@@ -26,7 +26,7 @@
     <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
     <string name="screenrecord_delete_description">Screen recording deleted</string>
     <!-- Screen record -->
-    <string name="screenrecord_stopdot_label">Show stop dot</string>
+    <string name="screenrecord_stopdot_label">Show stop dot\nLongpress to move it</string>
     <string name="screenrecord_stopdot_summary">Longpress to move it</string>
     <string name="screenrecord_lowquality_label">Lower quality</string>
     <string name="screenrecord_lowquality_summary">For smaller file size</string>
@@ -39,7 +39,7 @@
     <!-- Statusbar Icons -->
     <string name="status_bar_nfc">NFC</string>
     <string name="status_bar_vpn">VPN</string>
-    <string name="status_bar_data_saver">Data saver</string>
+    <string name="status_bar_data_saver">پاراستنی داتا</string>
     <string name="status_bar_call_strength">Call strength</string>
     <string name="status_bar_ims">VoLTE/VoWiFi</string>
     <!-- Text to use when the number in a notification info is too large -->
@@ -59,11 +59,11 @@
     <string name="onthego_notif_ticker">On-The-Go activated</string>
     <string name="onthego_notif_title">On-The-Go is active</string>
     <string name="onthego_notif_stop">Stop</string>
-    <string name="onthego_notif_options">Options</string>
+    <string name="onthego_notif_options">بژاردەکان</string>
     <string name="onthego_notif_error">Unable to start On-The-Go</string>
     <string name="onthego_notif_restart">Restart On-The-Go</string>
     <string name="onthego_notif_camera_changed">Camera mode changed</string>
-    <string name="onthego_transparency">Transparency</string>
+    <string name="onthego_transparency">ڕوونێتی</string>
     <string name="onthego_front_camera">Use front camera</string>
     <string name="onthego_service_toggle">Automatically restart service</string>
     <string name="onthego_channel_name">Main</string>
@@ -91,12 +91,12 @@
     <!-- DataSwitch Tile -->
     <string name="qs_data_switch_label">گۆڕینی کارتی داتا</string>
     <!-- Volume panel QS tile -->
-    <string name="quick_settings_volume_panel_label">Volume panel</string>
+    <string name="quick_settings_volume_panel_label">تەختەی دەنگ</string>
     <!-- Alert slide extras -->
     <string name="volume_ringer_priority_only">Priority</string>
     <string name="volume_ringer_alarms_only">وریاکەرەوە</string>
     <string name="volume_ringer_dnd">DnD</string>
-    <string name="tristate_flashlight">Torch</string>
+    <string name="tristate_flashlight">فلاش</string>
     <string name="tristate_flashlight_on">Torch on</string>
     <string name="tristate_flashlight_off">Torch off</string>
     <string name="tristate_flashlight_blink">Torch blink</string>
@@ -104,7 +104,7 @@
     <string name="tristate_brightness_dark">Min-brightness</string>
     <string name="tristate_brightness_auto">Auto-brightness</string>
     <string name="tristate_rotation_auto">Auto-rotate</string>
-    <string name="tristate_rotation_0">Portrait</string>
+    <string name="tristate_rotation_0">ستوونی</string>
     <string name="tristate_rotation_90">Landscape (90°)</string>
     <string name="tristate_rotation_270">Landscape (270°)</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
@@ -113,8 +113,8 @@
         <item quantity="other">%d devices connected</item>
     </plurals>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">Force stop?</string>
-    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
+    <string name="force_stop_dlg_title">بەتینی ڕابگیرێ؟</string>
+    <string name="force_stop_dlg_text">گەر بەتینی ئەپێک ڕاگری، ڕەنگە کێشەی بۆ دروسکات.</string>
     <!-- Smart Pixels QS Tile -->
     <string name="quick_settings_smart_pixels">Smart Pixels</string>
     <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled Smart Pixels</string>
@@ -126,11 +126,11 @@
     <string name="face_unlock_recognizing">Recognizing face...</string>
     <!-- Refresh Rate Tile -->
     <string name="refresh_rate_tile_label">Refresh rate</string>
-    <string name="auto_mode_label">Auto</string>
+    <string name="auto_mode_label">خۆکاری</string>
     <!-- Screenshot Tile -->
     <string name="screenshot_long_press">Long press - selected region</string>
     <!-- SoundSearch Tile -->
-    <string name="quick_settings_sound_search">Sound search</string>
+    <string name="quick_settings_sound_search">گەڕانی دەنگ</string>
     <string name="quick_settings_sound_search_no_app">Sorry, but this doesn\'t work if you don\'t have a Sound search app.</string>
     <!-- Status bar network traffic monitor strings -->
     <string name="kilobitspersecond_short">kb/s</string>
@@ -149,5 +149,5 @@
     <string name="bluetooth_is_off">Bluetooth is off</string>
     <string name="tap_a_device_to_connect">Tap a device to connect</string>
     <!-- Button to restart SystemUI, within the Restart Options dialog -->
-    <string name="global_action_restart_systemui">SystemUI</string>
+    <string name="global_action_restart_systemui">ڕووکاری سیستەم</string>
 </resources>
