@@ -20,11 +20,11 @@
     <string name="url_copy_success">Az URL sikeresen másolva</string>
     <string name="url_copy_failed">Hiba történt a napló Pasty-feltöltése során</string>
     <!-- Pocket Lock -->
-    <string name="pocket_mode_title">Pocket mode is active</string>
-    <string name="pocket_mode_illustration_description">Illustration of phone in pocket</string>
-    <string name="pocket_mode_instructions_header">To use your phone:</string>
-    <string name="pocket_mode_instruction_step1">1. Ensure the blue area (proximity sensor) shown above is unobstructed and free from dirt or dust.</string>
-    <string name="pocket_mode_instruction_step2">2. Press and hold the power button to exit pocket mode.</string>
+    <string name="pocket_mode_title">A Zsebmód aktív</string>
+    <string name="pocket_mode_illustration_description">A zsebben lévő telefon illusztrációja</string>
+    <string name="pocket_mode_instructions_header">A telefonja használatához:</string>
+    <string name="pocket_mode_instruction_step1">1. Győződjön meg arról, hogy a közelségérzékelő kék területe nincs takarásban, ill. szennyeződés- és pormentes.</string>
+    <string name="pocket_mode_instruction_step2">2. Tartsa lenyomva a bekapcsológombot a Zsebmódból való lkilépéshez.</string>
     <!-- App lock -->
     <string name="unlock_application">Feloldja a következőt: <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
 </resources>
