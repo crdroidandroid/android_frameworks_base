@@ -31,7 +31,7 @@
     <string name="quick_settings_sound_mute">Vaigista</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Name of the roaming status bar icon. -->
-    <string name="status_bar_roaming">Roaming indicator</string>
+    <string name="status_bar_roaming">Rändlusindikaator</string>
     <!-- Name of the HD calling status bar icon. -->
     <string name="status_bar_hd_calling">HD calling (VoLTE/VoNR)</string>
     <!-- Name of the VoWiFi status bar icon. -->
