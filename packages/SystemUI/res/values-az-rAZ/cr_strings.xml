@@ -26,7 +26,7 @@
     <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
     <string name="screenrecord_delete_description">Ekran qeydi silindi</string>
     <!-- Screen record -->
-    <string name="screenrecord_stopdot_label">Show stop dot</string>
+    <string name="screenrecord_stopdot_label">Dayanma nöqtəsini göstər\nHərəkət etdirmək üçün uzun toxun</string>
     <string name="screenrecord_stopdot_summary">Longpress to move it</string>
     <string name="screenrecord_lowquality_label">Kiçik həcm üçün düşük keyfiyyət</string>
     <string name="screenrecord_lowquality_summary">For smaller file size</string>
@@ -91,12 +91,12 @@
     <!-- DataSwitch Tile -->
     <string name="qs_data_switch_label">Şəbəkə kartını dəyişdir</string>
     <!-- Volume panel QS tile -->
-    <string name="quick_settings_volume_panel_label">Volume panel</string>
+    <string name="quick_settings_volume_panel_label">Səs paneli</string>
     <!-- Alert slide extras -->
     <string name="volume_ringer_priority_only">Öncəlik</string>
     <string name="volume_ringer_alarms_only">Alarmlar</string>
     <string name="volume_ringer_dnd">DnD</string>
-    <string name="tristate_flashlight">Torch</string>
+    <string name="tristate_flashlight">Fənər</string>
     <string name="tristate_flashlight_on">Fənər açıq</string>
     <string name="tristate_flashlight_off">Fənər bağlı</string>
     <string name="tristate_flashlight_blink">Fənər titrəməsi</string>
@@ -116,7 +116,7 @@
     <string name="force_stop_dlg_title">Məcburi dayandırılsın?</string>
     <string name="force_stop_dlg_text">Tətbiqi məcburi dayandırsanız, xətalı davrana bilər.</string>
     <!-- Smart Pixels QS Tile -->
-    <string name="quick_settings_smart_pixels">Smart Pixels</string>
+    <string name="quick_settings_smart_pixels">Ağıllı Piksellər</string>
     <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled Smart Pixels</string>
     <!-- Weather Tile -->
     <string name="omnijaws_service_error">Hava məlumatı yüklənərkən problem yarandı</string>
@@ -149,5 +149,5 @@
     <string name="bluetooth_is_off">Bluetooth is off</string>
     <string name="tap_a_device_to_connect">Tap a device to connect</string>
     <!-- Button to restart SystemUI, within the Restart Options dialog -->
-    <string name="global_action_restart_systemui">SystemUI</string>
+    <string name="global_action_restart_systemui">Sistem interfeysi</string>
 </resources>
