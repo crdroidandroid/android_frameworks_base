@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:gravity="start"
+    android:layout_gravity="start"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="0dp"
+    android:id="@+id/clock_frame"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:gravity="start"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="0dp">
+
+        <TextClock
+            android:textSize="30dp"
+            android:textColor="@android:color/white"
+            android:fontFamily="@font/SlateForOnePlus-Medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:singleLine="true"
+            android:textAlignment="viewStart"
+            android:includeFontPadding="false"
+            android:letterSpacing="0"
+            android:paddingStart="8dp"
+            android:layout_marginBottom="-2dp"
+            android:format12Hour="EEEE"
+            android:format24Hour="EEEE"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:orientation="horizontal"
+            android:gravity="start|bottom"
+            android:paddingStart="0dp">
+
+            <TextClock
+                android:textSize="96dp"
+                android:textColor="@android:color/holo_red_light"
+                android:fontFamily="@font/SlateForOnePlus-Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:textAlignment="viewStart"
+                android:includeFontPadding="false"
+                android:letterSpacing="0"
+                android:paddingStart="0dp"
+                android:format12Hour="h"
+                android:format24Hour="H"/>
+
+            <TextClock
+                android:textSize="96dp"
+                android:textColor="@android:color/white"
+                android:fontFamily="@font/SlateForOnePlus-Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:textAlignment="viewStart"
+                android:includeFontPadding="false"
+                android:letterSpacing="0"
+                android:paddingStart="0dp"
+                android:format12Hour=":mm"
+                android:format24Hour=":mm"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:orientation="horizontal"
+            android:gravity="start|center_vertical"
+            android:paddingStart="8dp">
+
+            <TextClock
+                android:textSize="20dp"
+                android:textColor="@android:color/white"
+                android:fontFamily="@font/SlateForOnePlus-Regular"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:textAlignment="viewStart"
+                android:letterSpacing="0"
+                android:paddingStart="0dp"
+                android:format12Hour="MMM dd "
+                android:format24Hour="MMM dd "/>
+
+            <com.android.systemui.weather.WeatherImageView
+                android:id="@+id/weather_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="4dp"/>
+
+            <com.android.systemui.weather.WeatherTextView
+                android:id="@+id/weather_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:fontFamily="@font/SlateForOnePlus-Regular"
+                android:textColor="@android:color/white"
+                android:visibility="gone"
+                android:textSize="21dp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

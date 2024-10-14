@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_gravity="start|center_vertical">
+
+    <!-- "It's" Text -->
+    <TextView
+        android:id="@+id/its_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="It's"
+        android:fontFamily="@*android:string/config_clockFontFamily"
+        android:textSize="62sp"
+        android:textColor="@android:color/system_accent1_300"
+        android:layout_marginStart="4dp"
+        android:layout_marginBottom="6dp" />
+
+    <!-- Custom Word Clock -->
+    <com.android.systemui.clocks.WordClockView
+        android:id="@+id/word_clock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:lineSpacingExtra="8dp"
+        android:textSize="64sp"
+        android:fontFamily="@*android:string/config_clockFontFamily"
+        android:textColor="@android:color/white" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:orientation="horizontal"
+        android:layout_gravity="start|center_vertical">
+
+        <com.android.systemui.weather.WeatherImageView
+            android:id="@+id/weather_image"
+            android:layout_width="20sp"
+            android:layout_height="20sp"
+            android:layout_marginEnd="4dp"
+            android:scaleType="fitCenter"
+            android:visibility="gone" />
+
+        <com.android.systemui.weather.WeatherTextView
+            android:id="@+id/weather_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:fontFamily="@*android:string/config_clockFontFamily"
+            android:textColor="@android:color/white"
+            android:visibility="gone"
+            android:textSize="20sp" />
+    </LinearLayout>
+</LinearLayout>
