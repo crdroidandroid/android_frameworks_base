@@ -172,6 +172,35 @@ class SplashscreenWindowCreator extends AbsSplashWindowCreator {
             final SplashWindowRecord record = sRecord instanceof SplashWindowRecord
                     ? (SplashWindowRecord) sRecord : null;
             // If record == null, either the starting window added fail or removed already.
+            if (record == null) {
+                // release the icon view host
+                if (contentView.getSurfaceHost() != null) {
+                    SplashScreenView.releaseIconHost(contentView.getSurfaceHost());
+                }
+                return;
+            }
+
+            if (record.mSuggestType != STARTING_WINDOW_TYPE_LEGACY_SPLASH_SCREEN) {
+                contentView.addOnAttachStateChangeListener(
+                        new View.OnAttachStateChangeListener() {
+                            @Override
+                            public void onViewAttachedToWindow(View v) {
+                                SplashScreenView view = (SplashScreenView) v;
+                                final int lightBarAppearance =
+                                        ContrastColorUtil.isColorLight(
+                                                view.getInitBackgroundColor())
+                                                ? LIGHT_BARS_MASK : 0;
+                                view.getWindowInsetsController()
+                                        .setSystemBarsAppearance(
+                                        lightBarAppearance, LIGHT_BARS_MASK);
+                            }
+
+                            @Override
+                            public void onViewDetachedFromWindow(View v) {
+                            }
+                        });
+            }
+
             // Do not add this view if the token is mismatch.
             if (record != null && windowInfo.appToken == record.mAppToken) {
                 // if view == null then creation of content view was failed.
@@ -192,47 +221,15 @@ class SplashscreenWindowCreator extends AbsSplashWindowCreator {
         mSplashscreenContentDrawer.createContentView(context, suggestType, windowInfo,
                 viewSupplier::setView, viewSupplier::setUiThreadInitTask);
         try {
-            if (addWindow(taskId, windowInfo.appToken, rootLayout, display, params, suggestType)) {
-                // We use the splash screen worker thread to create SplashScreenView while adding
-                // the window, as otherwise Choreographer#doFrame might be delayed on this thread.
-                // And since Choreographer#doFrame won't happen immediately after adding the window,
-                // if the view is not added to the PhoneWindow on the first #doFrame, the view will
-                // not be rendered on the first frame. So here we need to synchronize the view on
-                // the window before first round relayoutWindow, which will happen after insets
-                // animation.
-                mChoreographer.postCallback(CALLBACK_INSETS_ANIMATION, setViewSynchronized, null);
-                final SplashWindowRecord record =
-                        (SplashWindowRecord) mStartingWindowRecordManager.getRecord(taskId);
-                if (record != null) {
-                    // Block until we get the background color.
-                    final SplashScreenView contentView = viewSupplier.get();
-                    if (suggestType != STARTING_WINDOW_TYPE_LEGACY_SPLASH_SCREEN) {
-                        contentView.addOnAttachStateChangeListener(
-                                new View.OnAttachStateChangeListener() {
-                                    @Override
-                                    public void onViewAttachedToWindow(View v) {
-                                        final int lightBarAppearance =
-                                                ContrastColorUtil.isColorLight(
-                                                        contentView.getInitBackgroundColor())
-                                                        ? LIGHT_BARS_MASK : 0;
-                                        contentView.getWindowInsetsController()
-                                                .setSystemBarsAppearance(
-                                                lightBarAppearance, LIGHT_BARS_MASK);
-                                    }
-
-                                    @Override
-                                    public void onViewDetachedFromWindow(View v) {
-                                    }
-                                });
-                    }
-                }
-            } else {
-                // release the icon view host
-                final SplashScreenView contentView = viewSupplier.get();
-                if (contentView.getSurfaceHost() != null) {
-                    SplashScreenView.releaseIconHost(contentView.getSurfaceHost());
-                }
-            }
+            // We use the splash screen worker thread to create SplashScreenView while adding
+            // the window, as otherwise Choreographer#doFrame might be delayed on this thread.
+            // And since Choreographer#doFrame won't happen immediately after adding the window,
+            // if the view is not added to the PhoneWindow on the first #doFrame, the view will
+            // not be rendered on the first frame. So here we need to synchronize the view on
+            // the window before first round relayoutWindow, which will happen after insets
+            // animation.
+            mChoreographer.postCallback(CALLBACK_INSETS_ANIMATION, setViewSynchronized, null);
+            addWindow(taskId, windowInfo.appToken, rootLayout, display, params, suggestType);
         } catch (RuntimeException e) {
             // don't crash if something else bad happens, for example a
             // failure loading resources because we are loading from an app
