@@ -14444,6 +14444,12 @@ public final class Settings {
         public static final String NOTIFICATION_ROW_TRANSPARENCY_LOCKSCREEN = "notification_row_transparency_lockscreen";
 
         /**
+         * Lockscreen custom clock face
+         * @hide
+         */
+        public static final String LOCK_SCREEN_CUSTOM_CLOCK_STYLE = "lock_screen_custom_clock_style";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *

@@ -98,7 +98,14 @@ constructor(
     override val forcedClockSize: Flow<ClockSize?> =
         if (featureFlags.isEnabled(Flags.LOCKSCREEN_ENABLE_LANDSCAPE)) {
             configurationRepository.onAnyConfigurationChange.map {
-                if (context.resources.getBoolean(R.bool.force_small_clock_on_lockscreen)) {
+                if (
+                    context.resources.getBoolean(R.bool.force_small_clock_on_lockscreen) ||
+                    secureSettings.getIntForUser(
+                        Settings.Secure.LOCK_SCREEN_CUSTOM_CLOCK_STYLE,
+                        0, // Default value
+                        UserHandle.USER_CURRENT
+                    ) != 0
+                ) {
                     ClockSize.SMALL
                 } else {
                     null
@@ -161,14 +168,23 @@ constructor(
             )
 
     private fun getClockSize(): ClockSizeSetting {
-        return ClockSizeSetting.fromSettingValue(
-            secureSettings.getIntForUser(
-                Settings.Secure.LOCKSCREEN_USE_DOUBLE_LINE_CLOCK,
-                context.resources.getInteger(
-                    com.android.internal.R.integer.config_doublelineClockDefault
-                ),
-                UserHandle.USER_CURRENT,
-            )
+        val isDoubleLineClock = secureSettings.getIntForUser(
+            Settings.Secure.LOCKSCREEN_USE_DOUBLE_LINE_CLOCK,
+            context.resources.getInteger(
+                com.android.internal.R.integer.config_doublelineClockDefault
+            ),
+            UserHandle.USER_CURRENT
         )
+        val clockStyleEnabled = secureSettings.getIntForUser(
+            Settings.Secure.LOCK_SCREEN_CUSTOM_CLOCK_STYLE,
+            0, // Default value
+            UserHandle.USER_CURRENT
+        ) != 0
+        val clockSettingValue = if (clockStyleEnabled) {
+            0 
+        } else {
+            isDoubleLineClock
+        }
+        return ClockSizeSetting.fromSettingValue(clockSettingValue)
     }
 }
