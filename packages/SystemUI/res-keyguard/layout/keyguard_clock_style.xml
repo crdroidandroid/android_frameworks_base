@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.android.systemui.clocks.ClockStyle
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <RelativeLayout
+        android:id="@+id/clock_frame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/below_clock_padding_start"
+        android:layout_marginTop="@dimen/custom_clock_frame_margin_top">
+        <ViewStub
+            android:id="@+id/clock_view_stub"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+</com.android.systemui.clocks.ClockStyle>
