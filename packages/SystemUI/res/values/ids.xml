@@ -317,4 +317,8 @@
 
     <!-- Custom overlay on lockscreen/doze -->
     <item type="id" name="custom_overlay_container" />
+
+    <!-- Clock face -->
+    <item type="id" name="original_text_color" />
+    <item type="id" name="original_typeface" />
 </resources>
