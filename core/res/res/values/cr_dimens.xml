@@ -20,4 +20,9 @@
     <dimen name="pocket_mode_instructions_steps_margin_top">8dp</dimen>
     <dimen name="pocket_mode_instructions_step_size">14sp</dimen>
     <dimen name="pocket_mode_instructions_step_margin_top">8dp</dimen>
+
+    <!-- Custom clocks -->
+    <dimen name="presentation_clock_text_size">50dp</dimen>
+    <dimen name="large_clock_text_size">150dp</dimen>
+    <dimen name="small_clock_text_size">86dp</dimen>
 </resources>
