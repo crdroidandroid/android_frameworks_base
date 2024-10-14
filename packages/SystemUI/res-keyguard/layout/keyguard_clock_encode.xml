@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/clock_frame"
+    android:orientation="vertical"
+    android:gravity="center|top"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Hour Text (Dynamic) -->
+    <TextClock
+        android:id="@+id/hour_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="100sp"
+        android:textColor="@android:color/white"
+        android:fontFamily="@font/EncodeSansBold"
+        android:layout_gravity="center"
+        android:format12Hour="hh"
+        android:format24Hour="HH"/>
+
+    <!-- Minute Text (Dynamic) -->
+    <TextClock
+        android:id="@+id/minute_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="101sp"
+        android:textColor="@android:color/white"
+        android:fontFamily="@font/EncodeSansLight"
+        android:layout_marginTop="-4dp"
+        android:layout_gravity="center"
+        android:format12Hour="mm"
+        android:format24Hour="mm"/>
+
+    <!-- AM/PM Text (Dynamic) -->
+    <TextClock
+        android:id="@+id/am_pm_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:textColor="@android:color/white"
+        android:fontFamily="@font/EncodeSansLight"
+        android:layout_marginTop="4dp"
+        android:layout_gravity="center"
+        android:format12Hour="a - EEE, MMM d"
+        android:format24Hour="a - EEE, MMM d"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="4dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <com.android.systemui.weather.WeatherImageView
+            android:id="@+id/weather_image"
+            android:layout_width="20sp"
+            android:layout_height="20sp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="4dp"
+            android:scaleType="fitCenter"
+            android:visibility="gone" />
+
+        <com.android.systemui.weather.WeatherTextView
+            android:id="@+id/weather_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_gravity="center_vertical"
+            android:fontFamily="@font/EncodeSansLight"
+            android:textColor="@android:color/white"
+            android:visibility="gone"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</LinearLayout>
