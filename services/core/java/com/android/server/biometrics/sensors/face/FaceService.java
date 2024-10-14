@@ -687,7 +687,7 @@ public class FaceService extends SystemService {
                 FaceSensorConfigurations faceSensorConfigurations) {
             super.registerAuthenticators_enforcePermission();
 
-            if (!faceSensorConfigurations.hasSensorConfigurations()) {
+            if (!faceSensorConfigurations.hasSensorConfigurations() && !SenseUtils.canUseProvider()) {
                 Slog.d(TAG, "No face sensors to register.");
                 return;
             }
