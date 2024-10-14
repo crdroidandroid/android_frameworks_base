@@ -71,6 +71,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.os.Trace;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.IndentingPrintWriter;
 import android.util.Log;
@@ -1269,6 +1270,14 @@ public final class NotificationPanelViewController implements
             return ClockSize.SMALL;
         }
         return ClockSize.LARGE;
+    }
+
+    private boolean shouldForceSmallClock() {
+        return !isOnAod()
+                // True on small landscape screens
+                && mResources.getBoolean(R.bool.force_small_clock_on_lockscreen)
+                || Settings.Secure.getIntForUser(
+                    mContentResolver, "clock_style", 0, UserHandle.USER_CURRENT) != 0;
     }
 
     private void updateKeyguardStatusViewAlignment() {

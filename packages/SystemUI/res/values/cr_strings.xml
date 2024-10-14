@@ -189,4 +189,7 @@
     <string name="screenrecord_delete_label">Delete</string>
     <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
     <string name="screenrecord_delete_description">Screen recording deleted</string>
+
+    <!-- Lockscreen clock -->
+    <string name="clock_ide_weather_data_unavailable">null</string>
 </resources>
