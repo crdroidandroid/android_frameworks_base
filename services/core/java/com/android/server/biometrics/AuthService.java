@@ -78,6 +78,7 @@ import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.util.ArrayUtils;
 import com.android.server.SystemService;
 import com.android.server.biometrics.sensors.face.FaceService;
+import com.android.server.biometrics.sensors.face.sense.SenseUtils;
 import com.android.server.biometrics.sensors.fingerprint.FingerprintService;
 import com.android.server.companion.virtual.VirtualDeviceManagerInternal;
 
@@ -1023,7 +1024,8 @@ public class AuthService extends SystemService {
             final String[] hidlConfigStrings, final Context context,
             final IFaceService faceService, final BiometricHandlerProvider handlerProvider) {
         if ((hidlConfigStrings == null || hidlConfigStrings.length == 0)
-                && (faceAidlInstances == null || faceAidlInstances.length == 0)) {
+                && (faceAidlInstances == null || faceAidlInstances.length == 0)
+                && !SenseUtils.canUseProvider()) {
             Slog.d(TAG, "No face sensors.");
             return;
         }
