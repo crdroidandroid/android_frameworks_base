@@ -212,12 +212,16 @@ public class AutoAODService extends SystemService {
                     // we have a future alarm set and user left current state
                     // save the next alarm
                     Slog.v(TAG, "user abandoned state. active: " + mActive);
-                    mSharedPreferences.edit()
-                            .putLong(PREF_TIME_KEY, mLastSetTime).apply();
+                    if (mSharedPreferences != null) {
+                        mSharedPreferences.edit()
+                                .putLong(PREF_TIME_KEY, mLastSetTime).apply();
+                    }
                     return;
                 }
                 Slog.v(TAG, "removing PREF_TIME_KEY. active: " + mActive);
-                mSharedPreferences.edit().remove(PREF_TIME_KEY).apply();
+                if (mSharedPreferences != null) {
+                    mSharedPreferences.edit().remove(PREF_TIME_KEY).apply();
+                }
                 return;
             }
             mHandler.post(() -> initState());
