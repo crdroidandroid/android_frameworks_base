@@ -93,5 +93,6 @@
     <dimen name="ongoing_action_icon_compact_size">16dp</dimen>
 
     <!-- Lockscreen clock -->
+    <dimen name="custom_aod_image_size">180dp</dimen>
     <dimen name="custom_clock_frame_margin_top">0dp</dimen>
 </resources>
