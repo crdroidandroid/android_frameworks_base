@@ -20,11 +20,11 @@
     <string name="url_copy_success">آدرس با موفقیت کپی شد</string>
     <string name="url_copy_failed">هنگام بارگزاری گزارش در Pasty خطایی روی داد</string>
     <!-- Pocket Lock -->
-    <string name="pocket_mode_title">Pocket mode is active</string>
-    <string name="pocket_mode_illustration_description">Illustration of phone in pocket</string>
+    <string name="pocket_mode_title">حالت جیب فعال است</string>
+    <string name="pocket_mode_illustration_description">تصویر گوشی در جیب</string>
     <string name="pocket_mode_instructions_header">برای استفاده از تلفن‌تان:</string>
-    <string name="pocket_mode_instruction_step1">1. Ensure the blue area (proximity sensor) shown above is unobstructed and free from dirt or dust.</string>
-    <string name="pocket_mode_instruction_step2">2. Press and hold the power button to exit pocket mode.</string>
+    <string name="pocket_mode_instruction_step1">1. مطمئن شوید که ناحیه آبی (حسگر مجاورت) نشان داده شده در بالا بدون مانع و عاری از خاک یا گرد و غبار است.</string>
+    <string name="pocket_mode_instruction_step2">2. دکمه پاور را فشار داده و نگه دارید تا از حالت جیبی خارج شوید.</string>
     <!-- App lock -->
     <string name="unlock_application">بازگشایی <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
 </resources>

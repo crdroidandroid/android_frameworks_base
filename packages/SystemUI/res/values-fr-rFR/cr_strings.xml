@@ -150,6 +150,6 @@
     <!-- AI Assistant affordance [CHAR LIMIT=32] -->
     <string name="accessibility_assistant_button">Assistant IA</string>
     <!-- Screen record -->
-    <string name="screenrecord_keep_screen_awake_label">Écran toujours allumé </string>
+    <string name="screenrecord_keep_screen_awake_label">Écran toujours allumé</string>
     <string name="screenrecord_keep_screen_awake_summary">Garder l\'écran allumé</string>
 </resources>
