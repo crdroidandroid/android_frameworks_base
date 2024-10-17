@@ -6631,6 +6631,12 @@ public final class Settings {
         public static final String LOCKSCREEN_WEATHER_TEXT = "lockscreen_weather_text";
 
         /**
+         * Whether to hide the carrier name from the lockscreen
+         * @hide
+         */
+        public static final String HIDE_CARRIER_ON_LOCKSCREEN = "hide_carrier_on_lockscreen";
+
+        /**
          * Whether to show the battery info on the lockscreen while charging
          * @hide
          */
