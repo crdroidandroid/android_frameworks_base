@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright (C) 2021 The AospExtended Project
-  ~ Copyright (C) 2022-2025 The LibreMobileOS Foundation
+  ~ Copyright (C) 2024-2025 The LibreMobileOS Foundation
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -15,20 +14,15 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<selector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:autoMirrored="true">
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_enabled="false">
-        <shape android:tint="@color/settingslib_seekbar_progress_color" android:shape="rectangle" >
-            <corners
-                android:topLeftRadius="8dp" android:bottomLeftRadius="8dp"
-                android:topRightRadius="2dp" android:bottomRightRadius="2dp" />
+        <shape android:tint="@color/settingslib_seekbar_track_color" android:shape="rectangle">
+            <corners android:radius="8dp" />
         </shape>
     </item>
     <item android:state_enabled="true">
-        <shape android:tint="@color/settingslib_seekbar_progress_color" android:shape="rectangle">
-            <corners
-                android:topLeftRadius="8dp" android:bottomLeftRadius="8dp"
-                android:topRightRadius="2dp" android:bottomRightRadius="2dp" />
+        <shape android:tint="@color/settingslib_seekbar_track_color" android:shape="rectangle">
+            <corners android:radius="8dp" />
         </shape>
     </item>
 </selector>

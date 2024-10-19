@@ -20,9 +20,7 @@
     android:autoMirrored="true">
     <item android:height="16dp" android:gravity="fill_horizontal|center" android:id="@android:id/background"
           android:drawable="@drawable/settingslib_seekbar_track" />
-    <!-- Track stop indicator -->
-    <item android:height="4dp" android:gravity="end|center" android:end="6dp"
-          android:drawable="@drawable/settingslib_seekbar_tick_mark" />
+    <!-- No track stop indicator-->
     <item android:height="16dp" android:gravity="fill_horizontal|center" android:id="@android:id/progress">
         <scale android:scaleWidth="100%" android:drawable="@drawable/settingslib_seekbar_progress" />
     </item>

@@ -15,7 +15,7 @@
 -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Disabled state of seekbar track -->
-    <item android:alpha="?android:attr/primaryContentAlpha" android:color="@color/settingslib_materialColorSurfaceVariant" android:state_enabled="false" />
+    <item android:alpha="0.12" android:color="@color/settingslib_materialColorOnSurface" android:state_enabled="false" />
     <!-- Enabled state of seekbar track -->
-    <item android:alpha="?android:attr/secondaryContentAlpha"  android:color="@color/settingslib_materialColorPrimary" />
+    <item android:color="@color/settingslib_materialColorSecondaryContainer" />
 </selector>

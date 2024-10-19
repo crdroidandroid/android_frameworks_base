@@ -13,9 +13,10 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
+<selector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:androidprv="http://schemas.android.com/apk/prv/res/android">
     <!-- Disabled state of seekbar progress -->
-    <item android:alpha="?android:attr/primaryContentAlpha" android:color="@color/settingslib_materialColorSurfaceVariant" android:state_enabled="false" />
+    <item android:alpha="0.38" android:color="?androidprv:attr/materialColorOnSurface" android:state_enabled="false" />
     <!-- Enabled state of seekbar progress  -->
-    <item android:color="@color/settingslib_materialColorPrimary" />
+    <item android:color="?androidprv:attr/materialColorPrimary" />
 </selector>

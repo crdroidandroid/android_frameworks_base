@@ -15,14 +15,19 @@
      limitations under the License.
 -->
 <resources>
-
+    <!-- Material 3 slider styles -->
     <style name="SeekBar.SettingsLib" parent="@android:style/Widget.Material.SeekBar">
         <item name="android:progressDrawable">@drawable/settingslib_seekbar_progress_drawable</item>
         <item name="android:indeterminateDrawable">@drawable/settingslib_seekbar_progress_drawable</item>
-        <item name="android:thumb">@drawable/settingslib_seekbar_trumb</item>
-        <item name="android:splitTrack">false</item>
+        <item name="android:thumb">@drawable/settingslib_seekbar_thumb</item>
+        <item name="android:thumbTint">@color/settingslib_seekbar_thumb_color</item>
+        <item name="android:splitTrack">true</item>
         <item name="android:thumbOffset">0dp</item>
         <item name="android:background">@null</item>
     </style>
 
+    <style name="SeekBar.SettingsLib.Discrete">
+        <item name="android:progressDrawable">@drawable/settingslib_seekbar_progress_drawable_discrete</item>
+        <item name="android:tickMark">@drawable/settingslib_seekbar_tick_mark</item>
+    </style>
 </resources>
