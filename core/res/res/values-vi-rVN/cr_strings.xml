@@ -20,11 +20,11 @@
     <string name="url_copy_success">Đã sao chép thành công</string>
     <string name="url_copy_failed">Đã xảy ra lỗi khi tải nhật ký lên máy chủ</string>
     <!-- Pocket Lock -->
-    <string name="pocket_mode_title">Chế độ bỏ túi đang hoạt động</string>
+    <string name="pocket_mode_title">Chế độ bỏ túi đang được bật</string>
     <string name="pocket_mode_illustration_description">Hình minh họa điện thoại trong túi</string>
-    <string name="pocket_mode_instructions_header">Để sử dụng điện thoại của bạn:</string>
-    <string name="pocket_mode_instruction_step1">1. Đảm bảo khu vực màu xanh (cảm biến tiệm cận) hiển thị ở trên không bị cản trở và không dính bụi bẩn.</string>
-    <string name="pocket_mode_instruction_step2">2. Nhấn và giữ nút nguồn để thoát chế độ bỏ túi.</string>
+    <string name="pocket_mode_instructions_header">Để tiếp tục sử dụng hãy:</string>
+    <string name="pocket_mode_instruction_step1">1. Đảm bảo khu vực (cảm biến tiệm cận) không bị cản trở hoặc không dính bụi bẩn.</string>
+    <string name="pocket_mode_instruction_step2">2. Ấn giữ nút nguồn để tiếp tục.</string>
     <!-- App lock -->
     <string name="unlock_application">Mở khóa <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
 </resources>

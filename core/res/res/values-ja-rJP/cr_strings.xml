@@ -20,11 +20,11 @@
     <string name="url_copy_success">URL をコピーしました</string>
     <string name="url_copy_failed">Pasty へのログのアップロード中にエラーが発生しました</string>
     <!-- Pocket Lock -->
-    <string name="pocket_mode_title">Pocket mode is active</string>
-    <string name="pocket_mode_illustration_description">Illustration of phone in pocket</string>
+    <string name="pocket_mode_title">ポケットモードがアクティブです</string>
+    <string name="pocket_mode_illustration_description">ポケットの中のスマートフォンのイラスト</string>
     <string name="pocket_mode_instructions_header">端末を使用するには</string>
-    <string name="pocket_mode_instruction_step1">1. Ensure the blue area (proximity sensor) shown above is unobstructed and free from dirt or dust.</string>
-    <string name="pocket_mode_instruction_step2">2. Press and hold the power button to exit pocket mode.</string>
+    <string name="pocket_mode_instruction_step1">1. 上記の青色の領域 (近接センサー) が覆われておらず、汚れやほこりがないことを確認してください。</string>
+    <string name="pocket_mode_instruction_step2">2. 電源ボタンを押したままにするとポケットモードを終了します。</string>
     <!-- App lock -->
     <string name="unlock_application"><xliff:g id="label" example="Telegram">%1$s</xliff:g> をロック解除</string>
 </resources>
