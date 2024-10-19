@@ -19094,7 +19094,8 @@ public class TelephonyManager {
             if (telephony != null) {
                 return telephony.isNullCipherNotificationsEnabled();
             } else {
-                throw new IllegalStateException("telephony service is null.");
+                Log.d(TAG, "Telephony service is null.");
+                return false;
             }
         } catch (RemoteException ex) {
             Rlog.e(TAG, "isNullCipherNotificationsEnabled RemoteException", ex);
