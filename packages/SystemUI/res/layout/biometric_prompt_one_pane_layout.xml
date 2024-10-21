@@ -75,8 +75,9 @@
             <TextView
                 android:id="@+id/logo_description"
                 style="@style/TextAppearance.AuthCredential.LogoDescription"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="@integer/biometric_dialog_text_gravity"
                 android:paddingTop="@dimen/biometric_prompt_logo_description_top_padding"
                 app:layout_constraintBottom_toTopOf="@+id/title"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -101,7 +102,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="@integer/biometric_dialog_text_gravity"
-                android:paddingTop="16dp"
+                android:paddingTop="8dp"
                 app:layout_constraintBottom_toTopOf="@+id/contentBarrier"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -149,7 +150,7 @@
         style="@style/TextAppearance.AuthCredential.Indicator"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="8dp"
         android:layout_marginHorizontal="24dp"
         android:accessibilityLiveRegion="assertive"
         android:fadingEdge="horizontal"
@@ -196,7 +197,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_end="40dp" />
+        app:layout_constraintGuide_end="10dp" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/topGuideline"
