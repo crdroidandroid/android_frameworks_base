@@ -31,6 +31,7 @@ import static com.android.systemui.theme.ThemeOverlayApplier.OVERLAY_CATEGORY_SY
 import static com.android.systemui.theme.ThemeOverlayApplier.OVERLAY_COLOR_BOTH;
 import static com.android.systemui.theme.ThemeOverlayApplier.OVERLAY_LUMINANCE_FACTOR;
 import static com.android.systemui.theme.ThemeOverlayApplier.OVERLAY_CHROMA_FACTOR;
+import static com.android.systemui.theme.ThemeOverlayApplier.OVERLAY_WHOLE_PALETTE;
 import static com.android.systemui.theme.ThemeOverlayApplier.OVERLAY_TINT_BACKGROUND;
 import static com.android.systemui.theme.ThemeOverlayApplier.OVERLAY_COLOR_INDEX;
 import static com.android.systemui.theme.ThemeOverlayApplier.OVERLAY_COLOR_SOURCE;
@@ -743,6 +744,7 @@ public class ThemeOverlayController implements CoreStartable, Dumpable {
         mColorScheme = new ColorScheme(color, nightMode, mThemeStyle,
                 fetchLuminanceFactorFromSetting(),
                 fetchChromaFactorFromSetting(),
+                fetchWholePaletteFromSetting(),
                 fetchTintBackgroundFromSetting(),
                 fetchBgColorFromSetting());
         mNeutralOverlay = createNeutralOverlay();
@@ -979,6 +981,21 @@ public class ThemeOverlayController implements CoreStartable, Dumpable {
             }
         }
         return 1f;
+    }
+
+    private boolean fetchWholePaletteFromSetting() {
+        final String overlayPackageJson = mSecureSettings.getStringForUser(
+                Settings.Secure.THEME_CUSTOMIZATION_OVERLAY_PACKAGES,
+                mUserTracker.getUserId());
+        if (!TextUtils.isEmpty(overlayPackageJson)) {
+            try {
+                JSONObject object = new JSONObject(overlayPackageJson);
+                return object.optInt(OVERLAY_WHOLE_PALETTE, 0) == 1;
+            } catch (JSONException | IllegalArgumentException e) {
+                Log.i(TAG, "Failed to parse THEME_CUSTOMIZATION_OVERLAY_PACKAGES.", e);
+            }
+        }
+        return false;
     }
 
     private boolean fetchTintBackgroundFromSetting() {

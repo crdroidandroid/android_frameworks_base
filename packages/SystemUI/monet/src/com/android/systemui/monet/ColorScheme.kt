@@ -387,6 +387,7 @@ class ColorScheme(
     val style: Style = Style.TONAL_SPOT,
     val luminanceFactor: Float = 1f,
     val chromaFactor: Float = 1f,
+    val wholePalette: Boolean = false,
     val tintBackground: Boolean = false,
     @ColorInt val bgSeed: Int? = null
 ) {
@@ -398,8 +399,9 @@ class ColorScheme(
     val neutral2: TonalPalette
 
     constructor(@ColorInt seed: Int, darkTheme: Boolean, style: Style = Style.TONAL_SPOT,
-            luminanceFactor: Float = 1f, chromaFactor: Float = 1f, tintBackground: Boolean = false):
-            this(seed, darkTheme, style, luminanceFactor, chromaFactor, tintBackground, null)
+            luminanceFactor: Float = 1f, chromaFactor: Float = 1f, wholePalette: Boolean = false,
+            tintBackground: Boolean = false):
+            this(seed, darkTheme, style, luminanceFactor, chromaFactor, wholePalette, tintBackground, null)
 
     constructor(@ColorInt seed: Int, darkTheme: Boolean) : this(seed, darkTheme, Style.TONAL_SPOT)
 
@@ -410,10 +412,11 @@ class ColorScheme(
         style: Style = Style.TONAL_SPOT,
         luminanceFactor: Float = 1f,
         chromaFactor: Float = 1f,
+        wholePalette: Boolean = false,
         tintBackground: Boolean = false,
         bgSeed: Int? = null
     ) : this(getSeedColor(wallpaperColors, style != Style.CONTENT), darkTheme, style,
-             luminanceFactor, chromaFactor, tintBackground, bgSeed)
+             luminanceFactor, chromaFactor, wholePalette, tintBackground, bgSeed)
 
     val allHues: List<TonalPalette>
         get() {
@@ -467,13 +470,16 @@ class ColorScheme(
             }
 
         accent1 = TonalPalette(style.coreSpec.a1, seedArgb, luminanceFactor, chromaFactor)
-        accent2 = TonalPalette(style.coreSpec.a2, seedArgb)
-        accent3 = TonalPalette(style.coreSpec.a3, seedArgb)
+        accent2 = TonalPalette(style.coreSpec.a2, seedArgb,
+                if (wholePalette) luminanceFactor else 1f,
+                if (wholePalette) chromaFactor else 1f)
+        accent3 = TonalPalette(style.coreSpec.a3, seedArgb, luminanceFactor, chromaFactor)
         neutral1 = TonalPalette(style.coreSpec.n1, bgSeedArgb,
                 if (tintBackground) luminanceFactor else 1f,
                 if (tintBackground) chromaFactor else 1f)
-        neutral2 = TonalPalette(style.coreSpec.n2, bgSeedArgb)
-                
+        neutral2 = TonalPalette(style.coreSpec.n2, bgSeedArgb,
+                if (tintBackground && wholePalette) luminanceFactor else 1f,
+                if (tintBackground && wholePalette) chromaFactor else 1f)            
     }
 
     val shadeCount
