@@ -52,7 +52,7 @@ public class AppWidgetService extends SystemService {
 
     @Override
     public void onUserStopping(@NonNull TargetUser user) {
-        mImpl.onUserStopped(user.getUserIdentifier());
+        mImpl.onUserStopping(user.getUserIdentifier());
     }
 
     @Override
