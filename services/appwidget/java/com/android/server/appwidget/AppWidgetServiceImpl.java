@@ -4498,7 +4498,7 @@ class AppWidgetServiceImpl extends IAppWidgetService.Stub implements WidgetBacku
         return new AtomicFile(new File(Environment.getUserSystemDirectory(userId), STATE_FILENAME));
     }
 
-    void onUserStopped(int userId) {
+    void onUserStopping(int userId) {
         if (DEBUG) {
             Slog.i(TAG, "onUserStopped() " + userId);
         }
@@ -4518,6 +4518,10 @@ class AppWidgetServiceImpl extends IAppWidgetService.Stub implements WidgetBacku
                 // as we do not want to make host callbacks and provider broadcasts
                 // as the host and the provider will be killed.
                 if (hostInUser && (!hasProvider || providerInUser)) {
+                    // The user's app widget host (i.e. the launcher) is usually still running at
+                    // this point. Don't notify it that the widget is removed to avoid affecting
+                    // homescreen configuration
+                    widget.host.callbacks = null;
                     removeWidgetLocked(widget);
                     widget.host.widgets.remove(widget);
                     widget.host = null;
