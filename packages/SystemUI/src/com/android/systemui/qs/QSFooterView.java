@@ -155,7 +155,7 @@ public class QSFooterView extends FrameLayout {
         // relayout if the text didn't actually change.
         String text = formatDataUsage(info.usageLevel, suffix);
         if (!TextUtils.equals(text, mUsageText.getText())) {
-            mUsageText.setText(formatDataUsage(info.usageLevel, suffix));
+            mUsageText.setText(text);
         }
         mShouldShowUsageText = true;
         updateVisibilities();
@@ -163,14 +163,11 @@ public class QSFooterView extends FrameLayout {
 
     private String formatDataUsage(long byteValue, String suffix) {
         // Example: 1.23 GB used today (airtel)
-        StringBuilder usage = new StringBuilder(Formatter.formatFileSize(getContext(),
-                byteValue, Formatter.FLAG_IEC_UNITS))
+        return new StringBuilder(Formatter.formatFileSize(getContext(), byteValue, Formatter.FLAG_IEC_UNITS))
                 .append(" ")
                 .append(mContext.getString(R.string.usage_data))
-                .append(" (")
-                .append(suffix)
-                .append(")");
-        return usage.toString();
+                .append(" (" + suffix + ")")
+                .toString();
     }
 
     private String getSlotCarrierName() {
@@ -183,7 +180,11 @@ public class QSFooterView extends FrameLayout {
 
     private String getWifiSsid() {
         if (mWifiSsid != null) {
-            return mWifiSsid.replace("\"", "");
+            String ssid = mWifiSsid.replace("\"", "");
+            if (ssid.length() > 10) {
+                return ssid.substring(0, 7) + "...";
+            }
+            return ssid;
         }
         return mContext.getResources().getString(R.string.usage_wifi_default_suffix);
     }
