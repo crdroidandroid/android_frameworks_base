@@ -486,18 +486,18 @@ class ShortcutRequestPinProcessor {
                 return false;
             }
 
+            ps = mService.getPackageShortcutsForPublisherLocked(appPackageName, appUserId);
+            final ShortcutInfo current = ps.findShortcutById(shortcutId);
+
             final ShortcutLauncher launcher = mService.getLauncherShortcutsLocked(
                     launcherPackage, appUserId, launcherUserId);
             launcher.attemptToRestoreIfNeededAndSave();
-            if (launcher.hasPinned(original)) {
+            if (current != null && launcher.hasPinned(original)) {
                 if (DEBUG) {
                     Slog.d(TAG, "Shortcut " + original + " already pinned.");   // This too.
                 }
                 return true;
             }
-
-            ps = mService.getPackageShortcutsForPublisherLocked(appPackageName, appUserId);
-            final ShortcutInfo current = ps.findShortcutById(shortcutId);
 
             // The shortcut might have been changed, so we need to do the same validation again.
             try {
