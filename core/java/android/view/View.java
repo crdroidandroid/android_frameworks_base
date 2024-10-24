@@ -22730,6 +22730,11 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
         cleanupDraw();
         mCurrentAnimation = null;
 
+        if (mScrollCache != null && mScrollCache.state == ScrollabilityCache.ON
+                && mAttachInfo != null) {
+            mAttachInfo.mHandler.removeCallbacks(mScrollCache);
+        }
+
         if ((mViewFlags & TOOLTIP) == TOOLTIP) {
             removeCallbacks(mTooltipInfo.mShowTooltipRunnable);
             removeCallbacks(mTooltipInfo.mHideTooltipRunnable);
