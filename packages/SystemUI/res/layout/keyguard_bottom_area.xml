@@ -38,8 +38,6 @@
             android:layout_gravity="center"
             android:scaleType="fitCenter"
             android:tint="@android:color/white"
-            android:background="@drawable/keyguard_bottom_affordance_bg"
-            android:foreground="@drawable/keyguard_bottom_affordance_selected_border"
             android:visibility="gone" />
 
     </LinearLayout>
