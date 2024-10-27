@@ -48,6 +48,8 @@ public class BrightnessSliderView extends LinearLayout {
     private Gefingerpoken mOnInterceptListener;
     @Nullable
     private Drawable mProgressDrawable;
+    @Nullable
+    private Drawable mProgressBgDrawable;
     private float mScale = 1f;
     private final Rect mSystemGestureExclusionRect = new Rect();
 
@@ -76,6 +78,7 @@ public class BrightnessSliderView extends LinearLayout {
                     .findDrawableByLayerId(android.R.id.progress);
             LayerDrawable actualProgressSlider = (LayerDrawable) progressSlider.getDrawable();
             mProgressDrawable = actualProgressSlider.findDrawableByLayerId(R.id.slider_foreground);
+            mProgressBgDrawable = progress.findDrawableByLayerId(android.R.id.background);
         } catch (Exception e) {
             // Nothing to do, mProgressDrawable will be null.
         }
@@ -213,10 +216,14 @@ public class BrightnessSliderView extends LinearLayout {
 
     private void applySliderScale() {
         if (mProgressDrawable != null) {
-            final Rect r = mProgressDrawable.getBounds();
+            Rect r = mProgressDrawable.getBounds();
             int height = (int) (mProgressDrawable.getIntrinsicHeight() * mScale);
             int inset = (mProgressDrawable.getIntrinsicHeight() - height) / 2;
             mProgressDrawable.setBounds(r.left, inset, r.right, inset + height);
+            if (mProgressBgDrawable != null) {
+                r = mProgressBgDrawable.getBounds();
+                mProgressBgDrawable.setBounds(r.left, inset, r.right, inset + height);
+            }
         }
     }
 
