@@ -1196,6 +1196,13 @@ public class UdfpsController implements DozeReceiver, Dumpable {
         if (mPowerManagerInternal != null) {
             mPowerManagerInternal.setPowerMode(PowerManagerInternal.MODE_LAUNCH, true);
         }
+
+        final View view = mOverlay.getTouchOverlay();
+
+        if (view != null && view.getViewRootImpl() != null) {
+            view.getViewRootImpl().notifyRendererOfExpensiveFrame();
+        }
+
         if (mDisableSmartPixels) {
             if (!mSmartPixelsFlag && (mSmartPixelsEnabled || mSmartPixelsOnPowerSave)) {
                 disableSmartPixels();
@@ -1219,7 +1226,6 @@ public class UdfpsController implements DozeReceiver, Dumpable {
                 minor, major, orientation, time, gestureStart, isAod);
         Trace.endAsyncSection("UdfpsController.e2e.onPointerDown", 0);
 
-        final View view = mOverlay.getTouchOverlay();
         if (view != null && isOptical()) {
             if (mIgnoreRefreshRate) {
                 dispatchOnUiReady(requestId);
@@ -1233,6 +1239,10 @@ public class UdfpsController implements DozeReceiver, Dumpable {
                 cb.onFingerDown();
             }
             showUdfpsAnimation();
+        }
+
+        if (view != null && view.getViewRootImpl() != null) {
+            view.getViewRootImpl().notifyRendererOfExpensiveFrame();
         }
     }
 
