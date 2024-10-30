@@ -42,6 +42,7 @@ class UdfpsTouchOverlay(context: Context, attrs: AttributeSet?) : FrameLayout(co
         private set
 
     override fun onFinishInflate() {
+        super.onFinishInflate()
         ghbmView = findViewById(R.id.hbm_view)
     }
 
