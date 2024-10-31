@@ -32,6 +32,7 @@ import android.app.WindowConfiguration.WindowingMode;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Insets;
 import android.graphics.Point;
@@ -41,6 +42,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Handler;
 import android.util.Size;
 import android.view.Choreographer;
+import android.view.Display;
 import android.view.InsetsState;
 import android.view.MotionEvent;
 import android.view.SurfaceControl;
@@ -50,6 +52,7 @@ import android.view.WindowInsets;
 import android.view.WindowManager;
 import android.window.WindowContainerTransaction;
 
+import com.android.internal.policy.ScreenDecorationsUtils;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.wm.shell.R;
 import com.android.wm.shell.ShellTaskOrganizer;
@@ -204,7 +207,7 @@ public class CaptionWindowDecoration extends WindowDecoration<WindowDecorLinearL
             boolean shouldSetTaskVisibilityPositionAndCrop,
             boolean isStatusBarVisible,
             boolean isKeyguardVisibleAndOccluded,
-            InsetsState displayInsetsState,
+            DisplayController displayController,
             boolean hasGlobalFocus,
             @NonNull Region globalExclusionRegion) {
         relayoutParams.reset();
@@ -221,6 +224,8 @@ public class CaptionWindowDecoration extends WindowDecoration<WindowDecorLinearL
         relayoutParams.mIsCaptionVisible = taskInfo.isFreeform()
                 || (isStatusBarVisible && !isKeyguardVisibleAndOccluded);
         relayoutParams.mDisplayExclusionRegion.set(globalExclusionRegion);
+        relayoutParams.mCornerRadius =
+                getCornerRadius(context, displayController.getDisplay(taskInfo.displayId));
 
         if (TaskInfoKt.isTransparentCaptionBarAppearance(taskInfo)) {
             // If the app is requesting to customize the caption bar, allow input to fall
@@ -240,7 +245,8 @@ public class CaptionWindowDecoration extends WindowDecoration<WindowDecorLinearL
         controlsElement.mAlignment = RelayoutParams.OccludingCaptionElement.Alignment.END;
         relayoutParams.mOccludingCaptionElements.add(controlsElement);
         relayoutParams.mCaptionTopPadding = getTopPadding(relayoutParams,
-                taskInfo.getConfiguration().windowConfiguration.getBounds(), displayInsetsState);
+                taskInfo.getConfiguration().windowConfiguration.getBounds(),
+                displayController.getInsetsState(taskInfo.displayId));
     }
 
     @SuppressLint("MissingPermission")
@@ -261,7 +267,7 @@ public class CaptionWindowDecoration extends WindowDecoration<WindowDecorLinearL
         updateRelayoutParams(mRelayoutParams, mContext, taskInfo, applyStartTransactionOnDraw,
                 shouldSetTaskVisibilityPositionAndCrop, mIsStatusBarVisible,
                 mIsKeyguardVisibleAndOccluded,
-                mDisplayController.getInsetsState(taskInfo.displayId), hasGlobalFocus,
+                mDisplayController, hasGlobalFocus,
                 globalExclusionRegion);
 
         relayout(mRelayoutParams, startT, finishT, wct, oldRootView, mResult);
@@ -310,6 +316,19 @@ public class CaptionWindowDecoration extends WindowDecoration<WindowDecorLinearL
                         getResizeHandleEdgeInset(res), getFineResizeCornerSize(res),
                         getLargeResizeCornerSize(res), DragResizeWindowGeometry.DisabledEdge.NONE),
                 touchSlop);
+    }
+
+    private static int getCornerRadius(Context context, Display display) {
+        // Show rounded corners only on the internal display as we can't get rounded corners for
+        // external displays.
+        if (display.getType() != Display.TYPE_INTERNAL) {
+            return 0;
+        }
+        final TypedArray ta = context.obtainStyledAttributes(
+                new int[]{android.R.attr.dialogCornerRadius});
+        final int cornerRadius = ta.getDimensionPixelSize(0, 0);
+        ta.recycle();
+        return cornerRadius;
     }
 
     /**
