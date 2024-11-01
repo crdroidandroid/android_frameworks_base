@@ -108,4 +108,7 @@
 
     <!-- Whether to cancel fingerprint operation if not idle -->
     <bool name="config_fpCancelIfNotIdle">false</bool>
+
+    <!-- Mediadata max bitmap size -->
+    <integer name="config_maxBitmapSizePx">512</integer>
 </resources>
