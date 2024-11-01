@@ -976,13 +976,41 @@ public final class MediaMetadata implements Parcelable {
         }
 
         private Bitmap scaleBitmap(Bitmap bmp, int maxDimension) {
-            float maxDimensionF = maxDimension;
-            float widthScale = maxDimensionF / bmp.getWidth();
-            float heightScale = maxDimensionF / bmp.getHeight();
-            float scale = Math.min(widthScale, heightScale);
-            int height = (int) (bmp.getHeight() * scale);
-            int width = (int) (bmp.getWidth() * scale);
-            return Bitmap.createScaledBitmap(bmp, width, height, true);
+            if (bmp == null) {
+                return null;
+            }
+            int srcWidth = bmp.getWidth();
+            int srcHeight = bmp.getHeight();
+            if (srcWidth <= maxDimension && srcHeight <= maxDimension) {
+                return bmp;
+            }
+            int sampleSize = calculateSampleSize(srcWidth, srcHeight, maxDimension, maxDimension);
+            int scaledWidth = srcWidth / sampleSize;
+            int scaledHeight = srcHeight / sampleSize;
+            if (scaledWidth > maxDimension) {
+                scaledWidth = maxDimension;
+            }
+            if (scaledHeight > maxDimension) {
+                scaledHeight = maxDimension;
+            }
+            Bitmap scaledBitmap = Bitmap.createScaledBitmap(bmp, scaledWidth, scaledHeight, true);
+            java.io.ByteArrayOutputStream outputStream = new java.io.ByteArrayOutputStream();
+            scaledBitmap.compress(Bitmap.CompressFormat.WEBP_LOSSLESS, 90, outputStream);
+            byte[] compressedData = outputStream.toByteArray();
+            Bitmap compressedBitmap = BitmapFactory.decodeByteArray(compressedData, 0, compressedData.length);
+            scaledBitmap.recycle();
+            bmp.recycle();
+            return compressedBitmap;
+        }
+
+        private static int calculateSampleSize(int srcWidth, int srcHeight, int dstWidth, int dstHeight) {
+            int sampleSize = 1;
+            if (srcWidth > dstWidth || srcHeight > dstHeight) {
+                int widthSample = (int) Math.ceil((float) srcWidth / dstWidth);
+                int heightSample = (int) Math.ceil((float) srcHeight / dstHeight);
+                sampleSize = Math.max(widthSample, heightSample);
+            }
+            return sampleSize;
         }
     }
 }

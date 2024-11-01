@@ -93,4 +93,7 @@
 
     <!-- GameSpace -->
     <java-symbol type="string" name="gamespace_new_game_added" />
+
+    <!-- Album art max bitmap size -->
+    <java-symbol type="integer" name="config_maxBitmapSizePx" />
 </resources>
