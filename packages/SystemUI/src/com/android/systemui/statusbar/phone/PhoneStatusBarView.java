@@ -25,8 +25,10 @@ import android.graphics.Rect;
 import android.inputmethodservice.InputMethodService;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
 import android.view.Display;
 import android.view.DisplayCutout;
@@ -56,13 +58,22 @@ import com.android.systemui.statusbar.CommandQueue.Callbacks;
 import com.android.systemui.statusbar.phone.userswitcher.StatusBarUserSwitcherContainer;
 import com.android.systemui.statusbar.policy.Offset;
 import com.android.systemui.statusbar.window.StatusBarWindowController;
+import com.android.systemui.tuner.TunerService;
 import com.android.systemui.user.ui.binder.StatusBarUserChipViewBinder;
 import com.android.systemui.user.ui.viewmodel.StatusBarUserChipViewModel;
 import com.android.systemui.util.leak.RotationUtils;
 
 import java.util.Objects;
 
-public class PhoneStatusBarView extends FrameLayout implements Callbacks {
+public class PhoneStatusBarView extends FrameLayout implements Callbacks, TunerService.Tunable {
+
+    private static final String STATUSBAR_EXTRA_PADDING_START =
+            "system:" + Settings.System.STATUSBAR_EXTRA_PADDING_START;
+    private static final String STATUSBAR_EXTRA_PADDING_TOP =
+            "system:" + Settings.System.STATUSBAR_EXTRA_PADDING_TOP;
+    private static final String STATUSBAR_EXTRA_PADDING_END =
+            "system:" + Settings.System.STATUSBAR_EXTRA_PADDING_END;
+
     private static final String TAG = "PhoneStatusBarView";
     private final CommandQueue mCommandQueue;
     private final StatusBarWindowController mStatusBarWindowController;
@@ -87,6 +98,12 @@ public class PhoneStatusBarView extends FrameLayout implements Callbacks {
     @Nullable
     private ViewGroup mStatusBarContents = null;
 
+    private final TunerService mTunerService;
+
+    private int mStatusBarPaddingStart = 0;
+    private int mStatusBarPaddingTop = 0;
+    private int mStatusBarPaddingEnd = 0;
+
     /**
      * Draw this many pixels into the left/right side of the cutout to optimally use the space
      */
@@ -98,6 +115,7 @@ public class PhoneStatusBarView extends FrameLayout implements Callbacks {
         super(context, attrs);
         mCommandQueue = Dependency.get(CommandQueue.class);
         mStatusBarWindowController = Dependency.get(StatusBarWindowController.class);
+        mTunerService = Dependency.get(TunerService.class);
 
         // Only create FRB here if there is no navbar
         if (!hasNavigationBar()) {
@@ -184,6 +202,9 @@ public class PhoneStatusBarView extends FrameLayout implements Callbacks {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
+        mTunerService.addTunable(this, STATUSBAR_EXTRA_PADDING_START);
+        mTunerService.addTunable(this, STATUSBAR_EXTRA_PADDING_TOP);
+        mTunerService.addTunable(this, STATUSBAR_EXTRA_PADDING_END);
         if (updateDisplayParameters()) {
             updateLayoutForCutout();
             updateWindowHeight();
@@ -197,6 +218,7 @@ public class PhoneStatusBarView extends FrameLayout implements Callbacks {
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        mTunerService.removeTunable(this);
         mDisplayCutout = null;
 
         if (mRotationButtonController != null) {
@@ -227,6 +249,33 @@ public class PhoneStatusBarView extends FrameLayout implements Callbacks {
             requestLayout();
         }
         return super.onApplyWindowInsets(insets);
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case STATUSBAR_EXTRA_PADDING_START:
+                mStatusBarPaddingStart = convertToDip(TunerService.parseInteger(newValue, 0));
+                updateResources();
+                break;
+            case STATUSBAR_EXTRA_PADDING_TOP:
+                mStatusBarPaddingTop = convertToDip(TunerService.parseInteger(newValue, 0));
+                updateResources();
+                break;
+            case STATUSBAR_EXTRA_PADDING_END:
+                mStatusBarPaddingEnd = convertToDip(TunerService.parseInteger(newValue, 0));
+                updateResources();
+                break;
+            default:
+                break;
+         }
+    }
+
+    private int convertToDip(int padding) {
+        return Math.round(TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                padding,
+                mContext.getResources().getDisplayMetrics()));
     }
 
     /**
@@ -357,13 +406,13 @@ public class PhoneStatusBarView extends FrameLayout implements Callbacks {
                 R.dimen.status_bar_padding_start);
 
         mStatusBarContents.setPaddingRelative(
-                statusBarPaddingStart,
-                getResources().getDimensionPixelSize(R.dimen.status_bar_padding_top),
-                getResources().getDimensionPixelSize(R.dimen.status_bar_padding_end),
+                statusBarPaddingStart + mStatusBarPaddingStart,
+                getResources().getDimensionPixelSize(R.dimen.status_bar_padding_top) + mStatusBarPaddingTop,
+                getResources().getDimensionPixelSize(R.dimen.status_bar_padding_end) + mStatusBarPaddingEnd,
                 0);
 
         findViewById(R.id.notification_lights_out)
-                .setPaddingRelative(0, statusBarPaddingStart, 0, 0);
+                .setPaddingRelative(0, statusBarPaddingStart + mStatusBarPaddingStart, 0, 0);
 
         findViewById(R.id.system_icons).setPaddingRelative(
                 getResources().getDimensionPixelSize(R.dimen.status_bar_icons_padding_start),
