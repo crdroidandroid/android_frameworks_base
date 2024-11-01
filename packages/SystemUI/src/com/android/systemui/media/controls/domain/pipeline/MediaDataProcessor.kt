@@ -193,12 +193,10 @@ class MediaDataProcessor(
     @Keep private var smartspaceSession: SmartspaceSession? = null
     private var allowMediaRecommendations = false
 
-    private val artworkWidth =
-        context.resources.getDimensionPixelSize(
-            com.android.internal.R.dimen.config_mediaMetadataBitmapMaxSize
-        )
-    private val artworkHeight =
-        context.resources.getDimensionPixelSize(R.dimen.qs_media_session_height_expanded)
+    private val artworkWidth = context.getResources().getInteger(
+                        com.android.internal.R.integer.config_maxBitmapSizePx)
+    private val artworkHeight = context.getResources().getInteger(
+                        com.android.internal.R.integer.config_maxBitmapSizePx)
 
     @SuppressLint("WrongConstant") // sysui allowed to call STATUS_BAR_SERVICE
     private val statusBarManager =
