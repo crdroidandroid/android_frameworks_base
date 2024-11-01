@@ -6886,6 +6886,21 @@ public final class Settings {
         public static final String STATUS_BAR_BRIGHTNESS_CONTROL = "status_bar_brightness_control";
 
         /**
+         * @hide
+         */
+        public static final String STATUSBAR_EXTRA_PADDING_START = "statusbar_extra_padding_start";
+
+        /**
+         * @hide
+         */
+        public static final String STATUSBAR_EXTRA_PADDING_TOP = "statusbar_extra_padding_top";
+
+        /**
+         * @hide
+         */
+        public static final String STATUSBAR_EXTRA_PADDING_END = "statusbar_extra_padding_end";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
