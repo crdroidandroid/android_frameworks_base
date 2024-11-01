@@ -89,12 +89,10 @@ constructor(
 ) {
     private val mediaProcessingJobs = ConcurrentHashMap<String, Job>()
 
-    private val artworkWidth: Int =
-        context.resources.getDimensionPixelSize(
-            com.android.internal.R.dimen.config_mediaMetadataBitmapMaxSize
-        )
-    private val artworkHeight: Int =
-        context.resources.getDimensionPixelSize(R.dimen.qs_media_session_height_expanded)
+    private val artworkWidth = context.getResources().getInteger(
+                        com.android.internal.R.integer.config_maxBitmapSizePx)
+    private val artworkHeight = context.getResources().getInteger(
+                        com.android.internal.R.integer.config_maxBitmapSizePx)
 
     private val themeText =
         com.android.settingslib.Utils.getColorAttr(
