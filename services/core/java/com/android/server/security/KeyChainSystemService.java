@@ -75,6 +75,11 @@ public class KeyChainSystemService extends SystemService {
     private final BroadcastReceiver mPackageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(final Context context, final Intent broadcastIntent) {
+            final String action = broadcastIntent.getAction();
+            if (action == null) {
+                return;
+            }
+
             if (broadcastIntent.getPackage() != null) {
                 return;
             }
@@ -87,7 +92,7 @@ public class KeyChainSystemService extends SystemService {
                     return;
                 }
                 intent.setComponent(service);
-                intent.setAction(broadcastIntent.getAction());
+                intent.setAction(action);
                 startServiceInBackgroundAsUser(intent, UserHandle.of(getSendingUserId()));
             } catch (RuntimeException e) {
                 Slog.e(TAG, "Unable to forward package removed broadcast to KeyChain", e);
