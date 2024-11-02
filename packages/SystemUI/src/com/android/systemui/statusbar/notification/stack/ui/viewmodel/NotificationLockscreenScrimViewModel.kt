@@ -120,6 +120,6 @@ constructor(
         private val SplitShadeDefaultBackground: Color
             @Composable
             @ReadOnlyComposable
-            get() = colorResource(R.color.shade_scrim_background_dark)
+            get() = colorResource(R.color.shade_scrim_background)
     }
 }
