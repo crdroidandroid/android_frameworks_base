@@ -245,6 +245,11 @@ public final class NativeTombstoneManager {
         mContext.registerReceiverForAllUsers(new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
+                final String action = intent.getAction();
+                if (action == null) {
+                    return;
+                }
+
                 final int uid = intent.getIntExtra(Intent.EXTRA_UID, UserHandle.USER_NULL);
                 if (uid == UserHandle.USER_NULL) return;
 
