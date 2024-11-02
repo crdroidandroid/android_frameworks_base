@@ -171,6 +171,10 @@ public class GpuService extends SystemService {
     private final class PackageReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(@NonNull final Context context, @NonNull final Intent intent) {
+            final String action = intent.getAction();
+            if (action == null) {
+                return;
+            }
             final Uri data = intent.getData();
             if (data == null && DEBUG) {
                 Slog.e(TAG, "Cannot handle package broadcast with null data");
@@ -183,7 +187,7 @@ public class GpuService extends SystemService {
                 return;
             }
 
-            switch (intent.getAction()) {
+            switch (action) {
                 case ACTION_PACKAGE_ADDED:
                 case ACTION_PACKAGE_CHANGED:
                 case ACTION_PACKAGE_REMOVED:
