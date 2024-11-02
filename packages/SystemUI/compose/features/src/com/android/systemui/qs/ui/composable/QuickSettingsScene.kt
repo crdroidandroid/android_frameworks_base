@@ -300,7 +300,7 @@ private fun SceneScope.QuickSettingsScene(
             modifier =
                 Modifier.element(Shade.Elements.BackgroundScrim)
                     .fillMaxSize()
-                    .background(colorResource(R.color.shade_scrim_background_dark))
+                    .background(colorResource(R.color.shade_scrim_background))
         )
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,

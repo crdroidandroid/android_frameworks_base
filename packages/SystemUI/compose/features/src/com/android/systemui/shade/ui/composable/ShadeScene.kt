@@ -344,7 +344,7 @@ private fun SceneScope.SingleShade(
             modifier =
                 Modifier.fillMaxSize()
                     .element(Shade.Elements.BackgroundScrim)
-                    .background(colorResource(R.color.shade_scrim_background_dark))
+                    .background(colorResource(R.color.shade_scrim_background))
         )
         Layout(
             modifier =
@@ -510,7 +510,7 @@ private fun SceneScope.SplitShade(
                     // Cannot set the alpha of the whole element to 0, because the mirror should be
                     // in the QS column.
                     .background(
-                        colorResource(R.color.shade_scrim_background_dark)
+                        colorResource(R.color.shade_scrim_background)
                             .copy(alpha = contentAlpha)
                     )
         )

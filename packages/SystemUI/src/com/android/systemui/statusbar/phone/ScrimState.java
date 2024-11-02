@@ -380,7 +380,7 @@ public enum ScrimState {
 
     public void init(ScrimView scrimInFront, ScrimView scrimBehind, DozeParameters dozeParameters,
             DockManager dockManager) {
-        mBackgroundColor = scrimBehind.getContext().getColor(R.color.shade_scrim_background_dark);
+        mBackgroundColor = scrimBehind.getContext().getColor(R.color.shade_scrim_background);
         mScrimInFront = scrimInFront;
         mScrimBehind = scrimBehind;
 
