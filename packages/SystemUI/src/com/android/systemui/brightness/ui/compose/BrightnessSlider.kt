@@ -189,7 +189,7 @@ private fun Modifier.sliderBackground(color: Color) = drawWithCache {
 fun BrightnessSliderContainer(
     viewModel: BrightnessSliderViewModel,
     modifier: Modifier = Modifier,
-    containerColor: Color = colorResource(R.color.shade_scrim_background_dark),
+    containerColor: Color = colorResource(R.color.shade_scrim_background),
 ) {
     val gamma = viewModel.currentBrightness.value
     val coroutineScope = rememberCoroutineScope()
