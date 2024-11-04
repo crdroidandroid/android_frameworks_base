@@ -149,6 +149,7 @@ import com.android.server.pm.pkg.AndroidPackage;
 import com.android.server.pm.pkg.PackageState;
 import com.android.server.pm.pkg.PackageStateInternal;
 import com.android.server.pm.pkg.PackageStateUtils;
+import com.android.server.pm.pkg.PackageUserState;
 import com.android.server.pm.pkg.PackageUserStateInternal;
 import com.android.server.pm.pkg.PackageUserStateUtils;
 import com.android.server.pm.pkg.SharedUserApi;
@@ -2784,6 +2785,16 @@ public class ComputerEngine implements Computer {
         }
         if ((flags & (MATCH_KNOWN_PACKAGES | MATCH_ARCHIVED_PACKAGES)) != 0) {
             final PackageStateInternal ps = mSettings.getPackage(packageName);
+
+            if (ps != null &&
+                    (flags & MATCH_KNOWN_PACKAGES) == 0 &&
+                    (flags & MATCH_ARCHIVED_PACKAGES) != 0) {
+                PackageUserState us = ps.getUserStateOrDefault(userId);
+                if (!us.isInstalled() && us.getArchiveState() == null) {
+                    return INVALID_UID;
+                }
+            }
+
             if (ps != null && PackageStateUtils.isMatch(ps, flags)
                     && !shouldFilterApplication(ps, callingUid, userId)) {
                 return UserHandle.getUid(userId, ps.getAppId());
