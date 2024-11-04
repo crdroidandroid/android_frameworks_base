@@ -3135,6 +3135,13 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
                 Slog.w(TAG, "unable to update policy on UID " + uid);
             }
         }
+
+        // There is nothing to migrate if coming from pre-12 or from nothing.
+        final boolean isMigratingFromAtLeastAndroid12 = version >= VERSION_SUPPORTED_CARRIER_USAGE;
+        if (lineageVersion < LINEAGE_VERSION_REINSTATED_POLICY_REJECT_ALL
+                && isMigratingFromAtLeastAndroid12) {
+            migrateToPolicyRejectAll();
+        }
     }
 
     /**
