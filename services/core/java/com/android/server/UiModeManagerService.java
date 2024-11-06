@@ -2057,9 +2057,11 @@ final class UiModeManagerService extends SystemService {
         boolean newComputedValue = activate;
         if (mNightMode.get() != MODE_NIGHT_YES && mNightMode.get() != UiModeManager.MODE_NIGHT_NO) {
             if (mOverrideNightModeOn && !newComputedValue) {
-                newComputedValue = true;
+                mComputedNightMode = true;
+                return;
             } else if (mOverrideNightModeOff && newComputedValue) {
-                newComputedValue = false;
+                mComputedNightMode = false;
+                return;
             }
         }
 
