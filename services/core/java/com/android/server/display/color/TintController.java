@@ -19,6 +19,7 @@ package com.android.server.display.color;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.util.Slog;
+import com.android.internal.annotations.GuardedBy;
 
 import java.io.PrintWriter;
 
@@ -29,7 +30,10 @@ abstract class TintController {
      */
     private static final long TRANSITION_DURATION = 3000L;
 
+    private final Object mLock = new Object();
+
     private ValueAnimator mAnimator;
+    @GuardedBy("mLock")
     private Boolean mIsActivated;
 
     public ValueAnimator getAnimator() {
@@ -60,15 +64,21 @@ abstract class TintController {
     }
 
     public void setActivated(Boolean isActivated) {
-        mIsActivated = isActivated;
+        synchronized (mLock) {
+            mIsActivated = isActivated;
+        }
     }
 
     public boolean isActivated() {
-        return mIsActivated != null && mIsActivated;
+        synchronized (mLock) {
+            return mIsActivated != null && mIsActivated;
+        }
     }
 
     public boolean isActivatedStateNotSet() {
-        return mIsActivated == null;
+        synchronized (mLock) {
+            return mIsActivated == null;
+        }
     }
 
     public long getTransitionDurationMilliseconds() {
