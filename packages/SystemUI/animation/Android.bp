@@ -47,6 +47,7 @@ android_library {
         "com_android_systemui_flags_lib",
         "SystemUIShaderLib",
         "WindowManager-Shell-shared",
+        "com.google.android.material_material",
         "//frameworks/libs/systemui:animationlib",
         "//frameworks/libs/systemui:com_android_systemui_shared_flags_lib",
     ],

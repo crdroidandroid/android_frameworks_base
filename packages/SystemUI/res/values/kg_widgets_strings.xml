@@ -1,0 +1,12 @@
+<resources>    
+    <string name="camera">Camera</string>
+    <string name="clock_timer">Clock/Timer</string>
+    <string name="calculator">Calculator</string>
+    <string name="gallery">Gallery</string>
+    <string name="no_default_app_found">No default %1$s app found</string>
+    <string name="weather_data_unavailable">Data Unavailable</string>
+    <string name="omnijaws_weather">OmniJaws</string>
+    <string name="quick_settings_data_label">Mobile data</string>
+    <string name="quick_settings_ringer_label">Ringer mode</string>
+    <string name="torch_active">Torch Active</string>
+</resources>

@@ -1275,9 +1275,11 @@ public final class NotificationPanelViewController implements
     private boolean shouldForceSmallClock() {
         return !isOnAod()
                 // True on small landscape screens
-                && mResources.getBoolean(R.bool.force_small_clock_on_lockscreen)
-                || Settings.Secure.getIntForUser(
-                    mContentResolver, "clock_style", 0, UserHandle.USER_CURRENT) != 0;
+                && mResources.getBoolean(R.bool.force_small_clock_on_lockscreen) ||
+                (Settings.Secure.getIntForUser(
+                    mContentResolver, "clock_style", 0, UserHandle.USER_CURRENT) != 0 ||
+                 Settings.System.getIntForUser(
+                    mContentResolver, "lockscreen_widgets_enabled", 0, UserHandle.USER_CURRENT) != 0);
     }
 
     private void updateKeyguardStatusViewAlignment() {

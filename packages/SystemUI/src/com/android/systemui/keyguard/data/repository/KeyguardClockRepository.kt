@@ -36,6 +36,7 @@ import com.android.systemui.scene.shared.flag.SceneContainerFlag
 import com.android.systemui.shade.ShadeDisplayAware
 import com.android.systemui.shared.clocks.ClockRegistry
 import com.android.systemui.util.settings.SecureSettings
+import com.android.systemui.util.settings.SystemSettings
 import com.android.systemui.util.settings.SettingsProxyExt.observerFlow
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
@@ -84,6 +85,7 @@ class KeyguardClockRepositoryImpl
 @Inject
 constructor(
     private val secureSettings: SecureSettings,
+    private val systemSettings: SystemSettings,
     private val clockRegistry: ClockRegistry,
     override val clockEventController: ClockEventController,
     @Background private val backgroundDispatcher: CoroutineDispatcher,
@@ -173,7 +175,12 @@ constructor(
             0, // Default value
             UserHandle.USER_CURRENT
         ) != 0
-        val clockSettingValue = if (clockStyleEnabled) {
+        val lockscreenWidgetsEnabled = systemSettings.getIntForUser(
+            "lockscreen_widgets_enabled",
+            0, // Default value
+            UserHandle.USER_CURRENT
+        ) != 0
+        val clockSettingValue = if (clockStyleEnabled || lockscreenWidgetsEnabled) {
             0 
         } else {
             isDoubleLineClock
