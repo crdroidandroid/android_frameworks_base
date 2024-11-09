@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="start|center_vertical" >
+
+        <!-- "It's" Text -->
+        <TextView
+            android:id="@+id/its_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="It's"
+            android:fontFamily="@*android:string/config_clockFontFamily"
+            android:textSize="62sp"
+            android:textColor="@android:color/system_accent1_300" />
+
+        <!-- Custom Word Clock -->
+        <com.android.systemui.clocks.WordClockView
+            android:id="@+id/word_clock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="8dp"
+            android:textSize="64sp"
+            android:fontFamily="@*android:string/config_clockFontFamily"
+            android:textAlignment="viewStart"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+</FrameLayout>
