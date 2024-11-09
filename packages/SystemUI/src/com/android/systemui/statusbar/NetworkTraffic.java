@@ -482,6 +482,7 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable,
     public void applyNetworkTrafficState(NetworkTrafficState state) {
         // mEnabled and state.visible will have same values, no need to set again
         updateVisibility();
+        checkUpdateTrafficDrawable();
     }
 
     private final KeyguardUpdateMonitorCallback mUpdateCallback =
@@ -500,8 +501,6 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable,
         if (visible != mVisible) {
             mVisible = visible;
             setVisibility(mVisible ? View.VISIBLE : View.GONE);
-            checkUpdateTrafficDrawable();
-            requestLayout();
         }
     }
 
