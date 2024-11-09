@@ -46,10 +46,26 @@ public class ClockStyle extends RelativeLayout implements TunerService.Tunable {
             R.layout.keyguard_clock_simple,
             R.layout.keyguard_clock_miui,
             R.layout.keyguard_clock_ide,
-            R.layout.keyguard_clock_moto
+            R.layout.keyguard_clock_moto,
+            R.layout.keyguard_clock_label,
+            R.layout.keyguard_clock_ios, 
+            R.layout.keyguard_clock_num,
+            R.layout.keyguard_clock_taden,
+            R.layout.keyguard_clock_mont,
+            R.layout.keyguard_clock_accent,
+            R.layout.keyguard_clock_nos1,
+            R.layout.keyguard_clock_nos2,
+            R.layout.keyguard_clock_life,
+            R.layout.keyguard_clock_word,
+            R.layout.keyguard_clock_encode,
+            R.layout.keyguard_clock_block,
+            R.layout.keyguard_clock_bubble,
+            R.layout.keyguard_clock_nos3,
+            R.layout.keyguard_clock_analog,
+            R.layout.keyguard_clock_a9
     };
 
-    private final static int[] mCenterClocks = {2, 3, 5, 6};
+    private static final int[] mCenterClocks = {2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22};
 
     private static final int DEFAULT_STYLE = 0; // Disabled
     public static final String CLOCK_STYLE_KEY = Settings.Secure.LOCK_SCREEN_CUSTOM_CLOCK_STYLE;

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:gravity="center|top"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Hour Text (Dynamic) -->
+    <TextClock
+        android:id="@+id/hour_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="100dp"
+        android:textColor="@android:color/white"
+        android:fontFamily="@font/EncodeSansBold"
+        android:layout_gravity="center"
+        android:format12Hour="hh"
+        android:format24Hour="HH"/>
+
+    <!-- Minute Text (Dynamic) -->
+    <TextClock
+        android:id="@+id/minute_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="101dp"
+        android:textColor="@android:color/white"
+        android:fontFamily="@font/EncodeSansLight"
+        android:layout_marginTop="2dp"
+        android:layout_gravity="center"
+        android:format12Hour="mm"
+        android:format24Hour="mm"/>
+
+    <!-- AM/PM Text (Dynamic) -->
+    <TextClock
+        android:id="@+id/am_pm_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:textColor="@android:color/white"
+        android:fontFamily="@font/EncodeSansLight"
+        android:layout_marginTop="8dp"
+        android:layout_gravity="center"
+        android:format12Hour="a - EEE, MMM d"
+        android:format24Hour="a - EEE, MMM d"/>
+
+</LinearLayout>

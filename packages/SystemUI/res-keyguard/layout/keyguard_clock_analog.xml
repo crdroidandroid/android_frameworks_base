@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <!-- Analog Clock Custom View -->
+    <com.android.systemui.clocks.AnalogClockView
+        android:id="@+id/analog_clock"
+        android:layout_width="280dp"
+        android:layout_height="280dp"
+        android:layout_gravity="center"/>
+
+    <TextClock
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:format12Hour="EEE, MMM d"
+        android:format24Hour="EEE, MMM d"
+        android:gravity="center"
+        android:singleLine="true"
+        android:tag="text1|nolineheight"
+        android:textAlignment="center"
+        android:layout_marginTop="5dp"
+        android:textColor="@android:color/white"
+        android:fontFamily="@*android:string/config_clockFontFamily"
+        android:textSize="22dp" />
+</LinearLayout>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <!-- LIFE Text -->
+    <TextView
+        android:id="@+id/life_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="LIFE"
+        android:fontFamily="@font/PlayfairDisplay"
+        android:textColor="@android:color/white"
+        android:includeFontPadding="false"
+        android:textSize="100sp"
+        android:letterSpacing="0.4"
+        android:layout_marginBottom="125dp" />
+
+    <!-- Date Layout -->
+    <TextClock
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:format12Hour="d/M"
+        android:format24Hour="d/M"
+        android:fontFamily="@font/Cotta"
+        android:textColor="@android:color/white"
+        android:textSize="35sp"
+        android:layout_marginBottom="7dp" />
+
+    <!-- Time Layout -->
+    <TextClock
+        android:id="@+id/clock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:format12Hour="hh:mm"
+        android:format24Hour="HH:mm"
+        android:fontFamily="@font/Cotta"
+        android:textColor="@android:color/white"
+        android:textSize="65sp"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Day Text -->
+    <TextClock
+        android:id="@+id/day"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:format12Hour="EEE"
+        android:format24Hour="EEE"
+        android:fontFamily="@font/Cotta"
+        android:textColor="@android:color/white"
+        android:textSize="30sp" />
+
+</LinearLayout>
