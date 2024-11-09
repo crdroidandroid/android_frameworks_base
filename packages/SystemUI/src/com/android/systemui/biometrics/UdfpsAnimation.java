@@ -27,13 +27,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.database.ContentObserver;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.hardware.fingerprint.FingerprintSensorPropertiesInternal;
-import android.net.Uri;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.AttributeSet;
@@ -70,17 +68,12 @@ public class UdfpsAnimation extends ImageView {
     private final int mMaxBurnInOffsetX;
     private final int mMaxBurnInOffsetY;
 
-    private String[] mStyleNames;
-
     private static final String UDFPS_ANIMATIONS_PACKAGE = "com.crdroid.udfps.animations";
 
-    private Resources mApkResources;
-    
     private final KeyguardStateController mKeyguardStateController;
     private final AuthController mAuthController;
     private final FingerprintSensorPropertiesInternal mProps;
 
-    private boolean mIsContentObserverRegistered = false;
     private boolean mAnimationAdded = false;
 
     private final KeyguardStateController.Callback keyguardStateCallback = new KeyguardStateController.Callback() {
@@ -99,28 +92,8 @@ public class UdfpsAnimation extends ImageView {
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
             if (Intent.ACTION_USER_SWITCHED.equals(action)) {
-                if (mIsContentObserverRegistered) {
-                    mContext.getContentResolver().unregisterContentObserver(mContentObserver);
-                    mIsContentObserverRegistered = false;
-                }
-                Uri udfpsAnimStyle = Settings.System.getUriFor(Settings.System.UDFPS_ANIM_STYLE);
-                mContext.getContentResolver().registerContentObserver(
-                        udfpsAnimStyle, false, mContentObserver, UserHandle.USER_CURRENT);
-                mContentObserver.onChange(true, udfpsAnimStyle);
-                mIsContentObserverRegistered = true;
+                updateAnimationStyle();
             }           
-        }
-    };
-
-    private ContentObserver mContentObserver = new ContentObserver(null) {
-        @Override
-        public void onChange(boolean selfChange, Uri uri) {
-            int value = Settings.System.getIntForUser(mContext.getContentResolver(),
-                    Settings.System.UDFPS_ANIM_STYLE, 0, UserHandle.USER_CURRENT);
-            int style = (mStyleNames != null && value >= 0 && value < mStyleNames.length) ? value : 0;
-            mContext.getMainExecutor().execute(() -> {
-                updateAnimationStyle(style);
-            });
         }
     };
 
@@ -156,18 +129,6 @@ public class UdfpsAnimation extends ImageView {
 
         updatePosition();
 
-        try {
-            PackageManager pm = mContext.getPackageManager();
-            mApkResources = pm.getResourcesForApplication(UDFPS_ANIMATIONS_PACKAGE);
-        } catch (PackageManager.NameNotFoundException e) {
-            Log.e(LOG_TAG, "Failed to load package resources", e);
-        }
-        if (mApkResources != null) {
-            int res = mApkResources.getIdentifier("udfps_animation_styles",
-                    "array", UDFPS_ANIMATIONS_PACKAGE);
-            mStyleNames = mApkResources.getStringArray(res);
-        }
-
         setScaleType(ImageView.ScaleType.CENTER_INSIDE);
     }
 
@@ -176,29 +137,46 @@ public class UdfpsAnimation extends ImageView {
             IntentFilter filter = new IntentFilter(ACTION_USER_SWITCHED);
             mContext.registerReceiverAsUser(mIntentReceiver, UserHandle.ALL, filter, null, null);
 
-            Uri udfpsAnimStyle = Settings.System.getUriFor(Settings.System.UDFPS_ANIM_STYLE);
-            mContext.getContentResolver().registerContentObserver(
-                    udfpsAnimStyle, false, mContentObserver, UserHandle.USER_CURRENT);
-            mContentObserver.onChange(true, udfpsAnimStyle);
-            mIsContentObserverRegistered = true;
+            updateAnimationStyle();
 
             mKeyguardStateController.addCallback(keyguardStateCallback);
             mAnimationAdded = true;
         }
     }
 
+    private void updateAnimationStyle() {
+        int value = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.UDFPS_ANIM_STYLE, 0, UserHandle.USER_CURRENT);
+        mContext.getMainExecutor().execute(() -> {
+            updateAnimationStyle(value);
+        });
+    }
+
     private void updateAnimationStyle(int styleIdx) {
-        if (styleIdx == 0) {
+        Drawable bgDrawable = getBgDrawable(styleIdx);
+        if (styleIdx == 0 || bgDrawable == null) {
             setBackground(null);
             recognizingAnim = null;
         } else {
-            Drawable bgDrawable = getBgDrawable(styleIdx);
             setBackground(bgDrawable);
             recognizingAnim = bgDrawable instanceof AnimationDrawable ? (AnimationDrawable) bgDrawable : null;
         }
     }
 
     private Drawable getBgDrawable(int styleIdx) {
+        String[] mStyleNames = null;
+        Resources mApkResources = null;
+        try {
+            mApkResources = mContext.getPackageManager().getResourcesForApplication(UDFPS_ANIMATIONS_PACKAGE);
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e(LOG_TAG, "Failed to load package resources", e);
+            return null;
+        }
+        if (mApkResources != null) {
+            int res = mApkResources.getIdentifier("udfps_animation_styles",
+                    "array", UDFPS_ANIMATIONS_PACKAGE);
+            mStyleNames = mApkResources.getStringArray(res);
+        }
         if (mStyleNames == null || styleIdx >= mStyleNames.length) {
             return null;
         }
@@ -268,9 +246,7 @@ public class UdfpsAnimation extends ImageView {
                 recognizingAnim.stop();
                 recognizingAnim.selectDrawable(0);
             }
-            if (getWindowToken() != null) {
-                mWindowManager.removeView(this);
-            }
+            mWindowManager.removeView(this);
             mShowing = false;
         } catch (RuntimeException e) {
             Log.e(LOG_TAG, "Error removing view from WindowManager", e);
@@ -280,10 +256,6 @@ public class UdfpsAnimation extends ImageView {
     public void removeAnimation() {
         hide();
         if (mAnimationAdded) {
-            if (mIsContentObserverRegistered) {
-                mContext.getContentResolver().unregisterContentObserver(mContentObserver);
-                mIsContentObserverRegistered = false;
-            }
             mContext.unregisterReceiver(mIntentReceiver);
             mKeyguardStateController.removeCallback(keyguardStateCallback);
             mAnimationAdded = false;
