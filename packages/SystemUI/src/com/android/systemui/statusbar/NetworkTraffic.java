@@ -16,11 +16,16 @@
 
 package com.android.systemui.statusbar;
 
+import static com.android.systemui.statusbar.StatusBarIconView.STATE_DOT;
+import static com.android.systemui.statusbar.StatusBarIconView.STATE_HIDDEN;
+import static com.android.systemui.statusbar.StatusBarIconView.STATE_ICON;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
@@ -33,25 +38,36 @@ import android.net.TrafficStats;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.text.Spanned;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.RelativeSizeSpan;
 import android.util.AttributeSet;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.TextView;
-
-import lineageos.providers.LineageSettings;
 
 import com.android.systemui.Dependency;
 import com.android.systemui.res.R;
+import com.android.systemui.plugins.DarkIconDispatcher;
+import com.android.systemui.plugins.DarkIconDispatcher.DarkReceiver;
+import com.android.systemui.statusbar.StatusIconDisplayable;
+import com.android.systemui.statusbar.phone.PhoneStatusBarPolicy.NetworkTrafficState;
+import com.android.keyguard.KeyguardUpdateMonitor;
+import com.android.keyguard.KeyguardUpdateMonitorCallback;
+
 import com.android.systemui.tuner.TunerService;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.stream.Stream;
 
-public class NetworkTraffic extends TextView implements TunerService.Tunable {
+/** @hide */
+public class NetworkTraffic extends TextView implements TunerService.Tunable,
+        DarkReceiver, StatusIconDisplayable {
+
     private static final String TAG = "NetworkTraffic";
 
     // This must match the interface prefix in Connectivity's clatd.c.
@@ -60,10 +76,6 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable {
     private static final int MODE_UPSTREAM_AND_DOWNSTREAM = 0;
     private static final int MODE_UPSTREAM_ONLY = 1;
     private static final int MODE_DOWNSTREAM_ONLY = 2;
-
-    protected static final int LOCATION_DISABLED = 0;
-    protected static final int LOCATION_STATUSBAR = 1;
-    protected static final int LOCATION_QUICK_STATUSBAR = 2;
 
     private static final int MESSAGE_TYPE_PERIODIC_REFRESH = 0;
     private static final int MESSAGE_TYPE_UPDATE_VIEW = 1;
@@ -74,25 +86,24 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable {
     private static final int Mega = Kilo * Kilo;
     private static final int Giga = Mega * Kilo;
 
-    private static final String NETWORK_TRAFFIC_LOCATION =
-            "lineagesecure:" + LineageSettings.Secure.NETWORK_TRAFFIC_LOCATION;
+    private static final String NETWORK_TRAFFIC_ENABLED =
+            "system:" + Settings.System.NETWORK_TRAFFIC_ENABLED;
     private static final String NETWORK_TRAFFIC_MODE =
-            "lineagesecure:" + LineageSettings.Secure.NETWORK_TRAFFIC_MODE;
+            "system:" + Settings.System.NETWORK_TRAFFIC_MODE;
     private static final String NETWORK_TRAFFIC_AUTOHIDE =
-            "lineagesecure:" + LineageSettings.Secure.NETWORK_TRAFFIC_AUTOHIDE;
+            "system:" + Settings.System.NETWORK_TRAFFIC_AUTOHIDE;
     private static final String NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD =
-            "lineagesecure:" + LineageSettings.Secure.NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD;
+            "system:" + Settings.System.NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD;
     private static final String NETWORK_TRAFFIC_UNITS =
-            "lineagesecure:" + LineageSettings.Secure.NETWORK_TRAFFIC_UNITS;
+            "system:" + Settings.System.NETWORK_TRAFFIC_UNITS;
     private static final String NETWORK_TRAFFIC_REFRESH_INTERVAL =
-            "lineagesecure:" + LineageSettings.Secure.NETWORK_TRAFFIC_REFRESH_INTERVAL;
+            "system:" + Settings.System.NETWORK_TRAFFIC_REFRESH_INTERVAL;
     private static final String NETWORK_TRAFFIC_HIDEARROW =
-            "lineagesecure:" + LineageSettings.Secure.NETWORK_TRAFFIC_HIDEARROW;
+            "system:" + Settings.System.NETWORK_TRAFFIC_HIDEARROW;
 
-    protected int mLocation = LOCATION_DISABLED;
     private int mMode = MODE_UPSTREAM_AND_DOWNSTREAM;
     private int mSubMode = MODE_UPSTREAM_AND_DOWNSTREAM;
-    protected boolean mIsActive;
+    private boolean mIsActive;
     private boolean mTrafficActive;
     private long mTxBytes;
     private long mRxBytes;
@@ -102,17 +113,17 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable {
     private boolean mAutoHide;
     private long mAutoHideThreshold;
     private int mUnits;
-    protected int mIconTint = 0;
-    protected int newTint = Color.WHITE;
+    private int mIconTint = 0;
+    private int newTint = Color.WHITE;
 
     private Drawable mDrawable;
 
     private int mRefreshInterval = 2;
 
-    protected boolean mAttached;
+    private boolean mAttached;
     private boolean mHideArrows;
 
-    protected boolean mVisible = true;
+    private boolean mVisible = true;
 
     private ConnectivityManager mConnectivityManager;
     private final Handler mTrafficHandler;
@@ -120,14 +131,21 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable {
     private RelativeSizeSpan mSpeedRelativeSizeSpan = new RelativeSizeSpan(0.70f);
     private RelativeSizeSpan mUnitRelativeSizeSpan = new RelativeSizeSpan(0.65f);
 
-    protected boolean mEnabled = false;
+    private boolean mEnabled = false;
     private boolean mConnectionAvailable = true;
-    private boolean mChipVisible;
 
     private final HashMap<Network, LinkProperties> mLinkPropertiesMap = new HashMap<>();
     // Used to indicate that the set of sources contributing
     // to current stats have changed.
     private boolean mNetworksChanged = true;
+
+    private int mVisibleState = -1;
+    private boolean mColorIsStatic;
+
+    private KeyguardUpdateMonitor mKeyguardUpdateMonitor;
+    private boolean mKeyguardShowing;
+
+    private String mSlot;
 
     public NetworkTraffic(Context context) {
         this(context, null);
@@ -322,6 +340,58 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable {
         };
     }
 
+    public static NetworkTraffic fromContext(Context context, String slot) {
+        NetworkTraffic v = new NetworkTraffic(context);
+        v.setSlot(slot);
+        v.setVisibleState(STATE_ICON);
+        return v;
+    }
+
+    public void setSlot(String slot) {
+        mSlot = slot;
+    }
+
+    @Override
+    public void onDarkChanged(ArrayList<Rect> areas, float darkIntensity, int tint) {
+        if (mColorIsStatic) {
+            return;
+        }
+        newTint = DarkIconDispatcher.getTint(areas, this, tint);
+        checkUpdateTrafficDrawable();
+    }
+
+    @Override
+    public void setStaticDrawableColor(int color) {
+        mColorIsStatic = true;
+        newTint = color;
+        checkUpdateTrafficDrawable();
+    }
+
+    @Override
+    public void setDecorColor(int color) {
+    }
+
+    @Override
+    public String getSlot() {
+        return mSlot;
+    }
+
+    @Override
+    public boolean isIconVisible() {
+        return mEnabled;
+    }
+
+    @Override
+    public int getVisibleState() {
+        return mVisibleState;
+    }
+
+    @Override
+    public void setVisibleState(int state, boolean animate) {
+        mVisibleState = state;
+        updateVisibility();
+    }
+
     // Network tracking related variables
     private NetworkRequest mRequest = new NetworkRequest.Builder()
             .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
@@ -372,7 +442,7 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable {
         if (!mAttached) {
             mAttached = true;
             final TunerService tunerService = Dependency.get(TunerService.class);
-            tunerService.addTunable(this, NETWORK_TRAFFIC_LOCATION);
+            tunerService.addTunable(this, NETWORK_TRAFFIC_ENABLED);
             tunerService.addTunable(this, NETWORK_TRAFFIC_MODE);
             tunerService.addTunable(this, NETWORK_TRAFFIC_AUTOHIDE);
             tunerService.addTunable(this, NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD);
@@ -388,6 +458,9 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable {
             IntentFilter filter = new IntentFilter();
             filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
             mContext.registerReceiver(mIntentReceiver, filter, null, mTrafficHandler);
+
+            mKeyguardUpdateMonitor = Dependency.get(KeyguardUpdateMonitor.class);
+            mKeyguardUpdateMonitor.registerCallback(mUpdateCallback);
 
             updateViews();
         }
@@ -406,23 +479,37 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable {
         }
     }
 
-    public void setChipVisibility(boolean enable) {
-        if (mEnabled && mChipVisible != enable) {
-            mChipVisible = enable;
-            updateVisibility();
+    public void applyNetworkTrafficState(NetworkTrafficState state) {
+        // mEnabled and state.visible will have same values, no need to set again
+        updateVisibility();
+    }
+
+    private final KeyguardUpdateMonitorCallback mUpdateCallback =
+            new KeyguardUpdateMonitorCallback() {
+                @Override
+                public void onKeyguardVisibilityChanged(boolean showing) {
+                    mKeyguardShowing = showing;
+                    updateVisibility();
+                }
+            };
+
+    private void updateVisibility() {
+        boolean visible = mEnabled && mIsActive && getText() != ""
+                    && !mKeyguardShowing 
+                    && mVisibleState == STATE_ICON;
+        if (visible != mVisible) {
+            mVisible = visible;
+            setVisibility(mVisible ? View.VISIBLE : View.GONE);
+            checkUpdateTrafficDrawable();
+            requestLayout();
         }
     }
 
-    protected void setEnabled() {
-        mEnabled = mLocation == LOCATION_QUICK_STATUSBAR;
-    }
-
-    protected void updateVisibility() {
-        boolean visible = mEnabled && mIsActive && getText() != ""
-            && !mChipVisible;
-        if (visible != mVisible) {
-            mVisible = visible;
-            setVisibility(mVisible ? VISIBLE : GONE);
+    private void checkUpdateTrafficDrawable() {
+        // Wait for icon to be visible and tint to be changed
+        if (mVisible && mIconTint != newTint) {
+            mIconTint = newTint;
+            updateTrafficDrawable();
         }
     }
 
@@ -441,10 +528,9 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable {
     @Override
     public void onTuningChanged(String key, String newValue) {
         switch (key) {
-            case NETWORK_TRAFFIC_LOCATION:
-                mLocation =
-                        TunerService.parseInteger(newValue, 0);
-                setEnabled();
+            case NETWORK_TRAFFIC_ENABLED:
+                mEnabled =
+                        TunerService.parseIntegerSwitch(newValue, false);
                 if (mEnabled) {
                     setLines(2);
                     String txtFont = getResources().getString(com.android.internal.R.string.config_bodyFontFamily);
@@ -495,7 +581,7 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable {
         }
     }
 
-    protected void updateViews() {
+    private void updateViews() {
         if (mEnabled) {
             updateViewState();
         }
@@ -546,7 +632,7 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable {
         }
     }
 
-    protected void updateTrafficDrawable() {
+    private void updateTrafficDrawable() {
         if (mDrawable != null) {
             mDrawable.setColorFilter(mIconTint, PorterDuff.Mode.MULTIPLY);
         }
