@@ -81,6 +81,18 @@ public class UdfpsAnimation extends ImageView {
     private final FingerprintSensorPropertiesInternal mProps;
 
     private boolean mIsContentObserverRegistered = false;
+    private boolean mAnimationAdded = false;
+
+    private final KeyguardStateController.Callback keyguardStateCallback = new KeyguardStateController.Callback() {
+        @Override
+        public void onKeyguardFadingAwayChanged() {
+            removeAnimation();
+        }
+        @Override
+        public void onKeyguardGoingAwayChanged() {
+            removeAnimation();
+        }
+    };
 
     private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
@@ -105,7 +117,7 @@ public class UdfpsAnimation extends ImageView {
         public void onChange(boolean selfChange, Uri uri) {
             int value = Settings.System.getIntForUser(mContext.getContentResolver(),
                     Settings.System.UDFPS_ANIM_STYLE, 0, UserHandle.USER_CURRENT);
-            int style = (value < 0 || value >= mStyleNames.length) ? 0 : value;
+            int style = (mStyleNames != null && value >= 0 && value < mStyleNames.length) ? value : 0;
             mContext.getMainExecutor().execute(() -> {
                 updateAnimationStyle(style);
             });
@@ -148,54 +160,56 @@ public class UdfpsAnimation extends ImageView {
             PackageManager pm = mContext.getPackageManager();
             mApkResources = pm.getResourcesForApplication(UDFPS_ANIMATIONS_PACKAGE);
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+            Log.e(LOG_TAG, "Failed to load package resources", e);
         }
-        int res = mApkResources.getIdentifier("udfps_animation_styles",
-                "array", UDFPS_ANIMATIONS_PACKAGE);
-        mStyleNames = mApkResources.getStringArray(res);
+        if (mApkResources != null) {
+            int res = mApkResources.getIdentifier("udfps_animation_styles",
+                    "array", UDFPS_ANIMATIONS_PACKAGE);
+            mStyleNames = mApkResources.getStringArray(res);
+        }
 
         setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+    }
 
-        IntentFilter filter = new IntentFilter(ACTION_USER_SWITCHED);
-        mContext.registerReceiverAsUser(mIntentReceiver, UserHandle.ALL, filter, null, null);
+    private void addAnimation() {
+        if (!mAnimationAdded) {
+            IntentFilter filter = new IntentFilter(ACTION_USER_SWITCHED);
+            mContext.registerReceiverAsUser(mIntentReceiver, UserHandle.ALL, filter, null, null);
 
-        Uri udfpsAnimStyle = Settings.System.getUriFor(Settings.System.UDFPS_ANIM_STYLE);
-        mContext.getContentResolver().registerContentObserver(
-                udfpsAnimStyle, false, mContentObserver, UserHandle.USER_CURRENT);
-        mContentObserver.onChange(true, udfpsAnimStyle);
-        mIsContentObserverRegistered = true;
-        
-        mKeyguardStateController.addCallback(new KeyguardStateController.Callback() {
-            @Override
-            public void onKeyguardFadingAwayChanged() {
-                removeAnimation();
-            }
-            @Override
-            public void onKeyguardGoingAwayChanged() {
-                removeAnimation();
-            }
-        });
+            Uri udfpsAnimStyle = Settings.System.getUriFor(Settings.System.UDFPS_ANIM_STYLE);
+            mContext.getContentResolver().registerContentObserver(
+                    udfpsAnimStyle, false, mContentObserver, UserHandle.USER_CURRENT);
+            mContentObserver.onChange(true, udfpsAnimStyle);
+            mIsContentObserverRegistered = true;
+
+            mKeyguardStateController.addCallback(keyguardStateCallback);
+            mAnimationAdded = true;
+        }
     }
 
     private void updateAnimationStyle(int styleIdx) {
         if (styleIdx == 0) {
+            setBackground(null);
             recognizingAnim = null;
-            setBackgroundDrawable(null);
         } else {
             Drawable bgDrawable = getBgDrawable(styleIdx);
-            setBackgroundDrawable(bgDrawable);
-            recognizingAnim = bgDrawable != null ? (AnimationDrawable) getBackground() : null;
+            setBackground(bgDrawable);
+            recognizingAnim = bgDrawable instanceof AnimationDrawable ? (AnimationDrawable) bgDrawable : null;
         }
     }
 
     private Drawable getBgDrawable(int styleIdx) {
+        if (mStyleNames == null || styleIdx >= mStyleNames.length) {
+            return null;
+        }
         String drawableName = mStyleNames[styleIdx];
         if (DEBUG) Log.i(LOG_TAG, "Updating animation style to:" + drawableName);
         try {
             int resId = mApkResources.getIdentifier(drawableName, "drawable", UDFPS_ANIMATIONS_PACKAGE);
-            if (DEBUG) Log.i(LOG_TAG, "Got resource id: "+ resId +" from package" );
+            if (DEBUG) Log.i(LOG_TAG, "Got resource id: "+ resId +" from package");
             return mApkResources.getDrawable(resId);
         } catch (Resources.NotFoundException e) {
+            Log.w(LOG_TAG, "Drawable resource not found: " + drawableName, e);
             return null;
         }
     }
@@ -232,55 +246,56 @@ public class UdfpsAnimation extends ImageView {
     }
 
     public void show() {
-        if (!mShowing && mIsKeyguard && isAnimationEnabled()) {
+        if (mShowing || !mIsKeyguard || recognizingAnim == null) return;
+        try {
+            if (getWindowToken() == null) {
+                mWindowManager.addView(this, mAnimParams);
+            } else {
+                mWindowManager.updateViewLayout(this, mAnimParams);
+            }
             mShowing = true;
-            try {
-                if (getWindowToken() == null) {
-                    mWindowManager.addView(this, mAnimParams);
-                } else {
-                    mWindowManager.updateViewLayout(this, mAnimParams);
-                }
-            } catch (RuntimeException e) {
-                // Ignore
-            }
-            if (recognizingAnim != null) {
-                recognizingAnim.start();
-            }
+            recognizingAnim.start();
+        } catch (RuntimeException e) {
+            Log.e(LOG_TAG, "Error adding view to WindowManager", e);
         }
     }
 
     public void hide() {
-        if (mShowing) {
-            removeAnimation();
+        if (!mShowing) return;
+        try {
+            if (recognizingAnim != null) {
+                clearAnimation();
+                recognizingAnim.stop();
+                recognizingAnim.selectDrawable(0);
+            }
+            if (getWindowToken() != null) {
+                mWindowManager.removeView(this);
+            }
+            mShowing = false;
+        } catch (RuntimeException e) {
+            Log.e(LOG_TAG, "Error removing view from WindowManager", e);
         }
     }
-    
+
     public void removeAnimation() {
-        if (recognizingAnim != null) {
-            clearAnimation();
-            recognizingAnim.stop();
-            recognizingAnim.selectDrawable(0);
+        hide();
+        if (mAnimationAdded) {
+            if (mIsContentObserverRegistered) {
+                mContext.getContentResolver().unregisterContentObserver(mContentObserver);
+                mIsContentObserverRegistered = false;
+            }
+            mContext.unregisterReceiver(mIntentReceiver);
+            mKeyguardStateController.removeCallback(keyguardStateCallback);
+            mAnimationAdded = false;
         }
-        if (getWindowToken() != null) {
-            mWindowManager.removeView(this);
-        }
-        mShowing = false;
     }
 
     public void setIsKeyguard(boolean isKeyguard) {
         mIsKeyguard = isKeyguard;
-    }
-
-    public void dozeTimeTick() {
-        float amt = Dependency.get(StatusBarStateController.class).getDozeAmount();
-
-        float mBurnInOffsetX = MathUtils.lerp(0f,
-                getBurnInOffset(mMaxBurnInOffsetX * 2, true /* xAxis */)
-                - mMaxBurnInOffsetX, amt);
-        float mBurnInOffsetY = MathUtils.lerp(0f,
-                getBurnInOffset(mMaxBurnInOffsetY * 2, false /* xAxis */)
-                - mMaxBurnInOffsetY, amt);
-        setTranslationX(mBurnInOffsetX);
-        setTranslationY(mBurnInOffsetY);
+        if (mIsKeyguard) {
+            addAnimation();
+        } else {
+            removeAnimation();
+        }
     }
 }
