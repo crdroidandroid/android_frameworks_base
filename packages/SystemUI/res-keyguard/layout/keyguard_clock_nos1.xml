@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal|top"
+    android:gravity="center_horizontal|top"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+            <TextClock
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:format12Hour="EEE, d MMM"
+                android:format24Hour="EEE, d MMM"
+                android:gravity="center"
+                android:singleLine="true"
+                android:tag="text1|nolineheight"
+                android:includeFontPadding="false"
+                android:textAlignment="center"
+                android:textColor="@android:color/white"
+                android:textSize="20dp" />
+
+            <com.android.systemui.weather.WeatherImageView
+                android:id="@+id/weather_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="4dp"
+                android:visibility="gone" />
+
+            <com.android.systemui.weather.WeatherTextView
+                android:id="@+id/weather_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="8dp"
+                android:textColor="@android:color/white"
+                android:textSize="20dp"
+                android:visibility="gone" />
+
+        </LinearLayout>
+        <TextClock
+            android:id="@+id/clock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="0.9"
+            android:layout_marginTop="9dp"
+            android:fontFamily="@font/subway"
+            android:includeFontPadding="false"
+            android:format12Hour="hmm"
+            android:format24Hour="Hmm"
+            android:gravity="center"
+            android:singleLine="true"
+            android:tag="text1"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="150dp"/>
+    </LinearLayout>
+</LinearLayout>
