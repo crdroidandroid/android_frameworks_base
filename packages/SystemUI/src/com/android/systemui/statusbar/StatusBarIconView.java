@@ -790,6 +790,10 @@ public class StatusBarIconView extends AnimatedImageView implements StatusIconDi
      * transitioning this also immediately sets the color.
      */
     public void setStaticDrawableColor(int color) {
+        if (isNotification() && mNewIconStyle &&
+                (mIcon != null && !mIcon.pkg.contains("systemui"))) {
+            color = NO_COLOR;
+        }
         mDrawableColor = color;
         setColorInternal(color);
         updateContrastedStaticColor();
