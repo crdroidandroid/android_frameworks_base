@@ -46,6 +46,7 @@ import com.android.systemui.log.TouchHandlingViewLogger
 import com.android.systemui.res.R
 import com.android.systemui.scene.shared.flag.SceneContainerFlag
 import com.android.systemui.scrim.ScrimView
+import com.android.systemui.tuner.TunerService
 import dagger.Lazy
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
@@ -66,6 +67,7 @@ constructor(
     private val alternateBouncerDependencies: Lazy<AlternateBouncerDependencies>,
     private val windowManager: Lazy<WindowManager>,
     private val layoutInflater: Lazy<LayoutInflater>,
+    private val tunerService: TunerService,
 ) : CoreStartable {
 
     private var alternateBouncerView: ConstraintLayout? = null
@@ -260,7 +262,7 @@ constructor(
                         var udfpsView = view.getViewById(udfpsViewId)
                         if (udfpsView == null) {
                             udfpsView =
-                                DeviceEntryIconView(view.context, null, logger = logger).apply {
+                                DeviceEntryIconView(view.context, null, 0, logger, tunerService).apply {
                                     id = udfpsViewId
                                     contentDescription =
                                         context.resources.getString(
@@ -268,7 +270,7 @@ constructor(
                                         )
                                 }
                             view.addView(udfpsView)
-                            AlternateBouncerUdfpsViewBinder.bind(udfpsView, udfpsIconViewModel)
+                            AlternateBouncerUdfpsViewBinder.bind(applicationScope, udfpsView, udfpsIconViewModel)
                         }
 
                         val constraintSet = ConstraintSet().apply { clone(view) }

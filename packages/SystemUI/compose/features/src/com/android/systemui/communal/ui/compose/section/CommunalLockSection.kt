@@ -43,6 +43,7 @@ import com.android.systemui.log.dagger.LongPressTouchLog
 import com.android.systemui.plugins.FalsingManager
 import com.android.systemui.res.R
 import com.android.systemui.statusbar.VibratorHelper
+import com.android.systemui.tuner.TunerService
 import dagger.Lazy
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
@@ -58,6 +59,7 @@ constructor(
     private val vibratorHelper: Lazy<VibratorHelper>,
     private val featureFlags: FeatureFlagsClassic,
     @LongPressTouchLog private val logBuffer: LogBuffer,
+    private val tunerService: TunerService,
 ) {
     @Composable
     fun ContentScope.LockIcon(modifier: Modifier = Modifier) {
@@ -68,7 +70,9 @@ constructor(
                 DeviceEntryIconView(
                         context,
                         null,
-                        logger = TouchHandlingViewLogger(logBuffer, tag = TAG),
+                        0,
+                        TouchHandlingViewLogger(logBuffer, tag = TAG),
+                        tunerService
                     )
                     .apply {
                         id = R.id.device_entry_icon_view
