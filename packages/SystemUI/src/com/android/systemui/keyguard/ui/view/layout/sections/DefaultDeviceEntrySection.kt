@@ -48,6 +48,7 @@ import com.android.systemui.res.R
 import com.android.systemui.shade.NotificationPanelView
 import com.android.systemui.shade.ShadeDisplayAware
 import com.android.systemui.statusbar.VibratorHelper
+import com.android.systemui.tuner.TunerService
 import dagger.Lazy
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
@@ -71,6 +72,7 @@ constructor(
     private val falsingManager: Lazy<FalsingManager>,
     private val vibratorHelper: Lazy<VibratorHelper>,
     @LongPressTouchLog private val logBuffer: LogBuffer,
+    private val tunerService: TunerService,
 ) : KeyguardSection() {
     private val deviceEntryIconViewId = R.id.device_entry_icon_view
     private var disposableHandle: DisposableHandle? = null
@@ -84,7 +86,9 @@ constructor(
             DeviceEntryIconView(
                     context,
                     null,
-                    logger = LongPressHandlingViewLogger(logBuffer = logBuffer, TAG),
+                    0,
+                    LongPressHandlingViewLogger(logBuffer = logBuffer, TAG),
+                    tunerService,
                 )
                 .apply { id = deviceEntryIconViewId }
 
