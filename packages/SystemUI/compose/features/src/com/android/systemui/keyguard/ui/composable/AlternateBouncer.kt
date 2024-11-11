@@ -46,6 +46,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.android.compose.modifiers.height
 import com.android.compose.modifiers.width
+import com.android.systemui.Dependency
 import com.android.systemui.deviceentry.shared.model.BiometricMessage
 import com.android.systemui.deviceentry.ui.binder.UdfpsAccessibilityOverlayBinder
 import com.android.systemui.deviceentry.ui.view.UdfpsAccessibilityOverlay
@@ -58,9 +59,12 @@ import com.android.systemui.keyguard.ui.viewmodel.AlternateBouncerUdfpsIconViewM
 import com.android.systemui.lifecycle.rememberViewModel
 import com.android.systemui.log.TouchHandlingViewLogger
 import com.android.systemui.res.R
+import com.android.systemui.tuner.TunerService
+import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun AlternateBouncer(
+    applicationScope: CoroutineScope,
     alternateBouncerDependencies: AlternateBouncerDependencies,
     onHideAnimationFinished: () -> Unit,
     modifier: Modifier = Modifier,
@@ -108,6 +112,7 @@ fun AlternateBouncer(
         udfpsIconLocation?.let { udfpsLocation ->
             Box {
                 DeviceEntryIcon(
+                    applicationScope,
                     viewModel = alternateBouncerDependencies.udfpsIconViewModel,
                     logger = alternateBouncerDependencies.logger,
                     modifier =
@@ -156,6 +161,7 @@ private fun StatusMessage(
 
 @Composable
 private fun DeviceEntryIcon(
+    applicationScope: CoroutineScope,
     viewModel: AlternateBouncerUdfpsIconViewModel,
     logger: TouchHandlingViewLogger,
     modifier: Modifier = Modifier,
@@ -164,12 +170,12 @@ private fun DeviceEntryIcon(
         modifier = modifier,
         factory = { context ->
             val view =
-                DeviceEntryIconView(context, null, logger = logger).apply {
+                DeviceEntryIconView(context, null, 0, logger, Dependency.get(TunerService::class.java)).apply {
                     id = R.id.alternate_bouncer_udfps_icon_view
                     contentDescription =
                         context.resources.getString(R.string.accessibility_fingerprint_label)
                 }
-            AlternateBouncerUdfpsViewBinder.bind(view, viewModel)
+            AlternateBouncerUdfpsViewBinder.bind(applicationScope, view, viewModel)
             view
         },
     )
