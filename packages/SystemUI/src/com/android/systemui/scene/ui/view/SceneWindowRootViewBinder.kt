@@ -153,6 +153,7 @@ object SceneWindowRootViewBinder {
                         // TODO(b/358354906): use an overlay for the alternate bouncer
                         view.addView(
                             createAlternateBouncerView(
+                                scope = this,
                                 context = view.context,
                                 alternateBouncerDependencies = alternateBouncerDependencies,
                             )
@@ -200,12 +201,14 @@ object SceneWindowRootViewBinder {
     }
 
     private fun createAlternateBouncerView(
+        scope: CoroutineScope,
         context: Context,
         alternateBouncerDependencies: AlternateBouncerDependencies,
     ): ComposeView {
         return ComposeView(context).apply {
             setContent {
                 AlternateBouncer(
+                    applicationScope = scope,
                     alternateBouncerDependencies = alternateBouncerDependencies,
                 )
             }
