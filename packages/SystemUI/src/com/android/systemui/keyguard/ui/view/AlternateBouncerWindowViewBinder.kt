@@ -74,6 +74,7 @@ constructor(
             ComposeView(context).apply {
                 setContent {
                     AlternateBouncer(
+                        applicationScope,
                         alternateBouncerDependencies = dependencies,
                         onHideAnimationFinished = {
                             if (root.isAttachedToWindow) {
