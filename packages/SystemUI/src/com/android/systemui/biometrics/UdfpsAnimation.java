@@ -261,7 +261,7 @@ public class UdfpsAnimation extends ImageView {
     }
 
     public void hide() {
-        if (!mShowing) return;
+        if (!mShowing && getWindowToken() == null) return;
         try {
             if (recognizingAnim != null) {
                 clearAnimation();
