@@ -106,9 +106,10 @@ public class VisualizerStreamHandler {
                 try {
                     mVisualizer = new Visualizer(0);
                 } catch (Exception e) {
+                    mVisualizer = null;
                     Log.e(TAG, "Error enabling visualizer!", e);
-                    return;
                 }
+                if (mVisualizer == null) return;
                 mVisualizer.setEnabled(false);
                 mVisualizer.setCaptureSize(Visualizer.getCaptureSizeRange()[1]);
 
@@ -138,7 +139,9 @@ public class VisualizerStreamHandler {
                         (int) (Visualizer.getMaxCaptureRate() * 0.75), ENABLE_WAVEFORM, true);
 
             }
-            mVisualizer.setEnabled(true);
+            if (mVisualizer != null) {
+                mVisualizer.setEnabled(true);
+            }
         });
     }
 
