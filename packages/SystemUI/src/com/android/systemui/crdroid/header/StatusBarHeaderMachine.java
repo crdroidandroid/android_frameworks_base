@@ -126,6 +126,10 @@ public class StatusBarHeaderMachine {
                     false, this, UserHandle.USER_ALL);
         }
 
+        void unobserve() {
+            mContext.getContentResolver().unregisterContentObserver(this);
+        }
+
         @Override
         public void onChange(boolean selfChange, Uri uri) {
             final boolean customHeader = Settings.System.getIntForUser(mContext.getContentResolver(),
@@ -149,7 +153,7 @@ public class StatusBarHeaderMachine {
         }
     }
 
-    private SettingsObserver mSettingsObserver = new SettingsObserver(mHandler);
+    private SettingsObserver mSettingsObserver = new SettingsObserver(null);
 
     public StatusBarHeaderMachine(Context context) {
         mContext = context;
@@ -192,6 +196,7 @@ public class StatusBarHeaderMachine {
 
     public void removeObserver(IStatusBarHeaderMachineObserver observer) {
         mObservers.remove(observer);
+        mSettingsObserver.unobserve();
     }
 
     private void doUpdateStatusHeaderObservers(final boolean force) {
