@@ -1309,65 +1309,6 @@ public abstract class LayoutInflater {
                 return new android.view.NotificationHeaderView(context, attributeSet);
             case "android.widget.ListView": // 58 occurrences
                 return new android.widget.ListView(context, attributeSet);
-            case "android.widget.QuickContactBadge": // 50 occurrences
-                return new android.widget.QuickContactBadge(context, attributeSet);
-            case "android.widget.SeekBar": // 40 occurrences
-                return new android.widget.SeekBar(context, attributeSet);
-            case "android.widget.CheckBox": // 38 occurrences
-                return new android.widget.CheckBox(context, attributeSet);
-            case "android.widget.GridLayout": // 16 occurrences
-                return new android.widget.GridLayout(context, attributeSet);
-            case "android.widget.TableRow": // 15 occurrences
-                return new android.widget.TableRow(context, attributeSet);
-            case "android.widget.RadioGroup": // 15 occurrences
-                return new android.widget.RadioGroup(context, attributeSet);
-            case "android.widget.Chronometer": // 15 occurrences
-                return new android.widget.Chronometer(context, attributeSet);
-            case "android.widget.ViewFlipper": // 13 occurrences
-                return new android.widget.ViewFlipper(context, attributeSet);
-            case "android.widget.Spinner": // 9 occurrences
-                return new android.widget.Spinner(context, attributeSet);
-            case "android.widget.ViewSwitcher": // 8 occurrences
-                return new android.widget.ViewSwitcher(context, attributeSet);
-            case "android.widget.TextSwitcher": // 8 occurrences
-                return new android.widget.TextSwitcher(context, attributeSet);
-            case "android.widget.SurfaceView": // 8 occurrences
-            case "android.webkit.SurfaceView": // 1 occurrence
-            case "android.view.SurfaceView": // 1 occurrence
-            case "android.app.SurfaceView": // 1 occurrence
-                return new android.view.SurfaceView(context, attributeSet);
-            case "android.widget.CheckedTextView": // 8 occurrences
-                return new android.widget.CheckedTextView(context, attributeSet);
-            case "android.preference.PreferenceFrameLayout": // 8 occurrences
-                return new android.preference.PreferenceFrameLayout(context, attributeSet);
-            case "android.widget.TwoLineListItem": // 7 occurrences
-                return new android.widget.TwoLineListItem(context, attributeSet);
-            case "android.widget.TableLayout": // 5 occurrences
-                return new android.widget.TableLayout(context, attributeSet);
-            case "android.widget.EditText": // 5 occurrences
-                return new android.widget.EditText(context, attributeSet);
-            case "android.widget.TabWidget": // 3 occurrences
-                return new android.widget.TabWidget(context, attributeSet);
-            case "android.widget.TabHost": // 3 occurrences
-                return new android.widget.TabHost(context, attributeSet);
-            case "android.widget.ZoomButton": // 2 occurrences
-                return new android.widget.ZoomButton(context, attributeSet);
-            case "android.widget.TextureView": // 2 occurrences
-            case "android.webkit.TextureView": // 2 occurrences
-            case "android.app.TextureView": // 2 occurrences
-            case "android.view.TextureView": // 2 occurrences
-                return new android.view.TextureView(context, attributeSet);
-            case "android.widget.ExpandableListView": // 2 occurrences
-                return new android.widget.ExpandableListView(context, attributeSet);
-            case "android.widget.ViewAnimator": // 1 occurrence
-                return new android.widget.ViewAnimator(context, attributeSet);
-            case "android.widget.TextClock": // 1 occurrence
-                return new android.widget.TextClock(context, attributeSet);
-            case "android.widget.AutoCompleteTextView": // 1 occurrence
-                return new android.widget.AutoCompleteTextView(context, attributeSet);
-            case "android.widget.WebView": // 1 occurrence
-            case "android.webkit.WebView": // 1 occurrence
-                return new android.webkit.WebView(context, attributeSet);
         }
 
         return null;
