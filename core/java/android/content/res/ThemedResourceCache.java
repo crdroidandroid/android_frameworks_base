@@ -28,6 +28,8 @@ import android.util.LongSparseArray;
 
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Data structure used for caching data against themes.
@@ -221,8 +223,14 @@ abstract class ThemedResourceCache<T> {
      */
     private boolean pruneLocked(@Config int configChanges) {
         if (mThemedEntries != null) {
-	    mThemedEntries.entrySet()
-		.removeIf(entry -> pruneEntriesLocked(entry.getValue(), configChanges));
+            Iterator<ThemeKey> iterator = mThemedEntries.keySet().iterator();
+            while (iterator.hasNext()) {
+                ThemeKey key = iterator.next();
+                LongSparseArray<WeakReference<T>> value = mThemedEntries.get(key);
+                if (pruneEntriesLocked(value, configChanges)) {
+                    iterator.remove();
+                }
+            }
         }
 
         pruneEntriesLocked(mNullThemedEntries, configChanges);
