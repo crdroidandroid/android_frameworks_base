@@ -18,6 +18,7 @@
 package com.android.systemui.statusbar.policy
 
 import android.app.ActivityTaskManager
+import android.app.TaskStackListener
 import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.Context
@@ -30,9 +31,8 @@ import android.os.PowerManager
 import android.os.RemoteException
 import android.os.UserHandle
 import android.provider.Settings
+import android.view.Display.DEFAULT_DISPLAY
 import com.android.systemui.dagger.SysUISingleton
-import com.android.systemui.shared.system.TaskStackChangeListener
-import com.android.systemui.shared.system.TaskStackChangeListeners
 
 import java.util.Arrays
 import javax.inject.Inject
@@ -48,9 +48,15 @@ class GameSpaceManager @Inject constructor(
     private var activeGame: String? = null
     private var isRegistered = false
 
-    private val taskStackChangeListener = object : TaskStackChangeListener {
+    private val taskStackListener = object : TaskStackListener() {
         override fun onTaskStackChanged() {
             handler.sendEmptyMessage(MSG_UPDATE_FOREGROUND_APP)
+        }
+
+        override fun onTaskRemoved(taskId: Int) {
+            handler.post {
+                checkGameTaskRemoved(taskId)
+            }
         }
     }
 
@@ -81,13 +87,28 @@ class GameSpaceManager @Inject constructor(
         }
     }
 
+    private fun checkGameTaskRemoved(taskId: Int) {
+        try {
+            val tasks = taskManager.getTasks(32, false, false, DEFAULT_DISPLAY)
+            val isGameTaskPresent = tasks.any { it.id == taskId && it.topActivity?.packageName == activeGame }
+            if (!isGameTaskPresent && activeGame != null) {
+                activeGame = null
+                handler.sendEmptyMessage(MSG_DISPATCH_FOREGROUND_APP)
+            }
+        } catch (e: RemoteException) {
+        }
+    }
+
     private fun checkForegroundApp() {
+        handler.removeMessages(MSG_DISPATCH_FOREGROUND_APP)
         try {
             val info = taskManager.focusedRootTaskInfo
-            info?.topActivity ?: return
-            val packageName = info.topActivity?.packageName
-            activeGame = checkGameList(packageName)
-            handler.sendEmptyMessage(MSG_DISPATCH_FOREGROUND_APP)
+            val packageName = info?.topActivity?.packageName
+            val newActiveGame = checkGameList(packageName)
+            if (activeGame != newActiveGame) {
+                activeGame = newActiveGame
+                handler.sendEmptyMessage(MSG_DISPATCH_FOREGROUND_APP)
+            }
         } catch (e: RemoteException) {
         }
     }
@@ -95,42 +116,46 @@ class GameSpaceManager @Inject constructor(
     private fun dispatchForegroundApp() {
         val pm = context.getSystemService(Context.POWER_SERVICE) as PowerManager
         if (!pm.isInteractive && activeGame != null) return
+
         val action = if (activeGame != null) ACTION_GAME_START else ACTION_GAME_STOP
         Intent(action).apply {
             setPackage(GAMESPACE_PACKAGE)
             component = ComponentName.unflattenFromString(RECEIVER_CLASS)
             putExtra(EXTRA_CALLER_NAME, context.packageName)
             if (activeGame != null) putExtra(EXTRA_ACTIVE_GAME, activeGame)
-            addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING
-                or Intent.FLAG_RECEIVER_FOREGROUND
-                or Intent.FLAG_RECEIVER_INCLUDE_BACKGROUND)
-            context.sendBroadcastAsUser(this, UserHandle.CURRENT,
-                android.Manifest.permission.MANAGE_GAME_MODE)
+            addFlags(
+                Intent.FLAG_RECEIVER_REPLACE_PENDING or 
+                Intent.FLAG_RECEIVER_FOREGROUND or 
+                Intent.FLAG_RECEIVER_INCLUDE_BACKGROUND
+            )
+            context.sendBroadcastAsUser(
+                this, UserHandle.CURRENT, android.Manifest.permission.MANAGE_GAME_MODE
+            )
         }
     }
 
     fun observe() {
-        val taskStackChangeListeners = TaskStackChangeListeners.getInstance();
         if (isRegistered) {
-            taskStackChangeListeners.unregisterTaskStackListener(taskStackChangeListener)
+            taskManager.unregisterTaskStackListener(taskStackListener)
+            context.unregisterReceiver(interactivityReceiver)
+            keyguardStateController.removeCallback(keyguardStateCallback)
         }
-        taskStackChangeListeners.registerTaskStackListener(taskStackChangeListener)
-        isRegistered = true;
+        taskManager.registerTaskStackListener(taskStackListener)
         handler.sendEmptyMessage(MSG_UPDATE_FOREGROUND_APP)
         context.registerReceiver(interactivityReceiver, IntentFilter().apply {
             addAction(Intent.ACTION_SCREEN_OFF)
         }, Context.RECEIVER_NOT_EXPORTED)
         keyguardStateController.addCallback(keyguardStateCallback)
+        isRegistered = true;
     }
 
     fun unobserve() {
-        val taskStackChangeListeners = TaskStackChangeListeners.getInstance();
-        if (!isRegistered) {
-            taskStackChangeListeners.unregisterTaskStackListener(taskStackChangeListener)
+        if (isRegistered) {
+            taskManager.unregisterTaskStackListener(taskStackListener)
+            context.unregisterReceiver(interactivityReceiver)
+            keyguardStateController.removeCallback(keyguardStateCallback)
         }
         isRegistered = false;
-        context.unregisterReceiver(interactivityReceiver)
-        keyguardStateController.removeCallback(keyguardStateCallback)
     }
 
     fun isGameActive() = activeGame != null
