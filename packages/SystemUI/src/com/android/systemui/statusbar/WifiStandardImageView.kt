@@ -22,14 +22,12 @@ import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.wifi.WifiManager
-import android.os.Handler
-import android.os.Looper
 import android.os.UserHandle
 import android.util.AttributeSet
 import android.widget.ImageView
 import com.android.systemui.res.R
-
 import android.view.ViewGroup.MarginLayoutParams
+import kotlinx.coroutines.*
 
 class WifiStandardImageView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -39,7 +37,8 @@ class WifiStandardImageView @JvmOverloads constructor(
     private val wifiManager: WifiManager by lazy { context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager }
     private var currWifiStandardEnabled = false
     private var currWifiStandard: Int = -1
-    private val handler = Handler()
+    private var updateJob: Job? = null
+
     private val updateRunnable = object : Runnable {
         override fun run() {
             val wifiStandardEnabled = getWifiStandardEnabled()
@@ -50,18 +49,22 @@ class WifiStandardImageView @JvmOverloads constructor(
                 currWifiStandardEnabled = wifiStandardEnabled
                 updateWifiStandard()
             }
-            handler.postDelayed(this, 1000)
         }
     }
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        handler.post(updateRunnable)
+        updateJob = CoroutineScope(Dispatchers.Main).launch {
+            while (isAttachedToWindow) {
+                updateRunnable.run()
+                delay(1000)
+            }
+        }
     }
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        handler.removeCallbacks(updateRunnable)
+        updateJob?.cancel()
     }
 
     private fun getWifiStandard(): Int {
