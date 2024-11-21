@@ -99,4 +99,5 @@
     <color name="settingslib_materialColorPrimary">@android:color/system_primary_light</color>
     <color name="settingslib_materialColorSecondary">@android:color/system_secondary_light</color>
     <color name="settingslib_materialColorTertiary">@android:color/system_tertiary_light</color>
+    <color name="legacy_settingslib_materialColorSurfaceContainer">@android:color/system_neutral1_50</color>
 </resources>
