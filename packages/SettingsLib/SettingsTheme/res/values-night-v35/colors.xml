@@ -79,4 +79,5 @@
     <color name="settingslib_materialColorPrimary">@android:color/system_primary_dark</color>
     <color name="settingslib_materialColorSecondary">@android:color/system_secondary_dark</color>
     <color name="settingslib_materialColorTertiary">@android:color/system_tertiary_dark</color>
+    <color name="legacy_settingslib_materialColorSurfaceContainer">@android:color/system_neutral1_900</color>
 </resources>
