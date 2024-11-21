@@ -18,7 +18,7 @@
 <resources>
     <style name="Theme.SettingsBase.Expressive">
         <!-- Set up background color -->
-        <item name="android:colorBackground">@color/settingslib_materialColorSurfaceContainer</item>
+        <item name="android:colorBackground">@color/legacy_settingslib_materialColorSurfaceContainer</item>
 
         <!-- Set up Preference title text style -->
         <item name="android:textAppearanceListItem">@style/TextAppearance.SettingsLib.PreferenceTitle</item>
