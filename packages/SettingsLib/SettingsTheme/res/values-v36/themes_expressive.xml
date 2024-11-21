@@ -58,7 +58,7 @@
 
     <style name="Theme.AlertDialog.SettingsLib.Expressive">
         <item name="colorAccent">@color/settingslib_materialColorPrimary</item>
-        <item name="android:colorBackground">@color/settingslib_materialColorSurfaceContainerHigh</item>
+        <item name="android:colorBackground">@color/legacy_settingslib_materialColorSurfaceContainer</item>
         <item name="android:windowTitleStyle">@style/Widget.SettingsLib.DialogWindowTitle</item>
         <item name="dialogPreferredPadding">@dimen/settingslib_expressive_space_small4</item>
         <item name="buttonBarStyle">@style/Widget.SettingsLib.ButtonBar</item>
