@@ -18,7 +18,6 @@ package com.android.systemui.globalactions;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
-import static android.view.WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM;
 import static android.view.WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS;
 import static android.view.WindowManager.ScreenshotSource.SCREENSHOT_GLOBAL_ACTIONS;
 import static android.view.WindowManager.TAKE_SCREENSHOT_FULLSCREEN;
@@ -557,13 +556,6 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
         awakenIfNecessary();
         mDialog = createDialog();
         prepareDialog();
-
-        WindowManager.LayoutParams attrs = mDialog.getWindow().getAttributes();
-        attrs.setTitle("ActionsDialog");
-        attrs.layoutInDisplayCutoutMode = LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS;
-        mDialog.getWindow().setAttributes(attrs);
-        // Don't acquire soft keyboard focus, to avoid destroying state when capturing bugreports
-        mDialog.getWindow().addFlags(FLAG_ALT_FOCUSABLE_IM);
 
         DialogTransitionAnimator.Controller controller =
                 expandable != null ? expandable.dialogTransitionController(
@@ -2809,8 +2801,6 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            getWindow().setTitle(getContext().getString(
-                    com.android.systemui.res.R.string.accessibility_quick_settings_power_menu));
             initializeLayout();
             mWindowDimAmount = getWindow().getAttributes().dimAmount;
             getOnBackInvokedDispatcher().registerOnBackInvokedCallback(
@@ -2947,6 +2937,9 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
             }
 
             Window window = getWindow();
+            window.setType(WindowManager.LayoutParams.TYPE_VOLUME_OVERLAY);
+            window.setTitle(""); // prevent Talkback from speaking first item name twice
+            window.addFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
             window.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
             if (mBlurUtils.supportsBlursOnWindows()) {
                 // Enable blur behind
