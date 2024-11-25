@@ -856,9 +856,9 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener, Dump
         if (mClipsQsScrim) {
             // notification scrim's rounded corners are anti-aliased, but clipping of the QS/behind
             // scrim can't be and it's causing jagged corners. That's why notification scrim needs
-            // to overlap QS scrim by one pixel horizontally (left - 1 and right + 1)
+            // to overlap QS scrim by six pixels horizontally (left - 6 and right + 6)
             // see: b/186644628
-            mNotificationsScrim.setDrawableBounds(left - 1, top, right + 1, bottom);
+            mNotificationsScrim.setDrawableBounds(left - 6, top, right + 6, bottom);
             mScrimBehind.setBottomEdgePosition((int) top);
         } else {
             mNotificationsScrim.setDrawableBounds(left, top, right, bottom);
