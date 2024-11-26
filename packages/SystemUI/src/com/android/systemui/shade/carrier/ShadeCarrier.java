@@ -50,6 +50,8 @@ public class ShadeCarrier extends LinearLayout {
     private CellSignalState mLastSignalState;
     private boolean mMobileSignalInitialized = false;
     private boolean mIsSingleCarrier;
+    private ColorStateList mColorStateList = Utils.getColorAttr(mContext,
+                    android.R.attr.textColorPrimary);
 
     public ShadeCarrier(Context context) {
         super(context);
@@ -112,10 +114,8 @@ public class ShadeCarrier extends LinearLayout {
         mSpacer.setVisibility(isSingleCarrier ? View.VISIBLE : View.GONE);
         if (visible) {
             mMobileRoaming.setVisibility(state.roaming ? View.VISIBLE : View.GONE);
-            ColorStateList colorStateList = Utils.getColorAttr(mContext,
-                    android.R.attr.textColorPrimary);
-            mMobileRoaming.setImageTintList(colorStateList);
-            mMobileSignal.setImageTintList(colorStateList);
+            mMobileRoaming.setImageTintList(mColorStateList);
+            mMobileSignal.setImageTintList(mColorStateList);
 
             if (!mMobileSignalInitialized) {
                 mMobileSignalInitialized = true;
@@ -152,8 +152,9 @@ public class ShadeCarrier extends LinearLayout {
     }
 
     public void updateColors(ColorStateList colorStateList) {
-        mMobileRoaming.setImageTintList(colorStateList);
-        mMobileSignal.setImageTintList(colorStateList);
+        mColorStateList = colorStateList;
+        mMobileRoaming.setImageTintList(mColorStateList);
+        mMobileSignal.setImageTintList(mColorStateList);
     }
 
     @VisibleForTesting
