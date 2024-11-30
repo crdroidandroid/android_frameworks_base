@@ -713,6 +713,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private Action mAssistLongPressAction;
     private Action mAppSwitchPressAction;
     private Action mAppSwitchLongPressAction;
+    private Action mAppSwitchDoubleTapAction;
     private Action mCornerLongSwipeAction;
     private Action mEdgeLongSwipeAction;
     private Action mThreeFingersSwipeAction;
@@ -1092,6 +1093,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(LineageSettings.System.getUriFor(
                     LineageSettings.System.KEY_APP_SWITCH_LONG_PRESS_ACTION), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(LineageSettings.System.getUriFor(
+                    LineageSettings.System.KEY_APP_SWITCH_DOUBLE_TAP_ACTION), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(LineageSettings.System.getUriFor(
                     LineageSettings.System.KEY_CORNER_LONG_SWIPE_ACTION), false, this,
@@ -1809,8 +1813,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
     }
 
-    private void appSwitchPress() {
-        if (!keyguardOn() && mAppSwitchPressAction != Action.NOTHING) {
+    private void appSwitchPress(int count) {
+        if (count == 1 && !keyguardOn() && mAppSwitchPressAction != Action.NOTHING) {
             if (mAppSwitchPressAction != Action.APP_SWITCH) {
                 cancelPreloadRecentApps();
             }
@@ -1820,6 +1824,16 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     KeyEvent.FLAG_FROM_SYSTEM, InputDevice.SOURCE_KEYBOARD);
 
             performKeyAction(mAppSwitchPressAction, event);
+        } else if (count == 2 && !keyguardOn() && mAppSwitchDoubleTapAction != Action.NOTHING) {
+            if (mAppSwitchDoubleTapAction != Action.APP_SWITCH) {
+                cancelPreloadRecentApps();
+            }
+            long now = SystemClock.uptimeMillis();
+            KeyEvent event = new KeyEvent(now, now, KeyEvent.ACTION_DOWN,
+                    KeyEvent.KEYCODE_APP_SWITCH, 0, 0, KeyCharacterMap.VIRTUAL_KEYBOARD, 0,
+                    KeyEvent.FLAG_FROM_SYSTEM, InputDevice.SOURCE_KEYBOARD);
+
+            performKeyAction(mAppSwitchDoubleTapAction, event);
         }
     }
 
@@ -3072,7 +3086,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
         @Override
         int getMaxMultiPressCount() {
-            return 1;
+            return mAppSwitchDoubleTapAction != Action.NOTHING ? 2 : 1;
         }
 
         @Override
@@ -3082,7 +3096,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
             switch (event.getType()) {
                 case SINGLE_KEY_GESTURE_TYPE_PRESS:
-                    appSwitchPress();
+                    appSwitchPress(event.getPressCount());
                     break;
                 case SINGLE_KEY_GESTURE_TYPE_LONG_PRESS:
                     appSwitchLongPress();
@@ -3340,6 +3354,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         mAppSwitchPressAction = Action.APP_SWITCH;
         mAppSwitchLongPressAction = Action.fromIntSafe(res.getInteger(
                 org.lineageos.platform.internal.R.integer.config_longPressOnAppSwitchBehavior));
+        mAppSwitchDoubleTapAction = Action.LAST_APP;
         mCornerLongSwipeAction = Action.SEARCH;
         mEdgeLongSwipeAction = Action.NOTHING;
 
@@ -3376,6 +3391,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         mAppSwitchLongPressAction = Action.fromSettings(resolver,
                 LineageSettings.System.KEY_APP_SWITCH_LONG_PRESS_ACTION,
                 mAppSwitchLongPressAction);
+        mAppSwitchDoubleTapAction = Action.fromSettings(resolver,
+                LineageSettings.System.KEY_APP_SWITCH_DOUBLE_TAP_ACTION,
+                mAppSwitchDoubleTapAction);
 
         mCornerLongSwipeAction = Action.fromSettings(resolver,
                 LineageSettings.System.KEY_CORNER_LONG_SWIPE_ACTION,
@@ -5312,7 +5330,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 if (!keyguardOn()) {
                     if (down) {
                         if (mAppSwitchPressAction == Action.APP_SWITCH
-                                || mAppSwitchLongPressAction == Action.APP_SWITCH) {
+                                || mAppSwitchLongPressAction == Action.APP_SWITCH
+                                || mAppSwitchDoubleTapAction == Action.APP_SWITCH) {
                             preloadRecentApps();
                         }
                     }
