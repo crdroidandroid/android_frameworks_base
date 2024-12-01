@@ -255,7 +255,7 @@ public class SecureSettings {
         Settings.Secure.CUSTOM_BUGREPORT_HANDLER_USER,
         Settings.Secure.CONTEXTUAL_SCREEN_TIMEOUT_ENABLED,
         Settings.Secure.HINGE_ANGLE_LIDEVENT_ENABLED,
-        Settings.Secure.LOCK_SCREEN_WEATHER_ENABLED,
+        Settings.Secure.LOCKSCREEN_SMARTSPACE_ENABLED,
         Settings.Secure.HEARING_AID_RINGTONE_ROUTING,
         Settings.Secure.HEARING_AID_CALL_ROUTING,
         Settings.Secure.HEARING_AID_MEDIA_ROUTING,

@@ -56,7 +56,7 @@ constructor(
     override val isWeatherEnabled: StateFlow<Boolean> =
         secureSettings
             .observerFlow(
-                names = arrayOf(Settings.Secure.LOCK_SCREEN_WEATHER_ENABLED),
+                names = arrayOf(Settings.Secure.LOCKSCREEN_SMARTSPACE_ENABLED),
                 userId = UserHandle.USER_ALL,
             )
             .onStart { emit(Unit) }
@@ -73,7 +73,7 @@ constructor(
 
     private fun getLockscreenWeatherEnabled(): Boolean {
         return secureSettings.getIntForUser(
-            Settings.Secure.LOCK_SCREEN_WEATHER_ENABLED,
+            Settings.Secure.LOCKSCREEN_SMARTSPACE_ENABLED,
             1,
             userTracker.userId
         ) == 1

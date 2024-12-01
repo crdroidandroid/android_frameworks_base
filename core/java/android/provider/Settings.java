@@ -13121,11 +13121,10 @@ public final class Settings {
                 "hinge_angle_lidevent_enabled";
 
         /**
-         * Whether lockscreen weather is enabled.
-         *
+         * Whether lockscreen smartspace is enabled.
          * @hide
          */
-        public static final String LOCK_SCREEN_WEATHER_ENABLED = "lockscreen_weather_enabled";
+        public static final String LOCKSCREEN_SMARTSPACE_ENABLED = "lockscreen_smartspace_enabled";
 
         /**
          * Whether the feature that the device will fire a haptic when users scroll and hit

@@ -32,7 +32,7 @@ import android.os.Handler
 import android.os.UserHandle
 import android.provider.Settings.Secure.LOCK_SCREEN_ALLOW_PRIVATE_NOTIFICATIONS
 import android.provider.Settings.Secure.LOCK_SCREEN_SHOW_NOTIFICATIONS
-import android.provider.Settings.Secure.LOCK_SCREEN_WEATHER_ENABLED
+import android.provider.Settings.Secure.LOCKSCREEN_SMARTSPACE_ENABLED
 import android.util.Log
 import android.view.ContextThemeWrapper
 import android.view.View
@@ -314,7 +314,7 @@ constructor(
         get() {
             val showWeather =
                 secureSettings.getIntForUser(
-                    LOCK_SCREEN_WEATHER_ENABLED,
+                    LOCKSCREEN_SMARTSPACE_ENABLED,
                     1,
                     userTracker.userId,
                 ) == 1
