@@ -73,7 +73,7 @@ class SecureSettingController implements SettingController<Integer> {
                 Settings.Secure.CAMERA_GESTURE_DISABLED, 0,
                 Settings.Secure.CAMERA_DOUBLE_TAP_POWER_GESTURE_DISABLED, 0,
                 Settings.Secure.CAMERA_LIFT_TRIGGER_ENABLED, CAMERA_LIFT_TRIGGER_ENABLED_DEFAULT,
-                Settings.Secure.LOCK_SCREEN_WEATHER_ENABLED, 1,
+                Settings.Secure.LOCKSCREEN_SMARTSPACE_ENABLED, 1,
                 Settings.Secure.LOCKSCREEN_SHOW_CONTROLS, 0,
                 Settings.Secure.LOCKSCREEN_SHOW_WALLET, 0,
                 Settings.Secure.LOCK_SCREEN_SHOW_QR_CODE_SCANNER,
