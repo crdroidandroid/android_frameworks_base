@@ -204,7 +204,7 @@ public class CameraServiceProxy extends SystemService
     private static final int MAX_STREAM_STATISTICS = 5;
 
     private static final float MIN_PREVIEW_FPS = 30.0f;
-    private static final float MAX_PREVIEW_FPS = 60.0f;
+    private static final float MAX_PREVIEW_FPS = 120.0f;
 
     private final Context mContext;
     private final ServiceThread mHandlerThread;
