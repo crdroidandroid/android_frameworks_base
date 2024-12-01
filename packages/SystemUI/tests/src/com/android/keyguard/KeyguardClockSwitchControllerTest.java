@@ -248,7 +248,7 @@ public class KeyguardClockSwitchControllerTest extends KeyguardClockSwitchContro
         mController.init();
         mExecutor.runAllReady();
         verify(mSecureSettings).registerContentObserverForUser(
-                eq(Settings.Secure.LOCK_SCREEN_WEATHER_ENABLED), anyBoolean(),
+                eq(Settings.Secure.LOCKSCREEN_SMARTSPACE_ENABLED), anyBoolean(),
                     observerCaptor.capture(), eq(UserHandle.USER_ALL));
         ContentObserver observer = observerCaptor.getValue();
         mExecutor.runAllReady();
