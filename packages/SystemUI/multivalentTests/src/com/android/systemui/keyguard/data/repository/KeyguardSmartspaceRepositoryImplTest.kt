@@ -59,7 +59,7 @@ class KeyguardSmartspaceRepositoryImplTest : SysuiTestCase() {
     @Test
     fun testWeatherEnabled_true() =
         scope.runTest {
-            fakeSettings.putInt(Settings.Secure.LOCK_SCREEN_WEATHER_ENABLED, 1)
+            fakeSettings.putInt(Settings.Secure.LOCKSCREEN_SMARTSPACE_ENABLED, 1)
             val value = collectLastValue(underTest.isWeatherEnabled)
             Truth.assertThat(value()).isEqualTo(true)
         }
@@ -67,7 +67,7 @@ class KeyguardSmartspaceRepositoryImplTest : SysuiTestCase() {
     @Test
     fun testWeatherEnabled_false() =
         scope.runTest {
-            fakeSettings.putInt(Settings.Secure.LOCK_SCREEN_WEATHER_ENABLED, 0)
+            fakeSettings.putInt(Settings.Secure.LOCKSCREEN_SMARTSPACE_ENABLED, 0)
 
             val value = collectLastValue(underTest.isWeatherEnabled)
             Truth.assertThat(value()).isEqualTo(false)
