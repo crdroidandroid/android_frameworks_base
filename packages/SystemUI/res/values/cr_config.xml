@@ -53,4 +53,8 @@
 
     <!-- Show 5G toggle in internet dialog when available -->
     <bool name="config_supportsVONR">true</bool>
+
+    <!-- Sliding QS Tile -->
+    <integer name="tile_active_state_percentage_alpha">100</integer>
+    <integer name="tile_inactive_state_percentage_alpha">0</integer>
 </resources>
