@@ -144,22 +144,33 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
-    <TextView
-        android:id="@+id/indicator"
-        style="@style/TextAppearance.AuthCredential.Indicator"
-        android:layout_width="0dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/indicator_container"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="24dp"
-        android:layout_marginTop="24dp"
-        android:accessibilityLiveRegion="polite"
-        android:fadingEdge="horizontal"
-        android:gravity="center_horizontal"
-        android:scrollHorizontally="true"
-        app:layout_constraintBottom_toTopOf="@+id/button_bar"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/panel"
         app:layout_constraintStart_toStartOf="@+id/panel"
-        app:layout_constraintTop_toBottomOf="@+id/biometric_icon"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/biometric_icon">
+
+        <TextView
+            android:id="@+id/indicator"
+            style="@style/TextAppearance.AuthCredential.Indicator"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="36dp"
+            android:layout_marginHorizontal="24dp"
+            android:accessibilityLiveRegion="polite"
+            android:fadingEdge="horizontal"
+            android:scrollHorizontally="true"
+            android:gravity="center_horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/topBarrier"
