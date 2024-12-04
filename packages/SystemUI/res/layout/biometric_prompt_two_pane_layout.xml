@@ -166,23 +166,34 @@ android:layout_height="match_parent">
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
-    <TextView
-        android:id="@+id/indicator"
-        style="@style/TextAppearance.AuthCredential.Indicator"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/indicator_container"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:accessibilityLiveRegion="assertive"
-        android:fadingEdge="horizontal"
-        android:gravity="center_horizontal"
-        android:scrollHorizontally="true"
-        android:maxLines="2"
-        app:layout_constraintBottom_toTopOf="@+id/button_bar"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/biometric_icon"
         app:layout_constraintStart_toStartOf="@+id/biometric_icon"
-        app:layout_constraintTop_toBottomOf="@+id/biometric_icon"
-        app:layout_constraintVertical_bias="0.0"
-        app:layout_constraintWidth_max="@dimen/biometric_dialog_indicator_max_width" />
+        app:layout_constraintTop_toBottomOf="@+id/biometric_icon">
+
+        <TextView
+            android:id="@+id/indicator"
+            style="@style/TextAppearance.AuthCredential.Indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="36dp"
+            android:accessibilityLiveRegion="assertive"
+            android:fadingEdge="horizontal"
+            android:gravity="center_horizontal"
+            android:scrollHorizontally="true"
+            android:maxLines="2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintWidth_max="@dimen/biometric_dialog_indicator_max_width" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <include
         android:id="@+id/button_bar"
