@@ -1,0 +1,59 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:systemui="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <com.android.systemui.util.ProgressImageView
+        android:layout_marginTop="12dp"
+        android:id="@+id/battery_progress"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="12dp"
+        android:adjustViewBounds="true"
+        android:alpha="0.9"
+        android:src="@drawable/arc_progress"
+        systemui:tint="@android:color/white"
+        systemui:typeface="@*android:string/config_clockFontFamily" />
+
+    <com.android.systemui.util.ProgressImageView
+        android:layout_marginTop="12dp"
+        android:id="@+id/memory_progress"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:adjustViewBounds="true"
+        android:alpha="0.9"
+        android:src="@drawable/arc_progress"
+        systemui:tint="@android:color/white"
+        systemui:typeface="@*android:string/config_clockFontFamily" />
+
+    <com.android.systemui.util.ProgressImageView
+        android:layout_marginTop="12dp"
+        android:id="@+id/temperature_progress"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:adjustViewBounds="true"
+        android:alpha="0.9"
+        android:src="@drawable/arc_progress"
+        systemui:tint="@android:color/white"
+        systemui:typeface="@*android:string/config_clockFontFamily" />
+
+    <com.android.systemui.util.ProgressImageView
+        android:layout_marginTop="12dp"
+        android:id="@+id/volume_progress"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="12dp"
+        android:adjustViewBounds="true"
+        android:alpha="0.9"
+        android:src="@drawable/arc_progress"
+        systemui:tint="@android:color/white"
+        systemui:typeface="@*android:string/config_clockFontFamily" />
+
+</LinearLayout>
