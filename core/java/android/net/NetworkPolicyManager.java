@@ -344,6 +344,8 @@ public class NetworkPolicyManager {
             mSubscriptionCallbackMap = new ConcurrentHashMap<>();
     private final Map<NetworkPolicyCallback, NetworkPolicyCallbackProxy>
             mNetworkPolicyCallbackMap = new ConcurrentHashMap<>();
+    private final Map<AllowedTransportsCallback, AllowedTransportsCallbackProxy>
+            mAllowedTransportsCallbackMap = new ConcurrentHashMap<>();
 
     /** @hide */
     public NetworkPolicyManager(Context context, INetworkPolicyManager service) {
@@ -1076,11 +1078,6 @@ public class NetworkPolicyManager {
          */
         @SystemApi(client = SystemApi.Client.MODULE_LIBRARIES)
         default void onUidBlockedReasonChanged(int uid, int blockedReasons) {}
-
-        /** @hide */
-        @SystemApi(client = SystemApi.Client.MODULE_LIBRARIES)
-        default void onUidsAllowedTransportsChanged(@NonNull int[] uids,
-                @NonNull long[] allowedTransports) {}
     }
 
     /** @hide */
@@ -1100,11 +1097,6 @@ public class NetworkPolicyManager {
                 dispatchOnUidBlockedReasonChanged(mExecutor, mCallback, uid, newBlockedReasons);
             }
         }
-
-        @Override
-        public void onAllowedTransportsChanged(int[] uids, long[] allowedTransports) {
-            dispatchOnUidsAllowedTransportsChanged(mExecutor, mCallback, uids, allowedTransports);
-        }
     }
 
     private static void dispatchOnUidBlockedReasonChanged(@Nullable Executor executor,
@@ -1115,17 +1107,6 @@ public class NetworkPolicyManager {
             executor.execute(PooledLambda.obtainRunnable(
                     NetworkPolicyCallback::onUidBlockedReasonChanged,
                     callback, uid, blockedReasons).recycleOnUse());
-        }
-    }
-
-    private static void dispatchOnUidsAllowedTransportsChanged(@Nullable Executor executor,
-            @NonNull NetworkPolicyCallback callback, int[] uids, long[] allowedTransports) {
-        if (executor == null) {
-            callback.onUidsAllowedTransportsChanged(uids, allowedTransports);
-        } else {
-            executor.execute(PooledLambda.obtainRunnable(
-                    NetworkPolicyCallback::onUidsAllowedTransportsChanged,
-                    callback, uids, allowedTransports).recycleOnUse());
         }
     }
 
@@ -1171,6 +1152,72 @@ public class NetworkPolicyManager {
         @Override
         public void onSubscriptionPlansChanged(int subId, SubscriptionPlan[] plans) {
             mCallback.onSubscriptionPlansChanged(subId, plans);
+        }
+    }
+
+    /** @hide */
+    @SystemApi(client = SystemApi.Client.MODULE_LIBRARIES)
+    @RequiresPermission(android.Manifest.permission.OBSERVE_NETWORK_POLICY)
+    public void registerAllowedTransportsCallback(@Nullable Executor executor,
+            @NonNull AllowedTransportsCallback callback) {
+        if (callback == null) {
+            throw new NullPointerException("Callback cannot be null.");
+        }
+
+        final AllowedTransportsCallbackProxy callbackProxy = new AllowedTransportsCallbackProxy(
+                executor, callback);
+        registerListener(callbackProxy);
+        mAllowedTransportsCallbackMap.put(callback, callbackProxy);
+    }
+
+    /** @hide */
+    @SystemApi(client = SystemApi.Client.MODULE_LIBRARIES)
+    @RequiresPermission(android.Manifest.permission.OBSERVE_NETWORK_POLICY)
+    public void unregisterAllowedTransportsCallback(@NonNull AllowedTransportsCallback callback) {
+        if (callback == null) {
+            throw new NullPointerException("Callback cannot be null.");
+        }
+
+        final AllowedTransportsCallbackProxy callbackProxy =
+                mAllowedTransportsCallbackMap.remove(callback);
+        if (callbackProxy == null) return;
+        unregisterListener(callbackProxy);
+    }
+
+    /** @hide */
+    @SystemApi(client = SystemApi.Client.MODULE_LIBRARIES)
+    public interface AllowedTransportsCallback {
+        /** @hide */
+        @SystemApi(client = SystemApi.Client.MODULE_LIBRARIES)
+        default void onUidsAllowedTransportsChanged(@NonNull int[] uids,
+                @NonNull long[] allowedTransports) {}
+    }
+
+    /** @hide */
+    public static class AllowedTransportsCallbackProxy extends Listener {
+        private final Executor mExecutor;
+        private final AllowedTransportsCallback mCallback;
+
+        AllowedTransportsCallbackProxy(@Nullable Executor executor,
+                @NonNull AllowedTransportsCallback callback) {
+            mExecutor = executor;
+            mCallback = callback;
+        }
+
+        @Override
+        public void onAllowedTransportsChanged(int[] uids, long[] allowedTransports) {
+            dispatchOnUidsAllowedTransportsChanged(mExecutor, mCallback, uids, allowedTransports);
+        }
+    }
+
+    private static void dispatchOnUidsAllowedTransportsChanged(@Nullable Executor executor,
+            @NonNull AllowedTransportsCallback callback, int[] uids, long[] allowedTransports) {
+        if (executor == null) {
+            callback.onUidsAllowedTransportsChanged(uids, allowedTransports);
+        } else {
+            executor.execute(PooledLambda.obtainRunnable(
+                    AllowedTransportsCallback::onUidsAllowedTransportsChanged,
+                    callback, uids, allowedTransports).recycleOnUse());
         }
     }
 
