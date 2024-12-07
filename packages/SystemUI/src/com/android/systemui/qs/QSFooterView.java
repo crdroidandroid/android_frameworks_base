@@ -68,7 +68,6 @@ public class QSFooterView extends FrameLayout {
     private float mExpansionAmount;
 
     private boolean mShouldShowDataUsage;
-    private boolean mShouldShowUsageText;
  
     @Nullable
     private OnClickListener mExpandClickListener;
@@ -113,22 +112,22 @@ public class QSFooterView extends FrameLayout {
             mSubId = mSubId ^ 3;
             setUsageText();
             mUsageText.setSelected(false);
-            postDelayed(() -> mUsageText.setSelected(true), 1000);
+            postOnAnimationDelayed(() -> mUsageText.setSelected(true), 1000);
         }
     }
     
     private void setUsageTextDebounced() {
         if (mShouldShowDataUsage) {
-            mHandler.removeCallbacks(mSetUsageTextRunnable);
-            mHandler.postDelayed(mSetUsageTextRunnable, DEBOUNCE_DELAY_MS);
+            removeCallbacks(mSetUsageTextRunnable);
+            postOnAnimationDelayed(mSetUsageTextRunnable, DEBOUNCE_DELAY_MS);
         }
     }
 
     private void setUsageText() {
-        if (mUsageText == null || !mShouldShowDataUsage || !mExpanded) return;
-        DataUsageController.DataUsageInfo info;
-        String suffix;
-        if (mIsWifiConnected) {
+        if (mUsageText == null || !mShouldShowDataUsage) return;
+        DataUsageController.DataUsageInfo info = null;
+        String suffix = null;
+        if (mIsWifiConnected || mHasNoSims) {
             info = mDataController.getWifiDailyDataUsageInfo(true);
             if (info == null) {
                 info = mDataController.getWifiDailyDataUsageInfo(false);
@@ -136,15 +135,10 @@ public class QSFooterView extends FrameLayout {
             } else {
                 suffix = getWifiSsid();
             }
-        } else if (!mHasNoSims) {
+        } else {
             mDataController.setSubscriptionId(mSubId);
             info = mDataController.getDailyDataUsageInfo();
             suffix = getSlotCarrierName();
-        } else {
-            mShouldShowUsageText = false;
-            mUsageText.setText(null);
-            updateVisibilities();
-            return;
         }
         if (info == null) {
             Log.w(TAG, "setUsageText: DataUsageInfo is NULL.");
@@ -157,8 +151,6 @@ public class QSFooterView extends FrameLayout {
         if (!TextUtils.equals(text, mUsageText.getText())) {
             mUsageText.setText(text);
         }
-        mShouldShowUsageText = true;
-        updateVisibilities();
     }
 
     private String formatDataUsage(long byteValue, String suffix) {
@@ -192,35 +184,31 @@ public class QSFooterView extends FrameLayout {
     protected void setWifiSsid(String ssid) {
         if (mWifiSsid != ssid) {
             mWifiSsid = ssid;
-            setUsageTextDebounced();
         }
     }
 
     protected void setIsWifiConnected(boolean connected) {
         if (mIsWifiConnected != connected) {
             mIsWifiConnected = connected;
-            setUsageTextDebounced();
         }
     }
 
     protected void setNoSims(boolean hasNoSims) {
         if (mHasNoSims != hasNoSims) {
             mHasNoSims = hasNoSims;
-            setUsageTextDebounced();
         }
     }
 
     protected void setCurrentDataSubId(int subId) {
         if (mCurrentDataSubId != subId) {
             mSubId = mCurrentDataSubId = subId;
-            setUsageTextDebounced();
         }
     }
 
     protected void setShowDataUsage(boolean show) {
         if (mShouldShowDataUsage != show) {
             mShouldShowDataUsage = show;
-            updateVisibilities();
+            updateVisibility();
         }
     }
 
@@ -283,7 +271,9 @@ public class QSFooterView extends FrameLayout {
     void setExpanded(boolean expanded) {
         if (mExpanded == expanded) return;
         mExpanded = expanded;
-        updateEverything();
+        if (mExpanded) {
+            postOnAnimationDelayed(() -> updateEverything(), 250);
+        }
     }
 
     /** */
@@ -295,7 +285,7 @@ public class QSFooterView extends FrameLayout {
 
         if (mUsageText == null || !mShouldShowDataUsage) return;
         if (headerExpansionFraction == 1.0f) {
-            postDelayed(() -> mUsageText.setSelected(true), 1000);
+            postOnAnimationDelayed(() -> mUsageText.setSelected(true), 1000);
         } else if (headerExpansionFraction == 0.0f) {
             mUsageText.setSelected(false);
             mSubId = mCurrentDataSubId;
@@ -310,14 +300,15 @@ public class QSFooterView extends FrameLayout {
     }
 
     void updateEverything() {
-        post(() -> {
-            updateVisibilities();
+        postOnAnimation(() -> {
             setUsageTextDebounced();
         });
     }
-
-    private void updateVisibilities() {
-        mUsageText.setVisibility(mShouldShowDataUsage && mExpanded && mShouldShowUsageText
-                ? View.VISIBLE : View.INVISIBLE);
+    
+    void updateVisibility() {
+        int visibility = mShouldShowDataUsage ? View.VISIBLE : View.INVISIBLE;
+        if (mUsageText.getVisibility() != visibility) {
+            mUsageText.setVisibility(visibility);
+        }
     }
 }
