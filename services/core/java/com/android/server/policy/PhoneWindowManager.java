@@ -3157,8 +3157,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
         @Override
         int getMaxMultiPressCount() {
-             // Do not set it to 1 for Action.NOTHING else it will toggle app on double tap
-            return 2;
+            return mAppSwitchDoubleTapAction != Action.NOTHING ? 2 : 1;
         }
 
         @Override
