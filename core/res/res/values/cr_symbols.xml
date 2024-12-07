@@ -8,4 +8,7 @@
     <!-- Light / Regular style fonts -->
     <java-symbol type="string" name="config_lightFontFamily" />
     <java-symbol type="string" name="config_regularFontFamily" />
+
+    <!-- Build properties from a GMS certified device against current platform SPL level -->
+    <java-symbol type="array" name="config_certifiedBuildProperties" />
 </resources>
