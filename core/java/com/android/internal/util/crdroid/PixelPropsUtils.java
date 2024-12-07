@@ -24,6 +24,8 @@ import android.os.Build;
 import android.os.SystemProperties;
 import android.util.Log;
 
+import com.android.internal.R;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -157,6 +159,7 @@ public final class PixelPropsUtils {
     };
 
     private static volatile boolean sIsFinsky = false;
+    private static volatile String[] sCertifiedProps;
 
     static {
         propsToChangeGeneric = new HashMap<>();
@@ -250,7 +253,7 @@ public final class PixelPropsUtils {
             } else if (packageName.equals("com.google.android.gms")) {
                 final String processName = Application.getProcessName().toLowerCase();
                 if (processName.contains("unstable")) {
-                    spoofBuildGms();
+                    spoofBuildGms(context);
                     return;
                 }
                 return;
@@ -381,23 +384,20 @@ public final class PixelPropsUtils {
         }
     }
 
-    private static void spoofBuildGms() {
+    private static void spoofBuildGms(Context context) {
         if (!SystemProperties.getBoolean(SPOOF_PIXEL_PI, true))
             return;
         // Alter build parameters to avoid hardware attestation enforcement
-        setPropValue("MANUFACTURER", "Google");
-        setPropValue("MODEL", "Pixel 9 Pro XL");
-        setPropValue("FINGERPRINT", "google/komodo_beta/komodo:15/AP41.240925.009/12534705:user/release-keys");
-        setPropValue("BRAND", "google");
-        setPropValue("PRODUCT", "komodo_beta");
-        setPropValue("DEVICE", "komodo");
-        setPropValue("VERSION.RELEASE", "15");
-        setPropValue("ID", "AP41.240925.009");
-        setPropValue("VERSION.INCREMENTAL", "12534705");
-        setPropValue("TYPE", "user");
-        setPropValue("TAGS", "release-keys");
-        setPropValue("VERSION.SECURITY_PATCH", "2024-10-05");
-        setPropValue("VERSION.DEVICE_INITIAL_SDK_INT", "32");
+        sCertifiedProps = context.getResources().getStringArray(R.array.config_certifiedBuildProperties);
+        for (String entry : sCertifiedProps) {
+            // Each entry must be of the format FIELD:value
+            final String[] fieldAndProp = entry.split(":", 2);
+            if (fieldAndProp.length != 2) {
+                Log.e(TAG, "Invalid entry in certified props: " + entry);
+                continue;
+            }
+            setPropValue(fieldAndProp[0], fieldAndProp[1]);
+        }
     }
 
     private static boolean isCallerSafetyNet() {
