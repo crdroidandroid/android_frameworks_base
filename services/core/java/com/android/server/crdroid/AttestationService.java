@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2024 The LeafOS Project
+ * Copyright (C) 2024 crDroid Android Project
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -8,7 +9,6 @@
 package com.android.server.crdroid;
 
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
@@ -35,26 +35,31 @@ import java.util.concurrent.TimeUnit;
 public final class AttestationService extends SystemService {
 
     private static final String TAG = AttestationService.class.getSimpleName();
+
     private static final String API = "https://raw.githubusercontent.com/crdroidandroid/android_vendor_certification/refs/heads/15.0/gms_certified_props.json";
-
+    private static final String SPOOF_PIXEL_PI = "persist.sys.pixelprops.pi";
     private static final String DATA_FILE = "gms_certified_props.json";
-
-    private static final long INITIAL_DELAY = 0;
-    private static final long INTERVAL = 5;
-
+    private static final long INITIAL_DELAY = 0; // Start immediately on boot
+    private static final long INTERVAL = 8; // Interval in hours
     private static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
-    private static final boolean SPOOF_PIXEL_PI =
-            SystemProperties.getBoolean("persist.sys.pixelprops.pi", true);
 
     private final Context mContext;
     private final File mDataFile;
     private final ScheduledExecutorService mScheduler;
+    private final ConnectivityManager mConnectivityManager;
+    private final FetchGmsCertifiedProps mFetchRunnable;
+
+    private boolean mPendingUpdate;
 
     public AttestationService(Context context) {
         super(context);
         mContext = context;
         mDataFile = new File(Environment.getDataSystemDirectory(), DATA_FILE);
+        mFetchRunnable = new FetchGmsCertifiedProps();
         mScheduler = Executors.newSingleThreadScheduledExecutor();
+        mConnectivityManager =
+                (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        registerNetworkCallback();
     }
 
     @Override
@@ -62,12 +67,11 @@ public final class AttestationService extends SystemService {
 
     @Override
     public void onBootPhase(int phase) {
-        if (SPOOF_PIXEL_PI
-                && Utils.isPackageInstalled(mContext, "com.google.android.gms")
+        if (Utils.isPackageInstalled(mContext, "com.google.android.gms")
                 && phase == PHASE_BOOT_COMPLETED) {
             Log.i(TAG, "Scheduling the service");
             mScheduler.scheduleAtFixedRate(
-                    new FetchGmsCertifiedProps(), INITIAL_DELAY, INTERVAL, TimeUnit.MINUTES);
+                    mFetchRunnable, INITIAL_DELAY, INTERVAL, TimeUnit.HOURS);
         }
     }
 
@@ -108,7 +112,7 @@ public final class AttestationService extends SystemService {
                 urlConnection.setReadTimeout(10000);
 
                 try (BufferedReader reader =
-                        new BufferedReader(new InputStreamReader(urlConnection.getInputStream()))) {
+                             new BufferedReader(new InputStreamReader(urlConnection.getInputStream()))) {
                     StringBuilder response = new StringBuilder();
                     String line;
 
@@ -127,33 +131,48 @@ public final class AttestationService extends SystemService {
         }
     }
 
-    private boolean isInternetConnected() {
-        ConnectivityManager cm =
-                (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-        Network nw = cm.getActiveNetwork();
-        if (nw == null) return false;
-        NetworkCapabilities actNw = cm.getNetworkCapabilities(nw);
-        return actNw != null
-                && (actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
-                        || actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
-                        || actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
-                        || actNw.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH));
-    }
-
     private void dlog(String message) {
         if (DEBUG) Log.d(TAG, message);
+    }
+
+    private boolean isInternetConnected() {
+        Network network = mConnectivityManager.getActiveNetwork();
+        if (network != null) {
+            NetworkCapabilities capabilities = mConnectivityManager.getNetworkCapabilities(network);
+            return capabilities != null && capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
+        }
+        return false;
+    }
+
+    private void registerNetworkCallback() {
+        mConnectivityManager.registerDefaultNetworkCallback(new ConnectivityManager.NetworkCallback() {
+            @Override
+            public void onAvailable(Network network) {
+                Log.i(TAG, "Internet is available, resuming update");
+                if (mPendingUpdate) {
+                    mScheduler.schedule(mFetchRunnable, 0, TimeUnit.SECONDS);
+                }
+            }
+        });
     }
 
     private class FetchGmsCertifiedProps implements Runnable {
         @Override
         public void run() {
+            if (!SystemProperties.getBoolean(SPOOF_PIXEL_PI, true)) {
+                mPendingUpdate = false;
+                return;
+            }
+
             try {
                 dlog("FetchGmsCertifiedProps started");
 
                 if (!isInternetConnected()) {
-                    Log.e(TAG, "Internet unavailable");
+                    Log.e(TAG, "Internet is unavailable, deferring update");
+                    mPendingUpdate = true;
                     return;
                 }
+                mPendingUpdate = false;
 
                 String savedProps = readFromFile(mDataFile);
                 String props = fetchProps();
