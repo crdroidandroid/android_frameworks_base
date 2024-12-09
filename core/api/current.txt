@@ -49356,7 +49356,7 @@ package android.text {
     method public static void dumpSpans(CharSequence, android.util.Printer, String);
     method public static CharSequence ellipsize(CharSequence, android.text.TextPaint, float, android.text.TextUtils.TruncateAt);
     method public static CharSequence ellipsize(CharSequence, android.text.TextPaint, float, android.text.TextUtils.TruncateAt, boolean, @Nullable android.text.TextUtils.EllipsizeCallback);
-    method public static boolean equals(CharSequence, CharSequence);
+    method public static boolean equals(@Nullable CharSequence, @Nullable CharSequence);
     method public static CharSequence expandTemplate(CharSequence, java.lang.CharSequence...);
     method public static int getCapsMode(CharSequence, int, int);
     method public static void getChars(CharSequence, int, int, char[], int);
