@@ -330,21 +330,25 @@ public class KeyguardSliceProvider extends SliceProvider implements
         mMediaWakeLock = new SettableWakeLock(
                 WakeLock.createPartial(getContext(), mWakeLockLogger, "media"), "media");
         synchronized (KeyguardSliceProvider.sInstanceLock) {
-            KeyguardSliceProvider oldInstance = KeyguardSliceProvider.sInstance;
-            if (oldInstance != null) {
-                oldInstance.onDestroy();
+            try {
+                KeyguardSliceProvider oldInstance = KeyguardSliceProvider.sInstance;
+                if (oldInstance != null) {
+                    oldInstance.onDestroy();
+                }
+                mDatePattern = getContext().getString(R.string.system_ui_aod_date_pattern);
+                mPendingIntent = PendingIntent.getActivity(getContext(), 0,
+                        new Intent(getContext(), KeyguardSliceProvider.class),
+                        PendingIntent.FLAG_IMMUTABLE);
+                mMediaManager.addCallback(this);
+                mStatusBarStateController.addCallback(this);
+                mNextAlarmController.addCallback(this);
+                mZenModeController.addCallback(this);
+                KeyguardSliceProvider.sInstance = this;
+                registerClockUpdate();
+                updateClockLocked();
+            } catch (Exception e) {
+                return false;
             }
-            mDatePattern = getContext().getString(R.string.system_ui_aod_date_pattern);
-            mPendingIntent = PendingIntent.getActivity(getContext(), 0,
-                    new Intent(getContext(), KeyguardSliceProvider.class),
-                    PendingIntent.FLAG_IMMUTABLE);
-            mMediaManager.addCallback(this);
-            mStatusBarStateController.addCallback(this);
-            mNextAlarmController.addCallback(this);
-            mZenModeController.addCallback(this);
-            KeyguardSliceProvider.sInstance = this;
-            registerClockUpdate();
-            updateClockLocked();
         }
         return true;
     }
