@@ -23,6 +23,8 @@ import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Vibrator;
+import android.os.VibrationEffect;
 import android.provider.Settings;
 import android.service.quicksettings.Tile;
 
@@ -60,6 +62,10 @@ public class SoundTile extends QSTileImpl<BooleanState> {
             refreshState();
         }
     };
+
+    private Vibrator mVibrator;
+    private static final VibrationEffect VIBRATE_MODE_HAPTIC =
+            VibrationEffect.get(VibrationEffect.EFFECT_DOUBLE_CLICK);
 
     @Inject
     public SoundTile(
@@ -106,6 +112,10 @@ public class SoundTile extends QSTileImpl<BooleanState> {
         switch (oldState) {
             case AudioManager.RINGER_MODE_NORMAL:
                 newState = AudioManager.RINGER_MODE_VIBRATE;
+                if (mVibrator == null) mVibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+                if (mVibrator != null) {
+                    if (mVibrator.hasVibrator()) { mVibrator.vibrate(VIBRATE_MODE_HAPTIC); }
+                }
                 break;
             case AudioManager.RINGER_MODE_VIBRATE:
                 newState = AudioManager.RINGER_MODE_SILENT;
