@@ -29,8 +29,11 @@ import android.content.res.Resources;
 import android.content.res.Resources.NotFoundException;
 import android.content.res.Resources.Theme;
 import android.content.res.XmlResourceParser;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.os.SystemClock;
 import android.util.AttributeSet;
+import android.util.PathParser;
 import android.util.TimeUtils;
 import android.util.Xml;
 import android.view.InflateException;
@@ -216,6 +219,84 @@ public class AnimationUtils {
     public static Animation loadAnimation(Context context, @AnimRes int id)
             throws NotFoundException {
 
+        if (Settings.System.getInt(context.getContentResolver(), "pie_animation_style", 0) != 0) {
+            switch(context.getResources().getResourceEntryName(id)) {
+                case "activity_open_enter" : return getActivityOpenEnterAnim();
+                case "activity_open_exit" : return getActivityOpenExitAnim();
+                case "activity_close_enter" : return getActivityCloseEnterAnim();
+                case "activity_close_exit" : return getActivityCloseExitAnim();
+            }
+        }
+        return loadAnimationFromXml(context, id);
+    }
+
+    private static Animation getActivityOpenEnterAnim() {
+        AnimationSet animationSet = new AnimationSet(false);
+        animationSet.setZAdjustment(Animation.ZORDER_TOP);
+        TranslateAnimation translateAnimation = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.04100001f, Animation.RELATIVE_TO_SELF, 0.0f);
+        translateAnimation.setInterpolator(fastOutSlowIn());
+        translateAnimation.setDuration(425L);
+        animationSet.addAnimation(translateAnimation);
+        ClipRectAnimationF clipRectAnimationF = new ClipRectAnimationF(0.0f, 0.959f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f);
+        clipRectAnimationF.setDuration(425L);
+        clipRectAnimationF.setInterpolator(fastOutExtraSlowIn());
+        animationSet.addAnimation(clipRectAnimationF);
+        return animationSet;
+    }
+
+    private static Animation getActivityOpenExitAnim(){
+        AnimationSet animationSet = new AnimationSet(false);
+        TranslateAnimation translateAnimation = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, -0.019999981f);
+        translateAnimation.setDuration(425L);
+        translateAnimation.setInterpolator(fastOutSlowIn());
+        animationSet.addAnimation(translateAnimation);
+        AlphaAnimation alphaAnimation = new AlphaAnimation(1.0f,0.9f);
+        alphaAnimation.setDuration(117L);
+        alphaAnimation.setInterpolator(new LinearInterpolator());
+        animationSet.addAnimation(alphaAnimation);
+        return animationSet;
+    }
+
+    private static Animation getActivityCloseEnterAnim(){
+        AnimationSet animationSet = new AnimationSet(false);
+        TranslateAnimation translateAnimation = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, -0.019999981f, Animation.RELATIVE_TO_SELF, 0.0f);
+        translateAnimation.setDuration(425L);
+        translateAnimation.setInterpolator(fastOutSlowIn());
+        animationSet.addAnimation(translateAnimation);
+        AlphaAnimation alphaAnimation = new AlphaAnimation(0.9f,1.0f);
+        alphaAnimation.setDuration(425L);
+        alphaAnimation.setStartOffset(0);
+        alphaAnimation.setInterpolator(activityCloseDim());
+        animationSet.addAnimation(alphaAnimation);
+        return animationSet;
+    }
+
+    private static Animation getActivityCloseExitAnim(){
+        AnimationSet animationSet = new AnimationSet(false);
+        TranslateAnimation translateAnimation = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.04100001f);
+        translateAnimation.setDuration(425L);
+        translateAnimation.setInterpolator(fastOutSlowIn());
+        animationSet.addAnimation(translateAnimation);
+        ClipRectAnimationF clipRectAnimationF = new ClipRectAnimationF(0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.959f, 1.0f, 1.0f);
+        clipRectAnimationF.setDuration(425L);
+        clipRectAnimationF.setInterpolator(fastOutExtraSlowIn());
+        animationSet.addAnimation(clipRectAnimationF);
+        return animationSet;
+    }
+
+    private static Interpolator fastOutSlowIn() {
+        return new PathInterpolator(0.4F, 0.0F, 0.2F, 1.0F);
+    }
+
+    private static Interpolator activityCloseDim() {
+        return new PathInterpolator(0.33f, 0.0f, 1.0f, 1.0f);
+    }
+
+    private static Interpolator fastOutExtraSlowIn() {
+        return new PathInterpolator(PathParser.createPathFromPathData("M 0,0 C 0.05, 0, 0.133333, 0.06, 0.166666, 0.4 C 0.208333, 0.82, 0.25, 1, 1, 1"));
+    }
+
+    private static Animation loadAnimationFromXml(Context context, int id) {
         XmlResourceParser parser = null;
         try {
             parser = context.getResources().getAnimation(id);
