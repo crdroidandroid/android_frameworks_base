@@ -1014,10 +1014,7 @@ public class SoundDoseHelper {
                         || mEnableCsd.get();
         boolean safeMediaVolumeForce = SystemProperties.getBoolean(SYSTEM_PROPERTY_SAFEMEDIA_FORCE,
                 false);
-        // we are using the MCC overlaid legacy flag used for the safe volume enablement
-        // to determine whether the MCC enforces any safe hearing standard.
-        boolean mccEnforcedSafeMediaVolume = mContext.getResources().getBoolean(
-                com.android.internal.R.bool.config_safe_media_volume_enabled);
+        boolean mccEnforcedSafeMediaVolume = false;
 
         boolean safeVolumeEnabled =
                 (mccEnforcedSafeMediaVolume || safeMediaVolumeForce) && !safeMediaVolumeBypass;
@@ -1053,12 +1050,8 @@ public class SoundDoseHelper {
     private void updateCsdEnabled(String caller) {
         mForceCsdProperty.set(SystemProperties.getBoolean(SYSTEM_PROPERTY_SAFEMEDIA_CSD_FORCE,
                 false));
-        // we are using the MCC overlaid legacy flag used for the safe volume enablement
-        // to determine whether the MCC enforces any safe hearing standard.
-        boolean mccEnforcedSafeMedia = mContext.getResources().getBoolean(
-                com.android.internal.R.bool.config_safe_media_volume_enabled);
-        boolean csdEnable = mContext.getResources().getBoolean(
-                R.bool.config_safe_sound_dosage_enabled);
+        boolean mccEnforcedSafeMedia = false;
+        boolean csdEnable = false;
         boolean newEnabledCsd = (mccEnforcedSafeMedia && csdEnable) || mForceCsdProperty.get();
 
         synchronized (mCsdAsAFeatureLock) {
