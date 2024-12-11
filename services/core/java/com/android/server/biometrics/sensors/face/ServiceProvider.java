@@ -67,8 +67,6 @@ public interface ServiceProvider extends BiometricServiceProvider<FaceSensorProp
      */
     default void scheduleInvalidateAuthenticatorId(int sensorId, int userId,
             @NonNull IInvalidationCallback callback) {
-        throw new IllegalStateException("Providers that support invalidation must override"
-                + " this method");
     }
 
     void scheduleGenerateChallenge(int sensorId, int userId, @NonNull IBinder token,
