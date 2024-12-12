@@ -42,6 +42,7 @@ import com.android.systemui.qs.footer.domain.model.SecurityButtonConfig
 import com.android.systemui.security.data.repository.SecurityRepository
 import com.android.systemui.shade.ShadeDisplayAware
 import com.android.systemui.statusbar.policy.DeviceProvisionedController
+import com.android.systemui.statusbar.policy.KeyguardStateController;
 import com.android.systemui.user.data.repository.UserSwitcherRepository
 import com.android.systemui.user.domain.interactor.UserSwitcherInteractor
 import javax.inject.Inject
@@ -101,6 +102,7 @@ constructor(
     private val metricsLogger: MetricsLogger,
     private val uiEventLogger: UiEventLogger,
     private val deviceProvisionedController: DeviceProvisionedController,
+    private val keyguardStateController: KeyguardStateController,
     private val qsSecurityFooterUtils: QSSecurityFooterUtils,
     private val fgsManagerController: FgsManagerController,
     private val userSwitcherInteractor: UserSwitcherInteractor,
@@ -156,7 +158,7 @@ constructor(
     ) {
         uiEventLogger.log(GlobalActionsDialogLite.GlobalActionsEvent.GA_OPEN_QS)
         globalActionsDialogLite.showOrHideDialog(
-            /* keyguardShowing= */ false,
+            keyguardStateController.isShowing(),
             /* isDeviceProvisioned= */ true,
             expandable,
             context.displayId,
