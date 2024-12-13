@@ -29,6 +29,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.RippleDrawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -403,6 +404,10 @@ public class NotificationBackgroundView extends View implements Dumpable,
         GradientDrawable overlay =
                 (GradientDrawable) background.findDrawableByLayerId(
                         R.id.notification_focus_overlay);
+        if (overlay == null) {
+            Log.w("NotificationBackgroundView", "Focus overlay not found in LayerDrawable");
+            return;
+        }
         for (int i = 0; i < mCornerRadii.length; i++) {
             // in theory subtracting mFocusOverlayStroke/2 should be enough but notification
             // background is still peeking a bit from below - probably due to antialiasing or
