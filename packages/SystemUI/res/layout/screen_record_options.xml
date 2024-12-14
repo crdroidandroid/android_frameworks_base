@@ -41,14 +41,14 @@
             android:dropDownWidth="274dp"
             android:importantForAccessibility="yes"/>
 
-        <Switch
+        <com.google.android.material.materialswitch.MaterialSwitch
             android:layout_width="wrap_content"
             android:minWidth="48dp"
             android:layout_height="48dp"
             android:layout_gravity="end"
             android:id="@+id/screenrecord_audio_switch"
             android:contentDescription="@string/screenrecord_audio_label"
-            style="@style/ScreenRecord.Switch"
+            android:theme="@style/Theme.Material3.DynamicColors.DayNight"
             android:importantForAccessibility="yes" />
     </LinearLayout>
     <LinearLayout
@@ -76,13 +76,13 @@
             android:textColor="?android:attr/textColorPrimary"
             android:contentDescription="@string/screenrecord_taps_label"/>
 
-        <Switch
+        <com.google.android.material.materialswitch.MaterialSwitch
             android:layout_width="wrap_content"
             android:minWidth="48dp"
             android:layout_height="48dp"
             android:id="@+id/screenrecord_taps_switch"
             android:contentDescription="@string/screenrecord_taps_label"
-            style="@style/ScreenRecord.Switch"
+            android:theme="@style/Theme.Material3.DynamicColors.DayNight"
             android:importantForAccessibility="yes" />
     </LinearLayout>
     <LinearLayout
@@ -123,13 +123,13 @@
                 android:textColor="?android:textColorSecondary"/>
         </LinearLayout>
 
-        <Switch
+        <com.google.android.material.materialswitch.MaterialSwitch
             android:layout_width="wrap_content"
             android:minWidth="48dp"
             android:layout_height="48dp"
             android:id="@+id/screenrecord_lowquality_switch"
             android:contentDescription="@string/screenrecord_lowquality_label"
-            style="@style/ScreenRecord.Switch"
+            android:theme="@style/Theme.Material3.DynamicColors.DayNight"
             android:importantForAccessibility="yes" />
     </LinearLayout>
     <LinearLayout
@@ -170,13 +170,13 @@
                 android:textColor="?android:textColorSecondary"/>
         </LinearLayout>
 
-        <Switch
+        <com.google.android.material.materialswitch.MaterialSwitch
             android:layout_width="wrap_content"
             android:minWidth="48dp"
             android:layout_height="48dp"
             android:id="@+id/screenrecord_longer_timeout_switch"
             android:contentDescription="@string/screenrecord_longer_timeout_switch_label"
-            style="@style/ScreenRecord.Switch"
+            android:theme="@style/Theme.Material3.DynamicColors.DayNight"
             android:importantForAccessibility="yes" />
     </LinearLayout>
     <LinearLayout
@@ -217,13 +217,13 @@
                 android:textColor="?android:textColorSecondary"/>
         </LinearLayout>
 
-        <Switch
+        <com.google.android.material.materialswitch.MaterialSwitch
             android:layout_width="wrap_content"
             android:minWidth="48dp"
             android:layout_height="48dp"
             android:id="@+id/screenrecord_skip_time_switch"
             android:contentDescription="@string/screenrecord_skip_time_label"
-            style="@style/ScreenRecord.Switch"
+            android:theme="@style/Theme.Material3.DynamicColors.DayNight"
             android:importantForAccessibility="yes" />
     </LinearLayout>
     <LinearLayout
@@ -264,13 +264,13 @@
                 android:textColor="?android:textColorSecondary"/>
         </LinearLayout>
 
-        <Switch
+        <com.google.android.material.materialswitch.MaterialSwitch
             android:layout_width="wrap_content"
             android:minWidth="48dp"
             android:layout_height="48dp"
             android:id="@+id/screenrecord_hevc_switch"
             android:contentDescription="@string/screenrecord_hevc_switch_label"
-            style="@style/ScreenRecord.Switch"
+            android:theme="@style/Theme.Material3.DynamicColors.DayNight"
             android:importantForAccessibility="yes" />
     </LinearLayout>
 </LinearLayout>
