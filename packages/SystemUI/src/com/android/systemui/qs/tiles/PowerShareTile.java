@@ -189,6 +189,7 @@ public class PowerShareTile extends QSTileImpl<BooleanState>
         }
 
         state.icon = ResourceIcon.get(R.drawable.ic_qs_powershare);
+        state.hasLongClickEffect = false;
         try {
             state.value = mPowerShare.isEnabled();
         } catch (RemoteException ex) {

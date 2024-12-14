@@ -148,6 +148,7 @@ public class AODTile extends QSTileImpl<BooleanState> implements
         state.icon = mIcon;
         state.value = enable;
         state.label = mContext.getString(R.string.quick_settings_aod_label);
+        state.hasLongClickEffect = false;
         if (mBatteryController.isAodPowerSave()) {
             state.state = Tile.STATE_UNAVAILABLE;
         } else {
