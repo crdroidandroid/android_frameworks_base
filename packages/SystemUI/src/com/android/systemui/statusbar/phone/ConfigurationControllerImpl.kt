@@ -64,7 +64,7 @@ constructor(@Assisted private val context: Context) :
     private inline fun forEachListener(block: (ConfigurationListener) -> Unit) {
         // Avoid concurrent modification exception
         val snapshot = synchronized(listeners) { listeners.toList() }
-        snapshot.forEach(block)
+        snapshot.filterNotNull().forEach(block)
     }
 
     override fun notifyThemeChanged() {
@@ -149,11 +149,13 @@ constructor(@Assisted private val context: Context) :
     }
 
     override fun addCallback(listener: ConfigurationListener) {
+        if (listener == null) return
         synchronized(listeners) { listeners.add(listener) }
         listener.onDensityOrFontScaleChanged()
     }
 
     override fun removeCallback(listener: ConfigurationListener) {
+        if (listener == null) return
         synchronized(listeners) { listeners.remove(listener) }
     }
 
