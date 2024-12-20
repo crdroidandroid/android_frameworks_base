@@ -238,9 +238,12 @@ public class NotificationBackgroundView extends View implements Dumpable,
      */
     private void setStatefulColors() {
         if (mTintColor != mNormalColor) {
-            ColorStateList newColor = ContrastColorUtil.isColorDark(mTintColor)
-                    ? mDarkColoredStatefulColors : mLightColoredStatefulColors;
-            ((GradientDrawable) getStatefulBackgroundLayer().mutate()).setColor(newColor);
+            Drawable statefulLayer = getStatefulBackgroundLayer();
+            if (statefulLayer instanceof GradientDrawable gradientDrawable) {
+                ColorStateList newColor = ContrastColorUtil.isColorDark(mTintColor)
+                        ? mDarkColoredStatefulColors : mLightColoredStatefulColors;
+                gradientDrawable.setColor(newColor);
+            }
         }
     }
 
@@ -249,22 +252,22 @@ public class NotificationBackgroundView extends View implements Dumpable,
      * the notion of a background independently of the regular View background..
      */
     public void setCustomBackground(Drawable background) {
-        if (mBackground != null) {
-            mBackground.setCallback(null);
-            unscheduleDrawable(mBackground);
+        if (background instanceof LayerDrawable || background == null) {
+            if (mBackground != null) {
+                mBackground.setCallback(null);
+                unscheduleDrawable(mBackground);
+            }
+            mBackground = background;
+            if (mBackground != null) {
+                mBackground.mutate();
+                mBackground.setCallback(this);
+                setTint(mTintColor);
+            }
+            updateBackgroundRadii();
+            invalidate();
+        } else {
+            Log.e("NotificationBackgroundView", "Invalid background type: " + background);
         }
-        mBackground = background;
-        mRippleColor = null;
-        mBackground.mutate();
-        if (mBackground != null) {
-            mBackground.setCallback(this);
-            setTint(mTintColor);
-        }
-        if (mBackground instanceof RippleDrawable) {
-            ((RippleDrawable) mBackground).setForceSoftware(true);
-        }
-        updateBackgroundRadii();
-        invalidate();
     }
 
     public void setCustomBackground(int drawableResId) {
@@ -273,11 +276,21 @@ public class NotificationBackgroundView extends View implements Dumpable,
     }
 
     private Drawable getBaseBackgroundLayer() {
-        return ((LayerDrawable) mBackground).getDrawable(0);
+        if (mBackground instanceof LayerDrawable layerDrawable) {
+            if (layerDrawable.getNumberOfLayers() > 0) {
+                return layerDrawable.getDrawable(0);
+            }
+        }
+        return null; // Return null if no valid layer exists
     }
 
     private Drawable getStatefulBackgroundLayer() {
-        return ((LayerDrawable) mBackground).getDrawable(1);
+        if (mBackground instanceof LayerDrawable layerDrawable) {
+            if (layerDrawable.getNumberOfLayers() > 1) {
+                return layerDrawable.getDrawable(1);
+            }
+        }
+        return null; // Return null if no valid layer exists
     }
 
     public void setTint(int tintColor) {
