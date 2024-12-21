@@ -56,6 +56,7 @@ object OngoingActivityChipBinder {
                 setChipIcon(chipModel, chipBackgroundView, chipDefaultIconView, iconViewStore)
                 setChipMainContent(chipModel, chipTextView, chipTimeView, chipShortTimeDeltaView)
                 chipView.setOnClickListener(chipModel.onClickListener)
+                chipView.setOnLongClickListener(chipModel.onLongClickListener)
                 updateChipPadding(
                     chipModel,
                     chipBackgroundView,
