@@ -16,6 +16,7 @@
 
 package com.android.systemui.statusbar.chips.ui.viewmodel
 
+import android.widget.Toast
 import android.view.View
 import com.android.systemui.animation.DialogCuj
 import com.android.systemui.animation.DialogTransitionAnimator
@@ -47,6 +48,7 @@ interface OngoingActivityChipViewModel {
         ): View.OnClickListener {
             return View.OnClickListener { view ->
                 logger.log(tag, LogLevel.INFO, {}, { "Chip clicked" })
+                Toast.makeText(view.getContext(), R.string.chip_longpress_hint, Toast.LENGTH_SHORT).show()
                 val dialog = dialogDelegate.createDialog()
                 val launchableView =
                     view.requireViewById<ChipBackgroundContainer>(
