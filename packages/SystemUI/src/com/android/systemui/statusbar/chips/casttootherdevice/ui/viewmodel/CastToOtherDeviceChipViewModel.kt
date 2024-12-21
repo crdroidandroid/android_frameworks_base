@@ -17,6 +17,8 @@
 package com.android.systemui.statusbar.chips.casttootherdevice.ui.viewmodel
 
 import android.content.Context
+import android.view.HapticFeedbackConstants
+import android.view.View
 import androidx.annotation.DrawableRes
 import com.android.internal.jank.Cuj
 import com.android.systemui.animation.DialogCuj
@@ -209,6 +211,11 @@ constructor(
                 logger,
                 TAG,
             ),
+            onLongClickListener = View.OnLongClickListener { view ->
+                view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+                stopMediaRouterCastingFromDialog()
+                true
+            },
         )
     }
 

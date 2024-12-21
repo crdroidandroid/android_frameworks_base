@@ -48,6 +48,7 @@ sealed class OngoingActivityChipModel {
          * clickable.
          */
         open val onClickListener: View.OnClickListener?,
+        open val onLongClickListener: View.OnLongClickListener? = null,
     ) : OngoingActivityChipModel() {
 
         /** This chip shows only an icon and nothing else. */
@@ -74,7 +75,8 @@ sealed class OngoingActivityChipModel {
              */
             val startTimeMs: Long,
             override val onClickListener: View.OnClickListener?,
-        ) : Shown(icon, colors, onClickListener) {
+            override val onLongClickListener: View.OnLongClickListener? = null,
+        ) : Shown(icon, colors, onClickListener, onLongClickListener) {
             override val logName = "Shown.Timer"
         }
 
