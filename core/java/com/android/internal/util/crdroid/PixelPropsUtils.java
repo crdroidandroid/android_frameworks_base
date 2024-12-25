@@ -156,6 +156,7 @@ public final class PixelPropsUtils {
         );
 
         Collections.addAll(PKGS_S24U,
+            "com.blizzard.diablo.immortal",
             "com.pubg.imobile",
             "com.pubg.krmobile",
             "com.rekoo.pubgm",
