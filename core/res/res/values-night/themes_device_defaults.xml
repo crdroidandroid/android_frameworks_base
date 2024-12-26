@@ -104,4 +104,6 @@ easier.
     <style name="Theme.DeviceDefault.AutofillHalfScreenDialogList" parent="Theme.DeviceDefault.DayNight">
         <item name="colorForeground">@android:color/white</item>
     </style>
+
+    <style name="Theme.DeviceDefault.System" parent="Theme.DeviceDefault.DayNight" />
 </resources>
