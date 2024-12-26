@@ -8868,7 +8868,7 @@
                  android:killAfterRestore="false"
                  android:icon="@drawable/ic_launcher_android"
                  android:supportsRtl="true"
-                 android:theme="@style/Theme.DeviceDefault.Light.DarkActionBar"
+                 android:theme="@style/Theme.DeviceDefault.System"
                  android:defaultToDeviceProtectedStorage="true"
                  android:forceQueryable="true"
                  android:directBootAware="true">
