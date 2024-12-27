@@ -1275,10 +1275,15 @@ public class NavigationBar extends ViewController<NavigationBarView> implements 
         if (!mView.isRecentsButtonVisible() && mScreenPinningActive) {
             return onLongPressBackHome(v);
         }
-        KeyButtonView keyButtonView = (KeyButtonView) v;
-        keyButtonView.sendEvent(KeyEvent.ACTION_DOWN, KeyEvent.FLAG_LONG_PRESS);
-        keyButtonView.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_LONG_CLICKED);
-        return true;
+        if (v instanceof KeyButtonView) {
+            KeyButtonView keyButtonView = (KeyButtonView) v;
+            keyButtonView.sendEvent(KeyEvent.ACTION_DOWN, KeyEvent.FLAG_LONG_PRESS);
+            keyButtonView.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_LONG_CLICKED);
+            return true;
+        } else {
+            Log.d(TAG, "Unexpected view type: " + v.getClass().getSimpleName());
+            return false;
+        }
     }
 
     // additional optimization when we have software system buttons - start loading the recent
