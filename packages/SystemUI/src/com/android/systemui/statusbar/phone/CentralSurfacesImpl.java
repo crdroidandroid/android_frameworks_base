@@ -402,6 +402,7 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
 
     private final Point mCurrentDisplaySize = new Point();
 
+    protected PhoneStatusBarView mStatusBarView;
     private PhoneStatusBarViewController mPhoneStatusBarViewController;
     private PhoneStatusBarTransitions mStatusBarTransitions;
     private final AuthRippleController mAuthRippleController;
@@ -1265,8 +1266,8 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
 
             // Set up CollapsedStatusBarFragment and PhoneStatusBarView
             mStatusBarInitializer.setStatusBarViewUpdatedListener(
-                    (statusBarViewController, statusBarTransitions) -> {
-
+                    (statusBarView, statusBarViewController, statusBarTransitions) -> {
+                        mStatusBarView = statusBarView;
                         mPhoneStatusBarViewController = statusBarViewController;
                         mStatusBarTransitions = statusBarTransitions;
                         getNotificationShadeWindowViewController()
