@@ -992,7 +992,11 @@ public class MediaControlPanel {
                     Log.d(TAG, "Cannot load wallpaper color from a recycled bitmap");
                     return null;
                 }
-                return WallpaperColors.fromBitmap(artworkBitmap);
+                try {
+                    return WallpaperColors.fromBitmap(artworkBitmap);
+                } catch (Exception e) {
+                    return null;
+                }
             } else {
                 Drawable artworkDrawable = artworkIcon.loadDrawable(mContext);
                 if (artworkDrawable != null) {
