@@ -200,14 +200,14 @@ final class AppClipsViewModel extends ViewModel {
      * Saves the provided {@link Drawable} to storage then informs the result {@link Uri} to
      * {@link LiveData}.
      */
-    void saveScreenshotThenFinish(Drawable screenshotDrawable, Rect bounds, UserHandle user) {
+    void saveScreenshotThenFinish(Drawable screenshotDrawable, Rect bounds, UserHandle user, String foregroundAppName) {
         mBgExecutor.execute(() -> {
             // Render the screenshot bitmap in background.
             Bitmap screenshotBitmap = renderBitmap(screenshotDrawable, bounds);
 
             // Export and save the screenshot in background.
             ListenableFuture<ImageExporter.Result> exportFuture = mImageExporter.export(mBgExecutor,
-                    UUID.randomUUID(), screenshotBitmap, user, Display.DEFAULT_DISPLAY, null);
+                    UUID.randomUUID(), screenshotBitmap, user, Display.DEFAULT_DISPLAY, foregroundAppName);
 
             // Get the result and update state on main thread.
             exportFuture.addListener(() -> {
