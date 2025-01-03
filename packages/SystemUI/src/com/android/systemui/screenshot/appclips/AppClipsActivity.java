@@ -29,7 +29,9 @@ import static com.android.systemui.screenshot.appclips.AppClipsTrampolineActivit
 import static com.android.systemui.screenshot.appclips.AppClipsTrampolineActivity.PERMISSION_SELF;
 
 import android.app.Activity;
+import android.app.ActivityTaskManager;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
@@ -43,7 +45,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.os.ResultReceiver;
+import android.content.pm.ActivityInfo;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,7 +76,11 @@ import com.android.systemui.screenshot.appclips.InternalBacklinksData.BacklinksD
 import com.android.systemui.screenshot.appclips.InternalBacklinksData.CrossProfileError;
 import com.android.systemui.screenshot.scroll.CropView;
 import com.android.systemui.settings.UserTracker;
+import com.android.systemui.shared.system.TaskStackChangeListener;
+import com.android.systemui.shared.system.TaskStackChangeListeners;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -127,6 +135,37 @@ public class AppClipsActivity extends ComponentActivity {
     private String mCallingPackageName;
     private int mCallingPackageUid;
 
+    private ComponentName mTaskComponentName;
+    private final ExecutorService mBgExecutor;
+
+    private final TaskStackChangeListener mTaskListener = new TaskStackChangeListener() {
+        @Override
+        public void onTaskStackChanged() {
+            mBgExecutor.execute(() -> updateForegroundTaskSync());
+        }
+    };
+
+    private void updateForegroundTaskSync() {
+        try {
+            final ActivityTaskManager.RootTaskInfo focusedStack =
+                    ActivityTaskManager.getService().getFocusedRootTaskInfo();
+            if (focusedStack != null && focusedStack.topActivity != null) {
+                mTaskComponentName = focusedStack.topActivity;
+            }
+        } catch (RemoteException e) {
+            Log.e(TAG, "Failed to get foreground task component", e);
+        }
+    }
+
+    private String getForegroundAppLabel() {
+        try {
+            final ActivityInfo ai = mPackageManager.getActivityInfo(mTaskComponentName, 0);
+            return ai.applicationInfo.loadLabel(mPackageManager).toString();
+        } catch (PackageManager.NameNotFoundException e) {
+             return null;
+        }
+    }
+
     @Inject
     public AppClipsActivity(AppClipsViewModel.Factory viewModelFactory,
             PackageManager packageManager, UserTracker userTracker, UiEventLogger uiEventLogger) {
@@ -151,6 +190,14 @@ public class AppClipsActivity extends ComponentActivity {
         };
 
         mIntentFilter = new IntentFilter(ACTION_FINISH_FROM_TRAMPOLINE);
+
+        mBgExecutor = Executors.newSingleThreadExecutor();
+
+        // Register task stack listener
+        TaskStackChangeListeners.getInstance().registerTaskStackListener(mTaskListener);
+
+        // Initialize current foreground package name
+        updateForegroundTaskSync();
     }
 
     @Override
@@ -232,6 +279,9 @@ public class AppClipsActivity extends ComponentActivity {
 
         unregisterReceiver(mBroadcastReceiver);
 
+        TaskStackChangeListeners.getInstance().unregisterTaskStackListener(mTaskListener);
+        mBgExecutor.shutdown();
+
         // If neither error nor result was set, it implies that the activity is finishing due to
         // some other reason such as user dismissing this activity using back gesture. Inform error.
         if (isFinishing() && mViewModel.getErrorLiveData().getValue() == null
@@ -298,7 +348,7 @@ public class AppClipsActivity extends ComponentActivity {
         }
 
         updateImageDimensions();
-        mViewModel.saveScreenshotThenFinish(drawable, bounds, getUser());
+        mViewModel.saveScreenshotThenFinish(drawable, bounds, getUser(), getForegroundAppLabel());
     }
 
     private void setResultThenFinish(Uri uri) {
