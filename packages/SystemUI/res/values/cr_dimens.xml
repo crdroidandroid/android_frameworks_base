@@ -96,4 +96,7 @@
 
     <!-- FPS Info tile -->
     <dimen name="fps_info_text_padding">4dp</dimen>
+
+    <!-- Face unlock icon -->
+    <dimen name="face_unlock_icon_margin_top">6dp</dimen>
 </resources>
