@@ -968,16 +968,14 @@ constructor(
         lastIconTint = icon.getColor(state)
 
         // Long-press effects
-        longPressEffect?.qsTile?.state?.handlesLongClick = state.handlesLongClick
+        longPressEffect?.qsTile?.state?.handlesLongClick = hasLongClickEffect
         if (
-            state.handlesLongClick &&
+            hasLongClickEffect &&
                 longPressEffect?.initializeEffect(longPressEffectDuration) == true
         ) {
-            if (hasLongClickEffect) {
-                showRippleEffect = false
-                longPressEffect.qsTile?.state?.state = lastState // Store the tile's state
-                longPressEffect.resetState()
-            }
+            showRippleEffect = false
+            longPressEffect.qsTile?.state?.state = lastState // Store the tile's state
+            longPressEffect.resetState()
             initializeLongPressProperties(measuredHeight, measuredWidth)
         } else {
             // Long-press effects might have been enabled before but the new state does not
