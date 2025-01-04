@@ -966,12 +966,14 @@ constructor(
         val deltaH = (newHeight - startingHeight) / 2
         val deltaW = (newWidth - startingWidth) / 2
 
-        background.updateBounds(
-            left = -deltaW,
-            top = -deltaH,
-            right = newWidth - deltaW,
-            bottom = newHeight - deltaH,
-        )
+        background?.let {
+            it.updateBounds(
+                left = -deltaW,
+                top = -deltaH,
+                right = newWidth - deltaW,
+                bottom = newHeight - deltaH,
+            )
+        }
 
         // Radius change
         val newRadius =
@@ -1024,12 +1026,14 @@ constructor(
         start + fraction * (end - start)
 
     fun resetLongPressEffectProperties() {
-        background.updateBounds(
-            left = 0,
-            top = 0,
-            right = initialLongPressProperties?.width?.toInt() ?: measuredWidth,
-            bottom = initialLongPressProperties?.height?.toInt() ?: measuredHeight,
-        )
+        background?.let {
+            it.updateBounds(
+                left = 0,
+                top = 0,
+                right = initialLongPressProperties?.width?.toInt() ?: measuredWidth,
+                bottom = initialLongPressProperties?.height?.toInt() ?: measuredHeight,
+            )
+        }
         changeCornerRadius(resources.getDimensionPixelSize(R.dimen.qs_corner_radius).toFloat())
         setAllColors(
             getBackgroundColorForState(lastState, lastDisabledByPolicy),
