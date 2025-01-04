@@ -578,7 +578,7 @@ constructor(
     }
 
     override fun init(tile: QSTile) {
-        if (longPressEffect != null) {
+        if (!isA11Style && longPressEffect != null) {
             isHapticFeedbackEnabled = false
             longPressEffect.qsTile = tile
             longPressEffect.createExpandableFromView(this)
@@ -817,7 +817,7 @@ constructor(
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         // let the View run the onTouch logic for click and long-click detection
         val result = super.onTouchEvent(event)
-        if (longPressEffect != null) {
+        if (!isA11Style && longPressEffect != null) {
             when (event?.actionMasked) {
                 MotionEvent.ACTION_DOWN -> {
                     longPressEffect.handleActionDown()
@@ -840,7 +840,7 @@ constructor(
         val allowAnimations = animationsEnabled()
         isClickable = state.state != Tile.STATE_UNAVAILABLE
         isLongClickable = state.handlesLongClick
-        hasLongClickEffect = (state.handlesLongClick && state.hasLongClickEffect)
+        hasLongClickEffect = !isA11Style && state.handlesLongClick && state.hasLongClickEffect
         icon.setIcon(state, allowAnimations)
         contentDescription = state.contentDescription
 
@@ -1154,7 +1154,7 @@ constructor(
 
     override fun onActivityLaunchAnimationEnd() {
         longPressEffect?.resetState()
-        if (longPressEffect != null && !haveLongPressPropertiesBeenReset) {
+        if (!isA11Style && longPressEffect != null && !haveLongPressPropertiesBeenReset) {
             resetLongPressEffectProperties()
         }
     }
