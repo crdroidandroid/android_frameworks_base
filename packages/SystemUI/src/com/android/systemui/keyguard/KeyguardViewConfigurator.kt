@@ -47,6 +47,7 @@ import com.android.systemui.keyguard.ui.binder.LightRevealScrimViewBinder
 import com.android.systemui.keyguard.ui.composable.LockscreenContent
 import com.android.systemui.keyguard.ui.composable.blueprint.ComposableLockscreenSceneBlueprint
 import com.android.systemui.keyguard.ui.view.KeyguardIndicationArea
+import com.android.systemui.keyguard.ui.view.KeyguardIndicationAreaTop
 import com.android.systemui.keyguard.ui.view.KeyguardRootView
 import com.android.systemui.keyguard.ui.viewmodel.KeyguardBlueprintViewModel
 import com.android.systemui.keyguard.ui.viewmodel.KeyguardClockViewModel
@@ -184,6 +185,9 @@ constructor(
     private fun initializeViews() {
         val indicationArea = KeyguardIndicationArea(context, null)
         keyguardIndicationController.setIndicationArea(indicationArea)
+
+        val indicationAreaTop = KeyguardIndicationAreaTop(context, null)
+        keyguardIndicationController.setIndicationAreaTop(indicationAreaTop)
     }
 
     private fun bindKeyguardRootView() {
