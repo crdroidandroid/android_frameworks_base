@@ -12660,11 +12660,13 @@ public class BatteryStatsImpl extends BatteryStats {
 
                 // Distribute the remaining Tx power appropriately between all apps that transmitted
                 // packets.
-                for (int i = 0; i < txPackets.size(); i++) {
-                    final int uid = txPackets.keyAt(i);
-                    final long myTxTimeMs = (txPackets.valueAt(i) * leftOverTxTimeMs)
-                            / totalTxPackets;
-                    txTimesMs.incrementValue(uid, myTxTimeMs);
+                if (totalTxPackets > 0) { // see https://github.com/GrapheneOS/os-issue-tracker/issues/4627
+                    for (int i = 0; i < txPackets.size(); i++) {
+                        final int uid = txPackets.keyAt(i);
+                        final long myTxTimeMs = (txPackets.valueAt(i) * leftOverTxTimeMs)
+                                / totalTxPackets;
+                        txTimesMs.incrementValue(uid, myTxTimeMs);
+                    }
                 }
 
                 // Distribute the remaining Rx power appropriately between all apps that received
