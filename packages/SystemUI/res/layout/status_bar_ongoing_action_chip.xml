@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2025 The LineageOS Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ongoing_action_chip"
+    android:layout_width="@dimen/ongoing_action_chip_width"
+    android:layout_height="@dimen/ongoing_action_chip_height"
+    android:maxWidth="120dp"
+    android:minWidth="60dp"
+    android:orientation="horizontal"
+    android:layout_gravity="center_vertical|start"
+    android:padding="@dimen/ongoing_action_padding"
+    android:layout_marginLeft="4dp"
+    android:visibility="gone"
+    android:background="@drawable/action_chip_container_background"
+    android:clickable="true"
+    android:focusable="true">
+
+    <ImageView
+        android:id="@+id/ongoing_action_app_icon"
+        android:layout_width="@dimen/ongoing_action_icon_size"
+        android:layout_height="@dimen/ongoing_action_icon_size"
+        android:gravity="center_vertical|start"
+        android:scaleType="centerInside"
+        android:contentDescription="App icon"
+        android:tint="@android:color/transparent"
+        android:src="@android:drawable/sym_def_app_icon" />
+
+    <View
+        android:layout_width="@dimen/ongoing_action_spacing"
+        android:layout_height="0dp" />
+
+    <ProgressBar
+        android:id="@+id/app_action_progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/ongoing_action_progress_height"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:indeterminate="false"
+        android:progress="0"
+        android:max="100"
+        android:clickable="false"
+        android:focusable="false" />
+</LinearLayout>
