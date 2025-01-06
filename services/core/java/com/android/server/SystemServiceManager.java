@@ -379,6 +379,13 @@ public final class SystemServiceManager implements Dumpable {
     }
 
     private @NonNull TargetUser newTargetUser(@UserIdInt int userId) {
+        if (mUserManagerInternal == null) {
+            // see https://github.com/GrapheneOS/os-issue-tracker/issues/4510
+            var um = LocalServices.getService(UserManagerInternal.class);
+            if (um != null) {
+                mUserManagerInternal = um;
+            }
+        }
         final UserInfo userInfo = mUserManagerInternal.getUserInfo(userId);
         Preconditions.checkState(userInfo != null, "No UserInfo for " + userId);
         return new TargetUser(userInfo);
