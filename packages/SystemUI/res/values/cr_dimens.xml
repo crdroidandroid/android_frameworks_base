@@ -79,4 +79,16 @@
 
     <!-- Biometric view -->
     <dimen name="biometric_indicator_above_margin_bottom">8dp</dimen>
+
+    <!-- Progress chip -->
+    <dimen name="ongoing_action_chip_width">70dp</dimen>
+    <dimen name="ongoing_action_chip_height">18sp</dimen>
+    <dimen name="ongoing_action_icon_size">10sp</dimen>
+    <dimen name="ongoing_action_progress_height">10sp</dimen>
+    <dimen name="ongoing_action_padding">4sp</dimen>
+    <dimen name="ongoing_action_spacing">5dp</dimen>
+
+    <!-- Progress dimens -->
+    <dimen name="ongoing_action_chip_compact_size">28dp</dimen>
+    <dimen name="ongoing_action_icon_compact_size">16dp</dimen>
 </resources>
