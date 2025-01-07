@@ -591,6 +591,7 @@
                   android:theme="@style/Theme.SubSettingsBase"
                   android:label="@string/system_ui_tuner"
                   android:process=":tuner"
+                  android:enableOnBackInvokedCallback="true"
                   android:exported="true">
             <intent-filter>
                 <action android:name="com.android.settings.action.EXTRA_SETTINGS" />
