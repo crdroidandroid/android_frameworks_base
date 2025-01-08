@@ -121,25 +121,18 @@ constructor(
             setAlpha(getNonTargetClockFace(clock).views, 0F)
 
             if (!keyguardClockViewModel.isLargeClockVisible.value) {
-                if (
-                    KeyguardSmartspaceViewModel.dateWeatherBelowSmallClock(
-                        context.resources.configuration
-                    )
-                ) {
-                    connect(
-                        sharedR.id.bc_smartspace_view,
-                        TOP,
-                        sharedR.id.date_smartspace_view,
-                        BOTTOM,
-                    )
-                } else {
-                    connect(
-                        sharedR.id.bc_smartspace_view,
-                        TOP,
-                        customR.id.lockscreen_clock_view,
-                        BOTTOM,
-                    )
-                }
+                connect(
+                    sharedR.id.date_smartspace_view,
+                    TOP,
+                    customR.id.lockscreen_clock_view,
+                    BOTTOM,
+                )
+                connect(
+                    sharedR.id.bc_smartspace_view,
+                    TOP,
+                    customR.id.lockscreen_clock_view,
+                    BOTTOM,
+                )
             } else {
                 setScaleX(getTargetClockFace(clock).views, aodBurnInViewModel.movement.value.scale)
                 setScaleY(getTargetClockFace(clock).views, aodBurnInViewModel.movement.value.scale)
