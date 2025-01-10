@@ -605,18 +605,23 @@ class WindowContainer<E extends WindowContainer> extends ConfigurationContainer<
 
         // The display object before reparenting as that might lead to old parent getting removed
         // from the display if it no longer has any child.
-        final DisplayContent prevDc = oldParent.getDisplayContent();
+        final DisplayContent prevDc = oldParent != null ? oldParent.getDisplayContent() : null;
         final DisplayContent dc = newParent.getDisplayContent();
+        final boolean dcChanged = prevDc != dc;
 
         mReparenting = true;
-        oldParent.removeChild(this);
+        if (oldParent != null) {
+            oldParent.removeChild(this);
+        }
         newParent.addChild(this, position);
         mReparenting = false;
 
         // Relayout display(s)
         dc.setLayoutNeeded();
-        if (prevDc != dc) {
+        if (dcChanged) {
             onDisplayChanged(dc);
+        }
+        if(dcChanged && prevDc != null) {
             prevDc.setLayoutNeeded();
         }
 
