@@ -636,6 +636,12 @@ class DragState {
             if (isWindowNotified(newWin)) {
                 return;
             }
+            if (mData == null) {
+                if (DEBUG_DRAG) {
+                    Slog.i(TAG_WM, "mData is null.");
+                }
+                return;
+            }
             sendDragStartedLocked(newWin, mCurrentX, mCurrentY,
                     containsApplicationExtras(mDataDescription));
         }
