@@ -27,6 +27,7 @@ import com.android.systemui.customization.R as custR
 import com.android.systemui.keyguard.MigrateClocksToBlueprint
 import com.android.systemui.keyguard.shared.model.KeyguardSection
 import com.android.systemui.res.R
+import com.android.systemui.statusbar.lockscreen.LockscreenSmartspaceController
 import javax.inject.Inject
 
 import com.android.systemui.weather.WeatherInfoView
@@ -35,9 +36,11 @@ class KeyguardWeatherViewSection
 @Inject
 constructor(
     private val context: Context,
+    val smartspaceController: LockscreenSmartspaceController,
 ) : KeyguardSection() {
     override fun addViews(constraintLayout: ConstraintLayout) {
         if (!MigrateClocksToBlueprint.isEnabled) return
+        if (!smartspaceController.isCustomWeatherEnabled) return
 
         constraintLayout.findViewById<WeatherInfoView?>(R.id.keyguard_weather_area)?.let { weatherArea ->
             (weatherArea.parent as? ViewGroup)?.removeView(weatherArea)
@@ -50,6 +53,7 @@ constructor(
 
     override fun applyConstraints(constraintSet: ConstraintSet) {
         if (!MigrateClocksToBlueprint.isEnabled) return
+        if (!smartspaceController.isCustomWeatherEnabled) return
 
         constraintSet.apply {
             connect(
@@ -85,6 +89,7 @@ constructor(
     }
 
     override fun removeViews(constraintLayout: ConstraintLayout) {
+        if (smartspaceController.isCustomWeatherEnabled) return
         constraintLayout.findViewById<WeatherInfoView?>(R.id.keyguard_weather_area)?.let { weatherArea ->
             weatherArea.cleanup()
         }
