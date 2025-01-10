@@ -35,18 +35,19 @@ constructor(
 ) : KeyguardSection() {
     override fun addViews(constraintLayout: ConstraintLayout) {
         if (!MigrateClocksToBlueprint.isEnabled) return
-        if (smartspaceController.isEnabled) return
+        if (!smartspaceController.isCustomWeatherEnabled) return
 
         constraintLayout.findViewById<View?>(R.id.weather_container)?.let {
             (it.parent as ViewGroup).removeView(it)
             constraintLayout.addView(it)
         }
     }
+
     override fun bindData(constraintLayout: ConstraintLayout) {}
 
     override fun applyConstraints(constraintSet: ConstraintSet) {
         if (!MigrateClocksToBlueprint.isEnabled) return
-        if (smartspaceController.isEnabled) return
+        if (!smartspaceController.isCustomWeatherEnabled) return
 
         constraintSet.apply {
             connect(
@@ -81,8 +82,7 @@ constructor(
 
     override fun removeViews(constraintLayout: ConstraintLayout) {
         if (!MigrateClocksToBlueprint.isEnabled) return
-        if (!smartspaceController.isEnabled) return
-
+        if (smartspaceController.isCustomWeatherEnabled) return
         constraintLayout.removeView(R.id.weather_container)
     }
 }
