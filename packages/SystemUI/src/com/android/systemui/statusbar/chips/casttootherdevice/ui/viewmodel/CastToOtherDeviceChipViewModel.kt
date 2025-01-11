@@ -240,6 +240,11 @@ constructor(
                 logger,
                 TAG,
             ),
+            onLongClickListener = View.OnLongClickListener { view ->
+                view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+                stopMediaRouterCastingFromDialog()
+                true
+            },
         )
     }
 

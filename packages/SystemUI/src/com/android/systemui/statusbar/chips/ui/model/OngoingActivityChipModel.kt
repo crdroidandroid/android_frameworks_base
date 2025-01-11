@@ -56,7 +56,8 @@ sealed class OngoingActivityChipModel {
             override val icon: ChipIcon,
             override val colors: ColorsModel,
             override val onClickListener: View.OnClickListener?,
-        ) : Shown(icon, colors, onClickListener) {
+            override val onLongClickListener: View.OnLongClickListener? = null,
+        ) : Shown(icon, colors, onClickListener, onLongClickListener) {
             override val logName = "Shown.Icon"
         }
 
