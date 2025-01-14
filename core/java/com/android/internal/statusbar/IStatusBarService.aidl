@@ -235,5 +235,10 @@ interface IStatusBarService
      */
     void startAssist(in Bundle args);
 
+    /**
+     * Toggle recent apps.
+     */
+    void toggleRecentApps();
+
     void screenPinningStateChanged(boolean enabled);
 }

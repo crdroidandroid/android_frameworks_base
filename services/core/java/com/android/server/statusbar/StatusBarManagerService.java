@@ -2682,6 +2682,18 @@ public class StatusBarManagerService extends IStatusBarService.Stub implements D
         }
     }
 
+    @Override
+    public void toggleRecentApps() {
+        enforceStatusBarService();
+        if (mBar != null) {
+            try {
+                mBar.toggleRecentApps();
+            } catch (RemoteException e) {
+                Slog.e(TAG, "toggleRecentApps", e);
+            }
+        }
+    }
+
     /** @hide */
     public void passThroughShellCommand(String[] args, FileDescriptor fd) {
         enforceStatusBarOrShell();
