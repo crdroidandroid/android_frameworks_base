@@ -20,6 +20,8 @@ import android.app.trust.TrustManager
 import android.content.Context
 import android.hardware.biometrics.BiometricFaceConstants
 import android.hardware.biometrics.BiometricSourceType
+import android.pocket.IPocketCallback
+import android.pocket.PocketManager
 import android.security.Flags.secureLockDevice
 import android.service.dreams.Flags.dreamsV2
 import com.android.keyguard.KeyguardUpdateMonitor
@@ -119,7 +121,22 @@ constructor(
 
     private val listeners: MutableList<FaceAuthenticationListener> = mutableListOf()
 
+    private var isDeviceInPocket: Boolean = false
+    private var pocketManager: PocketManager? = context.getSystemService(Context.POCKET_SERVICE) as? PocketManager
+    private val pocketCallback = object : IPocketCallback.Stub() {
+        override fun onStateChanged(state: Boolean, reason: Int) {
+            if (reason == PocketManager.REASON_SENSOR) {
+                isDeviceInPocket = state
+            } else {
+                isDeviceInPocket = false
+            }
+        }
+    }
+
     override fun start() {
+        // Register pocket callback to detect pocket state changes
+        pocketManager?.addCallback(pocketCallback)
+
         // Todo(b/310594096): there is a dependency cycle introduced by the repository depending on
         //  KeyguardBypassController, which in turn depends on KeyguardUpdateMonitor through
         //  its other dependencies. Once bypassEnabled state is available through a repository, we
@@ -378,7 +395,7 @@ constructor(
 
     fun isAuthOrDetectRunning(): Boolean = isAuthRunning() || isDetectRunning()
 
-    override fun canFaceAuthRun(): Boolean = repository.canRunFaceAuth.value
+    override fun canFaceAuthRun(): Boolean = repository.canRunFaceAuth.value && !isDeviceInPocket
 
     override fun isFaceAuthStrong(): Boolean =
         facePropertyRepository.sensorInfo.value?.strength == SensorStrength.STRONG
@@ -437,6 +454,7 @@ constructor(
         authenticationStatus.filterIsInstance<SuccessFaceAuthenticationStatus>()
 
     private fun runFaceAuth(uiEvent: FaceAuthUiEvent, fallbackToDetect: Boolean) {
+        if (isDeviceInPocket) return
         if (
             secureLockDevice() &&
                 (_pendingFaceAuthConfirmationInSecureLockDevice.value ||
