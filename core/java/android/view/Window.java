@@ -1305,10 +1305,6 @@ public abstract class Window {
      * @see #clearFlags
      */
     public void setFlags(int flags, int mask) {
-        if ((mask & FLAG_SECURE) != 0 && Settings.Secure.getInt(mContext.getContentResolver(),
-                Settings.Secure.WINDOW_IGNORE_SECURE, 0) == 1) {
-            mask &= ~FLAG_SECURE;
-        }
         final WindowManager.LayoutParams attrs = getAttributes();
         attrs.flags = (attrs.flags&~mask) | (flags&mask);
         mForcedWindowFlags |= mask;
@@ -1325,6 +1321,10 @@ public abstract class Window {
      * {@hide}
      */
     protected void dispatchWindowAttributesChanged(WindowManager.LayoutParams attrs) {
+        if ((attrs.flags & FLAG_SECURE) != 0 && Settings.Secure.getInt(mContext.getContentResolver(),
+                Settings.Secure.WINDOW_IGNORE_SECURE, 0) == 1) {
+            attrs.flags &= ~FLAG_SECURE;
+        }
         if (mCallback != null) {
             mCallback.onWindowAttributesChanged(attrs);
         }
