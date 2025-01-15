@@ -657,6 +657,32 @@ constructor(
             size.isMedium && authState.isNotAuthenticated && credentialAllowed && !fallbackVisible
         }
 
+    val isUdfpsIndicating: Flow<Boolean> =
+        combine(
+            modalities,
+            isIndicatorMessageVisible
+        ) { modalities, isIndicatorMessageVisible ->
+            modalities.hasUdfps && isIndicatorMessageVisible
+        }
+
+    val indicatorMessageWidthPx: Flow<Int> =
+        message.map { message ->
+            val maxWidth =
+                context.resources.getDimensionPixelSize(
+                    R.dimen.biometric_dialog_indicator_max_width
+                )
+            val attributes =
+                context.obtainStyledAttributes(
+                    R.style.TextAppearance_AuthCredential_Indicator,
+                    intArrayOf(android.R.attr.textSize),
+                )
+            val paint = TextPaint()
+            paint.textSize = attributes.getDimensionPixelSize(0, 0).toFloat()
+            val textWidth = paint.measureText(message.message).toInt()
+            attributes.recycle()
+            maxOf(maxWidth, textWidth)
+        }
+
     private val history = PromptHistoryImpl()
     private var messageJob: Job? = null
 
