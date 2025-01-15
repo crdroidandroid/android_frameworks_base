@@ -22,6 +22,7 @@ import android.transition.AutoTransition
 import android.transition.TransitionManager
 import android.util.TypedValue
 import android.view.View
+import android.view.ViewGroup.MarginLayoutParams
 import android.view.ViewOutlineProvider
 import android.view.WindowInsets
 import android.widget.ImageView
@@ -29,9 +30,11 @@ import android.widget.TextView
 import androidx.constraintlayout.helper.widget.Flow
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
+import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
 import com.android.app.tracing.coroutines.launchTraced as launch
 import com.android.systemui.Flags
+import com.android.systemui.biometrics.Utils
 import com.android.systemui.biometrics.domain.interactor.BiometricPromptView
 import com.android.systemui.biometrics.ui.BiometricPromptLayoutState
 import com.android.systemui.biometrics.ui.PromptPosition
@@ -43,8 +46,10 @@ import com.android.systemui.biometrics.ui.isSmall
 import com.android.systemui.biometrics.ui.viewmodel.PromptViewModel
 import com.android.systemui.lifecycle.repeatWhenAttached
 import com.android.systemui.res.R
+import com.android.systemui.util.kotlin.Quint
 import com.android.systemui.utils.windowmanager.WindowManagerUtils
 import kotlin.math.abs
+import kotlinx.coroutines.flow.combine
 
 /** Helper for [BiometricViewBinder] to handle resize transitions. */
 object BiometricViewSizeBinder {
@@ -67,6 +72,8 @@ object BiometricViewSizeBinder {
                 !view.context.packageManager.hasSystemFeature(PackageManager.FEATURE_AUTOMOTIVE)
         val windowManager = WindowManagerUtils.getWindowManager(view.context)
 
+        val indicatorView = view.requireViewById<View>(R.id.indicator)
+        val scrollView = view.requireViewById<View>(R.id.scrollView)
         val panelView = view.requireViewById<View>(R.id.panel)
         val cornerRadius = view.resources.getDimension(R.dimen.biometric_dialog_corner_size)
         val pxToDp =
@@ -153,6 +160,110 @@ object BiometricViewSizeBinder {
         largeConstraintSet.setVisibility(R.id.fallback_view, View.GONE)
 
         view.repeatWhenAttached {
+            lifecycleScope.launch {
+                combine(
+                    viewModel.isUdfpsIndicating,
+                    viewModel.position,
+                    viewModel.iconViewModel.iconPosition,
+                    viewModel.iconViewModel.iconSize,
+                    viewModel.indicatorMessageWidthPx,
+                    ::Quint,
+                )
+                    .collect {
+                        (
+                            isUdfpsIndicating,
+                            position,
+                            iconPosition,
+                            iconSize,
+                            indicatorMessageWidthPx,
+                        ) ->
+                        if (!isUdfpsIndicating) return@collect
+                        when (position) {
+                            PromptPosition.Bottom -> {
+                                val indicatorMarginTop =
+                                    (indicatorView.layoutParams as MarginLayoutParams).topMargin
+                                val indicatorHeight =
+                                    indicatorView.measuredHeight + indicatorMarginTop
+                                val bottomInset = Utils.getNavbarInsets(view.context).bottom
+                                val marginBottom =
+                                    view.resources.getDimensionPixelSize(
+                                        R.dimen.biometric_indicator_above_margin_bottom
+                                    )
+                                // move the indicator text above udfps icon if we don't have
+                                // enough space
+                                if (indicatorHeight + bottomInset > iconPosition.bottom) {
+                                    mediumConstraintSet.apply {
+                                        clear(R.id.indicator, ConstraintSet.TOP)
+                                        setVerticalBias(R.id.indicator, 1.0f)
+                                        setVerticalBias(R.id.scrollView, 0f)
+                                        connect(
+                                            R.id.indicator,
+                                            ConstraintSet.BOTTOM,
+                                            R.id.biometric_icon,
+                                            ConstraintSet.TOP,
+                                        )
+                                        setMargin(
+                                            R.id.indicator,
+                                            ConstraintSet.BOTTOM,
+                                            marginBottom,
+                                        )
+                                        setMargin(
+                                            R.id.scrollView,
+                                            ConstraintSet.BOTTOM,
+                                            indicatorMarginTop,
+                                        )
+                                    }
+                                    indicatorView.updateLayoutParams<
+                                        ConstraintLayout.LayoutParams
+                                    > {
+                                        topToBottom = ConstraintLayout.LayoutParams.UNSET
+                                        bottomToTop = R.id.biometric_icon
+                                        bottomMargin = marginBottom
+                                    }
+                                    scrollView.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                                        bottomMargin = indicatorMarginTop
+                                    }
+                                }
+                            }
+                            // prevent the text from going out of screen bounds as it is
+                            // centered below the udfps icon in landscape positions
+                            PromptPosition.Right -> {
+                                val rightInset = Utils.getNavbarInsets(view.context).right
+                                val rightMargin =
+                                    iconPosition.right -
+                                        ((indicatorMessageWidthPx - iconSize.first) / 2) -
+                                        rightInset
+                                if (rightMargin < 0) {
+                                    indicatorView.setPadding(
+                                        0,
+                                        indicatorView.paddingTop,
+                                        -rightMargin,
+                                        indicatorView.paddingBottom,
+                                    )
+                                }
+                            }
+                            PromptPosition.Left -> {
+                                val leftInset = Utils.getNavbarInsets(view.context).left
+                                val leftMargin =
+                                    iconPosition.left -
+                                        ((indicatorMessageWidthPx - iconSize.first) / 2) -
+                                        leftInset
+                                if (leftMargin < 0) {
+                                    indicatorView.setPadding(
+                                        -leftMargin,
+                                        indicatorView.paddingTop,
+                                        0,
+                                        indicatorView.paddingBottom,
+                                    )
+                                }
+                            }
+                            // ignore top position as we typically don't allow 180 degree
+                            // rotation on udfps devices
+                            else -> return@collect
+                        }
+                    }
+            }
+
             lifecycleScope.launch {
                 viewModel.layoutState.collect { currentState ->
                     val nextConstraintSet = ConstraintSet()
