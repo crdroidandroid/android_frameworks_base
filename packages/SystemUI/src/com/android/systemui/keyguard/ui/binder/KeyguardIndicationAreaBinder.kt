@@ -94,7 +94,12 @@ object KeyguardIndicationAreaBinder {
 
                     launch("$TAG#viewModel.indicationAreaTranslationY") {
                         configurationBasedDimensions
-                            .map { it.defaultBurnInPreventionYOffsetPx }
+                            .map {
+                                minOf(
+                                    it.indicationAreaBottomMarginPx,
+                                    it.defaultBurnInPreventionYOffsetPx
+                                )
+                            }
                             .flatMapLatest { defaultBurnInOffsetY ->
                                 viewModel.indicationAreaTranslationY(defaultBurnInOffsetY)
                             }
@@ -143,12 +148,15 @@ object KeyguardIndicationAreaBinder {
                 view.resources.getDimensionPixelSize(
                     com.android.internal.R.dimen.text_size_small_material
                 ),
+            indicationAreaBottomMarginPx =
+                view.resources.getDimensionPixelSize(R.dimen.keyguard_indication_margin_bottom),
         )
     }
 
     private data class ConfigurationBasedDimensions(
         val defaultBurnInPreventionYOffsetPx: Int,
         val indicationAreaPaddingPx: Int,
+        val indicationAreaBottomMarginPx: Int,
         val indicationTextSizePx: Int,
     )
 
