@@ -22,45 +22,104 @@
     android:gravity="center_vertical"
     android:clipToPadding="false">
 
+    <!-- Parent LinearLayout with vertical orientation -->
     <LinearLayout
-        android:id="@+id/current"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal" >
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/left_text"
-            android:layout_width="wrap_content"
+        <!-- First line -->
+        <LinearLayout
+            android:id="@+id/current"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="?attr/wallpaperTextColor"
-            android:ellipsize="end"
-            android:singleLine="true"
-            android:paddingEnd="8dp"
-            style="@style/TextAppearance.Keyguard.Secondary" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/current_image"
-            android:layout_width="@dimen/widget_icon_size"
-            android:layout_height="@dimen/widget_icon_size"
-            android:scaleType="centerInside"/>
+            <TextView
+                android:id="@+id/left_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/wallpaperTextColor"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:paddingEnd="8dp"
+                style="@style/TextAppearance.Keyguard.Secondary" />
 
-        <TextView
-            android:id="@+id/right_text"
-            android:layout_width="wrap_content"
+            <ImageView
+                android:id="@+id/current_image"
+                android:layout_width="@dimen/widget_icon_size"
+                android:layout_height="@dimen/widget_icon_size"
+                android:scaleType="centerInside" />
+
+            <TextView
+                android:id="@+id/right_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/wallpaperTextColor"
+                android:singleLine="true"
+                android:paddingStart="8dp"
+                style="@style/TextAppearance.Keyguard.Secondary" />
+
+            <TextView
+                android:id="@+id/weather_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/wallpaperTextColor"
+                android:singleLine="true"
+                style="@style/TextAppearance.Keyguard.Secondary" />
+        </LinearLayout>
+
+        <!-- Second line -->
+        <LinearLayout
+            android:id="@+id/new_line"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="?attr/wallpaperTextColor"
-            android:singleLine="true"
-            android:paddingStart="8dp"
-            style="@style/TextAppearance.Keyguard.Secondary" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/weather_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="?attr/wallpaperTextColor"
-            android:singleLine="true"
-            style="@style/TextAppearance.Keyguard.Secondary" />
+            <ImageView
+                android:id="@+id/wind_info_image"
+                android:layout_width="@dimen/widget_icon_size"
+                android:layout_height="@dimen/widget_icon_size"
+                android:scaleType="centerInside" />
+
+            <TextView
+                android:id="@+id/weather_wind_speed_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/wallpaperTextColor"
+                android:singleLine="true"
+                style="@style/TextAppearance.Keyguard.Secondary" />
+
+            <ImageView
+                android:id="@+id/pinwheel_image"
+                android:layout_width="@dimen/widget_icon_size"
+                android:layout_height="@dimen/widget_icon_size"
+                android:scaleType="centerInside" />
+
+            <TextView
+                android:id="@+id/weather_wind_direction_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/wallpaperTextColor"
+                android:singleLine="true"
+                style="@style/TextAppearance.Keyguard.Secondary" />
+
+            <ImageView
+                android:id="@+id/humidity_info_image"
+                android:layout_width="@dimen/widget_icon_size"
+                android:layout_height="@dimen/widget_icon_size"
+                android:scaleType="centerInside" />
+
+            <TextView
+                android:id="@+id/weather_humidity_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/wallpaperTextColor"
+                android:singleLine="true"
+                style="@style/TextAppearance.Keyguard.Secondary" />
+        </LinearLayout>
+
     </LinearLayout>
-
 </com.android.systemui.crdroid.CurrentWeatherView>
