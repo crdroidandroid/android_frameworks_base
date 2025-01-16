@@ -71,8 +71,9 @@ class EdgeLightViewController @Inject constructor(
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
     private val wallpaperManager = context.getSystemService(WallpaperManager::class.java)!!
-    private val animationDuration =
-        (dozeParameters.pulseVisibleDuration / 3).toLong() - COLLAPSE_ANIMATION_DURATION
+    private val animationDuration = dozeParameters.pulseVisibleDuration
+    private val pulsingDuration =
+        (dozeParameters.pulseVisibleDuration / 3).toLong()
 
     private var screenOn = false
     private var edgeLightView: EdgeLightView? = null
@@ -108,8 +109,20 @@ class EdgeLightViewController @Inject constructor(
                             colorMode = getColorMode()
                             edgeLightView?.setColor(getColorForMode(colorMode))
                         }
-                        Settings.System.EDGE_LIGHT_CUSTOM_COLOR ->
-                            edgeLightView?.setColor(getCustomColor())
+                        Settings.System.EDGE_LIGHT_CUSTOM_COLOR -> {
+                            if (getColorMode() == ColorMode.CUSTOM) { 
+                                edgeLightView?.setColor(getCustomColor())
+                            }
+                        }
+                        EDGE_LIGHT_WIDTH -> {
+                            edgeLightView?.setStrokeWidth(getStrokeWidth())
+                        }
+                        EDGE_LIGHT_STYLE -> {
+                            val style = getEdgeLightStyle()
+                            val duration = getDurationFromStyle(style)
+                            edgeLightView?.setEdgeLightStyle(style)
+                            edgeLightView?.setAnimationDuration(duration)
+                        }
                     }
                     return@withLock
                 }
@@ -126,6 +139,8 @@ class EdgeLightViewController @Inject constructor(
                 Settings.System.EDGE_LIGHT_REPEAT_ANIMATION,
                 Settings.System.EDGE_LIGHT_COLOR_MODE,
                 Settings.System.EDGE_LIGHT_CUSTOM_COLOR,
+                EDGE_LIGHT_WIDTH,
+                EDGE_LIGHT_STYLE
             )
         }
         screenLifecycle.addObserver(this)
@@ -158,6 +173,9 @@ class EdgeLightViewController @Inject constructor(
                 edgeLightView?.let {
                     it.setRepeatCount(getRepeatCount())
                     it.setColor(getColorForMode(getColorMode()))
+                    it.setStrokeWidth(getStrokeWidth())
+                    it.setEdgeLightStyle(getEdgeLightStyle())
+                    it.setAnimationDuration(getDurationFromStyle(getEdgeLightStyle()))
                 }
             }
         }
@@ -223,7 +241,30 @@ class EdgeLightViewController @Inject constructor(
             ColorMode.WALLPAPER -> wallpaperManager.getWallpaperColors(WallpaperManager.FLAG_SYSTEM)
                     ?.primaryColor?.toArgb() ?: Utils.getColorAccentDefaultColor(context)
             ColorMode.CUSTOM -> getCustomColor()
+            ColorMode.GRADIENT -> -1
             else -> Utils.getColorAccentDefaultColor(context)
+        }
+
+    private suspend fun getStrokeWidth(): Float {
+        return withContext(Dispatchers.IO) {
+            systemSettings.getFloatForUser(
+                EDGE_LIGHT_WIDTH,
+                20f,
+                UserHandle.USER_CURRENT
+            )
+        }
+    }
+
+    private suspend fun getEdgeLightStyle(): Int {
+        return withContext(Dispatchers.IO) {
+            systemSettings.getIntForUser(EDGE_LIGHT_STYLE, 0, UserHandle.USER_CURRENT)
+        }
+    }
+    
+    private suspend fun getDurationFromStyle(style: Int): Long =
+        when (style) {
+            0 -> animationDuration.toLong()
+            else -> pulsingDuration.toLong()
         }
 
     override fun onScreenTurnedOn() {
@@ -287,15 +328,12 @@ class EdgeLightViewController @Inject constructor(
     }
 
     fun setEdgeLightView(edgeLightView: EdgeLightView) {
-        this.edgeLightView = edgeLightView.apply {
-            setExpandAnimationDuration(animationDuration)
-            setCollapseAnimationDuration(COLLAPSE_ANIMATION_DURATION)
-        }.also {
-            coroutineScope.launch {
-                settingsMutex.withLock {
-                    it.setRepeatCount(getRepeatCount())
-                    it.setColor(getColorForMode(colorMode))
-                }
+        this.edgeLightView = edgeLightView
+        coroutineScope.launch {
+            settingsMutex.withLock {
+                edgeLightView.setRepeatCount(getRepeatCount())
+                edgeLightView.setColor(getColorForMode(colorMode))
+                edgeLightView.setAnimationDuration(getDurationFromStyle(getEdgeLightStyle()))
             }
         }
     }
@@ -352,8 +390,8 @@ class EdgeLightViewController @Inject constructor(
     companion object {
         private const val TAG = "EdgeLightViewController"
         private val DEBUG = Log.isLoggable(TAG, Log.DEBUG)
-
-        private const val COLLAPSE_ANIMATION_DURATION = 700L
+        private val EDGE_LIGHT_WIDTH = "edge_light_width"
+        private val EDGE_LIGHT_STYLE = "edge_light_style"
 
         private fun logD(msg: String) {
             if (DEBUG) Log.d(TAG, msg)
@@ -365,5 +403,6 @@ private enum class ColorMode {
     ACCENT,
     NOTIFICATION,
     WALLPAPER,
+    GRADIENT,
     CUSTOM
 }
