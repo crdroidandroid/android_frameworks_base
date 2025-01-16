@@ -20,23 +20,4 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/transparent">
-
-    <ImageView
-        android:id="@+id/edge_light_start"
-        android:layout_width="125px"
-        android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
-        android:scaleType="fitXY"
-        android:src="@drawable/edge_light_drawable" />
-
-    <!-- Mirror of left ImageView -->
-    <ImageView
-        android:id="@+id/edge_light_end"
-        android:layout_width="125px"
-        android:layout_height="match_parent"
-        android:layout_alignParentEnd="true"
-        android:scaleType="fitXY"
-        android:scaleX="-1"
-        android:src="@drawable/edge_light_drawable" />
-</com.android.systemui.statusbar.EdgeLightView>
+    android:background="@android:color/transparent" />
