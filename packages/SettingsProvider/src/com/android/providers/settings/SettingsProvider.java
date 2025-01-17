@@ -4411,17 +4411,19 @@ public class SettingsProvider extends ContentProvider {
                         }
 
                         final SettingsState ssaidSettings = getSsaidSettingsLocked(userId);
-                        for (PackageInfo info : packages) {
-                            // Check if the UID already has an entry in the table.
-                            final String uid = Integer.toString(info.applicationInfo.uid);
-                            final Setting ssaid = ssaidSettings.getSettingLocked(uid);
+                        if (ssaidSettings != null) {
+                            for (PackageInfo info : packages) {
+                                // Check if the UID already has an entry in the table.
+                                final String uid = Integer.toString(info.applicationInfo.uid);
+                                final Setting ssaid = ssaidSettings.getSettingLocked(uid);
 
-                            if (ssaid.isNull() || ssaid.getValue() == null) {
-                                // Android Id doesn't exist for this package so create it.
-                                ssaidSettings.insertSettingOverrideableByRestoreLocked(uid,
-                                        legacySsaid, null, true, info.packageName);
-                                if (DEBUG) {
-                                    Slog.d(LOG_TAG, "Keep the legacy ssaid for uid=" + uid);
+                                if (ssaid.isNull() || ssaid.getValue() == null) {
+                                    // Android Id doesn't exist for this package so create it.
+                                    ssaidSettings.insertSettingOverrideableByRestoreLocked(uid,
+                                            legacySsaid, null, true, info.packageName);
+                                    if (DEBUG) {
+                                        Slog.d(LOG_TAG, "Keep the legacy ssaid for uid=" + uid);
+                                    }
                                 }
                             }
                         }
