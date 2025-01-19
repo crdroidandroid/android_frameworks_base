@@ -73,9 +73,6 @@ public class TileUtils {
             value = Settings.System.getIntForUser(
                     context.getContentResolver(), Settings.System.QS_LAYOUT_ROWS_LANDSCAPE,
                     2, UserHandle.USER_CURRENT);
-            valueQQS = Settings.System.getIntForUser(
-                    context.getContentResolver(), Settings.System.QQS_LAYOUT_ROWS_LANDSCAPE,
-                    1, UserHandle.USER_CURRENT);
         }
         return Math.max(value, valueQQS);
     }
@@ -89,8 +86,8 @@ public class TileUtils {
                     2, UserHandle.USER_CURRENT);
         } else {
             value = Settings.System.getIntForUser(
-                    context.getContentResolver(), Settings.System.QQS_LAYOUT_ROWS_LANDSCAPE,
-                    1, UserHandle.USER_CURRENT);
+                    context.getContentResolver(), Settings.System.QS_LAYOUT_ROWS_LANDSCAPE,
+                    2, UserHandle.USER_CURRENT);
         }
         return Math.max(QS_ROWS_MIN, value);
     }
