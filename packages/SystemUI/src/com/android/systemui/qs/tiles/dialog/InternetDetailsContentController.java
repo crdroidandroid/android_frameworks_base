@@ -1328,6 +1328,9 @@ public class InternetDetailsContentController implements AccessPointController.A
 
     @WorkerThread
     boolean isFivegSupported() {
+        if (!mContext.getResources().getBoolean(R.bool.config_supportsVONR))
+            return false;
+
         final TelephonyManager tm = mTelephonyManager;
         if (tm != null) {
             try {
