@@ -52,12 +52,12 @@ public final class PowerStats {
 
     private static final BatteryStatsHistory.VarintParceler VARINT_PARCELER =
             new BatteryStatsHistory.VarintParceler();
-    private static final byte PARCEL_FORMAT_VERSION = 2;
+    private static final byte PARCEL_FORMAT_VERSION = 3;
 
-    private static final int PARCEL_FORMAT_VERSION_MASK = 0x000000FF;
+    private static final int PARCEL_FORMAT_VERSION_MASK = 0x0000003F;
     private static final int PARCEL_FORMAT_VERSION_SHIFT =
             Integer.numberOfTrailingZeros(PARCEL_FORMAT_VERSION_MASK);
-    private static final int STATS_ARRAY_LENGTH_MASK = 0x0000FF00;
+    private static final int STATS_ARRAY_LENGTH_MASK = 0x0000FFC0;
     private static final int STATS_ARRAY_LENGTH_SHIFT =
             Integer.numberOfTrailingZeros(STATS_ARRAY_LENGTH_MASK);
     public static final int MAX_STATS_ARRAY_LENGTH =
