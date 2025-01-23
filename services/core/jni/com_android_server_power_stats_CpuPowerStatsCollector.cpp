@@ -113,7 +113,7 @@ static jlong nativeReadCpuStats(JNIEnv *env, [[maybe_unused]] jobject zis, jobje
 static int flatten(JNIEnv *env, const std::vector<std::vector<uint64_t>> &times,
                    jlongArray outArray) {
     ScopedLongArrayRW scopedOutArray(env, outArray);
-    const uint8_t scalingStepCount = scopedOutArray.size();
+    const uint32_t scalingStepCount = scopedOutArray.size();
     uint64_t *out = reinterpret_cast<uint64_t *>(scopedOutArray.get());
     uint32_t scalingStep = 0;
     for (const auto &subVec : times) {
@@ -136,9 +136,9 @@ static int combineByBracket(JNIEnv *env, const std::vector<std::vector<uint64_t>
                             jlongArray outBrackets) {
     ScopedLongArrayRW scopedOutBrackets(env, outBrackets);
     uint64_t *brackets = reinterpret_cast<uint64_t *>(scopedOutBrackets.get());
-    const uint8_t statsSize = scopedOutBrackets.size();
+    const uint32_t statsSize = scopedOutBrackets.size();
     memset(brackets, 0, statsSize * sizeof(uint64_t));
-    const uint8_t scalingStepCount = scopedScalingStepToPowerBracketMap.size();
+    const uint32_t scalingStepCount = scopedScalingStepToPowerBracketMap.size();
 
     uint32_t scalingStep = 0;
     for (const auto &subVec : times) {
