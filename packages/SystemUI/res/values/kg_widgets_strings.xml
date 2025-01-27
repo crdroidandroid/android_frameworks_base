@@ -9,4 +9,5 @@
     <string name="quick_settings_data_label">Mobile data</string>
     <string name="quick_settings_ringer_label">Ringer mode</string>
     <string name="torch_active">Torch Active</string>
+    <string name="google_wallet">Google Wallet</string>
 </resources>
