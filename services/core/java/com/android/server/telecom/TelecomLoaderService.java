@@ -36,6 +36,7 @@ import android.telephony.SubscriptionManager;
 import android.util.IntArray;
 import android.util.Slog;
 
+import com.android.internal.R;
 import com.android.internal.annotations.GuardedBy;
 import com.android.internal.telecom.ITelecomLoader;
 import com.android.internal.telecom.ITelecomService;
@@ -191,12 +192,19 @@ public class TelecomLoaderService extends SystemService {
 
         // Set a callback for the permission grant policy to query the default dialer app.
         permissionManager.setDialerAppPackagesProvider(userId -> {
+            boolean serviceAvailable = true;
             synchronized (mLock) {
                 if (mServiceConnection == null) {
-                    return null;
+                    serviceAvailable = false;
                 }
             }
-            String packageName = DefaultDialerManager.getDefaultDialerApplication(mContext);
+            String packageName;
+            if (serviceAvailable) {
+                packageName = DefaultDialerManager.getDefaultDialerApplication(mContext);
+            } else {
+                // Fallback in case telecom service not yet connected.
+                packageName = mContext.getString(R.string.config_defaultDialer);
+            }
             if (packageName != null) {
                 return new String[]{packageName};
             }
