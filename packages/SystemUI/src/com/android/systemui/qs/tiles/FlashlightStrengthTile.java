@@ -62,7 +62,9 @@ public class FlashlightStrengthTile extends FlashlightTile implements TouchableQ
 
     private final CameraManager mCameraManager;
     private final FlashlightController mFlashlightController;
+    private final Looper mBgLooper;
     private boolean mSupportsSettingFlashLevel;
+    private boolean mRegistered = false;
     private int mDefaultLevel;
     private int mMaxLevel;
     private float mCurrentPercent;
@@ -70,6 +72,28 @@ public class FlashlightStrengthTile extends FlashlightTile implements TouchableQ
     private boolean mClicked = true;
 
     @Nullable private String mCameraId;
+
+    private final CameraManager.TorchCallback mTorchCallback = new CameraManager.TorchCallback() {
+        @Override
+        public void onTorchStrengthLevelChanged(@NonNull String cameraId, int newStrengthLevel) {
+            if (!cameraId.equals(mCameraId)) {
+                return;
+            }
+            // We don't wanna refresh state for same values as this callback
+            // will be invoked from this tile as well.
+            if (mCurrentLevel == newStrengthLevel) {
+                return;
+            }
+            // Update current percent/level and refresh the tile.
+            mCurrentLevel = newStrengthLevel;
+            mCurrentPercent = ((float) mCurrentLevel) / ((float) mMaxLevel);
+            Settings.System.putFloat(
+                    mContext.getContentResolver(),
+                    FLASHLIGHT_BRIGHTNESS_SETTING,
+                    mCurrentPercent);
+            refreshState(true);
+        }
+    };
 
     private final View.OnTouchListener mTouchListener =
             new View.OnTouchListener() {
@@ -146,12 +170,25 @@ public class FlashlightStrengthTile extends FlashlightTile implements TouchableQ
                 flashlightController);
         mCameraManager = (CameraManager) mContext.getSystemService(Context.CAMERA_SERVICE);
         mFlashlightController = flashlightController;
+        mBgLooper = backgroundLooper;
+    }
+
+    @Override
+    public void handleSetListening(boolean listening) {
+        if (!listening) {
+            if (mRegistered) {
+                mCameraManager.unregisterTorchCallback(mTorchCallback);
+                mRegistered = false;
+            }
+            return;
+        }
+
         try {
             mCameraId = getCameraId();
             CameraCharacteristics characteristics =
                     mCameraManager.getCameraCharacteristics(mCameraId);
             mSupportsSettingFlashLevel =
-                    flashlightController.isAvailable()
+                    mFlashlightController.isAvailable()
                             && mCameraId != null
                             && characteristics.get(FLASHLIGHT_MAX_BRIGHTNESS_CHARACTERISTIC) > 1;
             mMaxLevel = (int) characteristics.get(FLASHLIGHT_MAX_BRIGHTNESS_CHARACTERISTIC);
@@ -170,35 +207,15 @@ public class FlashlightStrengthTile extends FlashlightTile implements TouchableQ
                         FLASHLIGHT_BRIGHTNESS_SETTING,
                         defaultPercent);
         // Register torch callback on torch strength level supported devices.
-        if (mSupportsSettingFlashLevel) {
-            CameraManager.TorchCallback mTorchCallback = new CameraManager.TorchCallback() {
-                @Override
-                public void onTorchStrengthLevelChanged(@NonNull String cameraId, int newStrengthLevel) {
-                    if (!cameraId.equals(mCameraId)) {
-                        return;
-                    }
-                    // We don't wanna refresh state for same values as this callback
-                    // will be invoked from this tile as well.
-                    if (mCurrentLevel == newStrengthLevel) {
-                        return;
-                    }
-                    // Update current percent/level and refresh the tile.
-                    mCurrentLevel = newStrengthLevel;
-                    mCurrentPercent = ((float) mCurrentLevel) / ((float) mMaxLevel);
-                    Settings.System.putFloat(
-                            mContext.getContentResolver(),
-                            FLASHLIGHT_BRIGHTNESS_SETTING,
-                            mCurrentPercent);
-                    refreshState(true);
-                }
-            };
-            mCameraManager.registerTorchCallback(mTorchCallback, new Handler(backgroundLooper));
+        if (mSupportsSettingFlashLevel && !mRegistered) {
+            mCameraManager.registerTorchCallback(mTorchCallback, new Handler(mBgLooper));
+            mRegistered = true;
         }
     }
 
     @Override
     public View.OnTouchListener getTouchListener() {
-        return mSupportsSettingFlashLevel ? mTouchListener : null;
+        return mTouchListener;
     }
 
     @Override
