@@ -24,6 +24,7 @@ import androidx.annotation.StyleRes
 import com.android.systemui.mediaprojection.MediaProjectionMetricsLogger
 import com.android.systemui.mediaprojection.permission.BaseMediaProjectionPermissionContentManager
 import com.android.systemui.mediaprojection.permission.BaseMediaProjectionPermissionDialogDelegate
+import com.android.systemui.mediaprojection.permission.ENTIRE_SCREEN
 import com.android.systemui.mediaprojection.permission.SINGLE_APP
 import com.android.systemui.mediaprojection.permission.ScreenShareMode
 import com.android.systemui.plugins.ActivityStarter
@@ -84,7 +85,7 @@ class ScreenRecordPermissionDialogDelegate(
         onStartRecordingClicked,
         mediaProjectionMetricsLogger,
         systemUIDialogFactory,
-        defaultSelectedMode = SINGLE_APP,
+        defaultSelectedMode = ENTIRE_SCREEN,
         theme = SystemUIDialog.DEFAULT_THEME,
         context,
         displayManager,
