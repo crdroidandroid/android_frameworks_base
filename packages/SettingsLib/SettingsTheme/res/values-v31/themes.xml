@@ -28,7 +28,6 @@
         <item name="switchStyle">@style/SwitchCompat.SettingsLib</item>
         <item name="android:progressBarStyleHorizontal">@style/HorizontalProgressBar.SettingsLib</item>
         <item name="android:listDivider">@drawable/settingslib_list_divider</item>
-        <item name="android:seekBarStyle">@style/SeekBar.SettingsLib</item>
     </style>
 
     <style name="Theme.SettingsBase" parent="Theme.SettingsBase_v31" />
