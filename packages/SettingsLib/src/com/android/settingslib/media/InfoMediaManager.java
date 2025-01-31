@@ -267,6 +267,10 @@ public abstract class InfoMediaManager extends MediaManager {
     private RoutingSessionInfo getActiveRoutingSession() {
         // List is never empty.
         final List<RoutingSessionInfo> sessions = getRoutingSessionsForPackage();
+        if (sessions.size() <= 0) {
+            // Return system session.
+            sessions.get(0);
+        }
         return sessions.get(sessions.size() - 1);
     }
 
