@@ -156,7 +156,7 @@ constructor(
         val keyguardNotShowing = !keyguardStateController.isShowing
         val unlockNotAllowed =
             !keyguardUpdateMonitor.isUnlockingWithBiometricAllowed(biometricSourceType)
-        if (keyguardNotShowing || unlockNotAllowed) {
+        if (keyguardNotShowing || unlockNotAllowed || !isRippleEnabled) {
             logger.notShowingUnlockRipple(keyguardNotShowing, unlockNotAllowed)
             return
         }
@@ -275,7 +275,7 @@ constructor(
      * Whether we're animating the light reveal scrim from a call to [onKeyguardFadingAwayChanged].
      */
     fun isAnimatingLightRevealScrim(): Boolean {
-        return lightRevealScrimAnimator?.isRunning ?: false
+        return if (!isRippleEnabled) false else (lightRevealScrimAnimator?.isRunning ?: false)
     }
 
     override fun onStartedGoingToSleep() {
