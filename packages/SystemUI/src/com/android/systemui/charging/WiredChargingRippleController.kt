@@ -35,7 +35,6 @@ import com.android.systemui.surfaceeffects.ripple.RippleView
 import com.android.systemui.statusbar.commandline.Command
 import com.android.systemui.statusbar.commandline.CommandRegistry
 import com.android.systemui.statusbar.policy.BatteryController
-import com.android.systemui.statusbar.policy.ConfigurationController
 import com.android.systemui.util.time.SystemClock
 import java.io.PrintWriter
 import javax.inject.Inject
@@ -53,7 +52,6 @@ private const val BASE_DEBOUNCE_TIME = 2000
 class WiredChargingRippleController @Inject constructor(
     commandRegistry: CommandRegistry,
     private val batteryController: BatteryController,
-    private val configurationController: ConfigurationController,
     featureFlags: FeatureFlags,
     private val context: Context,
     private val windowManager: WindowManager,
@@ -83,12 +81,11 @@ class WiredChargingRippleController @Inject constructor(
     private var debounceLevel = 0
 
     @VisibleForTesting
-    var rippleView: RippleView = RippleView(context, attrs = null).also { it.setupShader() }
+    var rippleView: AXRippleView = AXRippleView(context, attrs = null)
 
     init {
         pluggedIn = batteryController.isPluggedIn
         commandRegistry.registerCommand("charging-ripple") { ChargingRippleCommand() }
-        updateRippleColor()
     }
 
     fun registerCallbacks() {
@@ -112,23 +109,6 @@ class WiredChargingRippleController @Inject constructor(
             }
         }
         batteryController.addCallback(batteryStateChangeCallback)
-
-        val configurationChangedListener = object : ConfigurationController.ConfigurationListener {
-            override fun onUiModeChanged() {
-                updateRippleColor()
-            }
-            override fun onThemeChanged() {
-                updateRippleColor()
-            }
-
-            override fun onConfigChanged(newConfig: Configuration?) {
-                normalizedPortPosX = context.resources.getFloat(
-                        R.dimen.physical_charger_port_location_normalized_x)
-                normalizedPortPosY = context.resources.getFloat(
-                        R.dimen.physical_charger_port_location_normalized_y)
-            }
-        }
-        configurationController.addCallback(configurationChangedListener)
     }
 
     // Lazily debounce ripple to avoid triggering ripple constantly (e.g. from flaky chargers).
@@ -154,12 +134,12 @@ class WiredChargingRippleController @Inject constructor(
             // the animation ends.)
             return
         }
+        rippleView.preloadRes()
         windowLayoutParams.packageName = context.opPackageName
         rippleView.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
             override fun onViewDetachedFromWindow(view: View) {}
 
             override fun onViewAttachedToWindow(view: View) {
-                layoutRipple()
                 rippleView.startRipple(Runnable {
                     windowManager.removeView(rippleView)
                 })
@@ -168,36 +148,6 @@ class WiredChargingRippleController @Inject constructor(
         })
         windowManager.addView(rippleView, windowLayoutParams)
         uiEventLogger.log(WiredChargingRippleEvent.CHARGING_RIPPLE_PLAYED)
-    }
-
-    private fun layoutRipple() {
-        val bounds = windowManager.currentWindowMetrics.bounds
-        val width = bounds.width()
-        val height = bounds.height()
-        val maxDiameter = Integer.max(width, height) * 2f
-        rippleView.setMaxSize(maxDiameter, maxDiameter)
-        when (context.display?.rotation) {
-            Surface.ROTATION_0 -> {
-                rippleView.setCenter(
-                        width * normalizedPortPosX, height * normalizedPortPosY)
-            }
-            Surface.ROTATION_90 -> {
-                rippleView.setCenter(
-                        width * normalizedPortPosY, height * (1 - normalizedPortPosX))
-            }
-            Surface.ROTATION_180 -> {
-                rippleView.setCenter(
-                        width * (1 - normalizedPortPosX), height * (1 - normalizedPortPosY))
-            }
-            Surface.ROTATION_270 -> {
-                rippleView.setCenter(
-                        width * (1 - normalizedPortPosY), height * normalizedPortPosX)
-            }
-        }
-    }
-
-    private fun updateRippleColor() {
-        rippleView.setColor(Utils.getColorAttr(context, android.R.attr.colorAccent).defaultColor)
     }
 
     inner class ChargingRippleCommand : Command {
