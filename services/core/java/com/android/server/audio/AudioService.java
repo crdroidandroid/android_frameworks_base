@@ -5080,10 +5080,22 @@ public class AudioService extends IAudioService.Stub
             streamType = AudioManager.STREAM_BLUETOOTH_SCO;
         }
 
-        final int device = (ada == null)
+        int device = (ada == null)
                 ? getDeviceForStream(streamType)
                 : ada.getInternalType();
         int oldIndex;
+
+        // apply a2dp absolute volume control request in multiple audio
+        // output
+        if ((flags & AudioManager.FLAG_BLUETOOTH_ABS_VOLUME) != 0) {
+            final Set<Integer> devices = getDeviceSetForStream(streamTypeAlias);
+            for (int deviceType : AudioSystem.DEVICE_OUT_ALL_A2DP_SET) {
+                if (devices.contains(deviceType)) {
+                    device = deviceType;
+                    break;
+                }
+            }
+        }
 
         // skip a2dp absolute volume control request when the device
         // is neither an a2dp device nor BLE device
