@@ -191,6 +191,7 @@ object KeyguardRootViewBinder {
                                 childViews[statusViewId]?.alpha = alpha
                                 childViews[burnInLayerId]?.alpha = alpha
                                 childViews[sliceViewId]?.alpha = alpha
+                                childViews[weatherContainerId]?.alpha = alpha
                             }
                         }
                     }
@@ -204,6 +205,7 @@ object KeyguardRootViewBinder {
                             viewModel.translationY.collect { y ->
                                 childViews[burnInLayerId]?.translationY = y
                                 childViews[sliceViewId]?.translationY = y
+                                childViews[weatherContainerId]?.translationY = y
                                 childViews[largeClockId]?.translationY = y
                                 childViews[aodNotificationIconContainerId]?.translationY = y
                             }
@@ -217,6 +219,7 @@ object KeyguardRootViewBinder {
                                         // Large Clock is not translated in the x direction
                                         childViews[burnInLayerId]?.translationX = px
                                         childViews[sliceViewId]?.translationX = px
+                                        childViews[weatherContainerId]?.translationX = px
                                         childViews[aodNotificationIconContainerId]?.translationX =
                                             px
                                     }
@@ -275,6 +278,7 @@ object KeyguardRootViewBinder {
                             viewModel.burnInLayerVisibility.collect { visibility ->
                                 childViews[burnInLayerId]?.visibility = visibility
                                 childViews[sliceViewId]?.visibility = visibility
+                                childViews[weatherContainerId]?.visibility = visibility
                             }
                         }
 
@@ -635,6 +639,7 @@ object KeyguardRootViewBinder {
     private val statusViewId = R.id.keyguard_status_view
     private val burnInLayerId = R.id.burn_in_layer
     private val sliceViewId = R.id.keyguard_slice_view
+    private val weatherContainerId = R.id.keyguard_weather_area
     private val aodNotificationIconContainerId = R.id.aod_notification_icon_container
     private val largeClockId = customR.id.lockscreen_clock_view_large
     private val smallClockId = customR.id.lockscreen_clock_view
