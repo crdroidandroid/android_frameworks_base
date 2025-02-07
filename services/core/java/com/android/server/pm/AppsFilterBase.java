@@ -435,11 +435,13 @@ public abstract class AppsFilterBase implements AppsFilterSnapshot {
             if (callingSetting instanceof PackageStateInternal) {
                 final PackageStateInternal packageState = (PackageStateInternal) callingSetting;
                 if (packageState.hasSharedUser()) {
-                    callingPkgSetting = null;
                     final SharedUserApi sharedUserApi =
                             snapshot.getSharedUser(packageState.getSharedUserAppId());
                     if (sharedUserApi != null) {
                         callingSharedPkgSettings.addAll(sharedUserApi.getPackageStates());
+                        callingPkgSetting = null;
+                    } else {
+                        callingPkgSetting = packageState;
                     }
                 } else {
                     callingPkgSetting = packageState;
