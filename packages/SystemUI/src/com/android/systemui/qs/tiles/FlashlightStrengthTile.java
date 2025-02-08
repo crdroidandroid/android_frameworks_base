@@ -26,6 +26,8 @@ import android.hardware.camera2.CameraManager;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.UserHandle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -71,6 +73,12 @@ public class FlashlightStrengthTile extends FlashlightTile implements SlideableQ
     private float mCurrentPercent;
     private int mCurrentLevel;
     private boolean mClicked = true;
+
+    private int mLastRoundedPercent = -1;
+
+    private Vibrator mVibrator;
+    private static final VibrationEffect FLASHLIGHT_MOVE_HAPTIC =
+            VibrationEffect.get(VibrationEffect.EFFECT_TICK);
 
     @Nullable private String mCameraId;
 
@@ -257,14 +265,26 @@ public class FlashlightStrengthTile extends FlashlightTile implements SlideableQ
     protected void handleUpdateState(BooleanState state, Object arg) {
         super.handleUpdateState(state, arg);
         if (mSupportsSettingFlashLevel) {
+            int currentRoundedPercent = Math.round(mCurrentPercent * 100f);
+
+            mVibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+            if (mVibrator == null || !mVibrator.hasVibrator()) {
+                mVibrator = null;
+            }
+
+            // Play haptic effects if the rounded percentage has changed by ±1
+            if (mVibrator != null && Math.abs(currentRoundedPercent - mLastRoundedPercent) == 1) {
+                mVibrator.vibrate(FLASHLIGHT_MOVE_HAPTIC);
+            }
             String label = mHost.getContext().getString(R.string.quick_settings_flashlight_label);
             if (state.value) {
                 label = String.format(
                         "%s - %s%%",
                         mHost.getContext().getString(R.string.quick_settings_flashlight_label),
-                        Math.round(mCurrentPercent * 100f));
+                        currentRoundedPercent);
             }
             state.label = label;
+            mLastRoundedPercent = currentRoundedPercent;
         }
     }
 
