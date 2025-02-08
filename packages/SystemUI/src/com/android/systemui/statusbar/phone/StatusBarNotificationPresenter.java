@@ -22,12 +22,17 @@ import static com.android.systemui.statusbar.phone.CentralSurfaces.DEBUG;
 
 import android.app.KeyguardManager;
 import android.content.Context;
+import android.database.ContentObserver;
 import android.os.PowerManager;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.os.UserHandle;
+import android.provider.Settings;
+import android.provider.Telephony.Sms;
 import android.service.notification.StatusBarNotification;
 import android.service.vr.IVrManager;
 import android.service.vr.IVrStateCallbacks;
+import android.telecom.TelecomManager;
 import android.util.Log;
 import android.util.Slog;
 import android.view.View;
@@ -75,6 +80,9 @@ import com.android.systemui.statusbar.notification.stack.NotificationListContain
 import com.android.systemui.statusbar.notification.stack.NotificationStackScrollLayoutController;
 import com.android.systemui.statusbar.policy.KeyguardStateController;
 
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -107,8 +115,12 @@ class StatusBarNotificationPresenter implements NotificationPresenter, CommandQu
     private final NotificationListContainer mNotifListContainer;
     private final DeviceUnlockedInteractor mDeviceUnlockedInteractor;
     private final QuickSettingsController mQsController;
+    private final TelecomManager mTm;
+    private final Context mContext;
+    private final List<String> mHeadsUpWhitelistPackages = new ArrayList<>();
 
     protected boolean mVrMode;
+    private boolean mLessBoringHeadsUp;
 
     @Inject
     StatusBarNotificationPresenter(
@@ -139,6 +151,7 @@ class StatusBarNotificationPresenter implements NotificationPresenter, CommandQu
             NotificationRemoteInputManager.Callback remoteInputManagerCallback,
             NotificationListContainer notificationListContainer,
             DeviceUnlockedInteractor deviceUnlockedInteractor) {
+        mContext = context;
         mActivityStarter = activityStarter;
         mKeyguardStateController = keyguardStateController;
         mNotificationPanel = panel;
@@ -166,6 +179,7 @@ class StatusBarNotificationPresenter implements NotificationPresenter, CommandQu
                 ServiceManager.getService(Context.STATUS_BAR_SERVICE));
         mNotifListContainer = notificationListContainer;
         mDeviceUnlockedInteractor = deviceUnlockedInteractor;
+        mTm = (TelecomManager) context.getSystemService(Context.TELECOM_SERVICE);
 
         IVrManager vrManager = IVrManager.Stub.asInterface(ServiceManager.getService(
                 Context.VR_SERVICE));
@@ -188,8 +202,10 @@ class StatusBarNotificationPresenter implements NotificationPresenter, CommandQu
                 visualInterruptionDecisionProvider.addCondition(mVrModeCondition);
                 visualInterruptionDecisionProvider.addFilter(mNeedsRedactionFilter);
                 visualInterruptionDecisionProvider.addCondition(mPanelsDisabledCondition);
+                visualInterruptionDecisionProvider.addLegacySuppressor(mLessBoringSuppressor);
             } else {
                 visualInterruptionDecisionProvider.addLegacySuppressor(mInterruptSuppressor);
+                visualInterruptionDecisionProvider.addLegacySuppressor(mLessBoringSuppressor);
             }
             mLockscreenUserManager.setUpWithPresenter(this);
             mGutsManager.setUpWithPresenter(
@@ -197,6 +213,47 @@ class StatusBarNotificationPresenter implements NotificationPresenter, CommandQu
 
             onUserSwitched(mLockscreenUserManager.getCurrentUserId());
         });
+
+        ContentObserver headsUpObserver = new ContentObserver(null) {
+            @Override
+            public void onChange(boolean selfChange) {
+                mLessBoringHeadsUp = Settings.System.getIntForUser(
+                        mContext.getContentResolver(),
+                        Settings.System.LESS_BORING_HEADS_UP,
+                        0, UserHandle.USER_CURRENT) == 1;
+            }
+        };
+        mContext.getContentResolver().registerContentObserver(
+                Settings.System.getUriFor(Settings.System.LESS_BORING_HEADS_UP),
+                true,
+                headsUpObserver);
+        headsUpObserver.onChange(true); // set up
+
+        String defaultDialerPackage = getDefaultDialerPackage(mTm);
+        if (defaultDialerPackage != null && !defaultDialerPackage.isEmpty()) {
+            mHeadsUpWhitelistPackages.add(defaultDialerPackage.toLowerCase());
+        }
+
+        String defaultSmsPackage = getDefaultSmsPackage(mContext);
+        if (defaultSmsPackage != null && !defaultSmsPackage.isEmpty()) {
+            mHeadsUpWhitelistPackages.add(defaultSmsPackage.toLowerCase());
+        }
+
+        mHeadsUpWhitelistPackages.addAll(Arrays.asList(
+            "dialer",
+            "messaging",
+            "messenger",
+            "clock"
+        ));
+    }
+
+    private static String getDefaultSmsPackage(Context ctx) {
+        // for reference, there's also a new RoleManager api with getDefaultSmsPackage(context, userid) 
+        return Sms.getDefaultSmsPackage(ctx);
+    }
+
+    private static String getDefaultDialerPackage(TelecomManager tm) {
+        return tm != null ? tm.getDefaultDialerPackage() : "";
     }
 
     /** Called when the shade has been emptied to attempt to close the shade */
@@ -413,4 +470,18 @@ class StatusBarNotificationPresenter implements NotificationPresenter, CommandQu
                     return !mCommandQueue.panelsEnabled();
                 }
             };
+
+    private final NotificationInterruptSuppressor mLessBoringSuppressor =
+            new NotificationInterruptSuppressor() {
+        @Override
+        public String getName() {
+            return TAG;
+        }
+
+        @Override
+        public boolean suppressAwakeHeadsUp(NotificationEntry entry) {
+            if (!mLessBoringHeadsUp) return false;
+            return !mHeadsUpWhitelistPackages.contains(entry.getSbn().getPackageName().toLowerCase());
+        }
+    };
 }
