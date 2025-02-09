@@ -1973,6 +1973,7 @@ public class ActivityManagerService extends IActivityManager.Stub
             ServiceManager.addService("permission", new PermissionController(this));
             ServiceManager.addService("processinfo", new ProcessInfoService(this));
             ServiceManager.addService("cacheinfo", new CacheBinder(this));
+            ServiceManager.addService("boost_framework", new BoostFrameworkService());
 
             ApplicationInfo info = mContext.getPackageManager().getApplicationInfo(
                     "android", STOCK_PM_FLAGS | MATCH_SYSTEM_ONLY);
