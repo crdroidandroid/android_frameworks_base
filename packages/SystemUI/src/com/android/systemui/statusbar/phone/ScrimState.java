@@ -281,6 +281,9 @@ public enum ScrimState {
             mBlankScreen = mDisplayRequiresBlanking;
             mAnimationDuration = mWakeLockScreenSensorActive
                     ? ScrimController.ANIMATION_DURATION_LONG : ScrimController.ANIMATION_DURATION;
+            if (previousState == OFF || previousState == AOD) {
+                mAnimateChange = false;
+            }
         }
     },
 
