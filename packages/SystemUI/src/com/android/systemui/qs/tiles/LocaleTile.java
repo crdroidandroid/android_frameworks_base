@@ -133,7 +133,7 @@ public class LocaleTile extends QSTileImpl<State> {
     @Override
     public Intent getLongClickIntent() {
         return new Intent().setComponent(new ComponentName(
-            "com.android.settings", "com.android.settings.LanguageSettings"));
+            "com.android.settings", "com.android.settings.language.LanguageSettings"));
     }
 
     @Override
