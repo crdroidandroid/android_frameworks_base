@@ -234,6 +234,40 @@ void android_os_Process_setThreadGroupAndCpuset(JNIEnv* env, jobject clazz, int 
     }
 }
 
+void android_os_Process_setThreadAffinity(JNIEnv* env, jobject clazz, int tid, jint grp) {
+    cpu_set_t target_cpu_set;
+    CPU_ZERO(&target_cpu_set);
+
+    std::vector<int32_t> small_cores = {0, 1, 2, 3};
+    std::vector<int32_t> big_cores = {4, 5, 6, 7};
+
+    if (grp == 1) {
+        for (int core : small_cores) {
+            CPU_SET(core, &target_cpu_set);
+        }
+    } 
+    else if (grp == 0) {
+        for (int core : big_cores) {
+            CPU_SET(core, &target_cpu_set);
+        }
+    } 
+    else if (grp == 2) {
+        int max_cpus = sysconf(_SC_NPROCESSORS_ONLN);
+        for (int i = 0; i < max_cpus; i++) {
+            CPU_SET(i, &target_cpu_set);
+        }
+    } 
+    else {
+        return;
+    }
+
+    if (sched_setaffinity(tid, sizeof(cpu_set_t), &target_cpu_set) == -1) {
+        ALOGI("Failed to set CPU affinity for thread %d", tid);
+    } else {
+        ALOGI("Successfully set affinity for thread %d", tid);
+    }
+}
+
 // Look up the user ID of a process in /proc/${pid}/status. The Uid: line is present in
 // /proc/${pid}/status since at least kernel v2.5.
 static int uid_from_pid(int pid)
@@ -1392,6 +1426,7 @@ static const JNINativeMethod methods[] = {
         {"getThreadScheduler", "(I)I", (void*)android_os_Process_getThreadScheduler},
         {"setThreadGroup", "(II)V", (void*)android_os_Process_setThreadGroup},
         {"setThreadGroupAndCpuset", "(II)V", (void*)android_os_Process_setThreadGroupAndCpuset},
+        {"setThreadAffinity", "(II)V", (void*)android_os_Process_setThreadAffinity},
         {"setProcessGroup", "(II)V", (void*)android_os_Process_setProcessGroup},
         {"getProcessGroup", "(I)I", (void*)android_os_Process_getProcessGroup},
         {"createProcessGroup", "(II)I", (void*)android_os_Process_createProcessGroup},

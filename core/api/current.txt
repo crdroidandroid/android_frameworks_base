@@ -34521,6 +34521,7 @@ package android.os {
     method public static final int myUid();
     method public static android.os.UserHandle myUserHandle();
     method public static final void sendSignal(int, int);
+    method public static final void setThreadAffinity(int, int) throws java.lang.IllegalArgumentException, java.lang.SecurityException;
     method public static final void setThreadPriority(int, @IntRange(from=0xffffffec, to=android.os.Process.THREAD_PRIORITY_LOWEST) int) throws java.lang.IllegalArgumentException, java.lang.SecurityException;
     method public static final void setThreadPriority(@IntRange(from=0xffffffec, to=android.os.Process.THREAD_PRIORITY_LOWEST) int) throws java.lang.IllegalArgumentException, java.lang.SecurityException;
     method @Deprecated public static final boolean supportsProcesses();
