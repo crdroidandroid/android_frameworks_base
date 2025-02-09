@@ -165,6 +165,7 @@ import com.android.systemui.telephony.TelephonyListenerManager;
 import com.android.systemui.user.domain.interactor.SelectedUserInteractor;
 import com.android.systemui.util.Assert;
 import com.android.systemui.util.kotlin.JavaAdapter;
+import com.android.systemui.util.SystemUIBoostFramework;
 
 import dalvik.annotation.optimization.NeverCompile;
 
@@ -1839,6 +1840,7 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, Dumpab
                             ActiveUnlockConfig.ActiveUnlockRequestOrigin.BIOMETRIC_FAIL,
                             "fingerprintFailure");
                     handleFingerprintAuthFailed();
+                    SystemUIBoostFramework.getInstance().animationBoostOff(SystemUIBoostFramework.REQUEST_ANIMATION_BOOST_TYPE_UNLOCK);
                 }
 
                 @Override
