@@ -1,4 +1,6 @@
 // Baseline format: 1.0
+BannedThrow: android.os.Process#setThreadAffinity(int, int):
+     Methods must not throw unchecked exceptions
 BroadcastBehavior: android.app.AlarmManager#ACTION_NEXT_ALARM_CLOCK_CHANGED:
     Field 'ACTION_NEXT_ALARM_CLOCK_CHANGED' is missing @BroadcastBehavior
 BroadcastBehavior: android.app.AlarmManager#ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED:
@@ -1513,6 +1515,8 @@ UnflaggedApi: android.os.Build.VERSION_CODES#VANILLA_ICE_CREAM:
     New API must be flagged with @FlaggedApi: field android.os.Build.VERSION_CODES.VANILLA_ICE_CREAM
 UnflaggedApi: android.os.PerformanceHintManager.Session#setPreferPowerEfficiency(boolean):
     New API must be flagged with @FlaggedApi: method android.os.PerformanceHintManager.Session.setPreferPowerEfficiency(boolean)
+UnflaggedApi: android.os.Process#setThreadAffinity(int, int):
+     New API must be flagged with @FlaggedApi: method android.os.Process.setThreadAffinity(int,int)
 UnflaggedApi: android.os.UserManager#DISALLOW_NEAR_FIELD_COMMUNICATION_RADIO:
     New API must be flagged with @FlaggedApi: field android.os.UserManager.DISALLOW_NEAR_FIELD_COMMUNICATION_RADIO
 UnflaggedApi: android.provider.Settings#ACTION_CREDENTIAL_PROVIDER:
