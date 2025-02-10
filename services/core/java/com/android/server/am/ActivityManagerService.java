@@ -1750,6 +1750,7 @@ public class ActivityManagerService extends IActivityManager.Stub
             new HostingRecord(HostingRecord.HOSTING_TYPE_EMPTY);
 
     private boolean mThreeFingersSwipeEnabled;
+    private boolean mThreeFingerGestureActive;
 
     /**
      * Used to notify activity lifecycle events.
@@ -20894,17 +20895,16 @@ public class ActivityManagerService extends IActivityManager.Stub
 
     @Override
     public boolean isThreeFingersSwipeActive() {
-        if (!mThreeFingersSwipeEnabled)
-            return false;
-        synchronized (this) {
-            return Settings.System.getIntForUser(mContext.getContentResolver(),
-                    Settings.System.THREE_FINGER_GESTURE_ACTIVE, 0,
-                    UserHandle.USER_CURRENT) == 1;
-        }
+        return mThreeFingersSwipeEnabled && mThreeFingerGestureActive;
     }
 
     @Override
     public void setThreeFingersSwipeActive(boolean active) {
         mThreeFingersSwipeEnabled = active;
+    }
+
+    @Override
+    public void setThreeGestureStateActive(boolean active) {
+        mThreeFingerGestureActive = active;
     }
 }
