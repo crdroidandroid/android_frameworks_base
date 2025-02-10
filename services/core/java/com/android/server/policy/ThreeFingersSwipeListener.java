@@ -17,7 +17,9 @@
 
 package com.android.server.policy;
 
+import android.app.ActivityManager;
 import android.content.Context;
+import android.os.RemoteException;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
@@ -105,11 +107,11 @@ public class ThreeFingersSwipeListener implements PointerEventListener {
     private void changeThreeGestureState(int state) {
         if (mThreeGestureState != state){
             mThreeGestureState = state;
-            boolean shouldEnableFlag = mThreeGestureState == THREE_GESTURE_STATE_DETECTED_TRUE ||
+            boolean active = mThreeGestureState == THREE_GESTURE_STATE_DETECTED_TRUE ||
                     mThreeGestureState == THREE_GESTURE_STATE_DETECTING;
-            Settings.System.putIntForUser(mContext.getContentResolver(),
-                    Settings.System.THREE_FINGER_GESTURE_ACTIVE, shouldEnableFlag ? 1 : 0,
-                    UserHandle.USER_CURRENT);
+            try {
+                ActivityManager.getService().setThreeGestureStateActive(active);
+            } catch (RemoteException e) {}
         }
     }
 
