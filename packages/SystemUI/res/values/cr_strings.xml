@@ -159,5 +159,6 @@
     <string name="qs_preferred_network_label">Preferred network</string>
     <string name="qs_preferred_network_lte">4G / LTE</string>
     <string name="qs_preferred_network_nr">5G / NR</string>
+    <string name="qs_preferred_network_3g">3G</string>
     <string name="qs_preferred_network_unsupported">Unsupported</string>
 </resources>
