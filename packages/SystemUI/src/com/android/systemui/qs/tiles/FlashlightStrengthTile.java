@@ -25,6 +25,7 @@ import android.hardware.camera2.CameraCharacteristics.Key;
 import android.hardware.camera2.CameraManager;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -87,10 +88,7 @@ public class FlashlightStrengthTile extends FlashlightTile implements SlideableQ
             // Update current percent/level and refresh the tile.
             mCurrentLevel = newStrengthLevel;
             mCurrentPercent = ((float) mCurrentLevel) / ((float) mMaxLevel);
-            Settings.System.putFloat(
-                    mContext.getContentResolver(),
-                    FLASHLIGHT_BRIGHTNESS_SETTING,
-                    mCurrentPercent);
+            writeCurrentSetting();
             refreshState(true);
         }
     };
@@ -119,10 +117,7 @@ public class FlashlightStrengthTile extends FlashlightTile implements SlideableQ
                                 view.getParent().requestDisallowInterceptTouchEvent(true);
                                 moved = true;
                                 mCurrentPercent = Math.max(0.01f, Math.min(newPct, 1));
-                                Settings.System.putFloat(
-                                        mContext.getContentResolver(),
-                                        FLASHLIGHT_BRIGHTNESS_SETTING,
-                                        mCurrentPercent);
+                                writeCurrentSetting();
                                 handleClick(null);
                             }
                             return true;
@@ -130,10 +125,7 @@ public class FlashlightStrengthTile extends FlashlightTile implements SlideableQ
                         case MotionEvent.ACTION_UP -> {
                             if (moved) {
                                 moved = false;
-                                Settings.System.putFloat(
-                                        mContext.getContentResolver(),
-                                        FLASHLIGHT_BRIGHTNESS_SETTING,
-                                        mCurrentPercent);
+                                writeCurrentSetting();
                             } else {
                                 mClicked = true;
                                 handleClick(null);
@@ -202,10 +194,11 @@ public class FlashlightStrengthTile extends FlashlightTile implements SlideableQ
         }
         float defaultPercent = ((float) mDefaultLevel) / ((float) mMaxLevel);
         mCurrentPercent =
-                Settings.System.getFloat(
+                Settings.System.getFloatForUser(
                         mContext.getContentResolver(),
                         FLASHLIGHT_BRIGHTNESS_SETTING,
-                        defaultPercent);
+                        defaultPercent,
+                        UserHandle.USER_CURRENT);
         // Register torch callback on torch strength level supported devices.
         if (mSupportsSettingFlashLevel && !mRegistered) {
             mCameraManager.registerTorchCallback(mTorchCallback, new Handler(mBgLooper));
@@ -284,5 +277,13 @@ public class FlashlightStrengthTile extends FlashlightTile implements SlideableQ
             }
         }
         return null;
+    }
+
+    private void writeCurrentSetting() {
+        Settings.System.putFloatForUser(
+                mContext.getContentResolver(),
+                FLASHLIGHT_BRIGHTNESS_SETTING,
+                mCurrentPercent,
+                UserHandle.USER_CURRENT);
     }
 }
