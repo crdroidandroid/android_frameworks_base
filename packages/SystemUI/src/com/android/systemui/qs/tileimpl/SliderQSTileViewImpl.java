@@ -136,13 +136,12 @@ public class SliderQSTileViewImpl extends QSTileViewImpl {
         private PercentageDrawable(float defaultPercent) {
             shape = mContext.getDrawable(R.drawable.qs_tile_background_shape);
             mDefaultPercent = defaultPercent;
-            mCurrentPercent = Settings.System.getFloat(mContext.getContentResolver(),
-                    mSettingsKey, mDefaultPercent);
+            updatePercent();
         }
 
         synchronized void updatePercent() {
-            mCurrentPercent = Settings.System.getFloat(mContext.getContentResolver(),
-                    mSettingsKey, mDefaultPercent);
+            mCurrentPercent = Settings.System.getFloatForUser(mContext.getContentResolver(),
+                    mSettingsKey, mDefaultPercent, UserHandle.USER_CURRENT);
         }
 
         @Override
