@@ -357,6 +357,17 @@ public class QSPanel extends LinearLayout implements Tunable {
         updateViewPositions();
     }
 
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        if (mToggleSliderController != null) {
+            mToggleSliderController.setLayoutSize();
+        }
+    }
+
+    public void setBrightnessSliderController(BrightnessSliderController sliderController) {
+        mToggleSliderController = sliderController;
+    }
+
     private void updateViewPositions() {
         if (mChildrenLayoutTop == null || mChildrenLayoutTop.isEmpty() || mTileLayout == null) {
             return;

@@ -159,6 +159,12 @@ public class BrightnessSliderController extends ViewController<BrightnessSliderV
         }
     }
 
+    public void setLayoutSize() {
+        if (mMirrorController != null && mView != null) {
+            mMirrorController.setLocationAndSize(mView);
+        }
+    }
+
     private void setMirror(ToggleSlider toggleSlider) {
         mMirror = toggleSlider;
         if (mMirror != null) {
