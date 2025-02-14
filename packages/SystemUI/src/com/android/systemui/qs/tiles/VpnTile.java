@@ -210,7 +210,7 @@ public class VpnTile extends QSTileImpl<BooleanState> {
     }
 
     private void connectVpnOrAskForCredentials(VpnProfile profile) {
-        if (profile.saveLogin) {
+        if (!profile.isUsernamePasswordRequiredVpnProfile() || profile.saveLogin) {
             mController.connectLegacyVpn(profile);
             return;
         }
