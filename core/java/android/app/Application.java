@@ -345,6 +345,7 @@ public class Application extends ContextWrapper implements ComponentCallbacks2 {
     /* package */ final void attach(Context context) {
         attachBaseContext(context);
         mLoadedApk = ContextImpl.getImpl(context).mPackageInfo;
+        com.android.internal.util.android.PropsHooksUtils.setProps(context);
     }
 
     @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
