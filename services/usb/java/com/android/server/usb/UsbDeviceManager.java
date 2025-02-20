@@ -1240,7 +1240,7 @@ public class UsbDeviceManager implements ActivityTaskManagerInternal.ScreenObser
                             if (!mScreenLocked
                                     && mScreenUnlockedFunctions != UsbManager.FUNCTION_NONE) {
                                 setScreenUnlockedFunctions(operationId);
-                            } else {
+                            } else if (mCurrentFunctions != UsbManager.FUNCTION_UVC) {
                                 setEnabledFunctions(UsbManager.FUNCTION_NONE, false, operationId);
                             }
                         }
