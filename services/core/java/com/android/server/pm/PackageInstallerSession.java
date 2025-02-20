@@ -5046,6 +5046,10 @@ public class PackageInstallerSession extends IPackageInstallerSession.Stub {
 
     private void dispatchSessionPreapproved() {
         final IntentSender target = getPreapprovalRemoteStatusReceiver();
+        if (target == null) {
+            Slog.e(TAG, "Missing receiver for preapproval status.");
+            return;
+        }
         final Intent intent = new Intent();
         intent.putExtra(PackageInstaller.EXTRA_SESSION_ID, sessionId);
         intent.putExtra(PackageInstaller.EXTRA_STATUS, PackageInstaller.STATUS_SUCCESS);
@@ -5086,7 +5090,9 @@ public class PackageInstallerSession extends IPackageInstallerSession.Stub {
                     "Session " + sessionId + " is a parent of multi-package session and "
                             + "requestUserPreapproval on the parent session isn't supported.");
         }
-
+        if (statusReceiver == null) {
+            throw new IllegalArgumentException("Status receiver cannot be null.");
+        }
         synchronized (mLock) {
             assertPreparedAndNotSealedLocked("request of session " + sessionId);
             mPreapprovalDetails = details;
@@ -5439,6 +5445,10 @@ public class PackageInstallerSession extends IPackageInstallerSession.Stub {
      */
     private static void sendOnUserActionRequired(Context context, IntentSender target,
             int sessionId, Intent intent) {
+        if (target == null) {
+            Slog.e(TAG, "Missing receiver for pending user action.");
+            return;
+        }
         final Intent fillIn = new Intent();
         fillIn.putExtra(PackageInstaller.EXTRA_SESSION_ID, sessionId);
         fillIn.putExtra(PackageInstaller.EXTRA_STATUS, PackageInstaller.STATUS_PENDING_USER_ACTION);
