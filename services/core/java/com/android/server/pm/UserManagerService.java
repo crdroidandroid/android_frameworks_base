@@ -73,6 +73,7 @@ import android.app.PendingIntent;
 import android.app.StatsManager;
 import android.app.admin.DevicePolicyEventLogger;
 import android.app.admin.DevicePolicyManagerInternal;
+import android.app.backup.IBackupManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IIntentReceiver;
@@ -5891,6 +5892,12 @@ public class UserManagerService extends IUserManager.Stub {
             t.traceEnd();
             applyDefaultUserSettings(userTypeDetails, userId);
             setDefaultCrossProfileIntentFilters(userId, userTypeDetails, restrictions, parentId);
+            try {
+                IBackupManager.Stub.asInterface(ServiceManager.getService(Context.BACKUP_SERVICE))
+                        .setBackupServiceActive(userId, true);
+            } catch (RemoteException e) {
+                Slog.w(LOG_TAG, "could not enable backup service for user " + userId, e);
+            }
 
             if (preCreate) {
                 // Must start user (which will be stopped right away, through
