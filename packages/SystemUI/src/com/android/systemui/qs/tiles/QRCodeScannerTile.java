@@ -138,7 +138,7 @@ public class QRCodeScannerTile extends QSTileImpl<QSTile.State> {
 
     @Override
     public boolean isAvailable() {
-        return mQRCodeScannerController.isCameraAvailable();
+        return mQRCodeScannerController.isAbleToLaunchScannerActivity();
     }
 
     @Nullable
