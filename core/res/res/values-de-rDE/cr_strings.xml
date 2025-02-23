@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2024 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Button that copies the url to the log of a crashed application -->
+    <string name="aerr_copy">URL des Absturzberichts kopieren</string>
+    <string name="url_copy_success">URL erfolgreich kopiert</string>
+    <string name="url_copy_failed">Beim Hochladen des Absturzberichts zu Pasty ist ein Fehler aufgetreten</string>
+    <!-- Lock gesture -->
+    <string name="gesture_locked_warning">Erneut wischen, um Gesten zu verwenden</string>
+    <!-- Pocket Lock -->
+    <string name="pocket_mode_title">Taschenmodus aktiv</string>
+    <string name="pocket_mode_illustration_description">Abbildung des Telefons in der Tasche</string>
+    <string name="pocket_mode_instructions_header">Um das Gerät zu verwenden:</string>
+    <string name="pocket_mode_instruction_step1">1. Dafür sorgen, dass der blau dargestellte Bereich (Näherungssensor) frei von Schmutz und Staub ist.</string>
+    <string name="pocket_mode_instruction_step2">2. Ein-/Austaste gedrückt halten zum Beenden des Taschenmodus.</string>
+    <!-- App lock -->
+    <string name="unlock_application"><xliff:g id="label" example="Telegram">%1$s</xliff:g> entsperren</string>
+</resources>

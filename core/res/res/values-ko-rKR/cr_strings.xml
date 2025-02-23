@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2024 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Button that copies the url to the log of a crashed application -->
+    <string name="aerr_copy">비정상 종료 로그 URL 복사</string>
+    <string name="url_copy_success">URL을 복사했습니다.</string>
+    <string name="url_copy_failed">Pasty 서비스에 로그를 업로드하는 중 오류가 발생했습니다.</string>
+    <!-- Lock gesture -->
+    <string name="gesture_locked_warning">제스처 잠금을 해제하려면 다시 한 번 스와이프하세요.</string>
+    <!-- Pocket Lock -->
+    <string name="pocket_mode_title">포켓 모드 사용 중</string>
+    <string name="pocket_mode_illustration_description">주머니에 들어 있는 기기를 나타낸 그림</string>
+    <string name="pocket_mode_instructions_header">기기를 사용하려면 다음 단계를 따르세요.</string>
+    <string name="pocket_mode_instruction_step1">1. 파란색 영역(근접 센서)가 가려지거나 먼지, 흙이 묻지 않았는지 확인합니다.</string>
+    <string name="pocket_mode_instruction_step2">2. 전원 버튼을 길게 눌러 포켓 모드를 종료합니다.</string>
+    <!-- App lock -->
+    <string name="unlock_application"><xliff:g id="label" example="Telegram">%1$s</xliff:g> 잠금 해제</string>
+</resources>
