@@ -31,13 +31,15 @@ public class HideDeveloperStatusUtils {
         if (cr == null || packageName == null || name == null || !isBootCompleted()) {
             return false;
         }
+        
+        if (!settingsToHide.contains(name)) return false;
 
         Set<String> apps = getApps(cr);
         if (apps.isEmpty()) {
             return false;
         }
 
-        return apps.contains(packageName) && settingsToHide.contains(name);
+        return apps.contains(packageName);
     }
 
     private static Set<String> getApps(Context context) {
