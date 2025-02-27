@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2022 StatiXOS
- * Copyright (C) 2024 The LibreMobileOS Foundation
+ * Copyright (C) 2024-2025 The LibreMobileOS Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,13 +43,13 @@ import com.android.systemui.plugins.statusbar.StatusBarStateController;
 import com.android.systemui.qs.QSHost;
 import com.android.systemui.qs.QsEventLogger;
 import com.android.systemui.qs.logging.QSLogger;
-import com.android.systemui.qs.tileimpl.TouchableQSTile;
+import com.android.systemui.qs.tileimpl.SlideableQSTile;
 import com.android.systemui.res.R;
 import com.android.systemui.statusbar.policy.FlashlightController;
 
 import javax.inject.Inject;
 
-public class FlashlightStrengthTile extends FlashlightTile implements TouchableQSTile {
+public class FlashlightStrengthTile extends FlashlightTile implements SlideableQSTile {
 
     public static final String TILE_SPEC = "flashlight";
 
