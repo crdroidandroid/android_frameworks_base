@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2022 StatiXOS
- * Copyright (C) 2024 The LibreMobileOS Foundation
+ * Copyright (C) 2024-2025 The LibreMobileOS Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ package com.android.systemui.qs.tileimpl;
 import android.view.View;
 
 // For use with SliderQSTileViewImpl
-public interface TouchableQSTile {
+public interface SlideableQSTile {
 
     View.OnTouchListener getTouchListener();
 
