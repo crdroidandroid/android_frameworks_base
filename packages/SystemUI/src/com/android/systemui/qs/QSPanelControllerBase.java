@@ -45,7 +45,7 @@ import com.android.systemui.qs.logging.QSLogger;
 import com.android.systemui.qs.tiles.FlashlightStrengthTile;
 import com.android.systemui.qs.tileimpl.QSTileViewImpl;
 import com.android.systemui.qs.tileimpl.SliderQSTileViewImpl;
-import com.android.systemui.qs.tileimpl.TouchableQSTile;
+import com.android.systemui.qs.tileimpl.SlideableQSTile;
 import com.android.systemui.scene.shared.flag.SceneContainerFlag;
 import com.android.systemui.statusbar.policy.SplitShadeStateController;
 import com.android.systemui.tuner.TunerService;
@@ -403,13 +403,13 @@ public abstract class QSPanelControllerBase<T extends QSPanel> extends ViewContr
         ) != 0;
         if (FlashlightStrengthTile.TILE_SPEC.equals(tile.getTileSpec())
             && !isA11Style) {
-            TouchableQSTile touchableTile = (TouchableQSTile) tile;
+            SlideableQSTile slideableTile = (SlideableQSTile) tile;
             tileView = new SliderQSTileViewImpl(
                     getContext(),
                     collapsedView,
-                    touchableTile.getTouchListener(),
-                    touchableTile.getSettingsSystemKey(),
-                    touchableTile.getSettingsDefaultValue());
+                    slideableTile.getTouchListener(),
+                    slideableTile.getSettingsSystemKey(),
+                    slideableTile.getSettingsDefaultValue());
         } else {
             tileView = new QSTileViewImpl(
                     getContext(), collapsedView, longPressEffect);
