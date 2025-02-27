@@ -66,8 +66,8 @@ public class FlashlightStrengthTile extends FlashlightTile implements SlideableQ
     private final Looper mBgLooper;
     private boolean mSupportsSettingFlashLevel;
     private boolean mRegistered = false;
-    private int mDefaultLevel;
-    private int mMaxLevel;
+    private int mDefaultLevel = 0;
+    private int mMaxLevel = 1;
     private float mCurrentPercent;
     private int mCurrentLevel;
     private boolean mClicked = true;
