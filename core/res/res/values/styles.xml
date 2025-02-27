@@ -993,7 +993,7 @@ please see styles_device_defaults.xml.
         <item name="fontFamily">@*android:string/config_bodyFontFamily</item>
         <item name="textSize">14sp</item>
         <item name="lineHeight">20sp</item>
-        <item name="textColor">?android:attr/textColorPrimary</item>
+        <item name="android:textColor">@*android:color/system_neutral1_900</item>
     </style>
 
     <style name="TextAppearance.Tooltip">
