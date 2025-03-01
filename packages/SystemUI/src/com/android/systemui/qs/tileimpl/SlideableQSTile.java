@@ -27,4 +27,6 @@ public interface SlideableQSTile {
     String getSettingsSystemKey();
 
     float getSettingsDefaultValue();
+
+    boolean isSlideable();
 }
