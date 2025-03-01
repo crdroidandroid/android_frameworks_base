@@ -222,6 +222,11 @@ public class FlashlightStrengthTile extends FlashlightTile implements SlideableQ
     }
 
     @Override
+    public boolean isSlideable() {
+        return mSupportsSettingFlashLevel;
+    }
+
+    @Override
     protected void handleClick(@Nullable Expandable expandable) {
         boolean newState = !mClicked || !mState.value;
         if (mSupportsSettingFlashLevel && newState) {
