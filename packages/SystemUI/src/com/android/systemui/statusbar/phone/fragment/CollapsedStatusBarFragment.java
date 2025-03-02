@@ -729,9 +729,9 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
                 StatusBarNotifChips.isEnabled() && mHasSecondaryOngoingActivity;
 
         View clockView = mClockController.getClock();
-        boolean isRightClock = clockView.getId() == R.id.clock_right;
+        boolean notLeftClock = clockView.getId() != R.id.clock;
         return new StatusBarVisibilityModel(
-                showClock || isRightClock,
+                showClock || notLeftClock,
                 externalModel.getShowNotificationIcons(),
                 showPrimaryOngoingActivityChip && !headsUpVisible,
                 showSecondaryOngoingActivityChip && !headsUpVisible,
