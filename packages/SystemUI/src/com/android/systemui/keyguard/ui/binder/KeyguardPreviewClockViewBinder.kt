@@ -133,8 +133,7 @@ object KeyguardPreviewClockViewBinder {
                     context.resources.getDimensionPixelSize(
                         R.dimen.keyguard_smartspace_top_offset
                     ) +
-                    getDimen(context, DATE_WEATHER_VIEW_HEIGHT) +
-                    getDimen(context, ENHANCED_SMARTSPACE_HEIGHT)
+                    getDimen(context, DATE_WEATHER_VIEW_HEIGHT)
             connect(R.id.lockscreen_clock_view_large, TOP, PARENT_ID, TOP, largeClockTopMargin)
             connect(R.id.lockscreen_clock_view_large, START, PARENT_ID, START)
             connect(
@@ -220,6 +219,5 @@ object KeyguardPreviewClockViewBinder {
     }
 
     private const val DATE_WEATHER_VIEW_HEIGHT = "date_weather_view_height"
-    private const val ENHANCED_SMARTSPACE_HEIGHT = "enhanced_smartspace_height"
     private const val TAG = "KeyguardPreviewClockViewBinder"
 }
