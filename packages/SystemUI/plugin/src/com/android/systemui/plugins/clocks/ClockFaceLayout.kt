@@ -105,8 +105,7 @@ class DefaultClockFaceLayout(val view: View) : ClockFaceLayout {
                     SystemBarUtils.getStatusBarHeight(context) +
                         context.getDimen("small_clock_padding_top") +
                         context.getDimen("keyguard_smartspace_top_offset") +
-                        context.getDimen("date_weather_view_height") +
-                        context.getDimen("enhanced_smartspace_height")
+                        context.getDimen("date_weather_view_height")
                 connect(lockscreenClockViewLargeId, TOP, PARENT_ID, TOP, largeClockTopMargin)
                 connect(lockscreenClockViewLargeId, START, PARENT_ID, START)
                 connect(lockscreenClockViewLargeId, END, PARENT_ID, END)
