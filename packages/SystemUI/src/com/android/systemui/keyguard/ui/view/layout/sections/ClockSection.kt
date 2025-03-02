@@ -148,12 +148,6 @@ constructor(
 
     fun constrainWeatherClockDateIconsBarrier(constraints: ConstraintSet) {
         constraints.apply {
-            createBarrier(
-                R.id.weather_clock_bc_smartspace_bottom,
-                Barrier.BOTTOM,
-                getDimen(ENHANCED_SMARTSPACE_HEIGHT),
-                (customR.id.weather_clock_time),
-            )
             if (
                 rootViewModel.isNotifIconContainerVisible.value.value &&
                     keyguardClockViewModel.hasAodIcons.value
@@ -193,8 +187,7 @@ constructor(
             )
             val largeClockTopMargin =
                 keyguardClockViewModel.getLargeClockTopMargin() +
-                    getDimen(DATE_WEATHER_VIEW_HEIGHT) +
-                    getDimen(ENHANCED_SMARTSPACE_HEIGHT)
+                    getDimen(DATE_WEATHER_VIEW_HEIGHT)
             connect(
                 customR.id.lockscreen_clock_view_large,
                 TOP,
@@ -261,7 +254,6 @@ constructor(
 
     companion object {
         private const val DATE_WEATHER_VIEW_HEIGHT = "date_weather_view_height"
-        private const val ENHANCED_SMARTSPACE_HEIGHT = "enhanced_smartspace_height"
 
         fun getDimen(context: Context, name: String): Int {
             val res = context.packageManager.getResourcesForApplication(context.packageName)
