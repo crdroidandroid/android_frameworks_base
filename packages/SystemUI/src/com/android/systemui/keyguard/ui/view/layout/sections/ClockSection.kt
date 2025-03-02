@@ -137,12 +137,6 @@ constructor(
 
     private fun constrainWeatherClockDateIconsBarrier(constraints: ConstraintSet) {
         constraints.apply {
-            createBarrier(
-                R.id.weather_clock_bc_smartspace_bottom,
-                Barrier.BOTTOM,
-                getDimen(ENHANCED_SMARTSPACE_HEIGHT),
-                (customR.id.weather_clock_time),
-            )
             if (
                 rootViewModel.isNotifIconContainerVisible.value.value &&
                     keyguardClockViewModel.hasAodIcons.value
@@ -188,8 +182,7 @@ constructor(
                         getDimen(ENHANCED_SMARTSPACE_HEIGHT)
                 } else {
                     keyguardClockViewModel.getLargeClockTopMargin() +
-                        getDimen(DATE_WEATHER_VIEW_HEIGHT) +
-                        getDimen(ENHANCED_SMARTSPACE_HEIGHT)
+                        getDimen(DATE_WEATHER_VIEW_HEIGHT)
                 }
             connect(
                 customR.id.lockscreen_clock_view_large,
