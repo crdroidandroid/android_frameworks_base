@@ -134,5 +134,5 @@
     <!-- 5G toggle in Internet Dialog -->
     <string name="enable_fiveg">啟用 5G</string>
     <!-- Toast for timer chips long press -->
-    <string name="chip_longpress_hint">Long press to directly stop</string>
+    <string name="chip_longpress_hint">長按以直接停止</string>
 </resources>
