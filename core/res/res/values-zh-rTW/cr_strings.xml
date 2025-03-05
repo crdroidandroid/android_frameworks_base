@@ -19,5 +19,5 @@
     <!-- App lock -->
     <string name="unlock_application">解鎖 <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
     <!-- Cycle through ringer modes -->
-    <string name="volume_dialog_ringer_guidance_normal">Calls and notifications will ring</string>
+    <string name="volume_dialog_ringer_guidance_normal">來電與通知將發出鈴聲</string>
 </resources>
