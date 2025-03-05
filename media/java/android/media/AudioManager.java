@@ -4752,7 +4752,7 @@ public class AudioManager {
             focusReceiver = addClientIdToFocusReceiverLocked(clientFakeId);
         }
 
-        return handleExternalAudioPolicyWaitIfNeeded(clientFakeId, focusReceiver);
+        return handleExternalAudioPolicyWaitIfNeeded(clientFakeId, focusReceiver, afr);
     }
 
     /**
@@ -4965,7 +4965,7 @@ public class AudioManager {
             focusReceiver = addClientIdToFocusReceiverLocked(clientId);
         }
 
-        return handleExternalAudioPolicyWaitIfNeeded(clientId, focusReceiver);
+        return handleExternalAudioPolicyWaitIfNeeded(clientId, focusReceiver, afr);
     }
 
     @GuardedBy("mFocusRequestsLock")
@@ -4981,11 +4981,20 @@ public class AudioManager {
     }
 
     private @FocusRequestResult int handleExternalAudioPolicyWaitIfNeeded(String clientId,
-            BlockingFocusResultReceiver focusReceiver) {
+            BlockingFocusResultReceiver focusReceiver, @NonNull AudioFocusRequest afr) {
         focusReceiver.waitForResult(EXT_FOCUS_POLICY_TIMEOUT_MS);
-        if (DEBUG && !focusReceiver.receivedResult()) {
-            Log.e(TAG, "handleExternalAudioPolicyWaitIfNeeded"
-                    + " response from ext policy timed out, denying request");
+        if (!focusReceiver.receivedResult()) {
+            if (DEBUG) {
+                Log.e(TAG, "handleExternalAudioPolicyWaitIfNeeded"
+                        + " response from ext policy timed out, denying request");
+            }
+            try {
+                // To prevent from orphan focus holder, cleanup
+                abandonAudioFocus(afr.getOnAudioFocusChangeListener());
+            } catch (Exception e) {
+                Log.e(TAG, "handleExternalAudioPolicyWaitIfNeeded failed to abandon audio"
+                        +" focus after time out, error: " + e.getMessage());
+            }
         }
 
         synchronized (mFocusRequestsLock) {
