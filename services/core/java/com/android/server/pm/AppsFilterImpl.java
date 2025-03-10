@@ -53,6 +53,7 @@ import android.os.UserHandle;
 import android.provider.DeviceConfig;
 import android.util.ArrayMap;
 import android.util.ArraySet;
+import android.util.IntArray;
 import android.util.Slog;
 import android.util.SparseBooleanArray;
 import android.util.SparseSetArray;
@@ -113,7 +114,7 @@ public final class AppsFilterImpl extends AppsFilterLocked implements Watchable,
      */
     @GuardedBy("mQueryableViaUsesPermissionLock")
     @NonNull
-    private final ArrayMap<String, ArraySet<Integer>> mPermissionToUids;
+    private final ArrayMap<String, IntArray> mPermissionToUids;
 
     /**
      * A cache that maps parsed {@link android.R.styleable#AndroidManifestUsesPermission
@@ -123,7 +124,7 @@ public final class AppsFilterImpl extends AppsFilterLocked implements Watchable,
      */
     @GuardedBy("mQueryableViaUsesPermissionLock")
     @NonNull
-    private final ArrayMap<String, ArraySet<Integer>> mUsesPermissionToUids;
+    private final ArrayMap<String, IntArray> mUsesPermissionToUids;
 
     /**
      * Ensures an observer is in the list, exactly once. The observer cannot be null.  The
@@ -620,10 +621,10 @@ public final class AppsFilterImpl extends AppsFilterLocked implements Watchable,
                     // Lookup in the mPermissionToUids cache if installed packages have
                     // defined this permission.
                     if (mPermissionToUids.containsKey(usesPermissionName)) {
-                        final ArraySet<Integer> permissionDefiners =
+                        final IntArray permissionDefiners =
                                 mPermissionToUids.get(usesPermissionName);
                         for (int j = 0; j < permissionDefiners.size(); j++) {
-                            final int targetAppId = permissionDefiners.valueAt(j);
+                            final int targetAppId = permissionDefiners.get(j);
                             if (targetAppId != newPkgSetting.getAppId()) {
                                 mQueryableViaUsesPermission.add(newPkgSetting.getAppId(),
                                         targetAppId);
@@ -633,9 +634,12 @@ public final class AppsFilterImpl extends AppsFilterLocked implements Watchable,
                     // Record in mUsesPermissionToUids that a permission was requested
                     // by a new package
                     if (!mUsesPermissionToUids.containsKey(usesPermissionName)) {
-                        mUsesPermissionToUids.put(usesPermissionName, new ArraySet<>());
+                        mUsesPermissionToUids.put(usesPermissionName, new IntArray());
                     }
-                    mUsesPermissionToUids.get(usesPermissionName).add(newPkgSetting.getAppId());
+                    IntArray intArray = mUsesPermissionToUids.get(usesPermissionName);
+                    if (!intArray.contains(newPkgSetting.getAppId())) {
+                        intArray.add(newPkgSetting.getAppId());
+                    }
                 }
             }
         }
@@ -647,10 +651,10 @@ public final class AppsFilterImpl extends AppsFilterLocked implements Watchable,
                     // Lookup in the mUsesPermissionToUids cache if installed packages have
                     // requested this permission.
                     if (mUsesPermissionToUids.containsKey(permissionName)) {
-                        final ArraySet<Integer> permissionUsers = mUsesPermissionToUids.get(
+                        final IntArray permissionUsers = mUsesPermissionToUids.get(
                                 permissionName);
                         for (int j = 0; j < permissionUsers.size(); j++) {
-                            final int queryingAppId = permissionUsers.valueAt(j);
+                            final int queryingAppId = permissionUsers.get(j);
                             if (queryingAppId != newPkgSetting.getAppId()) {
                                 mQueryableViaUsesPermission.add(queryingAppId,
                                         newPkgSetting.getAppId());
@@ -659,9 +663,12 @@ public final class AppsFilterImpl extends AppsFilterLocked implements Watchable,
                     }
                     // Record in mPermissionToUids that a permission was defined by a new package
                     if (!mPermissionToUids.containsKey(permissionName)) {
-                        mPermissionToUids.put(permissionName, new ArraySet<>());
+                        mPermissionToUids.put(permissionName, new IntArray());
                     }
-                    mPermissionToUids.get(permissionName).add(newPkgSetting.getAppId());
+                    IntArray intArray = mPermissionToUids.get(permissionName);
+                    if (!intArray.contains(newPkgSetting.getAppId())) {
+                        intArray.add(newPkgSetting.getAppId());
+                    }
                 }
             }
         }
@@ -1150,8 +1157,12 @@ public final class AppsFilterImpl extends AppsFilterLocked implements Watchable,
                 for (ParsedPermission permission : setting.getPkg().getPermissions()) {
                     String permissionName = permission.getName();
                     if (mPermissionToUids.containsKey(permissionName)) {
-                        mPermissionToUids.get(permissionName).remove(setting.getAppId());
-                        if (mPermissionToUids.get(permissionName).isEmpty()) {
+                        IntArray intArray = mPermissionToUids.get(permissionName);
+                        int index = intArray.indexOf(setting.getAppId());
+                        if (index >= 0) {
+                            intArray.remove(index);
+                        }
+                        if (mPermissionToUids.get(permissionName).size() <= 0) {
                             mPermissionToUids.remove(permissionName);
                         }
                     }
@@ -1161,8 +1172,12 @@ public final class AppsFilterImpl extends AppsFilterLocked implements Watchable,
                 for (ParsedUsesPermission usesPermission : setting.getPkg().getUsesPermissions()) {
                     String usesPermissionName = usesPermission.getName();
                     if (mUsesPermissionToUids.containsKey(usesPermissionName)) {
-                        mUsesPermissionToUids.get(usesPermissionName).remove(setting.getAppId());
-                        if (mUsesPermissionToUids.get(usesPermissionName).isEmpty()) {
+                        IntArray intArray = mUsesPermissionToUids.get(usesPermissionName);
+                        int index = intArray.indexOf(setting.getAppId());
+                        if (index >= 0) {
+                            intArray.remove(index);
+                        }
+                        if (mUsesPermissionToUids.get(usesPermissionName).size() <= 0) {
                             mUsesPermissionToUids.remove(usesPermissionName);
                         }
                     }
