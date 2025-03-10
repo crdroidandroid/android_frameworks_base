@@ -121,6 +121,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -2323,6 +2324,7 @@ public final class GameManagerService extends IGameManagerService.Stub {
             final boolean isNotGame = Arrays.stream(packages).noneMatch(
                     p -> isPackageGame(p, userId));
             synchronized (mUidObserverLock) {
+                setGameAffinity(uid, true);
                 if (isNotGame) {
                     if (disableGameModeWhenAppTop()) {
                         if (!mGameForegroundUids.isEmpty() && mNonGameForegroundUids.isEmpty()) {
@@ -2349,6 +2351,7 @@ public final class GameManagerService extends IGameManagerService.Stub {
 
         private void handleUidMovedOffTop(int uid) {
             synchronized (mUidObserverLock) {
+                setGameAffinity(uid, false);
                 if (mGameForegroundUids.contains(uid)) {
                     mGameForegroundUids.remove(uid);
                     if (mGameForegroundUids.isEmpty() && (!disableGameModeWhenAppTop()
@@ -2364,6 +2367,47 @@ public final class GameManagerService extends IGameManagerService.Stub {
                     }
                 }
             }
+        }
+
+        private void setGameAffinity(int uid, boolean boosted) {
+            Map<String, Integer> packagePidMap = getRunningGamePidsPerPackage(uid);
+            if (packagePidMap.isEmpty()) {
+                Slog.w(TAG, "No running game process found for UID=" + uid);
+                return;
+            }
+
+            for (Map.Entry<String, Integer> entry : packagePidMap.entrySet()) {
+                int pid = entry.getValue();
+                String packageName = entry.getKey();
+
+                Process.setThreadAffinity(pid, boosted ? 0 : 2);
+                Slog.d(TAG, "Set affinity for PID=" + pid + " (Package: " + packageName + 
+                        ", UID=" + uid + ") to " + (boosted ? "big cores (boosted)" : "all cores (normal)"));
+            }
+        }
+
+        private Map<String, Integer> getRunningGamePidsPerPackage(int targetUid) {
+            Map<String, Integer> packagePidMap = new HashMap<>();
+            ActivityManager am = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
+            if (am == null) return packagePidMap;
+
+            List<ActivityManager.RunningAppProcessInfo> runningProcesses = am.getRunningAppProcesses();
+            if (runningProcesses == null) return packagePidMap;
+
+            for (ActivityManager.RunningAppProcessInfo processInfo : runningProcesses) {
+                if (processInfo.uid == targetUid) {
+                    String[] packageNames = processInfo.pkgList;
+                    if (packageNames != null) {
+                        for (String packageName : packageNames) {
+                            int userId = ActivityManager.getCurrentUser();
+                            if (isPackageGame(packageName, userId) && !packagePidMap.containsKey(packageName)) {
+                                packagePidMap.put(packageName, processInfo.pid);
+                            }
+                        }
+                    }
+                }
+            }
+            return packagePidMap;
         }
     }
 
