@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2021 Chaldeaprjkt
  * Copyright (C) 2022-2024 crDroid Android Project
+ * Copyright (C) 2025 AxionAOSP Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,17 +25,16 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.os.Handler
-import android.os.Looper
-import android.os.Message
 import android.os.PowerManager
 import android.os.RemoteException
 import android.os.UserHandle
 import android.provider.Settings
-import android.view.Display.DEFAULT_DISPLAY
+
 import com.android.systemui.dagger.SysUISingleton
 
-import java.util.Arrays
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.channels.awaitClose
 import javax.inject.Inject
 
 @SysUISingleton
@@ -42,143 +42,190 @@ class GameSpaceManager @Inject constructor(
     private val context: Context,
     private val keyguardStateController: KeyguardStateController,
 ) {
-    private val handler by lazy { GameSpaceHandler(Looper.getMainLooper()) }
     private val taskManager by lazy { ActivityTaskManager.getService() }
-
-    private var activeGame: String? = null
-    private var isRegistered = false
+    private val powerManager by lazy { context.getSystemService(Context.POWER_SERVICE) as PowerManager }
+    private val coroutineScope = CoroutineScope(Dispatchers.Main.immediate)
+    
+    private val _activeGame = MutableStateFlow<String?>(null)
+    val activeGame: StateFlow<String?> = _activeGame.asStateFlow()
+    
+    private val refreshTrigger = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
+    private var observationJob: Job? = null
 
     private val taskStackListener = object : TaskStackListener() {
-        override fun onTaskStackChanged() {
-            handler.sendEmptyMessage(MSG_UPDATE_FOREGROUND_APP)
-        }
-
-        override fun onTaskRemoved(taskId: Int) {
-            handler.post {
-                checkGameTaskRemoved(taskId)
-            }
-        }
+        override fun onTaskStackChanged() = refresh()
+        override fun onTaskRemoved(taskId: Int) = refresh()
     }
 
-    private val interactivityReceiver = object : BroadcastReceiver() {
+    private val screenReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             when (intent?.action) {
-                Intent.ACTION_SCREEN_OFF -> {
-                    activeGame = null
-                    handler.sendEmptyMessage(MSG_DISPATCH_FOREGROUND_APP)
-                }
+                Intent.ACTION_SCREEN_OFF -> _activeGame.value = null
+                Intent.ACTION_SCREEN_ON -> refresh()
             }
         }
     }
 
-    private val keyguardStateCallback = object : KeyguardStateController.Callback {
+    private val keyguardCallback = object : KeyguardStateController.Callback {
         override fun onKeyguardShowingChanged() {
-            if (keyguardStateController.isShowing) return
-            handler.sendEmptyMessage(MSG_UPDATE_FOREGROUND_APP)
+            if (!keyguardStateController.isShowing) refresh()
         }
     }
 
-    private inner class GameSpaceHandler(looper: Looper) : Handler(looper, null, true) {
-        override fun handleMessage(msg: Message) {
-            when (msg.what) {
-                MSG_UPDATE_FOREGROUND_APP -> checkForegroundApp()
-                MSG_DISPATCH_FOREGROUND_APP -> dispatchForegroundApp()
-            }
-        }
-    }
-
-    private fun checkGameTaskRemoved(taskId: Int) {
-        try {
-            val tasks = taskManager.getTasks(32, false, false, DEFAULT_DISPLAY)
-            val isGameTaskPresent = tasks.any { it.id == taskId && it.topActivity?.packageName == activeGame }
-            if (!isGameTaskPresent && activeGame != null) {
-                activeGame = null
-                handler.sendEmptyMessage(MSG_DISPATCH_FOREGROUND_APP)
-            }
-        } catch (e: RemoteException) {
-        }
-    }
-
-    private fun checkForegroundApp() {
-        handler.removeMessages(MSG_DISPATCH_FOREGROUND_APP)
-        try {
-            val info = taskManager.focusedRootTaskInfo
-            val packageName = info?.topActivity?.packageName
-            val newActiveGame = checkGameList(packageName)
-            if (activeGame != newActiveGame) {
-                activeGame = newActiveGame
-                handler.sendEmptyMessage(MSG_DISPATCH_FOREGROUND_APP)
-            }
-        } catch (e: RemoteException) {
-        }
-    }
-
-    private fun dispatchForegroundApp() {
-        val pm = context.getSystemService(Context.POWER_SERVICE) as PowerManager
-        if (!pm.isInteractive && activeGame != null) return
-
-        val action = if (activeGame != null) ACTION_GAME_START else ACTION_GAME_STOP
-        Intent(action).apply {
-            setPackage(GAMESPACE_PACKAGE)
-            component = ComponentName.unflattenFromString(RECEIVER_CLASS)
-            putExtra(EXTRA_CALLER_NAME, context.packageName)
-            if (activeGame != null) putExtra(EXTRA_ACTIVE_GAME, activeGame)
-            addFlags(
-                Intent.FLAG_RECEIVER_REPLACE_PENDING or 
-                Intent.FLAG_RECEIVER_FOREGROUND or 
-                Intent.FLAG_RECEIVER_INCLUDE_BACKGROUND
-            )
-            context.sendBroadcastAsUser(
-                this, UserHandle.CURRENT, android.Manifest.permission.MANAGE_GAME_MODE
-            )
-        }
+    init {
+        observe()
     }
 
     fun observe() {
-        if (isRegistered) {
-            taskManager.unregisterTaskStackListener(taskStackListener)
-            context.unregisterReceiver(interactivityReceiver)
-            keyguardStateController.removeCallback(keyguardStateCallback)
+        if (observationJob != null) return
+        
+        observationJob = coroutineScope.launch {
+            merge(
+                taskStackFlow(),
+                screenInteractiveFlow(),
+                keyguardStateFlow(),
+                refreshTrigger
+            ).collect {
+                updateGameState()
+            }
         }
-        taskManager.registerTaskStackListener(taskStackListener)
-        handler.sendEmptyMessage(MSG_UPDATE_FOREGROUND_APP)
-        context.registerReceiver(interactivityReceiver, IntentFilter().apply {
-            addAction(Intent.ACTION_SCREEN_OFF)
-        }, Context.RECEIVER_NOT_EXPORTED)
-        keyguardStateController.addCallback(keyguardStateCallback)
-        isRegistered = true;
+
+        registerReceivers()
     }
 
     fun unobserve() {
-        if (isRegistered) {
-            taskManager.unregisterTaskStackListener(taskStackListener)
-            context.unregisterReceiver(interactivityReceiver)
-            keyguardStateController.removeCallback(keyguardStateCallback)
-        }
-        isRegistered = false;
+        observationJob?.cancel()
+        observationJob = null
+        unregisterReceivers()
     }
-
-    fun isGameActive() = activeGame != null
 
     fun shouldSuppressFullScreenIntent() =
         Settings.System.getIntForUser(
             context.contentResolver,
             Settings.System.GAMESPACE_SUPPRESS_FULLSCREEN_INTENT, 0,
-            UserHandle.USER_CURRENT) == 1 && isGameActive()
+            UserHandle.USER_CURRENT
+        ) == 1 && activeGame.value != null
 
-    private fun checkGameList(packageName: String?): String? {
-        packageName ?: return null
+    private fun refresh() {
+        refreshTrigger.tryEmit(Unit)
+    }
+
+    private fun registerReceivers() {
+        try {
+            taskManager.registerTaskStackListener(taskStackListener)
+            context.registerReceiver(
+                screenReceiver,
+                IntentFilter().apply {
+                    addAction(Intent.ACTION_SCREEN_OFF)
+                    addAction(Intent.ACTION_SCREEN_ON)
+                },
+                Context.RECEIVER_NOT_EXPORTED
+            )
+            keyguardStateController.addCallback(keyguardCallback)
+        } catch (e: Exception) {}
+    }
+
+    private fun unregisterReceivers() {
+        try {
+            taskManager.unregisterTaskStackListener(taskStackListener)
+            context.unregisterReceiver(screenReceiver)
+            keyguardStateController.removeCallback(keyguardCallback)
+        } catch (e: Exception) {}
+    }
+
+    private fun taskStackFlow(): Flow<Unit> = callbackFlow {
+        val listener = object : TaskStackListener() {
+            override fun onTaskStackChanged() {
+                trySend(Unit)
+            }
+
+            override fun onTaskRemoved(taskId: Int) {
+                trySend(Unit)
+            }
+        }
+        try {
+            taskManager.registerTaskStackListener(listener)
+            awaitClose { taskManager.unregisterTaskStackListener(listener) }
+        } catch (e: Exception) {
+            close(e)
+        }
+    }
+
+    private fun screenInteractiveFlow(): Flow<Boolean> = callbackFlow {
+        val filter = IntentFilter().apply {
+            addAction(Intent.ACTION_SCREEN_OFF)
+            addAction(Intent.ACTION_SCREEN_ON)
+        }
+        val receiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                intent?.action?.let { action ->
+                    trySend(action == Intent.ACTION_SCREEN_ON)
+                }
+            }
+        }
+        context.registerReceiver(receiver, filter, Context.RECEIVER_NOT_EXPORTED)
+        awaitClose { context.unregisterReceiver(receiver) }
+    }
+
+    private fun keyguardStateFlow(): Flow<Boolean> = callbackFlow {
+        val callback = object : KeyguardStateController.Callback {
+            override fun onKeyguardShowingChanged() {
+                trySend(keyguardStateController.isShowing)
+            }
+        }
+        keyguardStateController.addCallback(callback)
+        awaitClose { keyguardStateController.removeCallback(callback) }
+    }
+
+    private suspend fun updateGameState() {
+        if (!powerManager.isInteractive || keyguardStateController.isShowing) {
+            _activeGame.value = null
+            return
+        }
+
+        val currentPackage = getForegroundPackage() ?: run {
+            _activeGame.value = null
+            return
+        }
+
+        _activeGame.value = if (isInGameList(currentPackage)) currentPackage else null
+        dispatchGameState()
+    }
+
+    private suspend fun getForegroundPackage(): String? = try {
+        withContext(Dispatchers.IO) {
+            taskManager.focusedRootTaskInfo?.topActivity?.packageName
+        }
+    } catch (e: RemoteException) {
+        null
+    }
+
+    private fun isInGameList(packageName: String): Boolean {
         val games = Settings.System.getStringForUser(
             context.contentResolver,
             Settings.System.GAMESPACE_GAME_LIST,
-            UserHandle.USER_CURRENT)
+            UserHandle.USER_CURRENT
+        ) ?: return false
 
-        if (games.isNullOrEmpty())
-            return null
+        return games.split(";").any { it.split("=").first() == packageName }
+    }
 
-        return games.split(";")
-            .map { it.split("=").first() }
-            .firstOrNull { it == packageName }
+    private fun dispatchGameState() {
+        val action = if (_activeGame.value != null) ACTION_GAME_START else ACTION_GAME_STOP
+        Intent(action).apply {
+            setPackage(GAMESPACE_PACKAGE)
+            component = ComponentName.unflattenFromString(RECEIVER_CLASS)
+            putExtra(EXTRA_CALLER_NAME, context.packageName)
+            _activeGame.value?.let { putExtra(EXTRA_ACTIVE_GAME, it) }
+            addFlags(
+                Intent.FLAG_RECEIVER_REPLACE_PENDING or
+                        Intent.FLAG_RECEIVER_FOREGROUND or
+                        Intent.FLAG_RECEIVER_INCLUDE_BACKGROUND
+            )
+            context.sendBroadcastAsUser(
+                this, UserHandle.CURRENT, android.Manifest.permission.MANAGE_GAME_MODE
+            )
+        }
     }
 
     companion object {
@@ -188,7 +235,5 @@ class GameSpaceManager @Inject constructor(
         private const val RECEIVER_CLASS = "io.chaldeaprjkt.gamespace/.gamebar.GameBroadcastReceiver"
         private const val EXTRA_CALLER_NAME = "source"
         private const val EXTRA_ACTIVE_GAME = "package_name"
-        private const val MSG_UPDATE_FOREGROUND_APP = 0
-        private const val MSG_DISPATCH_FOREGROUND_APP = 1
     }
 }
