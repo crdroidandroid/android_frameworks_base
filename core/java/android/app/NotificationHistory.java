@@ -256,6 +256,10 @@ public final class NotificationHistory implements Parcelable {
             mParcel.setDataPosition(0);
             mParcel.appendFrom(data, data.dataPosition(), listByteLength);
             mParcel.setDataSize(mParcel.dataPosition());
+            if (positionInParcel > mParcel.dataSize()) {
+                throw new IllegalStateException(
+                    "Obtained an invalid position value(" + positionInParcel + " from Parcel.");
+            }
             mParcel.setDataPosition(positionInParcel);
         }
     }
