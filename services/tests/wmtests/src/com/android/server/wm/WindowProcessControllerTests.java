@@ -379,12 +379,18 @@ public class WindowProcessControllerTests extends WindowTestsBase {
         assertFalse(tracker.hasResumedActivity(mWpc.mUid));
         assertTrue(mWpc.hasForegroundActivities());
 
-        activity.setVisibility(false);
         activity.setVisibleRequested(false);
-        activity.setState(STOPPED, "test");
 
+        if (com.android.window.flags.Flags.useVisibleRequestedForProcessTracker()) {
+            assertTrue("PAUSING is visible", mWpc.hasVisibleActivities());
+            activity.setState(PAUSED, "test");
+        } else {
+            activity.setVisible(false);
+        }
         verify(tracker).onAllActivitiesInvisible(mWpc);
         assertFalse(mWpc.hasVisibleActivities());
+
+        activity.setState(STOPPED, "test");
         assertFalse(mWpc.hasForegroundActivities());
     }
 
