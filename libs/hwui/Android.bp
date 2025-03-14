@@ -705,6 +705,7 @@ cc_library {
             version_script: "libhwui.map.txt",
         },
     },
+    lto_Instr100: true,
     afdo: true,
 }
 
