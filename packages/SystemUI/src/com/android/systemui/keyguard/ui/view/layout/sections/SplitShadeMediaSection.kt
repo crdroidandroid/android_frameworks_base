@@ -66,7 +66,7 @@ constructor(
         constraintSet.apply {
             constrainWidth(mediaContainerId, MATCH_CONSTRAINT)
             constrainHeight(mediaContainerId, WRAP_CONTENT)
-            connect(mediaContainerId, TOP, R.id.smart_space_barrier_bottom, BOTTOM)
+            connect(mediaContainerId, TOP, R.id.keyguard_slice_view, BOTTOM)
             connect(mediaContainerId, START, PARENT_ID, START)
             connect(mediaContainerId, END, R.id.split_shade_guideline, END)
         }
