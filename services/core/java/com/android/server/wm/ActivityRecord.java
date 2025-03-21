@@ -232,6 +232,7 @@ import static com.android.server.wm.StartingData.AFTER_TRANSACTION_IDLE;
 import static com.android.server.wm.StartingData.AFTER_TRANSACTION_REMOVE_DIRECTLY;
 import static com.android.server.wm.SurfaceAnimator.ANIMATION_TYPE_APP_TRANSITION;
 import static com.android.server.wm.SurfaceAnimator.ANIMATION_TYPE_PREDICT_BACK;
+import static com.android.server.wm.SurfaceAnimator.ANIMATION_TYPE_STARTING_REVEAL;
 import static com.android.server.wm.SurfaceAnimator.ANIMATION_TYPE_WINDOW_ANIMATION;
 import static com.android.server.wm.TaskFragment.TASK_FRAGMENT_VISIBILITY_VISIBLE;
 import static com.android.server.wm.TaskPersister.DEBUG;
@@ -2721,6 +2722,8 @@ public final class ActivityRecord extends WindowToken implements WindowManagerSe
             return;
         }
         try {
+            // Mark splash screen copy as finished to ensure proper reparenting during transition.
+            mStartingWindow.setCopySplashScreenFinish(true);
             mTransferringSplashScreenState = TRANSFER_SPLASH_SCREEN_ATTACH_TO_CLIENT;
             final TransferSplashScreenViewStateItem item =
                     new TransferSplashScreenViewStateItem(token, parcelable, windowAnimationLeash);
@@ -2731,6 +2734,7 @@ public final class ActivityRecord extends WindowToken implements WindowManagerSe
             mStartingWindow.cancelAnimation();
             parcelable.clearIfNeeded();
             mTransferringSplashScreenState = TRANSFER_SPLASH_SCREEN_FINISH;
+            mStartingWindow.setCopySplashScreenFinish(false);
         }
     }
 
@@ -4710,7 +4714,8 @@ public final class ActivityRecord extends WindowToken implements WindowManagerSe
                 // Post cleanup after the visibility and animation are transferred.
                 fromActivity.postWindowRemoveStartingWindowCleanup(tStartingWindow);
                 fromActivity.mVisibleSetFromTransferredStartingWindow = false;
-
+                // Ensure the starting window is correctly reparented to prevent residual surfaces or black screens.
+                validateAndReparentStartingWindowIfNeeded(fromActivity, this);
                 mWmService.updateFocusedWindowLocked(
                         UPDATE_FOCUS_WILL_PLACE_SURFACES, true /*updateInputWindows*/);
                 getDisplayContent().setLayoutNeeded();
@@ -4734,6 +4739,44 @@ public final class ActivityRecord extends WindowToken implements WindowManagerSe
         // TODO: Transfer thumbnail
 
         return false;
+    }
+
+    /**
+     * Ensures the starting window (`mStartingWindow`) is properly reparented during activity transition.
+     * Prevents residual attachment to the animation leash (starting_reveal), avoiding black screens or invisible surfaces.
+     *
+     * Validates the source (`from`), destination (`to`), and required `SurfaceControl` instances.
+     * If conditions are met, reparents the splash screen from the animation leash to the target activity's surface,
+     * ensuring a smooth transition without rendering issues.
+     *
+     * @param from The source ActivityRecord (previous activity).
+     * @param to The target ActivityRecord (new activity).
+     */
+    private void validateAndReparentStartingWindowIfNeeded(ActivityRecord from, ActivityRecord to) {
+        if (from == null || to == null) return;
+
+        WindowState startingWindow = to.mStartingWindow;
+        SurfaceControl targetSurface = to.getSurfaceControl();
+
+        if (startingWindow == null || targetSurface == null) return;
+
+        SurfaceControl startingWindowLeash = startingWindow.getAnimationLeash();
+        SurfaceControl startingWindowSC = startingWindow.getSurfaceControl();
+
+        if (startingWindowLeash == null || !startingWindowLeash.isValid()
+                || startingWindowSC == null || !startingWindowSC.isValid()) {
+            return;
+        }
+
+        boolean hasSplashScreenCopied = startingWindow.isCopySplashScreenFinish();
+        if (hasSplashScreenCopied && startingWindow.isSelfAnimating(0, ANIMATION_TYPE_STARTING_REVEAL)) {
+            ProtoLog.v(WM_DEBUG_STARTING_WINDOW,
+                    "Reparenting starting window to target ActivityRecord during transferStartingWindow. "
+                            + "From: %s, To: %s, Starting Window: %s, Starting Animation Leash: %s",
+                    from, to, startingWindow, startingWindowLeash);
+
+            to.getSyncTransaction().reparent(startingWindowSC, targetSurface);
+        }
     }
 
     /**
