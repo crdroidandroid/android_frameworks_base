@@ -1,18 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     Copyright (C) 2016-2024 crDroid Android Project
-
-     Licensed under the Apache License, Version 2.0 (the "License");
-     you may not use this file except in compliance with the License.
-     You may obtain a copy of the License at
-
-          http://www.apache.org/licenses/LICENSE-2.0
-
-     Unless required by applicable law or agreed to in writing, software
-     distributed under the License is distributed on an "AS IS" BASIS,
-     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-     See the License for the specific language governing permissions and
-     limitations under the License.
+     SPDX-FileCopyrightText: 2016-2025 crDroid Android Project
+     SPDX-License-Identifier: Apache-2.0
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Statusbar Icons -->
@@ -24,7 +13,7 @@
         <item quantity="one">%d seade ühendatud</item>
         <item quantity="other">%d seadet ühendatud</item>
     </plurals>
-    <!-- Text to use when the number in a notification info is too large -->
+    <!-- Notification counter -->
     <!-- Name of the roaming status bar icon. -->
     <string name="status_bar_roaming">Rändlusindikaator</string>
     <!-- Name of the HD calling status bar icon. -->
@@ -145,4 +134,6 @@
     <string name="face_unlock_recognizing">Näotuvastus...</string>
     <!-- 5G toggle in Internet Dialog -->
     <string name="enable_fiveg">Luba 5G</string>
+    <!-- Toast for timer chips long press -->
+    <string name="chip_longpress_hint">Long press to directly stop</string>
 </resources>
