@@ -2756,7 +2756,6 @@ public class TelephonyRegistry extends ITelephonyRegistry.Stub {
             }
             handleRemoveListLocked();
         }
-        broadcastRadioPowerStateChanged(state, phoneId, subId);
     }
 
     @Override
@@ -2894,6 +2893,7 @@ public class TelephonyRegistry extends ITelephonyRegistry.Stub {
             }
             handleRemoveListLocked();
         }
+        broadcastRadioPowerStateChanged(state, phoneId, subId);
     }
 
     @Override
