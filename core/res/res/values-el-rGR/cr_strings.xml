@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: 2016-2025 crDroid Android Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Button that copies the url to the log of a crashed application -->
+    <string name="aerr_copy">Αντιγραφή διεύθυνσης URL σφάλματος</string>
+    <string name="url_copy_success">Το URL αντιγράφηκε με επιτυχία</string>
+    <string name="url_copy_failed">Παρουσιάστηκε σφάλμα κατά τη μεταφόρτωση του αρχείου καταγραφής στο Pasty</string>
+    <!-- Lock gesture -->
+    <string name="gesture_locked_warning">Σύρετε ξανά για να ξεκλειδώσετε τις χειρονομίες</string>
+    <!-- Pocket Lock -->
+    <string name="pocket_mode_title">Η λειτουργία τσέπης είναι ενεργή</string>
+    <string name="pocket_mode_illustration_description">Απεικόνιση του τηλεφώνου στην τσέπη</string>
+    <string name="pocket_mode_instructions_header">Για να χρησιμοποιήσετε το τηλέφωνό σας:</string>
+    <string name="pocket_mode_instruction_step1">1. Βεβαιωθείτε ότι η μπλε περιοχή (αισθητήρας εγγύτητας) που παρουσιάζεται παραπάνω είναι ανεμπόδιστη και απαλλαγμένη από βρωμιά ή σκόνη.</string>
+    <string name="pocket_mode_instruction_step2">2. Πατήστε και κρατήστε πατημένο το κουμπί τροφοδοσίας για να βγείτε από τη λειτουργία τσέπης.</string>
+    <!-- App lock -->
+    <string name="unlock_application">Ξεκλείδωμα <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
+    <!-- Cycle through ringer modes -->
+    <string name="volume_dialog_ringer_guidance_normal">Οι κλήσεις και οι ειδοποιήσεις θα ηχούν</string>
+</resources>
