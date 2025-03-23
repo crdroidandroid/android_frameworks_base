@@ -84,15 +84,17 @@ public class ThemeUtils {
 
         try {
             if (target.equals(packageName)) {
-                mOverlayManager.setEnabled(currentPackageName, false, USER_SYSTEM);
+                if (currentPackageName != null) {
+                    mOverlayManager.setEnabled(currentPackageName, false, USER_SYSTEM);
+                }
             } else {
-                mOverlayManager.setEnabledExclusiveInCategory(packageName,
-                        USER_SYSTEM);
+                mOverlayManager.setEnabledExclusiveInCategory(packageName, USER_SYSTEM);
             }
 
             writeSettings(category, packageName, target.equals(packageName));
 
         } catch (RemoteException e) {
+            Log.e(TAG, "RemoteException while setting overlay: " + e.getMessage(), e);
         }
     }
 
@@ -153,7 +155,7 @@ public class ThemeUtils {
                 }
             }
         } catch (RemoteException re) {
-            throw re.rethrowFromSystemServer();
+            Log.e(TAG, "RemoteException while getting overlay info: " + re.getMessage(), re);
         }
         filteredInfos.sort(OVERLAY_INFO_COMPARATOR);
         return filteredInfos;
@@ -161,18 +163,22 @@ public class ThemeUtils {
 
     public List<Typeface> getFonts() {
         final List<Typeface> fontlist = new ArrayList<>();
-            for (String overlayPackage : getOverlayPackagesForCategory(FONT_KEY)) {
-                try {
-                    overlayRes = overlayPackage.equals("android") ? Resources.getSystem()
-                           : pm.getResourcesForApplication(overlayPackage);
-                    final String font = overlayRes.getString(
-                            overlayRes.getIdentifier("config_bodyFontFamily",
-                            "string", overlayPackage));
-                    fontlist.add(Typeface.create(font, Typeface.NORMAL));
-                } catch (NameNotFoundException | NotFoundException e) {
-                // Do nothing
+                for (String overlayPackage : getOverlayPackagesForCategory(FONT_KEY)) {
+            Resources overlayRes = null;
+            try {
+                overlayRes = overlayPackage.equals("android") ? Resources.getSystem()
+                        : pm.getResourcesForApplication(overlayPackage);
+                if (overlayRes != null) {
+                    int fontId = overlayRes.getIdentifier("config_bodyFontFamily", "string", overlayPackage);
+                    if (fontId != 0) {
+                        String fontName = overlayRes.getString(fontId);
+                        fontlist.add(Typeface.create(fontName, Typeface.NORMAL));
+                    }
                 }
+            } catch (NameNotFoundException | NotFoundException e) {
+                Log.e(TAG, "Error fetching fonts for package: " + overlayPackage, e);
             }
+        }
         return fontlist;
     }
 
@@ -195,6 +201,10 @@ public class ThemeUtils {
         } catch (NameNotFoundException | NotFoundException e) {
             // Do nothing
         }
+        if (overlayRes == null) {
+            Log.e(TAG, "Resources not found for package: " + overlayPackage);
+            return null;
+        }
         final String shape = overlayRes.getString(
             overlayRes.getIdentifier("config_icon_mask",
             "string", overlayPackage));
@@ -212,24 +222,13 @@ public class ThemeUtils {
             OverlayInfo info = mOverlayManager.getOverlayInfo(overlayPackage, USER_SYSTEM);
             return info == null ? false : info.isEnabled();
         } catch (RemoteException e) {
-            e.printStackTrace();
+            Log.e(TAG, "RemoteException while checking if overlay is enabled: " + e.getMessage(), e);
         }
         return false;
     }
 
     public boolean isDefaultOverlay(String category) {
-        for (String overlayPackage : getOverlayPackagesForCategory(category)) {
-            try {
-                OverlayInfo info = mOverlayManager.getOverlayInfo(overlayPackage, USER_SYSTEM);
-                if (info != null && info.isEnabled()) {
-                    return false;
-                } else {
-                    continue;
-                }
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        }
-        return true;
+        return getOverlayPackagesForCategory(category).stream()
+               .noneMatch(pkg -> isOverlayEnabled(pkg));
     }
 }
