@@ -15,11 +15,14 @@
  */
 package com.android.systemui.qs.customize;
 
+import static com.android.systemui.Flags.notificationShadeBlur;
+
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -71,8 +74,16 @@ public class QSCustomizer extends LinearLayout {
         super(context, attrs);
 
         LayoutInflater.from(getContext()).inflate(R.layout.qs_customize_panel_content, this);
-        mClipper = new QSDetailClipper(findViewById(R.id.customize_container));
+        View customizeContainer = findViewById(R.id.customize_container);
+        if (notificationShadeBlur()) {
+            customizeContainer
+                    .setBackgroundResource(R.drawable.qs_customizer_background_transparent);
+        }
+        mClipper = new QSDetailClipper(customizeContainer);
         mToolbar = findViewById(com.android.internal.R.id.action_bar);
+        if (notificationShadeBlur()) {
+            mToolbar.setBackgroundColor(Color.TRANSPARENT);
+        }
         TypedValue value = new TypedValue();
         mContext.getTheme().resolveAttribute(android.R.attr.homeAsUpIndicator, value, true);
         mToolbar.setNavigationIcon(
@@ -108,7 +119,9 @@ public class QSCustomizer extends LinearLayout {
                 findViewById(R.id.nav_bar_background).setVisibility(View.GONE);
             } else {
                 findViewById(R.id.nav_bar_background)
-                        .setVisibility(mIsShowingNavBackdrop ? View.VISIBLE : View.GONE);
+                        .setVisibility(
+                                mIsShowingNavBackdrop && !notificationShadeBlur() ? View.VISIBLE
+                                        : View.GONE);
             }
         }
     }
@@ -124,7 +137,8 @@ public class QSCustomizer extends LinearLayout {
                 || newConfig.orientation != Configuration.ORIENTATION_LANDSCAPE;
         if (navBackdrop != null) {
             navBackdrop.setVisibility(
-                    mIsShowingNavBackdrop && !mSceneContainerEnabled ? View.VISIBLE : View.GONE);
+                    mIsShowingNavBackdrop && !mSceneContainerEnabled && !notificationShadeBlur()
+                            ? View.VISIBLE : View.GONE);
         }
         updateNavColors(lightBarController);
     }
