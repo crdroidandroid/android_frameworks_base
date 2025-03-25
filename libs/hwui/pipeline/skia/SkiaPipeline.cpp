@@ -44,7 +44,6 @@
 
 #include <sstream>
 
-#include "LightingInfo.h"
 #include "VectorDrawable.h"
 #include "include/gpu/GpuTypes.h"  // from Skia
 #include "thread/CommonPool.h"
@@ -88,20 +87,12 @@ bool SkiaPipeline::renderLayerImpl(RenderNode* layerNode, const Rect& layerDamag
 
     SkCanvas* layerCanvas = layerNode->getLayerSurface()->getCanvas();
 
-    int saveCount = layerCanvas->save();
-    SkASSERT(saveCount == 1);
+    SkASSERT(layerCanvas->getSaveCount() == 1);
+    SkAutoCanvasRestore saver(layerCanvas, true);
 
     layerCanvas->androidFramework_setDeviceClipRestriction(layerDamage.toSkIRect());
 
-    // TODO: put localized light center calculation and storage to a drawable related code.
-    // It does not seem right to store something localized in a global state
-    // fix here and in recordLayers
-    const Vector3 savedLightCenter(LightingInfo::getLightCenterRaw());
-    Vector3 transformedLightCenter(savedLightCenter);
-    // map current light center into RenderNode's coordinate space
-    layerNode->getSkiaLayer()->inverseTransformInWindow.mapPoint3d(transformedLightCenter);
-    LightingInfo::setLightCenterRaw(transformedLightCenter);
-
+    AutoLightingInfoRestore restoreLightingInfo(layerNode);
     const RenderProperties& properties = layerNode->properties();
     const SkRect bounds = SkRect::MakeWH(properties.getWidth(), properties.getHeight());
     if (properties.getClipToBounds() && layerCanvas->quickReject(bounds)) {
@@ -116,9 +107,6 @@ bool SkiaPipeline::renderLayerImpl(RenderNode* layerNode, const Rect& layerDamag
 
     RenderNodeDrawable root(layerNode, layerCanvas, false);
     root.forceDraw(layerCanvas);
-    layerCanvas->restoreToCount(saveCount);
-
-    LightingInfo::setLightCenterRaw(savedLightCenter);
     return true;
 }
 
