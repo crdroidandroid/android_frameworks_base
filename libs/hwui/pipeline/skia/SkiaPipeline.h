@@ -21,6 +21,7 @@
 #include <SkSurface.h>
 
 #include "Lighting.h"
+#include "LightingInfo.h"
 #include "hwui/AnimatedImageDrawable.h"
 #include "renderthread/CanvasContext.h"
 #include "renderthread/HardwareBufferRenderParams.h"
@@ -120,7 +121,28 @@ private:
         // A mode which records a single frame to a normal SKP file.
         SingleFrameSKP,
     };
-  CaptureMode mCaptureMode = CaptureMode::None;
+    CaptureMode mCaptureMode = CaptureMode::None;
+
+    class AutoLightingInfoRestore {
+    public:
+        AutoLightingInfoRestore(RenderNode* node)
+                : mSavedLightCenter(LightingInfo::getLightCenterRaw()) {
+            // TODO: put localized light center calculation and storage to a drawable related code.
+            // It does not seem right to store something localized in a global state
+            // fix here and in recordLayers
+            Vector3 transformedLightCenter(mSavedLightCenter);
+            // map current light center into RenderNode's coordinate space
+            node->getSkiaLayer()->inverseTransformInWindow.mapPoint3d(transformedLightCenter);
+            LightingInfo::setLightCenterRaw(transformedLightCenter);
+        }
+
+        ~AutoLightingInfoRestore() {
+            LightingInfo::setLightCenterRaw(mSavedLightCenter);
+        }
+
+    private:
+        Vector3 mSavedLightCenter;
+    };
 
     /**
      * mCapturedFile - the filename to write a recorded SKP to in either MultiFrameSKP or
