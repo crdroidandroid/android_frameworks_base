@@ -27,6 +27,7 @@ import com.android.systemui.statusbar.VibratorHelper
 import com.google.android.msdl.data.model.MSDLToken
 import com.google.android.msdl.domain.InteractionProperties
 import com.google.android.msdl.domain.MSDLPlayer
+import kotlinx.coroutines.*
 import kotlin.math.abs
 import kotlin.math.min
 import kotlin.math.pow
@@ -49,6 +50,8 @@ class SliderHapticFeedbackProvider(
     private val clock: com.android.systemui.util.time.SystemClock,
 ) : SliderStateListener {
 
+    private var dragVibrationJob: Job? = null
+
     private val velocityAccelerateInterpolator =
         AccelerateInterpolator(config.velocityInterpolatorFactor)
     private val positionAccelerateInterpolator =
@@ -61,6 +64,9 @@ class SliderHapticFeedbackProvider(
         vibratorHelper.getPrimitiveDurations(VibrationEffect.Composition.PRIMITIVE_LOW_TICK)[0]
     private var hasVibratedAtLowerBookend = false
     private var hasVibratedAtUpperBookend = false
+    
+    private val doubleClickEffect = VibrationEffect.createPredefined(VibrationEffect.EFFECT_DOUBLE_CLICK)
+    private val textureClickEffect = VibrationEffect.createPredefined(VibrationEffect.EFFECT_TEXTURE_TICK)
 
     /** Time threshold to wait before making new API call. */
     private val thresholdUntilNextDragCallMillis =
@@ -81,11 +87,7 @@ class SliderHapticFeedbackProvider(
                 )
             msdlPlayer.playToken(MSDLToken.DRAG_THRESHOLD_INDICATOR_LIMIT, properties)
         } else {
-            val vibration =
-                VibrationEffect.startComposition()
-                    .addPrimitive(VibrationEffect.Composition.PRIMITIVE_CLICK, powerScale)
-                    .compose()
-            vibratorHelper.vibrate(vibration, VIBRATION_ATTRIBUTES_PIPELINING)
+            vibratorHelper.vibrate(doubleClickEffect, VIBRATION_ATTRIBUTES_PIPELINING)
         }
     }
 
@@ -156,11 +158,7 @@ class SliderHapticFeedbackProvider(
                 InteractionProperties.DynamicVibrationScale(scale, VIBRATION_ATTRIBUTES_PIPELINING)
             msdlPlayer.playToken(MSDLToken.DRAG_INDICATOR_DISCRETE, properties)
         } else {
-            val effect =
-                VibrationEffect.startComposition()
-                    .addPrimitive(VibrationEffect.Composition.PRIMITIVE_TICK, scale)
-                    .compose()
-            vibratorHelper.vibrate(effect, VIBRATION_ATTRIBUTES_PIPELINING)
+            vibratorHelper.vibrate(textureClickEffect, VIBRATION_ATTRIBUTES_PIPELINING)
         }
     }
 
@@ -170,11 +168,13 @@ class SliderHapticFeedbackProvider(
                 InteractionProperties.DynamicVibrationScale(scale, VIBRATION_ATTRIBUTES_PIPELINING)
             msdlPlayer.playToken(MSDLToken.DRAG_INDICATOR_CONTINUOUS, properties)
         } else {
-            val composition = VibrationEffect.startComposition()
-            repeat(config.numberOfLowTicks) {
-                composition.addPrimitive(VibrationEffect.Composition.PRIMITIVE_LOW_TICK, scale)
+            dragVibrationJob?.cancel()
+            dragVibrationJob = CoroutineScope(Dispatchers.Default).launch {
+                repeat(config.numberOfLowTicks) {
+                    vibratorHelper.vibrate(textureClickEffect, VIBRATION_ATTRIBUTES_PIPELINING)
+                    delay(80)
+                }
             }
-            vibratorHelper.vibrate(composition.compose(), VIBRATION_ATTRIBUTES_PIPELINING)
         }
     }
 
