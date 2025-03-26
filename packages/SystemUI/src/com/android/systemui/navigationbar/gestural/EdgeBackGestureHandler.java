@@ -86,6 +86,7 @@ import androidx.annotation.DimenRes;
 
 import com.android.internal.config.sysui.SystemUiDeviceConfigFlags;
 import com.android.internal.policy.GestureNavigationSettingsObserver;
+import com.android.internal.util.crdroid.Utils;
 import com.android.systemui.LauncherProxyService;
 import com.android.systemui.contextualeducation.GestureType;
 import com.android.systemui.dagger.qualifiers.Background;
@@ -154,6 +155,8 @@ public class EdgeBackGestureHandler implements TunerService.Tunable {
             "lineagesystem:" + LineageSettings.System.KEY_EDGE_LONG_SWIPE_ACTION;
     private static final String BACK_GESTURE_HEIGHT =
             "system:" + Settings.System.BACK_GESTURE_HEIGHT;
+    private static final String FORCE_SHOW_NAVBAR =
+            "lineagesystem:" + LineageSettings.System.FORCE_SHOW_NAVBAR;
 
     private static final int MAX_NUM_LOGGED_PREDICTIONS = 10;
     private static final int MAX_NUM_LOGGED_GESTURES = 10;
@@ -342,6 +345,8 @@ public class EdgeBackGestureHandler implements TunerService.Tunable {
 
     private final GestureNavigationSettingsObserver mGestureNavigationSettingsObserver;
     private final TopUiController mTopUiController;
+
+    private boolean mNavbarVisible;
 
     private final NavigationEdgeBackPlugin.BackCallback mBackCallback =
             new NavigationEdgeBackPlugin.BackCallback() {
@@ -612,6 +617,9 @@ public class EdgeBackGestureHandler implements TunerService.Tunable {
                 && mButtonForcedVisibleCallback != null) {
             mButtonForcedVisibleCallback.accept(mIsButtonForcedVisible);
         }
+        mNavbarVisible = LineageSettings.System.getIntForUser(mContext.getContentResolver(),
+                LineageSettings.System.FORCE_SHOW_NAVBAR, Utils.hasNavbarByDefault(mContext) ? 1 : 0,
+                UserHandle.USER_CURRENT) != 0;
 
         final DisplayMetrics dm = res.getDisplayMetrics();
         final float defaultGestureHeight = res.getDimension(
@@ -689,6 +697,7 @@ public class EdgeBackGestureHandler implements TunerService.Tunable {
         mUserTracker.addCallback(mUserChangedCallback, mUiThreadContext.getExecutor());
         mTunerService.addTunable(this, KEY_EDGE_LONG_SWIPE_ACTION);
         mTunerService.addTunable(this, BACK_GESTURE_HEIGHT);
+        mTunerService.addTunable(this, FORCE_SHOW_NAVBAR);
     }
 
     /**
@@ -814,7 +823,7 @@ public class EdgeBackGestureHandler implements TunerService.Tunable {
 
             mIsGestureHandlingEnabled = mInGestureNavMode || (mUsingThreeButtonNav
                     && !mTrackpadsConnected.isEmpty());
-            boolean isEnabled = mIsAttached && mIsGestureHandlingEnabled;
+            boolean isEnabled = mIsAttached && mIsGestureHandlingEnabled && mNavbarVisible;
             if (isEnabled == mIsEnabled) {
                 return;
             }
@@ -950,6 +959,10 @@ public class EdgeBackGestureHandler implements TunerService.Tunable {
         } else if (BACK_GESTURE_HEIGHT.equals(key)) {
             mEdgeHeightSetting = TunerService.parseInteger(newValue, 0);
             updateEdgeHeightValue();
+        } else if (FORCE_SHOW_NAVBAR.equals(key)) {
+            mNavbarVisible =
+                TunerService.parseIntegerSwitch(newValue, Utils.hasNavbarByDefault(mContext));
+            updateIsEnabled();
         }
     }
 
