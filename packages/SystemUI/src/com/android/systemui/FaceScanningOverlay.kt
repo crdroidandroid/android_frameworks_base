@@ -41,6 +41,7 @@ import com.android.systemui.plugins.statusbar.StatusBarStateController
 import com.android.systemui.res.R
 import com.android.systemui.shade.domain.interactor.ShadeInteractor
 import com.android.systemui.statusbar.phone.FaceUnlockImageView
+import com.android.systemui.statusbar.phone.FaceUnlockProxy
 import com.android.systemui.util.asIndenting
 import java.io.PrintWriter
 import java.util.concurrent.Executor
@@ -133,7 +134,7 @@ class FaceScanningOverlay(
         // Delay the relayout until the end of the animation when hiding,
         // otherwise we'd clip it.
         if (showScanningAnim) {
-            FaceUnlockImageView.setBouncerState(FaceUnlockImageView.State.SCANNING)
+            FaceUnlockProxy.INSTANCE().setBouncerState(FaceUnlockImageView.State.SCANNING)
             visibility = View.VISIBLE
             requestLayout()
         }
@@ -155,7 +156,7 @@ class FaceScanningOverlay(
             )
         rimAnimator?.start()
         if (faceAuthSucceeded) {
-            FaceUnlockImageView.setBouncerState(FaceUnlockImageView.State.SUCCESS)
+            FaceUnlockProxy.INSTANCE().setBouncerState(FaceUnlockImageView.State.SUCCESS)
         }
     }
 
