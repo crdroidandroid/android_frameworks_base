@@ -63,27 +63,6 @@ class FaceUnlockImageView @JvmOverloads constructor(
     private var mDozing = false
     private val statusBarStateController: StatusBarStateController = Dependency.get(StatusBarStateController::class.java)
 
-    companion object {
-        private var instance: FaceUnlockImageView? = null
-
-        @JvmStatic
-        fun setBouncerState(state: State) {
-            instance?.postDelayed({
-                instance?.setState(state)
-            }, 100)
-        }
-
-        @JvmStatic
-        fun setInstance(instance: FaceUnlockImageView) {
-            this.instance = instance
-        }
-
-        @JvmStatic
-        fun getInstance(): FaceUnlockImageView? {
-            return instance
-        }
-    }
-
     private val statusBarStateListener = object : StatusBarStateController.StateListener {
         override fun onStateChanged(newState: Int) {}
 
@@ -105,7 +84,7 @@ class FaceUnlockImageView @JvmOverloads constructor(
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        setInstance(this)
+        FaceUnlockProxy.INSTANCE().setFaceUnlockView(this)
         updateColor()
         statusBarStateController.addCallback(statusBarStateListener)
         statusBarStateListener.onDozingChanged(statusBarStateController.isDozing())
