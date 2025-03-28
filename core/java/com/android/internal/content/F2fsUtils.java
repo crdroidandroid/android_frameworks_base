@@ -266,7 +266,10 @@ public final class F2fsUtils {
         final ArrayList<File> files = new ArrayList<>();
         for (File f : allFiles) {
             if (f.isDirectory()) {
-                files.addAll(getFilesRecursive(f));
+                List<File> inner = getFilesRecursive(f);
+                if (inner != null) {
+                    files.addAll(inner);
+                }
             } else if (f.isFile()) {
                 files.add(f);
             }
