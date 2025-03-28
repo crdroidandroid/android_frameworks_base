@@ -160,7 +160,8 @@ constructor(
         return ClockSizeSetting.fromSettingValue(
             secureSettings.getIntForUser(
                 Settings.Secure.LOCKSCREEN_USE_DOUBLE_LINE_CLOCK,
-                /* defaultValue= */ 1,
+                context.resources
+                    .getInteger(com.android.internal.R.integer.config_doublelineClockDefault),
                 UserHandle.USER_CURRENT,
             )
         )
