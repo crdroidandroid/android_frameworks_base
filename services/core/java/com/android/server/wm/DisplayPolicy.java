@@ -532,7 +532,7 @@ public class DisplayPolicy {
                 public void onFling(int duration) {
                     if (mService.mPowerManagerInternal != null) {
                         mService.mPowerManagerInternal.setPowerBoost(
-                                Boost.INTERACTION, duration);
+                                Boost.DISPLAY_UPDATE_IMMINENT, duration);
                     }
                 }
 
