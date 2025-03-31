@@ -64,6 +64,7 @@
     <dimen name="widget_title_font_size">20dp</dimen>
     <dimen name="widget_title_line_height">24dp</dimen>
     <dimen name="header_icon_size">16dp</dimen>
+    <dimen name="header_title_vertical_padding">4dp</dimen>
     <!-- Slice subtitle -->
     <dimen name="widget_label_font_size">16dp</dimen>
     <dimen name="widget_label_line_height">20dp</dimen>
