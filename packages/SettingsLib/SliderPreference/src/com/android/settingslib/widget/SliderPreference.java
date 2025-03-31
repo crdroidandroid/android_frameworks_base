@@ -300,7 +300,6 @@ public class SliderPreference extends Preference {
         mSlider.clearOnChangeListeners();
         mSlider.addOnChangeListener(mChangeListener);
         mSlider.setEnabled(isEnabled());
-        mSlider.setFocusable(isSelectable());
         mSlider.setClickable(isSelectable());
 
         // Set up slider color
