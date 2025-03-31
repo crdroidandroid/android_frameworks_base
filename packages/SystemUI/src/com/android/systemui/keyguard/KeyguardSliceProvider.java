@@ -237,7 +237,7 @@ public class KeyguardSliceProvider extends SliceProvider implements
     }
 
     protected void addDateLocked(ListBuilder builder) {
-        builder.addRow(new RowBuilder(mDateUri).setTitle(mLastText));
+        builder.setHeader(new ListBuilder.HeaderBuilder(mDateUri).setTitle(mLastText));
     }
 
     protected boolean needsMediaLocked() {
