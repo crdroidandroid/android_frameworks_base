@@ -33,6 +33,7 @@
               android:visibility="gone"
               android:textColor="?attr/wallpaperTextColor"
               android:theme="@style/TextAppearance.Keyguard"
+              android:paddingVertical="@dimen/header_title_vertical_padding"
     />
     <view class="com.android.keyguard.KeyguardSliceView$Row"
               android:id="@+id/row"
