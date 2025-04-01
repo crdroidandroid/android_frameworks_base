@@ -335,6 +335,8 @@ public final class HintManagerService extends SystemService {
             } catch (RemoteException e) {
                 throw new IllegalStateException("Could not contact PowerHAL!", e);
             }
+        } else {
+            mSupportInfo = getDummySupportInfo();
         }
         mDefaultCpuHeadroomCalculationWindowMillis =
                 new CpuHeadroomParamsInternal().calculationWindowMillis;
@@ -379,7 +381,10 @@ public final class HintManagerService extends SystemService {
         } catch (RemoteException e) {
             throw new IllegalStateException("Could not contact PowerHAL!", e);
         }
+        return getDummySupportInfo();
+    }
 
+    private SupportInfo getDummySupportInfo() {
         SupportInfo supportInfo = new SupportInfo();
         supportInfo.usesSessions = isHintSessionSupported();
         // Global boosts & modes aren't currently relevant for HMS clients
