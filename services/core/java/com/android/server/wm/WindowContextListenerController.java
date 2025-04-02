@@ -287,11 +287,10 @@ class WindowContextListenerController {
         }
 
         private void register(boolean shouldDispatchConfig) {
-            final IBinder token = mClientToken;
             if (mDeathRecipient == null) {
-                throw new IllegalStateException("Invalid client token: " + token);
+                throw new IllegalStateException("Invalid client token: " + mClientToken);
             }
-            mListeners.putIfAbsent(token, this);
+            mListeners.putIfAbsent(mClientToken, this);
             mContainer.registerWindowContainerListener(this, shouldDispatchConfig);
         }
 
