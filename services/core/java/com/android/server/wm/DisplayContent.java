@@ -1305,7 +1305,7 @@ class DisplayContent extends RootDisplayArea implements WindowManagerPolicy.Disp
                 .setOpaque(true)
                 .setContainerLayer()
                 .setCallsite("DisplayContent");
-        mSurfaceControl = b.setName(getName()).setContainerLayer().build();
+        mSurfaceControl = b.setName(getName()).build();
         for (int i = getChildCount() - 1; i >= 0; i--)  {
             final SurfaceControl sc = getChildAt(i).mSurfaceControl;
             if (sc != null) {
