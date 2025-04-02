@@ -43,7 +43,7 @@ open class RippleView(context: Context?, attrs: AttributeSet?) : View(context, a
     private val ripplePaint = Paint()
     protected val animator: ValueAnimator = ValueAnimator.ofFloat(0f, 1f)
 
-    var duration: Long = 1750
+    var duration: Long = 2250
 
     fun setMaxSize(maxWidth: Float, maxHeight: Float) {
         rippleShader.rippleSize.setMaxSize(maxWidth, maxHeight)
