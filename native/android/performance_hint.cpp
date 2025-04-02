@@ -865,7 +865,7 @@ void FMQWrapper::writeBuffer<HalChannelMessageContents::workDuration>(hal::WorkD
                 .timeStampNanos = (i == count - 1) ? now : message.timeStampNanos,
                 .data = HalChannelMessageContents::make<HalChannelMessageContents::workDuration,
                                                         hal::WorkDurationFixedV1>({
-                        .durationNanos = message.cpuDurationNanos,
+                        .durationNanos = message.durationNanos,
                         .workPeriodStartTimestampNanos = message.workPeriodStartTimestampNanos,
                         .cpuDurationNanos = message.cpuDurationNanos,
                         .gpuDurationNanos = message.gpuDurationNanos,
