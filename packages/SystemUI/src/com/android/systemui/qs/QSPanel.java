@@ -151,7 +151,7 @@ public class QSPanel extends LinearLayout {
                         && mIsAutomaticBrightnessAvailable) {
                     updateViewVisibilityForTuningValue(mAutoBrightnessView,
                             LineageSettings.Secure.getString(mContext.getContentResolver(),
-                                    LineageSettings.Secure.QS_SHOW_AUTO_BRIGHTNESS), false);
+                                    LineageSettings.Secure.QS_SHOW_AUTO_BRIGHTNESS), true);
                 } else if (LineageSettings.Secure.getUriFor(
                             LineageSettings.Secure.QS_SHOW_BRIGHTNESS_SLIDER).equals(uri)
                         && mBrightnessView != null) {
