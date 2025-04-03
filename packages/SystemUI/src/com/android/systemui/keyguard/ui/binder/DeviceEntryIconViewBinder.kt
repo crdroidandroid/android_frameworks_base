@@ -265,6 +265,10 @@ object DeviceEntryIconViewBinder {
                     launch("$TAG#fpIconView.viewModel") {
                         fgViewModel.viewModel.collect { viewModel ->
                             Log.d(TAG, "Updating device entry icon image state $viewModel")
+                            fgIconView.setImageState(
+                                view.getIconState(viewModel.type, viewModel.useAodVariant),
+                                /* merge */ false,
+                            )
                             if (viewModel.type.contentDescriptionResId != -1) {
                                 fgIconView.contentDescription =
                                     fgIconView.resources.getString(
@@ -283,12 +287,6 @@ object DeviceEntryIconViewBinder {
                             } else {
                                 fgIconView.setPadding(0, 0, 0, 0)
                             }
-                            // Set image state at the end after updating other view state. This
-                            // method forces the ImageView to recompute the bounds of the drawable.
-                            fgIconView.setImageState(
-                                view.getIconState(viewModel.type, viewModel.useAodVariant),
-                                /* merge */ false,
-                            )
                             // Invalidate, just in case the padding changes just after icon changes
                             fgIconView.invalidate()
                         }
