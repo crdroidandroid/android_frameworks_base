@@ -108,7 +108,7 @@ public class QSPanelController extends QSPanelControllerBase<QSPanel> {
                         TunerService.parseIntegerSwitch(LineageSettings.Secure.getStringForUser(
                                 mView.getContext().getContentResolver(),
                                 LineageSettings.Secure.QS_SHOW_AUTO_BRIGHTNESS,
-                                mSelectedUserInteractor.getSelectedUserId()), false) ? View.VISIBLE
+                                mSelectedUserInteractor.getSelectedUserId()), true) ? View.VISIBLE
                                 : View.GONE);
             } else if (LineageSettings.Secure.getUriFor(
                     LineageSettings.Secure.QS_SHOW_BRIGHTNESS_SLIDER).equals(uri)
