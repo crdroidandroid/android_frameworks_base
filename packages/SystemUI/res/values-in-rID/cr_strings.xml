@@ -33,7 +33,7 @@
     <!-- Weather -->
     <string name="weather_condition_clouds">Berawan</string>
     <string name="weather_condition_rain">Hujan</string>
-    <string name="weather_condition_clear">Cerah</string>
+    <string name="weather_condition_clear">Clear Sky</string>
     <string name="weather_condition_storm">Badai</string>
     <string name="weather_condition_snow">Bersalju</string>
     <string name="weather_condition_wind">Berangin</string>
