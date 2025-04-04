@@ -36,7 +36,7 @@
     <!-- Weather -->
     <string name="weather_condition_clouds">Oblačno</string>
     <string name="weather_condition_rain">Deštivo</string>
-    <string name="weather_condition_clear">Clear Sky</string>
+    <string name="weather_condition_clear">Jasno</string>
     <string name="weather_condition_storm">Bouřka</string>
     <string name="weather_condition_snow">Sněžení</string>
     <string name="weather_condition_wind">Větrno</string>
