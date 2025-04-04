@@ -36,7 +36,7 @@
     <!-- Weather -->
     <string name="weather_condition_clouds">Хмарно</string>
     <string name="weather_condition_rain">Дощова</string>
-    <string name="weather_condition_clear">Сонячно</string>
+    <string name="weather_condition_clear">Clear Sky</string>
     <string name="weather_condition_storm">Гроза</string>
     <string name="weather_condition_snow">Йде сніг</string>
     <string name="weather_condition_wind">Вітряно</string>
