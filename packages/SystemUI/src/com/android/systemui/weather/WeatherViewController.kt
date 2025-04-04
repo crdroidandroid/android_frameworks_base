@@ -86,9 +86,14 @@ class WeatherViewController(
     }
 
     private fun getConditionText(condition: String): String {
-        for ((key, value) in WEATHER_CONDITIONS) {
-            if (condition.contains(key)) {
-                return context.resources.getString(value)
+        val locale = context.resources.configuration.locales[0]
+        val isEnglish = locale.language.startsWith("en", ignoreCase = true)
+
+        if (!isEnglish) {
+            for ((key, value) in WEATHER_CONDITIONS) {
+                if (condition.contains(key)) {
+                    return context.resources.getString(value)
+                }
             }
         }
         return condition.split(" ").joinToString(" ") { it.replaceFirstChar { char -> char.uppercaseChar() } }
