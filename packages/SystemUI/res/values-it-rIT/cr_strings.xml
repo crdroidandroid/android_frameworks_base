@@ -34,7 +34,7 @@
     <!-- Weather -->
     <string name="weather_condition_clouds">Nuvoloso</string>
     <string name="weather_condition_rain">Piovoso</string>
-    <string name="weather_condition_clear">Soleggiato</string>
+    <string name="weather_condition_clear">Clear Sky</string>
     <string name="weather_condition_storm">Tempestoso</string>
     <string name="weather_condition_snow">Nevoso</string>
     <string name="weather_condition_wind">Ventoso</string>
