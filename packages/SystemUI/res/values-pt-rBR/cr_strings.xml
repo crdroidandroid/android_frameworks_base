@@ -34,7 +34,7 @@
     <!-- Weather -->
     <string name="weather_condition_clouds">Nublado</string>
     <string name="weather_condition_rain">Chuvoso</string>
-    <string name="weather_condition_clear">Ensolarado</string>
+    <string name="weather_condition_clear">Clear Sky</string>
     <string name="weather_condition_storm">Tempestuoso</string>
     <string name="weather_condition_snow">Neve</string>
     <string name="weather_condition_wind">Ventania</string>
