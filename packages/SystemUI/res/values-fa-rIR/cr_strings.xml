@@ -34,7 +34,7 @@
     <!-- Weather -->
     <string name="weather_condition_clouds">ابری</string>
     <string name="weather_condition_rain">بارانی</string>
-    <string name="weather_condition_clear">آفتابی</string>
+    <string name="weather_condition_clear">Clear Sky</string>
     <string name="weather_condition_storm">طوفانی</string>
     <string name="weather_condition_snow">برفی</string>
     <string name="weather_condition_wind">باد</string>
