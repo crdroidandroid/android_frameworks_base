@@ -34,7 +34,7 @@
     <!-- Weather -->
     <string name="weather_condition_clouds">Pilvinen</string>
     <string name="weather_condition_rain">Sateinen</string>
-    <string name="weather_condition_clear">Aurinkoinen</string>
+    <string name="weather_condition_clear">Clear Sky</string>
     <string name="weather_condition_storm">Myrskyinen</string>
     <string name="weather_condition_snow">Luminen</string>
     <string name="weather_condition_wind">Tuulinen</string>
