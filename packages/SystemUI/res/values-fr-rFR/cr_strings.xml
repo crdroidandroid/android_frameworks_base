@@ -34,7 +34,7 @@
     <!-- Weather -->
     <string name="weather_condition_clouds">Nuageux</string>
     <string name="weather_condition_rain">Pluvieux</string>
-    <string name="weather_condition_clear">Ensoleillé</string>
+    <string name="weather_condition_clear">Clear Sky</string>
     <string name="weather_condition_storm">Orageux</string>
     <string name="weather_condition_snow">Neigeux</string>
     <string name="weather_condition_wind">Venteux</string>
