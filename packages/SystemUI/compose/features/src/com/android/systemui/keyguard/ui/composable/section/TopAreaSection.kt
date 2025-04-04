@@ -227,10 +227,6 @@ constructor(
                     burnInParams = burnIn.parameters,
                     onTopChanged = burnIn.onSmartspaceTopChanged,
                     smartSpacePaddingTop = smartSpacePaddingTop,
-                    modifier =
-                        Modifier.heightIn(
-                            min = getDimen(context, "enhanced_smartspace_height", density)
-                        ),
                 )
             }
             with(weatherClockSection) {
@@ -240,19 +236,5 @@ constructor(
                 )
             }
         }
-    }
-
-    /*
-     * Use this function to access dimen which cannot be access by R.dimen directly
-     * Currently use to access dimen from BcSmartspace
-     * @param name Name of resources
-     * @param density Density required to convert dimen from Int To Dp
-     */
-    private fun getDimen(context: Context, name: String, density: Density): Dp {
-        val res = context.packageManager.getResourcesForApplication(context.packageName)
-        val id = res.getIdentifier(name, "dimen", context.packageName)
-        var dimen: Dp
-        with(density) { dimen = (if (id == 0) 0 else res.getDimensionPixelSize(id)).toDp() }
-        return dimen
     }
 }
