@@ -34,7 +34,7 @@
     <!-- Weather -->
     <string name="weather_condition_clouds">Felhős</string>
     <string name="weather_condition_rain">Esős</string>
-    <string name="weather_condition_clear">Napos</string>
+    <string name="weather_condition_clear">Clear Sky</string>
     <string name="weather_condition_storm">Viharos</string>
     <string name="weather_condition_snow">Havas</string>
     <string name="weather_condition_wind">Szeles</string>
