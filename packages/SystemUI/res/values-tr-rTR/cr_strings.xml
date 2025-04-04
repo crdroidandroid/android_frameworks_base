@@ -34,7 +34,7 @@
     <!-- Weather -->
     <string name="weather_condition_clouds">Bulutlu</string>
     <string name="weather_condition_rain">Yağmurlu</string>
-    <string name="weather_condition_clear">Güneşli</string>
+    <string name="weather_condition_clear">Clear Sky</string>
     <string name="weather_condition_storm">Fırtınalı</string>
     <string name="weather_condition_snow">Karlı</string>
     <string name="weather_condition_wind">Rüzgârlı</string>
