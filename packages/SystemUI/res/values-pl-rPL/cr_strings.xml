@@ -36,7 +36,7 @@
     <!-- Weather -->
     <string name="weather_condition_clouds">Pochmurno</string>
     <string name="weather_condition_rain">Deszczowo</string>
-    <string name="weather_condition_clear">Clear Sky</string>
+    <string name="weather_condition_clear">Czyste niebo</string>
     <string name="weather_condition_storm">Burzowo</string>
     <string name="weather_condition_snow">Śnieżnie</string>
     <string name="weather_condition_wind">Wietrznie</string>
