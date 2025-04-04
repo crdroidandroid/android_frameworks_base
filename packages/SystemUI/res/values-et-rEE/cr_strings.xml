@@ -34,7 +34,7 @@
     <!-- Weather -->
     <string name="weather_condition_clouds">Pilves</string>
     <string name="weather_condition_rain">Vihmane</string>
-    <string name="weather_condition_clear">Päikeseline</string>
+    <string name="weather_condition_clear">Clear Sky</string>
     <string name="weather_condition_storm">Tormine</string>
     <string name="weather_condition_snow">Lumine</string>
     <string name="weather_condition_wind">Tuuline</string>
