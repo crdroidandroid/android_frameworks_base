@@ -36,7 +36,7 @@
     <!-- Weather -->
     <string name="weather_condition_clouds">מעונן</string>
     <string name="weather_condition_rain">גשום</string>
-    <string name="weather_condition_clear">שמשי</string>
+    <string name="weather_condition_clear">Clear Sky</string>
     <string name="weather_condition_storm">סוער</string>
     <string name="weather_condition_snow">מושלג</string>
     <string name="weather_condition_wind">משבי רוח</string>
