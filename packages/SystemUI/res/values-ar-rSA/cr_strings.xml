@@ -38,7 +38,7 @@
     <!-- Weather -->
     <string name="weather_condition_clouds">غائم</string>
     <string name="weather_condition_rain">ماطر</string>
-    <string name="weather_condition_clear">مُشمِس</string>
+    <string name="weather_condition_clear">Clear Sky</string>
     <string name="weather_condition_storm">عاصف</string>
     <string name="weather_condition_snow">مثلج</string>
     <string name="weather_condition_wind">رياح قوية</string>
