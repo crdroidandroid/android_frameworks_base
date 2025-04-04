@@ -36,7 +36,7 @@
     <!-- Weather -->
     <string name="weather_condition_clouds">Воблачна</string>
     <string name="weather_condition_rain">Дождж</string>
-    <string name="weather_condition_clear">Сонечна</string>
+    <string name="weather_condition_clear">Clear Sky</string>
     <string name="weather_condition_storm">Навальніца</string>
     <string name="weather_condition_snow">Снег</string>
     <string name="weather_condition_wind">Ветрана</string>
