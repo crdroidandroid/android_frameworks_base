@@ -19,5 +19,5 @@
     <!-- App lock -->
     <string name="unlock_application">Odemknout <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
     <!-- Cycle through ringer modes -->
-    <string name="volume_dialog_ringer_guidance_normal">Volání a oznámení budou vyzvánět</string>
+    <string name="volume_dialog_ringer_guidance_normal">Volání a oznámení budou vyzvánět</string>
 </resources>
