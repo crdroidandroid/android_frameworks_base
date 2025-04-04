@@ -34,7 +34,7 @@
     <!-- Weather -->
     <string name="weather_condition_clouds">Bewölkt</string>
     <string name="weather_condition_rain">Regen</string>
-    <string name="weather_condition_clear">Sonnig</string>
+    <string name="weather_condition_clear">Clear Sky</string>
     <string name="weather_condition_storm">Stürmisch</string>
     <string name="weather_condition_snow">Schnee</string>
     <string name="weather_condition_wind">Wind</string>
