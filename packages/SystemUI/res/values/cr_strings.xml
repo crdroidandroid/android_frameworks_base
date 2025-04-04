@@ -44,7 +44,7 @@
     <!-- Weather -->
     <string name="weather_condition_clouds">Cloudy</string>
     <string name="weather_condition_rain">Rainy</string>
-    <string name="weather_condition_clear">Sunny</string>
+    <string name="weather_condition_clear">Clear Sky</string>
     <string name="weather_condition_storm">Stormy</string>
     <string name="weather_condition_snow">Snowy</string>
     <string name="weather_condition_wind">Windy</string>
