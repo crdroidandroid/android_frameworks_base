@@ -13640,6 +13640,16 @@ public final class Settings {
         public static final String NAVBAR_INVERSE_LAYOUT = "navbar_inverse_layout";
 
         /**
+         * Which navigation bar layout to use
+         * 0 = Normal (Default)
+         * 1 = Compact
+         * 2 = Left-leaning
+         * 3 = Right-leaning
+         * @hide
+         */
+        public static final String NAVBAR_LAYOUT_MODE = "navbar_layout_mode";
+
+        /**
          * Whether to show or hide the arrow for back gesture
          * @hide
          */
