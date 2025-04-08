@@ -33,7 +33,7 @@
     <!-- Weather -->
     <string name="weather_condition_clouds">多云</string>
     <string name="weather_condition_rain">有雨</string>
-    <string name="weather_condition_clear">Clear Sky</string>
+    <string name="weather_condition_clear">晴天</string>
     <string name="weather_condition_storm">暴雨</string>
     <string name="weather_condition_snow">有雪</string>
     <string name="weather_condition_wind">有风</string>
