@@ -33,7 +33,7 @@
     <!-- Weather -->
     <string name="weather_condition_clouds">Nhiều mây</string>
     <string name="weather_condition_rain">Mưa</string>
-    <string name="weather_condition_clear">Clear Sky</string>
+    <string name="weather_condition_clear">Trời quang đãng</string>
     <string name="weather_condition_storm">Bão</string>
     <string name="weather_condition_snow">Có tuyết</string>
     <string name="weather_condition_wind">Có gió</string>
