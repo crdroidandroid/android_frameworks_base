@@ -350,9 +350,9 @@ private fun TextButton(
 ) {
     Expandable(
         shape = CircleShape,
-        color = Color.Transparent,
+        color = colorAttr(R.attr.shadeInactive),
         contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-        borderStroke = BorderStroke(1.dp, colorAttr(R.attr.shadeInactive)),
+        borderStroke = null,
         modifier =
             modifier
                 .padding(horizontal = 4.dp)
