@@ -333,12 +333,18 @@ public class RecoverySystem {
             if (certificates == null || certificates.length == 0) {
                 throw new SignatureException("signature contains no certificates");
             }
+            if (certificates.length > 1) {
+                throw new SignatureException("signature contains multiple certificates");
+            }
             X509Certificate cert = certificates[0];
             PublicKey signatureKey = cert.getPublicKey();
 
             SignerInfo[] signerInfos = block.getSignerInfos();
             if (signerInfos == null || signerInfos.length == 0) {
                 throw new SignatureException("signature contains no signedData");
+            }
+            if (signerInfos.length > 1) {
+                throw new SignatureException("signature contains multiple signedData");
             }
             SignerInfo signerInfo = signerInfos[0];
 
