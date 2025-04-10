@@ -69,6 +69,10 @@ public class ClockStyle extends RelativeLayout implements TunerService.Tunable {
 
     private static final int DEFAULT_STYLE = 0; // Disabled
     public static final String CLOCK_STYLE_KEY = Settings.Secure.LOCK_SCREEN_CUSTOM_CLOCK_STYLE;
+    public static final String CLOCK_TEXT_COLOR_KEY = Settings.Secure.LOCK_SCREEN_CUSTOM_CLOCK_ACCENT_COLOR;
+    public static final String CLOCK_TEXT_OPACITY_KEY = Settings.Secure.LOCK_SCREEN_CUSTOM_CLOCK_OPACITY;
+
+    private static final int DEFAULT_OPACITY = 100;
 
     private final Context mContext;
     private final KeyguardManager mKeyguardManager;
@@ -76,6 +80,8 @@ public class ClockStyle extends RelativeLayout implements TunerService.Tunable {
 
     private View currentClockView;
     private int mClockStyle;
+    private boolean mUseAccentColor = false;
+    private int mClockOpacity = DEFAULT_OPACITY;
 
     private static final long UPDATE_INTERVAL_MILLIS = 15 * 1000;
     private long lastUpdateTimeMillis = 0;
@@ -141,7 +147,7 @@ public class ClockStyle extends RelativeLayout implements TunerService.Tunable {
         mContext = context;
         mKeyguardManager = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
         mTunerService = Dependency.get(TunerService.class);
-        mTunerService.addTunable(this, CLOCK_STYLE_KEY);
+        mTunerService.addTunable(this, CLOCK_STYLE_KEY, CLOCK_TEXT_COLOR_KEY, CLOCK_TEXT_OPACITY_KEY);
         mStatusBarStateController = Dependency.get(StatusBarStateController.class);
         mStatusBarStateController.addCallback(mStatusBarStateListener);
         mStatusBarStateListener.onDozingChanged(mStatusBarStateController.isDozing());
@@ -205,6 +211,37 @@ public class ClockStyle extends RelativeLayout implements TunerService.Tunable {
         }
     }
 
+    private void updateClockTextColor() {
+        if (currentClockView != null) {
+            updateTextClockColor(currentClockView);
+        }
+    }
+
+    private void updateTextClockColor(View view) {
+        if (view instanceof ViewGroup) {
+            ViewGroup viewGroup = (ViewGroup) view;
+            for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                View childView = viewGroup.getChildAt(i);
+                updateTextClockColor(childView);
+            }
+        }
+
+        if (view instanceof TextClock) {
+            TextClock textClock = (TextClock) view;
+            int color;
+            if (mUseAccentColor) {
+                color = mContext.getColor(
+                    mContext.getResources().getIdentifier(
+                        "system_accent1_100", "color", "android"));
+            } else {
+                color = mContext.getColor(android.R.color.white);
+            }
+            int alpha = Math.round((mClockOpacity / 100f) * 255);
+            color = (color & 0x00FFFFFF) | (alpha << 24);
+            textClock.setTextColor(color);
+        }
+    }
+
     private void updateClockView() {
         if (currentClockView != null) {
             ((ViewGroup) currentClockView.getParent()).removeView(currentClockView);
@@ -219,6 +256,7 @@ public class ClockStyle extends RelativeLayout implements TunerService.Tunable {
                 if (currentClockView instanceof LinearLayout) {
                     ((LinearLayout) currentClockView).setGravity(gravity);
                 }
+                updateClockTextColor();
             }
         }
         onTimeChanged();
@@ -235,6 +273,16 @@ public class ClockStyle extends RelativeLayout implements TunerService.Tunable {
                         Settings.Secure.LOCK_SCREEN_CUSTOM_CLOCK_FACE, 0, UserHandle.USER_CURRENT);
                 }
                 updateClockView();
+                break;
+            case CLOCK_TEXT_COLOR_KEY:
+                mUseAccentColor = TunerService.parseIntegerSwitch(newValue, false);
+                updateClockTextColor();
+                break;
+            case CLOCK_TEXT_OPACITY_KEY:
+                mClockOpacity = TunerService.parseInteger(newValue, DEFAULT_OPACITY);
+                // Keep opacity within valid range (0-100)
+                mClockOpacity = Math.max(0, Math.min(100, mClockOpacity));
+                updateClockTextColor();
                 break;
         }
     }
