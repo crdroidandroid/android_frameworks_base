@@ -143,6 +143,11 @@ public class CameraCaptureSessionImpl extends CameraCaptureSession
 
     private void setSkipUnconfigure() {
         String packageName = ActivityThread.currentOpPackageName();
+        if (packageName == null || packageName.isEmpty() || 
+            packageName.equals("com.google.android.GoogleCamera")) {
+            return;
+        }
+
         List<String> packageList = Arrays.asList(SystemProperties.get(
                 "vendor.camera.skip_unconfigure.packagelist", packageName).split(","));
 
