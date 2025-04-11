@@ -2074,7 +2074,8 @@ public class CameraDeviceImpl extends CameraDevice
 
     private boolean checkPrivilegedAppList() {
         String packageName = ActivityThread.currentOpPackageName();
-        if (packageName.equals("com.google.android.GoogleCamera")) return true;
+        if (packageName == null || packageName.isEmpty() 
+            || packageName.equals("com.google.android.GoogleCamera")) return true;
         String packageList = SystemProperties.get("persist.vendor.camera.privapp.list");
 
         if (packageList.length() > 0) {
