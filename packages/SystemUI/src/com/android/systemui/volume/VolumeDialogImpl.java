@@ -590,9 +590,6 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         float xExtraSize = 0;
         float yExtraSize = 0;
 
-        final boolean expanded = mExpansionState == ExpansionState.EXPANDED;
-        final boolean appsExpanded = mExpansionState == ExpansionState.APPS_EXPANDED;
-
         // The ringer and rows container has extra height at the top to fit the expanded ringer
         // drawer. This area should not be touchable unless the ringer drawer is open.
         // In landscape the ringer expands to the left and it has to be ensured that if there
@@ -601,23 +598,21 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         // needs to be touchable.
         // When app rows are expanded, stream rows are invisible and vice versa.
         if (view == mTopContainer) {
-            int extraRowsSize = 0;
-            if (!appsExpanded) {
-                extraRowsSize += getAppRowsExtraSize();
-            }
-            if (!expanded) {
-                extraRowsSize += getExpandableRowsExtraSize();
-            }
+            boolean expanded = mExpansionState == ExpansionState.EXPANDED ||
+                    mExpansionState == ExpansionState.APPS_EXPANDED;
+            int extraRowsSize = Math.max(getAppRowsExtraSize(), getExpandableRowsExtraSize());
             if (!isLandscape()) {
                 if (!mIsRingerDrawerOpen) {
                     yExtraSize = getRingerDrawerOpenExtraSize();
                 }
-                xExtraSize = extraRowsSize;
+                if (!expanded) {
+                    xExtraSize = extraRowsSize;
+                }
             } else {
-                if (!mIsRingerDrawerOpen) {
+                if (!mIsRingerDrawerOpen && !expanded) {
                     xExtraSize =
                             Math.max(getRingerDrawerOpenExtraSize(), extraRowsSize);
-                } else {
+                } else if (!expanded) {
                     if ((getVisibleRowsExtraSize() + extraRowsSize)
                             > getRingerDrawerOpenExtraSize()) {
                         xExtraSize = (getVisibleRowsExtraSize() + extraRowsSize)
@@ -2919,7 +2914,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
     private int getExpandableRowsExtraSize() {
         int expandableRows = 0;
         for (final VolumeRow row : mRows) {
-            if (isExpandableRowH(row)) {
+            if (!row.isAppVolume && isExpandableRowH(row)) {
                 expandableRows++;
             }
         }
@@ -2927,13 +2922,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
     }
 
     private int getAppRowsExtraSize() {
-        int appRows = 0;
-        for (final VolumeRow row : mRows) {
-            if (row.isAppVolume) {
-                appRows++;
-            }
-        }
-        return appRows * (mDialogWidth + mRingerRowsPadding);
+        return mAppRows.size() * (mDialogWidth + mRingerRowsPadding);
     }
 
     private void updateBackgroundForDrawerClosedAmount() {
