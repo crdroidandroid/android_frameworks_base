@@ -42,7 +42,7 @@ import java.util.concurrent.Executor;
 /** VolumeControlProfile handles Bluetooth Volume Control Controller role */
 public class VolumeControlProfile implements LocalBluetoothProfile {
     private static final String TAG = "VolumeControlProfile";
-    private static boolean DEBUG = true;
+    private static boolean DEBUG = false;
     static final String NAME = "VCP";
     // Order of this profile in device profiles list
     private static final int ORDINAL = 1;
