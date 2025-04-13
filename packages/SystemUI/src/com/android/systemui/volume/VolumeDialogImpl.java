@@ -2157,13 +2157,13 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
             final boolean isExpandableRow = isStreamRow || isAppRow;
             final boolean shouldBeVisible = shouldBeVisibleH(row, activeRow);
             // Hide stream rows when app rows expanded and vice versa
-            final boolean shouldBeInvisible =
+            final boolean shouldBeGone =
                     (isStreamRow && appsExpanded) || (isAppRow && expanded) || collapsed;
 
             if (!isExpandableRow) {
                 Util.setVisOrGone(row.view, shouldBeVisible);
-            } else if (shouldBeInvisible) {
-                row.view.setVisibility(View.INVISIBLE);
+            } else if (shouldBeGone) {
+                Util.setVisOrGone(row.view, false);
             }
 
             if ((shouldBeVisible || isExpandableRow)
