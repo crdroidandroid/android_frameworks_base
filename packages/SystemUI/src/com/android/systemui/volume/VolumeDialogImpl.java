@@ -383,6 +383,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
     private Optional<List<CsdWarningAction>>
             mCsdWarningNotificationActions = Optional.of(Collections.emptyList());
     private boolean mShowAppVolume;
+    private boolean mHapticFeedback;
 
     public VolumeDialogImpl(
             Context context,
@@ -481,6 +482,10 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
                 mShowAppVolume = Settings.System.getIntForUser(mContext.getContentResolver(),
                         Settings.System.SHOW_APP_VOLUME,
                         0, UserHandle.USER_CURRENT) == 1;
+                mHapticFeedback = mSecureSettings.get().getIntForUser(
+                        Settings.Secure.VOLUME_DIALOG_HAPTIC_FEEDBACK,
+                        0, UserHandle.USER_CURRENT) != 0;
+                mConfigChanged = true;
             }
         };
         mContext.getContentResolver().registerContentObserver(
@@ -488,6 +493,9 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
                 false, settingsObserver);
         mContext.getContentResolver().registerContentObserver(
                 Settings.System.getUriFor(Settings.System.SHOW_APP_VOLUME),
+                false, settingsObserver);
+        mContext.getContentResolver().registerContentObserver(
+                Settings.Secure.getUriFor(Settings.Secure.VOLUME_DIALOG_HAPTIC_FEEDBACK),
                 false, settingsObserver);
         settingsObserver.onChange(true);
 
@@ -1176,8 +1184,10 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
     }
 
     private void addSliderHapticsToRow(VolumeRow row) {
-        row.createPlugin(row.slider, mVibratorHelper, mMSDLPlayer, mSystemClock);
-        HapticSliderViewBinder.bind(row.slider, row.mHapticPlugin);
+        if (mHapticFeedback) {
+            row.createPlugin(row.slider, mVibratorHelper, mMSDLPlayer, mSystemClock);
+            HapticSliderViewBinder.bind(row.slider, row.mHapticPlugin);
+        }
     }
 
     @VisibleForTesting void addSliderHapticsToRows() {
