@@ -3218,7 +3218,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
 
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            if (getActiveRow().equals(mRow) && mRow.slider.getVisibility() == VISIBLE) {
+            if (!mRow.isAppVolume && getActiveRow().equals(mRow) && mRow.slider.getVisibility() == VISIBLE) {
                 if (fromUser || mRow.animTargetProgress == progress) {
                     // Deliver user-generated slider haptics immediately, or when the animation
                     // completes
@@ -3229,6 +3229,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
                     + " onProgressChanged " + progress + " fromUser=" + fromUser);
             if (!fromUser) return;
             if (mRow.isAppVolume) {
+                mRow.deliverOnProgressChangedHaptics(fromUser, progress);
                 mActiveAppRowPackage = mRow.packageName;
                 final float vol = progress * 0.01f;
                 if (D.BUG) Log.d(TAG, "set app " + mRow.packageName + " volume to " + vol);
