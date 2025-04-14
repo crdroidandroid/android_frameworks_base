@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2024 crDroid Android Project
+ * Copyright (C) 2017-2025 crDroid Android Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,8 +23,12 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.PowerManager;
+import android.os.RemoteException;
+import android.os.ServiceManager;
 import android.os.SystemClock;
 import android.os.SystemProperties;
+
+import com.android.internal.statusbar.IStatusBarService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,5 +101,14 @@ public class Utils {
             needsNav = true;
         }
         return needsNav;
+    }
+
+    public static void restartSystemUI() {
+        final IStatusBarService mBarService = IStatusBarService.Stub.asInterface(
+                ServiceManager.getService(Context.STATUS_BAR_SERVICE));
+        try {
+            mBarService.restartSystemUI();
+        } catch (RemoteException e) {
+        }
     }
 }
