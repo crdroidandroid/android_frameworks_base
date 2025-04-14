@@ -459,6 +459,8 @@ class FakeStatusBarService : IStatusBarService.Stub() {
 
     override fun startAssist(args: Bundle) {}
 
+    override fun restartSystemUI() {}
+
     companion object {
         const val DEFAULT_DISPLAY_ID = Display.DEFAULT_DISPLAY
         const val SECONDARY_DISPLAY_ID = 2
