@@ -21,6 +21,7 @@ import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.os.Process;
 import android.os.Trace;
 import android.provider.Settings;
 import android.telephony.SubscriptionManager;
@@ -510,6 +511,11 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
             mNicBindingDisposable.dispose();
             mNicBindingDisposable = null;
         }
+    }
+
+    @Override
+    public void restartSystemUI() {
+        Process.killProcess(Process.myPid());
     }
 
     @Override
