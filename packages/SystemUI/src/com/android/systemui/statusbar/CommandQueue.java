@@ -189,6 +189,7 @@ public class CommandQueue extends IStatusBar.Stub implements
     private static final int MSG_WALLET_ACTION_LAUNCH_GESTURE = 83 << MSG_SHIFT;
     private static final int MSG_DISPLAY_REMOVE_SYSTEM_DECORATIONS = 85 << MSG_SHIFT;
     private static final int MSG_DISABLE_ALL  = 86 << MSG_SHIFT;
+    private static final int MSG_RESTART_SYSTEMUI = 87 << MSG_SHIFT;
 
     public static final int FLAG_EXCLUDE_NONE = 0;
     public static final int FLAG_EXCLUDE_SEARCH_PANEL = 1 << 0;
@@ -594,6 +595,8 @@ public class CommandQueue extends IStatusBar.Stub implements
          * @see IStatusBar#moveFocusedTaskToDesktop(int)
          */
         default void moveFocusedTaskToDesktop(int displayId) {}
+
+        default void restartSystemUI() {}
     }
 
     @VisibleForTesting
@@ -1550,6 +1553,13 @@ public class CommandQueue extends IStatusBar.Stub implements
         mHandler.obtainMessage(MSG_ENTER_DESKTOP, args).sendToTarget();
     }
 
+    @Override
+    public void restartSystemUI() {
+        synchronized (mLock) {
+            mHandler.removeMessages(MSG_RESTART_SYSTEMUI);
+            mHandler.obtainMessage(MSG_RESTART_SYSTEMUI).sendToTarget();
+        }
+    }
 
     private final class H extends Handler {
         private H(Looper l) {
@@ -2094,6 +2104,11 @@ public class CommandQueue extends IStatusBar.Stub implements
                     }
                     break;
                 }
+                case MSG_RESTART_SYSTEMUI:
+                    for (int i = 0; i < mCallbacks.size(); i++) {
+                        mCallbacks.get(i).restartSystemUI();
+                    }
+                    break;
             }
         }
     }
