@@ -454,7 +454,7 @@ public final class CarrierAppUtils {
                 return ai;
             }
         } catch (PackageManager.NameNotFoundException e) {
-            Log.w(TAG, "Could not reach PackageManager", e);
+            Log.i(TAG, "Not installed: " + packageName);
         }
         return null;
     }
