@@ -267,4 +267,6 @@ public interface StatusBarManagerInternal {
      * Called when requested to enter desktop from a focused app.
      */
     void moveFocusedTaskToDesktop(int displayId);
+
+    void restartSystemUI();
 }
