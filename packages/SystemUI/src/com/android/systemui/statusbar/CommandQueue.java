@@ -195,6 +195,7 @@ public class CommandQueue extends IStatusBar.Stub implements
     private static final int MSG_END_MOTION_CUES = 89 << MSG_SHIFT;
     private static final int MSG_ON_DISPLAY_INFO_CHANGED = 90 << MSG_SHIFT;
     private static final int MSG_ON_CONFIGURATION_CHANGED = 91 << MSG_SHIFT;
+    private static final int MSG_RESTART_SYSTEMUI = 92 << MSG_SHIFT;
 
     public static final int FLAG_EXCLUDE_NONE = 0;
     public static final int FLAG_EXCLUDE_SEARCH_PANEL = 1 << 0;
@@ -623,6 +624,8 @@ public class CommandQueue extends IStatusBar.Stub implements
          * @see IStatusBar#onConfigurationChanged()
          */
         default void onConfigurationChanged() {}
+
+        default void restartSystemUI() {}
     }
 
     @VisibleForTesting
@@ -1614,6 +1617,14 @@ public class CommandQueue extends IStatusBar.Stub implements
         mHandler.obtainMessage(MSG_ON_CONFIGURATION_CHANGED).sendToTarget();
     }
 
+    @Override
+    public void restartSystemUI() {
+        synchronized (mLock) {
+            mHandler.removeMessages(MSG_RESTART_SYSTEMUI);
+            mHandler.obtainMessage(MSG_RESTART_SYSTEMUI).sendToTarget();
+        }
+    }
+
     private final class H extends Handler {
         private H(Looper l) {
             super(l);
@@ -2186,6 +2197,11 @@ public class CommandQueue extends IStatusBar.Stub implements
                 case MSG_ON_CONFIGURATION_CHANGED:
                     for (Callbacks callback : mCallbacks) {
                         callback.onConfigurationChanged();
+                    }
+                    break;
+                case MSG_RESTART_SYSTEMUI:
+                    for (int i = 0; i < mCallbacks.size(); i++) {
+                        mCallbacks.get(i).restartSystemUI();
                     }
                     break;
             }
