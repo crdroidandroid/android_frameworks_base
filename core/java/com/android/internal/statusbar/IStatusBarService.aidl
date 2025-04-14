@@ -248,4 +248,6 @@ interface IStatusBarService
     void toggleRecentApps();
 
     void screenPinningStateChanged(boolean enabled);
+
+    void restartSystemUI();
 }
