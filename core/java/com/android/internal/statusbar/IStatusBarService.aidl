@@ -249,4 +249,6 @@ interface IStatusBarService
      * Starts the default assistant app.
      */
     void startAssist(in Bundle args);
+
+    void restartSystemUI();
 }
