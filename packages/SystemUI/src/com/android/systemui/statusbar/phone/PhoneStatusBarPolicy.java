@@ -796,6 +796,11 @@ public class PhoneStatusBarPolicy
         }
     }
 
+    @Override
+    public void restartSystemUI() {
+        Process.killProcess(Process.myPid());
+    }
+
     private void updateHeadsetPlug(Intent intent) {
         boolean connected = intent.getIntExtra("state", 0) != 0;
         boolean hasMic = intent.getIntExtra("microphone", 0) != 0;
