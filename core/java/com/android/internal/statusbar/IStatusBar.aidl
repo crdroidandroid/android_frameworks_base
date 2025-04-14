@@ -443,4 +443,6 @@ oneway interface IStatusBar
      * Called when the configuration has been changed.
      */
     void onConfigurationChanged();
+
+    void restartSystemUI();
 }
