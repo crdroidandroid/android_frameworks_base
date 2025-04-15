@@ -31,6 +31,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.android.systemui.res.R;
+import com.android.systemui.settings.UserTracker;
 import com.android.systemui.settings.brightness.BrightnessSliderController;
 import com.android.systemui.settings.brightness.MirrorController;
 import com.android.systemui.settings.brightness.ToggleSlider;
@@ -67,7 +68,8 @@ public class BrightnessMirrorController implements MirrorController {
             ShadeViewController shadeViewController,
             NotificationShadeDepthController notificationShadeDepthController,
             BrightnessSliderController.Factory factory,
-            @NonNull Consumer<Boolean> visibilityCallback) {
+            @NonNull Consumer<Boolean> visibilityCallback,
+            UserTracker userTracker) {
         mStatusBarWindow = statusBarWindow;
         mToggleSliderFactory = factory;
         mBrightnessMirror = statusBarWindow.findViewById(R.id.brightness_mirror_container);
@@ -82,18 +84,20 @@ public class BrightnessMirrorController implements MirrorController {
 
         mIsAutomaticBrightnessAvailable = mBrightnessMirror.getContext().getResources().getBoolean(
                 com.android.internal.R.bool.config_automatic_brightness_available);
-        mShouldShowAutoBrightness = LineageSettings.Secure.getInt(
+        mShouldShowAutoBrightness = LineageSettings.Secure.getIntForUser(
                 mBrightnessMirror.getContext().getContentResolver(),
-                LineageSettings.Secure.QS_SHOW_AUTO_BRIGHTNESS, 0) != 0;
+                LineageSettings.Secure.QS_SHOW_AUTO_BRIGHTNESS, 0,
+                userTracker.getUserId()) != 0;
         updateIcon();
         mBrightnessMirror.getContext().getContentResolver().registerContentObserver(
                 LineageSettings.Secure.getUriFor(LineageSettings.Secure.QS_SHOW_AUTO_BRIGHTNESS),
                 false, new ContentObserver(null) {
                     @Override
                     public void onChange(boolean selfChange) {
-                        mShouldShowAutoBrightness = LineageSettings.Secure.getInt(
+                        mShouldShowAutoBrightness = LineageSettings.Secure.getIntForUser(
                                 mBrightnessMirror.getContext().getContentResolver(),
-                                LineageSettings.Secure.QS_SHOW_AUTO_BRIGHTNESS, 0) != 0;
+                                LineageSettings.Secure.QS_SHOW_AUTO_BRIGHTNESS, 0,
+                                userTracker.getUserId()) != 0;
                         updateIcon();
                     }
                 });
