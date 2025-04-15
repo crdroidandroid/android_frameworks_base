@@ -1324,7 +1324,8 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces {
                     mShadeSurface,
                     mNotificationShadeDepthControllerLazy.get(),
                     mBrightnessSliderFactory,
-                    this::setBrightnessMirrorShowing);
+                    this::setBrightnessMirrorShowing,
+                    mUserTracker);
             fragmentHostManager.addTagListener(QS.TAG, (tag, f) -> {
                 QS qs = (QS) f;
                 if (qs instanceof QSFragmentLegacy) {
