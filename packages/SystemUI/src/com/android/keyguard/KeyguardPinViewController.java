@@ -34,6 +34,8 @@ import com.android.systemui.res.R;
 import com.android.systemui.statusbar.policy.DevicePostureController;
 import com.android.systemui.user.domain.interactor.SelectedUserInteractor;
 
+import lineageos.providers.LineageSettings;
+
 public class KeyguardPinViewController
         extends KeyguardPinBasedInputViewController<KeyguardPINView> {
     private final KeyguardUpdateMonitor mKeyguardUpdateMonitor;
@@ -97,6 +99,10 @@ public class KeyguardPinViewController
             mPasswordEntry.setUsePinShapes(true);
             updateAutoConfirmationState();
         }
+        mView.updatePinScrambling(
+                LineageSettings.System.getIntForUser(getContext().getContentResolver(),
+                        LineageSettings.System.LOCKSCREEN_PIN_SCRAMBLE_LAYOUT, 0,
+                        mSelectedUserInteractor.getSelectedUserId()) == 1);
     }
 
     protected void onUserInput() {
@@ -120,6 +126,10 @@ public class KeyguardPinViewController
     @Override
     public void startAppearAnimation() {
         super.startAppearAnimation();
+        mView.updatePinScrambling(
+                LineageSettings.System.getIntForUser(getContext().getContentResolver(),
+                        LineageSettings.System.LOCKSCREEN_PIN_SCRAMBLE_LAYOUT, 0,
+                        mSelectedUserInteractor.getSelectedUserId()) == 1);
     }
 
     @Override
