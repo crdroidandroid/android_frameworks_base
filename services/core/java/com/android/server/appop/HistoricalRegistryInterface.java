@@ -135,6 +135,11 @@ public interface HistoricalRegistryInterface {
      */
     void offsetHistory(long offsetMillis);
 
+      /**
+     * Offsets discrete history by the given duration.
+     */
+    void offsetDiscreteHistory(long offsetMillis);
+
     /**
      * Retrieve historical app op stats for a period form disk.
      */

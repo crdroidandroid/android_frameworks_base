@@ -7035,6 +7035,7 @@ public class AppOpsService extends IAppOpsService.Stub {
         offsetHistory_enforcePermission();
         // Must not hold the appops lock
         mHistoricalRegistry.offsetHistory(offsetMillis);
+        mHistoricalRegistry.offsetDiscreteHistory(offsetMillis);
     }
 
     @android.annotation.EnforcePermission(android.Manifest.permission.MANAGE_APPOPS)

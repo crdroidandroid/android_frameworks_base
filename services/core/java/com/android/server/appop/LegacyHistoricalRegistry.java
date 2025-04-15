@@ -618,7 +618,11 @@ final class LegacyHistoricalRegistry implements HistoricalRegistryInterface {
                 mPersistence.persistHistoricalOpsDLocked(history);
             }
         }
-        mDiscreteRegistry.offsetHistory(offsetMillis);
+    }
+
+    @Override
+    public void offsetDiscreteHistory(long offsetMillis) {
+       mDiscreteRegistry.offsetHistory(offsetMillis);
     }
 
     @Override

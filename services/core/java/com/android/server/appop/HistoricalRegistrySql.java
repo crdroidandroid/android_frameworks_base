@@ -131,6 +131,11 @@ public class HistoricalRegistrySql implements HistoricalRegistryInterface {
     }
 
     @Override
+    public void offsetDiscreteHistory(long offsetMillis) {
+
+    }
+
+    @Override
     public void getHistoricalOpsFromDiskRaw(int uid, @Nullable String packageName,
             @Nullable String attributionTag, @Nullable String[] opNames, int historyFlags,
             int filter, long beginTimeMillis, long endTimeMillis, int flags,
