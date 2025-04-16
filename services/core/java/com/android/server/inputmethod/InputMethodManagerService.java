@@ -3089,8 +3089,8 @@ public final class InputMethodManagerService implements IInputMethodManagerImpl.
         if (!mLineageHardware.isSupported(LineageHardwareManager.FEATURE_HIGH_TOUCH_SENSITIVITY)) {
             return;
         }
-        final boolean enabled = LineageSettings.System.getInt(mContext.getContentResolver(),
-                LineageSettings.System.HIGH_TOUCH_SENSITIVITY_ENABLE, 0) == 1;
+        final boolean enabled = LineageSettings.System.getIntForUser(mContext.getContentResolver(),
+                LineageSettings.System.HIGH_TOUCH_SENSITIVITY_ENABLE, 0, mCurrentImeUserId) == 1;
         mLineageHardware.set(LineageHardwareManager.FEATURE_HIGH_TOUCH_SENSITIVITY, enabled);
     }
 
