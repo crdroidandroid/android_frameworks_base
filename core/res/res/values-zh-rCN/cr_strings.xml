@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: 2016-2025 crDroid Android Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Button that copies the url to the log of a crashed application -->
+    <string name="aerr_copy">复制崩溃日志链接</string>
+    <string name="url_copy_success">已成功复制链接</string>
+    <string name="url_copy_failed">将日志上传到 Pasty 时出错</string>
+    <!-- Lock gesture -->
+    <string name="gesture_locked_warning">再次滑动以解锁手势</string>
+    <!-- Pocket Lock -->
+    <string name="pocket_mode_title">口袋检测已开启</string>
+    <string name="pocket_mode_illustration_description">口袋检测说明</string>
+    <string name="pocket_mode_instructions_header">如需使用您的手机：</string>
+    <string name="pocket_mode_instruction_step1">1. 确保上面显示的蓝色区域 ( 距离传感器 ) 不受遮挡，且没有泥土或灰尘。</string>
+    <string name="pocket_mode_instruction_step2">2. 按住电源按钮可退出口袋检测。</string>
+    <!-- App lock -->
+    <string name="unlock_application">解锁应用 <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
+    <!-- Cycle through ringer modes -->
+    <string name="volume_dialog_ringer_guidance_normal">来电和通知时将响铃</string>
+</resources>

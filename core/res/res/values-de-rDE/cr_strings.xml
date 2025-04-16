@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: 2016-2025 crDroid Android Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Button that copies the url to the log of a crashed application -->
+    <string name="aerr_copy">URL des Absturzberichts kopieren</string>
+    <string name="url_copy_success">URL erfolgreich kopiert</string>
+    <string name="url_copy_failed">Beim Hochladen des Absturzberichts zu Pasty ist ein Fehler aufgetreten</string>
+    <!-- Lock gesture -->
+    <string name="gesture_locked_warning">Erneut wischen, um Gesten zu verwenden</string>
+    <!-- Pocket Lock -->
+    <string name="pocket_mode_title">Taschenmodus aktiv</string>
+    <string name="pocket_mode_illustration_description">Abbildung des Telefons in der Tasche</string>
+    <string name="pocket_mode_instructions_header">Um das Gerät zu verwenden:</string>
+    <string name="pocket_mode_instruction_step1">1. Dafür sorgen, dass der blau dargestellte Bereich (Näherungssensor) frei von Schmutz und Staub ist.</string>
+    <string name="pocket_mode_instruction_step2">2. Ein-/Austaste gedrückt halten zum Beenden des Taschenmodus.</string>
+    <!-- App lock -->
+    <string name="unlock_application"><xliff:g id="label" example="Telegram">%1$s</xliff:g> entsperren</string>
+    <!-- Cycle through ringer modes -->
+    <string name="volume_dialog_ringer_guidance_normal">Bei Anrufen und Benachrichtigungen klingeln</string>
+</resources>

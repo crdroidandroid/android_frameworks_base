@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: 2016-2025 crDroid Android Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Button that copies the url to the log of a crashed application -->
+    <string name="aerr_copy">Капіяваць спасылку журнала памылкі</string>
+    <string name="url_copy_success">Спасылка паспяхова скапіявана</string>
+    <string name="url_copy_failed">Адбылася памылка падчас загрузкі лога на Pasty</string>
+    <!-- Lock gesture -->
+    <string name="gesture_locked_warning">Правядзіце яшчэ раз, каб разблакіраваць жэсты</string>
+    <!-- Pocket Lock -->
+    <string name="pocket_mode_title">Рэжым \"У кішэні\" уключаны</string>
+    <string name="pocket_mode_illustration_description">Ілюстрацыя тэлефона ў кішэні</string>
+    <string name="pocket_mode_instructions_header">Для выкарыстання тэлефона:</string>
+    <string name="pocket_mode_instruction_step1">1. Пераканайцеся, што сіняя вобласць (датчык набліжэння), паказаная вышэй, не мае перашкод і не мае бруду або пылу.</string>
+    <string name="pocket_mode_instruction_step2">2. Каб выйсці з кішэннага рэжыму, націсніце і ўтрымлівайце кнопку сілкавання.</string>
+    <!-- App lock -->
+    <string name="unlock_application">Разблакіраваць <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
+    <!-- Cycle through ringer modes -->
+    <string name="volume_dialog_ringer_guidance_normal">Calls and notifications will ring</string>
+</resources>

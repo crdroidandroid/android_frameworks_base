@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: 2016-2025 crDroid Android Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Button that copies the url to the log of a crashed application -->
+    <string name="aerr_copy">クラッシュログ URL をコピー</string>
+    <string name="url_copy_success">URL をコピーしました</string>
+    <string name="url_copy_failed">Pasty へのログのアップロード中にエラーが発生しました</string>
+    <!-- Lock gesture -->
+    <string name="gesture_locked_warning">再度スワイプしてジェスチャーのロックを解除</string>
+    <!-- Pocket Lock -->
+    <string name="pocket_mode_title">ポケットモードがアクティブです</string>
+    <string name="pocket_mode_illustration_description">ポケットの中のスマートフォンのイラスト</string>
+    <string name="pocket_mode_instructions_header">端末を使用するには</string>
+    <string name="pocket_mode_instruction_step1">1. 上記の青色の領域 (近接センサー) が覆われておらず、汚れやほこりがないことを確認してください。</string>
+    <string name="pocket_mode_instruction_step2">2. 電源ボタンを押したままにするとポケットモードを終了します。</string>
+    <!-- App lock -->
+    <string name="unlock_application"><xliff:g id="label" example="Telegram">%1$s</xliff:g> をロック解除</string>
+    <!-- Cycle through ringer modes -->
+    <string name="volume_dialog_ringer_guidance_normal">Calls and notifications will ring</string>
+</resources>
