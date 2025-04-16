@@ -1693,9 +1693,9 @@ public final class PowerManagerService extends SystemService
             mSystemProperties.set(SYSTEM_PROPERTY_RETAIL_DEMO_ENABLED, retailDemoValue);
         }
 
-        mProximityWakeEnabled = LineageSettings.System.getInt(resolver,
+        mProximityWakeEnabled = LineageSettings.System.getIntForUser(resolver,
                 LineageSettings.System.PROXIMITY_ON_WAKE,
-                mProximityWakeEnabledByDefaultConfig ? 1 : 0) == 1;
+                mProximityWakeEnabledByDefaultConfig ? 1 : 0, UserHandle.USER_CURRENT) == 1;
 
         mButtonTimeout = LineageSettings.Secure.getIntForUser(resolver,
                 LineageSettings.Secure.BUTTON_BACKLIGHT_TIMEOUT,
