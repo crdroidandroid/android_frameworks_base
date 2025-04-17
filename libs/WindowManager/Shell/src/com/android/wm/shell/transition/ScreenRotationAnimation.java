@@ -79,6 +79,7 @@ class ScreenRotationAnimation {
     private final float[] mTmpFloats = new float[9];
     /** The leash of the changing window container. */
     private final SurfaceControl mSurfaceControl;
+    private final SurfaceControl mRootLeash;
 
     private final int mAnimHint;
     private final int mStartWidth;
@@ -129,6 +130,7 @@ class ScreenRotationAnimation {
         mEndHeight = change.getEndAbsBounds().height();
         mStartRotation = change.getStartRotation();
         mEndRotation = change.getEndRotation();
+        mRootLeash = rootLeash;
 
         mAnimLeash = new SurfaceControl.Builder()
                 .setParent(rootLeash)
@@ -390,6 +392,7 @@ class ScreenRotationAnimation {
             t.remove(mBackColorSurface);
         }
         if (mBackEffectSurface != null && mBackEffectSurface.isValid()) {
+            t.reparent(mSurfaceControl, mRootLeash);
             t.remove(mBackEffectSurface);
         }
         t.apply();
