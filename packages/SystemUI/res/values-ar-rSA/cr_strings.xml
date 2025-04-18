@@ -10,20 +10,20 @@
     <string name="status_bar_call_strength">قوة الاتصال</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
-        <item quantity="zero">‏عدد الأجهزة المتصلة ‎%d</item>
-        <item quantity="one">%d جهاز متصل</item>
-        <item quantity="two">%d devices connected</item>
-        <item quantity="few">%d devices connected</item>
-        <item quantity="many">%d devices connected</item>
+        <item quantity="zero">%d devices connected</item>
+        <item quantity="one">%d device connected</item>
+        <item quantity="two">%d اجهزة متصلة</item>
+        <item quantity="few">%d اجهزة متصلة</item>
+        <item quantity="many">%d اجهزة متصلة</item>
         <item quantity="other">%d اجهزة متصلة</item>
     </plurals>
     <!-- Notification counter -->
     <!-- Name of the roaming status bar icon. -->
     <string name="status_bar_roaming">أيقونة التجوال</string>
     <!-- Name of the HD calling status bar icon. -->
-    <string name="status_bar_hd_calling">HD calling (VoLTE/VoNR)</string>
+    <string name="status_bar_hd_calling">اتصالات عالية الجودة (VoLTE/VoNR)</string>
     <!-- Name of the VoWiFi status bar icon. -->
-    <string name="status_bar_vowifi">Wi-Fi calling (VoWiFi)</string>
+    <string name="status_bar_vowifi">اتصال عبر الـWi-Fi (VoWiFi)</string>
     <!-- Status bar network traffic monitor strings -->
     <string name="kilobitspersecond_short">ك. ب/ث</string>
     <string name="megabitspersecond_short">م. ب/ث</string>
@@ -38,7 +38,7 @@
     <!-- Weather -->
     <string name="weather_condition_clouds">غائم</string>
     <string name="weather_condition_rain">ماطر</string>
-    <string name="weather_condition_clear">Clear Sky</string>
+    <string name="weather_condition_clear">سماء صافية</string>
     <string name="weather_condition_storm">عاصف</string>
     <string name="weather_condition_snow">مثلج</string>
     <string name="weather_condition_wind">رياح قوية</string>
@@ -133,11 +133,11 @@
     <string name="quick_settings_locale_label">اللغة</string>
     <string name="quick_settings_locale_more_locales_toast">قم بتهيئة عدة لغات اولآ</string>
     <!-- AI Assistant affordance [CHAR LIMIT=32] -->
-    <string name="accessibility_assistant_button">AI Assistant</string>
+    <string name="accessibility_assistant_button">مساعد AI</string>
     <!-- Text while recognizing face -->
     <string name="face_unlock_recognizing">يتم التعرف على الوجه...</string>
     <!-- 5G toggle in Internet Dialog -->
-    <string name="enable_fiveg">Enable 5G</string>
+    <string name="enable_fiveg">تمكين 5G</string>
     <!-- Toast for timer chips long press -->
-    <string name="chip_longpress_hint">Long press to directly stop</string>
+    <string name="chip_longpress_hint">اضغط مطولاً للتوقف مباشرة</string>
 </resources>
