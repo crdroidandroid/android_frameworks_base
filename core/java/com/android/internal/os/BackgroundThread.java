@@ -32,49 +32,41 @@ import java.util.concurrent.Executor;
 public final class BackgroundThread extends HandlerThread {
     private static final long SLOW_DISPATCH_THRESHOLD_MS = 10_000;
     private static final long SLOW_DELIVERY_THRESHOLD_MS = 30_000;
-    private static BackgroundThread sInstance;
-    private static Handler sHandler;
-    private static HandlerExecutor sHandlerExecutor;
+    private Handler mHandler;
+    private HandlerExecutor mHandlerExecutor;
 
     private BackgroundThread() {
         super("android.bg", android.os.Process.THREAD_PRIORITY_BACKGROUND);
     }
 
-    private static void ensureThreadLocked() {
-        if (sInstance == null) {
-            sInstance = new BackgroundThread();
-            sInstance.start();
-            final Looper looper = sInstance.getLooper();
-            looper.setTraceTag(Trace.TRACE_TAG_SYSTEM_SERVER);
-            looper.setSlowLogThresholdMs(
-                    SLOW_DISPATCH_THRESHOLD_MS, SLOW_DELIVERY_THRESHOLD_MS);
-            sHandler = new Handler(sInstance.getLooper(), /*callback=*/ null, /* async=*/ false,
-                    /* shared=*/ true);
-            sHandlerExecutor = new HandlerExecutor(sHandler);
-        }
-    }
-
     @NonNull
     public static BackgroundThread get() {
-        synchronized (BackgroundThread.class) {
-            ensureThreadLocked();
-            return sInstance;
-        }
+        return ThreadHolder.INSTANCE;
     }
 
     @NonNull
     public static Handler getHandler() {
-        synchronized (BackgroundThread.class) {
-            ensureThreadLocked();
-            return sHandler;
-        }
+        return ThreadHolder.INSTANCE.mHandler;
     }
 
     @NonNull
     public static Executor getExecutor() {
-        synchronized (BackgroundThread.class) {
-            ensureThreadLocked();
-            return sHandlerExecutor;
+        return ThreadHolder.INSTANCE.mHandlerExecutor;
+    }
+
+    private static final class ThreadHolder {
+        private static final BackgroundThread INSTANCE;
+        static {
+            BackgroundThread thread = new BackgroundThread();
+            thread.start();
+            final Looper looper = thread.getLooper();
+            looper.setTraceTag(Trace.TRACE_TAG_SYSTEM_SERVER);
+            looper.setSlowLogThresholdMs(
+                    SLOW_DISPATCH_THRESHOLD_MS, SLOW_DELIVERY_THRESHOLD_MS);
+            thread.mHandler = new Handler(looper, /*callback=*/ null, /* async=*/ false,
+                    /* shared=*/ true);
+            thread.mHandlerExecutor = new HandlerExecutor(thread.mHandler);
+            INSTANCE = thread;
         }
     }
 }
