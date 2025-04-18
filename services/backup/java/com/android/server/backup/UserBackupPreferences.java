@@ -21,34 +21,37 @@ import android.content.SharedPreferences;
 
 import java.io.File;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /** Manages the persisted backup preferences per user. */
 public class UserBackupPreferences {
     private static final String PREFERENCES_FILE = "backup_preferences";
 
-    private final SharedPreferences mPreferences;
-    private final SharedPreferences.Editor mEditor;
+    private final File mExcludedKeysFile;
+    private SharedPreferences mPreferences = null;
 
-    UserBackupPreferences(Context conext, File storageDir) {
-        File excludedKeysFile = new File(storageDir, PREFERENCES_FILE);
-        mPreferences = conext.getSharedPreferences(excludedKeysFile, Context.MODE_PRIVATE);
-        mEditor = mPreferences.edit();
+    UserBackupPreferences(File storageDir) {
+        mExcludedKeysFile = new File(storageDir, PREFERENCES_FILE);
     }
 
-    void addExcludedKeys(String packageName, List<String> keys) {
+    void addExcludedKeys(Context context, String packageName, List<String> keys) {
+        if (mPreferences == null) {
+            mPreferences = context.getSharedPreferences(mExcludedKeysFile, Context.MODE_PRIVATE);
+        }
         Set<String> existingKeys =
                 new HashSet<>(mPreferences.getStringSet(packageName, Collections.emptySet()));
         existingKeys.addAll(keys);
-        mEditor.putStringSet(packageName, existingKeys);
-        mEditor.commit();
+        SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putStringSet(packageName, existingKeys);
+        editor.commit();
     }
 
-    Set<String> getExcludedRestoreKeysForPackage(String packageName) {
+    Set<String> getExcludedRestoreKeysForPackage(Context context, String packageName) {
+        if (mPreferences == null) {
+            mPreferences = context.getSharedPreferences(mExcludedKeysFile, Context.MODE_PRIVATE);
+        }
         return mPreferences.getStringSet(packageName, Collections.emptySet());
     }
 }

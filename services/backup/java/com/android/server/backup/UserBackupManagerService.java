@@ -664,7 +664,7 @@ public class UserBackupManagerService {
         mBackupHandler.postDelayed(backupManagerMonitorDumpsysUtils::deleteExpiredBMMEvents,
                 INITIALIZATION_DELAY_MILLIS);
 
-        mBackupPreferences = new UserBackupPreferences(mContext, mBaseStateDir);
+        mBackupPreferences = new UserBackupPreferences(mBaseStateDir);
 
         // Power management
         mWakelock = new BackupWakeLock(
@@ -1167,7 +1167,7 @@ public class UserBackupManagerService {
     }
 
     public Set<String> getExcludedRestoreKeys(String packageName) {
-        return mBackupPreferences.getExcludedRestoreKeysForPackage(packageName);
+        return mBackupPreferences.getExcludedRestoreKeysForPackage(mContext, packageName);
     }
 
     /** Used for generating random salts or passwords. */
@@ -2960,7 +2960,7 @@ public class UserBackupManagerService {
     public void excludeKeysFromRestore(String packageName, List<String> keys) {
         mContext.enforceCallingOrSelfPermission(android.Manifest.permission.BACKUP,
                 "excludeKeysFromRestore");
-        mBackupPreferences.addExcludedKeys(packageName, keys);
+        mBackupPreferences.addExcludedKeys(mContext, packageName, keys);
     }
 
     public void reportDelayedRestoreResult(String packageName,
