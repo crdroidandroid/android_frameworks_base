@@ -28,42 +28,38 @@ import java.util.concurrent.Executor;
  * (not waiting for data itself, but communicating with network daemons).
  */
 public final class IoThread extends ServiceThread {
-    private static IoThread sInstance;
-    private static Handler sHandler;
-    private static HandlerExecutor sHandlerExecutor;
+    private Handler mHandler;
+    private HandlerExecutor mHandlerExecutor;
 
     private IoThread() {
         super("android.io", android.os.Process.THREAD_PRIORITY_DEFAULT, true /*allowIo*/);
     }
 
-    private static void ensureThreadLocked() {
-        if (sInstance == null) {
-            sInstance = new IoThread();
-            sInstance.start();
-            sInstance.getLooper().setTraceTag(Trace.TRACE_TAG_SYSTEM_SERVER);
-            sHandler = makeSharedHandler(sInstance.getLooper());
-            sHandlerExecutor = new HandlerExecutor(sHandler);
-        }
-    }
-
     public static IoThread get() {
-        synchronized (IoThread.class) {
-            ensureThreadLocked();
-            return sInstance;
-        }
+        return ThreadHolder.INSTANCE;
     }
 
     public static Handler getHandler() {
-        synchronized (IoThread.class) {
-            ensureThreadLocked();
-            return sHandler;
-        }
+        return ThreadHolder.INSTANCE.mHandler;
     }
 
     public static Executor getExecutor() {
-        synchronized (IoThread.class) {
-            ensureThreadLocked();
-            return sHandlerExecutor;
+        return ThreadHolder.INSTANCE.mHandlerExecutor;
+    }
+
+    private static void initHandler(IoThread thread) {
+        thread.mHandler = makeSharedHandler(thread.getLooper());
+    }
+
+    private static final class ThreadHolder {
+        private static final IoThread INSTANCE;
+        static {
+            IoThread thread = new IoThread();
+            thread.start();
+            thread.getLooper().setTraceTag(Trace.TRACE_TAG_SYSTEM_SERVER);
+            initHandler(thread);
+            thread.mHandlerExecutor = new HandlerExecutor(thread.mHandler);
+            INSTANCE = thread;
         }
     }
 }

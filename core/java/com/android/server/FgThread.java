@@ -38,45 +38,41 @@ public final class FgThread extends ServiceThread {
     private static final long SLOW_DISPATCH_THRESHOLD_MS = 100;
     private static final long SLOW_DELIVERY_THRESHOLD_MS = 200;
 
-    private static FgThread sInstance;
-    private static Handler sHandler;
-    private static HandlerExecutor sHandlerExecutor;
+    private Handler mHandler;
+    private HandlerExecutor mHandlerExecutor;
 
     private FgThread() {
         super("android.fg", android.os.Process.THREAD_PRIORITY_DEFAULT, true /*allowIo*/);
     }
 
-    private static void ensureThreadLocked() {
-        if (sInstance == null) {
-            sInstance = new FgThread();
-            sInstance.start();
-            final Looper looper = sInstance.getLooper();
-            looper.setTraceTag(Trace.TRACE_TAG_SYSTEM_SERVER);
-            looper.setSlowLogThresholdMs(
-                    SLOW_DISPATCH_THRESHOLD_MS, SLOW_DELIVERY_THRESHOLD_MS);
-            sHandler = makeSharedHandler(sInstance.getLooper());
-            sHandlerExecutor = new HandlerExecutor(sHandler);
-        }
-    }
-
     public static FgThread get() {
-        synchronized (FgThread.class) {
-            ensureThreadLocked();
-            return sInstance;
-        }
+        return ThreadHolder.INSTANCE;
     }
 
     public static Handler getHandler() {
-        synchronized (FgThread.class) {
-            ensureThreadLocked();
-            return sHandler;
-        }
+        return ThreadHolder.INSTANCE.mHandler;
     }
 
     public static Executor getExecutor() {
-        synchronized (FgThread.class) {
-            ensureThreadLocked();
-            return sHandlerExecutor;
+        return ThreadHolder.INSTANCE.mHandlerExecutor;
+    }
+
+    private static void initHandler(FgThread thread) {
+        thread.mHandler = makeSharedHandler(thread.getLooper());
+    }
+
+    private static final class ThreadHolder {
+        private static final FgThread INSTANCE;
+        static {
+            FgThread thread = new FgThread();
+            thread.start();
+            final Looper looper = thread.getLooper();
+            looper.setTraceTag(Trace.TRACE_TAG_SYSTEM_SERVER);
+            looper.setSlowLogThresholdMs(
+                    SLOW_DISPATCH_THRESHOLD_MS, SLOW_DELIVERY_THRESHOLD_MS);
+            initHandler(thread);
+            thread.mHandlerExecutor = new HandlerExecutor(thread.mHandler);
+            INSTANCE = thread;
         }
     }
 }
