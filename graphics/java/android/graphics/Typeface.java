@@ -151,6 +151,11 @@ public class Typeface {
     private static final LruCache<Long, LruCache<String, Typeface>> sVariableCache =
             new LruCache<>(16);
     private static final Object sVariableCacheLock = new Object();
+    
+    private static final Map<String, Field> sCachedFields = new HashMap<>();
+    private static final Map<String, Typeface> sTypefaceCache = new HashMap<>();
+    
+    private static String sLastDefaultFamily;
 
     /** @hide */
     @VisibleForTesting
@@ -1499,14 +1504,22 @@ public class Typeface {
         }
     }
 
-    private static void setFinalField(String fieldName, Typeface value) {
+    private static void setFinalField(String fieldName, Typeface newValue) {
         synchronized (SYSTEM_FONT_MAP_LOCK) {
             try {
-                Field field = Typeface.class.getDeclaredField(fieldName);
-                // isAccessible bypasses final on ART
-                field.setAccessible(true);
-                field.set(null, value);
-                field.setAccessible(false);
+                Field field = sCachedFields.get(fieldName);
+                if (field == null) {
+                    field = Typeface.class.getDeclaredField(fieldName);
+                    field.setAccessible(true);
+                    sCachedFields.put(fieldName, field);
+                }
+
+                Object currentValue = field.get(null);
+                if (newValue != null && newValue.equals(currentValue)) {
+                    return;
+                }
+
+                field.set(null, newValue);
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 Log.e(TAG, "Failed to set Typeface." + fieldName, e);
             }
@@ -1517,53 +1530,89 @@ public class Typeface {
     public static void updateDefaultFont(Resources res) {
         synchronized (SYSTEM_FONT_MAP_LOCK) {
             String defaultFamily = res.getString(com.android.internal.R.string.config_bodyFontFamily);
-            Typeface defaultTypeface = getTypefaceOrDefault(defaultFamily, "sans-serif", NORMAL);
+            if (defaultFamily.equals(sLastDefaultFamily)) {
+                return;
+            }
 
+            sLastDefaultFamily = defaultFamily;
+
+            Typeface defaultTypeface = getTypefaceOrDefault(defaultFamily, "sans-serif", NORMAL);
             setDefault(defaultTypeface);
 
             // Static typefaces in public API
             setFinalField("DEFAULT", create(getSystemDefaultTypeface(defaultFamily), NORMAL));
             setFinalField("DEFAULT_BOLD", create(getSystemDefaultTypeface(defaultFamily), BOLD));
-            setFinalField("SANS_SERIF", defaultFamily.equals("sans-serif") ? create("sans-serif", NORMAL) : defaultTypeface);
-            setFinalField("SERIF", create("serif", NORMAL));
+            setFinalField("SANS_SERIF", defaultFamily.equals("sans-serif")
+                ? getOrCreateTypeface("sans-serif", NORMAL)
+                : defaultTypeface);
+            setFinalField("SERIF", getOrCreateTypeface("serif", NORMAL));
 
             updateFontOverrides("sans-serif", defaultFamily, defaultTypeface);
             updateFontOverrides("google-sans", defaultFamily, defaultTypeface);
 
-            if (sSystemFontOverrides.containsKey(defaultFamily)) {
-                sSystemFontOverrides.remove(defaultFamily);
-            }
-
+            sSystemFontOverrides.remove(defaultFamily);
             setPublicDefaults(defaultFamily);
+        }
+    }
+
+    private static Typeface getOrCreateTypeface(String family, int style) {
+        String key = family + ":" + style;
+        synchronized (sTypefaceCache) {
+            if (sTypefaceCache.containsKey(key)) {
+                return sTypefaceCache.get(key);
+            } else {
+                Typeface typeface = Typeface.create(family, style);
+                sTypefaceCache.put(key, typeface);
+                return typeface;
+            }
         }
     }
 
     /** @hide */
     private static Typeface getTypefaceOrDefault(String familyName, String defaultFamily, int style) {
         Typeface typeface = sSystemFontMap.get(familyName);
-        return typeface != null ? typeface : create(defaultFamily, style);
+        return typeface != null ? typeface : getOrCreateTypeface(defaultFamily, style);
     }
 
     /** @hide */
     private static void updateFontOverrides(String fontPrefix, String familyName, Typeface defaultTypeface) {
         if (!familyName.equals(fontPrefix)) {
-            sSystemFontOverrides.put(fontPrefix, defaultTypeface);
-            sSystemFontOverrides.put(fontPrefix + "-flex", defaultTypeface);
-            sSystemFontOverrides.put(fontPrefix + "-text", defaultTypeface);
-            sSystemFontOverrides.put(fontPrefix + "-thin", create(defaultTypeface, 100, false));
-            sSystemFontOverrides.put(fontPrefix + "-light", create(defaultTypeface, 300, false));
-            sSystemFontOverrides.put(fontPrefix + "-book", create(defaultTypeface, 400, false));
-            sSystemFontOverrides.put(fontPrefix + "-regular", create(defaultTypeface, 400, false));
-            sSystemFontOverrides.put(fontPrefix + "-text-medium", create(defaultTypeface, 500, false));
-            sSystemFontOverrides.put(fontPrefix + "-text-medium-compat", create(defaultTypeface, 500, false));
-            sSystemFontOverrides.put(fontPrefix + "-medium", create(defaultTypeface, 500, false));
-            sSystemFontOverrides.put(fontPrefix + "-bold", create(defaultTypeface, 700, false));
-            sSystemFontOverrides.put(fontPrefix + "-text-bold", create(defaultTypeface, 700, false));
-            sSystemFontOverrides.put(fontPrefix + "-black", create(defaultTypeface, 900, false));
-            sSystemFontOverrides.put(fontPrefix + "-condensed", defaultTypeface);
-            sSystemFontOverrides.put(fontPrefix + "-condensed-light", create(defaultTypeface, 300, false));
-            sSystemFontOverrides.put(fontPrefix + "-condensed-medium", create(defaultTypeface, 500, false));
+            putIfAbsent(fontPrefix, defaultTypeface);
+            putIfAbsent(fontPrefix + "-flex", defaultTypeface);
+            putIfAbsent(fontPrefix + "-text", defaultTypeface);
+
+            putIfAbsent(fontPrefix + "-thin", getOrCreateFromBase(defaultTypeface, 100, false));
+            putIfAbsent(fontPrefix + "-light", getOrCreateFromBase(defaultTypeface, 300, false));
+            putIfAbsent(fontPrefix + "-book", getOrCreateFromBase(defaultTypeface, 400, false));
+            putIfAbsent(fontPrefix + "-regular", getOrCreateFromBase(defaultTypeface, 400, false));
+            putIfAbsent(fontPrefix + "-text-medium", getOrCreateFromBase(defaultTypeface, 500, false));
+            putIfAbsent(fontPrefix + "-text-medium-compat", getOrCreateFromBase(defaultTypeface, 500, false));
+            putIfAbsent(fontPrefix + "-medium", getOrCreateFromBase(defaultTypeface, 500, false));
+            putIfAbsent(fontPrefix + "-bold", getOrCreateFromBase(defaultTypeface, 700, false));
+            putIfAbsent(fontPrefix + "-text-bold", getOrCreateFromBase(defaultTypeface, 700, false));
+            putIfAbsent(fontPrefix + "-black", getOrCreateFromBase(defaultTypeface, 900, false));
+            putIfAbsent(fontPrefix + "-condensed", defaultTypeface);
+            putIfAbsent(fontPrefix + "-condensed-light", getOrCreateFromBase(defaultTypeface, 300, false));
+            putIfAbsent(fontPrefix + "-condensed-medium", getOrCreateFromBase(defaultTypeface, 500, false));
         }
+    }
+
+    private static Typeface getOrCreateFromBase(Typeface base, int weight, boolean italic) {
+        String key = base.hashCode() + ":" + weight + ":" + italic;
+        synchronized (sTypefaceCache) {
+            Typeface cached = sTypefaceCache.get(key);
+            if (cached != null) {
+                return cached;
+            }
+            Typeface typeface = Typeface.create(base, weight, italic);
+            sTypefaceCache.put(key, typeface);
+            return typeface;
+        }
+    }
+
+    /** @hide */
+    private static void putIfAbsent(String key, Typeface typeface) {
+        sSystemFontOverrides.putIfAbsent(key, typeface);
     }
 
     /** @hide */
