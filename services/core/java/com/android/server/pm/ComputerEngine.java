@@ -1550,18 +1550,12 @@ public class ComputerEngine implements Computer {
             return null;
         }
 
-        final PackageUserStateInternal state = ps.getUserStateOrDefault(userId);
-        if ((flags & MATCH_UNINSTALLED_PACKAGES) != 0) {
-            final SettingBase callingSetting =
-                    mSettings.getSettingBase(UserHandle.getAppId(callingUid));
-            if (state.isHidden() && callingSetting != null && (callingSetting.getFlags() &
-                    ApplicationInfo.FLAG_SYSTEM) != ApplicationInfo.FLAG_SYSTEM) {
-                return null;
-            } else if (ps.isSystem()) {
-                flags |= MATCH_ANY_USER;
-            }
+        if ((flags & MATCH_UNINSTALLED_PACKAGES) != 0
+                && ps.isSystem()) {
+            flags |= MATCH_ANY_USER;
         }
 
+        final PackageUserStateInternal state = ps.getUserStateOrDefault(userId);
         AndroidPackage p = ps.getPkg();
         if (p != null) {
             // Compute GIDs only if requested
