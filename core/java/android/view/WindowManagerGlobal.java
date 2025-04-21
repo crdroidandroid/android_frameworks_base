@@ -560,7 +560,7 @@ public final class WindowManagerGlobal {
     }
 
     void doRemoveView(ViewRootImpl root) {
-        boolean allViewsRemoved;
+        final boolean allViewsRemoved;
         synchronized (mLock) {
             final int index = mRoots.indexOf(root);
             if (index >= 0) {
@@ -570,6 +570,13 @@ public final class WindowManagerGlobal {
                 mDyingViews.remove(view);
             }
             allViewsRemoved = mRoots.isEmpty();
+
+            // If we don't have any views anymore in our process, stop watching
+            // for system property changes.
+            if (allViewsRemoved && mSystemPropertyUpdater != null) {
+                SystemProperties.removeChangeCallback(mSystemPropertyUpdater);
+                mSystemPropertyUpdater = null;
+            }
         }
 
         // If we don't have any views anymore in our process, we no longer need the
