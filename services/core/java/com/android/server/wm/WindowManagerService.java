@@ -8772,8 +8772,11 @@ public class WindowManagerService extends IWindowManager.Stub
 
         @Override
         public @Nullable IBinder getTargetWindowTokenFromInputToken(IBinder inputToken) {
-            InputTarget inputTarget = WindowManagerService.this.getInputTargetFromToken(inputToken);
-            return inputTarget == null ? null : inputTarget.getWindowToken();
+            synchronized (mGlobalLock) {
+                InputTarget inputTarget =
+                        WindowManagerService.this.getInputTargetFromToken(inputToken);
+                return inputTarget == null ? null : inputTarget.getWindowToken();
+            }
         }
 
         @Override
