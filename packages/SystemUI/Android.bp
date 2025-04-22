@@ -540,7 +540,7 @@ android_library {
         "kairos",
         "displaylib",
         "aconfig_settings_flags_lib",
-        "vendor.lineage.powershare-V1.0-java",
+        "vendor.lineage.powershare-V1-java",
     ],
     libs: [
         "keepanno-annotations",
@@ -736,7 +736,7 @@ android_library {
         "aconfig_settings_flags_lib",
         "kairos",
         "displaylib",
-        "vendor.lineage.powershare-V1.0-java",
+        "vendor.lineage.powershare-V1-java",
     ],
 }
 
