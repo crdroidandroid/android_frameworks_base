@@ -795,9 +795,14 @@ public class AudioDeviceInventory {
             //TODO iterate on mApmConnectedDevices instead once it handles all device types
             for (DeviceInfo di : mConnectedDevices.values()) {
                 res = mAudioSystem.setDeviceConnectionState(new AudioDeviceAttributes(
-                        di.mDeviceType,
+                        AudioSystem.isInputDevice(di.mDeviceType)
+                            ? AudioDeviceAttributes.ROLE_INPUT
+                            : AudioDeviceAttributes.ROLE_OUTPUT,
+                        AudioDeviceInfo.convertInternalDeviceToDeviceType(di.mDeviceType),
                         di.mDeviceAddress,
-                        di.mDeviceName),
+                        di.mDeviceName,
+                        di.mAudioProfiles,
+                        di.mAudioDescriptors),
                         AudioSystem.DEVICE_STATE_AVAILABLE,
                         di.mDeviceCodecFormat, false /*deviceSwitch*/);
                 if (asDeviceConnectionFailure() && res != AudioSystem.AUDIO_STATUS_OK) {
