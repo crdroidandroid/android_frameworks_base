@@ -4379,10 +4379,8 @@ public class WindowManagerService extends IWindowManager.Stub
      * @param runningUserIds The ids of the list of users that have tasks loaded in our in-memory
      *                       model.
      */
-    public void removeObsoleteTaskFiles(ArraySet<Integer> persistentTaskIds, int[] runningUserIds) {
-        synchronized (mGlobalLock) {
-            mTaskSnapshotController.removeObsoleteTaskFiles(persistentTaskIds, runningUserIds);
-        }
+    void removeObsoleteTaskFiles(ArraySet<Integer> persistentTaskIds, int[] runningUserIds) {
+        mTaskSnapshotController.removeObsoleteTaskFiles(persistentTaskIds, runningUserIds);
     }
 
     @Override
