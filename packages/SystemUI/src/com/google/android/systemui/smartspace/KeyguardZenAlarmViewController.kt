@@ -42,6 +42,8 @@ class KeyguardZenAlarmViewController @Inject constructor(
         }
     
     val dndImage: Drawable = loadDndImage()
+
+    var currentAlarmListener: AlarmManager.OnAlarmListener? = null
     
     fun init() {
         plugin.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
@@ -90,26 +92,25 @@ class KeyguardZenAlarmViewController @Inject constructor(
     }
 
     fun updateNextAlarm() {
-        alarmManager.cancel(object : AlarmManager.OnAlarmListener {
-            override fun onAlarm() {
-                showAlarm()
-            }
-        })
+        currentAlarmListener?.let { alarmManager.cancel(it) }
         val nextAlarm: Long = zenModeController.getNextAlarm()
         if (nextAlarm > 0) {
             val millis: Long = nextAlarm - TimeUnit.HOURS.toMillis(12L)
             if (millis > 0) {
-                alarmManager.setExact(
-                    1,
-                    millis,
-                    "lock_screen_next_alarm",
-                    object : AlarmManager.OnAlarmListener {
-                        override fun onAlarm() {
-                            showAlarm()
-                        }
-                    },
-                    handler
-                )
+                currentAlarmListener = object : AlarmManager.OnAlarmListener {
+                    override fun onAlarm() {
+                        showAlarm()
+                    }
+                }
+                currentAlarmListener?.let {
+                    alarmManager.setExact(
+                        1,
+                        millis,
+                        "lock_screen_next_alarm",
+                        it,
+                        handler
+                    )
+                }
             }
         }
         showAlarm()
