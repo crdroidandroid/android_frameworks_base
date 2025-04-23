@@ -1123,9 +1123,11 @@ class TransitionController {
         } else {
             // Post this so that the now-playing transition logic isn't interrupted.
             mAtm.mH.post(() -> {
+                WindowManagerService.boostPriorityForLockedSection();
                 synchronized (mAtm.mGlobalLock) {
                     queued.mOnStartCollect.onCollectStarted(true /* deferred */);
                 }
+                WindowManagerService.resetPriorityAfterLockedSection();
             });
         }
     }
@@ -1575,9 +1577,11 @@ class TransitionController {
             // Note: asBinder() can be null if player is same process (likely in a test).
             if (mPlayer.asBinder() == null) return;
             mDeath = () -> {
+                WindowManagerService.boostPriorityForLockedSection();
                 synchronized (mAtm.mGlobalLock) {
                     unregisterTransitionPlayer(mPlayer);
                 }
+                WindowManagerService.resetPriorityAfterLockedSection();
             };
             mPlayer.asBinder().linkToDeath(mDeath, 0);
         }
@@ -1780,21 +1784,31 @@ class TransitionController {
     class Lock {
         private int mTransitionWaiters = 0;
         void runWhenIdle(long timeout, Runnable r) {
+            WindowManagerService.boostPriorityForLockedSection();
             synchronized (mAtm.mGlobalLock) {
-                if (!inTransition()) {
-                    r.run();
-                    return;
+                try {
+                    if (!inTransition()) {
+                        r.run();
+                        return;
+                    }
+                    mTransitionWaiters += 1;
+                } finally {
+                    WindowManagerService.resetPriorityAfterLockedSection();
                 }
-                mTransitionWaiters += 1;
             }
             final long startTime = SystemClock.uptimeMillis();
             final long endTime = startTime + timeout;
             while (true) {
+                WindowManagerService.boostPriorityForLockedSection();
                 synchronized (mAtm.mGlobalLock) {
-                    if (!inTransition() || SystemClock.uptimeMillis() > endTime) {
-                        mTransitionWaiters -= 1;
-                        r.run();
-                        return;
+                    try {
+                        if (!inTransition() || SystemClock.uptimeMillis() > endTime) {
+                            mTransitionWaiters -= 1;
+                            r.run();
+                            return;
+                        }
+                    } finally {
+                        WindowManagerService.resetPriorityAfterLockedSection();
                     }
                 }
                 synchronized (this) {
