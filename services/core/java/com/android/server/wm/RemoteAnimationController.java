@@ -281,10 +281,12 @@ class RemoteAnimationController implements DeathRecipient {
                 mRemoteAnimationAdapter.getDuration(),
                 mRemoteAnimationAdapter.getStatusBarTransitionDelay(),
                 adapter -> {
+                    WindowManagerService.boostPriorityForLockedSection();
                     synchronized (mService.mGlobalLock) {
                         // If the wallpaper animation is canceled, continue with the app animation
                         mPendingWallpaperAnimations.remove(adapter);
                     }
+                    WindowManagerService.resetPriorityAfterLockedSection();
                 }, mPendingWallpaperAnimations);
     }
 
@@ -303,6 +305,7 @@ class RemoteAnimationController implements DeathRecipient {
         ProtoLog.d(WM_DEBUG_REMOTE_ANIMATIONS, "onAnimationFinished(): mPendingAnimations=%d",
                 mPendingAnimations.size());
         mHandler.removeCallbacks(mTimeoutRunnable);
+        WindowManagerService.boostPriorityForLockedSection();
         synchronized (mService.mGlobalLock) {
             mIsFinishing = true;
             unlinkToDeathOfRunner();
@@ -345,6 +348,7 @@ class RemoteAnimationController implements DeathRecipient {
                 }
             } catch (Exception e) {
                 Slog.e(TAG, "Failed to finish remote animation", e);
+                WindowManagerService.resetPriorityAfterLockedSection();
                 throw e;
             } finally {
                 mIsFinishing = false;
@@ -354,6 +358,7 @@ class RemoteAnimationController implements DeathRecipient {
                     activity -> activity.setDropInputForAnimation(false);
             mDisplayContent.forAllActivities(updateActivities);
         }
+        WindowManagerService.resetPriorityAfterLockedSection();
         setRunningRemoteAnimation(false);
         ProtoLog.i(WM_DEBUG_REMOTE_ANIMATIONS, "Finishing remote animation");
     }
