@@ -169,7 +169,10 @@ public class MediaRecorder implements AudioRouting,
          */
         try (ScopedParcelState attributionSourceState = context.getAttributionSource()
                 .asScopedParcelState()) {
-            native_setup(new WeakReference<>(this), ActivityThread.currentPackageName(),
+            String name = ActivityThread.currentPackageName() == null
+                    ? context.getApplicationInfo().packageName
+                    : ActivityThread.currentPackageName();
+            native_setup(new WeakReference<>(this), name,
                     attributionSourceState.getParcel());
         }
     }
