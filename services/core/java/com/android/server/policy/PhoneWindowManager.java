@@ -430,6 +430,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     private static final String ACTION_TORCH_OFF =
             "com.android.server.policy.PhoneWindowManager.ACTION_TORCH_OFF";
+            
+    private static final long MEMORY_RELEASE_INTERVAL_MS = 10 * 60 * 1000L; // 10 minutes
+    private long lastMemoryReleaseTime = 0L;
 
     /**
      * Keyguard stuff
@@ -7116,6 +7119,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         if (mPocketManager != null) {
             mPocketManager.onInteractiveChanged(false);
         }
+
+        mHandler.removeCallbacks(mMemoryOpt);
     }
 
     // Called on the PowerManager's Notifier thread.
@@ -7171,6 +7176,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
         EventLogTags.writeScreenToggled(1);
 
+        mHandler.removeCallbacks(mMemoryOpt);
+        mHandler.postDelayed(mMemoryOpt, 1250 /* allowance time */);
+
         mIsGoingToSleepDefaultDisplay = false;
         mDefaultDisplayPolicy.setAwake(true);
 
@@ -7215,6 +7223,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             mDisplayFoldController.finishedWakingUp();
         }
     }
+
+    private final Runnable mMemoryOpt = new Runnable() {
+        @Override
+        public void run() {
+            releaseMemoryAtScreenOn();
+        }
+    };
 
     private boolean shouldWakeUpWithHomeIntent() {
         if (mWakeUpToLastStateTimeout <= 0) {
@@ -8912,6 +8927,17 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             case AudioManager.RINGER_MODE_SILENT:
                 am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
                 break;
+        }
+    }
+
+    private void releaseMemoryAtScreenOn() {
+        long currentTime = System.currentTimeMillis();
+        if (lastMemoryReleaseTime == 0L || currentTime - lastMemoryReleaseTime > MEMORY_RELEASE_INTERVAL_MS) {
+            try {
+                ActivityManager.getService().releaseMemory(900, 20, false, false);
+                lastMemoryReleaseTime = currentTime;
+            } catch (RemoteException e) {
+            }
         }
     }
 }
