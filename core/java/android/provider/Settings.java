@@ -7111,14 +7111,6 @@ public final class Settings {
         public static final String GAMESPACE_SUPPRESS_FULLSCREEN_INTENT = "gamespace_suppress_fullscreen_intent";
 
         /**
-         * Whether three fingers swipe is active
-         * 0 = Inactive, 1 = Active
-         * @hide
-         */
-        @Readable
-        public static final String THREE_FINGER_GESTURE_ACTIVE = "three_fingers_swipe_active";
-
-        /**
          * Current status of whether gestures are locked
          * @hide
          */
