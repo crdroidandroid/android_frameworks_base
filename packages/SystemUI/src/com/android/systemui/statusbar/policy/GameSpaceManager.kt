@@ -44,11 +44,11 @@ class GameSpaceManager @Inject constructor(
 ) {
     private val taskManager by lazy { ActivityTaskManager.getService() }
     private val powerManager by lazy { context.getSystemService(Context.POWER_SERVICE) as PowerManager }
-    private val coroutineScope = CoroutineScope(Dispatchers.Main.immediate)
-    
+    private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+
     private val _activeGame = MutableStateFlow<String?>(null)
     val activeGame: StateFlow<String?> = _activeGame.asStateFlow()
-    
+
     private val refreshTrigger = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
     private var observationJob: Job? = null
 
@@ -57,7 +57,7 @@ class GameSpaceManager @Inject constructor(
         override fun onTaskRemoved(taskId: Int) = refresh()
     }
 
-    private val screenReceiver = object : BroadcastReceiver() {
+    private val broadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             when (intent?.action) {
                 Intent.ACTION_SCREEN_OFF -> _activeGame.value = null
@@ -78,13 +78,11 @@ class GameSpaceManager @Inject constructor(
 
     fun observe() {
         if (observationJob != null) return
-        
+
         observationJob = coroutineScope.launch {
             merge(
-                taskStackFlow(),
-                screenInteractiveFlow(),
-                keyguardStateFlow(),
-                refreshTrigger
+                refreshTrigger,
+                screenAndKeyguardFlow()
             ).collect {
                 updateGameState()
             }
@@ -99,12 +97,13 @@ class GameSpaceManager @Inject constructor(
         unregisterReceivers()
     }
 
-    fun shouldSuppressFullScreenIntent() =
-        Settings.System.getIntForUser(
+    fun shouldSuppressFullScreenIntent(): Boolean {
+        return Settings.System.getIntForUser(
             context.contentResolver,
             Settings.System.GAMESPACE_SUPPRESS_FULLSCREEN_INTENT, 0,
             UserHandle.USER_CURRENT
         ) == 1 && activeGame.value != null
+    }
 
     private fun refresh() {
         refreshTrigger.tryEmit(Unit)
@@ -114,7 +113,7 @@ class GameSpaceManager @Inject constructor(
         try {
             taskManager.registerTaskStackListener(taskStackListener)
             context.registerReceiver(
-                screenReceiver,
+                broadcastReceiver,
                 IntentFilter().apply {
                     addAction(Intent.ACTION_SCREEN_OFF)
                     addAction(Intent.ACTION_SCREEN_ON)
@@ -122,82 +121,69 @@ class GameSpaceManager @Inject constructor(
                 Context.RECEIVER_NOT_EXPORTED
             )
             keyguardStateController.addCallback(keyguardCallback)
-        } catch (e: Exception) {}
+        } catch (_: Exception) {}
     }
 
     private fun unregisterReceivers() {
         try {
             taskManager.unregisterTaskStackListener(taskStackListener)
-            context.unregisterReceiver(screenReceiver)
+            context.unregisterReceiver(broadcastReceiver)
             keyguardStateController.removeCallback(keyguardCallback)
-        } catch (e: Exception) {}
+        } catch (_: Exception) {}
     }
 
-    private fun taskStackFlow(): Flow<Unit> = callbackFlow {
-        val listener = object : TaskStackListener() {
-            override fun onTaskStackChanged() {
-                trySend(Unit)
-            }
-
-            override fun onTaskRemoved(taskId: Int) {
-                trySend(Unit)
-            }
-        }
-        try {
-            taskManager.registerTaskStackListener(listener)
-            awaitClose { taskManager.unregisterTaskStackListener(listener) }
-        } catch (e: Exception) {
-            close(e)
-        }
-    }
-
-    private fun screenInteractiveFlow(): Flow<Boolean> = callbackFlow {
-        val filter = IntentFilter().apply {
-            addAction(Intent.ACTION_SCREEN_OFF)
+    private fun screenAndKeyguardFlow(): Flow<Unit> = callbackFlow {
+        val screenFilter = IntentFilter().apply {
             addAction(Intent.ACTION_SCREEN_ON)
+            addAction(Intent.ACTION_SCREEN_OFF)
         }
         val receiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
-                intent?.action?.let { action ->
-                    trySend(action == Intent.ACTION_SCREEN_ON)
-                }
+                trySend(Unit)
             }
         }
-        context.registerReceiver(receiver, filter, Context.RECEIVER_NOT_EXPORTED)
-        awaitClose { context.unregisterReceiver(receiver) }
-    }
 
-    private fun keyguardStateFlow(): Flow<Boolean> = callbackFlow {
         val callback = object : KeyguardStateController.Callback {
             override fun onKeyguardShowingChanged() {
-                trySend(keyguardStateController.isShowing)
+                trySend(Unit)
             }
         }
+
+        context.registerReceiver(receiver, screenFilter, Context.RECEIVER_NOT_EXPORTED)
         keyguardStateController.addCallback(callback)
-        awaitClose { keyguardStateController.removeCallback(callback) }
+        awaitClose {
+            context.unregisterReceiver(receiver)
+            keyguardStateController.removeCallback(callback)
+        }
     }
 
     private suspend fun updateGameState() {
         if (!powerManager.isInteractive || keyguardStateController.isShowing) {
-            _activeGame.value = null
+            if (_activeGame.value != null) {
+                _activeGame.value = null
+                dispatchGameState()
+            }
             return
         }
 
-        val currentPackage = getForegroundPackage() ?: run {
-            _activeGame.value = null
-            return
-        }
+        val currentPackage = getForegroundPackage()
+        val isGame = currentPackage != null && isInGameList(currentPackage)
 
-        _activeGame.value = if (isInGameList(currentPackage)) currentPackage else null
-        dispatchGameState()
+        if (_activeGame.value != currentPackage && isGame) {
+            _activeGame.value = currentPackage
+            dispatchGameState()
+        } else if (!isGame && _activeGame.value != null) {
+            _activeGame.value = null
+            dispatchGameState()
+        }
     }
 
-    private suspend fun getForegroundPackage(): String? = try {
-        withContext(Dispatchers.IO) {
+    private suspend fun getForegroundPackage(): String? = withContext(Dispatchers.IO) {
+        try {
             taskManager.focusedRootTaskInfo?.topActivity?.packageName
+        } catch (e: RemoteException) {
+            null
         }
-    } catch (e: RemoteException) {
-        null
     }
 
     private fun isInGameList(packageName: String): Boolean {
@@ -207,7 +193,9 @@ class GameSpaceManager @Inject constructor(
             UserHandle.USER_CURRENT
         ) ?: return false
 
-        return games.split(";").any { it.split("=").first() == packageName }
+        return games.split(";").mapNotNull {
+            it.substringBefore('=').takeIf(String::isNotBlank)
+        }.toSet().contains(packageName)
     }
 
     private fun dispatchGameState() {
@@ -222,9 +210,7 @@ class GameSpaceManager @Inject constructor(
                         Intent.FLAG_RECEIVER_FOREGROUND or
                         Intent.FLAG_RECEIVER_INCLUDE_BACKGROUND
             )
-            context.sendBroadcastAsUser(
-                this, UserHandle.CURRENT, android.Manifest.permission.MANAGE_GAME_MODE
-            )
+            context.sendBroadcastAsUser(this, UserHandle.CURRENT, android.Manifest.permission.MANAGE_GAME_MODE)
         }
     }
 
