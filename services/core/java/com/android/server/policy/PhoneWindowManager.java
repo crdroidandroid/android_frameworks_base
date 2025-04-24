@@ -7175,9 +7175,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
         EventLogTags.writeScreenToggled(1);
 
-        releaseMemoryAtScreenOn();
-        loadProcessMemory("com.android.systemui");
-        loadProcessMemory("com.android.launcher3");
+        mHandler.post(() -> {
+            releaseMemoryAtScreenOn();
+            loadProcessMemory("com.android.systemui");
+            loadProcessMemory("com.android.launcher3");
+        });
 
         mIsGoingToSleepDefaultDisplay = false;
         mDefaultDisplayPolicy.setAwake(true);
