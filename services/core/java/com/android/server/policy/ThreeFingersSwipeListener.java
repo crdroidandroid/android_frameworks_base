@@ -58,9 +58,9 @@ public class ThreeFingersSwipeListener implements PointerEventListener {
         mScreenWidth = displayMetrics.widthPixels;
 
         // reset the setting flag on init
-        Settings.System.putIntForUser(mContext.getContentResolver(),
-                Settings.System.THREE_FINGER_GESTURE_ACTIVE, 0,
-                UserHandle.USER_CURRENT);
+        try {
+            ActivityManager.getService().setThreeGestureStateActive(false);
+        } catch (RemoteException e) {}
     }
 
     @Override
