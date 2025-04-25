@@ -91,4 +91,6 @@
     <!-- Cycle through ringer modes -->
     <java-symbol type="string" name="volume_dialog_ringer_guidance_normal" />
 
+    <!-- GameSpace -->
+    <java-symbol type="string" name="gamespace_new_game_added" />
 </resources>
