@@ -20,4 +20,6 @@
     <string name="unlock_application">Ontgrendel <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
     <!-- Cycle through ringer modes -->
     <string name="volume_dialog_ringer_guidance_normal">Gesprekken en meldingen zullen af gaan</string>
+    <!-- GameSpace -->
+    <string name="gamespace_new_game_added"><xliff:g id="name" example="MyApp">%s</xliff:g> toegevoegd aan GameSpace</string>
 </resources>
