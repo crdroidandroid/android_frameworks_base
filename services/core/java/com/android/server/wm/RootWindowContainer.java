@@ -2900,10 +2900,9 @@ class RootWindowContainer extends WindowContainer<DisplayContent>
     }
 
     void removeSleepToken(SleepToken token) {
-        if (!mSleepTokens.contains(token.mHashKey)) {
+        if (mSleepTokens.removeReturnOld(token.mHashKey) == null) {
             Slog.d(TAG, "Remove non-exist sleep token: " + token + " from " + Debug.getCallers(6));
         }
-        mSleepTokens.remove(token.mHashKey);
         final DisplayContent display = getDisplayContent(token.mDisplayId);
         if (display == null) {
             Slog.d(TAG, "Remove sleep token for non-existing display: " + token + " from "
