@@ -12,4 +12,7 @@
 
     <!-- Lock gesture -->
     <string name="gesture_locked_warning">Swipe again to unlock gestures</string>
+
+    <!-- GameSpace -->
+    <string name="gamespace_new_game_added"><xliff:g id="name" example="MyApp">%s</xliff:g> added to GameSpace</string>
 </resources>
