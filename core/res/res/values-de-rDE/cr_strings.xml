@@ -20,4 +20,6 @@
     <string name="unlock_application"><xliff:g id="label" example="Telegram">%1$s</xliff:g> entsperren</string>
     <!-- Cycle through ringer modes -->
     <string name="volume_dialog_ringer_guidance_normal">Bei Anrufen und Benachrichtigungen klingeln</string>
+    <!-- GameSpace -->
+    <string name="gamespace_new_game_added"><xliff:g id="name" example="MyApp">%s</xliff:g> added to GameSpace</string>
 </resources>
