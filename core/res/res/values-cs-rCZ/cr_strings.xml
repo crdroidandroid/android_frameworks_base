@@ -20,4 +20,6 @@
     <string name="unlock_application">Odemknout <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
     <!-- Cycle through ringer modes -->
     <string name="volume_dialog_ringer_guidance_normal">Volání a oznámení budou vyzvánět</string>
+    <!-- GameSpace -->
+    <string name="gamespace_new_game_added">Aplikace <xliff:g id="name" example="MyApp">%s</xliff:g> byla přidána do GameSpace</string>
 </resources>

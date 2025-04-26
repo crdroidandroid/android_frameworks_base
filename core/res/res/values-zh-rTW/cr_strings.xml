@@ -20,4 +20,6 @@
     <string name="unlock_application">解鎖 <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
     <!-- Cycle through ringer modes -->
     <string name="volume_dialog_ringer_guidance_normal">來電與通知將發出鈴聲</string>
+    <!-- GameSpace -->
+    <string name="gamespace_new_game_added"><xliff:g id="name" example="MyApp">%s</xliff:g> 已加入 GameSpace</string>
 </resources>
