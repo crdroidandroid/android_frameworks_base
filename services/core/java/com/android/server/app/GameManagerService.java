@@ -2386,10 +2386,9 @@ public final class GameManagerService extends IGameManagerService.Stub {
             for (Map.Entry<String, Integer> entry : packagePidMap.entrySet()) {
                 int pid = entry.getValue();
                 String packageName = entry.getKey();
-
-                Process.setThreadAffinity(pid, boosted ? 0 : 2);
+                Process.setThreadAffinity(pid, 2);
                 Slog.v(TAG, "Set affinity for PID=" + pid + " (Package: " + packageName + 
-                        ", UID=" + uid + ") to " + (boosted ? "big cores (boosted)" : "all cores (normal)"));
+                        ", UID=" + uid + ") to all cores");
             }
         }
 
