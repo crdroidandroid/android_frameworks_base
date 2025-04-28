@@ -461,14 +461,3 @@ flag {
   bug: "277292497"
   is_fixed_read_only: true
 }
-
-flag {
-  name: "use_visible_requested_for_process_tracker"
-  namespace: "windowing_frontend"
-  description: "Do not count closing activity as visible process"
-  bug: "396653764"
-  is_fixed_read_only: true
-  metadata {
-    purpose: PURPOSE_BUGFIX
-  }
-}
