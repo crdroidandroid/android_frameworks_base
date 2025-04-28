@@ -2481,9 +2481,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     mPendingHomeKeyEvent = null;
                     mHandler.removeCallbacks(mHomeDoubleTapTimeoutRunnable);
                     performKeyAction(mHomeDoubleTapAction, event);
-                    if (mHomeDoubleTapAction != Action.SLEEP) {
-                        mHomeConsumed = true;
-                    }
+                    mHomeConsumed = true;
                 } else if (mDisplayId == DEFAULT_DISPLAY
                         && (mHomeLongPressAction == Action.APP_SWITCH
                             || mHomeDoubleTapAction == Action.APP_SWITCH)) {
@@ -2501,9 +2499,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     // it should pass this right invocation type.
                     performKeyAction(mHomeLongPressAction, event,
                             AssistUtils.INVOCATION_TYPE_HOME_BUTTON_LONG_PRESS);
-                    if (mHomeLongPressAction != Action.SLEEP) {
-                        mHomeConsumed = true;
-                    }
+                    mHomeConsumed = true;
                 }
             }
             return true;
