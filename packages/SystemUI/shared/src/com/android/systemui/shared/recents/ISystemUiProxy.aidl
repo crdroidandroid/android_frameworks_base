@@ -114,7 +114,7 @@ interface ISystemUiProxy {
     oneway void injectLongPress(int keyCode) = 46;
 
     /** Injects button press. */
-    oneway void injectDoublePress(int keyCode) = 43;
+    oneway void injectPress(int keyCode) = 43;
 
     /** Notifies when taskbar status updated */
     oneway void notifyTaskbarStatus(boolean visible, boolean stashed) = 47;
