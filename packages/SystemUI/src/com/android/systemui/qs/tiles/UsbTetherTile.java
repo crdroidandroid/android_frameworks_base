@@ -121,7 +121,8 @@ public class UsbTetherTile extends QSTileImpl<BooleanState> {
         public void onReceive(Context context, Intent intent) {
             mUsbConnected = intent.getBooleanExtra(UsbManager.USB_CONNECTED, false);
             if (mUsbConnected && mTetheringManager.isTetheringSupported()) {
-                mUsbTetherEnabled = intent.getBooleanExtra(UsbManager.USB_FUNCTION_RNDIS, false);
+                mUsbTetherEnabled = intent.getBooleanExtra(UsbManager.USB_FUNCTION_RNDIS, false) ||
+                        intent.getBooleanExtra(UsbManager.USB_FUNCTION_NCM, false);
             } else {
                 mUsbTetherEnabled = false;
             }
