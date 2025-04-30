@@ -122,6 +122,7 @@ import static android.service.notification.Flags.FLAG_NOTIFICATION_CLASSIFICATIO
 import static android.service.notification.Flags.FLAG_NOTIFICATION_CONVERSATION_CHANNEL_MANAGEMENT;
 import static android.service.notification.Flags.FLAG_NOTIFICATION_FORCE_GROUPING;
 import static android.service.notification.Flags.FLAG_NOTIFICATION_REGROUP_ON_CLASSIFICATION;
+import static android.service.notification.Flags.FLAG_NOTIFICATION_SILENT_FLAG;
 import static android.service.notification.Flags.FLAG_REDACT_SENSITIVE_NOTIFICATIONS_FROM_UNTRUSTED_LISTENERS;
 import static android.service.notification.NotificationListenerService.FLAG_FILTER_TYPE_ALERTING;
 import static android.service.notification.NotificationListenerService.FLAG_FILTER_TYPE_CONVERSATIONS;
@@ -2642,7 +2643,7 @@ public class NotificationManagerServiceTest extends UiServiceTestCase {
     }
 
     @Test
-    @EnableFlags(FLAG_NOTIFICATION_FORCE_GROUPING)
+    @EnableFlags({FLAG_NOTIFICATION_FORCE_GROUPING, FLAG_NOTIFICATION_SILENT_FLAG})
     public void testAggregatedSummary_updateSummaryAttributes() {
         final String aggregateGroupName = "Aggregate_Test";
         final String newChannelId = "newChannelId";
@@ -2658,6 +2659,7 @@ public class NotificationManagerServiceTest extends UiServiceTestCase {
         mService.mAutobundledSummaries.get(0).put(groupKey, summary.getKey());
         when(mPreferencesHelper.getNotificationChannel(eq("pkg"), anyInt(),
                 eq(newChannelId), anyBoolean())).thenReturn(newChannel);
+        assertThat(summary.getNotification().isSilent()).isFalse();
 
         mService.updateAutobundledSummaryLocked(0, "pkg", groupKey,
                 new NotificationAttributes(GroupHelper.BASE_FLAGS | FLAG_ONGOING_EVENT,
@@ -2665,6 +2667,7 @@ public class NotificationManagerServiceTest extends UiServiceTestCase {
                     false);
         waitForIdle();
 
+        assertThat(summary.getNotification().isSilent()).isTrue();
         assertTrue(summary.getSbn().isOngoing());
         assertThat(summary.getNotification().getGroupAlertBehavior()).isEqualTo(
                 GROUP_ALERT_CHILDREN);
@@ -2684,6 +2687,33 @@ public class NotificationManagerServiceTest extends UiServiceTestCase {
         assertThat(r.getSbn().getOverrideGroupKey()).isEqualTo("grpKey");
         verify(mRankingHandler, times(1)).requestSort();
         verify(mListeners, times(1)).notifyPostedLocked(eq(r), eq(r));
+    }
+
+    @Test
+    @EnableFlags({FLAG_NOTIFICATION_FORCE_GROUPING, FLAG_NOTIFICATION_SILENT_FLAG})
+    public void testAddUngroupedAggregateNotification_silentFlagNotSet() throws Exception {
+        final NotificationRecord r =
+                generateNotificationRecord(mTestNotificationChannel, 0, null, false);
+        assertThat(r.getNotification().isSilent()).isFalse();
+        mService.addNotification(r);
+        mService.addAutogroupKeyLocked(r.getKey(), "AggregateGrp", true);
+
+        assertThat(r.hasAdjustment(Adjustment.KEY_GROUP_KEY)).isTrue();
+        assertThat(r.getNotification().isSilent()).isFalse();
+    }
+
+    @Test
+    @EnableFlags({FLAG_NOTIFICATION_FORCE_GROUPING, FLAG_NOTIFICATION_SILENT_FLAG})
+    public void testAddGroupedAggregateNotification_silentFlagSet() throws Exception {
+        final String originalGroupName = "originalGroup";
+        final NotificationRecord r =
+                generateNotificationRecord(mTestNotificationChannel, 0, originalGroupName, false);
+        assertThat(r.getNotification().isSilent()).isFalse();
+        mService.addNotification(r);
+        mService.addAutogroupKeyLocked(r.getKey(), "AggregateGrp", true);
+
+        assertThat(r.getSbn().getOverrideGroupKey()).isEqualTo("AggregateGrp");
+        assertThat(r.getNotification().isSilent()).isTrue();
     }
 
     @Test
