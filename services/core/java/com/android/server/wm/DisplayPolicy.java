@@ -530,18 +530,12 @@ public class DisplayPolicy {
 
                 @Override
                 public void onFling(int duration) {
-                    if (mService.mPowerManagerInternal != null) {
-                        mService.mPowerManagerInternal.setPowerBoost(
-                                Boost.INTERACTION, duration);
-                    }
+                    doBoost(duration);
                 }
 
                 @Override
                 public void onScroll(int duration) {
-                    if (mService.mPowerManagerInternal != null) {
-                        mService.mPowerManagerInternal.setPowerBoost(
-                                Boost.INTERACTION, duration);
-                    }
+                    doBoost(duration);
                 }
 
                 @Override
@@ -724,6 +718,15 @@ public class DisplayPolicy {
         mForceShowNavBarSettingsObserver.setOnChangeRunnable(this::updateForceShowNavBarSettings);
         mForceShowNavigationBarEnabled = mForceShowNavBarSettingsObserver.isEnabled();
         mHandler.post(mForceShowNavBarSettingsObserver::register);
+    }
+
+    private void doBoost(int duration) {
+        if (mService.mPowerManagerInternal != null) {
+            mService.mPowerManagerInternal.setPowerBoost(
+                    Boost.INTERACTION, duration);
+            mService.mPowerManagerInternal.setPowerBoost(
+                    Boost.DISPLAY_UPDATE_IMMINENT, duration);
+        }
     }
 
     private void updateForceShowNavBarSettings() {
