@@ -76,7 +76,7 @@ public final class CpuMonitorService extends SystemService {
      * On user-debug or eng builds, continuously cache stats with a bigger cache size for debugging
      * purposes.
      */
-    private static final long CACHE_DURATION_MILLISECONDS = Build.IS_USERDEBUG || Build.IS_ENG
+    private static final long CACHE_DURATION_MILLISECONDS = Build.IS_ENG
             ? TimeUnit.MINUTES.toMillis(30) : TimeUnit.MINUTES.toMillis(10);
     // TODO(b/267500110): Investigate whether this duration should change when the monitoring
     //  interval is updated. When the CPU is under heavy load, the monitoring will happen less
@@ -163,7 +163,7 @@ public final class CpuMonitorService extends SystemService {
     public CpuMonitorService(Context context) {
         this(context, new CpuInfoReader(), new ServiceThread(TAG,
                         Process.THREAD_PRIORITY_BACKGROUND, /* allowIo= */ true),
-                Build.IS_USERDEBUG || Build.IS_ENG, NORMAL_MONITORING_INTERVAL_MILLISECONDS,
+                Build.IS_ENG, NORMAL_MONITORING_INTERVAL_MILLISECONDS,
                 DEBUG_MONITORING_INTERVAL_MILLISECONDS, LATEST_AVAILABILITY_DURATION_MILLISECONDS,
                 STOP_PERIODIC_CPUSET_READING_DELAY_MILLISECONDS);
     }
