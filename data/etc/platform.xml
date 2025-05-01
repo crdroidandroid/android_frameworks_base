@@ -171,6 +171,7 @@
     <assign-permission name="android.permission.REGISTER_STATS_PULL_ATOM" uid="media" />
     <assign-permission name="android.permission.INTERACT_ACROSS_USERS" uid="media" />
     <assign-permission name="android.permission.LOG_FOREGROUND_RESOURCE_USE" uid="media" />
+    <assign-permission name="android.permission.CAPTURE_AUDIO_OUTPUT" uid="media" />
 
     <assign-permission name="android.permission.INTERNET" uid="media" />
 
