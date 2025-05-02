@@ -7123,7 +7123,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         mHandler.removeCallbacks(mMemoryOpt);
 
         // make sure we do garbage collection at screen off but delay it to avoid black wallpaper
-        mHandler.postDelayed(mSystemServerGcOpt, 1000);
+        mHandler.postDelayed(mSystemServerGcOpt, 5000);
     }
 
     // Called on the PowerManager's Notifier thread.
