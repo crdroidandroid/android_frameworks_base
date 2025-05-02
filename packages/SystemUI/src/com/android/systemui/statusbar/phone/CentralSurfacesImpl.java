@@ -2780,7 +2780,7 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
 
             DejankUtils.stopDetectingBlockingIpcs(tag);
             // make sure we do garbage collection at screen off but delay it to avoid black wallpaper
-            mHandler.postDelayed(mSystemUiGcOpt, 1000);
+            mHandler.postDelayed(mSystemUiGcOpt, 4000);
         }
 
         @Override
