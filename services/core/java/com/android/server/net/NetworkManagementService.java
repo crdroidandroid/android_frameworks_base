@@ -485,7 +485,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub {
                 }
             }
 
-            size = mUidCleartextPolicy.size();
+            size = mUidCleartextPolicy != null ? mUidCleartextPolicy.size() : 0;
             if (size > 0) {
                 if (DBG) Slog.d(TAG, "Pushing " + size + " active UID cleartext policies");
                 final SparseIntArray local = mUidCleartextPolicy;
