@@ -16,6 +16,7 @@
 
 package com.android.server.companion.devicepresence;
 
+import android.Manifest;
 import android.annotation.NonNull;
 import android.annotation.Nullable;
 import android.annotation.SuppressLint;
@@ -25,14 +26,16 @@ import android.companion.CompanionDeviceService;
 import android.companion.DevicePresenceEvent;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.content.pm.ServiceInfo;
 import android.os.Handler;
 import android.util.Pair;
 import android.util.Slog;
 
 import com.android.internal.annotations.GuardedBy;
-import com.android.internal.infra.PerUser;
 import com.android.server.companion.CompanionDeviceManagerService;
-import com.android.server.companion.utils.PackageUtils;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -70,12 +73,16 @@ import java.util.Set;
 public class CompanionAppBinder {
     private static final String TAG = "CDM_CompanionAppBinder";
 
+    private static final Intent COMPANION_SERVICE_INTENT =
+            new Intent(CompanionDeviceService.SERVICE_INTERFACE);
+
+    private static final String PROPERTY_PRIMARY_TAG =
+            "android.companion.PROPERTY_PRIMARY_COMPANION_DEVICE_SERVICE";
+
     private static final long REBIND_TIMEOUT = 10 * 1000; // 10 sec
 
     @NonNull
     private final Context mContext;
-    @NonNull
-    private final CompanionServicesRegister mCompanionServicesRegister;
 
     @NonNull
     @GuardedBy("mBoundCompanionApplications")
@@ -87,18 +94,8 @@ public class CompanionAppBinder {
 
     public CompanionAppBinder(@NonNull Context context) {
         mContext = context;
-        mCompanionServicesRegister = new CompanionServicesRegister();
         mBoundCompanionApplications = new HashMap<>();
         mScheduledForRebindingCompanionApplications = new HashSet<>();
-    }
-
-    /**
-     * On package changed.
-     */
-    public void onPackageChanged(@UserIdInt int userId) {
-        // Note: To invalidate the user space for simplicity. We could alternatively manage each
-        //       package, but that would easily cause errors if one case is mis-handled.
-        mCompanionServicesRegister.invalidate(userId);
     }
 
     /**
@@ -109,8 +106,9 @@ public class CompanionAppBinder {
         Slog.i(TAG, "Binding user=[" + userId + "], package=[" + packageName + "], isSelfManaged=["
                 + isSelfManaged + "]...");
 
-        final List<ComponentName> companionServices =
-                mCompanionServicesRegister.forPackage(userId, packageName);
+        final List<ComponentName> companionServices = getCompanionServiceComponentsForPackage(
+                mContext, packageName, userId);
+
         if (companionServices.isEmpty()) {
             Slog.e(TAG, "Can not bind companion applications u" + userId + "/" + packageName + ": "
                     + "eligible CompanionDeviceService not found.\n"
@@ -299,28 +297,51 @@ public class CompanionAppBinder {
         return connectors != null ? connectors.get(0) : null;
     }
 
-    private class CompanionServicesRegister extends PerUser<Map<String, List<ComponentName>>> {
-        @Override
-        @NonNull
-        public synchronized Map<String, List<ComponentName>> forUser(
-                @UserIdInt int userId) {
-            return super.forUser(userId);
+    /**
+     * @return list of {@link CompanionDeviceService}-s per package for a given user.
+     *         Services marked as "primary" would always appear at the head of the lists, *before*
+     *         all non-primary services.
+     */
+    private @NonNull List<ComponentName> getCompanionServiceComponentsForPackage(
+            @NonNull Context context, @NonNull String packageName, @UserIdInt int userId) {
+        final PackageManager pm = context.getPackageManager();
+        final List<ResolveInfo> companionServices = pm.queryIntentServicesAsUser(
+                COMPANION_SERVICE_INTENT, PackageManager.ResolveInfoFlags.of(0), userId);
+        final List<ComponentName> componentNames = new ArrayList<>();
+
+        for (ResolveInfo resolveInfo : companionServices) {
+            final ServiceInfo service = resolveInfo.serviceInfo;
+            final ComponentName componentName = service.getComponentName();
+
+            if (!componentName.getPackageName().equals(packageName)) continue;
+
+            final boolean requiresPermission = Manifest.permission.BIND_COMPANION_DEVICE_SERVICE
+                    .equals(resolveInfo.serviceInfo.permission);
+            if (!requiresPermission) {
+                Slog.w(TAG, "CompanionDeviceService "
+                        + service.getComponentName().flattenToShortString() + " must require "
+                        + "android.permission.BIND_COMPANION_DEVICE_SERVICE");
+                break;
+            }
+
+            if (isPrimaryCompanionDeviceService(pm, componentName, userId)) {
+                // "Primary" service should be at the head of the list.
+                componentNames.add(0, componentName);
+            } else {
+                componentNames.add(componentName);
+            }
         }
 
-        @NonNull
-        synchronized List<ComponentName> forPackage(
-                @UserIdInt int userId, @NonNull String packageName) {
-            return forUser(userId).getOrDefault(packageName, Collections.emptyList());
-        }
+        return componentNames;
+    }
 
-        synchronized void invalidate(@UserIdInt int userId) {
-            remove(userId);
-        }
-
-        @Override
-        @NonNull
-        protected final Map<String, List<ComponentName>> create(@UserIdInt int userId) {
-            return PackageUtils.getCompanionServicesForUser(mContext, userId);
+    private boolean isPrimaryCompanionDeviceService(@NonNull PackageManager pm,
+            @NonNull ComponentName componentName, @UserIdInt int userId) {
+        try {
+            return pm.getPropertyAsUser(PROPERTY_PRIMARY_TAG, componentName.getPackageName(),
+                    componentName.getClassName(), userId).getBoolean();
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
         }
     }
 }

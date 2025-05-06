@@ -26,24 +26,19 @@ import static com.android.internal.R.array.config_companionDevicePackages;
 import static com.android.internal.R.array.config_companionPermSyncEnabledCerts;
 import static com.android.internal.R.array.config_companionPermSyncEnabledPackages;
 
-import android.Manifest;
 import android.annotation.NonNull;
 import android.annotation.Nullable;
 import android.annotation.UserIdInt;
 import android.app.AppOpsManager;
 import android.app.ecm.EnhancedConfirmationManager;
-import android.companion.CompanionDeviceService;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.FeatureInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.PackageInfoFlags;
-import android.content.pm.PackageManager.ResolveInfoFlags;
 import android.content.pm.PackageManagerInternal;
-import android.content.pm.ResolveInfo;
-import android.content.pm.ServiceInfo;
 import android.content.pm.Signature;
 import android.os.Binder;
 import android.os.Process;
@@ -52,11 +47,7 @@ import android.util.Slog;
 
 import com.android.internal.util.ArrayUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -65,11 +56,6 @@ import java.util.Set;
 public final class PackageUtils {
 
     private static final String TAG = "CDM_PackageUtils";
-
-    private static final Intent COMPANION_SERVICE_INTENT =
-            new Intent(CompanionDeviceService.SERVICE_INTERFACE);
-    private static final String PROPERTY_PRIMARY_TAG =
-            "android.companion.PROPERTY_PRIMARY_COMPANION_DEVICE_SERVICE";
 
     /**
      * Get package info
@@ -116,61 +102,6 @@ public final class PackageUtils {
         throw new IllegalStateException("Must declare uses-feature "
                 + FEATURE_COMPANION_DEVICE_SETUP
                 + " in manifest to use this API");
-    }
-
-    /**
-     * @return list of {@link CompanionDeviceService}-s per package for a given user.
-     *         Services marked as "primary" would always appear at the head of the lists, *before*
-     *         all non-primary services.
-     */
-    public static @NonNull Map<String, List<ComponentName>> getCompanionServicesForUser(
-            @NonNull Context context, @UserIdInt int userId) {
-        final PackageManager pm = context.getPackageManager();
-        final List<ResolveInfo> companionServices = pm.queryIntentServicesAsUser(
-                COMPANION_SERVICE_INTENT, ResolveInfoFlags.of(0), userId);
-
-        final Map<String, List<ComponentName>> packageNameToServiceInfoList =
-                new HashMap<>(companionServices.size());
-
-        for (ResolveInfo resolveInfo : companionServices) {
-            final ServiceInfo service = resolveInfo.serviceInfo;
-
-            final boolean requiresPermission = Manifest.permission.BIND_COMPANION_DEVICE_SERVICE
-                    .equals(resolveInfo.serviceInfo.permission);
-            if (!requiresPermission) {
-                Slog.w(TAG, "CompanionDeviceService "
-                        + service.getComponentName().flattenToShortString() + " must require "
-                        + "android.permission.BIND_COMPANION_DEVICE_SERVICE");
-                continue;
-            }
-
-            // We'll need to prepend "primary" services, while appending the other (non-primary)
-            // services to the list.
-            final ArrayList<ComponentName> services =
-                    (ArrayList<ComponentName>) packageNameToServiceInfoList.computeIfAbsent(
-                            service.packageName, it -> new ArrayList<>(1));
-
-            final ComponentName componentName = service.getComponentName();
-
-            if (isPrimaryCompanionDeviceService(pm, componentName, userId)) {
-                // "Primary" service should be at the head of the list.
-                services.add(0, componentName);
-            } else {
-                services.add(componentName);
-            }
-        }
-
-        return packageNameToServiceInfoList;
-    }
-
-    private static boolean isPrimaryCompanionDeviceService(@NonNull PackageManager pm,
-            @NonNull ComponentName componentName, @UserIdInt int userId) {
-        try {
-            return pm.getPropertyAsUser(PROPERTY_PRIMARY_TAG, componentName.getPackageName(),
-                    componentName.getClassName(), userId).getBoolean();
-        } catch (PackageManager.NameNotFoundException e) {
-            return false;
-        }
     }
 
     /**
