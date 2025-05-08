@@ -111,7 +111,7 @@ public class ConfigurationBoundResourceCacheTest {
         newCnf.orientation = cfg.orientation == Configuration.ORIENTATION_LANDSCAPE ?
                 Configuration.ORIENTATION_PORTRAIT
                 : Configuration.ORIENTATION_LANDSCAPE;
-        int changes = calcConfigChanges(res, newCnf);
+        int changes = applyConfigChanges(res, newCnf);
         assertEquals(staticDim, mCache.getInstance(key, res, mContext.getTheme()));
         mCache.onConfigurationChange(changes);
         assertEquals(staticDim, mCache.getInstance(key, res, mContext.getTheme()));
@@ -134,7 +134,7 @@ public class ConfigurationBoundResourceCacheTest {
         newCnf.orientation = cfg.orientation == Configuration.ORIENTATION_LANDSCAPE ?
                 Configuration.ORIENTATION_PORTRAIT
                 : Configuration.ORIENTATION_LANDSCAPE;
-        int changes = calcConfigChanges(res, newCnf);
+        int changes = applyConfigChanges(res, newCnf);
         assertEquals(changingDim,
                 mCache.getInstance(key, res, mContext.getTheme()));
         mCache.onConfigurationChange(changes);
@@ -162,7 +162,7 @@ public class ConfigurationBoundResourceCacheTest {
         newCnf.orientation = cfg.orientation == Configuration.ORIENTATION_LANDSCAPE ?
                 Configuration.ORIENTATION_PORTRAIT
                 : Configuration.ORIENTATION_LANDSCAPE;
-        int changes = calcConfigChanges(res, newCnf);
+        int changes = applyConfigChanges(res, newCnf);
         assertEquals(staticDim, mCache.getInstance(R.dimen.resource_cache_test_generic, res,
                 mContext.getTheme()));
         assertEquals(changingDim,
@@ -205,7 +205,7 @@ public class ConfigurationBoundResourceCacheTest {
         newCnf.orientation = cfg.orientation == Configuration.ORIENTATION_LANDSCAPE ?
                 Configuration.ORIENTATION_PORTRAIT
                 : Configuration.ORIENTATION_LANDSCAPE;
-        int changes = calcConfigChanges(res, newCnf);
+        int changes = applyConfigChanges(res, newCnf);
         for (int i = 0; i < 2; i++) {
             final Resources.Theme theme = i == 0 ? mContext.getTheme() : null;
             assertEquals(staticDim,
@@ -224,8 +224,8 @@ public class ConfigurationBoundResourceCacheTest {
         }
     }
 
-    private static int calcConfigChanges(Resources resources, Configuration configuration) {
-        return resources.calcConfigChanges(configuration);
+    private static int applyConfigChanges(Resources resources, Configuration configuration) {
+        return resources.applyConfigChanges(configuration);
     }
 
     static class DummyFloatConstantState extends ConstantState<Float> {
