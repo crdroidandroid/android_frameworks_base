@@ -5980,6 +5980,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         boolean isWakeKey = (policyFlags & WindowManagerPolicy.FLAG_WAKE) != 0
                 || event.isWakeKey();
         boolean isKeyGestureTriggered = (policyFlags & FLAG_KEY_GESTURE_TRIGGERED) != 0;
+        final boolean shouldHandleGlobalKey = isValidGlobalKey(keyCode)
+                && mGlobalKeyManager.shouldHandleGlobalKey(keyCode);
 
         // There are key events that perform the operation as the current user,
         // and these should be ignored for visible background users.
@@ -6069,7 +6071,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             // When the device is interactive or the key is injected pass the
             // key to the application.
             result = ACTION_PASS_TO_USER;
-            isWakeKey = false;
+
+            // If the key handled globally, we want it to be able to stop dreaming if it is a wake
+            // key, so don't drop isWakeKey flag.
+            final DreamManagerInternal dreamManagerInternal = getDreamManagerInternal();
+            if (!(shouldHandleGlobalKey && (dreamManagerInternal != null
+                    && dreamManagerInternal.isDreaming()))) {
+                isWakeKey = false;
+            }
 
             if (interactive) {
                 // If the screen is awake, but the button pressed was the one that woke the device
@@ -6104,8 +6113,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
         // If the key would be handled globally, just return the result, don't worry about special
         // key processing.
-        if (isValidGlobalKey(keyCode)
-                && mGlobalKeyManager.shouldHandleGlobalKey(keyCode)) {
+        if (shouldHandleGlobalKey) {
             // Dispatch if global key defined dispatchWhenNonInteractive.
             if (!interactive && isWakeKey && down
                     && mGlobalKeyManager.shouldDispatchFromNonInteractive(keyCode)) {
