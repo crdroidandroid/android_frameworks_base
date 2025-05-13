@@ -378,10 +378,19 @@ class MediaOutputAdapter(controller: MediaSwitchingController) :
             }
         }
 
-        private fun initializeSeekbarVolume(currentVolume: Int) {
+        private fun initializeSeekbarVolume(
+            currentVolume: Int,
+            deviceDrawable: Drawable?,
+            muteDrawable: Drawable?,
+        ) {
             tryResolveVolumeUserRequest(currentVolume)
             if (!isDragging && hasNoPendingVolumeRequests()) {
                 mSlider.value = currentVolume.toFloat()
+                updateSliderIconsVisibility(
+                    deviceDrawable = deviceDrawable,
+                    muteDrawable = muteDrawable,
+                    isMuted = currentVolume == 0,
+                )
             }
         }
 
@@ -426,12 +435,11 @@ class MediaOutputAdapter(controller: MediaSwitchingController) :
             mSlider.trackIconInactiveColor =
                 ColorStateList.valueOf(colorTheme.sliderInactiveIconColor)
             val muteDrawable = getMuteDrawable(isInputDevice)
-            updateSliderIconsVisibility(
+            initializeSeekbarVolume(
+                currentVolume = currentVolume,
                 deviceDrawable = deviceDrawable,
                 muteDrawable = muteDrawable,
-                isMuted = currentVolume == 0,
             )
-            initializeSeekbarVolume(currentVolume)
 
             mSlider.clearOnChangeListeners() // Prevent adding multiple listeners
             mSlider.addOnChangeListener { _: Slider, value: Float, fromUser: Boolean ->
