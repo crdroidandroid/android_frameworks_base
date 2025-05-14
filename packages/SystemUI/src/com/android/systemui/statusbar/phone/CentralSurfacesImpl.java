@@ -58,6 +58,7 @@ import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.Point;
 import android.hardware.devicestate.DeviceStateManager;
+import android.hardware.display.AmbientDisplayConfiguration;
 import android.hardware.display.DisplayManager;
 import android.metrics.LogMaker;
 import android.net.Uri;
@@ -180,6 +181,7 @@ import com.android.systemui.settings.brightness.BrightnessSliderController;
 import com.android.systemui.settings.brightness.data.repository.BrightnessMirrorShowingRepository;
 import com.android.systemui.shade.CameraLauncher;
 import com.android.systemui.shade.GlanceableHubContainerController;
+import com.android.systemui.shade.NotificationPanelViewController;
 import com.android.systemui.shade.NotificationShadeWindowView;
 import com.android.systemui.shade.NotificationShadeWindowViewController;
 import com.android.systemui.shade.QuickSettingsController;
@@ -244,6 +246,7 @@ import com.android.systemui.statusbar.window.StatusBarWindowStateController;
 import com.android.systemui.surfaceeffects.ripple.RippleShader.RippleShape;
 import com.android.systemui.tuner.TunerService;
 import com.android.systemui.util.DumpUtilsKt;
+import com.android.systemui.util.*;
 import com.android.systemui.util.WallpaperController;
 import com.android.systemui.util.concurrency.DelayableExecutor;
 import com.android.systemui.util.concurrency.MessageRouter;
@@ -441,6 +444,7 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
     private final ConfigurationController mConfigurationController;
     private final Lazy<NotificationShadeWindowViewController>
             mNotificationShadeWindowViewControllerLazy;
+    private final Lazy<NotificationPanelViewController> mPanelViewControllerLazy;
     private final DozeParameters mDozeParameters;
     private final Lazy<BiometricUnlockController> mBiometricUnlockControllerLazy;
     private final PluginManager mPluginManager;
@@ -764,7 +768,8 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
             QuickAccessWalletController walletController,
             WindowManager windowManager,
             WindowManagerProvider windowManagerProvider,
-            BurnInProtectionController burnInProtectionController
+            BurnInProtectionController burnInProtectionController,
+            Lazy<NotificationPanelViewController> panelViewControllerLazy
     ) {
         mContext = context;
         mNotificationsController = notificationsController;
@@ -815,6 +820,7 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
         mConfigurationController = configurationController;
         mNotificationShadeWindowController = notificationShadeWindowController;
         mNotificationShadeWindowViewControllerLazy = notificationShadeWindowViewControllerLazy;
+        mPanelViewControllerLazy = panelViewControllerLazy;
         mStackScrollerController = notificationStackScrollLayoutController;
         mStackScroller = mStackScrollerController.getView();
         mNotifListContainer = mStackScrollerController.getNotificationListContainer();
@@ -912,6 +918,10 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
 
         mWindowManager = windowManager;
         mWindowManagerProvider = windowManagerProvider;
+
+	ScreenAnimationController.INSTANCE().init(
+            new AmbientDisplayConfiguration(mContext), 
+            (DisplayManager) context.getSystemService("display"));
     }
 
     private void initBubbles(Bubbles bubbles) {
@@ -2532,21 +2542,23 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
     }
 
     private void updateDozingState() {
+        boolean animate = false;
         if (Trace.isTagEnabled(Trace.TRACE_TAG_APP)) {
             Trace.asyncTraceForTrackEnd(Trace.TRACE_TAG_APP, "Dozing", 0);
             Trace.asyncTraceForTrackBegin(Trace.TRACE_TAG_APP, "Dozing", String.valueOf(mDozing),
                     0);
         }
         Trace.beginSection("CentralSurfaces#updateDozingState");
+                
+        boolean canAnimate = (!mDozing && shouldAnimateDozeWakeup() && mPowerManager.isInteractive()) 
+                || (mDozing && mDozeParameters.shouldControlScreenOff() && (mKeyguardStateController.isVisible() 
+                || (mDozing && mDozeParameters.shouldDelayKeyguardShow())) && mDozeServiceHost.getDozingRequested());
 
-        boolean keyguardVisible = mKeyguardStateController.isVisible();
-        // If we're dozing and we'll be animating the screen off, the keyguard isn't currently
-        // visible but will be shortly for the animation, so we should proceed as if it's visible.
-        boolean keyguardVisibleOrWillBe =
-                keyguardVisible || (mDozing && mDozeParameters.shouldDelayKeyguardShow());
-
-        boolean animate = (!mDozing && shouldAnimateDozeWakeup())
-                || (mDozing && mDozeParameters.shouldControlScreenOff() && keyguardVisibleOrWillBe);
+        if (!ScreenAnimationController.INSTANCE().isPanelExpandedWhenScreenOff() 
+                && !ScreenAnimationController.INSTANCE().isLandscapeScreenOff()) {
+            animate = mBiometricUnlockController.getMode() 
+                == BiometricUnlockController.MODE_WAKE_AND_UNLOCK ? true : canAnimate;
+        }
 
         mShadeSurface.setDozing(mDozing, animate);
         mPulseController.setDozing(mDozing);
@@ -2629,33 +2641,70 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
      *                 (false).
      */
     private void updateRevealEffect(boolean wakingUp) {
-        if (mLightRevealScrim == null) {
+        if (mLightRevealScrim == null || ambientAod()) {
             return;
         }
+        updateRevealEffectEx(wakingUp);
+    }
 
-        if (ambientAod()) {
-            return;
-        }
-
+    public void updateRevealEffectEx(boolean wakingUp) {
+        int lastWakeReason = mWakefulnessLifecycle.getLastWakeReason();
+        int lastSleepReason = mWakefulnessLifecycle.getLastSleepReason();
         final boolean wakingUpFromPowerButton = wakingUp
-                && !(mLightRevealScrim.getRevealEffect() instanceof CircleReveal)
-                && mWakefulnessLifecycle.getLastWakeReason()
-                == PowerManager.WAKE_REASON_POWER_BUTTON;
+                && lastWakeReason == PowerManager.WAKE_REASON_POWER_BUTTON;
         final boolean sleepingFromPowerButton = !wakingUp
-                && mWakefulnessLifecycle.getLastSleepReason()
+                && lastSleepReason
                 == PowerManager.GO_TO_SLEEP_REASON_POWER_BUTTON;
-
         if (wakingUpFromPowerButton || sleepingFromPowerButton) {
             mLightRevealScrim.setRevealEffect(mPowerButtonReveal);
-            mLightRevealScrim.setRevealAmount(1f - mStatusBarStateController.getDozeAmount());
-        } else if (!wakingUp || !(mLightRevealScrim.getRevealEffect() instanceof CircleReveal)) {
-            // If we're going to sleep, but it's not from the power button, use the default reveal.
-            // If we're waking up, only use the default reveal if the biometric controller didn't
-            // already set it to the circular reveal because we're waking up from a fingerprint/face
-            // auth.
+        } else if (!wakingUp) {
+            CircleReveal sleepTapReveal = getTapLightRevealEffect(false);
+            if (lastSleepReason == PowerManager.GO_TO_SLEEP_REASON_MIN 
+                    && sleepTapReveal != null) {
+                mLightRevealScrim.setRevealEffect(sleepTapReveal);
+            } else {
+                mLightRevealScrim.setRevealEffect(LiftReveal.INSTANCE);
+            }
+            if (lastSleepReason == PowerManager.GO_TO_SLEEP_REASON_SLEEP_BUTTON) {
+                mIsPressSleepButton = true;
+            }
+        } else if (lastWakeReason == PowerManager.WAKE_REASON_TAP) {
+            CircleReveal wakeTapReveal = getTapLightRevealEffect(true);
+            mLightRevealScrim.setRevealEffect(
+                wakeTapReveal == null ? LiftReveal.INSTANCE : wakeTapReveal);
+        } else if (lastWakeReason == PowerManager.WAKE_REASON_CAMERA_LAUNCH) {
+            mLightRevealScrim.setRevealEffect(mPowerButtonReveal);
+        } else if (lastWakeReason == PowerManager.WAKE_REASON_BIOMETRIC) {
+            final boolean isSfps = mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_is_powerbutton_fps);
+            mLightRevealScrim.setRevealEffect(
+                isSfps ? mPowerButtonReveal : LiftReveal.INSTANCE);
+        } else {
             mLightRevealScrim.setRevealEffect(LiftReveal.INSTANCE);
-            mLightRevealScrim.setRevealAmount(1f - mStatusBarStateController.getDozeAmount());
         }
+        if (wakingUp || (!mPanelExpandedWhenScreenOff && !mLandscapeWhenScreenOff)) {
+            mLightRevealScrim.setRevealAmount(1.0f - mStatusBarStateController.getDozeAmount());
+        }
+        mDozeParameters.updateControlScreenOff();
+    }
+
+    private CircleReveal getTapLightRevealEffect(boolean wakingUp) {
+        int x;
+        int y;
+        Point mTapPos = TapPositionUtil.INSTANCE().getTapPos();
+
+        if (mTapPos != null) {
+            x = mTapPos.x;
+            y = mTapPos.y;
+        } else {
+            return null;
+        }
+
+        int maxRadius = Math.max(
+            Math.max(x, mDisplayMetrics.widthPixels - x),
+            Math.max(y, mDisplayMetrics.heightPixels - y)
+        );
+        return new CircleReveal(x, y, 0, maxRadius);
     }
 
     // TODO: Figure out way to remove these.
@@ -2708,6 +2757,7 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
     final WakefulnessLifecycle.Observer mWakefulnessObserver = new WakefulnessLifecycle.Observer() {
         @Override
         public void onFinishedGoingToSleep() {
+            TapPositionUtil.INSTANCE().clearTapPos();
             mCameraLauncherLazy.get().setLaunchingAffordance(false);
             releaseGestureWakeLock();
             mLaunchCameraWhenFinishedWaking = false;
@@ -2751,6 +2801,16 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
         public void onStartedGoingToSleep() {
             String tag = "CentralSurfaces#onStartedGoingToSleep";
             DejankUtils.startDetectingBlockingIpcs(tag);
+            
+            NotificationPanelViewController notificationPanelViewController = mPanelViewControllerLazy.get();
+            mPanelExpandedWhenScreenOff = (notificationPanelViewController == null || notificationPanelViewController.isPanelFullyCollapsed()) ? false : true;
+            mLandscapeWhenScreenOff = mContext.getResources().getConfiguration().orientation == 2;
+            updateCsfStates();
+
+            if (mLandscapeWhenScreenOff && mWakefulnessLifecycle.getLastSleepReason() 
+                == PowerManager.GO_TO_SLEEP_REASON_TIMEOUT && mLightRevealScrim != null) {
+                mLightRevealScrim.setRevealAmount(0.0f);
+            }
 
             //  cancel stale runnables that could put the device in the wrong state
             cancelAfterLaunchTransitionRunnables();
@@ -2774,6 +2834,10 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
 
         @Override
         public void onStartedWakingUp() {
+            mPanelExpandedWhenScreenOff = false;
+            mLandscapeWhenScreenOff = false;
+            mIsPressSleepButton = false;
+            updateCsfStates();
             // Between onStartedWakingUp() and onFinishedWakingUp(), the system is changing the
             // display power mode. To avoid jank, animations should NOT run during these power
             // mode transitions, which means that whenever possible, animations should
@@ -2786,13 +2850,21 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
                 updateIsKeyguard();
                 // TODO(b/301913237): can't delay transition if config_displayBlanksAfterDoze=true,
                 // otherwise, the clock will flicker during LOCKSCREEN_TRANSITION_FROM_AOD
-                mShouldDelayLockscreenTransitionFromAod = mDozeParameters.getAlwaysOn()
+                boolean shouldPlayAnimation = ScreenAnimationController.INSTANCE().shouldPlayAnimation();
+                mShouldDelayLockscreenTransitionFromAod = (mDozeParameters.getAlwaysOn() || shouldPlayAnimation)
                         && !mDozeParameters.getDisplayNeedsBlanking();
                 if (!mShouldDelayLockscreenTransitionFromAod) {
                     startLockscreenTransitionFromAod();
                 }
             });
             DejankUtils.stopDetectingBlockingIpcs(tag);
+        }
+        
+        private void updateCsfStates() {
+            ScreenAnimationController.INSTANCE().updateCsfStates(
+                mPanelExpandedWhenScreenOff, 
+                mLandscapeWhenScreenOff, 
+                mIsPressSleepButton);
         }
 
         /**
@@ -2823,6 +2895,7 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
                         this::startLockscreenTransitionFromAod);
             }
             mWakeUpCoordinator.setFullyAwake(true);
+            TapPositionUtil.INSTANCE().clearTapPos();
             mWakeUpCoordinator.setWakingUp(false);
             if (mKeyguardStateController.isOccluded()
                     && !mDozeParameters.canControlUnlockedScreenOff()) {
@@ -3072,6 +3145,10 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
 
     protected boolean mDeviceInteractive;
 
+    private boolean mPanelExpandedWhenScreenOff = false;
+    private boolean mLandscapeWhenScreenOff = false;
+    private boolean mIsPressSleepButton = false;
+
     private final PowerManager mPowerManager;
     protected StatusBarKeyguardViewManager mStatusBarKeyguardViewManager;
 
@@ -3316,11 +3393,16 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
 
                 @Override
                 public void onDozeAmountChanged(float linear, float eased) {
-                    if (!ambientAod()
-                            && !(mLightRevealScrim.getRevealEffect() instanceof CircleReveal)) {
-                        // If wakeAndUnlocking, this is handled in AuthRippleInteractor
-                        if (!mBiometricUnlockController.isWakeAndUnlock()) {
-                            mLightRevealScrim.setRevealAmount(1f - linear);
+                    if (ambientAod()) {
+                        return;
+                    }
+                    if ((mDozing || !mBiometricUnlockController.isWakeAndUnlock()) && !mAuthRippleController.isAnimatingLightRevealScrim()) {
+                        if (!mScreenOffAnimationController.isAnimationPlaying() || mDeviceInteractive) {
+                            if (mBiometricUnlockController.isWakeAndUnlock()) {
+                                return;
+                            }
+                            mLightRevealScrim.setRevealAmount(1.0f - linear);
+                            return;
                         }
                     }
                 }
@@ -3479,5 +3561,12 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
     public ActivityTransitionAnimator.Controller getAnimatorControllerFromNotification(
             ExpandableNotificationRow associatedView) {
         return mNotificationAnimationProvider.getAnimatorController(associatedView);
+    }
+
+    @Override
+    public void unlockedScreenOffAnimationCancel() {
+        if (mState == StatusBarState.KEYGUARD) {
+            mShadeSurface.cancelPendingCollapse();
+        }
     }
 }

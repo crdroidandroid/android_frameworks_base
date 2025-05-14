@@ -34,6 +34,7 @@ import com.android.systemui.power.domain.interactor.PowerInteractor
 import com.android.systemui.settings.UserTracker
 import com.android.systemui.tuner.TunerService
 import com.android.systemui.tuner.TunerService.Tunable
+import com.android.systemui.util.TapPositionUtil
 import java.io.PrintWriter
 import javax.inject.Inject
 
@@ -102,6 +103,7 @@ constructor(
             if (proximityIsNotNear && isNotAFalseTap) {
                 shadeLogger.d("Single tap handled, requesting centralSurfaces.wakeUpIfDozing")
                 dozeInteractor.setLastTapToWakePosition(Point(x.toInt(), y.toInt()))
+                TapPositionUtil.INSTANCE().setTapPos(x.toInt(), y.toInt())
                 powerInteractor.wakeUpIfDozing("PULSING_SINGLE_TAP", PowerManager.WAKE_REASON_TAP)
             }
 
@@ -120,6 +122,11 @@ constructor(
         if (e.actionMasked != MotionEvent.ACTION_UP) {
             return false
         }
+        
+        TapPositionUtil.INSTANCE().setTapPos(
+            e.rawX.toInt(), 
+            e.rawY.toInt()
+        )
 
         return onDoubleTapEvent()
     }

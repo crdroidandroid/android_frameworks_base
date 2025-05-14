@@ -35,6 +35,7 @@ import com.android.systemui.scene.shared.flag.SceneContainerFlag
 import com.android.systemui.shade.domain.interactor.ShadeInteractor
 import com.android.systemui.shared.customization.data.SensorLocation
 import com.android.systemui.util.kotlin.sample
+import com.android.systemui.util.settings.SystemSettings
 import dagger.Lazy
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
@@ -70,6 +71,7 @@ constructor(
     private val deviceEntryInteractor: DeviceEntryInteractor,
     private val deviceEntrySourceInteractor: DeviceEntrySourceInteractor,
     private val accessibilityInteractor: AccessibilityInteractor,
+    private val systemSettings: SystemSettings,
     @Application private val scope: CoroutineScope,
 ) {
     val isUdfpsSupported: StateFlow<Boolean> = deviceEntryUdfpsInteractor.isUdfpsSupported
@@ -218,7 +220,9 @@ constructor(
             isListeningForUdfps,
             isUnlocked ->
             if (isListeningForUdfps) {
-                if (isUnlocked) {
+                val showAodOnScreenOff = systemSettings.getIntForUser(
+                                        "screen_off_aod_enabled", 1, android.os.UserHandle.USER_CURRENT) == 1
+                if (isUnlocked && !showAodOnScreenOff) {
                     // Don't show any UI until isUnlocked=false. This covers the case
                     // when the "Power button instantly locks > 0s" or the device doesn't lock
                     // immediately after a screen time.

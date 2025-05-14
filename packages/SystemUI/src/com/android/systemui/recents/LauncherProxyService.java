@@ -373,6 +373,11 @@ public class LauncherProxyService implements CallbackController<LauncherProxyLis
         }
 
         @Override
+        public void notifyGoingToSleepByDoubleClick(int x, int y) {
+            com.android.systemui.util.TapPositionUtil.INSTANCE().setTapPos(x, y);
+        }
+
+        @Override
         public void setHomeRotationEnabled(boolean enabled) {
             verifyCallerAndClearCallingIdentityPostMain("setHomeRotationEnabled", () ->
                     mHandler.post(() -> notifyHomeRotationEnabled(enabled)));

@@ -363,4 +363,6 @@ public interface CentralSurfaces extends Dumpable, LifecycleOwner, CoreStartable
     void onBrightnessChanged(boolean upOrCancel);
 
     GameSpaceManager getGameSpaceManager();
+    
+    default void unlockedScreenOffAnimationCancel() {}
 }

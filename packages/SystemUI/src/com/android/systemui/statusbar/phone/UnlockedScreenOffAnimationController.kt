@@ -37,6 +37,7 @@ import com.android.systemui.statusbar.notification.stack.AnimationProperties
 import com.android.systemui.statusbar.notification.stack.StackStateAnimator
 import com.android.systemui.statusbar.policy.KeyguardStateController
 import com.android.systemui.util.settings.GlobalSettings
+import com.android.systemui.util.ScreenAnimationController
 import dagger.Lazy
 import javax.inject.Inject
 
@@ -101,9 +102,7 @@ constructor(
             interpolator = Interpolators.LINEAR
             addUpdateListener {
                 if (ambientAod()) return@addUpdateListener
-                if (lightRevealScrim.revealEffect !is CircleReveal) {
-                    lightRevealScrim.revealAmount = it.animatedValue as Float
-                }
+                lightRevealScrim.revealAmount = it.animatedValue as Float
                 if (
                     lightRevealScrim.isScrimAlmostOccludes &&
                         interactionJankMonitor.isInstrumenting(CUJ_SCREEN_OFF)
@@ -117,14 +116,34 @@ constructor(
                 object : AnimatorListenerAdapter() {
                     override fun onAnimationCancel(animation: Animator) {
                         if (ambientAod()) return
-                        if (lightRevealScrim.revealEffect !is CircleReveal) {
+                        lightRevealScrim.revealAmount = 1f
+                        if (lightRevealScrim.isScrimAlmostOccludes) {
+                            lightRevealScrim.revealAmount = 0.0f
+                        } else {
                             lightRevealScrim.revealAmount = 1f
                         }
+                        centralSurfaces.unlockedScreenOffAnimationCancel()
                     }
 
                     override fun onAnimationEnd(animation: Animator) {
                         lightRevealAnimationPlaying = false
                         interactionJankMonitor.end(CUJ_SCREEN_OFF)
+                        val wakefulness = wakefulnessLifecycle.getWakefulness()
+                        if (ScreenAnimationController.INSTANCE().shouldPlayAnimation() 
+                            && (wakefulness == WakefulnessLifecycle.WAKEFULNESS_WAKING 
+                                || wakefulness == WakefulnessLifecycle.WAKEFULNESS_AWAKE)) {
+                            centralSurfaces.updateIsKeyguard()
+                        }
+                        if (powerManager.isInteractive(Display.DEFAULT_DISPLAY)) {
+                            if (lightRevealScrim.revealAmount == 1.0f) {
+                                return
+                            }
+                            if (keyguardStateController.isShowing()) {
+                                return
+                            }
+                            lightRevealScrim.revealAmount = 1.0f
+                        }
+                        ScreenAnimationController.INSTANCE().setAnimationPlaying(false)
                     }
 
                     override fun onAnimationStart(animation: Animator) {
@@ -258,6 +277,9 @@ constructor(
 
         shouldAnimateInKeyguard = false
         DejankUtils.removeCallbacks(startLightRevealCallback)
+        if (!lightRevealAnimator.isStarted() && lightRevealAnimationPlaying) {
+            lightRevealAnimationPlaying = false
+        }
         lightRevealAnimator.cancel()
         handler.removeCallbacksAndMessages(null)
     }
@@ -281,7 +303,11 @@ constructor(
         if (shouldPlayUnlockedScreenOffAnimation()) {
             decidedToAnimateGoingToSleep = true
 
+            lightRevealAnimationPlaying = true
+
             shouldAnimateInKeyguard = true
+
+            lightRevealAnimator.setDuration(500L)
 
             // Start the animation on the next frame. startAnimation() is called after
             // PhoneWindowManager makes a binder call to System UI on
@@ -375,10 +401,11 @@ constructor(
         // portrait. If we're in another orientation, disable the screen off animation so we don't
         // animate in the keyguard AOD UI sideways or upside down.
         if (
-            !keyguardStateController.isKeyguardScreenRotationAllowed &&
-                context.display?.rotation != Surface.ROTATION_0
+            keyguardStateController.isKeyguardScreenRotationAllowed &&
+                context.display?.rotation == Surface.ROTATION_0
         ) {
-            return false
+            return Settings.Secure.getIntForUser(context.getContentResolver(), 
+                "user_setup_complete", 0, android.os.UserHandle.USER_CURRENT) != 0
         }
 
         // Otherwise, good to go.

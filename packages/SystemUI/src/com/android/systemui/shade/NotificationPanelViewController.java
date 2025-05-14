@@ -802,6 +802,7 @@ public final class NotificationPanelViewController implements
             @Override
             public boolean onDoubleTap(MotionEvent e) {
                 if (mPowerManager != null) {
+                    com.android.systemui.util.TapPositionUtil.INSTANCE().setTapPos((int) e.getX(), (int) e.getY());
                     mPowerManager.goToSleep(e.getEventTime());
                 }
                 return true;
@@ -4412,5 +4413,14 @@ public final class NotificationPanelViewController implements
             }
             return super.performAccessibilityAction(host, action, args);
         }
+    }
+    
+    public boolean isPanelFullyCollapsed() {
+        int state = mBarState;
+        if (state == StatusBarState.SHADE_LOCKED 
+            || state == StatusBarState.KEYGUARD) {
+            return !mQsController.isVisible();
+        }
+        return mExpandedFraction <= 0.0f;
     }
 }

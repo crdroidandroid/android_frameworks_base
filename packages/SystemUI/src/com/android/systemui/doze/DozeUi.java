@@ -35,6 +35,7 @@ import com.android.systemui.statusbar.phone.DozeParameters;
 import com.android.systemui.util.AlarmTimeout;
 import com.android.systemui.util.concurrency.DelayableExecutor;
 import com.android.systemui.util.wakelock.WakeLock;
+import com.android.systemui.util.ScreenAnimationController;
 
 import java.util.Calendar;
 
@@ -154,6 +155,7 @@ public class DozeUi implements DozeMachine.Part {
     }
 
     private void updateAnimateWakeup(DozeMachine.State state) {
+        boolean animate = true;
         switch (state) {
             case DOZE_REQUEST_PULSE:
             case DOZE_PULSING:
@@ -165,7 +167,11 @@ public class DozeUi implements DozeMachine.Part {
                 // Keep current state.
                 break;
             default:
-                mHost.setAnimateWakeup(mCanAnimateTransition && mDozeParameters.getAlwaysOn());
+                if (!mCanAnimateTransition || (!mDozeParameters.getAlwaysOn() 
+                        && !ScreenAnimationController.INSTANCE().shouldPlayAnimation())) {
+                    animate = false;
+                }
+                mHost.setAnimateWakeup(animate);
                 break;
         }
     }
