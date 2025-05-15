@@ -130,8 +130,7 @@ public class ServiceListener implements ServiceResolveQueue.ResolveCallback {
         boolean wasRemoved = false;
 
         synchronized (mLock) {
-            Set<String> vendors = mVendorHashMap.keySet();
-            for (String vendor : vendors) {
+            for(String vendor : new ArrayList<>(mVendorHashMap.keySet())) {
                 PrinterHashMap map = mVendorHashMap.get(vendor);
                 wasRemoved |= (map.removePrinter(nsdServiceInfo) != null);
                 if (map.isEmpty()) wasRemoved |= (mVendorHashMap.remove(vendor) != null);
