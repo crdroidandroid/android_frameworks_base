@@ -469,7 +469,7 @@ constructor(
         zenModeController.addCallback(zenModeCallback)
         if (SceneContainerFlag.isEnabled) {
             handleDoze(
-                when (AOD) {
+                when (DOZING) {
                     keyguardTransitionInteractor.getCurrentState() -> 1f
                     keyguardTransitionInteractor.getStartedState() -> 1f
                     else -> 0f
@@ -604,10 +604,10 @@ constructor(
     internal fun listenForDozeAmountTransition(scope: CoroutineScope): Job {
         return scope.launch {
             merge(
-                    keyguardTransitionInteractor.transition(Edge.create(AOD, LOCKSCREEN)).map {
+                    keyguardTransitionInteractor.transition(Edge.create(DOZING, LOCKSCREEN)).map {
                         it.copy(value = 1f - it.value)
                     },
-                    keyguardTransitionInteractor.transition(Edge.create(LOCKSCREEN, AOD)),
+                    keyguardTransitionInteractor.transition(Edge.create(LOCKSCREEN, DOZING)),
                 )
                 .filter { it.transitionState != TransitionState.FINISHED }
                 .collect { handleDoze(it.value) }
@@ -621,7 +621,7 @@ constructor(
     internal fun listenForAnyStateToAodTransition(scope: CoroutineScope): Job {
         return scope.launch {
             keyguardTransitionInteractor
-                .transition(Edge.create(to = AOD))
+                .transition(Edge.create(to = DOZING))
                 .filter { it.transitionState == TransitionState.STARTED }
                 .filter { it.from != LOCKSCREEN }
                 .collect { handleDoze(1f) }
@@ -634,7 +634,7 @@ constructor(
             keyguardTransitionInteractor
                 .transition(Edge.create(to = LOCKSCREEN))
                 .filter { it.transitionState == TransitionState.STARTED }
-                .filter { it.from != AOD }
+                .filter { it.from != DOZING }
                 .collect { handleDoze(0f) }
         }
     }
