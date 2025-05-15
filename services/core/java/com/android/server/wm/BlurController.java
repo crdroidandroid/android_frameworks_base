@@ -144,7 +144,8 @@ final class BlurController {
     }
 
     private boolean getBlurDisabledSetting() {
+        boolean blurEnabledByDefault = android.os.SystemProperties.getBoolean("ro.custom.blur.enable", false);
         return Settings.Global.getInt(mContext.getContentResolver(),
-                Settings.Global.DISABLE_WINDOW_BLURS, 0) == 1;
+                Settings.Global.DISABLE_WINDOW_BLURS, blurEnabledByDefault ? 0 : 1) == 1;
     }
 }
