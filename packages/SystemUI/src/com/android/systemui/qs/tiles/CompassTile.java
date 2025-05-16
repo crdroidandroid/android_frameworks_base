@@ -254,6 +254,9 @@ public class CompassTile extends QSTileImpl<BooleanState> implements SensorEvent
         Float newDegree = Float.valueOf((float) Math.toDegrees(orientation[0]));
         newDegree = (newDegree + 360) % 360;
 
+        // Convert the angle to one that points north relative to the device
+        newDegree = -newDegree + 360;
+
         refreshState(newDegree);
     }
 
