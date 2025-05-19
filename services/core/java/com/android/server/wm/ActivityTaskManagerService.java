@@ -5251,11 +5251,9 @@ public class ActivityTaskManagerService extends IActivityTaskManager.Stub {
                 mTopProcessState = ActivityManager.PROCESS_STATE_TOP;
                 Slog.d(TAG, "Top Process State changed to PROCESS_STATE_TOP");
                 mTaskSupervisor.comeOutOfSleepIfNeededLocked();
-            }
-            mRootWindowContainer.applySleepTokens(true /* applyToRootTasks */);
-            if (wasSleeping) {
                 updateOomAdj = true;
             }
+            mRootWindowContainer.applySleepTokens(true /* applyToRootTasks */);
         } else if (!mSleeping && shouldSleep) {
             mSleeping = true;
             FrameworkStatsLog.write(FrameworkStatsLog.ACTIVITY_MANAGER_SLEEP_STATE_CHANGED,
