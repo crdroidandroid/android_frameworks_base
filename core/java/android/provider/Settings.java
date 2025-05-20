@@ -13561,6 +13561,12 @@ public final class Settings {
         public static final String NAVBAR_LAYOUT_MODE = "navbar_layout_mode";
 
         /**
+         * Show navigation space below IME
+         * @hide
+         */
+        public static final String NAVBAR_IME_SPACE = "navbar_ime_space";
+
+        /**
          * Whether to show or hide the arrow for back gesture
          * @hide
          */
