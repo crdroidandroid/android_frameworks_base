@@ -506,6 +506,9 @@ public final class InputMethodManagerService implements IInputMethodManagerImpl.
                         LineageSettings.Secure.FEATURE_TOUCH_HOVERING),
                         false, this, UserHandle.ALL);
             }
+            resolver.registerContentObserverAsUser(Settings.Secure.getUriFor(
+                    "sysui_show_nav_bar_ime"),
+                    false, this, UserHandle.ALL);
         }
 
         @Override
@@ -521,6 +524,8 @@ public final class InputMethodManagerService implements IInputMethodManagerImpl.
                     LineageSettings.System.HIGH_TOUCH_SENSITIVITY_ENABLE);
             final Uri touchHoveringUri = LineageSettings.Secure.getUriFor(
                     LineageSettings.Secure.FEATURE_TOUCH_HOVERING);
+            final Uri navBarUri = Settings.Secure.getUriFor(
+                    "sysui_show_nav_bar_ime");
             synchronized (ImfLock.class) {
                 if (!mConcurrentMultiUserModeEnabled && mCurrentImeUserId != userId) {
                     return;
@@ -531,6 +536,8 @@ public final class InputMethodManagerService implements IInputMethodManagerImpl.
                     updateTouchSensitivity();
                 } else if (touchHoveringUri.equals(uri)) {
                     updateTouchHovering();
+                } else if (navBarUri.equals(uri)) {
+                    onUpdateResourceOverlay(userId);
                 }
             }
         }
@@ -1232,10 +1239,9 @@ public final class InputMethodManagerService implements IInputMethodManagerImpl.
                     InputMethodSettingsRepository.put(userId, settings);
 
                     final int profileParentId = userManagerInternal.getProfileParentId(userId);
-                    final boolean value =
-                            InputMethodDrawsNavBarResourceMonitor.evaluate(context,
-                                    profileParentId);
-                    userData.mImeDrawsNavBar.set(value);
+                    final boolean showNavBarIme = Settings.Secure.getIntForUser(
+                        context.getContentResolver(), "sysui_show_nav_bar_ime", 1, userId) == 1;
+                    userData.mImeDrawsNavBar.set(showNavBarIme);
 
                     userData.mBackgroundLoadLatch.countDown();
                     Slog.d(TAG, "Complete initialization for user=" + userId);
@@ -5477,13 +5483,13 @@ public final class InputMethodManagerService implements IInputMethodManagerImpl.
     @WorkerThread
     private void onUpdateResourceOverlay(@UserIdInt int userId) {
         final int profileParentId = mUserManagerInternal.getProfileParentId(userId);
-        final boolean value =
-                InputMethodDrawsNavBarResourceMonitor.evaluate(mContext, profileParentId);
         final var profileUserIds = mUserManagerInternal.getProfileIds(profileParentId, false);
+        final boolean showNavBarIme = Settings.Secure.getIntForUser(
+            mContext.getContentResolver(), "sysui_show_nav_bar_ime", 1, userId) == 1;
         final ArrayList<UserData> updatedUsers = new ArrayList<>();
         for (int profileUserId : profileUserIds) {
             final var userData = getUserData(profileUserId);
-            userData.mImeDrawsNavBar.set(value);
+            userData.mImeDrawsNavBar.set(showNavBarIme);
             updatedUsers.add(userData);
         }
         synchronized (ImfLock.class) {
