@@ -62,6 +62,7 @@ import android.app.StatusBarManager;
 import android.app.StatusBarManager.NavbarFlags;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.database.ContentObserver;
 import android.graphics.Insets;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
@@ -70,12 +71,16 @@ import android.graphics.RectF;
 import android.graphics.Region;
 import android.inputmethodservice.InputMethodService.BackDispositionMode;
 import android.inputmethodservice.InputMethodService.ImeWindowVisibility;
+import android.net.Uri;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.RemoteException;
 import android.os.Trace;
+import android.os.UserHandle;
 import android.provider.DeviceConfig;
+import android.provider.Settings;
 import android.telecom.TelecomManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -234,6 +239,8 @@ public class NavigationBar extends ViewController<NavigationBarView> implements 
     private EdgeBackGestureHandler mEdgeBackGestureHandler;
     private NavigationBarFrame mFrame;
     private MotionEvent mCurrentDownEvent;
+
+    private final ContentObserver mNavBarObserver;
 
     private @WindowVisibleState int mNavigationBarWindowState = WINDOW_STATE_SHOWING;
 
@@ -692,6 +699,25 @@ public class NavigationBar extends ViewController<NavigationBarView> implements 
         mView.setDisplayTracker(mDisplayTracker);
         mView.setRotationPolicyWrapper(rotationPolicyWrapper);
         mNavBarMode = mNavigationModeController.addListener(mModeChangedListener);
+
+        mNavBarObserver = new ContentObserver(new Handler(Looper.getMainLooper())) {
+            @Override
+            public void onChange(boolean selfChange, Uri uri) {
+                super.onChange(selfChange, uri);
+                if (mView != null) {
+                    mView.setNavBarMode(mNavBarMode, mNavigationModeController.getImeDrawsImeNavBar()
+                            && getShowNavBarIme());
+
+                }
+            }
+        };
+    }
+
+    private boolean getShowNavBarIme() {
+        return Settings.Secure.getIntForUser(
+            mContext.getContentResolver(),
+            Settings.Secure.NAVBAR_IME_SPACE, 1,
+            UserHandle.USER_CURRENT) == 1;
     }
 
     public NavigationBarView getView() {
@@ -866,6 +892,13 @@ public class NavigationBar extends ViewController<NavigationBarView> implements 
         AutoHideController autoHideController = mAutoHideControllerStore.forDisplay(mDisplayId);
         setAutoHideController(autoHideController);
         restoreAppearanceAndTransientState();
+
+        mContext.getContentResolver().registerContentObserver(
+                Settings.Secure.getUriFor(Settings.Secure.NAVBAR_IME_SPACE),
+                false,
+                mNavBarObserver,
+                UserHandle.USER_ALL
+        );
     }
 
     @Override
@@ -899,6 +932,7 @@ public class NavigationBar extends ViewController<NavigationBarView> implements 
         mPipOptional.ifPresent(mView::removePipExclusionBoundsChangeListener);
         mFrame = null;
         mOrientationHandle = null;
+        mContext.getContentResolver().unregisterContentObserver(mNavBarObserver);
     }
 
     // TODO: Remove this when we update nav bar recreation
@@ -2035,7 +2069,8 @@ public class NavigationBar extends ViewController<NavigationBarView> implements 
     }
 
     private void setNavBarMode(int mode) {
-        mView.setNavBarMode(mode, mNavigationModeController.getImeDrawsImeNavBar());
+        mView.setNavBarMode(mode, mNavigationModeController.getImeDrawsImeNavBar()
+                && getShowNavBarIme());
         if (isGesturalMode(mode)) {
             mRegionSamplingHelper.start(mSamplingBounds);
         } else {
