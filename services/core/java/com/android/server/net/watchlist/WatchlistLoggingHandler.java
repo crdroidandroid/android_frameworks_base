@@ -35,6 +35,7 @@ import android.os.UserManager;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Slog;
+import android.os.SystemClock;
 
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.util.ArrayUtils;
@@ -68,6 +69,9 @@ class WatchlistLoggingHandler extends Handler {
 
     private static final long ONE_DAY_MS = TimeUnit.DAYS.toMillis(1);
     private static final String DROPBOX_TAG = "network_watchlist_report";
+
+    private static final long BOOT_TIME_THRESHOLD_MILLIS = TimeUnit.SECONDS.toMillis(30);
+    private static final long INITIAL_CHECK_DELAY_MILLIS = TimeUnit.MINUTES.toMillis(1);
 
     private final Context mContext;
     private final @Nullable DropBoxManager mDropBoxManager;
@@ -178,8 +182,14 @@ class WatchlistLoggingHandler extends Handler {
      * Report network watchlist records if we collected enough data.
      */
     public void reportWatchlistIfNecessary() {
+        long uptimeMillis = SystemClock.elapsedRealtime();
         final Message msg = obtainMessage(REPORT_RECORDS_IF_NECESSARY_MSG);
-        sendMessage(msg);
+
+        if(uptimeMillis < BOOT_TIME_THRESHOLD_MILLIS) {
+            sendMessageDelayed(msg, INITIAL_CHECK_DELAY_MILLIS);
+        } else {
+            sendMessage(msg);
+        }
     }
 
     public void forceReportWatchlistForTest(long lastReportTime) {
