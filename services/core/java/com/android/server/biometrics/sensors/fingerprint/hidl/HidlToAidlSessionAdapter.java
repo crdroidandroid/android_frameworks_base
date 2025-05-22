@@ -65,46 +65,91 @@ public class HidlToAidlSessionAdapter implements ISession {
 
     @Override
     public void generateChallenge() throws RemoteException {
-        long challenge = mSession.get().preEnroll();
-        mHidlToAidlCallbackConverter.onChallengeGenerated(challenge);
+        try {
+            long challenge = mSession.get().preEnroll();
+            mHidlToAidlCallbackConverter.onChallengeGenerated(challenge);
+        } catch (RemoteException re) {
+            throw re;
+        } catch (Exception e) {
+            Slog.e(TAG, "generateChallenge: exception!", e);
+        }
     }
 
     @Override
     public void revokeChallenge(long challenge) throws RemoteException {
-        mSession.get().postEnroll();
-        mHidlToAidlCallbackConverter.onChallengeRevoked(0L);
+        try {
+            mSession.get().postEnroll();
+            mHidlToAidlCallbackConverter.onChallengeRevoked(0L);
+        } catch (RemoteException re) {
+            throw re;
+        } catch (Exception e) {
+            Slog.e(TAG, "revokeChallenge: exception!", e);
+        }
     }
 
     @Override
     public ICancellationSignal enroll(HardwareAuthToken hat) throws RemoteException {
-        mSession.get().enroll(HardwareAuthTokenUtils.toByteArray(hat), mUserId,
-                ENROLL_TIMEOUT_SEC);
-        return new Cancellation();
+        try {
+            mSession.get().enroll(HardwareAuthTokenUtils.toByteArray(hat), mUserId,
+                    ENROLL_TIMEOUT_SEC);
+            return new Cancellation();
+        } catch (RemoteException re) {
+            throw re;
+        } catch (Exception e) {
+            Slog.e(TAG, "enroll: exception!", e);
+        }
+        return null;
     }
 
     @Override
     public ICancellationSignal authenticate(long operationId) throws RemoteException {
-        mSession.get().authenticate(operationId, mUserId);
-        return new Cancellation();
+        try {
+            mSession.get().authenticate(operationId, mUserId);
+            return new Cancellation();
+        } catch (RemoteException re) {
+            throw re;
+        } catch (Exception e) {
+            Slog.e(TAG, "authenticate: exception!", e);
+        }
+        return null;
     }
 
     @Override
     public ICancellationSignal detectInteraction() throws RemoteException {
-        mSession.get().authenticate(0, mUserId);
-        return new Cancellation();
+        try {
+            mSession.get().authenticate(0, mUserId);
+            return new Cancellation();
+        } catch (RemoteException re) {
+            throw re;
+        } catch (Exception e) {
+            Slog.e(TAG, "detectInteraction: exception!", e);
+        }
+        return null;
     }
 
     @Override
     public void enumerateEnrollments() throws RemoteException {
-        mSession.get().enumerate();
+        try {
+            mSession.get().enumerate();
+        } catch (RemoteException re) {
+            throw re;
+        } catch (Exception e) {
+            Slog.e(TAG, "enumerateEnrollments: exception!", e);
+        }
     }
 
     @Override
     public void removeEnrollments(int[] enrollmentIds) throws RemoteException {
-        if (enrollmentIds.length > 1) {
-            mSession.get().remove(mUserId, 0);
-        } else {
-            mSession.get().remove(mUserId, enrollmentIds[0]);
+        try {
+            if (enrollmentIds.length > 1) {
+                mSession.get().remove(mUserId, 0);
+            } else {
+                mSession.get().remove(mUserId, enrollmentIds[0]);
+            }
+        } catch (RemoteException re) {
+            throw re;
+        } catch (Exception e) {
+            Slog.e(TAG, "removeEnrollments: exception!", e);
         }
     }
 
@@ -214,11 +259,24 @@ public class HidlToAidlSessionAdapter implements ISession {
     }
 
     public long getAuthenticatorIdForUpdateClient() throws RemoteException {
-        return mSession.get().getAuthenticatorId();
+        try {
+            return mSession.get().getAuthenticatorId();
+        } catch (RemoteException re) {
+            throw re;
+        } catch (Exception e) {
+            Slog.e(TAG, "getAuthenticatorIdForUpdateClient: exception!", e);
+        }
+        return 0L;
     }
 
     public void setActiveGroup(int userId, String absolutePath) throws RemoteException {
-        mSession.get().setActiveGroup(userId, absolutePath);
+        try {
+            mSession.get().setActiveGroup(userId, absolutePath);
+        } catch (RemoteException re) {
+            throw re;
+        } catch (Exception e) {
+            Slog.e(TAG, "setActiveGroup: exception!", e);
+        }
     }
 
     private void setCallback(AidlResponseHandler aidlResponseHandler) {
@@ -235,6 +293,8 @@ public class HidlToAidlSessionAdapter implements ISession {
             }
         } catch (RemoteException e) {
             Slog.d(TAG, "Failed to set callback");
+        } catch (Exception e) {
+            Slog.e(TAG, "setCallback: exception!", e);
         }
     }
 
@@ -247,6 +307,8 @@ public class HidlToAidlSessionAdapter implements ISession {
                 mSession.get().cancel();
             } catch (RemoteException e) {
                 Slog.e(TAG, "Remote exception when requesting cancel", e);
+            } catch (Exception e) {
+                Slog.e(TAG, "cancel: exception!", e);
             }
         }
 
