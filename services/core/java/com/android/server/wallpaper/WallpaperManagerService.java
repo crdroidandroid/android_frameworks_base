@@ -976,17 +976,21 @@ public class WallpaperManagerService extends IWallpaperManager.Stub
         }
 
         void forEachDisplayConnector(Consumer<DisplayConnector> action) {
-            for (int i = mDisplayConnector.size() - 1; i >= 0; i--) {
-                final DisplayConnector connector = mDisplayConnector.valueAt(i);
-                action.accept(connector);
+            synchronized (mLock) {
+                for (int i = mDisplayConnector.size() - 1; i >= 0; i--) {
+                    final DisplayConnector connector = mDisplayConnector.valueAt(i);
+                    action.accept(connector);
+                }
             }
         }
 
         int getConnectedEngineSize() {
             int engineSize = 0;
-            for (int i = mDisplayConnector.size() - 1; i >= 0; i--) {
-                final DisplayConnector connector = mDisplayConnector.valueAt(i);
-                if (connector.mEngine != null) engineSize++;
+            synchronized (mLock) {
+                for (int i = mDisplayConnector.size() - 1; i >= 0; i--) {
+                    final DisplayConnector connector = mDisplayConnector.valueAt(i);
+                    if (connector.mEngine != null) engineSize++;
+                }
             }
             return engineSize;
         }
