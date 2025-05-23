@@ -6925,6 +6925,11 @@ public final class Settings {
         public static final String UDFPS_ICON = "udfps_icon";
 
         /**
+         * @hide
+         */
+        public static final String SCREEN_ANIMATION_ENABLED = "screen_animation_enabled";
+
+        /**
          * Whether to vibrate on succesful fingerprint authentication
          * @hide
          */
