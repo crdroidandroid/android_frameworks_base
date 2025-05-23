@@ -228,17 +228,28 @@ public class ClockStyle extends RelativeLayout implements TunerService.Tunable {
 
         if (view instanceof TextClock) {
             TextClock textClock = (TextClock) view;
-            int color;
-            if (mUseAccentColor) {
-                color = mContext.getColor(
-                    mContext.getResources().getIdentifier(
-                        "system_accent1_100", "color", "android"));
-            } else {
-                color = mContext.getColor(android.R.color.white);
+
+            if (textClock.getTag(R.id.original_text_color) == null) {
+                int currentColor = textClock.getCurrentTextColor();
+                textClock.setTag(R.id.original_text_color, currentColor);
             }
-            int alpha = Math.round((mClockOpacity / 100f) * 255);
-            color = (color & 0x00FFFFFF) | (alpha << 24);
-            textClock.setTextColor(color);
+
+            int originalColor = (Integer) textClock.getTag(R.id.original_text_color);
+            int whiteColor = mContext.getColor(android.R.color.white);
+
+            if ((originalColor & 0x00FFFFFF) == (whiteColor & 0x00FFFFFF)) {
+                int color;
+                if (mUseAccentColor) {
+                    color = mContext.getColor(
+                        mContext.getResources().getIdentifier(
+                            "system_accent1_100", "color", "android"));
+                } else {
+                    color = mContext.getColor(android.R.color.white);
+                }
+                int alpha = Math.round((mClockOpacity / 100f) * 255);
+                color = (color & 0x00FFFFFF) | (alpha << 24);
+                textClock.setTextColor(color);
+            }
         }
     }
 
