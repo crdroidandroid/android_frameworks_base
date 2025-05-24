@@ -246,6 +246,12 @@ constructor(
                     showRepliedMessages = false,
                 )
             }
+            .map { notifs ->
+                notifs
+                    .filter { it.statusBarIcon != null }
+                    .distinctBy { it.statusBarIcon!!.toString() }
+                    .toSet()
+            }
             .flowOn(bgContext)
 
     /** Emits `true` whenever there is at least one status bar notification. */
