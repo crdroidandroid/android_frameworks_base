@@ -2726,7 +2726,7 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
                     removePointersFromTouchTargets(idBitsToAssign);
 
                     final int childrenCount = mChildrenCount;
-                    if (newTouchTarget == null && childrenCount != 0) {
+                    if (childrenCount != 0) {
                         final float x = ev.getXDispatchLocation(actionIndex);
                         final float y = ev.getYDispatchLocation(actionIndex);
                         // Find a child that can receive the event.
