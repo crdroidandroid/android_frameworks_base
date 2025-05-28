@@ -594,7 +594,7 @@ class BroadcastProcessQueue {
      * Return if we know of an actively running "warm" process for this queue.
      */
     public boolean isProcessWarm() {
-        return (app != null) && (app.getOnewayThread() != null) && !app.isKilled();
+        return (app != null) && app.isThreadReady() && !app.isKilled();
     }
 
     public int getPreferredSchedulingGroupLocked() {
