@@ -332,7 +332,7 @@ public final class AssociationDiskStore {
     }
 
     @NonNull
-    private static Associations readAssociationsFromInputStream(@UserIdInt int userId,
+    public static Associations readAssociationsFromInputStream(@UserIdInt int userId,
             @NonNull InputStream in, @NonNull String rootTag)
             throws XmlPullParserException, IOException {
         final TypedXmlPullParser parser = Xml.resolvePullParser(in);
@@ -348,10 +348,15 @@ public final class AssociationDiskStore {
             case 1:
                 while (true) {
                     parser.nextTag();
+                    if (isEndOfTag(parser, rootTag)) {
+                        break;
+                    }
                     if (isStartOfTag(parser, XML_TAG_ASSOCIATIONS)) {
                         associations = readAssociationsV1(parser, userId);
-                    } else if (isEndOfTag(parser, rootTag)) {
-                        break;
+                    } else {
+                        Slog.e(TAG, "Unexpected tag " + parser.getName()
+                                + " inside <" + rootTag + "> for user " + userId);
+                        XmlUtils.skipCurrentTag(parser);
                     }
                 }
                 break;
@@ -366,7 +371,7 @@ public final class AssociationDiskStore {
         writeToFileSafely(file, out -> {
             final TypedXmlSerializer serializer = Xml.resolveSerializer(out);
             serializer.setFeature("http://xmlpull.org/v1/doc/features.html#indent-output", true);
-            serializer.startDocument(null, true);
+            serializer.startDocument("UTF-8", true);
             serializer.startTag(null, XML_TAG_STATE);
             writeIntAttribute(serializer,
                     XML_ATTR_PERSISTENCE_VERSION, CURRENT_PERSISTENCE_VERSION);
@@ -476,13 +481,18 @@ public final class AssociationDiskStore {
 
         while (true) {
             parser.nextTag();
-            if (isEndOfTag(parser, XML_TAG_ASSOCIATIONS)) break;
-            if (!isStartOfTag(parser, XML_TAG_ASSOCIATION)) continue;
-
-            AssociationInfo association = readAssociationV1(parser, userId);
-            associations.addAssociation(association);
-
-            maxId = Math.max(maxId, association.getId());
+            if (isEndOfTag(parser, XML_TAG_ASSOCIATIONS)) {
+                break;
+            }
+            if (isStartOfTag(parser, XML_TAG_ASSOCIATION)) {
+                AssociationInfo association = readAssociationV1(parser, userId);
+                associations.addAssociation(association);
+                maxId = Math.max(maxId, association.getId());
+            } else {
+                Slog.e(TAG, "Unexpected tag " + parser.getName()
+                        + " inside <" + XML_TAG_ASSOCIATIONS + "> for user " + userId);
+                XmlUtils.skipCurrentTag(parser);
+            }
         }
 
         associations.setMaxId(maxId);
@@ -512,8 +522,22 @@ public final class AssociationDiskStore {
                 XML_ATTR_SYSTEM_DATA_SYNC_FLAGS, 0);
         final Icon deviceIcon = byteArrayToIcon(
                 readByteArrayAttribute(parser, XML_ATTR_DEVICE_ICON));
-        parser.nextTag();
-        final DeviceId deviceId = readDeviceId(parser);
+
+        // Read nested tags
+        DeviceId deviceId = null;
+        while (true) {
+            parser.nextTag();
+            if (isEndOfTag(parser, XML_TAG_ASSOCIATION)) {
+                break;
+            }
+            if (isStartOfTag(parser, XML_TAG_DEVICE_ID)) {
+                deviceId = readDeviceId(parser);
+            } else {
+                Slog.e(TAG, "Unexpected tag " + parser.getName()
+                        + " inside <" + XML_TAG_ASSOCIATION + "> for user " + userId);
+                XmlUtils.skipCurrentTag(parser);
+            }
+        }
 
         return new AssociationInfo(associationId, userId, appPackage, macAddress, displayName,
                 profile, null, selfManaged, notify, revoked, pending, timeApproved,
@@ -521,17 +545,16 @@ public final class AssociationDiskStore {
     }
 
     private static DeviceId readDeviceId(@NonNull TypedXmlPullParser parser)
-            throws XmlPullParserException {
-        if (isStartOfTag(parser, XML_TAG_DEVICE_ID)) {
-            final String customDeviceId = readStringAttribute(
-                    parser, XML_ATTR_CUSTOM_DEVICE_ID);
-            final MacAddress macAddress = stringToMacAddress(
-                    readStringAttribute(parser, XML_ATTR_MAC_ADDRESS_DEVICE_ID));
+            throws XmlPullParserException, IOException {
+        final String customDeviceId = readStringAttribute(
+                parser, XML_ATTR_CUSTOM_DEVICE_ID);
+        final MacAddress macAddress = stringToMacAddress(
+                readStringAttribute(parser, XML_ATTR_MAC_ADDRESS_DEVICE_ID));
 
-            return new DeviceId(customDeviceId, macAddress);
-        }
+        // Manually move to the END tag of XML_TAG_DEVICE_ID.
+        parser.nextTag();
 
-        return null;
+        return new DeviceId(customDeviceId, macAddress);
     }
 
     private static void writeAssociations(@NonNull XmlSerializer parent,
@@ -566,26 +589,26 @@ public final class AssociationDiskStore {
         writeByteArrayAttribute(
                 serializer, XML_ATTR_DEVICE_ICON, iconToByteArray(a.getDeviceIcon()));
 
-        writeDeviceId(serializer, a);
+        if (a.getDeviceId() != null) {
+            writeDeviceId(serializer, a);
+        }
         serializer.endTag(null, XML_TAG_ASSOCIATION);
     }
 
     private static void writeDeviceId(XmlSerializer parent, @NonNull AssociationInfo a)
             throws IOException {
-        if (a.getDeviceId() != null) {
-            final XmlSerializer serializer = parent.startTag(null, XML_TAG_DEVICE_ID);
-            writeStringAttribute(
-                    serializer,
-                    XML_ATTR_CUSTOM_DEVICE_ID,
-                    a.getDeviceId().getCustomId()
-            );
-            writeStringAttribute(
-                    serializer,
-                    XML_ATTR_MAC_ADDRESS_DEVICE_ID,
-                    a.getDeviceId().getMacAddressAsString()
-            );
-            serializer.endTag(null, XML_TAG_DEVICE_ID);
-        }
+        final XmlSerializer serializer = parent.startTag(null, XML_TAG_DEVICE_ID);
+        writeStringAttribute(
+                serializer,
+                XML_ATTR_CUSTOM_DEVICE_ID,
+                a.getDeviceId().getCustomId()
+        );
+        writeStringAttribute(
+                serializer,
+                XML_ATTR_MAC_ADDRESS_DEVICE_ID,
+                a.getDeviceId().getMacAddressAsString()
+        );
+        serializer.endTag(null, XML_TAG_DEVICE_ID);
     }
 
     private static void requireStartOfTag(@NonNull XmlPullParser parser, @NonNull String tag)
