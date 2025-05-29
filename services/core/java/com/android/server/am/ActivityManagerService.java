@@ -13654,9 +13654,9 @@ public class ActivityManagerService extends IActivityManager.Stub
         // If somehow this process was still waiting for the death of its predecessor,
         // (probably it's "killed" before starting for real), reset the bookkeeping.
         final ProcessRecord predecessor = app.mPredecessor;
-        if (predecessor != null) {
+        //Need to wait until process is really gone to clear mSuccessorStartRunnable
+        if (predecessor != null && predecessor.mSuccessorStartRunnable == null) {
             predecessor.mSuccessor = null;
-            predecessor.mSuccessorStartRunnable = null;
             app.mPredecessor = null;
         }
 
