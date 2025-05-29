@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: 2016-2025 crDroid Android Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Button that copies the url to the log of a crashed application -->
+    <string name="aerr_copy">Sao chép địa chỉ nhật ký sự cố</string>
+    <string name="url_copy_success">Đã sao chép thành công</string>
+    <string name="url_copy_failed">Đã xảy ra lỗi khi tải nhật ký lên máy chủ</string>
+    <!-- Lock gesture -->
+    <string name="gesture_locked_warning">Vuốt lại để mở khóa cử chỉ</string>
+    <!-- Pocket Lock -->
+    <string name="pocket_mode_title">Chế độ bỏ túi đang được bật</string>
+    <string name="pocket_mode_illustration_description">Hình minh họa điện thoại trong túi</string>
+    <string name="pocket_mode_instructions_header">Để tiếp tục sử dụng hãy:</string>
+    <string name="pocket_mode_instruction_step1">1. Đảm bảo khu vực màu xanh (cảm biến tiệm cận) không bị che hoặc không bám bụi.</string>
+    <string name="pocket_mode_instruction_step2">2. Ấn giữ nút nguồn để tiếp tục.</string>
+    <!-- App lock -->
+    <string name="unlock_application">Mở khóa <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
+    <!-- Cycle through ringer modes -->
+    <string name="volume_dialog_ringer_guidance_normal">Cuộc gọi &amp; thông báo sẽ đổ chuông</string>
+    <!-- GameSpace -->
+    <string name="gamespace_new_game_added"><xliff:g id="name" example="MyApp">%s</xliff:g> đã thêm vào không gian trò chơi</string>
+</resources>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: 2016-2025 crDroid Android Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Button that copies the url to the log of a crashed application -->
+    <string name="aerr_copy">Az összeomlási napló URL-jének másolása</string>
+    <string name="url_copy_success">Az URL sikeresen másolva</string>
+    <string name="url_copy_failed">Hiba történt a napló feltöltése során</string>
+    <!-- Lock gesture -->
+    <string name="gesture_locked_warning">Csúsztasson újból a vezérlések feloldásához</string>
+    <!-- Pocket Lock -->
+    <string name="pocket_mode_title">A Zsebmód aktív</string>
+    <string name="pocket_mode_illustration_description">A zsebben lévő telefon illusztrációja</string>
+    <string name="pocket_mode_instructions_header">A telefonja használatához:</string>
+    <string name="pocket_mode_instruction_step1">1. Győződjön meg arról, hogy a közelségérzékelő kék területe nincs takarásban, ill. szennyeződés- és pormentes.</string>
+    <string name="pocket_mode_instruction_step2">2. Tartsa lenyomva a bekapcsológombot a Zsebmódból való lkilépéshez.</string>
+    <!-- App lock -->
+    <string name="unlock_application">Feloldja a következőt: <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
+    <!-- Cycle through ringer modes -->
+    <string name="volume_dialog_ringer_guidance_normal">A hívások és az értesítések rezegni fognak</string>
+    <!-- GameSpace -->
+    <string name="gamespace_new_game_added"><xliff:g id="name" example="MyApp">%s</xliff:g> hozzáadva a Játéktérhez</string>
+</resources>
