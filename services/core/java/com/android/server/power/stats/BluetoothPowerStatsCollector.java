@@ -177,8 +177,8 @@ public class BluetoothPowerStatsCollector extends PowerStatsCollector {
 
                     @Override
                     public void onBluetoothActivityEnergyInfoError(int error) {
-                        immediateFuture.completeExceptionally(
-                                new RuntimeException("error: " + error));
+                        Slog.w(TAG, "BluetoothActivityEnergyInfo request failed with error code: " + error);
+                        immediateFuture.complete(null);
                     }
                 });
 
@@ -191,7 +191,7 @@ public class BluetoothPowerStatsCollector extends PowerStatsCollector {
             activityInfo = immediateFuture.get(BLUETOOTH_ACTIVITY_REQUEST_TIMEOUT,
                     TimeUnit.MILLISECONDS);
         } catch (Exception e) {
-            Slog.e(TAG, "Cannot acquire BluetoothActivityEnergyInfo", e);
+            Slog.w(TAG, "BluetoothActivityEnergyInfo unavailable, skipping stats collection", e);
             activityInfo = null;
         }
 
