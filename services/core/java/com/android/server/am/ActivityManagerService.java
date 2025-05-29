@@ -5369,10 +5369,14 @@ public class ActivityManagerService extends IActivityManager.Stub
                                 String data, Bundle extras, boolean ordered,
                                 boolean sticky, int sendingUser) {
                             mBootCompletedTimestamp = SystemClock.uptimeMillis();
-                            // Defer the full Pss collection as the system is really busy now.
                             mHandler.postDelayed(() -> {
                                 synchronized (mProcLock) {
                                     mCachedAppOptimizer.compactAllSystem();
+                                }
+                            }, 300000);
+                            // Defer the full Pss collection as the system is really busy now.
+                            mHandler.postDelayed(() -> {
+                                synchronized (mProcLock) {
                                     mAppProfiler.requestPssAllProcsLPr(
                                             SystemClock.uptimeMillis(), true, false);
                                 }
