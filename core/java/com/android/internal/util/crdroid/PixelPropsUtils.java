@@ -169,7 +169,6 @@ public final class PixelPropsUtils {
             "com.vng.pubgmobile"
     };
 
-    private static volatile boolean sIsFinsky = false;
     private static volatile List<String> sCertifiedProps = new ArrayList<>();
 
     static {
@@ -259,7 +258,7 @@ public final class PixelPropsUtils {
                     if (DEBUG) Log.d(TAG, "Netflix spoofing disabled by system prop");
                     return;
             } else if (packageName.equals("com.android.vending")) {
-                sIsFinsky = true;
+                spoofBuildGms(context);
                 return;
             } else if (packageName.equals("com.google.android.gms")) {
                 final String processName = Application.getProcessName().toLowerCase();
