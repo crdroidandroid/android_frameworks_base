@@ -109,7 +109,7 @@ fun Intent.toNetworkNameModel(separator: String): NetworkNameModel? {
                 dataSpn
             }
         } else {
-            getStringExtra(EXTRA_DATA_SPN)
+            getStringExtra(EXTRA_DATA_SPN) ?: getStringExtra(EXTRA_SPN)
         }
 
     val showPlmn = getBooleanExtra(EXTRA_SHOW_PLMN, false)
