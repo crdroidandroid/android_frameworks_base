@@ -21,5 +21,5 @@
     <!-- Cycle through ringer modes -->
     <string name="volume_dialog_ringer_guidance_normal">Sonarán las llamadas y las notificaciones</string>
     <!-- GameSpace -->
-    <string name="gamespace_new_game_added"><xliff:g id="name" example="MyApp">%s</xliff:g> añadido a GameSpace</string>
+    <string name="gamespace_new_game_added"><xliff:g id="name" example="MyApp">%s</xliff:g> añadido a Espacio de Juego</string>
 </resources>
