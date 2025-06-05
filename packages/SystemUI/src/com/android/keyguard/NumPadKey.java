@@ -122,7 +122,6 @@ public class NumPadKey extends ViewGroup implements NumPadAnimationListener {
         mKlondikeText = (TextView) findViewById(R.id.klondike_text);
 
         updateText();
-        setContentDescription(mDigitText.getText().toString());
 
         Drawable background = getBackground();
         if (background instanceof GradientDrawable) {
@@ -146,6 +145,7 @@ public class NumPadKey extends ViewGroup implements NumPadAnimationListener {
     private void updateText() {
         if (mDigit >= 0) {
             mDigitText.setText(Integer.toString(mDigit));
+            setContentDescription(mDigitText.getText().toString());
             if (sKlondike == null) {
                 sKlondike = getResources().getStringArray(R.array.lockscreen_num_pad_klondike);
             }
