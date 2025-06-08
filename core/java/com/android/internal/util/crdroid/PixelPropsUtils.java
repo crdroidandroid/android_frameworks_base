@@ -47,6 +47,7 @@ public final class PixelPropsUtils {
     private static final Map<String, Object> propsToChangePixelTablet;
     private static final Map<String, Object> propsToChangePixelXL;
     private static final Map<String, Object> propsToChangeROG6;
+    private static final Map<String, Object> propsToChangeROG6D;
     private static final Map<String, Object> propsToChangeLenovoY700;
     private static final Map<String, Object> propsToChangeOP8P;
     private static final Map<String, Object> propsToChangeOP9P;
@@ -89,6 +90,11 @@ public final class PixelPropsUtils {
             "com.madfingergames.legends",
             "com.pearlabyss.blackdesertm",
             "com.pearlabyss.blackdesertm.gl"
+    };
+
+    // Packages to Spoof as ROG Phone 6D
+    private static final String[] packagesToChangeROG6D = {
+            "com.proxima.dfm"
     };
 
     // Packages to Spoof as Lenovo Y700
@@ -189,6 +195,11 @@ public final class PixelPropsUtils {
         propsToChangeROG6.put("MANUFACTURER", "asus");
         propsToChangeROG6.put("DEVICE", "AI2201");
         propsToChangeROG6.put("MODEL", "ASUS_AI2201");
+        propsToChangeROG6D = new HashMap<>();
+        propsToChangeROG6D.put("BRAND", "asus");
+        propsToChangeROG6D.put("MANUFACTURER", "asus");
+        propsToChangeROG6D.put("DEVICE", "AI2203_C");
+        propsToChangeROG6D.put("MODEL", "ASUS_AI2203_C");
         propsToChangeLenovoY700 = new HashMap<>();
         propsToChangeLenovoY700.put("MODEL", "Lenovo TB-9707F");
         propsToChangeLenovoY700.put("MANUFACTURER", "lenovo");
@@ -265,6 +276,13 @@ public final class PixelPropsUtils {
             if (Arrays.asList(packagesToChangeROG6).contains(packageName)) {
                 if (DEBUG) Log.d(TAG, "Defining props for: " + packageName);
                 for (Map.Entry<String, Object> prop : propsToChangeROG6.entrySet()) {
+                    String key = prop.getKey();
+                    Object value = prop.getValue();
+                    setPropValue(key, value);
+                }
+            } else if (Arrays.asList(packagesToChangeROG6D).contains(packageName)) {
+                if (DEBUG) Log.d(TAG, "Defining props for: " + packageName);
+                for (Map.Entry<String, Object> prop : propsToChangeROG6D.entrySet()) {
                     String key = prop.getKey();
                     Object value = prop.getValue();
                     setPropValue(key, value);
