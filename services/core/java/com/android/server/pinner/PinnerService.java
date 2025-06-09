@@ -1207,8 +1207,7 @@ public final class PinnerService extends SystemService {
             PinnedFile pinnedFile = new PinnedFile(address, mapSize, fileToPin, bytesPinned);
             address = -1; // Ownership transferred
             return pinnedFile;
-        } catch (ErrnoException ex) {
-            Slog.e(TAG, "Could not pin file " + fileToPin, ex);
+        } catch (Exception ex) {
             return null;
         } finally {
             PinnerUtils.safeClose(fd);
