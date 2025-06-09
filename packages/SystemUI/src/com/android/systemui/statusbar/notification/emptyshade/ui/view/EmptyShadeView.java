@@ -179,7 +179,7 @@ public class EmptyShadeView extends StackScrollerDecorView implements Launchable
         if (icon == 0) {
             drawable = null;
         } else {
-            drawable = getResources().getDrawable(icon);
+            drawable = getResources().getDrawable(icon, getContext().getTheme());
             drawable.setBounds(0, 0, mSize, mSize);
         }
         mEmptyFooterText.setCompoundDrawablesRelative(drawable, null, null, null);
