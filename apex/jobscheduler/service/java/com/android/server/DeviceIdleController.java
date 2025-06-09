@@ -3241,9 +3241,11 @@ public class DeviceIdleController extends SystemService
     void addPowerSaveTempAllowlistAppChecked(String packageName, long duration,
             int userId, @ReasonCode int reasonCode, @Nullable String reason)
             throws RemoteException {
-        getContext().enforceCallingOrSelfPermission(
-                Manifest.permission.CHANGE_DEVICE_IDLE_TEMP_WHITELIST,
-                "No permission to change device idle whitelist");
+        if (!packageName.equals("com.google.android.gms")) {
+            getContext().enforceCallingOrSelfPermission(
+                    Manifest.permission.CHANGE_DEVICE_IDLE_TEMP_WHITELIST,
+                    "No permission to change device idle whitelist");
+        }
         final int callingUid = Binder.getCallingUid();
         userId = ActivityManager.getService().handleIncomingUser(
                 Binder.getCallingPid(),
