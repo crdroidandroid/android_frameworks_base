@@ -221,9 +221,12 @@ constructor(
             val isManualTransitionRunning =
                 updateTransitionId != null && lastStep.transitionState != TransitionState.FINISHED
             val isLastToLockscreen = lastStep.to == KeyguardState.LOCKSCREEN
-            // Dozing to Gone causes lockscreen to be hidden until scrolled, this transition step seem related to glanceable hub
+            // Only prevent DOZING to GONE when it's canceling a LOCKSCREEN transition
+            // and the LOCKSCREEN transition is still in progress (not finished)
             val isCancelingLockscreen =
-                isLastToLockscreen && ((info.from == KeyguardState.DOZING || info.from == KeyguardState.AOD) && info.to == KeyguardState.GONE)
+                isLastToLockscreen && 
+                lastStep.transitionState != TransitionState.FINISHED &&
+                ((info.from == KeyguardState.DOZING || info.from == KeyguardState.AOD) && info.to == KeyguardState.GONE)
 
             if ((isAnimatorRunning || isManualTransitionRunning) && isCancelingLockscreen) {
                 Log.i(
