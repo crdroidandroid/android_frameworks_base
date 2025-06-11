@@ -9,7 +9,9 @@ import android.system.keystore2.KeyEntryResponse;
 import android.system.keystore2.KeyMetadata;
 
 import com.android.internal.org.bouncycastle.asn1.ASN1Sequence;
+import com.android.internal.org.bouncycastle.asn1.ASN1Primitive;
 import com.android.internal.org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
+import com.android.internal.org.bouncycastle.asn1.pkcs.RSAPrivateKey;
 import com.android.internal.org.bouncycastle.asn1.sec.ECPrivateKey;
 import com.android.internal.org.bouncycastle.asn1.x9.X9ObjectIdentifiers;
 import com.android.internal.org.bouncycastle.asn1.x509.AlgorithmIdentifier;
@@ -23,6 +25,7 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.RSAPrivateCrtKeySpec;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
@@ -47,16 +50,40 @@ public class KeyboxUtils {
 
     public static PrivateKey parsePrivateKey(String encodedKey, String algorithm) throws Exception {
         byte[] keyBytes = decodePemOrBase64(encodedKey);
+        ASN1Primitive primitive = ASN1Primitive.fromByteArray(keyBytes);
         if ("EC".equalsIgnoreCase(algorithm)) {
-            ASN1Sequence seq = ASN1Sequence.getInstance(keyBytes);
-            ECPrivateKey ecPrivateKey = ECPrivateKey.getInstance(seq);
-            AlgorithmIdentifier algId = new AlgorithmIdentifier(X9ObjectIdentifiers.id_ecPublicKey, ecPrivateKey.getParameters());
-            PrivateKeyInfo privInfo = new PrivateKeyInfo(algId, ecPrivateKey);
-            PKCS8EncodedKeySpec pkcs8Spec = new PKCS8EncodedKeySpec(privInfo.getEncoded());
-            return KeyFactory.getInstance("EC").generatePrivate(pkcs8Spec);
+            try {
+                // Try parsing as PKCS#8
+                PrivateKeyInfo info = PrivateKeyInfo.getInstance(primitive);
+                return KeyFactory.getInstance("EC").generatePrivate(new PKCS8EncodedKeySpec(info.getEncoded()));
+            } catch (Exception e) {
+                // Possibly SEC1 / PKCS#1 EC
+                ASN1Sequence seq = ASN1Sequence.getInstance(primitive);
+                ECPrivateKey ecPrivateKey = ECPrivateKey.getInstance(seq);
+                AlgorithmIdentifier algId = new AlgorithmIdentifier(X9ObjectIdentifiers.id_ecPublicKey, ecPrivateKey.getParameters());
+                PrivateKeyInfo privInfo = new PrivateKeyInfo(algId, ecPrivateKey);
+                PKCS8EncodedKeySpec pkcs8Spec = new PKCS8EncodedKeySpec(privInfo.getEncoded());
+                return KeyFactory.getInstance("EC").generatePrivate(pkcs8Spec);
+            }
         } else if ("RSA".equalsIgnoreCase(algorithm)) {
-            PKCS8EncodedKeySpec pkcs8Spec = new PKCS8EncodedKeySpec(keyBytes);
-            return KeyFactory.getInstance("RSA").generatePrivate(pkcs8Spec);
+            try {
+                // Try parsing as PKCS#8
+                return KeyFactory.getInstance("RSA").generatePrivate(new PKCS8EncodedKeySpec(keyBytes));
+            } catch (Exception e) {
+                // Parse as PKCS#1
+                RSAPrivateKey rsaKey = RSAPrivateKey.getInstance(primitive);
+                RSAPrivateCrtKeySpec keySpec = new RSAPrivateCrtKeySpec(
+                    rsaKey.getModulus(),
+                    rsaKey.getPublicExponent(),
+                    rsaKey.getPrivateExponent(),
+                    rsaKey.getPrime1(),
+                    rsaKey.getPrime2(),
+                    rsaKey.getExponent1(),
+                    rsaKey.getExponent2(),
+                    rsaKey.getCoefficient()
+                );
+                return KeyFactory.getInstance("RSA").generatePrivate(keySpec);
+            }
         } else {
             throw new IllegalArgumentException("Unsupported algorithm: " + algorithm);
         }
