@@ -368,6 +368,11 @@ public final class NotificationPanelViewController implements
     private float mCurrentBackProgress = 0.0f;
     private boolean mExpanding;
     private boolean mSplitShadeEnabled;
+
+    private ValueAnimator lastFlingToHeightAnimator;
+    private boolean lastFlingToHeightExpand;
+    private float lastFlingToHeightVel;
+
     private KeyguardStatusBarViewController mKeyguardStatusBarViewController;
     private NotificationsQuickSettingsContainer mNotificationContainerParent;
     private final NotificationsQSContainerController mNotificationsQSContainerController;
@@ -893,6 +898,7 @@ public final class NotificationPanelViewController implements
         mQsHeaderLayout = mView.requireViewById(R.id.layout_header);
         mQsHeaderImageView = mView.requireViewById(R.id.qs_header_image_view);
         mStatusBarHeaderMachine = new StatusBarHeaderMachine(context);
+        mStatusBarKeyguardViewManager.setNotificationPanelViewController(this);
         dumpManager.registerDumpable(this);
     }
 
@@ -1458,6 +1464,9 @@ public final class NotificationPanelViewController implements
             overshootAmount += mOverExpansion / mPanelFlingOvershootAmount;
         }
         ValueAnimator animator = createHeightAnimator(target, overshootAmount);
+        if (shouldIgnoreStartFlingAnimavor(animator, mHeightAnimator, vel, expand)) {
+            return;
+        }
         if (expand) {
             maybeVibrateOnOpening(true /* openingWithTouch */);
             if (expandBecauseOfFalsing && vel < 0) {
@@ -1470,19 +1479,14 @@ public final class NotificationPanelViewController implements
                 animator.setDuration(SHADE_OPEN_SPRING_OUT_DURATION);
             }
         } else {
-            mHasVibratedOnOpen = false;
-            if (shouldUseDismissingAnimation()) {
-                if (vel == 0) {
-                    animator.setInterpolator(Interpolators.PANEL_CLOSE_ACCELERATED);
-                    long duration = (long) (200 + mExpandedHeight / this.mView.getHeight() * 100);
-                    animator.setDuration(duration);
-                } else {
-                    mFlingAnimationUtilsDismissing.apply(animator, mExpandedHeight, target, vel,
-                            this.mView.getHeight());
-                }
+            this.mHasVibratedOnOpen = false;
+            if (!shouldUseDismissingAnimation()) {
+                mFlingAnimationUtilsClosing.apply(animator, mExpandedHeight, target, vel, this.mView.getHeight());
+            } else if (vel == 0.0f) {
+                animator.setInterpolator(Interpolators.PANEL_CLOSE_ACCELERATED);
+                animator.setDuration((long) (((mExpandedHeight / this.mView.getHeight()) * 100.0f) + 200.0f));
             } else {
-                mFlingAnimationUtilsClosing.apply(
-                        animator, mExpandedHeight, target, vel, this.mView.getHeight());
+                mFlingAnimationUtilsDismissing.apply(animator, mExpandedHeight, target, vel, this.mView.getHeight());
             }
 
             // Make it shorter if we run a canned animation
@@ -1509,6 +1513,9 @@ public final class NotificationPanelViewController implements
                 if (!mStatusBarStateController.isDozing()) {
                     mQsController.beginJankMonitoring(isFullyCollapsed());
                 }
+                if (expand && mHeadsUpManager.hasPinnedHeadsUp()) {
+                    notifyExpandingStarted();
+                }
             }
 
             @Override
@@ -1530,8 +1537,43 @@ public final class NotificationPanelViewController implements
         if (!mScrimController.isScreenOn()) {
             animator.setDuration(1);
         }
+        if (mHeightAnimator != null && mHeightAnimator.isRunning()) {
+            stopHeightAnimator();
+        }
         setAnimator(animator);
         animator.start();
+    }
+
+    private final boolean shouldIgnoreStartFlingAnimavor(ValueAnimator newAnimator, ValueAnimator oldAnimator, float vel, boolean expand) {
+        if (newAnimator == null) {
+            return false;
+        }
+        if (oldAnimator != null 
+            && oldAnimator.equals(lastFlingToHeightAnimator) 
+            && isSameDirection(vel) 
+            && expand == lastFlingToHeightExpand 
+            && oldAnimator.isRunning()) {
+            return true;
+        }
+        lastFlingToHeightAnimator = newAnimator;
+        lastFlingToHeightVel = vel;
+        lastFlingToHeightExpand = expand;
+        return false;
+    }
+
+    private final boolean isSameDirection(float vel) {
+        return (vel <= 0.0f && lastFlingToHeightVel <= 0.0f) || (vel >= 0.0f && lastFlingToHeightVel >= 0.0f);
+    }
+
+    public void stopHeightAnimator() {
+        if (mHeightAnimator == null || !mHeightAnimator.isRunning()) {
+            return;
+        }
+        mHeightAnimator.cancel();
+    }
+
+    public void resetHeightForBouncerShowing() {
+        setExpandedHeight(0.0f);
     }
 
     @VisibleForTesting
@@ -2442,9 +2484,15 @@ public final class NotificationPanelViewController implements
 
     @Override
     public void setDozing(boolean dozing, boolean animate) {
+        boolean shouldAnimate;
         if (dozing == mDozing) return;
         mView.setDozing(dozing);
         mDozing = dozing;
+        if (!isKeyguardShowing() || mDozing) {
+            shouldAnimate = animate;
+        } else {
+            shouldAnimate = false;
+        }
         // TODO (b/) make listeners for this
         mNotificationStackScrollLayoutController.setDozing(mDozing, animate);
         mKeyguardInteractor.setAnimateDozingTransitions(animate);
@@ -2452,7 +2500,7 @@ public final class NotificationPanelViewController implements
         mQsController.setDozing(mDozing);
 
         if (mBarState == KEYGUARD || mBarState == StatusBarState.SHADE_LOCKED) {
-            updateDozingVisibilities(animate);
+            updateDozingVisibilities(shouldAnimate);
         }
 
         final float dozeAmount = dozing ? 1 : 0;
@@ -3807,10 +3855,15 @@ public final class NotificationPanelViewController implements
         public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft,
                 int oldTop, int oldRight, int oldBottom) {
             DejankUtils.startDetectingBlockingIpcs("NVP#onLayout");
-            updateExpandedHeightToMaxHeight();
+            boolean changed = (left == oldLeft && top == oldTop && right == oldRight && bottom == oldBottom) ? false : true;
+            if (!mKeyguardStateController.isShowing() || !mKeyguardStateController.isKeyguardGoingAway() || changed) {
+                updateExpandedHeightToMaxHeight();
+            }
             mHasLayoutedSinceDown = true;
             if (mUpdateFlingOnLayout) {
-                abortAnimations();
+                if (isTracking() || !mIsSpringBackAnimation || left != oldLeft || top != oldTop || right != oldRight || bottom != oldBottom) {
+                    abortAnimations();
+                }
                 fling(mUpdateFlingVelocity);
                 mUpdateFlingOnLayout = false;
             }
