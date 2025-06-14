@@ -763,6 +763,7 @@ public class BiometricUnlockController extends KeyguardUpdateMonitorCallback imp
 
             if (mNumConsecutiveFpFailures >= UDFPS_ATTEMPTS_BEFORE_SHOW_BOUNCER) {
                 mLogger.logUdfpsAttemptThresholdMet(mNumConsecutiveFpFailures);
+                mKeyguardViewController.setIsFromBiometric(true);
                 startWakeAndUnlock(
                         MODE_SHOW_BOUNCER,
                         BiometricUnlockSource.Companion.fromBiometricSourceType(biometricSourceType)
