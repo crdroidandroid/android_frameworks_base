@@ -2026,6 +2026,7 @@ package android {
     field public static final int system_accent3_900 = 17170524; // 0x106005c
     field public static final int system_background_dark = 17170581; // 0x1060095
     field public static final int system_background_light = 17170538; // 0x106006a
+    field public static final int system_bar_background_semi_transparent = 17171313; // 0x1060371
     field public static final int system_control_activated_dark = 17170599; // 0x10600a7
     field public static final int system_control_activated_light = 17170556; // 0x106007c
     field public static final int system_control_highlight_dark = 17170601; // 0x10600a9

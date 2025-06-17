@@ -3156,6 +3156,7 @@
     <public type="color" name="system_accent3_800" id="0x0106005b" />
     <public type="color" name="system_accent3_900" id="0x0106005c" />
     <public type="color" name="system_accent3_1000" id="0x0106005d" />
+    <public type="color" name="system_bar_background_semi_transparent" id="0x01060371" />
 
     <public type="dimen" name="system_app_widget_background_radius" id="0x01050008" />
     <public type="dimen" name="system_app_widget_inner_radius" id="0x01050009" />
