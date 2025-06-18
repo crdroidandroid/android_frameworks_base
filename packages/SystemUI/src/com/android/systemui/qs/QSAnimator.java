@@ -221,7 +221,7 @@ public class QSAnimator implements QSHost.Callback, PagedTileLayout.PageListener
 
     private void addNonFirstPageAnimators(int page) {
         Pair<HeightExpansionAnimator, TouchAnimator> pair = createSecondaryPageAnimators(page);
-        if (pair != null) {
+        if (pair != null && pair.second != null) {
             // pair is null in one of two cases:
             // * mPagedTileLayout is null, meaning we are still setting up.
             // * the page has no tiles
@@ -493,6 +493,9 @@ public class QSAnimator implements QSHost.Callback, PagedTileLayout.PageListener
 
         for (int i = 0; i < specs.size(); i++) {
             QSTileView tileView = mQsPanelController.getTileView(specs.get(i));
+            if (tileView == null) {
+                return null;
+            }
             getRelativePosition(mTmpLoc2, tileView, view);
             int diff = mTmpLoc2[1] - (mQQSTop + qqsLayout.getPhantomTopPosition(i));
             builder.addFloat(tileView, "translationY", -diff, 0);
