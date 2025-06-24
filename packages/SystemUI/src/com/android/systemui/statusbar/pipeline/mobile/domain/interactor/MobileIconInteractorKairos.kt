@@ -127,6 +127,18 @@ interface MobileIconInteractorKairos {
     /** See [MobileIconsInteractor.isRoamingForceHidden]. */
     val isRoamingForceHidden: State<Boolean>
 
+    /** True when VoLTE/VONR available */
+    val isMobileHd: State<Boolean>
+
+    /** See [MobileIconsInteractor.isMobileHdForceHidden]. */
+    val isMobileHdForceHidden: State<Boolean>
+
+    /** True when VoWifi available */
+    val isVoWifi: State<Boolean>
+
+    /** See [MobileIconsInteractor.isVoWifiForceHidden]. */
+    val isVoWifiForceHidden: State<Boolean>
+
     /** See [MobileConnectionRepository.isAllowedDuringAirplaneMode]. */
     val isAllowedDuringAirplaneMode: State<Boolean>
 
@@ -147,6 +159,8 @@ class MobileIconInteractorKairosImpl(
     isDefaultConnectionFailed: State<Boolean>,
     override val isForceHidden: State<Boolean>,
     override val isRoamingForceHidden: State<Boolean>,
+    override val isMobileHdForceHidden: State<Boolean>,
+    override val isVoWifiForceHidden: State<Boolean>,
     private val connectionRepository: MobileConnectionRepositoryKairos,
     private val context: Context,
     private val carrierIdOverrides: MobileIconCarrierIdOverrides =
@@ -262,6 +276,14 @@ class MobileIconInteractorKairosImpl(
             }
         }
 
+    private val showRoaming: State<Boolean> =
+        combine(
+            isRoaming,
+            isRoamingForceHidden
+        ) { roaming, roamingForceHidden ->
+            roaming && !roamingForceHidden
+        }
+
     private val level: State<Int> =
         combine(
             connectionRepository.isGsm,
@@ -332,12 +354,14 @@ class MobileIconInteractorKairosImpl(
             numberOfLevels,
             showExclamationMark,
             carrierNetworkChangeActive,
-        ) { cellularShownLevel, numberOfLevels, showExclamationMark, carrierNetworkChange ->
+            showRoaming,
+        ) { cellularShownLevel, numberOfLevels, showExclamationMark, carrierNetworkChange, showRoaming ->
             SignalIconModel.Cellular(
                 cellularShownLevel,
                 numberOfLevels,
                 showExclamationMark,
                 carrierNetworkChange,
+                showRoaming,
             )
         }
 
@@ -361,4 +385,11 @@ class MobileIconInteractorKairosImpl(
                 }
             }
             .also { onActivated { logDiffsForTable(it, tableLogBuffer, columnPrefix = "icon") } }
+
+    override val isMobileHd: State<Boolean> =
+        connectionRepository.imsState.map { it.isHdVoiceCapable() }
+
+    override val isVoWifi: State<Boolean> =
+        connectionRepository.imsState.map { it.isVoWifiAvailable() }
+
 }
