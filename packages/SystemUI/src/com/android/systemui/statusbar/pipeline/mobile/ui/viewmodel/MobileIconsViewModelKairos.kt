@@ -170,6 +170,10 @@ constructor(
                 latest(false) { isAllowedDuringAirplaneMode }
             override val carrierNetworkChangeActive: State<Boolean> =
                 latest(false) { carrierNetworkChangeActive }
+            override val isMobileHd: State<Boolean> = latest(false) { isMobileHd }
+            override val isMobileHdForceHidden: State<Boolean> = latest(false) { isMobileHdForceHidden }
+            override val isVoWifi: State<Boolean> = latest(false) { isVoWifi }
+            override val isVoWifiForceHidden: State<Boolean> = latest(false) { isVoWifiForceHidden }
         }
 
     private fun trackedCommonViewModel(subId: Int) =
