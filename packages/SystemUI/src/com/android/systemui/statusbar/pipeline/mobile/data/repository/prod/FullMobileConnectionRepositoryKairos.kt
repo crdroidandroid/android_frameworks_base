@@ -28,6 +28,7 @@ import com.android.systemui.kairos.util.nameTag
 import com.android.systemui.kairosBuilder
 import com.android.systemui.log.table.TableLogBuffer
 import com.android.systemui.log.table.logDiffsForTable
+import com.android.systemui.statusbar.pipeline.ims.data.model.ImsStateModel
 import com.android.systemui.statusbar.pipeline.mobile.data.model.DataConnectionState
 import com.android.systemui.statusbar.pipeline.mobile.data.model.NetworkNameModel
 import com.android.systemui.statusbar.pipeline.mobile.data.model.ResolvedNetworkType
@@ -408,6 +409,8 @@ constructor(
         activeRepo.flatMap { it.hasPrioritizedNetworkCapabilities }
 
     override val isInEcmMode: State<Boolean> = activeRepo.flatMap { it.isInEcmMode }
+
+    override val imsState: State<ImsStateModel> = activeRepo.flatMap { it.imsState }
 
     fun dump(pw: PrintWriter) {
         val cache = dumpCache ?: return
