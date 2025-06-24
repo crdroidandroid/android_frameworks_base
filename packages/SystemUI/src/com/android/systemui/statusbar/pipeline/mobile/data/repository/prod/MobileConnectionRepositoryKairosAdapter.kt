@@ -19,6 +19,7 @@ package com.android.systemui.statusbar.pipeline.mobile.data.repository.prod
 import com.android.systemui.kairos.BuildScope
 import com.android.systemui.kairos.ExperimentalKairosApi
 import com.android.systemui.log.table.TableLogBuffer
+import com.android.systemui.statusbar.pipeline.ims.data.model.ImsStateModel
 import com.android.systemui.statusbar.pipeline.mobile.data.model.DataConnectionState
 import com.android.systemui.statusbar.pipeline.mobile.data.model.NetworkNameModel
 import com.android.systemui.statusbar.pipeline.mobile.data.model.ResolvedNetworkType
@@ -59,6 +60,7 @@ fun BuildScope.MobileConnectionRepositoryKairosAdapter(
         networkName = kairosRepo.networkName.toStateFlow(),
         carrierName = kairosRepo.carrierName.toStateFlow(),
         isAllowedDuringAirplaneMode = kairosRepo.isAllowedDuringAirplaneMode.toStateFlow(),
+	imsState = kairosRepo.imsState.toStateFlow(),
         hasPrioritizedNetworkCapabilities =
             kairosRepo.hasPrioritizedNetworkCapabilities.toStateFlow(),
         isInEcmMode = { kairosNetwork.transact { kairosRepo.isInEcmMode.sample() } },
@@ -90,6 +92,7 @@ class MobileConnectionRepositoryKairosAdapter(
     override val networkName: StateFlow<NetworkNameModel>,
     override val carrierName: StateFlow<NetworkNameModel>,
     override val isAllowedDuringAirplaneMode: StateFlow<Boolean>,
+    override val imsState: StateFlow<ImsStateModel>,
     override val hasPrioritizedNetworkCapabilities: StateFlow<Boolean>,
     private val isInEcmMode: Producer<Boolean>,
 ) : MobileConnectionRepository {
