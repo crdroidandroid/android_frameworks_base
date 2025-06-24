@@ -43,6 +43,8 @@ import android.telephony.TelephonyManager.NETWORK_TYPE_UNKNOWN
 import android.telephony.TelephonyManager.UNKNOWN_CARRIER_ID
 import com.android.settingslib.Utils
 import com.android.systemui.KairosBuilder
+import com.android.systemui.statusbar.pipeline.ims.data.model.ImsStateModel
+import com.android.systemui.statusbar.pipeline.ims.data.repository.ImsRepository
 import com.android.systemui.broadcast.BroadcastDispatcher
 import com.android.systemui.dagger.qualifiers.Background
 import com.android.systemui.flags.FeatureFlagsClassic
@@ -110,6 +112,7 @@ constructor(
     @Background private val bgDispatcher: CoroutineDispatcher,
     logger: MobileInputLogger,
     @Assisted override val tableLogBuffer: TableLogBuffer,
+    @Assisted private val imsRepo: ImsRepository,
     flags: FeatureFlagsClassic,
 ) : MobileConnectionRepositoryKairos, KairosBuilder by kairosBuilder() {
 
@@ -467,6 +470,8 @@ constructor(
             .holdState(false)
     }
 
+    override val imsState: State<ImsStateModel> = buildState { imsRepo.imsState.toState() }
+
     @AssistedFactory
     fun interface Factory {
         fun create(
@@ -477,6 +482,7 @@ constructor(
             networkNameSeparator: String,
             systemUiCarrierConfig: SystemUiCarrierConfig,
             telephonyManager: TelephonyManager,
+            imsRepo: ImsRepository,
         ): MobileConnectionRepositoryKairosImpl
     }
 }
