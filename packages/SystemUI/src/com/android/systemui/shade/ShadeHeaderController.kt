@@ -354,11 +354,38 @@ constructor(
             }
 
             override fun onThemeChanged() {
-                clock.setTextAppearance(R.style.TextAppearance_QS_Status)
-                date.setTextAppearance(R.style.TextAppearance_QS_Status)
-                mShadeCarrierGroup.updateTextAppearance(R.style.TextAppearance_QS_Status)
+                updateShadeHeaderColors()
+            }
+            
+            override fun onUiModeChanged() {
+                updateShadeHeaderColors()
             }
         }
+
+    fun updateShadeHeaderColors() {
+        clock.setTextAppearance(R.style.TextAppearance_QS_Status)
+        date.setTextAppearance(R.style.TextAppearance_QS_Status)
+        mShadeCarrierGroup.updateTextAppearance(R.style.TextAppearance_QS_Status)
+        updateIconManagerColors()
+    }
+
+    private fun updateIconManagerColors() {
+        val fgColor =
+            Utils.getColorAttrDefaultColor(context, android.R.attr.textColorPrimary)
+        val bgColor =
+            Utils.getColorAttrDefaultColor(context, android.R.attr.textColorPrimaryInverse)
+
+        iconManager.setTint(fgColor, bgColor)
+
+        if (!NewStatusBarIcons.isEnabled) {
+            batteryIcon.isVisible = true
+            batteryIcon.updateColors(
+                fgColor, // foreground
+                bgColor, // background
+                fgColor  // single tone (default)
+            )
+        }
+    }
 
     private val nextAlarmCallback =
         NextAlarmController.NextAlarmChangeCallback { nextAlarm ->
@@ -377,26 +404,13 @@ constructor(
     override fun onInit() {
         variableDateViewControllerFactory.create(date as VariableDateView).init()
 
-        val fgColor =
-            Utils.getColorAttrDefaultColor(header.context, android.R.attr.textColorPrimary)
-        val bgColor =
-            Utils.getColorAttrDefaultColor(header.context, android.R.attr.textColorPrimaryInverse)
-
         iconManager = tintedIconManagerFactory.create(iconContainer, StatusBarLocation.QS)
-        iconManager.setTint(fgColor, bgColor)
+        updateIconManagerColors()
 
         if (!NewStatusBarIcons.isEnabled) {
             batteryMeterViewController.init()
-
             // battery settings same as in QS icons
             batteryMeterViewController.ignoreTunerUpdates()
-
-            batteryIcon.isVisible = true
-            batteryIcon.updateColors(
-                fgColor /* foreground */,
-                bgColor /* background */,
-                fgColor, /* single tone (current default) */
-            )
         } else {
             // Configure the compose battery view
             val batteryComposeView =
