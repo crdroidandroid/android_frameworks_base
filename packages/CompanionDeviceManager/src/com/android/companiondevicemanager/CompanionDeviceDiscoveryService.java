@@ -277,7 +277,12 @@ public class CompanionDeviceDiscoveryService extends Service {
 
         // Stop BLE scanning.
         if (mBleScanCallback != null) {
-            mBleScanner.stopScan(mBleScanCallback);
+            try {
+                mBleScanner.stopScan(mBleScanCallback);
+            } catch (IllegalStateException e) {
+                Slog.e(TAG, "Unable to stop BLE scanner. The scanner is already"
+                        + " turned off or Bluetooth is disabled.");
+            }
         }
 
         Handler.getMain().removeCallbacks(mSoftTimeoutRunnable);
