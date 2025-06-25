@@ -296,11 +296,35 @@ constructor(
             }
 
             override fun onThemeChanged() {
-                clock.setTextAppearance(R.style.TextAppearance_QS_Status)
-                date.setTextAppearance(R.style.TextAppearance_QS_Status)
-                mShadeCarrierGroup.updateTextAppearance(R.style.TextAppearance_QS_Status_Carriers)
+                updateShadeHeaderColors()
+            }
+            
+            override fun onUiModeChanged() {
+                updateShadeHeaderColors()
             }
         }
+
+    fun updateShadeHeaderColors() {
+        clock.setTextAppearance(R.style.TextAppearance_QS_Status)
+        date.setTextAppearance(R.style.TextAppearance_QS_Status)
+        mShadeCarrierGroup.updateTextAppearance(R.style.TextAppearance_QS_Status_Carriers)
+        updateIconManagerColors()
+    }
+
+    private fun updateIconManagerColors() {
+        val fgColor =
+            Utils.getColorAttrDefaultColor(context, android.R.attr.textColorPrimary)
+        val bgColor =
+            Utils.getColorAttrDefaultColor(context, android.R.attr.textColorPrimaryInverse)
+
+        iconManager.setTint(fgColor, bgColor)
+
+        batteryIcon.updateColors(
+            fgColor, // foreground
+            bgColor, // background
+            fgColor  // single tone (default)
+        )
+    }
 
     private val nextAlarmCallback =
         NextAlarmController.NextAlarmChangeCallback { nextAlarm ->
@@ -314,19 +338,8 @@ constructor(
         // battery settings same as in QS icons
         batteryMeterViewController.ignoreTunerUpdates()
 
-        val fgColor =
-            Utils.getColorAttrDefaultColor(header.context, android.R.attr.textColorPrimary)
-        val bgColor =
-            Utils.getColorAttrDefaultColor(header.context, android.R.attr.textColorPrimaryInverse)
-
         iconManager = tintedIconManagerFactory.create(iconContainer, StatusBarLocation.QS)
-        iconManager.setTint(fgColor, bgColor)
-
-        batteryIcon.updateColors(
-            fgColor /* foreground */,
-            bgColor /* background */,
-            fgColor, /* single tone (current default) */
-        )
+        updateIconManagerColors()
 
         carrierIconSlots =
             listOf(header.context.getString(com.android.internal.R.string.status_bar_mobile))
