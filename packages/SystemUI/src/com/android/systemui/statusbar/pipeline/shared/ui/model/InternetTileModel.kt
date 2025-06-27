@@ -41,9 +41,9 @@ sealed interface InternetTileModel {
     @SuppressLint("UseCompatLoadingForDrawables")
     fun applyTo(state: QSTile.BooleanState, context: Context) {
         if (secondaryLabel != null) {
-            state.secondaryLabel = secondaryLabel.loadText(context)
+            state.label = secondaryLabel.loadText(context)
         } else {
-            state.secondaryLabel = secondaryTitle
+            state.label = secondaryTitle
         }
 
         state.stateDescription = stateDescription.loadContentDescription(context)

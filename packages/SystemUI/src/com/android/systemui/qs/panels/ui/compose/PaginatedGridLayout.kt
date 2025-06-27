@@ -50,6 +50,7 @@ import com.android.systemui.development.ui.viewmodel.BuildNumberViewModel
 import com.android.systemui.lifecycle.rememberViewModel
 import com.android.systemui.qs.panels.dagger.PaginatedBaseLayoutType
 import com.android.systemui.qs.panels.ui.compose.Dimensions.FooterHeight
+import com.android.systemui.qs.panels.ui.compose.Dimensions.FooterPaddingTop
 import com.android.systemui.qs.panels.ui.compose.Dimensions.InterPageSpacing
 import com.android.systemui.qs.panels.ui.compose.toolbar.EditModeButton
 import com.android.systemui.qs.panels.ui.viewmodel.PaginatedGridViewModel
@@ -147,7 +148,8 @@ constructor(
 }
 
 private object Dimensions {
-    val FooterHeight = 48.dp
+    val FooterHeight = 40.dp
+    val FooterPaddingTop = 8.dp
     val InterPageSpacing = 16.dp
 }
 
@@ -171,7 +173,7 @@ private fun FooterBar(
     // * On the end side, we place the edit mode button, with the same constraints as for
     //   BuildNumber (but it will usually fit, as it's just a square button).
     Row(
-        modifier = Modifier.requiredHeight(FooterHeight).fillMaxWidth(),
+        modifier = Modifier.requiredHeight(FooterHeight).fillMaxWidth().padding(top = { FooterPaddingTop.roundToPx() }),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = spacedBy(8.dp),
     ) {

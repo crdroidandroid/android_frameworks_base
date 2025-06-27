@@ -424,6 +424,17 @@ constructor(
         }
     }
 
+    @AnyThread
+    suspend fun loadDrawableRes(
+        @DrawableRes resId: Int,
+        context: Context = defaultContext,
+    ): Drawable? = withContext(backgroundDispatcher) {
+        val ctx = context ?: defaultContext
+        val drawable = ResourcesCompat.getDrawable(ctx.resources, resId, ctx.theme)
+            ?: null
+        drawable
+    }
+
     companion object {
         const val TAG = "ImageLoader"
 

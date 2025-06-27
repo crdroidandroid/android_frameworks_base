@@ -31,5 +31,18 @@
                                                 - navigation_key_width) -->
     <dimen name="screen_pinning_request_side_width">44dp</dimen>
 
+    <!--QS -->
+    <dimen name="qs_status_bar_margin_end">15.57dp</dimen>
+    <dimen name="qs_status_bar_margin_start">15.57dp</dimen>
+    <dimen name="qs_status_bar_margin_top">15.57dp</dimen>
+    <dimen name="qs_status_bar_data_margin_top">-6.81dp</dimen>
+    <dimen name="qqs_status_bar_margin_top">11.68dp</dimen>
+    <dimen name="qqs_status_bar_text_size">14.60dp</dimen>
+    <dimen name="qqs_status_bar_height">61.31dp</dimen>
+    <dimen name="nt_qs_panel_padding_top">18.49dp</dimen>
+    <dimen name="nt_qqs_layout_margin_top">0.00dp</dimen>
+    <dimen name="custom_qs_tile_height">68.07dp</dimen>
+    <dimen name="qs_tile_margin_vertical">19.46dp</dimen>
+    <dimen name="qs_brightness_slider_height">54.50dp</dimen>
 </resources>
 

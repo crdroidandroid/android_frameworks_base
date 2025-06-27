@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- QuickSettings -->
+    <dimen name="qs_status_bar_margin_end">12.46dp</dimen>
+    <dimen name="qs_status_bar_margin_start">12.46dp</dimen>
+    <dimen name="qs_status_bar_margin_top">12.46dp</dimen>
+    <dimen name="qs_status_bar_data_margin_top">-5.45dp</dimen>
+    <dimen name="qqs_status_bar_margin_top">9.34dp</dimen>
+    <dimen name="qqs_status_bar_text_size">11.68dp</dimen>
+    <dimen name="qqs_status_bar_height">49.05dp</dimen>
+    <dimen name="nt_qs_panel_padding_top">14.79dp</dimen>
+    <dimen name="nt_qqs_layout_margin_top">0.00dp</dimen>
+    <dimen name="custom_qs_tile_height">54.06dp</dimen>
+    <dimen name="qs_tile_margin_vertical">15.57dp</dimen>
+    <dimen name="qs_brightness_slider_height">43.60dp</dimen>
+</resources>

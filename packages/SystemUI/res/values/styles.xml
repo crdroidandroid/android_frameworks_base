@@ -892,7 +892,7 @@
 
     <style name="MediaPlayer.ScrubbingTime">
         <item name="android:fontFamily">@*android:string/config_headlineFontFamily</item>
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">@dimen/qs_media_text_size_12</item>
         <item name="android:gravity">center</item>
     </style>
 
@@ -911,6 +911,10 @@
         <item name="android:tint">@android:color/system_on_primary_dark</item>
         <item name="android:background">@drawable/qs_media_round_button_background</item>
         <item name="android:backgroundTint">@color/media_player_solid_button_bg</item>
+        <item name="android:paddingTop">6dp</item>
+        <item name="android:paddingBottom">6dp</item>
+        <item name="android:paddingStart">6dp</item>
+        <item name="android:paddingEnd">6dp</item>
     </style>
 
     <style name="MediaPlayer.SessionAction.Secondary" parent="MediaPlayer.SessionAction">

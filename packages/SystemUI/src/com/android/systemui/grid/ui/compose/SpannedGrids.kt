@@ -129,19 +129,48 @@ fun VerticalSpannedGrid(
 }
 
 @Composable
+fun CustomVerticalSpannedGrid(
+    columns: Int,
+    rowSpacing: Dp,
+    spans: List<Int>,
+    modifier: Modifier = Modifier,
+    keys: (spanIndex: Int) -> Any = { it },
+    composables:
+        @Composable
+        BoxScope.(spanIndex: Int, column: Int, isFirstInRow: Boolean, isLastInRow: Boolean) -> Unit,
+) {
+    SpannedGrid(
+        primarySpaces = columns,
+        crossAxisSpacing = 0.dp,
+        mainAxisSpacing = rowSpacing,
+        spans = spans,
+        isVertical = true,
+        useSpaceEvenlyArrangement = true,
+        modifier = modifier,
+        keys = keys,
+        composables = composables,
+    )
+}
+
+@Composable
 private fun SpannedGrid(
     primarySpaces: Int,
     crossAxisSpacing: Dp,
     mainAxisSpacing: Dp,
     spans: List<Int>,
     isVertical: Boolean,
+    useSpaceEvenlyArrangement: Boolean = false,
     modifier: Modifier = Modifier,
     keys: (spanIndex: Int) -> Any = { it },
     composables:
         @Composable
         BoxScope.(spanIndex: Int, secondaryAxis: Int, isFirst: Boolean, isLast: Boolean) -> Unit,
 ) {
-    val crossAxisArrangement = Arrangement.spacedBy(crossAxisSpacing)
+    val crossAxisArrangement = if (useSpaceEvenlyArrangement) {
+        Arrangement.SpaceEvenly
+    } else {
+        Arrangement.spacedBy(crossAxisSpacing)
+    }
     spans.forEachIndexed { index, span ->
         check(span in 1..primarySpaces) {
             "Span out of bounds. Span at index $index has value of $span which is outside of the " +

@@ -30,7 +30,7 @@ class LargeScreenHeaderHelper @Inject constructor(@ShadeDisplayAware private val
         @JvmStatic
         fun getLargeScreenHeaderHeight(context: Context): Int {
             val defaultHeight =
-                context.resources.getDimensionPixelSize(R.dimen.large_screen_shade_header_height)
+                context.resources.getDimensionPixelSize(R.dimen.qqs_status_bar_height)
             val statusBarHeight = SystemBarUtils.getStatusBarHeight(context)
             // Height has to be at least as tall as the status bar, as the status bar height takes
             // into account display cutouts.

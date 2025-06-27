@@ -15,79 +15,65 @@
   ~ limitations under the License.
   -->
 
-<ConstraintSet
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/qs_header_constraint"
->
-
-    <Constraint
-        android:id="@+id/privacy_container">
+<ConstraintSet 
+    xmlns:android="http://schemas.android.com/apk/res/android" 
+    xmlns:app="http://schemas.android.com/apk/res-auto" 
+    android:id="@+id/qs_header_constraint">
+    <Constraint android:id="@+id/privacy_container">
         <Layout
             android:layout_width="wrap_content"
             android:layout_height="@dimen/large_screen_shade_header_min_height"
-            app:layout_constraintEnd_toEndOf="@id/end_guide"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/carrier_group"
+            android:layout_marginTop="@dimen/qs_status_bar_margin_top"
+            android:layout_marginEnd="@dimen/qs_status_bar_margin_end"
+            app:layout_constraintEnd_toEndOf="@+id/end_guide"
             app:layout_constraintHorizontal_bias="1"
-            />
+            app:layout_constraintTop_toTopOf="parent"/>
     </Constraint>
-
-    <Constraint
-        android:id="@+id/clock">
+    <Constraint android:id="@+id/clock">
         <Layout
             android:layout_width="wrap_content"
             android:layout_height="@dimen/large_screen_shade_header_min_height"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/privacy_container"
-            app:layout_constraintBottom_toBottomOf="@id/carrier_group"
-        />
+            android:layout_marginTop="@dimen/qs_status_bar_margin_top"
+            android:layout_marginStart="@dimen/qs_status_bar_margin_start"
+            app:layout_constraintStart_toStartOf="@+id/begin_guide"
+            app:layout_constraintTop_toTopOf="parent"/>
         <Transform
             android:scaleX="@dimen/qqs_expand_clock_scale"
-            android:scaleY="@dimen/qqs_expand_clock_scale"
-            />
+            android:scaleY="@dimen/qqs_expand_clock_scale"/>
     </Constraint>
-
-    <Constraint
-        android:id="@+id/date">
+    <Constraint android:id="@+id/date">
         <Layout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="@dimen/new_qs_header_non_clickable_element_height"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/carrier_group"
-        />
+            android:layout_marginTop="@dimen/qs_status_bar_data_margin_top"
+            android:layout_marginStart="0dp"
+            app:layout_constraintStart_toStartOf="@+id/clock"
+            app:layout_constraintTop_toBottomOf="@+id/clock"
+            app:layout_constraintWidth_default="wrap"/>
     </Constraint>
-
-    <!-- ShadeHeaderController helps with managing clock width to layout this view -->
-    <Constraint
-        android:id="@+id/carrier_group">
+    <Constraint android:id="@+id/carrier_group">
         <Layout
             android:layout_width="0dp"
             android:layout_height="@dimen/large_screen_shade_header_min_height"
-            app:layout_constraintWidth_min="48dp"
-            app:layout_constraintWidth_default="wrap"
-            app:layout_constraintStart_toStartOf="@id/clock"
-            app:layout_constraintTop_toBottomOf="@id/privacy_container"
+            app:layout_constraintBottom_toBottomOf="@+id/privacy_container"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/batteryRemainingIcon"
-            />
-        <PropertySet
-            android:alpha="1"
-            />
+            app:layout_constraintStart_toStartOf="@+id/clock"
+            app:layout_constraintWidth_default="wrap"
+            app:layout_constraintWidth_min="48dp"/>
+        <PropertySet android:alpha="0"/>
     </Constraint>
-
-    <Constraint
-        android:id="@+id/shade_header_system_icons">
+    <Constraint android:id="@+id/shade_header_system_icons">
         <Layout
             android:layout_width="0dp"
             android:layout_height="@dimen/new_qs_header_non_clickable_element_height"
-            app:layout_constraintWidth_default="wrap"
-            app:layout_constraintStart_toEndOf="@id/date"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/date"
-            app:layout_constraintBottom_toBottomOf="@id/date"
-            />
+            android:layout_marginEnd="@dimen/qs_status_bar_margin_end"
+            app:layout_constraintBottom_toBottomOf="@+id/date"
+            app:layout_constraintEnd_toEndOf="@+id/end_guide"
+            app:layout_constraintHeight_min="@dimen/new_qs_header_non_clickable_element_height"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toEndOf="@+id/date"
+            app:layout_constraintTop_toTopOf="@+id/date"
+            app:layout_constraintWidth_default="wrap"/>
     </Constraint>
-
 </ConstraintSet>

@@ -16,6 +16,7 @@
 
 package com.android.systemui.qs.ui.composable
 
+import android.content.Context
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -43,7 +44,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onPlaced
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.android.compose.animation.scene.ContentScope
@@ -295,8 +298,21 @@ object QuickSettingsShade {
 
     object Dimensions {
         val Padding = 16.dp
+        val QsPadding = 10.dp
+        val InnerPadding = 12.dp
         val ToolbarHeight = 48.dp
     }
+    
+    @Composable
+    fun QSVerticalPadding(): Dp = 20.dp * LocalContext.current.scaleRatio
+
+    val Context.scaleRatio: Float
+        get() {
+            val displayMetrics = resources.displayMetrics
+            val sw = minOf(displayMetrics.widthPixels, displayMetrics.heightPixels) / displayMetrics.density
+            val ratio = sw / 420f
+            return ratio
+        }
 
     /**
      * Applies system gesture exclusion to a component adding [Dimensions.Padding] to left and

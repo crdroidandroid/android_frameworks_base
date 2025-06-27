@@ -51,7 +51,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_default="wrap"
             app:layout_constraintWidth_min="48dp" />
-        <PropertySet android:alpha="1" />
+        <PropertySet android:alpha="0" />
     </Constraint>
 
     <Constraint android:id="@+id/shade_header_system_icons">

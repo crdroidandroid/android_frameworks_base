@@ -99,8 +99,8 @@
 
     <Constraint
         android:id="@+id/actionPlayPause"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="@dimen/qs_media_action_48"
+        android:layout_height="@dimen/qs_media_action_48"
         android:layout_marginStart="@dimen/qs_media_padding"
         android:layout_marginEnd="@dimen/qs_media_padding"
         android:layout_marginBottom="@dimen/qs_media_padding"

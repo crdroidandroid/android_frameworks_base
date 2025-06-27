@@ -27,5 +27,19 @@
 
     <!-- Biometric Auth pattern view size, better to align keyguard_security_width -->
     <dimen name="biometric_auth_pattern_view_size">298dp</dimen>
+    
+    <!-- QuickSettings -->
+    <dimen name="qs_status_bar_margin_end">15.26dp</dimen>
+    <dimen name="qs_status_bar_margin_start">15.26dp</dimen>
+    <dimen name="qs_status_bar_margin_top">15.26dp</dimen>
+    <dimen name="qs_status_bar_data_margin_top">-6.68dp</dimen>
+    <dimen name="qqs_status_bar_margin_top">11.45dp</dimen>
+    <dimen name="qqs_status_bar_text_size">14.31dp</dimen>
+    <dimen name="qqs_status_bar_height">60.09dp</dimen>
+    <dimen name="nt_qs_panel_padding_top">18.12dp</dimen>
+    <dimen name="nt_qqs_layout_margin_top">0.00dp</dimen>
+    <dimen name="custom_qs_tile_height">66.67dp</dimen>
+    <dimen name="qs_tile_margin_vertical">19.08dp</dimen>
+    <dimen name="qs_brightness_slider_height">53.41dp</dimen>
 </resources>
 

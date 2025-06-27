@@ -265,7 +265,7 @@ constructor(
                         val horizontalPosition =
                             when (shadeMode) {
                                 Single -> HorizontalPosition.EdgeToEdge
-                                Split -> HorizontalPosition.MiddleToEdge(ratio = 0.5f)
+                                Split -> HorizontalPosition.MiddleToEdge(ratio = 0.55f)
                                 Dual ->
                                     if (isShadeLayoutWide) {
                                         HorizontalPosition.FloatAtStart(
@@ -934,7 +934,7 @@ constructor(
         data object EdgeToEdge : HorizontalPosition
 
         /** The container is laid out from the given [ratio] of the screen width to the end edge. */
-        data class MiddleToEdge(val ratio: Float = 0.5f) : HorizontalPosition
+        data class MiddleToEdge(val ratio: Float = 0.55f) : HorizontalPosition
 
         /**
          * The container has a fixed [width] and is aligned to the start of the screen. In this

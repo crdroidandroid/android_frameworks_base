@@ -15,83 +15,66 @@
   ~ limitations under the License.
   -->
 
-<ConstraintSet
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/qqs_header_constraint"
->
-
-    <Constraint
-        android:id="@+id/clock">
+<ConstraintSet 
+    xmlns:android="http://schemas.android.com/apk/res/android" 
+    xmlns:app="http://schemas.android.com/apk/res-auto" 
+    android:id="@+id/qqs_header_constraint">
+    <Constraint android:id="@+id/clock">
         <Layout
             android:layout_width="wrap_content"
             android:layout_height="@dimen/large_screen_shade_header_min_height"
-            app:layout_constraintStart_toStartOf="@id/begin_guide"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="@id/qqs_header_bottom_guideline"
-            app:layout_constraintEnd_toStartOf="@id/date"
+            android:layout_marginTop="@dimen/qqs_status_bar_margin_top"
+            android:layout_marginStart="@dimen/qs_status_bar_margin_start"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintHorizontal_chainStyle="packed"
-        />
+            app:layout_constraintStart_toStartOf="@+id/begin_guide"
+            app:layout_constraintTop_toTopOf="parent"/>
         <Transform
             android:scaleX="1"
-            android:scaleY="1"
-            />
+            android:scaleY="1"/>
     </Constraint>
-
-    <Constraint
-        android:id="@+id/date">
+    <Constraint android:id="@+id/date">
         <Layout
+            android:textSize="@dimen/qqs_status_bar_text_size"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/new_qs_header_non_clickable_element_height"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="2dp"
             app:layout_constrainedWidth="true"
-            app:layout_constraintStart_toEndOf="@id/clock"
-            app:layout_constraintEnd_toStartOf="@id/barrier"
-            app:layout_constraintBaseline_toBaselineOf="@id/clock"
+            app:layout_constraintBaseline_toBaselineOf="@+id/clock"
+            app:layout_constraintEnd_toStartOf="@+id/barrier"
             app:layout_constraintHorizontal_bias="0"
-        />
+            app:layout_constraintStart_toEndOf="@+id/clock"/>
     </Constraint>
-
-    <Constraint
-        android:id="@+id/shade_header_system_icons">
+    <Constraint android:id="@+id/shade_header_system_icons">
         <Layout
             android:layout_width="wrap_content"
             android:layout_height="@dimen/new_qs_header_non_clickable_element_height"
+            android:layout_marginEnd="@dimen/qs_status_bar_margin_end"
+            app:layout_constraintBottom_toBottomOf="@+id/date"
+            app:layout_constraintEnd_toEndOf="@+id/end_guide"
             app:layout_constraintHeight_min="@dimen/new_qs_header_non_clickable_element_height"
-            app:layout_constraintStart_toEndOf="@id/date"
-            app:layout_constraintEnd_toEndOf="@id/end_guide"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="@id/qqs_header_bottom_guideline"
             app:layout_constraintHorizontal_bias="1"
             app:layout_constraintHorizontal_chainStyle="packed"
-            />
+            app:layout_constraintStart_toEndOf="@+id/date"/>
     </Constraint>
-
-    <Constraint
-        android:id="@+id/carrier_group">
+    <Constraint android:id="@+id/carrier_group">
         <Layout
-            app:layout_constraintWidth_min="48dp"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/large_screen_shade_header_min_height"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            />
-        <PropertySet
-            android:alpha="0"
-        />
+            app:layout_constraintWidth_min="48dp"/>
+        <PropertySet android:alpha="0"/>
     </Constraint>
-
-    <Constraint
-        android:id="@+id/privacy_container">
+    <Constraint android:id="@+id/privacy_container">
         <Layout
             android:layout_width="wrap_content"
             android:layout_height="@dimen/large_screen_shade_header_min_height"
-            app:layout_constraintStart_toEndOf="@id/date"
-            app:layout_constraintEnd_toEndOf="@id/end_guide"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="@id/qqs_header_bottom_guideline"
+            android:layout_marginEnd="@dimen/qs_status_bar_margin_end"
+            app:layout_constraintEnd_toEndOf="@+id/end_guide"
             app:layout_constraintHorizontal_bias="1"
-        />
+            app:layout_constraintStart_toEndOf="@+id/date"
+            app:layout_constraintTop_toTopOf="parent"/>
+        <PropertySet android:alpha="0"/>
     </Constraint>
 </ConstraintSet>

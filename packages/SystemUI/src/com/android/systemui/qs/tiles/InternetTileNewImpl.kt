@@ -21,6 +21,7 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
 import android.widget.Button
+import com.android.settingslib.net.DataUsageController
 import com.android.internal.logging.MetricsLogger
 import com.android.systemui.animation.Expandable
 import com.android.systemui.dagger.qualifiers.Background
@@ -38,7 +39,9 @@ import com.android.systemui.qs.tiles.dialog.InternetDetailsViewModel
 import com.android.systemui.qs.tiles.dialog.InternetDialogManager
 import com.android.systemui.qs.tiles.dialog.WifiStateWorker
 import com.android.systemui.res.R
+import com.android.systemui.Prefs
 import com.android.systemui.statusbar.connectivity.AccessPointController
+import com.android.systemui.statusbar.connectivity.NetworkController
 import com.android.systemui.statusbar.pipeline.shared.ui.binder.InternetTileBinder
 import com.android.systemui.statusbar.pipeline.shared.ui.model.InternetTileModel
 import com.android.systemui.statusbar.pipeline.shared.ui.viewmodel.InternetTileViewModel
@@ -61,6 +64,7 @@ constructor(
     private val accessPointController: AccessPointController,
     private val internetDetailsViewModelFactory: InternetDetailsViewModel.Factory,
     private val wifiStateWorker: WifiStateWorker,
+    private val networkController: NetworkController
 ) :
     QSTileImpl<QSTile.BooleanState>(
         host,
@@ -74,6 +78,25 @@ constructor(
         qsLogger,
     ) {
     private var model: InternetTileModel = viewModel.tileModel.value
+    private val dataUsageController: DataUsageController = networkController.mobileDataController
+    
+    private var dataEnabled: Boolean
+        get() = dataUsageController.isMobileDataEnabled()
+        set(value) {
+            dataUsageController.setMobileDataEnabled(value)
+        }
+
+    private var wifiEnabled: Boolean
+        get() = wifiStateWorker.isWifiEnabled()
+        set(value) {
+            wifiStateWorker.setWifiEnabled(value)
+        }
+
+    private var lastUsedModel: Int
+        get() = Prefs.getInt(mContext, "internet_tile_model", WIFI)
+        set(value) {
+            Prefs.putInt(mContext, "internet_tile_model", value)
+        }
 
     init {
         InternetTileBinder.bind(lifecycle, viewModel.tileModel) { newModel ->
@@ -104,7 +127,23 @@ constructor(
     }
 
     override fun handleSecondaryClick(expandable: Expandable?) {
-        wifiStateWorker.setWifiEnabled(!wifiStateWorker.isWifiEnabled())
+        when {
+            wifiEnabled -> {
+                wifiEnabled = false
+                lastUsedModel = WIFI
+            }
+            dataEnabled -> {
+                dataEnabled = false
+                lastUsedModel = DATA
+            }
+            else -> {
+                if (lastUsedModel == WIFI) {
+                    wifiEnabled = true
+                } else {
+                    dataEnabled = true
+                }
+            }
+        }
     }
 
     override fun getDetailsViewModel(): TileDetailsViewModel {
@@ -122,5 +161,7 @@ constructor(
 
     companion object {
         private val WIFI_SETTINGS = Intent(Settings.ACTION_WIFI_SETTINGS)
+        const val WIFI = 0
+        const val DATA = 1
     }
 }

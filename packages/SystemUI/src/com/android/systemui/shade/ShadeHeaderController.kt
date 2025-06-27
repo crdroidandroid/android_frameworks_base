@@ -680,7 +680,7 @@ constructor(
 
     private fun updateIgnoredSlots() {
         // switching from QQS to QS state halfway through the transition
-        if (singleCarrier || (!largeScreenActive && qsExpandedFraction < 0.5)) {
+        if (singleCarrier) {
             iconContainer.removeIgnoredSlots(carrierIconSlots)
         } else {
             iconContainer.addIgnoredSlots(carrierIconSlots)

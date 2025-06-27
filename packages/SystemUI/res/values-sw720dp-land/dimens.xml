@@ -22,7 +22,6 @@
 
     <dimen name="keyguard_split_shade_top_margin">72dp</dimen>
 
-    <dimen name="qs_media_session_height_expanded">184dp</dimen>
     <dimen name="qs_content_horizontal_padding">40dp</dimen>
     <dimen name="qs_horizontal_margin">40dp</dimen>
     <!-- in split shade qs_tiles_page_horizontal_margin should be equal of qs_horizontal_margin/2,

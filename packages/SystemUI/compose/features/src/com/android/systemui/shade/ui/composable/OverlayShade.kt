@@ -57,6 +57,7 @@ import com.android.mechanics.behavior.VerticalExpandContainerSpec
 import com.android.mechanics.behavior.verticalExpandContainerBackground
 import com.android.systemui.Flags
 import com.android.systemui.res.R
+import com.android.systemui.util.CustomAndroidColorScheme
 import com.android.systemui.shade.ui.ShadeColors.notificationScrim
 import com.android.systemui.shade.ui.ShadeColors.shadePanel
 import com.android.systemui.shade.ui.composable.OverlayShade.rememberShadeExpansionMotion
@@ -195,12 +196,12 @@ object OverlayShade {
         val ScrimBackground: Color
             @Composable
             @ReadOnlyComposable
-            get() = Color(LocalResources.current.notificationScrim(Flags.notificationShadeBlur()))
+            get() = Color(LocalResources.current.notificationScrim(CustomAndroidColorScheme.isBlurEnabled()))
 
         val PanelBackground: Color
             @Composable
             @ReadOnlyComposable
-            get() = Color(LocalResources.current.shadePanel(Flags.notificationShadeBlur()))
+            get() = Color(LocalResources.current.shadePanel(CustomAndroidColorScheme.isBlurEnabled()))
     }
 
     object Dimensions {

@@ -134,7 +134,7 @@
     </string-array>
 
     <!-- Use collapsed layout for media player in landscape QQS -->
-    <bool name="config_quickSettingsMediaLandscapeCollapsed">true</bool>
+    <bool name="config_quickSettingsMediaLandscapeCollapsed">false</bool>
 
     <!-- Hearing devices related tool list. Each entry must be in ComponentName format
          (package/class), indicating the specific application component to launch.
