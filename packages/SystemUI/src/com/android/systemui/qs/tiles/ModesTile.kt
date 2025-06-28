@@ -106,7 +106,7 @@ constructor(
     override fun newTileState(): QSTile.State {
         return QSTile.State().apply {
             label = mContext.getString(R.string.quick_settings_modes_label)
-            icon = ResourceIcon.get(ICON_RES_ID)
+            icon = maybeLoadResourceIcon(ICON_RES_ID)
             state = Tile.STATE_INACTIVE
         }
     }
