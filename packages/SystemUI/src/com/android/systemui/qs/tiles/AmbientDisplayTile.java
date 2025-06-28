@@ -55,7 +55,8 @@ public class AmbientDisplayTile extends QSTileImpl<BooleanState> {
 
     public static final String TILE_SPEC = "ambient_display";
 
-    private final Icon mIcon = ResourceIcon.get(R.drawable.ic_qs_ambient_display);
+    @Nullable
+    private Icon mIcon = null;
     private final UserSettingObserver mSetting;
 
     @Inject
@@ -132,6 +133,12 @@ public class AmbientDisplayTile extends QSTileImpl<BooleanState> {
         final boolean enable = value != 0;
         state.value = enable;
         state.label = mContext.getString(R.string.quick_settings_ambient_display_label);
+
+        if (mIcon == null) {
+            mIcon = maybeLoadResourceIcon(
+                    R.drawable.ic_qs_ambient_display);
+        }
+
         state.icon = mIcon;
         if (enable) {
             state.contentDescription =  mContext.getString(
