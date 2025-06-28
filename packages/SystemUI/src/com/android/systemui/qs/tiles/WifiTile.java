@@ -163,21 +163,21 @@ public class WifiTile extends QSTileImpl<BooleanState> {
         final StringBuffer minimalStateDescription = new StringBuffer();
         final Resources r = mContext.getResources();
         if (isTransient) {
-            state.icon = ResourceIcon.get(
+            state.icon = maybeLoadResourceIcon(
                     com.android.internal.R.drawable.ic_signal_wifi_transient_animation);
             state.label = r.getString(R.string.quick_settings_wifi_label);
         } else if (!state.value) {
             state.state = Tile.STATE_INACTIVE;
-            state.icon = ResourceIcon.get(WifiIcons.QS_WIFI_DISABLED);
+            state.icon = maybeLoadResourceIcon(WifiIcons.QS_WIFI_DISABLED);
             state.label = r.getString(R.string.quick_settings_wifi_label);
         } else if (wifiConnected) {
-            state.icon = ResourceIcon.get(cb.wifiSignalIconId);
+            state.icon = maybeLoadResourceIcon(cb.wifiSignalIconId);
             state.label = cb.ssid != null ? removeDoubleQuotes(cb.ssid) : getTileLabel();
         } else if (wifiNotConnected) {
-            state.icon = ResourceIcon.get(WifiIcons.QS_WIFI_NO_NETWORK);
+            state.icon = maybeLoadResourceIcon(WifiIcons.QS_WIFI_NO_NETWORK);
             state.label = r.getString(R.string.quick_settings_wifi_label);
         } else {
-            state.icon = ResourceIcon.get(WifiIcons.QS_WIFI_NO_NETWORK);
+            state.icon = maybeLoadResourceIcon(WifiIcons.QS_WIFI_NO_NETWORK);
             state.label = r.getString(R.string.quick_settings_wifi_label);
         }
         minimalContentDescription.append(
