@@ -176,9 +176,9 @@ public class CellularTile extends QSTileImpl<BooleanState> {
         state.value = mobileDataEnabled;
         state.expandedAccessibilityClassName = Switch.class.getName();
         if (cb.noSim) {
-            state.icon = ResourceIcon.get(R.drawable.ic_qs_no_sim);
+            state.icon = maybeLoadResourceIcon(R.drawable.ic_qs_no_sim);
         } else {
-            state.icon = ResourceIcon.get(R.drawable.ic_swap_vert);
+            state.icon = maybeLoadResourceIcon(R.drawable.ic_swap_vert);
         }
 
         if (cb.noSim) {
