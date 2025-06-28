@@ -81,7 +81,8 @@ public class ProfilesTile extends QSTileImpl<State> {
     private static final Intent PROFILES_SETTINGS =
             new Intent("org.lineageos.lineageparts.PROFILES_SETTINGS");
 
-    private final Icon mIcon = ResourceIcon.get(R.drawable.ic_qs_profiles);
+    @Nullable
+    private Icon mIcon = null;
 
     private boolean mListening;
 
@@ -162,8 +163,12 @@ public class ProfilesTile extends QSTileImpl<State> {
 
     @Override
     protected void handleUpdateState(State state, Object arg) {
-        state.icon = mIcon;
         state.label = mContext.getString(R.string.quick_settings_profiles_label);
+        if (mIcon == null) {
+            mIcon = maybeLoadResourceIcon(
+                    R.drawable.ic_qs_profiles);
+        }
+        state.icon = mIcon;
         if (profilesEnabled()) {
             state.secondaryLabel = mProfileManager.getActiveProfile().getName();
             state.contentDescription = mContext.getString(

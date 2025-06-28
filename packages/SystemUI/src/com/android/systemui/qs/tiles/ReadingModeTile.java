@@ -50,7 +50,8 @@ public class ReadingModeTile extends QSTileImpl<BooleanState> {
 
     public static final String TILE_SPEC = "reading_mode";
 
-    private final Icon mIcon = ResourceIcon.get(R.drawable.ic_qs_reader);
+    @Nullable
+    private Icon mIcon = null;
 
     private static final Intent DISPLAY_SETTINGS = new Intent("android.settings.DISPLAY_SETTINGS");
 
@@ -98,6 +99,10 @@ public class ReadingModeTile extends QSTileImpl<BooleanState> {
     @Override
     protected void handleUpdateState(BooleanState state, Object arg) {
         state.value = isReadingModeEnabled();
+        if (mIcon == null) {
+            mIcon = maybeLoadResourceIcon(
+                    R.drawable.ic_qs_reader);
+        }
         state.icon = mIcon;
         if (state.value) {
             state.contentDescription = mContext.getString(

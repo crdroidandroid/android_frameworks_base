@@ -56,7 +56,8 @@ public class UsbTetherTile extends QSTileImpl<BooleanState> {
 
     public static final String TILE_SPEC = "usb_tether";
 
-    private final Icon mIcon = ResourceIcon.get(R.drawable.ic_qs_usb_tether);
+    @Nullable
+    private Icon mIcon = null;
 
     private static final Intent TETHER_SETTINGS = new Intent().setComponent(new ComponentName(
             "com.android.settings", "com.android.settings.TetherSettings"));
@@ -134,6 +135,10 @@ public class UsbTetherTile extends QSTileImpl<BooleanState> {
     protected void handleUpdateState(BooleanState state, Object arg) {
         state.value = mUsbTetherEnabled;
         state.label = mContext.getString(R.string.quick_settings_usb_tether_label);
+        if (mIcon == null) {
+            mIcon = maybeLoadResourceIcon(
+                    R.drawable.ic_qs_usb_tether);
+        }
         state.icon = mIcon;
         state.state = !mUsbConnected ? Tile.STATE_UNAVAILABLE
                 : mUsbTetherEnabled ? Tile.STATE_ACTIVE : Tile.STATE_INACTIVE;
