@@ -1054,7 +1054,7 @@ public final class NotificationPanelViewController implements
                 mBlurRenderEffect = RenderEffect.createBlurEffect(
                         mBlurConfig.getMaxBlurRadiusPx(),
                         mBlurConfig.getMaxBlurRadiusPx(),
-                        Shader.TileMode.CLAMP);
+                        Shader.TileMode.MIRROR);
             }
             debugLog("Applying blur RenderEffect to shade.");
             mView.setRenderEffect(mBlurRenderEffect);
