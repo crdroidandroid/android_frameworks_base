@@ -6080,7 +6080,7 @@ public class NotificationStackScrollLayout
     private void updateBlurEffect() {
         if (mBlurRadius > 0) {
             mBlurEffect =
-                    RenderEffect.createBlurEffect(mBlurRadius, mBlurRadius, Shader.TileMode.CLAMP);
+                    RenderEffect.createBlurEffect(mBlurRadius, mBlurRadius, Shader.TileMode.MIRROR);
             spewLog("Setting up blur RenderEffect for NotificationStackScrollLayout");
         } else {
             spewLog("Clearing the blur RenderEffect setup for NotificationStackScrollLayout");
