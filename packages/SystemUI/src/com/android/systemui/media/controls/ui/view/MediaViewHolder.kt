@@ -101,7 +101,7 @@ class MediaViewHolder constructor(itemView: View) {
     }
 
     fun marquee(start: Boolean, delay: Long) {
-        gutsViewHolder.marquee(start, delay, TAG)
+        //gutsViewHolder.marquee(start, delay, TAG)
     }
 
     companion object {
