@@ -431,7 +431,7 @@
     <color name="system_surface_light">#FAF8FF</color>
     <color name="system_surface_bright_light">#FAF8FF</color>
     <color name="system_surface_container_light">#EEEDF4</color>
-    <color name="system_surface_container_high_light">#E8E7EF</color>
+    <color name="system_surface_container_high_light">#F1F0F7</color>
     <color name="system_surface_container_highest_light">#E2E2E9</color>
     <color name="system_surface_container_low_light">#F4F3FA</color>
     <color name="system_surface_container_lowest_light">#FFFFFF</color>
