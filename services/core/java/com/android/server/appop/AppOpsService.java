@@ -111,6 +111,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManagerInternal;
+import android.content.pm.ParceledListSlice;
 import android.content.pm.PermissionInfo;
 import android.content.pm.UserInfo;
 import android.database.ContentObserver;
@@ -1826,12 +1827,26 @@ public class AppOpsService extends IAppOpsService.Stub {
 
     @Override
     public List<AppOpsManager.PackageOps> getPackagesForOps(int[] ops) {
-        return getPackagesForOpsForDevice(ops, PERSISTENT_DEVICE_ID_DEFAULT);
+        // This method was intentionally not switched to ParceledListSlice to avoid breaking
+        // app compat, since it's a part of the allowlisted hidden API list.
+        //
+        // This method doesn't get used by the OS anymore, it exists for app compatibility.
+        //
+        // Also, third-party apps can't have the privileged GET_APP_OPS_STATS permissions, which means
+        // that only their own ops will be returned to them, which makes use of ParceledListSlice
+        // mostly redundant in this case.
+        return getPackagesForOpsForDeviceInner(ops, PERSISTENT_DEVICE_ID_DEFAULT);
     }
 
     @Override
-    public List<AppOpsManager.PackageOps> getPackagesForOpsForDevice(int[] ops,
+    public ParceledListSlice<AppOpsManager.PackageOps> getPackagesForOpsForDevice(int[] ops,
             @NonNull String persistentDeviceId) {
+        List<AppOpsManager.PackageOps> res = getPackagesForOpsForDeviceInner(ops, persistentDeviceId);
+        return res != null ? new ParceledListSlice<>(res) : null;
+    }
+
+    private List<AppOpsManager.PackageOps> getPackagesForOpsForDeviceInner(int[] ops,
+        @NonNull String persistentDeviceId) {
         final int callingUid = Binder.getCallingUid();
         final boolean hasAllPackageAccess = mContext.checkPermission(
                 Manifest.permission.GET_APP_OPS_STATS, Binder.getCallingPid(),
