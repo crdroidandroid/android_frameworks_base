@@ -17,7 +17,7 @@
 -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
        android:shape="rectangle">
-    <solid android:color="@color/toast_color_background" />
+    <solid android:color="@drawable/color_surface_alpha_toast" />
     <corners android:radius="28dp" />
 </shape>
 

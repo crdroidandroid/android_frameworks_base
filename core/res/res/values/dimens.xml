@@ -37,7 +37,7 @@
     <!-- Text size of the message within a toast -->
     <dimen name="toast_text_size">14sp</dimen>
     <!-- Elevation of toast view -->
-    <dimen name="toast_elevation">2dp</dimen>
+    <dimen name="toast_elevation">4dp</dimen>
 
     <!-- The default height of the status bar used in {@link SystemBarUtils#getStatusBarHeight} to
          calculate the status bar height. -->
