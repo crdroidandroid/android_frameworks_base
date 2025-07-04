@@ -85,6 +85,7 @@ public class KeyguardIndicationTextView extends DoubleShadowTextView {
         }
         mMessage = "";
         setText("");
+        clearBackgroundAndIcon();
     }
 
     /**
@@ -247,6 +248,12 @@ public class KeyguardIndicationTextView extends DoubleShadowTextView {
             setCompoundDrawablesRelativeWithIntrinsicBounds(icon, null, null, null);
             forceAssertiveAccessibilityLiveRegion =
                 mKeyguardIndicationInfo.getForceAssertiveAccessibilityLiveRegion();
+        } else {
+            // null mKeyguardIndicationInfo indicates a hideIndication call or INDICATION_TYPE_NONE
+            // being used. When this happens, upstream currently only removes the text via the
+            // setText(mMessage) call below (mMessage will be null whenever mKeyguardIndicationInfo
+            // is null), but they don't remove the background.
+            clearBackgroundAndIcon();
         }
         if (!forceAssertiveAccessibilityLiveRegion) {
             setAccessibilityLiveRegion(ACCESSIBILITY_LIVE_REGION_NONE);
@@ -255,6 +262,15 @@ public class KeyguardIndicationTextView extends DoubleShadowTextView {
         if (forceAssertiveAccessibilityLiveRegion) {
             setAccessibilityLiveRegion(ACCESSIBILITY_LIVE_REGION_ASSERTIVE);
         }
+    }
+
+    private void clearBackgroundAndIcon() {
+        // setNextIndication will set everything again on a new mKeyguardIndicationInfo, so it
+        // should be fine to do this. Note that AOSP doesn't use an icon anywhere yet
+        setBackground(null);
+        setOnClickListener(null);
+        setClickable(false);
+        setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, null, null);
     }
 
     private AnimatorSet getInAnimator() {
