@@ -7283,6 +7283,21 @@ public final class Settings {
         public static final String LS_MEDIA_ART_ENABLED = "ls_media_art_enabled";
 
         /**
+         * @hide
+         */
+        public static final String LS_MEDIA_ART_FILTER = "ls_media_art_filter";
+
+        /**
+         * @hide
+         */
+        public static final String LS_MEDIA_ART_FADE_LEVEL = "ls_media_art_fade_level";
+
+        /**
+         * @hide
+         */
+        public static final String LS_MEDIA_ART_BLUR_LEVEL = "ls_media_art_blur_level";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
