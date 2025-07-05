@@ -40,6 +40,8 @@ import com.android.systemui.statusbar.lockscreen.LockscreenSmartspaceController
 import com.android.systemui.util.mockito.any
 import com.android.systemui.util.mockito.whenever
 import com.google.common.truth.Truth.assertThat
+import org.mockito.Mockito.verify
+import org.mockito.Mockito.never
 import dagger.Lazy
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.Before
@@ -129,6 +131,11 @@ class SmartspaceSectionTest : SysuiTestCase() {
         assert(smartspaceView.parent == constraintLayout)
         assert(weatherView.parent == null)
         assert(dateView.parent == null)
+        
+        // Verify that buildAndConnectDateView and buildAndConnectWeatherView are not called
+        // when not decoupled
+        verify(lockscreenSmartspaceController, never()).buildAndConnectDateView(any(), any())
+        verify(lockscreenSmartspaceController, never()).buildAndConnectWeatherView(any(), any())
     }
 
     @Test

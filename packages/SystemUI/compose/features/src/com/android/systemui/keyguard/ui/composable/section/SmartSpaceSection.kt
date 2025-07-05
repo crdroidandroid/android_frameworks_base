@@ -151,7 +151,7 @@ constructor(
     @Composable
     private fun Weather(modifier: Modifier = Modifier) {
         val isVisible by keyguardSmartspaceViewModel.isWeatherVisible.collectAsStateWithLifecycle()
-        if (!isVisible) {
+        if (!isVisible || !keyguardSmartspaceViewModel.isDateWeatherDecoupled) {
             return
         }
 
@@ -176,7 +176,7 @@ constructor(
     @Composable
     private fun Date(modifier: Modifier = Modifier) {
         val isVisible by keyguardSmartspaceViewModel.isDateVisible.collectAsStateWithLifecycle()
-        if (!isVisible) {
+        if (!isVisible || !keyguardSmartspaceViewModel.isDateWeatherDecoupled) {
             return
         }
 
