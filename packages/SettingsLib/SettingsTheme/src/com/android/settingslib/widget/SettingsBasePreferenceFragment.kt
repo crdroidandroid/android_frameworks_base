@@ -38,7 +38,7 @@ abstract class SettingsBasePreferenceFragment : PreferenceFragmentCompat() {
     ): View {
         val view = super.onCreateView(inflater, container, savedInstanceState)
 
-        if (SettingsThemeHelper.isExpressiveTheme(requireContext())) {
+        if (SettingsThemeHelper.isExpressiveTheme(requireContext()) && listView != null) {
             // Don't allow any divider in between the preferences in expressive design.
             setDivider(null)
             listView?.addItemDecoration(MarginItemDecoration())
