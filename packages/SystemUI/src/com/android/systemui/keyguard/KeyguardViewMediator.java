@@ -170,6 +170,7 @@ import com.android.systemui.shared.system.QuickStepContract;
 import com.android.systemui.statusbar.CommandQueue;
 import com.android.systemui.statusbar.NotificationShadeDepthController;
 import com.android.systemui.statusbar.NotificationShadeWindowController;
+import com.android.systemui.statusbar.NTForbiddenSwipeDownQSController;
 import com.android.systemui.statusbar.SysuiStatusBarStateController;
 import com.android.systemui.statusbar.phone.BiometricUnlockController;
 import com.android.systemui.statusbar.phone.CentralSurfaces;
@@ -3921,6 +3922,10 @@ public class KeyguardViewMediator implements CoreStartable,
             if (mPowerGestureIntercepted && mOccluded && isSecure()
                     && mUpdateMonitor.isFaceEnabledAndEnrolled()) {
                 flags |= StatusBarManager.DISABLE_RECENT;
+            }
+
+            if (NTForbiddenSwipeDownQSController.get(mContext).getForbiddenSwipeDownQS() && this.mOccluded) {
+                flags |= StatusBarManager.DISABLE_EXPAND;
             }
 
             if (DEBUG) {
