@@ -55,6 +55,7 @@ import com.android.systemui.shade.ShadeViewController;
 import com.android.systemui.shade.domain.interactor.PanelExpansionInteractor;
 import com.android.systemui.statusbar.CommandQueue;
 import com.android.systemui.statusbar.LockscreenShadeTransitionController;
+import com.android.systemui.statusbar.NTForbiddenSwipeDownQSController;
 import com.android.systemui.statusbar.NotificationLockscreenUserManager;
 import com.android.systemui.statusbar.NotificationPresenter;
 import com.android.systemui.statusbar.NotificationRemoteInputManager;
@@ -118,6 +119,7 @@ class StatusBarNotificationPresenter implements NotificationPresenter, CommandQu
     private final TelecomManager mTm;
     private final Context mContext;
     private final List<String> mHeadsUpWhitelistPackages = new ArrayList<>();
+    private final NTForbiddenSwipeDownQSController mNTForbiddenSwipeDownQSController;
 
     protected boolean mVrMode;
     private boolean mLessBoringHeadsUp;
@@ -150,7 +152,8 @@ class StatusBarNotificationPresenter implements NotificationPresenter, CommandQu
             NotificationRemoteInputManager remoteInputManager,
             NotificationRemoteInputManager.Callback remoteInputManagerCallback,
             NotificationListContainer notificationListContainer,
-            DeviceUnlockedInteractor deviceUnlockedInteractor) {
+            DeviceUnlockedInteractor deviceUnlockedInteractor,
+            NTForbiddenSwipeDownQSController forbiddenSwipeDownQSController) {
         mContext = context;
         mActivityStarter = activityStarter;
         mKeyguardStateController = keyguardStateController;
@@ -180,6 +183,7 @@ class StatusBarNotificationPresenter implements NotificationPresenter, CommandQu
         mNotifListContainer = notificationListContainer;
         mDeviceUnlockedInteractor = deviceUnlockedInteractor;
         mTm = (TelecomManager) context.getSystemService(Context.TELECOM_SERVICE);
+        mNTForbiddenSwipeDownQSController = forbiddenSwipeDownQSController;
 
         IVrManager vrManager = IVrManager.Stub.asInterface(ServiceManager.getService(
                 Context.VR_SERVICE));
@@ -308,7 +312,12 @@ class StatusBarNotificationPresenter implements NotificationPresenter, CommandQu
         mHeadsUpManager.setExpanded(clickedEntry, nowExpanded);
         mPowerInteractor.wakeUpIfDozing("NOTIFICATION_CLICK", PowerManager.WAKE_REASON_GESTURE);
         if (nowExpanded) {
-            if (mStatusBarStateController.getState() == StatusBarState.KEYGUARD) {
+            if (mNTForbiddenSwipeDownQSController.getForbiddenSwipeDownQS()) {
+                mStatusBarStateController.setLeaveOpenOnKeyguardHide(true);
+                // launch the bouncer if the device is locked
+                mActivityStarter.dismissKeyguardThenExecute(() -> false /* dismissAction */
+                        , null /* cancelRunnable */, false /* afterKeyguardGone */);
+            } else if (mStatusBarStateController.getState() == StatusBarState.KEYGUARD) {
                 mShadeTransitionController.goToLockedShade(
                         clickedEntry.getRow(), /* needsQSAnimation = */ true);
             } else if (clickedEntry.isSensitive().getValue() && isInLockedDownShade()) {
@@ -326,7 +335,12 @@ class StatusBarNotificationPresenter implements NotificationPresenter, CommandQu
         mHeadsUpManager.setExpanded(clickedEntry.getKey(), row, nowExpanded);
         mPowerInteractor.wakeUpIfDozing("NOTIFICATION_CLICK", PowerManager.WAKE_REASON_GESTURE);
         if (nowExpanded) {
-            if (mStatusBarStateController.getState() == StatusBarState.KEYGUARD) {
+            if (mNTForbiddenSwipeDownQSController.getForbiddenSwipeDownQS()) {
+                mStatusBarStateController.setLeaveOpenOnKeyguardHide(true);
+                // launch the bouncer if the device is locked
+                mActivityStarter.dismissKeyguardThenExecute(() -> false /* dismissAction */
+                        , null /* cancelRunnable */, false /* afterKeyguardGone */);
+            } else if (mStatusBarStateController.getState() == StatusBarState.KEYGUARD) {
                 mShadeTransitionController.goToLockedShade(row, /* needsQSAnimation = */ true);
             } else if (clickedEntry.isSensitive().getValue() && isInLockedDownShade()) {
                 mStatusBarStateController.setLeaveOpenOnKeyguardHide(true);

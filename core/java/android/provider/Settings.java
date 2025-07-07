@@ -13956,6 +13956,12 @@ public final class Settings {
         public static final String VPN_ENFORCE_DNS_STORE = "vpn_enforce_dns_store";
 
         /**
+         * Whether to allow swipe down on lockscreen to view Quick Panel
+         * @hide
+         */
+        public static final String ENABLE_LOCKSCREEN_QUICK_SETTINGS = "enable_lockscreen_quick_settings";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
