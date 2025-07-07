@@ -139,6 +139,7 @@ import com.android.systemui.statusbar.notification.stack.NotificationChildrenCon
 import com.android.systemui.statusbar.notification.stack.NotificationChildrenContainerLogger;
 import com.android.systemui.statusbar.notification.stack.NotificationStackScrollLayout;
 import com.android.systemui.statusbar.notification.stack.SwipeableView;
+import com.android.systemui.statusbar.NTForbiddenSwipeDownQSController;
 import com.android.systemui.statusbar.phone.KeyguardBypassController;
 import com.android.systemui.statusbar.policy.InflatedSmartReplyState;
 import com.android.systemui.statusbar.policy.RemoteInputView;
@@ -412,8 +413,9 @@ public class ExpandableNotificationRow extends ActivatableNotificationView
             promptAppUnlock();
             return;
         }
-        if (isBundle()
-                || (!shouldShowPublic() && (!mIsMinimized || isExpanded()) && isGroupRoot())) {
+        if ((isBundle()
+                || (!shouldShowPublic() && (!mIsMinimized || isExpanded()) && isGroupRoot()))
+                && !NTForbiddenSwipeDownQSController.get(mContext).getForbiddenSwipeDownQS()) {
             mGroupExpansionChanging = true;
 
             final boolean wasExpanded =  mGroupExpansionManager.isGroupExpanded(mEntryAdapter);

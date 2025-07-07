@@ -545,4 +545,8 @@ public class SystemUIApplicationImpl extends SystemUIApplication implements
     public WMComponent getWMComponent() {
         return mInitializer.getWMComponent();
     }
+
+    public SysUIComponent getSysUIComponent() {
+        return mSysUIComponent;
+    }
 }
