@@ -94,6 +94,7 @@ import com.android.systemui.statusbar.notification.stack.AmbientState;
 import com.android.systemui.statusbar.notification.stack.NotificationStackScrollLayout;
 import com.android.systemui.statusbar.notification.stack.NotificationStackScrollLayoutController;
 import com.android.systemui.statusbar.notification.stack.StackStateAnimator;
+import com.android.systemui.statusbar.NTForbiddenSwipeDownQSController;
 import com.android.systemui.statusbar.phone.KeyguardBypassController;
 import com.android.systemui.statusbar.phone.KeyguardStatusBarView;
 import com.android.systemui.statusbar.phone.LightBarController;
@@ -539,7 +540,8 @@ public class QuickSettingsControllerImpl implements QuickSettingsController, Dum
 
     boolean isExpansionEnabled() {
         return mExpansionEnabledPolicy && mExpansionEnabledAmbient
-            && !isRemoteInputActiveWithKeyboardUp();
+            && !isRemoteInputActiveWithKeyboardUp()
+            && !NTForbiddenSwipeDownQSController.get(mPanelView.getContext()).getForbiddenSwipeDownQS();
     }
 
     /** */
@@ -1678,12 +1680,14 @@ public class QuickSettingsControllerImpl implements QuickSettingsController, Dum
     /** handles touches in Qs panel area */
     boolean handleTouch(MotionEvent event, boolean isFullyCollapsed,
             boolean isShadeOrQsHeightAnimationRunning) {
+        boolean isSwipeDisabled = NTForbiddenSwipeDownQSController.get(mPanelView.getContext()).getForbiddenSwipeDownQS();
         if (isSplitShadeAndTouchXOutsideQs(event.getX())) {
             mShadeLog.logMotionEvent(event, "handleQsTouch: touch outside QS");
             return false;
         }
         boolean isInStatusBar = event.getY(event.getActionIndex()) < mStatusBarMinHeight;
-        if (ShadeExpandsOnStatusBarLongPress.isEnabled() && isInStatusBar) {
+        if (ShadeExpandsOnStatusBarLongPress.isEnabled() && isInStatusBar 
+                && !isSwipeDisabled) {
             mStatusBarLongPressGestureDetector.get().handleTouch(event);
         }
         final int action = event.getActionMasked();
@@ -1713,6 +1717,9 @@ public class QuickSettingsControllerImpl implements QuickSettingsController, Dum
         // as sometimes the qsExpansionFraction can be a tiny value instead of 0 when in QQS.
         if (!mSplitShadeEnabled && !mLastShadeFlingWasExpanding
                 && computeExpansionFraction() <= 0.01 && mShadeExpandedFraction < 1.0) {
+            setTracking(false);
+        }
+        if (isSwipeDisabled) {
             setTracking(false);
         }
         if (!isExpandImmediate() && isTracking()) {
@@ -1975,6 +1982,11 @@ public class QuickSettingsControllerImpl implements QuickSettingsController, Dum
      */
     private void flingQs(float vel, int type, final Runnable onFinishRunnable,
             boolean isClick) {
+        if (type == 0 && NTForbiddenSwipeDownQSController.get(mPanelView.getContext()).getForbiddenSwipeDownQS()) {
+            Log.i(TAG, " can't expand qs since forbidden wipe down QS:" + isExpansionEnabled());
+            traceQsJank(false, false);
+            return;
+        }
         mShadeLog.flingQs(type, isClick);
         float target;
         switch (type) {
