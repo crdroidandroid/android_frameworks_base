@@ -28,6 +28,7 @@ import com.android.systemui.keyguard.KeyguardSliceProvider;
 import com.android.systemui.people.PeopleProvider;
 import com.android.systemui.startable.Dependencies;
 import com.android.systemui.statusbar.NotificationInsetsModule;
+import com.android.systemui.statusbar.NTForbiddenSwipeDownQSController;
 import com.android.systemui.statusbar.QsFrameTranslateModule;
 import com.android.systemui.statusbar.phone.ConfigurationForwarder;
 import com.android.systemui.statusbar.policy.ConfigurationController;
@@ -201,4 +202,7 @@ public interface SysUIComponent {
      */
     @SysUISingleton
     KeyguardSmartspaceController createKeyguardSmartspaceController();
+
+    @SysUISingleton
+    NTForbiddenSwipeDownQSController forbiddenSwipeDownQSController();
 }
