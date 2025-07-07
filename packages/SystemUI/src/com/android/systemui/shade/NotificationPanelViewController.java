@@ -4189,9 +4189,10 @@ public final class NotificationPanelViewController implements
 
             // If pulse is expanding already, let's give it the touch. There are situations
             // where the panel starts expanding even though we're also pulsing
-            boolean pulseShouldGetTouch = (!mIsExpandingOrCollapsing
+            boolean pulseShouldGetTouch = ((!mIsExpandingOrCollapsing
                     && !mQsController.shouldQuickSettingsIntercept(mDownX, mDownY, 0, event))
-                    || mPulseExpansionHandler.isExpanding();
+                    || mPulseExpansionHandler.isExpanding()
+                    || mPulseExpansionHandler.getSwipeDownWhenForbidden());
             if (pulseShouldGetTouch && mPulseExpansionHandler.onTouchEvent(event)) {
                 // We're expanding all the other ones shouldn't get this anymore
                 mShadeLog.logMotionEvent(event, "onTouch: PulseExpansionHandler handled event");
