@@ -34,10 +34,12 @@ import com.android.systemui.Gefingerpoken
 import com.android.systemui.classifier.Classifier.NOTIFICATION_DRAG_DOWN
 import com.android.systemui.dagger.SysUISingleton
 import com.android.systemui.dump.DumpManager
+import com.android.systemui.plugins.ActivityStarter
 import com.android.systemui.plugins.FalsingManager
 import com.android.systemui.plugins.statusbar.StatusBarStateController
 import com.android.systemui.res.R
 import com.android.systemui.shade.domain.interactor.ShadeInteractor
+import com.android.systemui.statusbar.NTForbiddenSwipeDownQSController
 import com.android.systemui.statusbar.notification.NotificationWakeUpCoordinator
 import com.android.systemui.statusbar.notification.headsup.HeadsUpManager
 import com.android.systemui.statusbar.notification.row.ExpandableNotificationRow
@@ -68,6 +70,9 @@ constructor(
     private val shadeInteractor: ShadeInteractor,
     private val lockscreenShadeTransitionController: LockscreenShadeTransitionController,
     dumpManager: DumpManager,
+    private val sysuiStatusBarStateController: SysuiStatusBarStateController,
+    private val activityStarter: ActivityStarter,
+    private val forbiddenSwipeDownQSController: NTForbiddenSwipeDownQSController,
 ) : Gefingerpoken, Dumpable {
     companion object {
         private val SPRING_BACK_ANIMATION_LENGTH_MS = 375
@@ -113,6 +118,7 @@ constructor(
 
     var pulseExpandAbortListener: Runnable? = null
     var bouncerShowing: Boolean = false
+    private var swipeDownWhenForbidden = false
 
     init {
         initResources(context)
@@ -165,10 +171,14 @@ constructor(
             MotionEvent.ACTION_MOVE -> {
                 val h = y - mInitialTouchY
                 if (h > touchSlop && h > Math.abs(x - mInitialTouchX)) {
-                    isExpanding = true
-                    captureStartingChild(mInitialTouchX, mInitialTouchY)
-                    mInitialTouchY = y
-                    mInitialTouchX = x
+                    if (!forbiddenSwipeDownQSController.getForbiddenSwipeDownQS()) {
+                        isExpanding = true
+                        captureStartingChild(mInitialTouchX, mInitialTouchY)
+                        mInitialTouchY = y
+                        mInitialTouchX = x
+                    } else {
+                        swipeDownWhenForbidden = true
+                    }
                     return true
                 }
             }
@@ -176,11 +186,13 @@ constructor(
             MotionEvent.ACTION_UP -> {
                 recycleVelocityTracker()
                 isExpanding = false
+                swipeDownWhenForbidden = false
             }
 
             MotionEvent.ACTION_CANCEL -> {
                 recycleVelocityTracker()
                 isExpanding = false
+                swipeDownWhenForbidden = false
             }
         }
         return false
@@ -194,7 +206,7 @@ constructor(
     override fun onTouchEvent(event: MotionEvent): Boolean {
         val finishExpanding =
             (event.action == MotionEvent.ACTION_CANCEL || event.action == MotionEvent.ACTION_UP) &&
-                    isExpanding
+                    (isExpanding || swipeDownWhenForbidden)
 
         val isDraggingNotificationOrCanBypass =
             mStartingChild?.showingPulsing() == true || bypassController.canBypass()
@@ -204,7 +216,7 @@ constructor(
         }
 
         if (
-            velocityTracker == null || !isExpanding || event.actionMasked == MotionEvent.ACTION_DOWN
+            velocityTracker == null || ((!isExpanding && !swipeDownWhenForbidden) || event.actionMasked == MotionEvent.ACTION_DOWN)
         ) {
             return startExpansion(event)
         }
@@ -221,7 +233,21 @@ constructor(
                             velocityTracker!!.getYVelocity() > -1000 &&
                             statusBarStateController.state != StatusBarState.SHADE
                 if (!falsingManager.isUnlockingDisabled && !isFalseTouch && canExpand) {
-                    finishExpansion()
+                    if (forbiddenSwipeDownQSController.getForbiddenSwipeDownQS()) {
+                        swipeDownWhenForbidden = false
+                        if (statusBarStateController.isDozing) {
+                            wakeUpCoordinator.willWakeUp = true
+                            mPowerManager!!.wakeUp(
+                                SystemClock.uptimeMillis(),
+                                PowerManager.WAKE_REASON_GESTURE,
+                                "com.android.systemui:PULSEDRAG",
+                            )
+                        }
+                        sysuiStatusBarStateController.setLeaveOpenOnKeyguardHide(true)
+                        activityStarter.dismissKeyguardThenExecute({ false }, null, /* afterKeyguardGone= */ false)
+                    } else {
+                        finishExpansion()
+                    }
                 } else {
                     cancelExpansion()
                 }
@@ -353,6 +379,10 @@ constructor(
 
     fun setPulsing(pulsing: Boolean) {
         mPulsing = pulsing
+    }
+
+    fun getSwipeDownWhenForbidden(): Boolean {
+        return swipeDownWhenForbidden
     }
 
     override fun dump(pw: PrintWriter, args: Array<out String>) {
