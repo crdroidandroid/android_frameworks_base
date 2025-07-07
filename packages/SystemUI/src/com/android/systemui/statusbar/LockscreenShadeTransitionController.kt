@@ -39,6 +39,7 @@ import com.android.systemui.statusbar.notification.row.ExpandableView
 import com.android.systemui.statusbar.notification.shared.NotificationBundleUi
 import com.android.systemui.statusbar.notification.stack.AmbientState
 import com.android.systemui.statusbar.notification.stack.NotificationStackScrollLayoutController
+import com.android.systemui.statusbar.NTForbiddenSwipeDownQSController
 import com.android.systemui.statusbar.phone.CentralSurfaces
 import com.android.systemui.statusbar.phone.KeyguardBypassController
 import com.android.systemui.statusbar.phone.LSShadeTransitionLogger
@@ -84,6 +85,7 @@ constructor(
     private val shadeLockscreenInteractorLazy: Lazy<ShadeLockscreenInteractor>,
     naturalScrollingSettingObserver: NaturalScrollingSettingObserver,
     private val lazyQSSceneAdapter: Lazy<QSSceneAdapter>,
+    private val forbiddenSwipeDownQSController: NTForbiddenSwipeDownQSController
 ) : Dumpable {
     private var pulseHeight: Float = 0f
 
@@ -170,6 +172,7 @@ constructor(
             naturalScrollingSettingObserver,
             shadeRepository,
             context,
+            forbiddenSwipeDownQSController,
         )
 
     private val splitShadeOverScroller: SplitShadeLockScreenOverScroller by lazy {
@@ -289,6 +292,16 @@ constructor(
     internal fun canDragDown(): Boolean {
         return (statusBarStateController.state == StatusBarState.KEYGUARD ||
             nsslController.isInLockedDownShade()) && (isQsFullyCollapsed || useSplitShade)
+            && !forbiddenSwipeDownQSController.getForbiddenSwipeDownQS()
+    }
+    
+    internal fun onDraggedDownWhenForbiddenSwipeDownQS(startingChild: View?) {
+        if ((startingChild is NotificationShelf) || (startingChild is ExpandableNotificationRow)) {
+            statusBarStateController.setLeaveOpenOnKeyguardHide(true)
+            activityStarter.dismissKeyguardThenExecute(
+                { false }, null, /* afterKeyguardGone= */ false,
+            )
+        }
     }
 
     /** Called by the touch helper when when a gesture has completed all the way and released. */
@@ -753,6 +766,7 @@ class DragDownHelper(
     private val naturalScrollingSettingObserver: NaturalScrollingSettingObserver,
     private val shadeRepository: ShadeRepository,
     context: Context,
+    private val forbiddenSwipeDownQSController: NTForbiddenSwipeDownQSController
 ) : Gefingerpoken {
 
     private var dragDownAmountOnStart = 0.0f
@@ -819,12 +833,14 @@ class DragDownHelper(
                     captureStartingChild(initialTouchX, initialTouchY)
                     initialTouchY = y
                     initialTouchX = x
-                    dragDownCallback.onDragDownStarted(startingChild)
-                    dragDownAmountOnStart = dragDownCallback.dragDownAmount
                     val intercepted =
                         startingChild != null || dragDownCallback.isDragDownAnywhereEnabled
-                    if (intercepted) {
-                        shadeRepository.setLegacyLockscreenShadeTracking(true)
+                    if (!forbiddenSwipeDownQSController.getForbiddenSwipeDownQS()) {
+                        dragDownCallback.onDragDownStarted(startingChild)
+                        dragDownAmountOnStart = dragDownCallback.dragDownAmount
+                        if (intercepted) {
+                            shadeRepository.setLegacyLockscreenShadeTracking(true)
+                        }
                     }
                     return intercepted
                 }
@@ -840,28 +856,37 @@ class DragDownHelper(
         val y = event.y
         when (event.actionMasked) {
             MotionEvent.ACTION_MOVE -> {
-                lastHeight = y - initialTouchY
-                captureStartingChild(initialTouchX, initialTouchY)
-                dragDownCallback.dragDownAmount = lastHeight + dragDownAmountOnStart
-                if (startingChild != null) {
-                    handleExpansion(lastHeight, startingChild!!)
-                }
-                if (lastHeight > minDragDistance) {
-                    if (!draggedFarEnough) {
-                        draggedFarEnough = true
-                        dragDownCallback.onCrossedThreshold(true)
+                if (!forbiddenSwipeDownQSController.getForbiddenSwipeDownQS()) {
+                    lastHeight = y - initialTouchY
+                    captureStartingChild(initialTouchX, initialTouchY)
+                    dragDownCallback.dragDownAmount = lastHeight + dragDownAmountOnStart
+                    if (startingChild != null) {
+                        handleExpansion(lastHeight, startingChild!!)
                     }
-                } else {
-                    if (draggedFarEnough) {
-                        draggedFarEnough = false
-                        dragDownCallback.onCrossedThreshold(false)
+                    if (lastHeight > minDragDistance) {
+                        if (!draggedFarEnough) {
+                            draggedFarEnough = true
+                            dragDownCallback.onCrossedThreshold(true)
+                        }
+                    } else {
+                        if (draggedFarEnough) {
+                            draggedFarEnough = false
+                            dragDownCallback.onCrossedThreshold(false)
+                        }
                     }
                 }
                 return true
             }
 
             MotionEvent.ACTION_UP ->
-                if (
+                if (forbiddenSwipeDownQSController.getForbiddenSwipeDownQS()
+                    && !falsingManager.isUnlockingDisabled) {
+                    dragDownCallback.onDraggedDownWhenForbiddenSwipeDownQS(startingChild)
+                    if (startingChild != null) {
+                        startingChild = null
+                    }
+                    isDraggingDown = false
+                } else if (
                     !falsingManager.isUnlockingDisabled &&
                         !isFalseTouch &&
                         dragDownCallback.canDragDown()
