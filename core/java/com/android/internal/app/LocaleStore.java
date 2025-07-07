@@ -31,6 +31,7 @@ import com.android.internal.annotations.VisibleForTesting;
 import java.io.Serializable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -603,7 +604,8 @@ public class LocaleStore {
         boolean hasTargetParent = parent != null;
         String parentId = hasTargetParent ? parent.getId() : null;
         HashSet<LocaleInfo> result = new HashSet<>();
-        for (LocaleStore.LocaleInfo li : supportedLocaleInfos.values()) {
+        Collection<LocaleInfo> currentLocaleInfos = new ArrayList<>(supportedLocaleInfos.values());
+        for (LocaleStore.LocaleInfo li : currentLocaleInfos) {
             if (isShallIgnore(ignorables, li, translatedOnly)) {
                 continue;
             }
