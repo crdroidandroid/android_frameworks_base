@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.android.systemui.statusbar.policy.networkspeed.NetworkSpeedView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_gravity="center_vertical"
+    android:id="@+id/network_speed"
+    android:layout_width="@dimen/network_speed_view_width"
+    android:layout_height="match_parent"
+    android:paddingEnd="@dimen/network_speed_view_padding_end">
+    <TextView
+        android:textAppearance="@style/TextAppearance.StatusBar.Default"
+        android:textSize="@dimen/network_speed_text_size"
+        android:gravity="end|center_vertical"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/number"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/network_speed_margin_bottom"
+        android:maxLines="1"
+        android:includeFontPadding="false"
+        android:importantForAccessibility="no"
+        android:textAlignment="viewEnd"/>
+    <TextView
+        android:textAppearance="@style/TextAppearance.StatusBar.Default"
+        android:textSize="@dimen/network_speed_unit_text_size"
+        android:gravity="end|center_vertical"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/unit"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/network_speed_unit_margin_top"
+        android:maxLines="1"
+        android:includeFontPadding="false"
+        android:importantForAccessibility="no"
+        android:textAlignment="viewEnd"/>
+</com.android.systemui.statusbar.policy.networkspeed.NetworkSpeedView>

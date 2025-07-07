@@ -21,4 +21,12 @@
 
     <!-- Largest size an avatar might need to be drawn in the power menu user picker -->
     <dimen name="global_actions_avatar_size">24dp</dimen>
+
+    <!-- Network Speed -->
+    <dimen name="network_speed_margin_bottom">7dp</dimen>
+    <dimen name="network_speed_text_size">8dp</dimen>
+    <dimen name="network_speed_unit_margin_top">9dp</dimen>
+    <dimen name="network_speed_unit_text_size">6dp</dimen>
+    <dimen name="network_speed_view_padding_end">2dp</dimen>
+    <dimen name="network_speed_view_width">22dp</dimen>
 </resources>

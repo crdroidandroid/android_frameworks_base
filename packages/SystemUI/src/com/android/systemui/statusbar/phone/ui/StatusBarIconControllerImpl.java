@@ -47,11 +47,13 @@ import com.android.systemui.statusbar.CommandQueue;
 import com.android.systemui.statusbar.StatusIconDisplayable;
 import com.android.systemui.statusbar.phone.StatusBarIconHolder;
 import com.android.systemui.statusbar.phone.StatusBarIconHolder.BindableIconHolder;
+import com.android.systemui.statusbar.phone.StatusBarIconControllerImplEx;
 import com.android.systemui.statusbar.pipeline.StatusBarPipelineFlags;
 import com.android.systemui.statusbar.pipeline.icons.shared.BindableIconsRegistry;
 import com.android.systemui.statusbar.pipeline.icons.shared.model.BindableIcon;
 import com.android.systemui.statusbar.policy.ConfigurationController;
 import com.android.systemui.statusbar.policy.ConfigurationController.ConfigurationListener;
+import com.android.systemui.statusbar.policy.NetworkSpeedController;
 import com.android.systemui.tuner.TunerService;
 import com.android.systemui.tuner.TunerService.Tunable;
 
@@ -107,6 +109,9 @@ public class StatusBarIconControllerImpl implements Tunable,
         dumpManager.registerDumpable(getClass().getSimpleName(), this);
 
         addModernBindableIcons(modernIconsRegistry);
+        StatusBarIconControllerImplEx.Companion.init(context, this, statusBarIconList);
+        NetworkSpeedController.Companion.init(context);
+        NetworkSpeedController.Companion.get().init();
     }
 
     /**
@@ -363,7 +368,7 @@ public class StatusBarIconControllerImpl implements Tunable,
         setIcon(slotName, holder);
     }
 
-    private void setIcon(String slot, @NonNull StatusBarIconHolder holder) {
+    public void setIcon(String slot, @NonNull StatusBarIconHolder holder) {
         boolean isNew = mStatusBarIconList.getIconHolder(slot, holder.getTag()) == null;
         mStatusBarIconList.setIcon(slot, holder);
 
@@ -451,7 +456,7 @@ public class StatusBarIconControllerImpl implements Tunable,
         }
     }
 
-    private void handleSet(String slotName, StatusBarIconHolder holder) {
+    public void handleSet(String slotName, StatusBarIconHolder holder) {
         int viewIndex = mStatusBarIconList.getViewIndex(slotName, holder.getTag());
         mIconGroups.forEach(l -> l.onSetIconHolder(viewIndex, holder));
     }

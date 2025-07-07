@@ -20,6 +20,7 @@ import static com.android.systemui.statusbar.phone.StatusBarIconHolder.TYPE_BIND
 import static com.android.systemui.statusbar.phone.StatusBarIconHolder.TYPE_ICON;
 import static com.android.systemui.statusbar.phone.StatusBarIconHolder.TYPE_MOBILE_NEW;
 import static com.android.systemui.statusbar.phone.StatusBarIconHolder.TYPE_WIFI_NEW;
+import static com.android.systemui.statusbar.phone.StatusBarIconHolder.TYPE_NETWORK_SPEED;
 
 import android.annotation.Nullable;
 import android.content.Context;
@@ -58,6 +59,7 @@ import com.android.systemui.statusbar.pipeline.shared.ui.view.ModernStatusBarVie
 import com.android.systemui.statusbar.pipeline.wifi.ui.WifiUiAdapter;
 import com.android.systemui.statusbar.pipeline.wifi.ui.view.ModernStatusBarWifiView;
 import com.android.systemui.statusbar.pipeline.wifi.ui.viewmodel.LocationBasedWifiViewModel;
+import com.android.systemui.statusbar.policy.NetworkSpeedController;
 import com.android.systemui.util.Assert;
 
 import dagger.Lazy;
@@ -190,6 +192,8 @@ public class IconManager implements DemoModeCommandReceiver {
             case TYPE_ICON -> addIcon(index, slot, blocked, holder.getIcon());
             case TYPE_WIFI_NEW -> addNewWifiIcon(index, slot);
             case TYPE_MOBILE_NEW -> addNewMobileIcon(index, slot, holder.getTag());
+            case TYPE_NETWORK_SPEED ->
+                    NetworkSpeedController.Companion.get().addHolder(index, slot, mGroup, holder, blocked);
             case TYPE_BINDABLE ->
                 // Safe cast, since only BindableIconHolders can set this tag on themselves
                     addBindableIcon((BindableIconHolder) holder, index);
@@ -349,6 +353,9 @@ public class IconManager implements DemoModeCommandReceiver {
             case TYPE_WIFI_NEW:
             case TYPE_BINDABLE:
                 // Nothing, the new icons update themselves
+                return;
+            case TYPE_NETWORK_SPEED:
+                NetworkSpeedController.Companion.get().onSetIconHolder(viewIndex, holder, mGroup);
                 return;
             default:
                 break;
