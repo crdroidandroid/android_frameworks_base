@@ -84,7 +84,6 @@ import androidx.dynamicanimation.animation.SpringAnimation;
 
 import com.android.app.animation.Interpolators;
 import com.android.internal.annotations.VisibleForTesting;
-import com.android.internal.graphics.ColorUtils;
 import com.android.internal.logging.MetricsLogger;
 import com.android.internal.logging.UiEventLogger;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
@@ -119,6 +118,7 @@ import com.android.systemui.statusbar.notification.NotificationUtils;
 import com.android.systemui.statusbar.notification.SourceType;
 import com.android.systemui.statusbar.notification.collection.EntryAdapter;
 import com.android.systemui.statusbar.notification.collection.NotificationEntry;
+import com.android.systemui.statusbar.notification.collection.NotificationEntryAdapter;
 import com.android.systemui.statusbar.notification.collection.PipelineEntry;
 import com.android.systemui.statusbar.notification.collection.provider.NotificationDismissibilityProvider;
 import com.android.systemui.statusbar.notification.collection.render.GroupExpansionManager;
@@ -1008,7 +1008,7 @@ public class ExpandableNotificationRow extends ActivatableNotificationView
             mAboveShelfChangedListener.onAboveShelfStateChanged(!wasAboveShelf);
         }
         if (notificationRowTransparency()) {
-            updateBackgroundTint();
+            updateColors();
         }
     }
 
@@ -1708,35 +1708,20 @@ public class ExpandableNotificationRow extends ActivatableNotificationView
 
     @Override
     protected void setBackgroundTintColor(int color) {
-        if (notificationRowTransparency()) {
-            boolean isColorized = false;
-            if (NotificationBundleUi.isEnabled()) {
-                if (mEntryAdapter != null) {
-                    isColorized = mEntryAdapter.isColorized();
-                }
-            } else {
-                if (mEntry != null) {
-                    isColorized = mEntry.getSbn().getNotification().isColorized();
-                }
-            }
-            boolean isTransparent = usesTransparentBackground();
-            if (isColorized) {
-                // For colorized notifications, use a color that matches the tint color at 90% alpha
-                // when the row is transparent.
-                color = ColorUtils.setAlphaComponent(
-                        color, (int) (0xFF * (isTransparent ? 0.9f : 1)));
-            } else {
-                // For non-colorized notifications, use the semi-transparent normal color token
-                // when the row is transparent, and the opaque color token otherwise.
-                if (!isTransparent && mBgTint == NO_COLOR) {
-                    color = mOpaqueColor;
-                }
-            }
-        }
         super.setBackgroundTintColor(color);
         NotificationContentView view = getShowingLayout();
         if (view != null) {
             view.setBackgroundTintColor(color);
+        }
+        if (notificationRowTransparency() && mBackgroundNormal != null) {
+            if (NotificationBundleUi.isEnabled() && mEntryAdapter != null) {
+                mBackgroundNormal.setBgIsColorized(mEntryAdapter.isColorized());
+            } else {
+                if (mEntry != null) {
+                    mBackgroundNormal.setBgIsColorized(
+                            mEntry.getSbn().getNotification().isColorized());
+                }
+            }
         }
     }
 
@@ -3204,7 +3189,7 @@ public class ExpandableNotificationRow extends ActivatableNotificationView
                 }
             }
             if (notificationRowTransparency()) {
-                updateBackgroundTint();
+                updateColors();
             }
         }
     }
