@@ -124,6 +124,7 @@ import com.android.internal.app.chooser.TargetInfo;
 import com.android.internal.content.PackageMonitor;
 import com.android.internal.logging.MetricsLogger;
 import com.android.internal.logging.nano.MetricsProto;
+import com.android.internal.util.ClonedAppsUtils;
 import com.android.internal.util.LatencyTracker;
 import com.android.internal.widget.ResolverDrawerLayout;
 import com.android.internal.widget.ViewPager;
@@ -1289,7 +1290,14 @@ public class ResolverActivity extends Activity implements
         // between cross-profile preferred activities.
         if (hasCloneProfile() && !mMultiProfilePagerAdapter
                 .getCurrentUserHandle().equals(mWorkProfileUserHandle)) {
-            mAlwaysButton.setEnabled(false);
+            boolean enabled = false;
+            if (hasValidSelection) {
+                enabled = shouldShowAlwaysButton(
+                    mMultiProfilePagerAdapter.getActiveListAdapter().resolveInfoForPosition(
+                    checkedPos, filtered), getLaunchedFromPackage(), 
+                    getIntent(), mCloneProfileUserHandle);
+            }
+            mAlwaysButton.setEnabled(enabled);
             return;
         }
         boolean enabled = false;
@@ -1328,6 +1336,33 @@ public class ResolverActivity extends Activity implements
             }
         }
         mAlwaysButton.setEnabled(enabled);
+    }
+
+    public boolean shouldShowAlwaysButton(ResolveInfo resolveInfo, String pkg, Intent intent, UserHandle userHandle) {
+        if (ClonedAppsUtils.isClonedUser(userHandle) || resolveInfo == null || resolveInfo.targetUserId != UserHandle.USER_CURRENT) {
+            return false;
+        }
+        UserHandle resolvedUserHandle = resolveInfo.userHandle;
+        String activityPackage = resolveInfo.activityInfo.packageName;
+        if (activityPackage.equals(pkg) && (resolvedUserHandle == null || ClonedAppsUtils.isClonedUser(resolvedUserHandle))) {
+            return false;
+        }
+        if (resolvedUserHandle == null) {
+            return true;
+        }
+        try {
+            int permission = android.app.AppGlobals.getPackageManager().checkPermission(
+                "android.permission.RECORD_AUDIO",
+                activityPackage,
+                resolvedUserHandle.getIdentifier()
+            );
+            if (permission == PackageManager.PERMISSION_GRANTED) {
+                return true;
+            }
+            return !intent.getBooleanExtra("is_audio_capture_device", false);
+        } catch (RemoteException e) {
+            return true;
+        }
     }
 
     public void onButtonClick(View v) {
