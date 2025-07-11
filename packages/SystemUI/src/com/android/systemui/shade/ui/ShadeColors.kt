@@ -16,6 +16,7 @@
 
 package com.android.systemui.shade.ui
 
+import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Color
 import com.android.internal.graphics.ColorUtils
@@ -40,13 +41,34 @@ object ShadeColors {
         }
     }
 
+    private fun Resources.isNightModeActive(): Boolean {
+        return (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
+    }
+
     @JvmStatic
     private fun Resources.shadePanelStandard(): Int {
+        return if (isNightModeActive()) {
+            shadePanelStandardDark()
+        } else {
+            shadePanelStandardLight()
+        }
+    }
+
+    private fun Resources.shadePanelStandardLight(): Int {
         val layerAbove = ColorUtils.setAlphaComponent(
             getColor(R.color.shade_panel_base, null),
-            (0.4f * 255).toInt()
+            (0.65f * 255).toInt()
         )
-        val layerBelow = ColorUtils.setAlphaComponent(Color.WHITE, (0.1f * 255).toInt())
+        val layerBelow = ColorUtils.setAlphaComponent(Color.WHITE, (0.15f * 255).toInt())
+        return ColorUtils.compositeColors(layerAbove, layerBelow)
+    }
+
+    private fun Resources.shadePanelStandardDark(): Int {
+        val layerAbove = ColorUtils.setAlphaComponent(
+            getColor(R.color.shade_panel_base, null),
+            (0.7f * 255).toInt()
+        )
+        val layerBelow = ColorUtils.setAlphaComponent(Color.WHITE, (0.13f * 255).toInt())
         return ColorUtils.compositeColors(layerAbove, layerBelow)
     }
 
@@ -57,10 +79,29 @@ object ShadeColors {
 
     @JvmStatic
     private fun Resources.notificationScrimStandard(): Int {
-        return ColorUtils.setAlphaComponent(
+        return if (isNightModeActive()) {
+            notificationScrimStandardDark()
+        } else {
+            notificationScrimStandardLight()
+        }
+    }
+
+    private fun Resources.notificationScrimStandardLight(): Int {
+        val layerAbove = ColorUtils.setAlphaComponent(
             getColor(R.color.notification_scrim_base, null),
-            (0.5f * 255).toInt(),
+            (0.54f * 255).toInt()
         )
+        val layerBelow = ColorUtils.setAlphaComponent(Color.WHITE, (0.2f * 255).toInt())
+        return ColorUtils.compositeColors(layerAbove, layerBelow)
+    }
+
+    private fun Resources.notificationScrimStandardDark(): Int {
+        val layerAbove = ColorUtils.setAlphaComponent(
+            getColor(R.color.notification_scrim_base, null),
+            (0.58f * 255).toInt()
+        )
+        val layerBelow = ColorUtils.setAlphaComponent(Color.WHITE, (0.21f * 255).toInt())
+        return ColorUtils.compositeColors(layerAbove, layerBelow)
     }
 
     @JvmStatic
