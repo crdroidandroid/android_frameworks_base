@@ -1279,7 +1279,7 @@
 
     <!--  Blur radius on status bar window and power menu  -->
     <dimen name="min_window_blur_radius">1px</dimen>
-    <dimen name="max_window_blur_radius">23px</dimen>
+    <dimen name="max_window_blur_radius">17.5px</dimen>
 
     <!-- Blur radius of the Notification Shade content (notifications, footer, shelf) -->
     <dimen name="max_shade_content_blur_radius">@dimen/max_window_blur_radius</dimen>

@@ -16,5 +16,5 @@
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:color="@android:color/system_accent1_100"
-          android:alpha="0.15"/>
+          android:alpha="0.24"/>
 </selector>
