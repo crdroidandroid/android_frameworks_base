@@ -158,7 +158,7 @@ public abstract class ContentProvider implements ContentInterface, ComponentCall
      */
     public static boolean isAuthorityRedirectedForCloneProfile(String authority) {
         // For now, only MediaProvider gets redirected.
-        return MediaStore.AUTHORITY.equals(authority);
+        return MediaStore.AUTHORITY.equals(authority) || "mms".equals(authority);
     }
 
     private Transport mTransport = new Transport();

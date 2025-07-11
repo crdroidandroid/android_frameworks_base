@@ -136,6 +136,7 @@ import com.android.internal.pm.pkg.component.ParsedMainComponent;
 import com.android.internal.pm.pkg.component.ParsedProvider;
 import com.android.internal.pm.pkg.component.ParsedService;
 import com.android.internal.util.ArrayUtils;
+import com.android.internal.util.ClonedAppsUtils;
 import com.android.internal.util.CollectionUtils;
 import com.android.internal.util.IndentingPrintWriter;
 import com.android.internal.util.Preconditions;
@@ -4782,6 +4783,9 @@ public class ComputerEngine implements Computer {
                         continue;
                     }
                     if (shouldFilterApplication(ps, callingUid, userId)) {
+                        continue;
+                    }
+                    if (ps.isSystem() && ClonedAppsUtils.isClonedUser(userId)) {
                         continue;
                     }
                     ai = PackageInfoUtils.generateApplicationInfo(ps.getPkg(), effectiveFlags,
