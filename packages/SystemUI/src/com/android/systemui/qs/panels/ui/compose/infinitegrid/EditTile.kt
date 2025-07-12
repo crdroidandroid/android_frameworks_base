@@ -194,7 +194,6 @@ private fun EditModeTopBar(onStopEditing: () -> Unit, onReset: (() -> Unit)?) {
         navigationIcon = {
             IconButton(
                 onClick = onStopEditing,
-                modifier = Modifier.drawBehind { drawCircle(primaryContainerColor) },
             ) {
                 Icon(
                     Icons.AutoMirrored.Filled.ArrowBack,
