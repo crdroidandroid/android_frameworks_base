@@ -332,7 +332,13 @@ public class KeyguardStatusBarView extends RelativeLayout {
         final int minRight = (!isLayoutRtl() && mIsPrivacyDotEnabled)
                 ? Math.max(mMinDotWidth, mPadding.right) : mPadding.right;
 
+        final int statusBarHeaderHeight = mContext.getResources()
+                .getDimensionPixelSize(R.dimen.status_bar_height);
+
         int top = waterfallTop + mPadding.top;
+        if (top > statusBarHeaderHeight) {
+            top = statusBarHeaderHeight;
+        }
         setPadding(minLeft, top, minRight, 0);
     }
 
