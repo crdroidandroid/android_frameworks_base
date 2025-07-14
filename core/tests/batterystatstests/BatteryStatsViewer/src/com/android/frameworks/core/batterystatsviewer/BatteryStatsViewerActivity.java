@@ -17,11 +17,13 @@
 package com.android.frameworks.core.batterystatsviewer;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.BatteryConsumer;
 import android.os.BatteryStatsManager;
 import android.os.BatteryUsageStats;
 import android.os.BatteryUsageStatsQuery;
 import android.os.Bundle;
+import android.os.UserHandle;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -208,8 +210,12 @@ public class BatteryStatsViewerActivity extends CollapsingToolbarBaseActivity {
                 mDetailsView.setVisibility(View.GONE);
             }
             if (batteryConsumerInfo.iconInfo != null) {
+                final PackageManager pm = getPackageManager();
                 mIconView.setImageDrawable(
-                        batteryConsumerInfo.iconInfo.loadIcon(getPackageManager()));
+                    pm.getUserBadgedIcon(
+                        pm.getApplicationIcon(batteryConsumerInfo.iconInfo),
+                        UserHandle.getUserHandleForUid(
+                            batteryConsumerInfo.iconInfo.uid)));
             } else {
                 mIconView.setImageResource(R.drawable.gm_device_24);
             }
