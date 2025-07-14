@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2014 The NamelessRom Project
+ *           (C) 2025 crDroid Android Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +17,7 @@
 
 package com.android.systemui.crdroid.onthego;
 
+import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -27,24 +29,37 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.PixelFormat;
 import android.graphics.SurfaceTexture;
-import android.hardware.Camera;
+import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraCaptureSession;
+import android.hardware.camera2.CameraCharacteristics;
+import android.hardware.camera2.CameraDevice;
+import android.hardware.camera2.CameraManager;
+import android.hardware.camera2.CameraMetadata;
+import android.hardware.camera2.CaptureRequest;
+import android.hardware.camera2.params.StreamConfigurationMap;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Surface;
 import android.view.TextureView;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+
+import androidx.annotation.NonNull;
 
 import com.android.systemui.res.R;
 
 import com.android.internal.util.crdroid.OnTheGoUtils;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class OnTheGoService extends Service {
 
@@ -68,13 +83,20 @@ public class OnTheGoService extends Service {
     private static final int NOTIFICATION_RESTART = 1;
     private static final int NOTIFICATION_ERROR   = 2;
 
-    private final Handler mHandler       = new Handler();
+    private final Handler mHandler = new Handler(Looper.getMainLooper());
     private final Object  mRestartObject = new Object();
 
-    private FrameLayout         mOverlay;
-    private Camera              mCamera;
+    private FrameLayout mOverlay;
+    private boolean isOverlayAdded = false;
+
     private NotificationManager mNotificationManager;
     private NotificationChannel mNotificationChannel;
+
+    private CameraDevice mCameraDevice;
+    private CameraCaptureSession mCaptureSession;
+    private CaptureRequest.Builder mPreviewRequestBuilder;
+    private String mCameraId;
+    private TextureView mTextureView;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -220,118 +242,180 @@ public class OnTheGoService extends Service {
         }
     }
 
-    private void getCameraInstance(int type) throws RuntimeException, IOException {
-        releaseCamera();
-
-        if (!OnTheGoUtils.hasFrontCamera(this)) {
-            mCamera = Camera.open();
-            return;
-        }
-
-        switch (type) {
-            // Get hold of the back facing camera
-            default:
-            case CAMERA_BACK:
-                mCamera = Camera.open(0);
-                break;
-            // Get hold of the front facing camera
-            case CAMERA_FRONT:
-                final Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
-                final int cameraCount = Camera.getNumberOfCameras();
-
-                for (int camIdx = 0; camIdx < cameraCount; camIdx++) {
-                    Camera.getCameraInfo(camIdx, cameraInfo);
-                    if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
-                        mCamera = Camera.open(camIdx);
-                    }
-                }
-                break;
-        }
-    }
-
     private void setupViews(final boolean isRestarting) {
-        logDebug("Setup Views, restarting: " + (isRestarting ? "true" : "false"));
+        logDebug("Setup Views with Camera2");
 
-        final int cameraType = Settings.System.getInt(getContentResolver(),
-                Settings.System.ON_THE_GO_CAMERA,
-                0);
+        CameraManager manager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
 
         try {
-            getCameraInstance(cameraType);
-        } catch (Exception exc) {
-            // Well, you cant have all in this life..
-            logDebug("Exception: " + exc.getMessage());
+            for (String cameraId : manager.getCameraIdList()) {
+                CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraId);
+
+                int lensFacing = characteristics.get(CameraCharacteristics.LENS_FACING);
+                int preferredFacing = Settings.System.getInt(getContentResolver(),
+                        Settings.System.ON_THE_GO_CAMERA, 0);
+
+                if ((preferredFacing == 1 && lensFacing == CameraCharacteristics.LENS_FACING_FRONT) ||
+                    (preferredFacing == 0 && lensFacing == CameraCharacteristics.LENS_FACING_BACK)) {
+                    mCameraId = cameraId;
+                    break;
+                }
+            }
+
+            if (mCameraId == null) {
+                logDebug("No suitable camera found");
+                createNotification(NOTIFICATION_ERROR);
+                stopOnTheGo(true);
+                return;
+            }
+
+            mTextureView = new TextureView(this);
+            mTextureView.setSurfaceTextureListener(textureListener);
+
+            mOverlay = new FrameLayout(this);
+            mOverlay.setLayoutParams(new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT
+            ));
+            mOverlay.addView(mTextureView);
+
+            WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
+            WindowManager.LayoutParams params = new WindowManager.LayoutParams(
+                    WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+                            WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL |
+                            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    PixelFormat.TRANSLUCENT
+            );
+            if (!isOverlayAdded) {
+                wm.addView(mOverlay, params);
+                isOverlayAdded = true;
+            }
+
+            toggleOnTheGoAlpha();
+
+        } catch (CameraAccessException e) {
+            logDebug("CameraAccessException: " + e.getMessage());
             createNotification(NOTIFICATION_ERROR);
             stopOnTheGo(true);
         }
-
-        final TextureView mTextureView = new TextureView(this);
-        mTextureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
-            @Override
-            public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int i, int i2) {
-                try {
-                    if (mCamera != null) {
-                        mCamera.setDisplayOrientation(90);
-                        mCamera.setPreviewTexture(surfaceTexture);
-                        mCamera.startPreview();
-                    }
-                } catch (IOException io) {
-                    logDebug("IOException: " + io.getMessage());
-                }
-            }
-
-            @Override
-            public void onSurfaceTextureSizeChanged(SurfaceTexture surfaceTexture, int i, int i2) {
-            }
-
-            @Override
-            public boolean onSurfaceTextureDestroyed(SurfaceTexture surfaceTexture) {
-                releaseCamera();
-                return true;
-            }
-
-            @Override
-            public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) { }
-        });
-
-        mOverlay = new FrameLayout(this);
-        mOverlay.setLayoutParams(new FrameLayout.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT)
-        );
-        mOverlay.addView(mTextureView);
-
-        final WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
-        final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
-                        WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL |
-                        WindowManager.LayoutParams.FLAG_FULLSCREEN |
-                        WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED |
-                        WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION |
-                        WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                PixelFormat.TRANSLUCENT
-        );
-        wm.addView(mOverlay, params);
-
-        toggleOnTheGoAlpha();
     }
 
-    private void resetViews() {
-        releaseCamera();
-        final WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
-        if (mOverlay != null) {
-            mOverlay.removeAllViews();
-            wm.removeView(mOverlay);
-            mOverlay = null;
+    private final TextureView.SurfaceTextureListener textureListener = new TextureView.SurfaceTextureListener() {
+        @Override
+        public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+            openCamera();
+        }
+
+        @Override
+        public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {}
+
+        @Override
+        public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+            closeCamera();
+            return true;
+        }
+
+        @Override
+        public void onSurfaceTextureUpdated(SurfaceTexture surface) {}
+    };
+
+    private void openCamera() {
+        if (mCameraDevice != null) return;
+        CameraManager manager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+        try {
+            if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                logDebug("Camera permission not granted");
+                stopOnTheGo(true);
+                return;
+            }
+
+            manager.openCamera(mCameraId, new CameraDevice.StateCallback() {
+                @Override
+                public void onOpened(@NonNull CameraDevice camera) {
+                    mCameraDevice = camera;
+                    startCameraPreview();
+                }
+
+                @Override
+                public void onDisconnected(@NonNull CameraDevice camera) {
+                    camera.close();
+                    mCameraDevice = null;
+                }
+
+                @Override
+                public void onError(@NonNull CameraDevice camera, int error) {
+                    logDebug("Camera error: " + error);
+                    camera.close();
+                    mCameraDevice = null;
+                    createNotification(NOTIFICATION_ERROR);
+                    stopOnTheGo(true);
+                }
+            }, mHandler);
+        } catch (CameraAccessException e) {
+            logDebug("Failed to open camera: " + e.getMessage());
         }
     }
 
-    private void releaseCamera() {
-        if (mCamera != null) {
-            mCamera.stopPreview();
-            mCamera.release();
-            mCamera = null;
+    private void startCameraPreview() {
+        try {
+            SurfaceTexture texture = mTextureView.getSurfaceTexture();
+            if (texture == null) {
+                logDebug("SurfaceTexture is null. Skipping preview.");
+                return;
+            }
+            texture.setDefaultBufferSize(1080, 1920);
+
+            Surface surface = new Surface(texture);
+            mPreviewRequestBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
+            mPreviewRequestBuilder.addTarget(surface);
+
+            mCameraDevice.createCaptureSession(
+                Arrays.asList(surface),
+                new CameraCaptureSession.StateCallback() {
+                    @Override
+                    public void onConfigured(@NonNull CameraCaptureSession session) {
+                        mCaptureSession = session;
+                        try {
+                            mCaptureSession.setRepeatingRequest(mPreviewRequestBuilder.build(),
+                                    null, mHandler);
+                        } catch (CameraAccessException e) {
+                            logDebug("Preview session error: " + e.getMessage());
+                        }
+                    }
+
+                    @Override
+                    public void onConfigureFailed(@NonNull CameraCaptureSession session) {
+                        logDebug("CaptureSession configuration failed");
+                    }
+                }, mHandler);
+
+        } catch (CameraAccessException e) {
+            logDebug("CameraAccessException in preview: " + e.getMessage());
+        }
+    }
+
+    private void closeCamera() {
+        if (mCaptureSession != null) {
+            mCaptureSession.close();
+            mCaptureSession = null;
+        }
+        if (mCameraDevice != null) {
+            mCameraDevice.close();
+            mCameraDevice = null;
+        }
+    }
+
+    private void resetViews() {
+        closeCamera();
+        WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
+        if (mOverlay != null) {
+            if (isOverlayAdded) {
+                wm.removeView(mOverlay);
+                isOverlayAdded = false;
+            }
+            mOverlay.removeAllViews();
+            mOverlay = null;
         }
     }
 
