@@ -97,7 +97,8 @@ class BatteryConsumerInfoHelper {
             if (primaryPackageName != null) {
                 try {
                     ApplicationInfo applicationInfo =
-                            packageManager.getApplicationInfo(primaryPackageName, 0);
+                            packageManager.getApplicationInfo(primaryPackageName,
+                                PackageManager.MATCH_DISABLED_COMPONENTS | PackageManager.MATCH_ANY_USER);
                     info.label = applicationInfo.loadLabel(packageManager);
                     info.iconInfo = applicationInfo;
                 } catch (PackageManager.NameNotFoundException e) {
