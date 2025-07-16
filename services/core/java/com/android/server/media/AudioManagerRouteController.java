@@ -584,7 +584,11 @@ import java.util.Objects;
                     // that the default routing logic from the audio framework kicks in. As a result
                     // of this, when the user connects a bluetooth device or a wired headset, the
                     // new device becomes the active route, which is the traditional behavior.
-                    mAudioManager.removePreferredDeviceForStrategy(mStrategyForMedia);
+                    List<AudioDeviceAttributes> preferredDevices =
+                    mAudioManager.getPreferredDevicesForStrategy(mStrategyForMedia);
+                    if (preferredDevices.isEmpty()) {
+                        mAudioManager.removePreferredDeviceForStrategy(mStrategyForMedia);
+                     }
                     rebuildAvailableRoutesAndNotify();
                     break;
                 }
