@@ -100,7 +100,7 @@ constructor(@ShadeDisplayAware private val sysuiContext: Context, dumpManager: D
 
     private val iconFactory: BaseIconFactory
         get() {
-            val isLowRam = ActivityManager.isLowRamDeviceStatic()
+            val isLowRam = true
             val res = sysuiContext.resources
             val iconSize: Int =
                 res.getDimensionPixelSize(
