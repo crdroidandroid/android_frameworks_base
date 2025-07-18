@@ -1194,8 +1194,7 @@ public final class DropBoxManagerService extends SystemService {
                 Settings.Global.DROPBOX_AGE_SECONDS, DEFAULT_AGE_SECONDS);
         mMaxFiles = Settings.Global.getInt(mContentResolver,
                 Settings.Global.DROPBOX_MAX_FILES,
-                (ActivityManager.isLowRamDeviceStatic()
-                        ?  DEFAULT_MAX_FILES_LOWRAM : DEFAULT_MAX_FILES));
+                DEFAULT_MAX_FILES_LOWRAM);
         long curTimeMillis = System.currentTimeMillis();
         long cutoffMillis = curTimeMillis - ageSeconds * 1000;
         while (!mAllFiles.contents.isEmpty()) {
