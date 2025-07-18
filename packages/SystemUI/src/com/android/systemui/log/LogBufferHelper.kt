@@ -22,11 +22,7 @@ class LogBufferHelper {
     companion object {
         /** If necessary, returns a limited maximum size for low ram (Go) devices */
         fun adjustMaxSize(requestedMaxSize: Int): Int {
-            return if (ActivityManager.isLowRamDeviceStatic()) {
-                minOf(requestedMaxSize, 20) /* low ram max log size*/
-            } else {
-                requestedMaxSize
-            }
+            return minOf(requestedMaxSize, 20)
         }
     }
 }
