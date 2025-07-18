@@ -28,6 +28,7 @@ import com.android.systemui.dump.DumpManager;
 import com.android.systemui.keyguard.KeyguardSliceProvider;
 import com.android.systemui.media.MediaViewController;
 import com.android.systemui.people.PeopleProvider;
+import com.android.systemui.pulse.PulseViewController;
 import com.android.systemui.settings.MultiUserUtilsModule;
 import com.android.systemui.startable.Dependencies;
 import com.android.systemui.statusbar.NotificationInsetsModule;
@@ -216,4 +217,7 @@ public interface SysUIComponent {
 
     @SysUISingleton
     MediaViewController mediaViewController();
+
+    @SysUISingleton
+    PulseViewController pulseViewController();
 }
