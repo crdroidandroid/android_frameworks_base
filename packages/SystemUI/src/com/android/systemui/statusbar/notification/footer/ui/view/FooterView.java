@@ -16,10 +16,6 @@
 
 package com.android.systemui.statusbar.notification.footer.ui.view;
 
-import static android.graphics.PorterDuff.Mode.SRC_ATOP;
-
-import static com.android.systemui.Flags.notificationFooterBackgroundTintOptimization;
-import static com.android.systemui.Flags.notificationShadeBlur;
 import static com.android.systemui.util.ColorUtilKt.hexColorString;
 
 import android.annotation.ColorInt;
@@ -30,10 +26,15 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.database.ContentObserver;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
+import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.IndentingPrintWriter;
 import android.view.View;
@@ -41,7 +42,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.android.internal.graphics.ColorUtils;
 import com.android.systemui.common.shared.colors.SurfaceEffectColors;
 import com.android.systemui.res.R;
 import com.android.systemui.scene.shared.flag.SceneContainerFlag;
@@ -68,6 +68,7 @@ public class FooterView extends StackScrollerDecorView {
     private FooterViewButton mHistoryButton;
     private boolean mShouldBeHidden;
     private boolean mIsBlurSupported;
+    private ContentObserver mTransparencyObserver;
 
     // Footer label
     private TextView mSeenNotifsFooterTextView;
@@ -92,6 +93,29 @@ public class FooterView extends StackScrollerDecorView {
 
     protected View findSecondaryView() {
         return findViewById(R.id.dismiss_text);
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        mTransparencyObserver = new ContentObserver(new Handler(mContext.getMainLooper())) {
+            @Override
+            public void onChange(boolean selfChange) {
+                updateColors();
+            }
+        };
+        mContext.getContentResolver().registerContentObserver(
+                Settings.System.getUriFor("notification_row_transparency"),
+                false, mTransparencyObserver, UserHandle.USER_CURRENT);
+        updateColors();
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (mTransparencyObserver != null) {
+            mContext.getContentResolver().unregisterContentObserver(mTransparencyObserver);
+        }
     }
 
     /** Whether the "Clear all" button is currently visible. */
@@ -381,53 +405,52 @@ public class FooterView extends StackScrollerDecorView {
         Resources.Theme theme = mContext.getTheme();
         final @ColorInt int onSurface = mContext.getColor(
                 com.android.internal.R.color.materialColorOnSurface);
-        // Same resource, separate drawables to prevent touch effects from showing on the wrong
-        // button.
-        final Drawable clearAllBg = theme.getDrawable(R.drawable.notif_footer_btn_background);
-        final Drawable settingsBg = theme.getDrawable(R.drawable.notif_footer_btn_background);
+        // Use mutate() to get a new instance of the drawable for each button, 
+        // so we don't modify the shared cached drawable state.
+        final Drawable clearAllBg = theme.getDrawable(R.drawable.notif_footer_btn_background).mutate();
+        final Drawable settingsBg = theme.getDrawable(R.drawable.notif_footer_btn_background).mutate();
         final Drawable historyBg = NotifRedesignFooter.isEnabled()
-                ? theme.getDrawable(R.drawable.notif_footer_btn_background) : null;
-        final @ColorInt int scHigh;
+                ? theme.getDrawable(R.drawable.notif_footer_btn_background).mutate() : null;
 
-        if (!notificationFooterBackgroundTintOptimization()) {
-            if (notificationShadeBlur()) {
-                if (mIsBlurSupported) {
-                    Color backgroundColor = Color.valueOf(
-                            SurfaceEffectColors.surfaceEffect1(getContext()));
-                    scHigh = ColorUtils.setAlphaComponent(backgroundColor.toArgb(), 0xFF);
-                    // Apply alpha on background drawables.
-                    int backgroundAlpha = (int) (backgroundColor.alpha() * 0xFF);
-                    clearAllBg.setAlpha(backgroundAlpha);
-                    settingsBg.setAlpha(backgroundAlpha);
-                    if (historyBg != null) {
-                        historyBg.setAlpha(backgroundAlpha);
-                    }
-                } else {
-                    scHigh = mContext.getColor(
-                            com.android.internal.R.color.materialColorSurfaceContainer);
-                }
+        final boolean isNotificationTransparencyOn = Settings.System.getIntForUser(
+                mContext.getContentResolver(),
+                "notification_row_transparency", 0, UserHandle.USER_CURRENT) == 1;
+
+        if (isNotificationTransparencyOn) {
+            int semiTransparentColor;
+            if (mIsBlurSupported) {
+                semiTransparentColor = SurfaceEffectColors.surfaceEffect1(getContext());
             } else {
-                scHigh = mContext.getColor(
-                        com.android.internal.R.color.materialColorSurfaceContainerHigh);
+                semiTransparentColor = mContext.getColor(
+                        com.android.internal.R.color.materialColorSurfaceContainer);
             }
-            if (scHigh != 0) {
-                final ColorFilter bgColorFilter = new PorterDuffColorFilter(scHigh, SRC_ATOP);
-                clearAllBg.setColorFilter(bgColorFilter);
-                settingsBg.setColorFilter(bgColorFilter);
-                if (NotifRedesignFooter.isEnabled()) {
-                    historyBg.setColorFilter(bgColorFilter);
-                }
+
+            final ColorFilter colorFilter =
+                    new PorterDuffColorFilter(semiTransparentColor, PorterDuff.Mode.SRC);
+            clearAllBg.setColorFilter(colorFilter);
+            settingsBg.setColorFilter(colorFilter);
+            if (historyBg != null) {
+                historyBg.setColorFilter(colorFilter);
             }
         } else {
-            scHigh = 0;
+            int opaqueColor = mContext.getColor(
+                    com.android.internal.R.color.materialColorSurfaceContainerHigh);
+
+            final ColorFilter colorFilter =
+                    new PorterDuffColorFilter(opaqueColor, PorterDuff.Mode.SRC);
+            clearAllBg.setColorFilter(colorFilter);
+            settingsBg.setColorFilter(colorFilter);
+            if (historyBg != null) {
+                historyBg.setColorFilter(colorFilter);
+            }
         }
+
         mClearAllButton.setBackground(clearAllBg);
         mClearAllButton.setTextColor(onSurface);
         if (NotifRedesignFooter.isEnabled()) {
             mSettingsButton.setBackground(settingsBg);
-            mSettingsButton.setCompoundDrawableTintList(ColorStateList.valueOf(onSurface));
-
             mHistoryButton.setBackground(historyBg);
+            mSettingsButton.setCompoundDrawableTintList(ColorStateList.valueOf(onSurface));
             mHistoryButton.setCompoundDrawableTintList(ColorStateList.valueOf(onSurface));
         } else {
             mManageOrHistoryButton.setBackground(settingsBg);
@@ -439,19 +462,16 @@ public class FooterView extends StackScrollerDecorView {
         if (colorUpdateLogger != null) {
             colorUpdateLogger.logEvent("Footer.updateColors()",
                     "textColor(onSurface)=" + hexColorString(onSurface)
-                            + " backgroundTint(surfaceContainerHigh)=" + hexColorString(scHigh)
                             + " background=" + DrawableDumpKt.dumpToString(settingsBg));
         }
     }
 
     public void setIsBlurSupported(boolean isBlurSupported) {
-        if (notificationShadeBlur()) {
-            if (mIsBlurSupported == isBlurSupported) {
-                return;
-            }
-            mIsBlurSupported = isBlurSupported;
-            updateColors();
+        if (mIsBlurSupported == isBlurSupported) {
+            return;
         }
+        mIsBlurSupported = isBlurSupported;
+        updateColors();
     }
 
     @Override
