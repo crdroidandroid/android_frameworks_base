@@ -976,7 +976,7 @@ public final class MediaMetadata implements Parcelable {
         }
 
         private Bitmap scaleBitmap(Bitmap bmp, int maxDimension) {
-            if (bmp == null || bmp.isRecycled()) {
+            if (bmp == null) {
                 return null;
             }
             int srcWidth = bmp.getWidth();
