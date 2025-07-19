@@ -57,6 +57,7 @@ import java.util.List;
  */
 @Deprecated public final class RemoteController
 {
+    private final static int MAX_BITMAP_DIMENSION = 512;
     private final static String TAG = "RemoteController";
     private final static boolean DEBUG = false;
     private final static Object mInfoLock = new Object();
@@ -126,8 +127,12 @@ import java.util.List;
                 .getSystemService(Context.MEDIA_SESSION_SERVICE);
         mSessionListener = new TopTransportSessionListener();
 
-        mMaxBitmapDimension = context.getResources().getInteger(
-                com.android.internal.R.integer.config_maxBitmapSizePx);
+        if (ActivityManager.isLowRamDeviceStatic()) {
+            mMaxBitmapDimension = MAX_BITMAP_DIMENSION;
+        } else {
+            final DisplayMetrics dm = context.getResources().getDisplayMetrics();
+            mMaxBitmapDimension = Math.max(dm.widthPixels, dm.heightPixels);
+        }
     }
 
 
