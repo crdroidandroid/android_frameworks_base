@@ -263,13 +263,17 @@ constructor(
             override fun onDensityOrFontScaleChanged() {
                 // System font changes should only happen when UMO is offscreen or a flicker may
                 // occur
-                updatePlayers(recreateMedia = true)
-                inflateSettingsButton()
+                mediaFrame.post {
+                    updatePlayers(recreateMedia = true)
+                    inflateSettingsButton()
+                }
             }
 
             override fun onThemeChanged() {
-                updatePlayers(recreateMedia = false)
-                inflateSettingsButton()
+                mediaFrame.post {
+                    updatePlayers(recreateMedia = false)
+                    inflateSettingsButton()
+                }
             }
 
             override fun onConfigChanged(newConfig: Configuration?) {
@@ -278,16 +282,20 @@ constructor(
             }
 
             override fun onUiModeChanged() {
-                updatePlayers(recreateMedia = false)
-                inflateSettingsButton()
+                mediaFrame.post {
+                    updatePlayers(recreateMedia = false)
+                    inflateSettingsButton()
+                }
             }
 
             override fun onLocaleListChanged() {
                 // Update players only if system primary language changes.
                 if (carouselLocale != context.resources.configuration.locales.get(0)) {
                     carouselLocale = context.resources.configuration.locales.get(0)
-                    updatePlayers(recreateMedia = true)
-                    inflateSettingsButton()
+                    mediaFrame.post {
+                        updatePlayers(recreateMedia = true)
+                        inflateSettingsButton()
+                    }
                 }
             }
         }
