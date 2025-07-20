@@ -5,7 +5,7 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Statusbar Icons -->
-    <string name="status_bar_nfc">NFC</string>
+    <string name="status_bar_nfc">NFC תקשורת טווח אפס</string>
     <string name="status_bar_data_saver">חסכון בנתונים</string>
     <string name="status_bar_call_strength">עוצמת השיחה</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
@@ -13,7 +13,7 @@
         <item quantity="one">‏%d מכשירים מחוברים</item>
         <item quantity="two">%d devices connected</item>
         <item quantity="many">%d devices connected</item>
-        <item quantity="other">%d devices connected</item>
+        <item quantity="other">‏%1$d מכשירים מחוברים</item>
     </plurals>
     <!-- Notification counter -->
     <!-- Name of the roaming status bar icon. -->
@@ -49,7 +49,7 @@
     <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • טעינת Warp</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a VOOC charger. Should match keyguard_plugged_in_vooc_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • טעינת VOOC (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> עד למצב מלא)</string>
-    <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • טעינת VOOC </string>
+    <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • טעינת VOOC</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • טעינת Turbo (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> עד למצב מלא)</string>
     <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • טעינת Turbo</string>
@@ -63,7 +63,7 @@
     <string name="onthego_notif_camera_changed">תצורת המצלמה שונתה</string>
     <string name="onthego_transparency">שקיפות</string>
     <string name="onthego_front_camera">שימוש במצלמה הקדמית</string>
-    <string name="onthego_service_toggle">הפעלת השירות מחדש אוטומטית</string>
+    <string name="onthego_service_toggle">הפעלה מחדש אוטומטית של השירות</string>
     <string name="onthego_channel_name">ראשי</string>
     <string name="global_action_onthego">\"על-הדרך\"</string>
     <!-- Button to restart SystemUI, within the Restart Options dialog -->
@@ -73,19 +73,19 @@
     <string name="volume_ringer_alarms_only">התרעות</string>
     <string name="volume_ringer_dnd">נא לא להפריע</string>
     <string name="tristate_flashlight">פנס</string>
-    <string name="tristate_flashlight_on">פנס דלוק</string>
-    <string name="tristate_flashlight_off">פנס כבוי</string>
+    <string name="tristate_flashlight_on">הפנס מופעל</string>
+    <string name="tristate_flashlight_off">הפנס כבוי</string>
     <string name="tristate_flashlight_blink">פנס מהבהב</string>
-    <string name="tristate_brightness_bright">בהירות מקסימלית</string>
-    <string name="tristate_brightness_dark">בהירות מינימלית</string>
+    <string name="tristate_brightness_bright">בהירות מירבית</string>
+    <string name="tristate_brightness_dark">בהירות מזערית</string>
     <string name="tristate_brightness_auto">בהירות אוטומטית</string>
     <string name="tristate_rotation_auto">סיבוב אוטומטי</string>
-    <string name="tristate_rotation_0">אנכי</string>
+    <string name="tristate_rotation_0">דיוקן (אנכי)</string>
     <string name="tristate_rotation_90">אופקי (90°)</string>
     <string name="tristate_rotation_270">אופקי (270°)</string>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">אילוץ עצירה?</string>
-    <string name="force_stop_dlg_text">כפיית הפסקת פעילות היישום עלולה לגרום לכך שלא יפעל כהלכה.</string>
+    <string name="force_stop_dlg_title">לאלץ עצירה?</string>
+    <string name="force_stop_dlg_text">אם תיכפה עצירת יישום, ייתכן שהוא לא יפעל כהלכה.</string>
     <!-- Label for UI element which allows to use lens on screenshot [CHAR LIMIT=30] -->
     <string name="screenshot_lens_label">Lens</string>
     <!-- Sound QS Tile -->
@@ -121,7 +121,7 @@
     <!-- Weather Tile -->
     <string name="omnijaws_service_error">שגיאה בטעינת נתוני מזג האויר</string>
     <string name="omnijaws_service_unknown">אין נתוני מזג אוויר</string>
-    <string name="omnijaws_label_default">מזג־אוויר</string>
+    <string name="omnijaws_label_default">מזג אוויר</string>
     <!-- Refresh Rate Tile -->
     <string name="refresh_rate_tile_label">קצב רענון</string>
     <string name="auto_mode_label">אוטומטי</string>
@@ -133,7 +133,7 @@
     <!-- AI Assistant affordance [CHAR LIMIT=32] -->
     <string name="accessibility_assistant_button">עוזר AI</string>
     <!-- Text while recognizing face -->
-    <string name="face_unlock_recognizing">מזהה פנים...</string>
+    <string name="face_unlock_recognizing">מזהה הפנים...</string>
     <!-- 5G toggle in Internet Dialog -->
     <string name="enable_fiveg">הפעלת 5G</string>
     <!-- Toast for timer chips long press -->
