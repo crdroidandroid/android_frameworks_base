@@ -17,14 +17,19 @@
 package com.android.systemui.qs.composefragment
 
 import android.annotation.SuppressLint
+import android.content.ContentResolver
 import android.content.Context
 import android.content.res.Configuration
+import android.database.ContentObserver
 import android.graphics.Canvas
 import android.graphics.Path
 import android.graphics.PointF
 import android.graphics.Rect
+import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
 import android.os.Trace
+import android.os.UserHandle
 import android.util.IndentingPrintWriter
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -99,6 +104,7 @@ import com.android.compose.animation.scene.ElementMatcher
 import com.android.compose.animation.scene.MutableSceneTransitionLayoutState
 import com.android.compose.animation.scene.SceneKey
 import com.android.compose.animation.scene.SceneTransitionLayout
+import com.android.compose.animation.scene.SceneTransitionLayoutState
 import com.android.compose.animation.scene.content.state.TransitionState
 import com.android.compose.animation.scene.rememberMutableSceneTransitionLayoutState
 import com.android.compose.animation.scene.transitions
@@ -113,6 +119,7 @@ import com.android.systemui.Flags.notificationShadeBlur
 import com.android.systemui.brightness.ui.compose.BrightnessSliderContainer
 import com.android.systemui.brightness.ui.compose.ContainerColors
 import com.android.systemui.compose.modifiers.sysuiResTag
+import com.android.systemui.dagger.qualifiers.Main
 import com.android.systemui.dump.DumpManager
 import com.android.systemui.keyboard.shortcut.ui.composable.InteractionsConfig
 import com.android.systemui.keyboard.shortcut.ui.composable.ProvideShortcutHelperIndication
@@ -157,12 +164,15 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
+import lineageos.providers.LineageSettings
+
 @SuppressLint("ValidFragment")
 class QSFragmentCompose
 @Inject
 constructor(
     private val qsFragmentComposeViewModelFactory: QSFragmentComposeViewModel.Factory,
     private val dumpManager: DumpManager,
+    @Main private val mainHandler: Handler,
 ) : LifecycleFragment(), QS, Dumpable {
 
     private val scrollListener = MutableStateFlow<QS.ScrollListener?>(null)
@@ -193,9 +203,34 @@ constructor(
             }
         }
 
+    private lateinit var mSettingsObserver: ContentObserver
+    private lateinit var mContentResolver: ContentResolver
+    private var _sliderAtTop by mutableStateOf(true)
+    private var _showSlider by mutableStateOf(1)
+
+    var sliderAtTop: Boolean
+        get() = _sliderAtTop
+        set(value) {
+            _sliderAtTop = value
+        }
+
+    var showSlider: Int
+        get() = _showSlider
+        set(value) {
+            _showSlider = value
+        }
+
     override fun onStart() {
         super.onStart()
         registerDumpable()
+        mContentResolver.registerContentObserver(
+            LineageSettings.Secure.getUriFor(LineageSettings.Secure.QS_SHOW_BRIGHTNESS_SLIDER),
+            false, mSettingsObserver, UserHandle.USER_CURRENT
+        )
+        mContentResolver.registerContentObserver(
+            LineageSettings.Secure.getUriFor(LineageSettings.Secure.QS_BRIGHTNESS_SLIDER_POSITION),
+            false, mSettingsObserver, UserHandle.USER_CURRENT
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -206,6 +241,29 @@ constructor(
 
         setListenerCollections()
         lifecycleScope.launch { viewModel.activate() }
+
+        mContentResolver = context.contentResolver
+
+        sliderAtTop = LineageSettings.Secure.getIntForUser(
+            mContentResolver,
+            LineageSettings.Secure.QS_BRIGHTNESS_SLIDER_POSITION,
+            0,
+            UserHandle.USER_CURRENT
+        ) == 0
+
+        showSlider = LineageSettings.Secure.getIntForUser(
+            mContentResolver,
+            LineageSettings.Secure.QS_SHOW_BRIGHTNESS_SLIDER,
+            1,
+            UserHandle.USER_CURRENT
+        )
+        mSettingsObserver = object : ContentObserver(mainHandler) {
+            override fun onChange(selfChange: Boolean, uri: Uri?) {
+                uri ?: return
+                val key = uri.lastPathSegment ?: return
+                handleSettingsChange(key)
+            }
+        }
     }
 
     override fun onCreateView(
@@ -253,6 +311,32 @@ constructor(
             FrameLayout.LayoutParams.MATCH_PARENT,
         )
         return frame
+    }
+
+    override fun onStop() {
+        super.onStop()
+        mContentResolver.unregisterContentObserver(mSettingsObserver)
+    }
+
+    private fun handleSettingsChange(key: String) {
+        when (key) {
+            LineageSettings.Secure.QS_SHOW_BRIGHTNESS_SLIDER -> {
+                showSlider = LineageSettings.Secure.getIntForUser(
+                    mContentResolver,
+                    LineageSettings.Secure.QS_SHOW_BRIGHTNESS_SLIDER,
+                    1,
+                    UserHandle.USER_CURRENT
+                )
+            }
+            LineageSettings.Secure.QS_BRIGHTNESS_SLIDER_POSITION -> {
+                sliderAtTop = LineageSettings.Secure.getIntForUser(
+                    mContentResolver,
+                    LineageSettings.Secure.QS_BRIGHTNESS_SLIDER_POSITION,
+                    0,
+                    UserHandle.USER_CURRENT
+                ) == 0
+            }
+        }
     }
 
     @Composable
@@ -641,6 +725,11 @@ constructor(
                         }
                         .padding(top = { qqsPadding }, bottom = { bottomPadding })
             ) {
+                val BrightnessSlider: @Composable () -> Unit = {
+                    Element(ElementKeys.BrightnessSlider, modifier = modifier) {
+                        BrightnessSlider(viewModel, layoutState)
+                    }
+                }
                 val Tiles =
                     @Composable {
                         QuickQuickSettings(
@@ -683,10 +772,13 @@ constructor(
                                 )
                                 .padding(horizontal = qsHorizontalMargin())
                     ) {
-                        QuickQuickSettingsLayout(
+                        QuickQuickSettingsLayout (
+                            brightness = BrightnessSlider,
                             tiles = Tiles,
                             media = Media,
                             mediaInRow = viewModel.qqsMediaInRow,
+                            showSlider = showSlider,
+                            sliderAtTop = sliderAtTop,
                         )
                     }
                 }
@@ -742,38 +834,11 @@ constructor(
                         Spacer(
                             modifier = Modifier.height { qqsPadding + qsExtraPadding.roundToPx() }
                         )
-                        val BrightnessSlider =
-                            @Composable {
-                                Box(
-                                    Modifier.systemGestureExclusionInShade(
-                                        enabled = {
-                                            /*
-                                             * While we are transitioning into QS (either from QQS
-                                             * or from gone), the global position of the brightness
-                                             * slider will change in every frame. This causes
-                                             * the modifier to send a new gesture exclusion
-                                             * rectangle on every frame. Instead, only apply the
-                                             * modifier when this is settled.
-                                             */
-                                            layoutState.transitionState is TransitionState.Idle &&
-                                                viewModel.isNotTransitioning
-                                        }
-                                    )
-                                ) {
-                                    AlwaysDarkMode {
-                                        BrightnessSliderContainer(
-                                            viewModel =
-                                                containerViewModel.brightnessSliderViewModel,
-                                            containerColors =
-                                                ContainerColors(
-                                                    Color.Transparent,
-                                                    ContainerColors.defaultContainerColor,
-                                                ),
-                                            modifier = Modifier.fillMaxWidth(),
-                                        )
-                                    }
-                                }
+                        val BrightnessSlider: @Composable () -> Unit = {
+                            Element(ElementKeys.BrightnessSlider, modifier = modifier) {
+                                BrightnessSlider(viewModel, layoutState)
                             }
+                        }
                         val TileGrid =
                             @Composable {
                                 Box {
@@ -821,6 +886,8 @@ constructor(
                                 tiles = TileGrid,
                                 media = Media,
                                 mediaInRow = viewModel.qsMediaInRow,
+                                showSlider = showSlider,
+                                sliderAtTop = sliderAtTop,
                             )
                         }
                     }
@@ -839,6 +906,43 @@ constructor(
             }
         }
     }
+
+    @Composable
+    private fun BrightnessSlider(
+        viewModel: QSFragmentComposeViewModel,
+        layoutState: SceneTransitionLayoutState,
+    ) {
+        Box(
+            Modifier.systemGestureExclusionInShade(
+                enabled = {
+                    /*
+                     * While we are transitioning into QS (either from QQS
+                     * or from gone), the global position of the brightness
+                     * slider will change in every frame. This causes
+                     * the modifier to send a new gesture exclusion
+                     * rectangle on every frame. Instead, only apply the
+                     * modifier when this is settled.
+                     */
+                    layoutState.transitionState is TransitionState.Idle &&
+                        viewModel.isNotTransitioning
+                }
+            )
+        ) {
+            AlwaysDarkMode {
+                BrightnessSliderContainer(
+                    viewModel =
+                        viewModel.containerViewModel.brightnessSliderViewModel,
+                    containerColors =
+                        ContainerColors(
+                            Color.Transparent,
+                            ContainerColors.defaultContainerColor,
+                        ),
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
+        }
+    }
+
 
     @Composable
     private fun EditModeElement(modifier: Modifier = Modifier) {
@@ -1231,22 +1335,33 @@ private fun MediaObject(
 @Composable
 @VisibleForTesting
 fun QuickQuickSettingsLayout(
+    brightness: @Composable () -> Unit,
     tiles: @Composable () -> Unit,
     media: @Composable () -> Unit,
     mediaInRow: Boolean,
+    showSlider: Int,
+    sliderAtTop: Boolean,
 ) {
-    if (mediaInRow) {
-        Row(
-            horizontalArrangement = spacedBy(dimensionResource(R.dimen.qs_tile_margin_vertical)),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Box(modifier = Modifier.weight(1f)) { tiles() }
-            Box(modifier = Modifier.weight(1f)) { media() }
+    Column(verticalArrangement = spacedBy(dimensionResource(R.dimen.qs_tile_margin_vertical))) {
+        if (showSlider == 2 && sliderAtTop) {
+            brightness()
         }
-    } else {
-        Column(verticalArrangement = spacedBy(dimensionResource(R.dimen.qs_tile_margin_vertical))) {
+
+        if (mediaInRow) {
+            Row(
+                horizontalArrangement = spacedBy(dimensionResource(R.dimen.qs_tile_margin_vertical)),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Box(modifier = Modifier.weight(1f)) { tiles() }
+                Box(modifier = Modifier.weight(1f)) { media() }
+            }
+        } else {
             tiles()
             media()
+        }
+
+        if (showSlider == 2 && !sliderAtTop) {
+            brightness()
         }
     }
 }
@@ -1258,13 +1373,18 @@ fun QuickSettingsLayout(
     tiles: @Composable () -> Unit,
     media: @Composable () -> Unit,
     mediaInRow: Boolean,
+    showSlider: Int,
+    sliderAtTop: Boolean,
 ) {
-    if (mediaInRow) {
-        Column(
-            verticalArrangement = spacedBy(QuickSettingsShade.Dimensions.Padding),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
+    Column(
+        verticalArrangement = spacedBy(dimensionResource(R.dimen.qs_tile_margin_vertical)),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        if (showSlider != 0 && sliderAtTop) {
             brightness()
+        }
+
+        if (mediaInRow) {
             Row(
                 horizontalArrangement = spacedBy(QuickSettingsShade.Dimensions.Padding),
                 verticalAlignment = Alignment.CenterVertically,
@@ -1272,14 +1392,11 @@ fun QuickSettingsLayout(
                 Box(modifier = Modifier.weight(1f)) { tiles() }
                 Box(modifier = Modifier.weight(1f)) { media() }
             }
-        }
-    } else {
-        Column(
-            verticalArrangement = spacedBy(QuickSettingsShade.Dimensions.Padding),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            brightness()
+        } else {
             tiles()
+            if (showSlider != 0 && !sliderAtTop) {
+                brightness()
+            }
             media()
         }
     }
