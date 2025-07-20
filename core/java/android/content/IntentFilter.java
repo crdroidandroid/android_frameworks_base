@@ -1063,7 +1063,10 @@ public class IntentFilter implements Parcelable {
      * Return a data type in the filter.
      */
     public final String getDataType(int index) {
-        return mDataTypes.get(index);
+        if (mDataTypes != null && index >= 0 && index < mDataTypes.size()) {
+            return mDataTypes.get(index);
+        }
+        return null;
     }
 
     /**

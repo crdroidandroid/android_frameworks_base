@@ -504,8 +504,10 @@ public class DataManager {
             return;
         }
         PackageData packageData = userData.getOrCreatePackageData(appTarget.getPackageName());
-        @Event.EventType int eventType = mimeTypeToShareEventType(
-            (intentFilter.countDataTypes() > 0) ? intentFilter.getDataType(0) : null);
+        String mimeType = intentFilter.getDataType(0);
+        if (mimeType == null) return;
+
+        @Event.EventType int eventType = mimeTypeToShareEventType(mimeType);
         EventHistoryImpl eventHistory;
         if (ChooserActivity.LAUNCH_LOCATION_DIRECT_SHARE.equals(event.getLaunchLocation())) {
             // Direct share event
