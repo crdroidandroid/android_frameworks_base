@@ -44,10 +44,10 @@
     <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Carregamento Dash</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Carregamento Warp (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> até concluir)</string>
-    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Carregamento Warp</string>
+    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Carregando Rapidamente</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a VOOC charger. Should match keyguard_plugged_in_vooc_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Carregamento VOOC (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> até concluir)</string>
-    <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • Carregamento VOOC</string>
+    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Carregamento rápido (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> até concluir)</string>
+    <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • Carregando rapidamente</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • Carregamento Turbo (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> até concluir)</string>
     <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • Carregamento Turbo</string>
@@ -58,12 +58,12 @@
     <string name="onthego_notif_options">Opções</string>
     <string name="onthego_notif_error">Não foi possível iniciar OTG</string>
     <string name="onthego_notif_restart">Reiniciar OTG</string>
-    <string name="onthego_notif_camera_changed">Modo de câmera alterado</string>
+    <string name="onthego_notif_camera_changed">Modo câmera alterado</string>
     <string name="onthego_transparency">Transparência</string>
     <string name="onthego_front_camera">Usar câmera frontal</string>
     <string name="onthego_service_toggle">Reiniciar automaticamente o serviço</string>
     <string name="onthego_channel_name">Principal</string>
-    <string name="global_action_onthego">On-The-Go</string>
+    <string name="global_action_onthego">OTG</string>
     <!-- Button to restart SystemUI, within the Restart Options dialog -->
     <string name="global_action_restart_systemui">Interface do sistema</string>
     <!-- Alert slide extras -->
@@ -110,7 +110,7 @@
     <string name="quick_settings_compass_W">O</string>
     <string name="quick_settings_compass_NW">NO</string>
     <!-- DataSwitch Tile -->
-    <string name="qs_data_switch_label">Trocar SIM de dados</string>
+    <string name="qs_data_switch_label">Trocar cartão de dados</string>
     <!-- Volume panel QS tile -->
     <string name="quick_settings_volume_panel_label">Painel de volume</string>
     <!-- Smart Pixels QS Tile -->

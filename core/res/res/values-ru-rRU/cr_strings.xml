@@ -5,8 +5,8 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Button that copies the url to the log of a crashed application -->
-    <string name="aerr_copy">Скопировать ссылку журнала сбоев</string>
-    <string name="url_copy_success">Ссылка успешно скопирована</string>
+    <string name="aerr_copy">Скопировать ссылку на журнал сбоя</string>
+    <string name="url_copy_success">Ссылка скопирована</string>
     <string name="url_copy_failed">Произошла ошибка во время загрузки лога на Pasty</string>
     <!-- Lock gesture -->
     <string name="gesture_locked_warning">Проведите ещё раз, чтобы разблокировать жесты</string>

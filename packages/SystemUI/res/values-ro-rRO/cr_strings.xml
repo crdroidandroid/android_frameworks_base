@@ -127,7 +127,7 @@
     <!-- Screenshot Tile -->
     <string name="screenshot_long_press">Apăsare lungă - regiunea selectată</string>
     <!-- Language toggle tile -->
-    <string name="quick_settings_locale_label">Limbă</string>
+    <string name="quick_settings_locale_label">Limba</string>
     <string name="quick_settings_locale_more_locales_toast">Configurați mai întâi limbi multiple</string>
     <!-- AI Assistant affordance [CHAR LIMIT=32] -->
     <string name="accessibility_assistant_button">Asistent IA</string>
