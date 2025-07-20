@@ -22,6 +22,9 @@ import android.compat.annotation.UnsupportedAppUsage;
 import android.content.ContentResolver;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.media.browse.MediaBrowser;
 import android.media.session.MediaController;
 import android.media.session.MediaSession;
@@ -976,41 +979,25 @@ public final class MediaMetadata implements Parcelable {
         }
 
         private Bitmap scaleBitmap(Bitmap bmp, int maxDimension) {
-            if (bmp == null) {
-                return null;
-            }
+            if (bmp == null) return null;
             int srcWidth = bmp.getWidth();
             int srcHeight = bmp.getHeight();
-            if (srcWidth <= maxDimension && srcHeight <= maxDimension) {
-                return bmp;
-            }
-            int sampleSize = calculateSampleSize(srcWidth, srcHeight, maxDimension, maxDimension);
-            int scaledWidth = srcWidth / sampleSize;
-            int scaledHeight = srcHeight / sampleSize;
-            if (scaledWidth > maxDimension) {
-                scaledWidth = maxDimension;
-            }
-            if (scaledHeight > maxDimension) {
-                scaledHeight = maxDimension;
-            }
-            Bitmap scaledBitmap = Bitmap.createScaledBitmap(bmp, scaledWidth, scaledHeight, true);
-            java.io.ByteArrayOutputStream outputStream = new java.io.ByteArrayOutputStream();
-            scaledBitmap.compress(Bitmap.CompressFormat.WEBP_LOSSY, 90, outputStream);
-            byte[] compressedData = outputStream.toByteArray();
-            Bitmap compressedBitmap = BitmapFactory.decodeByteArray(compressedData, 0, compressedData.length);
-            scaledBitmap.recycle();
-            bmp.recycle();
-            return compressedBitmap;
-        }
-
-        private static int calculateSampleSize(int srcWidth, int srcHeight, int dstWidth, int dstHeight) {
-            int sampleSize = 1;
-            if (srcWidth > dstWidth || srcHeight > dstHeight) {
-                int widthSample = (int) Math.ceil((float) srcWidth / dstWidth);
-                int heightSample = (int) Math.ceil((float) srcHeight / dstHeight);
-                sampleSize = Math.max(widthSample, heightSample);
-            }
-            return sampleSize;
+            float scale = Math.max(
+                (float) maxDimension / srcWidth,
+                (float) maxDimension / srcHeight
+            );
+            float scaledWidth = scale * srcWidth;
+            float scaledHeight = scale * srcHeight;
+            float dx = (maxDimension - scaledWidth) / 2f;
+            float dy = (maxDimension - scaledHeight) / 2f;
+            Bitmap output = Bitmap.createBitmap(maxDimension, maxDimension, bmp.getConfig());
+            Canvas canvas = new Canvas(output);
+            Matrix matrix = new Matrix();
+            matrix.setScale(scale, scale);
+            matrix.postTranslate(dx, dy);
+            Paint paint = new Paint(Paint.FILTER_BITMAP_FLAG);
+            canvas.drawBitmap(bmp, matrix, paint);
+            return output;
         }
     }
 }
