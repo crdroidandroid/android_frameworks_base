@@ -37,6 +37,8 @@ import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.annotation.processing.SupportedOptions;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ElementKind;
+import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.Name;
 import javax.lang.model.element.TypeElement;
@@ -138,10 +140,41 @@ public class IndexableProcessor extends AbstractProcessor {
                     } else if ((forTarget & SearchIndexable.ARC) != 0) {
                         builder = arcConstructorBuilder;
                     }
-                    builder.addCode(
-                            "$N(new com.android.settingslib.search.SearchIndexableData($L.class, $L"
-                                    + ".SEARCH_INDEX_DATA_PROVIDER));\n",
-                            addIndex, className, className);
+                    boolean hasNoArgConstructor = false;
+                    for (Element enclosed : ((TypeElement) element).getEnclosedElements()) {
+                        if (enclosed.getKind() == ElementKind.CONSTRUCTOR &&
+                            ((ExecutableElement) enclosed).getParameters().isEmpty()) {
+                            hasNoArgConstructor = true;
+                            break;
+                        }
+                    }
+
+                    builder.beginControlFlow("try")
+                        .addCode(
+                            "$N(new com.android.settingslib.search.SearchIndexableData($L.class, " +
+                            "$L.SEARCH_INDEX_DATA_PROVIDER));\n",
+                            addIndex, className, className)
+                        .nextControlFlow("catch (Throwable e1)");
+
+                    if (hasNoArgConstructor) {
+                        builder.beginControlFlow("try")
+                            .addStatement("Object obj = new $L()", className)
+                            .beginControlFlow("if (obj instanceof $T)",
+                                ClassName.get("com.android.settings.search", "SearchIndexProviderHolder"))
+                            .addStatement(
+                                "$N(new com.android.settingslib.search.SearchIndexableData($L.class, " +
+                                "(($T) obj).getSearchIndexProvider()))",
+                                addIndex, className,
+                                ClassName.get("com.android.settings.search", "SearchIndexProviderHolder"))
+                            .endControlFlow()
+                            .nextControlFlow("catch (Throwable e2)")
+                            .addComment("// No-arg instantiation failed or not a SearchIndexProviderHolder.")
+                            .endControlFlow();
+                    } else {
+                        builder.addComment("// Skipped instantiation: $L has no no-arg constructor", className);
+                    }
+
+                    builder.endControlFlow();
                 } else {
                     throw new IllegalStateException("Null classname from " + element);
                 }
