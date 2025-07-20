@@ -31,6 +31,7 @@ fun TransitionBuilder.quickQuickSettingsToQuickSettings(
     anchoredTranslate(ElementKeys.QuickSettingsContent, ElementKeys.GridAnchor)
 
     sharedElement(ElementKeys.TileElementMatcher, enabled = animateTilesExpansion())
+    sharedElement(ElementKeys.BrightnessSlider)
 
     // This will animate between 0f (QQS) and 0.6, fading in the QQS tiles when coming back
     // from non first page QS. The QS content ends fading out at 0.5f, so there's a brief
