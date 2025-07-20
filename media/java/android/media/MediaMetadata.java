@@ -995,11 +995,15 @@ public final class MediaMetadata implements Parcelable {
             if (mBitmapDimensionLimit != Integer.MAX_VALUE) {
                 for (String key : mBundle.keySet()) {
                     Object value = mBundle.get(key);
-                    if (value instanceof Bitmap) {
-                        Bitmap bmp = (Bitmap) value;
+                    if (value instanceof Bitmap bmp) {
+                        final Bitmap orig = bmp;
                         if (bmp.getHeight() > mBitmapDimensionLimit
                                 || bmp.getWidth() > mBitmapDimensionLimit) {
-                            putBitmap(key, scaleBitmap(bmp, mBitmapDimensionLimit));
+                            bmp = scaleBitmap(bmp, mBitmapDimensionLimit);
+                        }
+                        Bitmap sharedBmp = bmp.asShared();
+                        if (orig != sharedBmp) {
+                            putBitmap(key, sharedBmp);
                         }
                     }
                 }
