@@ -217,9 +217,23 @@ constructor(
                 Log.i(TAG, "Duplicate call to start the transition, rejecting: $info")
                 return@withContext null
             }
-            val isAnimatorRunning = lastAnimator?.isRunning() ?: false
+            val isAnimatorRunning = lastAnimator?.isRunning == true
             val isManualTransitionRunning =
                 updateTransitionId != null && lastStep.transitionState != TransitionState.FINISHED
+            val isLastToLockscreen = lastStep.to == KeyguardState.LOCKSCREEN
+            // Dozing to Gone causes lockscreen to be hidden until scrolled, this transition step seem related to glanceable hub
+            val isCancelingLockscreen =
+                isLastToLockscreen && ((info.from == KeyguardState.DOZING || info.from == KeyguardState.AOD) && info.to == KeyguardState.GONE)
+
+            if ((isAnimatorRunning || isManualTransitionRunning) && isCancelingLockscreen) {
+                Log.i(
+                    TAG,
+                    "Preventing cancelation of active LOCKSCREEN transition" +
+                    "Active=$lastStep, Incoming=$info"
+                )
+                return@withContext null
+            }
+
             val startingValue =
                 if (isAnimatorRunning || isManualTransitionRunning) {
                     Log.i(TAG, "Transition still active: $lastStep, canceling")
