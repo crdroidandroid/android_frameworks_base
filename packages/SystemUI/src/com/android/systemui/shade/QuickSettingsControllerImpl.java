@@ -102,6 +102,7 @@ import com.android.systemui.statusbar.policy.KeyguardStateController;
 import com.android.systemui.statusbar.policy.SplitShadeStateController;
 import com.android.systemui.tuner.TunerService;
 import com.android.systemui.util.LargeScreenUtils;
+import com.android.systemui.util.ScrimUtils;
 import com.android.systemui.util.kotlin.JavaAdapter;
 import com.android.systemui.utils.windowmanager.WindowManagerProvider;
 
@@ -1321,6 +1322,7 @@ public class QuickSettingsControllerImpl implements QuickSettingsController, Dum
             int clipTop = (int) (top - currentTranslation - mQsFrame.getTop());
             int clipBottom = (int) (bottom - currentTranslation - mQsFrame.getTop());
             mVisible = qsVisible;
+            ScrimUtils.get().setQsVisible(mVisible);
             mQs.setQsVisible(qsVisible);
             if (mEnableClipping) {
                 mQs.setFancyClipping(
