@@ -31,6 +31,9 @@ object CombinedShadeHeadersConstraintManagerImpl : CombinedShadeHeadersConstrain
         return ConstraintsChanges(
             qqsConstraintsChanges = {
                 setVisibility(R.id.shade_header_system_icons, headerIconsVisibility)
+            },
+            largeScreenConstraintsChanges = {
+                setVisibility(R.id.shade_header_system_icons, headerIconsVisibility)
             }
         )
     }
