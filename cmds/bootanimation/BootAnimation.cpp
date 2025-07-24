@@ -1440,7 +1440,12 @@ bool BootAnimation::movie() {
         mClockEnabled = clockFontInitialized;
     }
 
-    initFont(&mAnimation->progressFont, PROGRESS_FONT_ASSET);
+    bool progressFontInitialized = false;
+    if (mAnimation->progressEnabled) {
+        progressFontInitialized =
+            initFont(&mAnimation->progressFont, PROGRESS_FONT_ASSET) == NO_ERROR;
+        mAnimation->progressEnabled = progressFontInitialized;
+    }
 
     if (mClockEnabled && !updateIsTimeAccurate()) {
         mTimeCheckThread = new TimeCheckThread(this);
