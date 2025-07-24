@@ -110,7 +110,6 @@ public class FingerprintManagerTest {
                 new ArrayList<>() /* componentInfo */,
                 FingerprintSensorProperties.TYPE_UNKNOWN,
                 true /* halControlsIllumination */,
-                false /* halHandlesDisplayTouches */,
                 true /* resetLockoutRequiresHardwareAuthToken */,
                 new ArrayList<>() /* sensorLocations */));
     }

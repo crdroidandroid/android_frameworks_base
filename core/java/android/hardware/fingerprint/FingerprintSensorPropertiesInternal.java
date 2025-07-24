@@ -40,7 +40,6 @@ public class FingerprintSensorPropertiesInternal extends SensorPropertiesInterna
      */
     public final @FingerprintSensorProperties.SensorType int sensorType;
     public final boolean halControlsIllumination;
-    public final boolean halHandlesDisplayTouches;
 
     private final List<SensorLocationInternal> mSensorLocations;
 
@@ -49,7 +48,6 @@ public class FingerprintSensorPropertiesInternal extends SensorPropertiesInterna
             @NonNull List<ComponentInfoInternal> componentInfo,
             @FingerprintSensorProperties.SensorType int sensorType,
             boolean halControlsIllumination,
-            boolean halHandlesDisplayTouches,
             boolean resetLockoutRequiresHardwareAuthToken,
             @NonNull List<SensorLocationInternal> sensorLocations) {
         // IBiometricsFingerprint@2.1 handles lockout in the framework, so the challenge is not
@@ -60,7 +58,6 @@ public class FingerprintSensorPropertiesInternal extends SensorPropertiesInterna
             resetLockoutRequiresHardwareAuthToken, false /* resetLockoutRequiresChallenge */);
         this.sensorType = sensorType;
         this.halControlsIllumination = halControlsIllumination;
-        this.halHandlesDisplayTouches = halHandlesDisplayTouches;
         this.mSensorLocations = List.copyOf(sensorLocations);
     }
 
@@ -74,8 +71,7 @@ public class FingerprintSensorPropertiesInternal extends SensorPropertiesInterna
             boolean resetLockoutRequiresHardwareAuthToken) {
         // TODO(b/179175438): Value should be provided from the HAL
         this(sensorId, strength, maxEnrollmentsPerUser, componentInfo, sensorType,
-                false /* halControlsIllumination */, false /* halHandlesDisplayTouches */,
-                resetLockoutRequiresHardwareAuthToken,
+                false /* halControlsIllumination */, resetLockoutRequiresHardwareAuthToken,
                 List.of(new SensorLocationInternal("" /* displayId */, 540 /* sensorLocationX */,
                         1636 /* sensorLocationY */, 130 /* sensorRadius */)));
     }
@@ -84,7 +80,6 @@ public class FingerprintSensorPropertiesInternal extends SensorPropertiesInterna
         super(in);
         sensorType = in.readInt();
         halControlsIllumination = in.readBoolean();
-        halHandlesDisplayTouches = in.readBoolean();
         mSensorLocations = in.createTypedArrayList(SensorLocationInternal.CREATOR);
     }
 
@@ -111,7 +106,6 @@ public class FingerprintSensorPropertiesInternal extends SensorPropertiesInterna
         super.writeToParcel(dest, flags);
         dest.writeInt(sensorType);
         dest.writeBoolean(halControlsIllumination);
-        dest.writeBoolean(halHandlesDisplayTouches);
         dest.writeTypedList(mSensorLocations);
     }
 
