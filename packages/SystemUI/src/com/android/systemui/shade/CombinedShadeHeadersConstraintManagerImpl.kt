@@ -32,6 +32,9 @@ object CombinedShadeHeadersConstraintManagerImpl : CombinedShadeHeadersConstrain
         return ConstraintsChanges(
             qqsConstraintsChanges = {
                 setAlpha(R.id.shade_header_system_icons, constraintAlpha)
+            },
+            largeScreenConstraintsChanges = {
+                setAlpha(R.id.shade_header_system_icons, constraintAlpha)
             }
         )
     }
