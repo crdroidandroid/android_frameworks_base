@@ -13,8 +13,10 @@ import android.util.Xml;
 import org.xmlpull.v1.XmlPullParser;
 
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -105,7 +107,7 @@ public final class KeyProviderManager {
                                     Log.w(TAG, "Unsupported Certificate format: " + format);
                                     return false;
                                 }
-                                if (currentAlg != null && certCount < 3) {
+                                if (currentAlg != null) {
                                     p.next();
                                     certCount++;
                                     keyboxData.put(currentAlg + ".CERT_" + certCount, p.getText().trim());
@@ -145,10 +147,13 @@ public final class KeyProviderManager {
 
         @Override
         public boolean hasKeybox() {
-            return Arrays.asList("EC.PRIV", "EC.CERT_1", "EC.CERT_2", "EC.CERT_3",
-                    "RSA.PRIV", "RSA.CERT_1", "RSA.CERT_2", "RSA.CERT_3")
-                    .stream()
-                    .allMatch(keyboxData::containsKey);
+            if (!keyboxData.containsKey("EC.PRIV") || !keyboxData.containsKey("RSA.PRIV")) {
+                return false;
+            }
+            if (!keyboxData.containsKey("EC.CERT_1") || !keyboxData.containsKey("RSA.CERT_1")) {
+                return false;
+            }
+            return true;
         }
 
         @Override
@@ -172,11 +177,15 @@ public final class KeyProviderManager {
         }
 
         private String[] getCertificateChain(String prefix) {
-            return new String[]{
-                    keyboxData.get(prefix + ".CERT_1"),
-                    keyboxData.get(prefix + ".CERT_2"),
-                    keyboxData.get(prefix + ".CERT_3")
-            };
+            List<String> dataList = new ArrayList<>();
+            for (String key : keyboxData.keySet()) {
+                if (key.startsWith(prefix + ".CERT_")) {
+                    dataList.add(keyboxData.get(key));
+                }
+            }
+            String[] chain = dataList.toArray(String[]::new);
+            Arrays.sort(chain);
+            return chain;
         }
     }
 }
