@@ -739,7 +739,7 @@ public abstract class Animator implements Cloneable {
             for (int i = 0; i < size; i++) {
                 //noinspection unchecked
                 T item = (T) array[i];
-                call.call(item, animator, isReverse);
+                if (item != null) call.call(item, animator, isReverse);
                 array[i] = null;
             }
             // Store it for the next call so we can reuse this array, if needed.
