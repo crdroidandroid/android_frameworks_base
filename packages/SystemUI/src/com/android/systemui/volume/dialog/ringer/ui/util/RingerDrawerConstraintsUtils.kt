@@ -208,6 +208,13 @@ private fun ConstraintSet.adjustClosedConstraintsForDrawer(
                                 R.dimen.volume_dialog_ringer_drawer_button_size
                             ),
                         )
+                        setMargin(
+                            view.id,
+                            ConstraintSet.END,
+                            motionLayout.context.resources.getDimensionPixelSize(
+                                R.dimen.volume_dialog_background_margin
+                            ),
+                        )
                     }
                     constrainHeight(
                         view.id,
