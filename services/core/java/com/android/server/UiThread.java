@@ -35,7 +35,7 @@ public final class UiThread extends ServiceThread {
     private static Handler sHandler;
 
     private UiThread() {
-        super("android.ui", Process.THREAD_PRIORITY_FOREGROUND, false /*allowIo*/);
+        super("android.ui", Process.THREAD_PRIORITY_URGENT_DISPLAY, false /*allowIo*/);
     }
 
     @Override

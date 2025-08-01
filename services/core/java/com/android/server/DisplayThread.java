@@ -35,7 +35,7 @@ public final class DisplayThread extends ServiceThread {
     private DisplayThread() {
         // DisplayThread runs important stuff, but these are not as important as things running in
         // AnimationThread. Thus, set the priority to one lower.
-        super("android.display", Process.THREAD_PRIORITY_DISPLAY + 1, false /*allowIo*/);
+        super("android.display", Process.THREAD_PRIORITY_URGENT_DISPLAY + 1, false /*allowIo*/);
     }
 
     private static void ensureThreadLocked() {

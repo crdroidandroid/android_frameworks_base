@@ -16,7 +16,7 @@
 
 package com.android.server;
 
-import static android.os.Process.THREAD_PRIORITY_DISPLAY;
+import static android.os.Process.THREAD_PRIORITY_URGENT_DISPLAY;
 
 import android.os.Handler;
 import android.os.Trace;
@@ -32,7 +32,7 @@ public final class AnimationThread extends ServiceThread {
     private static Handler sHandler;
 
     private AnimationThread() {
-        super("android.anim", THREAD_PRIORITY_DISPLAY, false /*allowIo*/);
+        super("android.anim", THREAD_PRIORITY_URGENT_DISPLAY, false /*allowIo*/);
     }
 
     private static void ensureThreadLocked() {

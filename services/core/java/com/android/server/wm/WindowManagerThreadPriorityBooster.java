@@ -16,7 +16,7 @@
 
 package com.android.server.wm;
 
-import static android.os.Process.THREAD_PRIORITY_DISPLAY;
+import static android.os.Process.THREAD_PRIORITY_URGENT_DISPLAY;
 import static android.os.Process.THREAD_PRIORITY_TOP_APP_BOOST;
 import static android.os.Process.myTid;
 import static android.os.Process.setThreadPriority;
@@ -44,7 +44,7 @@ class WindowManagerThreadPriorityBooster extends ThreadPriorityBooster {
     private boolean mBoundsAnimationRunning;
 
     WindowManagerThreadPriorityBooster() {
-        super(THREAD_PRIORITY_DISPLAY, INDEX_WINDOW);
+        super(THREAD_PRIORITY_URGENT_DISPLAY, INDEX_WINDOW);
         mAnimationThreadId = AnimationThread.get().getThreadId();
         mSurfaceAnimationThreadId = SurfaceAnimationThread.get().getThreadId();
     }
@@ -93,7 +93,7 @@ class WindowManagerThreadPriorityBooster extends ThreadPriorityBooster {
     @GuardedBy("mLock")
     private void updatePriorityLocked() {
         int priority = (mAppTransitionRunning || mBoundsAnimationRunning)
-                ? THREAD_PRIORITY_TOP_APP_BOOST : THREAD_PRIORITY_DISPLAY;
+                ? THREAD_PRIORITY_TOP_APP_BOOST : THREAD_PRIORITY_URGENT_DISPLAY;
         setBoostToPriority(priority);
         setThreadPriority(mAnimationThreadId, priority);
         setThreadPriority(mSurfaceAnimationThreadId, priority);
