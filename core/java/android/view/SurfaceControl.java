@@ -3182,6 +3182,10 @@ public final class SurfaceControl implements Parcelable {
             final int reparentCount = mReparentedSurfaces.size();
             for (int i = reparentCount - 1; i >= 0; i--) {
                 final SurfaceControl child = mReparentedSurfaces.keyAt(i);
+                if (child == null) {
+                    mReparentedSurfaces.removeAt(i);
+                    continue;
+                }
                 synchronized (child.mLock) {
                     final int listenerCount = (child.mReparentListeners != null)
                             ? child.mReparentListeners.size() : 0;
