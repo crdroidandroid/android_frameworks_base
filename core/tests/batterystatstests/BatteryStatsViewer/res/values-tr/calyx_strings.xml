@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="display_dashboard_summary">Detaylandırılmış pil kullanım istatistiklerini görüntüle</string>
+    <string name="app_name">Pil İstatistikleri Görüntüleyicisi</string>
+    <string name="header">Pil istatistikleri</string>
+</resources>
