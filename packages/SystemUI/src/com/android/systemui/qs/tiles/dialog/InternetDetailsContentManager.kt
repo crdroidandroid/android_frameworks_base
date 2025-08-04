@@ -36,10 +36,10 @@ import android.view.View
 import android.view.ViewStub
 import android.view.WindowManager
 import android.widget.Button
+import android.widget.CompoundButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
-import android.widget.Switch
 import android.widget.TextView
 import androidx.annotation.MainThread
 import androidx.annotation.WorkerThread
@@ -116,9 +116,9 @@ constructor(
     private lateinit var mobileTitleTextView: TextView
     private lateinit var mobileSummaryTextView: TextView
     private lateinit var airplaneModeSummaryTextView: TextView
-    private lateinit var mobileDataToggle: Switch
+    private lateinit var mobileDataToggle: CompoundButton
     private lateinit var mobileToggleDivider: View
-    private lateinit var wifiToggle: Switch
+    private lateinit var wifiToggle: CompoundButton
     private lateinit var shareWifiButton: Button
     private lateinit var airplaneModeButton: Button
     private var alertDialog: AlertDialog? = null
