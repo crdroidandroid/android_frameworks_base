@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="header">Akkustatistik</string>
+    <string name="app_name">Anzeige Akkustatistik</string>
+    <string name="display_dashboard_summary">Zeige detaillierte Akkustatistik</string>
+</resources>
