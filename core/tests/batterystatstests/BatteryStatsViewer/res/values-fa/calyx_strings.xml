@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">نمایشگر وضعیت باتری</string>
+    <string name="header">وضعیت باتری</string>
+    <string name="display_dashboard_summary">مشاهده وضعیت دقیق مصرف باتری</string>
+</resources>

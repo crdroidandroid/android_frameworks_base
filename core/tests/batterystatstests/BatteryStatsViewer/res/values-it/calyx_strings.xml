@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Visualizzatore di statistiche della batteria</string>
+    <string name="header">Statistiche della batteria</string>
+    <string name="display_dashboard_summary">Visualizzazione delle statistiche dettagliate sull\'utilizzo della batteria</string>
+</resources>
