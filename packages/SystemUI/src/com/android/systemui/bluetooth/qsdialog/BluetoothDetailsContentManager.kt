@@ -27,9 +27,9 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.view.accessibility.AccessibilityNodeInfo
 import android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction
 import android.widget.Button
+import android.widget.CompoundButton
 import android.widget.ImageView
 import android.widget.ProgressBar
-import android.widget.Switch
 import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.recyclerview.widget.AsyncListDiffer
@@ -98,12 +98,12 @@ constructor(
     // UI Components
     private lateinit var contentView: View
     private lateinit var doneButton: Button
-    private lateinit var bluetoothToggle: Switch
+    private lateinit var bluetoothToggle: CompoundButton
     private lateinit var subtitleTextView: TextView
     private lateinit var seeAllButton: View
     private lateinit var pairNewDeviceButton: View
     private lateinit var deviceListView: RecyclerView
-    private lateinit var autoOnToggle: Switch
+    private lateinit var autoOnToggle: CompoundButton
     private lateinit var autoOnToggleLayout: View
     private lateinit var autoOnToggleInfoTextView: TextView
     private lateinit var audioSharingButton: Button
