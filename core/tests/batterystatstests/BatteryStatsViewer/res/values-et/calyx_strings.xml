@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Aku statistika</string>
+    <string name="header">Aku statistika</string>
+    <string name="display_dashboard_summary">Vaata üksikasjalikku akukasutuse statistikat</string>
+</resources>

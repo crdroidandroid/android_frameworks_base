@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Przeglądarka statystyk baterii</string>
+    <string name="header">Statystyki baterii</string>
+    <string name="display_dashboard_summary">Wyświetl szczegółowe statystyki zużycia baterii</string>
+</resources>

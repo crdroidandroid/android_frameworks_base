@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Statistiky baterie</string>
+    <string name="header">Statistiky baterie</string>
+    <string name="display_dashboard_summary">Zobrazit podrobné informace o využití baterie</string>
+</resources>
