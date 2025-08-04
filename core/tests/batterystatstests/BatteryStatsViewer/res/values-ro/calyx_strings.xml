@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Vizualizator de statistici ale bateriei</string>
+    <string name="header">Statistici ale bateriei</string>
+    <string name="display_dashboard_summary">Vizualizează statistici detaliate de utilizare a bateriei</string>
+</resources>
