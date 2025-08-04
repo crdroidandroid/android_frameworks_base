@@ -46,10 +46,10 @@ import android.view.ViewStub;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.Switch;
 import android.widget.TextView;
 import com.android.settingslib.Utils;
 
@@ -151,19 +151,19 @@ public class InternetDialogDelegateLegacy implements
     private TextView mMobileTitleText;
     private TextView mMobileSummaryText;
     private TextView mAirplaneModeSummaryText;
-    private Switch mMobileDataToggle;
+    private CompoundButton mMobileDataToggle;
     private View mMobileToggleDivider;
     private View mMobileConnectedSpace;
     private LinearLayout mFivegLayout;
     private ImageView mFivegIcon;
     private TextView mFivegTitleText;
-    private Switch mFivegToggle;
+    private CompoundButton mFivegToggle;
     private View mFivegToggleDivider;
     private ImageView mHotspotIcon;
     private TextView mHotspotTitleText;
     private TextView mHotspotSummaryText;
-    private Switch mHotspotToggle;
-    private Switch mWiFiToggle;
+    private CompoundButton mHotspotToggle;
+    private CompoundButton mWiFiToggle;
     private View mWifiConnectedSpace;
     private Button mDoneButton;
 
