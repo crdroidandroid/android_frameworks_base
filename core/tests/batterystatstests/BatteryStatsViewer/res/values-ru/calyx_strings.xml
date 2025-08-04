@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Просмотр статистики использования батареи</string>
+    <string name="header">Статистика использования батареи</string>
+    <string name="display_dashboard_summary">Просмотр подробной статистики использования батареи</string>
+</resources>
