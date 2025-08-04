@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">电池数据查看器</string>
+    <string name="header">电池数据</string>
+    <string name="display_dashboard_summary">查看详细的电池使用数据</string>
+</resources>

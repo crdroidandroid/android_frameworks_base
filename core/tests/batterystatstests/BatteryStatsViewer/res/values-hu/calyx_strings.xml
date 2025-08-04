@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="header">Akku statisztikák</string>
+    <string name="app_name">Akku Statisztika Betekintő</string>
+    <string name="display_dashboard_summary">Részletes akkumulátor használati statisztikák megtekintése</string>
+</resources>
