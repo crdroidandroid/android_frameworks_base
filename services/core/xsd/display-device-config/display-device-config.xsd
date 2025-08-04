@@ -625,6 +625,7 @@
                 <xs:annotation name="final"/>
             </xs:element>
         </xs:sequence>
+        <xs:attribute name="default" type="xs:boolean" use="optional" default="false"/>
     </xs:complexType>
 
     <!-- Thresholds for brightness changes. -->
