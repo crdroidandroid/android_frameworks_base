@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="header">סטטיסטיקת סוללה</string>
+    <string name="app_name">מציג סטטיסטיקת סוללה</string>
+    <string name="display_dashboard_summary">הצגת סטטיסטיקת שימוש מפורטת בסוללה</string>
+</resources>

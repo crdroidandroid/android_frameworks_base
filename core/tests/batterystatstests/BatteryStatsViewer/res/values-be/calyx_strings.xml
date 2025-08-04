@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Праглядальнік статусу батарэі</string>
+    <string name="header">Статус батарэі</string>
+    <string name="display_dashboard_summary">Праглядвайце дэтальныя звесткі аб выкарыстанні батарэі</string>
+</resources>
