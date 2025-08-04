@@ -101,9 +101,11 @@ package com.android.server.display.config {
     method @NonNull public final java.math.BigInteger getDensity();
     method @NonNull public final java.math.BigInteger getHeight();
     method @NonNull public final java.math.BigInteger getWidth();
+    method public boolean get_default();
     method public final void setDensity(@NonNull java.math.BigInteger);
     method public final void setHeight(@NonNull java.math.BigInteger);
     method public final void setWidth(@NonNull java.math.BigInteger);
+    method public void set_default(boolean);
   }
 
   public class DensityMapping {
