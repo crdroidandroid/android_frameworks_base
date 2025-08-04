@@ -23,7 +23,7 @@
 
     <!-- Advanced restart menu -->
     <!-- Button to indicate more options -->
-    <string name="global_action_restart_more">Restart\u2026</string>
+    <string name="global_action_restart_more">Advanced</string>
     <!-- Button to restart the device, within the Restart Options dialog -->
     <string name="global_action_restart_system">System</string>
     <!-- Button to restart the device into recovery mode, within the Restart Options dialog -->

@@ -1050,7 +1050,7 @@
     <!-- Minimum margin of the notification panel on the side, when being positioned dynamically -->
     <dimen name="notification_panel_min_side_margin">48dp</dimen>
 
-    <dimen name="volume_row_slider_height">192dp</dimen>
+    <dimen name="volume_row_slider_height">172dp</dimen>
 
     <!-- Thickness of the assist disclosure beams -->
     <dimen name="assist_disclosure_thickness">2.5dp</dimen>
