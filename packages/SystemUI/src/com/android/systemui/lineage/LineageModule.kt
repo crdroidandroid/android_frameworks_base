@@ -424,6 +424,21 @@ interface LineageModule {
 
         @Provides
         @IntoMap
+        @StringKey(PreferredNetworkTile.TILE_SPEC)
+        fun providePreferredNetworkTile(uiEventLogger: QsEventLogger): QSTileConfig {
+            return QSTileConfig(
+                tileSpec = TileSpec.create(PreferredNetworkTile.TILE_SPEC),
+                uiConfig = QSTileUIConfig.Resource(
+                    iconRes = R.drawable.ic_preferred_network,
+                    labelRes = R.string.quick_settings_preferred_network_label
+                ),
+                instanceId = uiEventLogger.getNewInstanceId(),
+                category = TileCategory.CONNECTIVITY
+            )
+        }
+
+        @Provides
+        @IntoMap
         @StringKey(ProfilesTile.TILE_SPEC)
         fun provideProfilesTileConfig(uiEventLogger: QsEventLogger): QSTileConfig {
             return QSTileConfig(
