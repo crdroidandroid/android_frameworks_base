@@ -16,16 +16,20 @@
 
 package com.android.systemui.common.ui.compose
 
+import androidx.compose.foundation.Image
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import com.android.systemui.common.shared.model.Icon
+import com.android.compose.ui.graphics.painter.rememberDrawablePainter
 
 /**
  * Icon composable that draws [icon] using [tint].
@@ -34,16 +38,31 @@ import com.android.systemui.common.shared.model.Icon
  */
 @Composable
 fun Icon(icon: Icon, modifier: Modifier = Modifier, tint: Color = LocalContentColor.current) {
+    val context = LocalContext.current
     val contentDescription = icon.contentDescription?.load()
     when (icon) {
         is Icon.Loaded -> {
             Icon(
-                remember(icon.drawable) { icon.drawable.toBitmap().asImageBitmap() },
-                contentDescription,
-                modifier,
-                tint,
+                bitmap = remember(icon.drawable) {
+                    icon.drawable.toBitmap().asImageBitmap()
+                },
+                contentDescription = contentDescription,
+                modifier = modifier,
+                tint = tint,
             )
         }
-        is Icon.Resource -> Icon(painterResource(icon.res), contentDescription, modifier, tint)
+        is Icon.Resource -> {
+            val drawable = remember(icon.res) {
+                ContextCompat.getDrawable(context, icon.res)
+            }
+            if (drawable != null) {
+                Image(
+                    painter = rememberDrawablePainter(drawable),
+                    contentDescription = contentDescription,
+                    colorFilter = ColorFilter.tint(tint),
+                    modifier = modifier,
+                )
+            }
+        }
     }
 }
