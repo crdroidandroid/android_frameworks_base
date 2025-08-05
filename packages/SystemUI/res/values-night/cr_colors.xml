@@ -5,4 +5,7 @@
 -->
 <resources>
 
+    <!-- for fallback only (dual tone) -->
+    <color name="nt_scrim_behind_1">@android:color/system_neutral1_900</color>
+    <color name="nt_scrim_behind_2">@android:color/system_neutral1_1000</color>
 </resources>
