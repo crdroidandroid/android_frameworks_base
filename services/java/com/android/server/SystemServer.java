@@ -2851,10 +2851,6 @@ public final class SystemServer implements Dumpable {
             mSystemServiceManager.startService(CustomDeviceConfigService.class);
             t.traceEnd();
 
-            t.traceBegin("GameSpaceManagerService");
-            mSystemServiceManager.startService(GameSpaceManagerService.class);
-            t.traceEnd();
-
             // AttestationService
             t.traceBegin("AttestationService");
             mSystemServiceManager.startService(AttestationService.class);
