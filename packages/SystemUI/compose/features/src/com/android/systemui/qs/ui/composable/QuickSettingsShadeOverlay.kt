@@ -34,6 +34,8 @@ import androidx.compose.foundation.systemGestureExclusion
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -137,32 +139,45 @@ constructor(
         // Set the bounds to null when the QuickSettings overlay disappears.
         DisposableEffect(Unit) { onDispose { contentViewModel.onPanelShapeChanged(null) } }
 
+        val currentContentViewModel by rememberUpdatedState(contentViewModel)
+        val currentQuickSettingsViewModel by rememberUpdatedState(quickSettingsContainerViewModel)
+        
+        val onScrimClickedStable = remember { { currentContentViewModel.onScrimClicked() } }
+
+        val headerStable = remember<@Composable () -> Unit> {
+            {
+                OverlayShadeHeader(
+                    viewModel = currentQuickSettingsViewModel.shadeHeaderViewModel,
+                    modifier = Modifier.element(QuickSettingsShade.Elements.StatusBar),
+                )
+            }
+        }
+
+        val contentStable = remember<@Composable () -> Unit> {
+            {
+                QuickSettingsContainer(
+                    viewModel = currentQuickSettingsViewModel,
+                    modifier =
+                        Modifier.onPlaced { coordinates ->
+                            val shape = ShadeScrimShape(
+                                bounds = ShadeScrimBounds(coordinates.boundsInWindow()),
+                                topRadius = 0,
+                                bottomRadius = panelCornerRadius,
+                            )
+                            currentContentViewModel.onPanelShapeChanged(shape)
+                        },
+                )
+            }
+        }
+
         Box(modifier = modifier.graphicsLayer { alpha = contentAlphaFromBrightnessMirror }) {
             OverlayShade(
                 panelElement = QuickSettingsShade.Elements.Panel,
                 alignmentOnWideScreens = Alignment.TopEnd,
-                onScrimClicked = contentViewModel::onScrimClicked,
-                header = {
-                    OverlayShadeHeader(
-                        viewModel = quickSettingsContainerViewModel.shadeHeaderViewModel,
-                        modifier = Modifier.element(QuickSettingsShade.Elements.StatusBar),
-                    )
-                },
-            ) {
-                QuickSettingsContainer(
-                    viewModel = quickSettingsContainerViewModel,
-                    modifier =
-                        Modifier.onPlaced { coordinates ->
-                            val shape =
-                                ShadeScrimShape(
-                                    bounds = ShadeScrimBounds(coordinates.boundsInWindow()),
-                                    topRadius = 0,
-                                    bottomRadius = panelCornerRadius,
-                                )
-                            contentViewModel.onPanelShapeChanged(shape)
-                        },
-                )
-            }
+                onScrimClicked = onScrimClickedStable,
+                header = headerStable,
+                content = contentStable,
+            )
             SnoozeableHeadsUpNotificationSpace(
                 stackScrollView = notificationStackScrollView.get(),
                 viewModel = hunPlaceholderViewModel,
