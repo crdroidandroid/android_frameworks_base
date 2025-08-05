@@ -7,4 +7,8 @@
 
     <!-- Notification counter -->
     <color name="notification_number_text_color">#ff000000</color>
+
+    <!-- for fallback only (dual tone) -->
+    <color name="nt_scrim_behind_1">@android:color/system_neutral1_100</color>
+    <color name="nt_scrim_behind_2">@android:color/system_neutral1_100</color>
 </resources>
