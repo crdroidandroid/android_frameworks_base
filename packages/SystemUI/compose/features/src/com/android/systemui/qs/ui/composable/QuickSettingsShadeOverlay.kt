@@ -33,6 +33,7 @@ import androidx.compose.foundation.systemGestureExclusion
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -134,18 +135,19 @@ constructor(
         // Set the bounds to null when the QuickSettings overlay disappears.
         DisposableEffect(Unit) { onDispose { contentViewModel.onPanelShapeChanged(null) } }
 
-        Box(modifier = modifier.graphicsLayer { alpha = contentAlphaFromBrightnessMirror }) {
-            OverlayShade(
-                panelElement = QuickSettingsShade.Elements.Panel,
-                alignmentOnWideScreens = Alignment.TopEnd,
-                onScrimClicked = contentViewModel::onScrimClicked,
-                header = {
-                    OverlayShadeHeader(
-                        viewModel = quickSettingsContainerViewModel.shadeHeaderViewModel,
-                        modifier = Modifier.element(QuickSettingsShade.Elements.StatusBar),
-                    )
-                },
-            ) {
+        val onScrimClickedStable = remember { contentViewModel::onScrimClicked }
+
+        val headerStable = remember<@Composable () -> Unit> {
+            {
+                OverlayShadeHeader(
+                    viewModel = quickSettingsContainerViewModel.shadeHeaderViewModel,
+                    modifier = Modifier.element(QuickSettingsShade.Elements.StatusBar),
+                )
+            }
+        }
+
+        val contentStable = remember<@Composable () -> Unit> {
+            {
                 QuickSettingsContainer(
                     viewModel = quickSettingsContainerViewModel,
                     modifier =
@@ -160,6 +162,16 @@ constructor(
                         },
                 )
             }
+        }
+
+        Box(modifier = modifier.graphicsLayer { alpha = contentAlphaFromBrightnessMirror }) {
+            OverlayShade(
+                panelElement = QuickSettingsShade.Elements.Panel,
+                alignmentOnWideScreens = Alignment.TopEnd,
+                onScrimClicked = onScrimClickedStable,
+                header = headerStable,
+                content = contentStable,
+            )
             SnoozeableHeadsUpNotificationSpace(
                 stackScrollView = notificationStackScrollView.get(),
                 viewModel = hunPlaceholderViewModel,
