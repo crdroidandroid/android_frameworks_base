@@ -89,7 +89,10 @@ constructor(
 
     override fun applyConstraints(constraintSet: ConstraintSet) {
         constraintSet.apply {
-            constrainHeight(statusBarViewId, Utils.getStatusBarHeaderHeightKeyguard(context))
+            val waterfallHeight = Utils.getStatusBarHeaderHeightKeyguard(context)
+            val sbHeight = context.resources.getDimensionPixelSize(R.dimen.status_bar_height)
+            val kgSbHeight = if (waterfallHeight > sbHeight) sbHeight else waterfallHeight
+            constrainHeight(statusBarViewId, kgSbHeight)
             connect(statusBarViewId, TOP, PARENT_ID, TOP)
             connect(statusBarViewId, START, PARENT_ID, START)
             connect(statusBarViewId, END, PARENT_ID, END)
