@@ -583,10 +583,30 @@ public class KeyguardStatusBarView extends RelativeLayout {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         Trace.beginSection("KeyguardStatusBarView#onMeasure");
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        if (needsConstraint()) {
+            int statusBarHeight = getResources().getDimensionPixelSize(R.dimen.status_bar_height);
+            int measuredHeight = getMeasuredHeight();
+            if (measuredHeight != statusBarHeight) {
+                setMeasuredDimension(getMeasuredWidth(), statusBarHeight);
+            }
+        }
         Trace.endSection();
+    }
+
+    @Override
+    public void setPadding(int left, int top, int right, int bottom) {
+        final int topPadding = mContext.getResources()
+                .getDimensionPixelSize(R.dimen.status_bar_padding_top);
+        super.setPadding(left, needsConstraint() ? topPadding : top, right, bottom);
     }
 
     public StateFlow<DarkChange> darkChangeFlow() {
         return FlowKt.asStateFlow(mDarkChange);
+    }
+
+    boolean needsConstraint() {
+        int waterfallHeight = getStatusBarHeaderHeightKeyguard(mContext);
+        int statusBarHeight = getResources().getDimensionPixelSize(R.dimen.status_bar_height);
+        return waterfallHeight > statusBarHeight;
     }
 }
