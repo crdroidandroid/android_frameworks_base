@@ -1217,7 +1217,9 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener, Dump
         setOrAdaptCurrentAnimation(mScrimBehind);
         setOrAdaptCurrentAnimation(mNotificationsScrim);
         setOrAdaptCurrentAnimation(mScrimInFront);
-        dispatchBackScrimState(mScrimBehind.getViewAlpha());
+        if (mScrimBehind != null) {
+            dispatchBackScrimState(mScrimBehind.getViewAlpha());
+        }
     }
 
     /**
