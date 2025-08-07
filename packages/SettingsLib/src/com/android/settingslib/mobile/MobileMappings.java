@@ -67,7 +67,7 @@ public class MobileMappings {
             case TelephonyDisplayInfo.OVERRIDE_NETWORK_TYPE_LTE_ADVANCED_PRO:
                 return toIconKey(TelephonyManager.NETWORK_TYPE_LTE) + "_CA_Plus";
             case TelephonyDisplayInfo.OVERRIDE_NETWORK_TYPE_NR_NSA:
-                return toIconKey(TelephonyManager.NETWORK_TYPE_NR);
+                return toIconKey(TelephonyManager.NETWORK_TYPE_NR) + "_NSA";
             case TelephonyDisplayInfo.OVERRIDE_NETWORK_TYPE_NR_ADVANCED:
                 return toIconKey(TelephonyManager.NETWORK_TYPE_NR) + "_Plus";
             default:
@@ -204,7 +204,7 @@ public class MobileMappings {
                 config.mobileIconGroup5gPlus);
         networkToIconLookup.put(toIconKey(
                 TelephonyManager.NETWORK_TYPE_NR),
-                TelephonyIcons.NR_5G);
+                TelephonyIcons.NR_5G_SA);
         return networkToIconLookup;
     }
 
