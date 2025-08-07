@@ -9657,6 +9657,10 @@
             android:name="com.android.server.patch.25239169"
             android:value="true" />
 
+        <meta-data
+            android:name="com.android.server.patch.34957421"
+            android:value="true" />
+
     </application>
 
 </manifest>

@@ -180,15 +180,6 @@ public final class MessageQueue {
             if (processName.contains("test") || processName.contains("Test")) {
                 sIsProcessAllowedToUseConcurrent = false;
             }
-        } else {
-            // Also explicitly allow SystemUI processes.
-            // SystemUI doesn't run in a core UID, but we want to give it the performance boost,
-            // and we know that it's safe to use the concurrent implementation in SystemUI.
-            sIsProcessAllowedToUseConcurrent =
-                    processName.equals("com.android.systemui")
-                            || processName.startsWith("com.android.systemui:");
-            // On Android distributions where SystemUI has a different process name,
-            // the above condition may need to be adjusted accordingly.
         }
 
         // We can lift these restrictions in the future after we've made it possible for test
