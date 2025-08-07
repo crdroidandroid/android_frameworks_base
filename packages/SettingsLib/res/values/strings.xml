@@ -1789,6 +1789,9 @@
     <!-- Content description of the data connection type 5G. [CHAR LIMIT=NONE] -->
     <string name="data_connection_5g" translatable="false">5G</string>
 
+    <!-- Content description of the data connection type 5G stand alone. [CHAR LIMIT=NONE] -->
+    <string name="data_connection_5g_sa" translate="false">5G SA</string>
+
     <!-- Content description of the data connection type 5G+. [CHAR LIMIT=NONE] -->
     <string name="data_connection_5g_plus" translatable="false">5G+</string>
     <!-- Content description of the data connection type 5G+ for carrier 2032. [CHAR LIMIT=NONE] -->

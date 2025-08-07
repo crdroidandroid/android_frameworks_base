@@ -137,6 +137,7 @@ private fun String.toDataType(): MobileIconGroup =
         "4g" -> TelephonyIcons.FOUR_G
         "4g+" -> TelephonyIcons.FOUR_G_PLUS
         "5g" -> TelephonyIcons.NR_5G
+        "5gsa" -> TelephonyIcons.NR_5G_SA
         "5ge" -> TelephonyIcons.LTE_CA_5G_E
         "5g+" -> TelephonyIcons.NR_5G_PLUS
         "e" -> TelephonyIcons.E
