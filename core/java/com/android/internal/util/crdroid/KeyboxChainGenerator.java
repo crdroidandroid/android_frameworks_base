@@ -1,5 +1,6 @@
 /*
  * SPDX-FileCopyrightText: 2025 Neoteric OS
+ * SPDX-FileCopyrightText: 2025 The halogenOS Project
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.android.internal.util.crdroid;
@@ -255,12 +256,19 @@ public final class KeyboxChainGenerator {
 
     private static int getOsVersion() {
         String release = Build.VERSION.RELEASE;
-        int major = 0, minor = 0, patch = 0;
+        int major = 16, minor = 0, patch = 0;
+
+        // Handle cases with additional suffixes like "/BP31"
+        release = release.split("/")[0];
 
         String[] parts = release.split("\\.");
-        if (parts.length > 0) major = Integer.parseInt(parts[0]);
-        if (parts.length > 1) minor = Integer.parseInt(parts[1]);
-        if (parts.length > 2) patch = Integer.parseInt(parts[2]);
+        try {
+            if (parts.length > 0) major = Integer.parseInt(parts[0]);
+            if (parts.length > 1) minor = Integer.parseInt(parts[1]);
+            if (parts.length > 2) patch = Integer.parseInt(parts[2]);
+        } catch (NumberFormatException e) {
+            Log.w(TAG, "Unable to parse OS version: " + release);
+        }
 
         return major * 10000 + minor * 100 + patch;
     }
