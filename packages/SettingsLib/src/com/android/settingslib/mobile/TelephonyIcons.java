@@ -56,6 +56,8 @@ public class TelephonyIcons {
             flagged(R.drawable.ic_1x_mobiledata, R.drawable.ic_1x_mobiledata_updated);
     public static final int ICON_5G =
             flagged(R.drawable.ic_5g_mobiledata, R.drawable.ic_5g_mobiledata_updated);
+    public static final int ICON_5G_SA =
+            flagged(R.drawable.ic_5g_sa_mobiledata, R.drawable.ic_5g_sa_mobiledata_updated);
     public static final int ICON_5G_PLUS =
             flagged(R.drawable.ic_5g_plus_mobiledata, R.drawable.ic_5g_plus_mobiledata_updated);
     public static final int ICON_CWF =
@@ -169,6 +171,11 @@ public class TelephonyIcons {
             TelephonyIcons.ICON_5G
     );
 
+    public static final MobileIconGroup NR_5G_SA = new MobileIconGroup(
+            "5G SA",
+            R.string.data_connection_5g_sa,
+            TelephonyIcons.ICON_5G_SA);
+
     public static final MobileIconGroup NR_5G_PLUS = new MobileIconGroup(
             "5G_PLUS",
             R.string.data_connection_5g_plus,
@@ -217,6 +224,7 @@ public class TelephonyIcons {
         ICON_NAME_TO_ICON.put("lte", LTE);
         ICON_NAME_TO_ICON.put("lte+", LTE_PLUS);
         ICON_NAME_TO_ICON.put("5g", NR_5G);
+        ICON_NAME_TO_ICON.put("5gsa", NR_5G_SA);
         ICON_NAME_TO_ICON.put("5g_plus", NR_5G_PLUS);
         ICON_NAME_TO_ICON.put("datadisable", DATA_DISABLED);
         ICON_NAME_TO_ICON.put("notdefaultdata", NOT_DEFAULT_DATA);
