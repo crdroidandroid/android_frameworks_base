@@ -16,8 +16,14 @@
 
 package com.android.systemui.qs.composefragment.viewmodel
 
+import android.content.ContentResolver
 import android.content.res.Resources
+import android.database.ContentObserver
 import android.graphics.Rect
+import android.os.Handler
+import android.os.Looper
+import android.os.UserHandle
+import android.provider.Settings
 import androidx.annotation.FloatRange
 import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.derivedStateOf
@@ -115,6 +121,7 @@ constructor(
     @Named(QSFragmentComposeModule.QS_USING_MEDIA_PLAYER) private val usingMedia: Boolean,
     private val uiEventLogger: UiEventLogger,
     @Assisted private val lifecycleScope: LifecycleCoroutineScope,
+    private val contentResolver: ContentResolver,
 ) : Dumpable, ExclusiveActivatable() {
 
     val containerViewModel = containerViewModelFactory.create(supportsBrightnessMirroring = true)
@@ -194,6 +201,38 @@ constructor(
             initialValue = resources.getDimensionPixelSize(R.dimen.qqs_layout_padding_bottom),
             source = configurationInteractor.dimensionPixelSize(R.dimen.qqs_layout_padding_bottom),
         )
+
+    val isQQSBrightnessSliderEnabled by hydrator.hydratedStateOf(
+        traceName = "isQQSBrightnessSliderEnabled",
+        initialValue = true,
+        source = settingsObserver("qs_brightness_slider_enabled", 2)
+            .map { value -> value == 2 }
+    )
+    
+    val isQsBrightnessSliderEnabled by hydrator.hydratedStateOf(
+        traceName = "isQsBrightnessSliderEnabled",
+        initialValue = true,
+        source = settingsObserver("qs_brightness_slider_enabled", 2)
+            .map { value -> value >= 1 }
+    )
+
+    private fun settingsObserver(key: String, defaultValue: Int): Flow<Int> {
+        return callbackFlow {
+            val observer = object : ContentObserver(Handler(Looper.getMainLooper())) {
+                override fun onChange(selfChange: Boolean) {
+                    val value = Settings.Secure.getIntForUser(contentResolver, key, defaultValue, UserHandle.USER_CURRENT)
+                    trySend(value)
+                }
+            }
+            val uri = Settings.Secure.getUriFor(key)
+            contentResolver.registerContentObserver(uri, false, observer)
+            val initialValue = Settings.Secure.getIntForUser(contentResolver, key, defaultValue, UserHandle.USER_CURRENT)
+            trySend(initialValue)
+            awaitClose {
+                contentResolver.unregisterContentObserver(observer)
+            }
+        }
+    }
 
     // Starting with a non-zero value makes it so that it has a non-zero height on first expansion
     // This is important for `QuickSettingsControllerImpl.mMinExpansionHeight` to detect a "change".
