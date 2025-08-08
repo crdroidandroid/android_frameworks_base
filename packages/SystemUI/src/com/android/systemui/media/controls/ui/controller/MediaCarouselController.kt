@@ -268,7 +268,7 @@ constructor(
             }
 
             override fun onThemeChanged() {
-                updatePlayers(recreateMedia = false)
+                updatePlayers(recreateMedia = true)
                 inflateSettingsButton()
             }
 
@@ -772,7 +772,7 @@ constructor(
             if (mediaControlsUmoInflationInBackground()) {
                 if (existingPlayer == null) {
                     bgExecutor.execute {
-                        val mediaViewHolder = createMediaViewHolderInBg()
+                        val mediaViewHolder = MediaViewHolder.create(LayoutInflater.from(context), mediaContent)
                         // Add the new player in the main thread.
                         uiExecutor.execute {
                             setupNewPlayer(key, data, curVisibleMediaKey, mediaViewHolder)
