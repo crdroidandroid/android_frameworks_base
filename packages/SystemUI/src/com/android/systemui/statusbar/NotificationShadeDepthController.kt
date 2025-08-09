@@ -275,6 +275,10 @@ constructor(
             shadeRadius = 0f
         }
 
+        if (shadeExpansion == 0f && !statusBarStateController.isDozing) {
+            shadeRadius = 0f
+        }
+
         var blur = shadeRadius.toInt()
         // If the blur comes from waking up, we don't want to zoom out the background
         val zoomOut =
