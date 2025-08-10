@@ -998,7 +998,7 @@ class UserController implements Handler.Callback {
             // Suppress double notifications for managed profiles that
             // were unlocked automatically as part of their parent user being
             // unlocked.  TODO(b/217442918): this code doesn't work correctly.
-            final boolean quiet = info.isManagedProfile();
+            final boolean quiet = info.isManagedProfile() || info.isCloneProfile();
             mInjector.sendPreBootBroadcast(userId, quiet,
                     () -> finishUserUnlockedCompleted(uss));
         } else {
