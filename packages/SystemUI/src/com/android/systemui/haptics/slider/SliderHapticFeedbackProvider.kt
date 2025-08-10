@@ -72,6 +72,12 @@ class SliderHapticFeedbackProvider(
     private val thresholdUntilNextDragCallMillis =
         lowTickDurationMs * config.numberOfLowTicks + config.deltaMillisForDragInterval
 
+    private val areAllPrimitivesSupported = vibratorHelper.areAllPrimitivesSupported(
+            VibrationEffect.Composition.PRIMITIVE_TICK,
+            VibrationEffect.Composition.PRIMITIVE_LOW_TICK,
+            VibrationEffect.Composition.PRIMITIVE_CLICK
+        ) ?: false
+
     /**
      * Vibrate when the handle reaches either bookend with a certain velocity.
      *
@@ -87,7 +93,14 @@ class SliderHapticFeedbackProvider(
                 )
             msdlPlayer.playToken(MSDLToken.DRAG_THRESHOLD_INDICATOR_LIMIT, properties)
         } else {
-            vibratorHelper.vibrate(doubleClickEffect, VIBRATION_ATTRIBUTES_PIPELINING)
+            if (areAllPrimitivesSupported) {
+                val vibration = VibrationEffect.startComposition()
+                    .addPrimitive(VibrationEffect.Composition.PRIMITIVE_CLICK, powerScale)
+                    .compose()
+                vibratorHelper.vibrate(vibration, VIBRATION_ATTRIBUTES_PIPELINING)
+            } else {
+                vibratorHelper.vibrate(doubleClickEffect, VIBRATION_ATTRIBUTES_PIPELINING)
+            }
         }
     }
 
@@ -158,7 +171,14 @@ class SliderHapticFeedbackProvider(
                 InteractionProperties.DynamicVibrationScale(scale, VIBRATION_ATTRIBUTES_PIPELINING)
             msdlPlayer.playToken(MSDLToken.DRAG_INDICATOR_DISCRETE, properties)
         } else {
-            vibratorHelper.vibrate(textureClickEffect, VIBRATION_ATTRIBUTES_PIPELINING)
+            if (areAllPrimitivesSupported) {
+                val effect = VibrationEffect.startComposition()
+                    .addPrimitive(VibrationEffect.Composition.PRIMITIVE_TICK, scale)
+                    .compose()
+                vibratorHelper.vibrate(effect, VIBRATION_ATTRIBUTES_PIPELINING)
+            } else {
+                vibratorHelper.vibrate(textureClickEffect, VIBRATION_ATTRIBUTES_PIPELINING)
+            }
         }
     }
 
@@ -168,11 +188,19 @@ class SliderHapticFeedbackProvider(
                 InteractionProperties.DynamicVibrationScale(scale, VIBRATION_ATTRIBUTES_PIPELINING)
             msdlPlayer.playToken(MSDLToken.DRAG_INDICATOR_CONTINUOUS, properties)
         } else {
-            dragVibrationJob?.cancel()
-            dragVibrationJob = CoroutineScope(Dispatchers.Default).launch {
+            if (areAllPrimitivesSupported) {
+                val composition = VibrationEffect.startComposition()
                 repeat(config.numberOfLowTicks) {
-                    vibratorHelper.vibrate(textureClickEffect, VIBRATION_ATTRIBUTES_PIPELINING)
-                    delay(80)
+                    composition.addPrimitive(VibrationEffect.Composition.PRIMITIVE_LOW_TICK, scale)
+                }
+                vibratorHelper.vibrate(composition.compose(), VIBRATION_ATTRIBUTES_PIPELINING)
+            } else {
+                dragVibrationJob?.cancel()
+                dragVibrationJob = CoroutineScope(Dispatchers.Default).launch {
+                    repeat(config.numberOfLowTicks) {
+                        vibratorHelper.vibrate(textureClickEffect, VIBRATION_ATTRIBUTES_PIPELINING)
+                        delay(80)
+                    }
                 }
             }
         }
