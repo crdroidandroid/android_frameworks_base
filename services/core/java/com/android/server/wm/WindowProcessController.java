@@ -1426,6 +1426,10 @@ public class WindowProcessController extends ConfigurationContainer<Configuratio
         // Posting on handler so WM lock isn't held when we call into AM.
         final Message m = PooledLambda.obtainMessage(WindowProcessListener::updateProcessInfo,
                 mListener, updateServiceConnectionActivities, activityChange, updateOomAdj);
+        if (!updateServiceConnectionActivities && activityChange && updateOomAdj && addPendingTopUid) {
+            mAtm.mUiHandler.sendMessageAtFrontOfQueue(m);
+            return;
+        }
         mAtm.mH.sendMessage(m);
     }
 
