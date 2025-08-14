@@ -980,6 +980,9 @@ public class Vpn {
     private boolean setAlwaysOnPackageInternal(
             @Nullable String packageName, boolean lockdown,
             @Nullable List<String> lockdownAllowlist) {
+        if (!isAlwaysOnPackageSupported(packageName)) {
+            return false;
+        }
         if (VpnConfig.LEGACY_VPN.equals(packageName)) {
             Log.w(TAG, "Not setting legacy VPN \"" + packageName + "\" as always-on.");
             return false;
