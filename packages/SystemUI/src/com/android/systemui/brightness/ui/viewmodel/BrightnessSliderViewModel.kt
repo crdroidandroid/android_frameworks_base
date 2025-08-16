@@ -35,6 +35,7 @@ import com.android.systemui.lifecycle.Hydrator
 import com.android.systemui.res.R
 import com.android.systemui.settings.brightness.domain.interactor.BrightnessMirrorShowingInteractor
 import com.android.systemui.settings.brightness.ui.BrightnessWarningToast
+import com.android.systemui.tuner.TunerService
 import com.android.systemui.utils.PolicyRestriction
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -60,6 +61,7 @@ constructor(
     @Assisted private val supportsMirroring: Boolean,
     private val brightnessWarningToast: BrightnessWarningToast,
     private val imageLoader: ImageLoader,
+    val tunerService: TunerService,
 ) : ExclusiveActivatable() {
 
     private val hydrator = Hydrator("BrightnessSliderViewModel.hydrator")

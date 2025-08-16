@@ -117,9 +117,12 @@ import com.android.systemui.haptics.slider.compose.ui.SliderHapticsViewModel
 import com.android.systemui.lifecycle.rememberViewModel
 import com.android.systemui.qs.ui.compose.borderOnFocus
 import com.android.systemui.res.R
+import com.android.systemui.tuner.TunerService
 import com.android.systemui.utils.PolicyRestriction
 import platform.test.motion.compose.values.MotionTestValueKey
 import platform.test.motion.compose.values.motionTestValues
+
+import lineageos.providers.LineageSettings
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -139,7 +142,20 @@ fun BrightnessSlider(
     modifier: Modifier = Modifier,
     showToast: () -> Unit = {},
     hapticsViewModelFactory: SliderHapticsViewModel.Factory,
+    tunerService: TunerService,
 ) {
+    val QS_SHOW_AUTO_BRIGHTNESS =
+        "lineagesecure:" + LineageSettings.Secure.QS_SHOW_AUTO_BRIGHTNESS
+
+    val showAutoBrightness = remember {
+        mutableStateOf(
+            TunerService.parseIntegerSwitch(
+                tunerService.getValue(QS_SHOW_AUTO_BRIGHTNESS),
+                true
+            )
+        )
+    }
+
     var value by remember(gammaValue) { mutableIntStateOf(gammaValue) }
     val animatedValue by
         animateFloatAsState(targetValue = value.toFloat(), label = "BrightnessSliderAnimatedValue")
@@ -204,6 +220,20 @@ fun BrightnessSlider(
     val hasAutoBrightness = context.resources.getBoolean(
         com.android.internal.R.bool.config_automatic_brightness_available
     )
+
+    DisposableEffect(Unit) {
+        val tunable = TunerService.Tunable { key, newValue ->
+            if (key == QS_SHOW_AUTO_BRIGHTNESS) {
+                showAutoBrightness.value =
+                    TunerService.parseIntegerSwitch(newValue, true)
+            }
+        }
+        tunerService.addTunable(tunable, QS_SHOW_AUTO_BRIGHTNESS)
+
+        onDispose {
+            tunerService.removeTunable(tunable)
+        }
+    }
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -333,7 +363,7 @@ fun BrightnessSlider(
             }
         )
 
-        if (hasAutoBrightness) {
+        if (hasAutoBrightness && showAutoBrightness.value) {
             Spacer(modifier = Modifier.width(8.dp))
 
             val coroutineScope = rememberCoroutineScope()
@@ -483,6 +513,7 @@ fun BrightnessSliderContainer(
             showToast = {
                 viewModel.showToast(context, R.string.quick_settings_brightness_unable_adjust_msg)
             },
+            tunerService = viewModel.tunerService,
         )
     }
 }
