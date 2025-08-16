@@ -18,6 +18,7 @@ package com.android.systemui.brightness.ui.compose
 
 import android.content.Context
 import android.graphics.PorterDuff
+import android.os.UserHandle
 import android.view.MotionEvent
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -121,6 +122,8 @@ import com.android.systemui.utils.PolicyRestriction
 import platform.test.motion.compose.values.MotionTestValueKey
 import platform.test.motion.compose.values.motionTestValues
 
+import lineageos.providers.LineageSettings
+
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 @VisibleForTesting
@@ -140,6 +143,19 @@ fun BrightnessSlider(
     showToast: () -> Unit = {},
     hapticsViewModelFactory: SliderHapticsViewModel.Factory,
 ) {
+    val context = LocalContext.current
+    val cr = context.contentResolver
+
+    val showAutoBrightness = remember {
+        try {
+            LineageSettings.Secure.getIntForUser(
+                cr, LineageSettings.Secure.QS_SHOW_AUTO_BRIGHTNESS, 1, UserHandle.USER_CURRENT
+            ) != 0
+        } catch (_: Throwable) {
+            false
+        }
+    }
+
     var value by remember(gammaValue) { mutableIntStateOf(gammaValue) }
     val animatedValue by
         animateFloatAsState(targetValue = value.toFloat(), label = "BrightnessSliderAnimatedValue")
@@ -176,7 +192,6 @@ fun BrightnessSlider(
                 iconResProvider(percentage)
             }
         }
-    val context = LocalContext.current
     val painter: Painter by
         produceState<Painter>(
             initialValue = ColorPainter(Color.Transparent),
@@ -333,7 +348,7 @@ fun BrightnessSlider(
             }
         )
 
-        if (hasAutoBrightness) {
+        if (hasAutoBrightness && showAutoBrightness) {
             Spacer(modifier = Modifier.width(8.dp))
 
             val coroutineScope = rememberCoroutineScope()
