@@ -177,6 +177,7 @@ import com.android.systemui.qs.panels.ui.compose.EditTileListState.Companion.INV
 import com.android.systemui.qs.panels.ui.compose.dragAndDropRemoveZone
 import com.android.systemui.qs.panels.ui.compose.dragAndDropTileList
 import com.android.systemui.qs.panels.ui.compose.dragAndDropTileSource
+import com.android.systemui.qs.panels.ui.compose.infinitegrid.CommonTileDefaults.ActiveTileCornerRadius
 import com.android.systemui.qs.panels.ui.compose.infinitegrid.CommonTileDefaults.InactiveCornerRadius
 import com.android.systemui.qs.panels.ui.compose.infinitegrid.CommonTileDefaults.TileArrangementPadding
 import com.android.systemui.qs.panels.ui.compose.infinitegrid.CommonTileDefaults.TileHeight
@@ -188,6 +189,7 @@ import com.android.systemui.qs.panels.ui.compose.infinitegrid.EditModeTileDefaul
 import com.android.systemui.qs.panels.ui.compose.infinitegrid.EditModeTileDefaults.CurrentTilesGridPadding
 import com.android.systemui.qs.panels.ui.compose.infinitegrid.EditModeTileDefaults.GridBackgroundCornerRadius
 import com.android.systemui.qs.panels.ui.compose.infinitegrid.EditModeTileDefaults.TilePlacementSpec
+import com.android.systemui.qs.panels.ui.compose.infinitegrid.rememberTileShapeMode
 import com.android.systemui.qs.panels.ui.compose.selection.InteractiveTileContainer
 import com.android.systemui.qs.panels.ui.compose.selection.MutableSelectionState
 import com.android.systemui.qs.panels.ui.compose.selection.ResizingState
@@ -1394,9 +1396,21 @@ private fun MeasureScope.iconHorizontalCenter(containerSize: Int): Float {
         CommonTileDefaults.TileStartPadding.toPx()
 }
 
+@Composable
+private fun editTileShape(shapeMode: Int): RoundedCornerShape {
+    val radius = when (shapeMode) {
+        1 -> InactiveCornerRadius // circle-ish
+        2 -> ActiveTileCornerRadius // rounded square
+        3 -> 0.dp // square
+        else -> InactiveCornerRadius
+    }
+    return RoundedCornerShape(radius)
+}
+
+@Composable
 private fun Modifier.tileBackground(color: () -> Color): Modifier {
-    // Clip tile contents from overflowing past the tile
-    return clip(RoundedCornerShape(InactiveCornerRadius)).drawBehind { drawRect(color()) }
+    val shapeMode = rememberTileShapeMode()
+    return clip(editTileShape(shapeMode)).drawBehind { drawRect(color()) }
 }
 
 private object EditModeTileDefaults {
