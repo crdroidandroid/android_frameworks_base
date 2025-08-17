@@ -47,6 +47,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -192,12 +193,16 @@ fun BuildNumber(
         }
     }
 
+    val updateRunnable = remember { Runnable { updateUsage() } }
+
     fun scheduleUpdateUsage() {
-        mainHandler.removeCallbacksAndMessages(null)
-        mainHandler.postDelayed({ updateUsage() }, 300)
+        mainHandler.removeCallbacks(updateRunnable)
+        mainHandler.postDelayed(updateRunnable, 300)
     }
 
     LaunchedEffect(showDataUsage.value) { if (showDataUsage.value) updateUsage() else { usageText = null } }
+
+    val latestUpdate by rememberUpdatedState(newValue = { updateUsage() })
 
     DisposableEffect(showDataUsage.value) {
         if (!showDataUsage.value) {
@@ -211,17 +216,18 @@ fun BuildNumber(
                 addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION)
                 addAction(WifiManager.RSSI_CHANGED_ACTION)
             }
+
             val receiver = object : BroadcastReceiver() {
                 override fun onReceive(context: Context?, intent: Intent?) { scheduleUpdateUsage() }
             }
-            context.registerReceiver(receiver, wifiFilter)
+            context.registerReceiver(receiver, wifiFilter, Context.RECEIVER_NOT_EXPORTED)
 
             val netCb = object : NetworkCallback() {
                 override fun onCapabilitiesChanged(network: Network, caps: NetworkCapabilities) {
-                    scheduleUpdateUsage()
+                    latestUpdate()
                 }
                 override fun onLost(network: Network) {
-                    scheduleUpdateUsage()
+                    latestUpdate()
                 }
             }
             cm.registerDefaultNetworkCallback(netCb)
@@ -229,7 +235,7 @@ fun BuildNumber(
             val settingsObserver = object : ContentObserver(mainHandler) {
                 override fun onChange(selfChange: Boolean) {
                     displaySubId = currentDataSubId(context, subMgr)
-                    scheduleUpdateUsage()
+                    latestUpdate()
                 }
             }
 
@@ -246,7 +252,7 @@ fun BuildNumber(
                     scheduleUpdateUsage()
                 }
             }
-            subMgr.addOnSubscriptionsChangedListener(subListener)
+            subMgr.addOnSubscriptionsChangedListener(context.mainExecutor, subListener)
 
             onDispose {
                 context.unregisterReceiver(receiver)
