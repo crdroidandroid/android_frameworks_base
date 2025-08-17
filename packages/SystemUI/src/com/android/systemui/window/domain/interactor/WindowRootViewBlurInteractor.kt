@@ -53,6 +53,9 @@ constructor(
     private val communalInteractor: CommunalInteractor,
     private val repository: WindowRootViewBlurRepository,
 ) {
+
+    private val DEBUG_BLUR = false
+
     private var isBouncerTransitionInProgress: StateFlow<Boolean> =
         if (Flags.bouncerUiRevamp()) {
             keyguardTransitionInteractor
@@ -127,7 +130,9 @@ constructor(
         if (isGlanceableHubActive()) {
             return false
         }
-        Log.d(TAG, "requestingBlurForShade for $blurRadius $opaque")
+        if (DEBUG_BLUR) {
+            Log.d(TAG, "requestingBlurForShade for $blurRadius $opaque")
+        }
         repository.blurRequestedByShade.value = blurRadius
         repository.isBlurOpaque.value = opaque
         return true

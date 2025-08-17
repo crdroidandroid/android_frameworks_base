@@ -105,7 +105,7 @@ constructor(
         }
 
     fun onBlurApplied(blurRadius: Int) {
-        if (isLoggable) {
+        if (DEBUG_BLUR) {
             Log.d(TAG, "blur applied for radius $blurRadius")
         }
         blurInteractor.onBlurApplied(blurRadius)
@@ -119,6 +119,7 @@ constructor(
     private companion object {
         const val TAG = "WindowRootViewModel"
         val isLoggable = Log.isLoggable(TAG, Log.VERBOSE) || Build.isDebuggable()
+        const val DEBUG_BLUR = false
 
         fun <T> Flow<T>.logIfPossible(loggingInfo: String): Flow<T> {
             return onEach { if (isLoggable) Log.v(TAG, "$loggingInfo $it") }
