@@ -31,6 +31,7 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -175,16 +176,18 @@ private fun FooterBar(
         horizontalArrangement = spacedBy(8.dp),
     ) {
         Row(Modifier.weight(1f)) {
-            BuildNumber(
-                viewModelFactory = buildNumberViewModelFactory,
-                textColor = MaterialTheme.colorScheme.onSurface,
-                modifier =
-                    Modifier.borderOnFocus(
-                            color = MaterialTheme.colorScheme.secondary,
-                            cornerSize = CornerSize(1.dp),
-                        )
-                        .wrapContentSize(),
-            )
+            ProvideTextStyle(MaterialTheme.typography.labelMedium) {
+                BuildNumber(
+                    viewModelFactory = buildNumberViewModelFactory,
+                    textColor = MaterialTheme.colorScheme.onSurface,
+                    modifier =
+                        Modifier.borderOnFocus(
+                                color = MaterialTheme.colorScheme.secondary,
+                                cornerSize = CornerSize(1.dp),
+                            )
+                            .wrapContentSize(),
+                )
+            }
             Spacer(modifier = Modifier.weight(1f))
         }
         PagerDots(
