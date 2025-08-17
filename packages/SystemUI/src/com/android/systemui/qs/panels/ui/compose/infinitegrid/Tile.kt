@@ -21,6 +21,7 @@ package com.android.systemui.qs.panels.ui.compose.infinitegrid
 import android.content.Context
 import android.content.res.Resources
 import android.os.Trace
+import android.provider.Settings
 import android.service.quicksettings.Tile.STATE_ACTIVE
 import android.service.quicksettings.Tile.STATE_INACTIVE
 import androidx.compose.animation.animateColorAsState
@@ -47,6 +48,8 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
@@ -79,6 +82,7 @@ import com.android.compose.animation.bounceable
 import com.android.compose.animation.rememberExpandableController
 import com.android.compose.modifiers.thenIf
 import com.android.compose.theme.LocalAndroidColorScheme
+import com.android.systemui.Dependency
 import com.android.systemui.Flags
 import com.android.systemui.animation.Expandable
 import com.android.systemui.common.shared.model.Icon
@@ -103,10 +107,13 @@ import com.android.systemui.qs.panels.ui.viewmodel.toUiState
 import com.android.systemui.qs.tileimpl.QSTileImpl
 import com.android.systemui.qs.ui.compose.borderOnFocus
 import com.android.systemui.res.R
+import com.android.systemui.tuner.TunerService
 import kotlinx.coroutines.CoroutineScope
 
 private const val TEST_TAG_SMALL = "qs_tile_small"
 private const val TEST_TAG_LARGE = "qs_tile_large"
+
+private const val QS_TILE_SHAPE = "system:" + Settings.System.QS_TILE_SHAPE
 
 @Composable
 fun TileLazyGrid(
@@ -167,8 +174,9 @@ fun Tile(
                 tileHapticsViewModelFactoryProvider.getHapticsViewModelFactory()?.create(tile)
             }
 
+        val shapeMode by rememberTileShapeMode()
         // TODO(b/361789146): Draw the shapes instead of clipping
-        val tileShape by TileDefaults.animateTileShapeAsState(uiState.state)
+        val tileShape by TileDefaults.animateTileShapeAsState(uiState.state, shapeMode)
         val animatedColor by animateColorAsState(colors.background, label = "QSTileBackgroundColor")
         val animatedAlpha by animateFloatAsState(colors.alpha, label = "QSTileAlpha")
 
@@ -230,7 +238,7 @@ fun Tile(
                         modifier = Modifier.align(Alignment.Center),
                     )
                 } else {
-                    val iconShape by TileDefaults.animateIconShapeAsState(uiState.state)
+                    val iconShape by TileDefaults.animateIconShapeAsState(uiState.state, shapeMode)
                     val secondaryClick: (() -> Unit)? =
                         {
                                 hapticsViewModel?.setTileInteractionState(
@@ -306,11 +314,13 @@ fun LargeStaticTile(
     iconProvider: IconProvider,
     modifier: Modifier = Modifier,
 ) {
+    val shapeMode by rememberTileShapeMode()
+
     val colors = TileDefaults.getColorForState(uiState = uiState, iconOnly = false)
 
     Box(
         modifier
-            .clip(TileDefaults.animateTileShapeAsState(state = uiState.state).value)
+            .clip(TileDefaults.animateTileShapeAsState(state = uiState.state, shapeMode = shapeMode).value)
             .background(colors.background)
             .height(TileHeight)
             .largeTilePadding()
@@ -379,6 +389,28 @@ data class TileColors(
     val icon: Color,
     val alpha: Float = 1f,
 )
+
+@Composable
+private fun rememberTileShapeMode(): State<Int> {
+    val modeState = remember { mutableStateOf(0) }
+
+    val tuner = remember { Dependency.get(TunerService::class.java) }
+
+    LaunchedEffect(tuner) {
+        modeState.value = tuner.getValue(QS_TILE_SHAPE, 0)
+    }
+
+    DisposableEffect(tuner) {
+        val tunable = TunerService.Tunable { changedKey, newValue ->
+            if (changedKey == QS_TILE_SHAPE) {
+                modeState.value = TunerService.parseInteger(newValue, 0)
+            }
+        }
+        tuner.addTunable(tunable, QS_TILE_SHAPE)
+        onDispose { tuner.removeTunable(tunable) }
+    }
+    return modeState
+}
 
 private object TileDefaults {
     val ActiveIconCornerRadius = 16.dp
@@ -468,20 +500,22 @@ private object TileDefaults {
     }
 
     @Composable
-    fun animateIconShapeAsState(state: Int): State<RoundedCornerShape> {
+    fun animateIconShapeAsState(state: Int, shapeMode: Int): State<RoundedCornerShape> {
         return animateShapeAsState(
             state = state,
             activeCornerRadius = ActiveIconCornerRadius,
             label = "QSTileCornerRadius",
+            shapeMode = shapeMode,
         )
     }
 
     @Composable
-    fun animateTileShapeAsState(state: Int): State<RoundedCornerShape> {
+    fun animateTileShapeAsState(state: Int, shapeMode: Int): State<RoundedCornerShape> {
         return animateShapeAsState(
             state = state,
             activeCornerRadius = ActiveTileCornerRadius,
             label = "QSTileIconCornerRadius",
+            shapeMode = shapeMode,
         )
     }
 
@@ -490,14 +524,15 @@ private object TileDefaults {
         state: Int,
         activeCornerRadius: Dp,
         label: String,
+        shapeMode: Int,
     ): State<RoundedCornerShape> {
         val animatedCornerRadius by
             animateDpAsState(
-                targetValue =
-                    if (state == STATE_ACTIVE) {
-                        activeCornerRadius
-                    } else {
-                        InactiveCornerRadius
+                targetValue = when (shapeMode) {
+                        1 -> InactiveCornerRadius /* Circle */
+                        2 -> activeCornerRadius /* Rounded Square */
+                        3 -> 0.dp /* Square */
+                        else -> if (state == STATE_ACTIVE) activeCornerRadius else InactiveCornerRadius
                     },
                 label = label,
             )
