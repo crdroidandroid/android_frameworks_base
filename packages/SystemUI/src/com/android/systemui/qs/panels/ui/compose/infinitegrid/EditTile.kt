@@ -174,6 +174,7 @@ import com.android.systemui.qs.panels.ui.compose.EditTileListState.Companion.INV
 import com.android.systemui.qs.panels.ui.compose.dragAndDropRemoveZone
 import com.android.systemui.qs.panels.ui.compose.dragAndDropTileList
 import com.android.systemui.qs.panels.ui.compose.dragAndDropTileSource
+import com.android.systemui.qs.panels.ui.compose.infinitegrid.CommonTileDefaults.ActiveTileCornerRadius
 import com.android.systemui.qs.panels.ui.compose.infinitegrid.CommonTileDefaults.InactiveTileCornerRadius
 import com.android.systemui.qs.panels.ui.compose.infinitegrid.CommonTileDefaults.TileArrangementPadding
 import com.android.systemui.qs.panels.ui.compose.infinitegrid.CommonTileDefaults.TileHeight
@@ -186,6 +187,7 @@ import com.android.systemui.qs.panels.ui.compose.infinitegrid.EditModeTileDefaul
 import com.android.systemui.qs.panels.ui.compose.infinitegrid.EditModeTileDefaults.CurrentTilesGridPadding
 import com.android.systemui.qs.panels.ui.compose.infinitegrid.EditModeTileDefaults.GridBackgroundCornerRadius
 import com.android.systemui.qs.panels.ui.compose.infinitegrid.EditModeTileDefaults.TilePlacementSpec
+import com.android.systemui.qs.panels.ui.compose.infinitegrid.rememberTileShapeMode
 import com.android.systemui.qs.panels.ui.compose.selection.InteractiveTileContainer
 import com.android.systemui.qs.panels.ui.compose.selection.MutableSelectionState
 import com.android.systemui.qs.panels.ui.compose.selection.QSDragAnchorsData
@@ -1327,9 +1329,18 @@ fun EditTile(
     ) {
         // Icon
         Box(
-            Modifier.size(ToggleTargetSize).thenIf(tile.isDualTarget) {
-                Modifier.drawBehind { drawCircle(colors.iconBackground, alpha = progress()) }
-            }
+            Modifier.size(ToggleTargetSize)
+                .let {
+                    if (tile.isDualTarget) {
+                        it.tileBackground(
+                            cornerRadius = InactiveTileCornerRadius,
+                            alpha = { progress() },
+                            color = { colors.iconBackground },
+                        )
+                    } else {
+                        it
+                    }
+                }
         ) {
             SmallTileContent(
                 iconProvider = { tile.icon },
@@ -1358,13 +1369,26 @@ private fun MeasureScope.iconHorizontalCenter(
     return (containerSize - toggleTargetSize.roundToPx()) / 2f - padding.toPx()
 }
 
+@Composable
+private fun editTileShape(cornerRadius: Dp): RoundedCornerShape {
+    val shapeMode = rememberTileShapeMode()
+    val radius = when (shapeMode) {
+        1 -> InactiveTileCornerRadius /* Circle */
+        2 -> ActiveTileCornerRadius /* Rounded Square */
+        3 -> 0.dp /* Square */
+        else -> cornerRadius
+    }
+    return RoundedCornerShape(radius)
+}
+
+@Composable
 private fun Modifier.tileBackground(
     cornerRadius: Dp,
     alpha: () -> Float = { 1f },
     color: () -> Color,
 ): Modifier {
     // Clip tile contents from overflowing past the tile
-    return clip(RoundedCornerShape(cornerRadius)).drawBehind { drawRect(color(), alpha = alpha()) }
+    return clip(editTileShape(cornerRadius)).drawBehind { drawRect(color(), alpha = alpha()) }
 }
 
 private fun Modifier.keyboardShortcuts(
