@@ -60,7 +60,9 @@ import androidx.compose.ui.semantics.onLongClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.AnnotatedString
 import com.android.settingslib.net.DataUsageController
+import com.android.systemui.Dependency
 import com.android.systemui.res.R
+import com.android.systemui.tuner.TunerService
 
 /**
  * BuildNumber composable replaced with a data usage readout
@@ -71,6 +73,9 @@ fun BuildNumber(
     textColor: Color,
     modifier: Modifier = Modifier,
 ) {
+    val QS_SHOW_DATA_USAGE =
+        "system:" + Settings.System.QS_SHOW_DATA_USAGE
+
     val context = LocalContext.current
     val haptics = LocalHapticFeedback.current
     val clipboard = LocalClipboardManager.current
@@ -78,6 +83,29 @@ fun BuildNumber(
 
     var usageText by remember { mutableStateOf<String?>(null) }
     val subMgr = remember { SubscriptionManager.from(context) }
+    val duc = remember { DataUsageController(context) }
+
+    val tunerService = Dependency.get(TunerService::class.java)
+
+    val showDataUsage = remember {
+        mutableStateOf(
+            TunerService.parseIntegerSwitch(
+                tunerService.getValue(QS_SHOW_DATA_USAGE),
+                false
+            )
+        )
+    }
+
+    DisposableEffect(Unit) {
+        val tunable = TunerService.Tunable { k, newValue ->
+            if (k == QS_SHOW_DATA_USAGE) {
+                showDataUsage.value = TunerService.parseIntegerSwitch(newValue, false)
+            }
+        }
+        tunerService.addTunable(tunable, QS_SHOW_DATA_USAGE)
+        onDispose { tunerService.removeTunable(tunable) }
+    }
+
     var displaySubId by remember { mutableIntStateOf(currentDataSubId(context, subMgr)) }
 
     val mainHandler = remember { Handler(Looper.getMainLooper()) }
@@ -138,7 +166,6 @@ fun BuildNumber(
     fun updateUsage() {
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val wm = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
-        val duc = DataUsageController(context)
 
         val wifi = isWifiConnected(cm, wm)
         val hasSims = subMgr.activeSubscriptionInfoCount > 0
@@ -170,65 +197,69 @@ fun BuildNumber(
         mainHandler.postDelayed({ updateUsage() }, 300)
     }
 
-    LaunchedEffect(Unit) { updateUsage() }
+    LaunchedEffect(showDataUsage.value) { if (showDataUsage.value) updateUsage() else { usageText = null } }
 
-    DisposableEffect(Unit) {
-        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val wm = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
+    DisposableEffect(showDataUsage.value) {
+        if (!showDataUsage.value) {
+            onDispose { }
+        } else {
+            val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val wm = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
 
-        val wifiFilter = IntentFilter().apply {
-            addAction(WifiManager.WIFI_STATE_CHANGED_ACTION)
-            addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION)
-            addAction(WifiManager.RSSI_CHANGED_ACTION)
-        }
-        val receiver = object : BroadcastReceiver() {
-            override fun onReceive(context: Context?, intent: Intent?) { scheduleUpdateUsage() }
-        }
-        context.registerReceiver(receiver, wifiFilter)
-
-        val netCb = object : NetworkCallback() {
-            override fun onCapabilitiesChanged(network: Network, caps: NetworkCapabilities) {
-                scheduleUpdateUsage()
+            val wifiFilter = IntentFilter().apply {
+                addAction(WifiManager.WIFI_STATE_CHANGED_ACTION)
+                addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION)
+                addAction(WifiManager.RSSI_CHANGED_ACTION)
             }
-            override fun onLost(network: Network) {
-                scheduleUpdateUsage()
+            val receiver = object : BroadcastReceiver() {
+                override fun onReceive(context: Context?, intent: Intent?) { scheduleUpdateUsage() }
             }
-        }
-        cm.registerDefaultNetworkCallback(netCb)
+            context.registerReceiver(receiver, wifiFilter)
 
-        val settingsObserver = object : ContentObserver(mainHandler) {
-            override fun onChange(selfChange: Boolean) {
-                displaySubId = currentDataSubId(context, subMgr)
-                scheduleUpdateUsage()
-            }
-        }
-
-        val uri = Settings.Global.getUriFor(Settings.Global.MULTI_SIM_DATA_CALL_SUBSCRIPTION)
-        context.contentResolver.registerContentObserver(uri, false, settingsObserver)
-
-        val subListener = object : OnSubscriptionsChangedListener() {
-            override fun onSubscriptionsChanged() {
-                if (!SubscriptionManager.isValidSubscriptionId(displaySubId) ||
-                    subMgr.getActiveSubscriptionInfo(displaySubId) == null
-                ) {
-                    displaySubId = currentDataSubId(context, subMgr)
+            val netCb = object : NetworkCallback() {
+                override fun onCapabilitiesChanged(network: Network, caps: NetworkCapabilities) {
+                    scheduleUpdateUsage()
                 }
-                scheduleUpdateUsage()
+                override fun onLost(network: Network) {
+                    scheduleUpdateUsage()
+                }
             }
-        }
-        subMgr.addOnSubscriptionsChangedListener(subListener)
+            cm.registerDefaultNetworkCallback(netCb)
 
-        onDispose {
-            context.unregisterReceiver(receiver)
-            cm.unregisterNetworkCallback(netCb)
-            context.contentResolver.unregisterContentObserver(settingsObserver)
-            subMgr.removeOnSubscriptionsChangedListener(subListener)
-            mainHandler.removeCallbacksAndMessages(null)
+            val settingsObserver = object : ContentObserver(mainHandler) {
+                override fun onChange(selfChange: Boolean) {
+                    displaySubId = currentDataSubId(context, subMgr)
+                    scheduleUpdateUsage()
+                }
+            }
+
+            val uri = Settings.Global.getUriFor(Settings.Global.MULTI_SIM_DATA_CALL_SUBSCRIPTION)
+            context.contentResolver.registerContentObserver(uri, false, settingsObserver)
+
+            val subListener = object : OnSubscriptionsChangedListener() {
+                override fun onSubscriptionsChanged() {
+                    if (!SubscriptionManager.isValidSubscriptionId(displaySubId) ||
+                        subMgr.getActiveSubscriptionInfo(displaySubId) == null
+                    ) {
+                        displaySubId = currentDataSubId(context, subMgr)
+                    }
+                    scheduleUpdateUsage()
+                }
+            }
+            subMgr.addOnSubscriptionsChangedListener(subListener)
+
+            onDispose {
+                context.unregisterReceiver(receiver)
+                cm.unregisterNetworkCallback(netCb)
+                context.contentResolver.unregisterContentObserver(settingsObserver)
+                subMgr.removeOnSubscriptionsChangedListener(subListener)
+                mainHandler.removeCallbacksAndMessages(null)
+            }
         }
     }
 
     val text = usageText
-    if (text != null) {
+    if (showDataUsage.value && text != null) {
         Text(
             text = text,
             modifier =
