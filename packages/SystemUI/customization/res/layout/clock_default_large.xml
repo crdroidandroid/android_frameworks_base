@@ -27,6 +27,7 @@
     android:textAlignment="center"
     android:includeFontPadding="false"
     android:elegantTextHeight="false"
+    android:fontFeatureSettings="tnum"
     chargeAnimationDelay="200"
     dozeWeight="200"
     lockScreenWeight="400" />
