@@ -326,7 +326,7 @@ constructor(
             return showWeather
         }
 
-    val isCustomWeatherEnabled: Boolean
+    val isOmniWeatherEnabled: Boolean
         get() {
             val showCustomWeather =
                 systemSettings.getIntForUser(
