@@ -118,5 +118,9 @@ constructor(
         }
     }
 
-    override fun removeViews(constraintLayout: ConstraintLayout) {}
+    override fun removeViews(constraintLayout: ConstraintLayout) {
+        if (smartspaceController.isEnabled) return
+
+        constraintLayout.removeView(R.id.keyguard_slice_view)
+    }
 }
