@@ -541,6 +541,9 @@ public class OverScroller {
         // Current position
         private int mCurrentPosition;
 
+        // last frame position
+        private int mLastPosition;
+
         // Final position
         private int mFinal;
 
@@ -959,7 +962,16 @@ public class OverScroller {
             }
 
             mCurrentPosition = mStart + (int) Math.round(distance);
-
+            int deltaDistance = mCurrentPosition - mLastPosition;
+            if (!mFinished && deltaDistance == 0) {
+                int direction = mFinal > mStart ? 1 : -1;
+                mCurrentPosition += direction;
+                if ((direction > 0 && mCurrentPosition > mFinal) ||
+                    (direction < 0 && mCurrentPosition < mFinal)) {
+                    mCurrentPosition = mFinal;
+                }
+            }
+            mLastPosition = mCurrentPosition;
             return true;
         }
     }
