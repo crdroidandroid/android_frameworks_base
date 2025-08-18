@@ -3735,9 +3735,6 @@ public class ActivityTaskManagerService extends IActivityTaskManager.Stub {
                 // Keyguard asked us to clear the home task snapshot before going away, so do that.
                 if ((flags & KEYGUARD_GOING_AWAY_FLAG_TO_LAUNCHER_CLEAR_SNAPSHOT) != 0) {
                     mActivityClientController.invalidateHomeTaskSnapshot(null /* token */);
-                } else if (mKeyguardShown) {
-                    // Only set if it is not unlocking to launcher which may also animate.
-                    mDemoteTopAppReasons |= DEMOTE_TOP_REASON_DURING_UNLOCKING;
                 }
 
                 boolean foundResumed = false;
