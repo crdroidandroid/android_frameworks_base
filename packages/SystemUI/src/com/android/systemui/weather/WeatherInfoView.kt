@@ -28,24 +28,32 @@ class WeatherInfoView @JvmOverloads constructor(
 
     private lateinit var weatherIcon: ImageView
     private lateinit var weatherTemp: TextView
-
     private lateinit var controller: WeatherViewController
-    
+    private var initialized = false
+
     fun init() {
+        if (initialized) return
+        initialized = true
+
         weatherIcon = findViewById(R.id.weather_icon)
         weatherTemp = findViewById(R.id.weather_temp)
 
-        controller = WeatherViewController(
-            context,
-            weatherIcon,
-            weatherTemp,
-            this
-        )
-
+        controller = WeatherViewController(context, weatherIcon, weatherTemp, this)
         controller.init()
     }
 
     fun cleanup() {
-        controller.removeObserver()
+        if (::controller.isInitialized) controller.removeObserver()
+        initialized = false
+    }
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        if (!initialized) init()
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        cleanup()
     }
 }
