@@ -19,6 +19,7 @@ package android.security;
 import android.annotation.NonNull;
 import android.app.compat.CompatChanges;
 import android.hardware.security.keymint.KeyParameter;
+import android.hardware.security.keymint.Tag;
 import android.os.Binder;
 import android.os.RemoteException;
 import android.os.ServiceSpecificException;
@@ -32,6 +33,8 @@ import android.system.keystore2.KeyDescriptor;
 import android.system.keystore2.KeyMetadata;
 import android.system.keystore2.ResponseCode;
 import android.util.Log;
+
+import com.android.internal.util.crdroid.KeyboxImitationHooks;
 
 import java.util.Calendar;
 import java.util.Collection;
@@ -146,6 +149,19 @@ public class KeyStoreSecurityLevel {
             throws KeyStoreException {
         StrictMode.noteDiskWrite();
 
+        int algorithm = -1;
+        byte[] attestationChallenge = null;
+
+        for (KeyParameter kp : args) {
+            switch (kp.tag) {
+                case Tag.ALGORITHM -> algorithm = kp.value.getAlgorithm();
+                case Tag.ATTESTATION_CHALLENGE -> attestationChallenge = kp.value.getBlob();
+            }
+        }
+
+        KeyboxImitationHooks.putAlgo(algorithm);
+        KeyboxImitationHooks.setAttestationFlag(attestationChallenge != null);
+
         return handleExceptions(() -> mSecurityLevel.generateKey(
                 descriptor, attestationKey, args.toArray(new KeyParameter[args.size()]),
                 flags, entropy));
@@ -223,5 +239,9 @@ public class KeyStoreSecurityLevel {
         if (wasInterrupted) {
             Thread.currentThread().interrupt();
         }
+    }
+
+    public IKeystoreSecurityLevel getBinderInterface() {
+        return mSecurityLevel;
     }
 }
