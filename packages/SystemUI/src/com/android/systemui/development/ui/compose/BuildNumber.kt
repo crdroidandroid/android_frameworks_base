@@ -36,7 +36,6 @@ import android.text.format.Formatter
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.Text
 import androidx.compose.material3.minimumInteractiveComponentSize
@@ -50,6 +49,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.pointerInput
@@ -200,7 +200,9 @@ fun BuildNumber(
         mainHandler.postDelayed(updateRunnable, 300)
     }
 
-    LaunchedEffect(showDataUsage.value) { if (showDataUsage.value) updateUsage() else { usageText = null } }
+    LaunchedEffect(showDataUsage.value) {
+        if (showDataUsage.value) updateUsage() else usageText = ""   // keep stable Text node
+    }
 
     val latestUpdate by rememberUpdatedState(newValue = { updateUsage() })
 
@@ -264,45 +266,54 @@ fun BuildNumber(
         }
     }
 
-    val text = usageText
-    if (showDataUsage.value && text != null) {
-        Text(
-            text = text,
-            modifier =
-                modifier
-                    .focusable()
-                    .wrapContentWidth()
-                    .pointerInput(Unit) {
-                        detectTapGestures(
-                            onTap = {
-                                val list = subMgr.activeSubscriptionInfoList
-                                if (!list.isNullOrEmpty() && list.size > 1) {
-                                    val ids = list.sortedBy { it.simSlotIndex }.map { it.subscriptionId }
-                                    val idx = ids.indexOf(displaySubId).let { if (it < 0) 0 else it }
-                                    displaySubId = ids[(idx + 1) % ids.size]
-                                    updateUsage()
-                                }
-                            },
-                            onLongPress = {
-                                haptics.performHapticFeedback(HapticFeedbackType.LongPress)
-                                clipboard.setText(AnnotatedString(text))
-                            }
-                        )
-                    }
-                    .semantics {
-                        onLongClick(copyA11y) {
-                            clipboard.setText(AnnotatedString(text))
-                            true
+    val textToShow = if (showDataUsage.value) usageText.orEmpty() else ""
+
+    val base = modifier
+        .focusable()
+        .wrapContentWidth()
+        .minimumInteractiveComponentSize()
+        .pointerInput(Unit) {
+            detectTapGestures(
+                onTap = {
+                    if (!textToShow.isNullOrEmpty()) {
+                        val list = subMgr.activeSubscriptionInfoList
+                        if (!list.isNullOrEmpty() && list.size > 1) {
+                            val ids = list.sortedBy { it.simSlotIndex }.map { it.subscriptionId }
+                            val idx = ids.indexOf(displaySubId).let { if (it < 0) 0 else it }
+                            displaySubId = ids[(idx + 1) % ids.size]
+                            updateUsage()
                         }
                     }
-                    .basicMarquee(iterations = 1, initialDelayMillis = 2000)
-                    .minimumInteractiveComponentSize(),
-            color = textColor,
-            maxLines = 1,
-        )
+                },
+                onLongPress = {
+                    if (textToShow.isNotEmpty()) {
+                        haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                        clipboard.setText(AnnotatedString(textToShow))
+                    }
+                }
+            )
+        }
+        .semantics {
+            onLongClick(copyA11y) {
+                if (textToShow.isNotEmpty()) {
+                    clipboard.setText(AnnotatedString(textToShow))
+                    true
+                } else false
+            }
+        }
+
+    val marquee = if (textToShow.isNotEmpty()) {
+        base.basicMarquee(iterations = 1, initialDelayMillis = 2000)
     } else {
-        Spacer(modifier)
+        base
     }
+
+    Text(
+        text = textToShow,
+        modifier = marquee.alpha(if (textToShow.isNotEmpty()) 1f else 0f),
+        color = textColor,
+        maxLines = 1,
+    )
 }
 
 private fun currentDataSubId(context: Context, subMgr: SubscriptionManager): Int {
