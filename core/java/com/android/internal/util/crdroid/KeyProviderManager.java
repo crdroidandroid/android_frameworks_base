@@ -8,14 +8,19 @@ import android.app.ActivityThread;
 import android.content.Context;
 import android.provider.Settings;
 import android.util.Log;
+import android.text.TextUtils;
 import android.util.Xml;
 
 import com.android.internal.R;
+import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParser;
 
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,15 +29,40 @@ import java.util.Map;
  */
 public final class KeyProviderManager {
     private static final String TAG = "KeyProviderManager";
+    private static final int MAX_CERT_COUNT = 3;
+
+    private static IKeyboxProvider instance = null;
+    private static String lastKeyboxData = null;
 
     private KeyProviderManager() {}
 
-    public static IKeyboxProvider getProvider() {
-        return new DefaultKeyboxProvider();
+    public static synchronized IKeyboxProvider getProvider() {
+        Context context = DefaultKeyboxProvider.getApplicationContext();
+        if (context == null) {
+            return null;
+        }
+
+        String keyboxData = Settings.Secure.getString(
+                context.getContentResolver(), Settings.Secure.KEYBOX_DATA);
+                
+        if (TextUtils.isEmpty(keyboxData)) return null;
+
+        if (isSameData(lastKeyboxData, keyboxData)) {
+            return instance;
+        }
+
+        instance = new DefaultKeyboxProvider();
+        lastKeyboxData = keyboxData;
+        return instance;
     }
 
     public static boolean isKeyboxAvailable() {
-        return getProvider().hasKeybox();
+        IKeyboxProvider provider = getProvider();
+        return provider != null && provider.hasKeybox();
+    }
+
+    private static boolean isSameData(String oldData, String newData) {
+        return instance != null && TextUtils.equals(oldData, newData);
     }
 
     private static class DefaultKeyboxProvider implements IKeyboxProvider {
@@ -52,87 +82,23 @@ public final class KeyProviderManager {
 
         private boolean loadFromXmlSetting(Context ctx) {
             try {
-                String xml = Settings.Secure.getString(ctx.getContentResolver(), Settings.Secure.KEYBOX_DATA);
-                if (xml == null || xml.trim().isEmpty()) return false;
-
-                XmlPullParser p = Xml.newPullParser();
-                p.setInput(new StringReader(xml));
-
-                String currentAlg = null;
-                int certCount = 0;
-                boolean numberOfKeyboxesChecked = false;
-
-                for (int ev = p.next(); ev != XmlPullParser.END_DOCUMENT; ev = p.next()) {
-                    if (ev == XmlPullParser.START_TAG) {
-                        String tag = p.getName();
-                        switch (tag) {
-                            case "NumberOfKeyboxes":
-                                p.next();
-                                numberOfKeyboxesChecked = true;
-                                try {
-                                    int count = Integer.parseInt(p.getText().trim());
-                                    if (count != 1) {
-                                        Log.w(TAG, "Invalid NumberOfKeyboxes: " + count);
-                                        return false;
-                                    }
-                                } catch (NumberFormatException e) {
-                                    Log.w(TAG, "Failed to parse NumberOfKeyboxes", e);
-                                    return false;
-                                }
-                                break;
-
-                            case "Key":
-                                currentAlg = p.getAttributeValue(null, "algorithm");
-                                if ("ecdsa".equalsIgnoreCase(currentAlg)) currentAlg = "EC";
-                                else if ("rsa".equalsIgnoreCase(currentAlg)) currentAlg = "RSA";
-                                else currentAlg = null;
-                                certCount = 0;
-                                break;
-
-                            case "PrivateKey": {
-                                String format = p.getAttributeValue(null, "format");
-                                if (!"pem".equalsIgnoreCase(format)) {
-                                    Log.w(TAG, "Unsupported PrivateKey format: " + format);
-                                    return false;
-                                }
-                                p.next();
-                                if (currentAlg != null) {
-                                    keyboxData.put(currentAlg + ".PRIV", p.getText().trim());
-                                }
-                                break;
-                            }
-
-                            case "Certificate": {
-                                String format = p.getAttributeValue(null, "format");
-                                if (!"pem".equalsIgnoreCase(format)) {
-                                    Log.w(TAG, "Unsupported Certificate format: " + format);
-                                    return false;
-                                }
-                                if (currentAlg != null && certCount < 3) {
-                                    p.next();
-                                    certCount++;
-                                    keyboxData.put(currentAlg + ".CERT_" + certCount, p.getText().trim());
-                                }
-                                break;
-                            }
-                        }
-                    }
+                String json = Settings.Secure.getString(
+                    ctx.getContentResolver(), Settings.Secure.KEYBOX_DATA);
+                if (json == null || json.trim().isEmpty()) return false;
+                JSONObject obj = new JSONObject(json);
+                Iterator<String> keys = obj.keys();
+                while (keys.hasNext()) {
+                    String key = keys.next();
+                    keyboxData.put(key, obj.getString(key));
                 }
-
-                if (!numberOfKeyboxesChecked) {
-                    Log.w(TAG, "Missing <NumberOfKeyboxes> in keybox XML");
-                    return false;
-                }
-
                 if (!hasKeybox()) {
-                    Log.w(TAG, "Failed to load keybox from XML setting");
+                    Log.w(TAG, "Incomplete keybox data");
                     return false;
                 }
-
-                Log.i(TAG, "Loaded keybox from XML setting");
+                Log.i(TAG, "Loaded keybox from Secure settings");
                 return true;
             } catch (Exception e) {
-                Log.e(TAG, "XML keybox load failed", e);
+                Log.e(TAG, "Failed to load keybox JSON", e);
                 return false;
             }
         }
@@ -150,7 +116,7 @@ public final class KeyProviderManager {
             }
         }
 
-        private static Context getApplicationContext() {
+        public static Context getApplicationContext() {
             try {
                 return ActivityThread.currentApplication().getApplicationContext();
             } catch (Exception e) {
@@ -161,10 +127,15 @@ public final class KeyProviderManager {
 
         @Override
         public boolean hasKeybox() {
-            return Arrays.asList("EC.PRIV", "EC.CERT_1", "EC.CERT_2", "EC.CERT_3",
-                    "RSA.PRIV", "RSA.CERT_1", "RSA.CERT_2", "RSA.CERT_3")
-                    .stream()
-                    .allMatch(keyboxData::containsKey);
+            return hasCertificateChain("EC") || hasCertificateChain("RSA");
+        }
+
+        private boolean hasCertificateChain(String prefix) {
+            if (!keyboxData.containsKey(prefix + ".PRIV")) return false;
+            for (int i = 1; i <= MAX_CERT_COUNT; i++) {
+                if (keyboxData.containsKey(prefix + ".CERT_" + i)) return true;
+            }
+            return false;
         }
 
         @Override
@@ -188,11 +159,14 @@ public final class KeyProviderManager {
         }
 
         private String[] getCertificateChain(String prefix) {
-            return new String[]{
-                    keyboxData.get(prefix + ".CERT_1"),
-                    keyboxData.get(prefix + ".CERT_2"),
-                    keyboxData.get(prefix + ".CERT_3")
-            };
+            List<String> chain = new ArrayList<>(3);
+            for (int i = 1; i <= MAX_CERT_COUNT; i++) {
+                String key = prefix + ".CERT_" + i;
+                String val = keyboxData.get(key);
+                if (val == null) break;
+                chain.add(val);
+            }
+            return chain.toArray(new String[0]);
         }
     }
 }
