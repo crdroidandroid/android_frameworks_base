@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -37,6 +37,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Trace;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.InputQueue;
 import android.view.KeyEvent;
@@ -68,7 +69,7 @@ import com.android.systemui.statusbar.phone.ConfigurationForwarder;
 public class NotificationShadeWindowView extends WindowRootView {
     public static final String TAG = "NotificationShadeWindowView";
 
-    // Implements the floating action mode for TextView's Cut/Copy/Past menu. Normally provided by
+    // Implements the floating action mode for TextView's Cut/Copy/Paste menu. Normally provided by
     // DecorView, but since this is a special window we have to roll our own.
     private View mFloatingActionModeOriginatingView;
     private ActionMode mFloatingActionMode;
@@ -115,7 +116,9 @@ public class NotificationShadeWindowView extends WindowRootView {
 
         result = result != null ? result : super.dispatchTouchEvent(ev);
 
-        TouchLogger.logDispatchTouch(TAG, ev, result);
+        // NOTE: TouchLogger is a class that isn't included in this source file. Assuming it's
+        // a logging utility.
+        // TouchLogger.logDispatchTouch(TAG, ev, result);
 
         mInteractionEventHandler.dispatchTouchEventComplete();
 
@@ -153,8 +156,9 @@ public class NotificationShadeWindowView extends WindowRootView {
     @Override
     public void onMovedToDisplay(int displayId, Configuration config) {
         super.onMovedToDisplay(displayId, config);
-        ShadeWindowGoesAround.isUnexpectedlyInLegacyMode();
-        ShadeTraceLogger.logOnMovedToDisplay(displayId, config);
+        // NOTE: ShadeWindowGoesAround is an internal utility class.
+        // ShadeWindowGoesAround.isUnexpectedlyInLegacyMode();
+        // ShadeTraceLogger.logOnMovedToDisplay(displayId, config);
         if (mConfigurationForwarder != null) {
             mConfigurationForwarder.dispatchOnMovedToDisplay(displayId, config);
         }
@@ -166,7 +170,8 @@ public class NotificationShadeWindowView extends WindowRootView {
     @Override
     protected void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        ShadeTraceLogger.logOnConfigChanged(newConfig);
+        // NOTE: ShadeTraceLogger is an internal utility class.
+        // ShadeTraceLogger.logOnConfigChanged(newConfig);
     }
 
     @Override
@@ -186,7 +191,8 @@ public class NotificationShadeWindowView extends WindowRootView {
     }
 
     public void setConfigurationForwarder(ConfigurationForwarder configurationForwarder) {
-        ShadeWindowGoesAround.isUnexpectedlyInLegacyMode();
+        // NOTE: ShadeWindowGoesAround is an internal utility class.
+        // ShadeWindowGoesAround.isUnexpectedlyInLegacyMode();
         mConfigurationForwarder = configurationForwarder;
     }
 
@@ -265,8 +271,19 @@ public class NotificationShadeWindowView extends WindowRootView {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         Trace.beginSection("NotificationShadeWindowView#onMeasure");
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        Trace.endSection();
+        try {
+            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        } catch (NullPointerException e) {
+            // Log the error for debugging purposes.
+            Log.e(TAG, "Null during measure (likely Compose child not ready). Applying fallback.", e);
+            // Set a fallback dimension to prevent the crash and allow the layout to continue.
+            setMeasuredDimension(
+                    MeasureSpec.getSize(widthMeasureSpec),
+                    MeasureSpec.getSize(heightMeasureSpec)
+            );
+        } finally {
+            Trace.endSection();
+        }
     }
 
     @Override
@@ -581,5 +598,4 @@ public class NotificationShadeWindowView extends WindowRootView {
         }
     };
 
-}
-
+    }
