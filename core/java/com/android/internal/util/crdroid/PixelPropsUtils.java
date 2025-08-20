@@ -38,6 +38,7 @@ public final class PixelPropsUtils {
     private static final String DEVICE = "ro.product.device";
     private static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
 
+    private static final String SPOOF_PIXEL_PI = "persist.sys.pixelprops.pi";
     private static final String SPOOF_PIXEL_GAMES = "persist.sys.pixelprops.games";
     private static final String SPOOF_PIXEL_GPHOTOS = "persist.sys.pixelprops.gphotos";
     private static final String SPOOF_PIXEL_NETFLIX = "persist.sys.pixelprops.netflix";
@@ -73,6 +74,7 @@ public final class PixelPropsUtils {
             "com.google.android.apps.wallpaper",
             "com.google.android.apps.wallpaper.pixel",
             "com.google.android.apps.weather",
+            "com.google.android.gms",
             "com.google.android.googlequicksearchbox",
             "com.google.android.settings.intelligence",
             "com.google.android.wallpaper.effects",
@@ -247,6 +249,13 @@ public final class PixelPropsUtils {
                         !SystemProperties.getBoolean(SPOOF_PIXEL_NETFLIX, false)) {
                     if (DEBUG) Log.d(TAG, "Netflix spoofing disabled by system prop");
                     return;
+            } else if (packageName.equals("com.google.android.gms")) {
+                final String processName = Application.getProcessName().toLowerCase();
+                if (processName.contains("unstable")) {
+                    spoofBuildGms();
+                    return;
+                }
+                return;
             } else if (packageName.equals("com.google.android.settings.intelligence")) {
                 setPropValue("FINGERPRINT", Build.VERSION.INCREMENTAL);
                 return;
@@ -378,6 +387,41 @@ public final class PixelPropsUtils {
             field.setAccessible(false);
         } catch (Exception e) {
             Log.e(TAG, "Failed to set prop " + key, e);
+        }
+    }
+
+    private static void spoofBuildGms() {
+        if (!SystemProperties.getBoolean(SPOOF_PIXEL_PI, true))
+            return;
+        // Alter build parameters to avoid hardware attestation enforcement
+        setPropValue("MANUFACTURER", "Google");
+        setPropValue("MODEL", "Pixel 9 Pro XL");
+        setPropValue("FINGERPRINT", "google/komodo_beta/komodo:15/AP41.240925.009/12534705:user/release-keys");
+        setPropValue("BRAND", "google");
+        setPropValue("PRODUCT", "komodo_beta");
+        setPropValue("DEVICE", "komodo");
+        setPropValue("VERSION.RELEASE", "15");
+        setPropValue("ID", "AP41.240925.009");
+        setPropValue("VERSION.INCREMENTAL", "12534705");
+        setPropValue("TYPE", "user");
+        setPropValue("TAGS", "release-keys");
+        setPropValue("VERSION.SECURITY_PATCH", "2024-10-05");
+        setPropValue("VERSION.DEVICE_INITIAL_SDK_INT", "32");
+    }
+
+    private static boolean isCallerSafetyNet() {
+        return Arrays.stream(Thread.currentThread().getStackTrace())
+                        .anyMatch(elem -> elem.getClassName().toLowerCase()
+                            .contains("droidguard"));
+    }
+
+    public static void onEngineGetCertificateChain() {
+        if (!SystemProperties.getBoolean(SPOOF_PIXEL_PI, true))
+            return;
+        // Check stack for SafetyNet or Play Integrity
+        if (isCallerSafetyNet()) {
+            Log.i(TAG, "Blocked key attestation");
+            throw new UnsupportedOperationException();
         }
     }
 }
