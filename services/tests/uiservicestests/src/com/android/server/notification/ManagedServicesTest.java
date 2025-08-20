@@ -28,6 +28,7 @@ import static com.android.server.notification.ManagedServices.APPROVAL_BY_PACKAG
 import static com.android.server.notification.NotificationManagerService.privateSpaceFlagsEnabled;
 
 import static com.google.common.truth.Truth.assertThat;
+import static com.google.common.truth.Truth.assertWithMessage;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
@@ -2067,6 +2068,68 @@ public class ManagedServicesTest extends UiServiceTestCase {
         assertThat(service0.isSystemUi()).isTrue();
         service0.isSystemUi = false;
         assertThat(service0.isSystemUi()).isFalse();
+    }
+
+    @Test
+    public void setPackageOrComponentEnabled_tooManyPackages_stopsAdding() {
+        ManagedServices service = new TestManagedServices(getContext(), mLock, mUserProfiles,
+                mIpm, APPROVAL_BY_PACKAGE);
+        int userId = 0;
+
+        for (int i = 1; i <= 100; i++) {
+            assertWithMessage("Trying pkg" + i)
+                    .that(service.setPackageOrComponentEnabled("pkg" + i, userId, true, true))
+                    .isTrue();
+            assertThat(service.isPackageAllowed("pkg" + i, userId)).isTrue();
+        }
+
+        // And finally, monsieur, a wafer-thin mint.
+        assertThat(service.setPackageOrComponentEnabled("toomany", userId, true, true)).isFalse();
+        assertThat(service.isPackageAllowed("toomany", userId)).isFalse();
+
+        // We can still DISABLE packages though.
+        assertThat(service.isPackageAllowed("pkg33", userId)).isTrue();
+        assertThat(service.setPackageOrComponentEnabled("pkg33", userId, true, false)).isTrue();
+        assertThat(service.isPackageAllowed("pkg33", userId)).isFalse();
+
+        // And that allows adding new ones.
+        assertThat(service.setPackageOrComponentEnabled("onemore", userId, true, true)).isTrue();
+        assertThat(service.isPackageAllowed("onemore", userId)).isTrue();
+    }
+
+    @Test
+    public void setPackageOrComponentEnabled_tooManyChanges_stopsAddingToUserSet() {
+        ManagedServices service = new TestManagedServices(getContext(), mLock, mUserProfiles,
+                mIpm, APPROVAL_BY_PACKAGE);
+        int userId = 0;
+
+        for (int i = 1; i <= 100; i++) {
+            assertWithMessage("Enabling pkg" + i)
+                    .that(service.setPackageOrComponentEnabled("pkg" + i, userId, true, true))
+                    .isTrue();
+            assertWithMessage("Disabling pkg" + i)
+                    .that(service.setPackageOrComponentEnabled("pkg" + i, userId, true, false))
+                    .isTrue();
+            assertThat(service.isPackageAllowed("pkg" + i, userId)).isFalse();
+            assertThat(service.isPackageOrComponentUserSet("pkg" + i, userId)).isTrue();
+        }
+
+        // Too many disabled services.
+        assertThat(service.setPackageOrComponentEnabled("toomany", userId, true, true)).isTrue();
+        assertThat(service.isPackageAllowed("toomany", userId)).isTrue();
+        assertThat(service.isPackageOrComponentUserSet("toomany", userId)).isFalse();
+        assertThat(service.setPackageOrComponentEnabled("toomany", userId, true, false)).isTrue();
+        assertThat(service.isPackageAllowed("toomany", userId)).isFalse();
+        assertThat(service.isPackageOrComponentUserSet("toomany", userId)).isFalse();
+
+        // We make space only when packages are uninstalled.
+        service.onPackagesChanged(/* removingPackage= */ true, new String[] { "pkg22" },
+                new int[] { 22 });
+
+        // And that allows tracking new ones.
+        assertThat(service.setPackageOrComponentEnabled("onemore", userId, true, true)).isTrue();
+        assertThat(service.setPackageOrComponentEnabled("onemore", userId, true, false)).isTrue();
+        assertThat(service.isPackageOrComponentUserSet("onemore", userId)).isTrue();
     }
 
     private void mockServiceInfoWithMetaData(List<ComponentName> componentNames,

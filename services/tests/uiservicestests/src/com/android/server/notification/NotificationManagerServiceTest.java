@@ -708,6 +708,18 @@ public class NotificationManagerServiceTest extends UiServiceTestCase {
         mPolicyFile.finishWrite(fos);
 
         // Setup managed services
+        when(mListeners.setPackageOrComponentEnabled(any(), anyInt(), anyBoolean(), anyBoolean()))
+                .thenReturn(true);
+        when(mListeners.setPackageOrComponentEnabled(any(), anyInt(), anyBoolean(), anyBoolean(),
+                anyBoolean())).thenReturn(true);
+        when(mAssistants.setPackageOrComponentEnabled(any(), anyInt(), anyBoolean(), anyBoolean()))
+                .thenReturn(true);
+        when(mAssistants.setPackageOrComponentEnabled(any(), anyInt(), anyBoolean(), anyBoolean(),
+                anyBoolean())).thenReturn(true);
+        when(mConditionProviders.setPackageOrComponentEnabled(any(), anyInt(), anyBoolean(),
+                anyBoolean())).thenReturn(true);
+        when(mConditionProviders.setPackageOrComponentEnabled(any(), anyInt(), anyBoolean(),
+                anyBoolean(), anyBoolean())).thenReturn(true);
         when(mNlf.isTypeAllowed(anyInt())).thenReturn(true);
         when(mNlf.isPackageAllowed(any())).thenReturn(true);
         when(mNlf.isPackageAllowed(null)).thenReturn(true);
@@ -6048,6 +6060,21 @@ public class NotificationManagerServiceTest extends UiServiceTestCase {
 
         verify(mListeners).setPackageOrComponentEnabled(
                 c.flattenToString(), user.getIdentifier(), true, /* enabled= */ false, true);
+    }
+
+    @Test
+    public void testSetListenerAccessForUser_tooManyListeners_skipsFollowups() throws Exception {
+        UserHandle user = UserHandle.of(mContext.getUserId() + 10);
+        ComponentName c = ComponentName.unflattenFromString("package/Component");
+        when(mListeners.setPackageOrComponentEnabled(any(), anyInt(), anyBoolean(), anyBoolean(),
+                anyBoolean())).thenReturn(false);
+
+        mBinderService.setNotificationListenerAccessGrantedForUser(
+                c, user.getIdentifier(), /* enabled= */ true, true);
+
+        verify(mConditionProviders, never()).setPackageOrComponentEnabled(any(), anyInt(),
+                anyBoolean(), anyBoolean(), anyBoolean());
+        verify(mContext, never()).sendBroadcastAsUser(any(), any(), any());
     }
 
     @Test
