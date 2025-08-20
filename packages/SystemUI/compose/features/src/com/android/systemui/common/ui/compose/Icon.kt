@@ -16,6 +16,9 @@
 
 package com.android.systemui.common.ui.compose
 
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Rect
 import androidx.compose.foundation.Image
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
@@ -55,9 +58,12 @@ fun Icon(icon: Icon, modifier: Modifier = Modifier, tint: Color = LocalContentCo
             val drawable = remember(icon.res) {
                 ContextCompat.getDrawable(context, icon.res)
             }
+
             if (drawable != null) {
+                val bitmap = remember(drawable) { drawable.toBitmap() }
+                val croppedBitmap = remember(bitmap) { removeExtraSpaces(bitmap) }
                 Image(
-                    painter = rememberDrawablePainter(drawable),
+                    bitmap = croppedBitmap.asImageBitmap(),
                     contentDescription = contentDescription,
                     colorFilter = ColorFilter.tint(tint),
                     modifier = modifier,
@@ -65,4 +71,46 @@ fun Icon(icon: Icon, modifier: Modifier = Modifier, tint: Color = LocalContentCo
             }
         }
     }
+}
+
+private fun removeExtraSpaces(bitmap: Bitmap): Bitmap {
+    val width = bitmap.width
+    val height = bitmap.height
+    var top = 0
+    var left = 0
+    var right = width - 1
+    var bottom = height - 1
+    loop@ for (y in 0 until height) {
+        for (x in 0 until width) {
+            if (bitmap.getPixel(x, y) != 0) {
+                top = y
+                break@loop
+            }
+        }
+    }
+    loop@ for (y in height - 1 downTo 0) {
+        for (x in 0 until width) {
+            if (bitmap.getPixel(x, y) != 0) {
+                bottom = y
+                break@loop
+            }
+        }
+    }
+    loop@ for (x in 0 until width) {
+        for (y in 0 until height) {
+            if (bitmap.getPixel(x, y) != 0) {
+                left = x
+                break@loop
+            }
+        }
+    }
+    loop@ for (x in width - 1 downTo 0) {
+        for (y in 0 until height) {
+            if (bitmap.getPixel(x, y) != 0) {
+                right = x
+                break@loop
+            }
+        }
+    }
+    return Bitmap.createBitmap(bitmap, left, top, right - left + 1, bottom - top + 1)
 }
