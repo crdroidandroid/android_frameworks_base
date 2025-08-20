@@ -17,6 +17,7 @@
 
 package com.android.internal.util.crdroid;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Build;
@@ -27,8 +28,11 @@ import android.util.Log;
 import com.android.internal.R;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -39,6 +43,7 @@ public final class PixelPropsUtils {
     private static final String TAG = PixelPropsUtils.class.getSimpleName();
     private static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
 
+    private static final String SPOOF_PIXEL_PI = "persist.sys.pixelprops.pi";
     private static final String SPOOF_PIXEL_GAMES = "persist.sys.pixelprops.games";
     private static final String SPOOF_PIXEL_GPHOTOS = "persist.sys.pixelprops.gphotos";
     private static final String SPOOF_PIXEL_NETFLIX = "persist.sys.pixelprops.netflix";
@@ -89,6 +94,7 @@ public final class PixelPropsUtils {
             "com.google.android.apps.wallpaper",
             "com.google.android.apps.wallpaper.pixel",
             "com.google.android.apps.weather",
+            "com.google.android.gms",
             "com.google.android.googlequicksearchbox",
             "com.google.android.pcs",
             "com.google.android.settings.intelligence",
@@ -219,6 +225,8 @@ public final class PixelPropsUtils {
         propsToChangeS24U.put("MODEL", "SM-S928B");
     }
 
+    private static volatile List<String> sCertifiedProps;
+
     public static void setProps(Context context) {
         final String packageName = context.getPackageName();
         if (packageName == null || packageName.isEmpty()) {
@@ -238,6 +246,13 @@ public final class PixelPropsUtils {
                         !SystemProperties.getBoolean(SPOOF_PIXEL_NETFLIX, false)) {
                     if (DEBUG) Log.d(TAG, "Netflix spoofing disabled by system prop");
                     return;
+            } else if (packageName.equals("com.google.android.gms")) {
+                final String processName = Application.getProcessName().toLowerCase();
+                if (processName.contains("unstable")) {
+                    spoofBuildGms(context);
+                    return;
+                }
+                return;
             } else if (packageName.equals("com.google.android.settings.intelligence")) {
                 setPropValue("FINGERPRINT", Build.VERSION.INCREMENTAL);
                 return;
@@ -327,6 +342,43 @@ public final class PixelPropsUtils {
             field.setAccessible(false);
         } catch (Exception e) {
             Log.e(TAG, "Failed to set prop " + key, e);
+        }
+    }
+
+    private static void spoofBuildGms(Context context) {
+        if (!SystemProperties.getBoolean(SPOOF_PIXEL_PI, true))
+            return;
+
+        List<String> fresh = Arrays.asList(context.getResources()
+                 .getStringArray(R.array.config_certifiedBuildProperties));
+        sCertifiedProps = new ArrayList<>(fresh);
+        if (sCertifiedProps != null && !sCertifiedProps.isEmpty()) {
+            applyCertifiedProps();
+        }
+    }
+
+    private static void applyCertifiedProps() {
+        for (String entry : sCertifiedProps) {
+            String[] kv = entry.split(":", 2);
+            if (kv.length == 2) setPropValue(kv[0], kv[1]);
+        }
+    }
+
+    private static boolean isCallerSafetyNet() {
+        for (StackTraceElement e : Thread.currentThread().getStackTrace()) {
+            final String cn = e.getClassName();
+            if (cn != null && (cn.contains("DroidGuard") || cn.contains("droidguard"))) return true;
+        }
+        return false;
+    }
+
+    public static void onEngineGetCertificateChain() {
+        if (!SystemProperties.getBoolean(SPOOF_PIXEL_PI, true))
+            return;
+        // Check stack for SafetyNet
+        if (isCallerSafetyNet()) {
+            Log.i(TAG, "Blocked key attestation");
+            throw new UnsupportedOperationException();
         }
     }
 }
