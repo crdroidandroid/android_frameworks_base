@@ -20,6 +20,7 @@ import static android.os.Trace.TRACE_TAG_WINDOW_MANAGER;
 
 import static com.android.internal.protolog.WmProtoLogGroups.WM_DEBUG_SYNC_ENGINE;
 import static com.android.server.wm.WindowState.BLAST_TIMEOUT_DURATION;
+import static android.view.WindowManager.TRANSIT_TO_FRONT;
 
 import android.annotation.NonNull;
 import android.annotation.Nullable;
@@ -207,9 +208,14 @@ class BLASTSyncEngine {
             for (int i = mRootMembers.size() - 1; i >= 0; --i) {
                 final WindowContainer wc = mRootMembers.valueAt(i);
                 if (!wc.isSyncFinished(this)) {
-                    ProtoLog.v(WM_DEBUG_SYNC_ENGINE, "SyncGroup %d:  Unfinished container: %s",
-                            mSyncId, wc);
-                    return false;
+                    if(canIgnoreFromRecents(wc)){
+                        //if wallpaper has drawn, ignore unfinished container when window is animating by recents.
+                        Slog.w(TAG, "Sync group " + mSyncId + " ignoring " + wc + "when wallpaper has drawn");
+                    } else {
+                        ProtoLog.v(WM_DEBUG_SYNC_ENGINE, "SyncGroup %d:  Unfinished container: %s",
+                                mSyncId, wc);
+                        return false;
+                    }
                 }
             }
             finishNow();
@@ -655,5 +661,18 @@ class BLASTSyncEngine {
 
     void addOnIdleListener(Runnable onIdleListener) {
         mOnIdleListeners.add(onIdleListener);
+    }
+
+    /** @return {@code true} if wallpaper has drawn when window is animating by recents.*/
+    private boolean canIgnoreFromRecents(WindowContainer wc){
+
+        if(wc.asActivityRecord() != null && wc.getDisplayContent() != null
+            && wc.asActivityRecord().isActivityTypeHomeOrRecents()
+            && mWm.mAtmService.getTransitionController().getCollectingTransitionType() == TRANSIT_TO_FRONT
+            && wc.getDisplayContent().mWallpaperController.wallpaperTransitionReady()
+            && wc.getDisplayContent().mWallpaperController.getTopVisibleWallpaper() != null){
+            return true;
+        }
+        return false;
     }
 }
