@@ -263,11 +263,22 @@ public class NotificationShadeWindowView extends WindowRootView {
     }
 
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        Trace.beginSection("NotificationShadeWindowView#onMeasure");
+protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    Trace.beginSection("NotificationShadeWindowView#onMeasure");
+    try {
+        if (getChildCount() == 0 || getChildAt(0) == null || !getChildAt(0).isAttachedToWindow()) {
+            setMeasuredDimension(0, 0);
+            return;
+        }
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    } catch (NullPointerException e) {
+        android.util.Log.e(TAG, "onMeasure crashed due to detached Compose node", e);
+        post(this::requestLayout);
+        setMeasuredDimension(0, 0);
+    } finally {
         Trace.endSection();
     }
+}
 
     @Override
     public void requestLayout() {
