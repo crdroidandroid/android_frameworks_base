@@ -28,6 +28,7 @@ import android.net.NetworkCapabilities
 import android.net.wifi.WifiManager
 import android.os.Handler
 import android.os.Looper
+import android.os.UserHandle
 import android.provider.Settings
 import android.telephony.SubscriptionInfo
 import android.telephony.SubscriptionManager
@@ -61,9 +62,7 @@ import androidx.compose.ui.semantics.onLongClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.AnnotatedString
 import com.android.settingslib.net.DataUsageController
-import com.android.systemui.Dependency
 import com.android.systemui.res.R
-import com.android.systemui.tuner.TunerService
 
 /**
  * BuildNumber composable replaced with a data usage readout
@@ -74,9 +73,6 @@ fun BuildNumber(
     textColor: Color,
     modifier: Modifier = Modifier,
 ) {
-    val QS_SHOW_DATA_USAGE =
-        "system:" + Settings.System.QS_SHOW_DATA_USAGE
-
     val context = LocalContext.current
     val haptics = LocalHapticFeedback.current
     val clipboard = LocalClipboardManager.current
@@ -86,25 +82,15 @@ fun BuildNumber(
     val subMgr = remember { SubscriptionManager.from(context) }
     val duc = remember { DataUsageController(context) }
 
-    val tunerService = Dependency.get(TunerService::class.java)
-
     val showDataUsage = remember {
-        mutableStateOf(
-            TunerService.parseIntegerSwitch(
-                tunerService.getValue(QS_SHOW_DATA_USAGE),
-                false
-            )
-        )
-    }
-
-    DisposableEffect(Unit) {
-        val tunable = TunerService.Tunable { k, newValue ->
-            if (k == QS_SHOW_DATA_USAGE) {
-                showDataUsage.value = TunerService.parseIntegerSwitch(newValue, false)
-            }
+        val cr = context.contentResolver
+        try {
+            Settings.System.getIntForUser(
+                cr, Settings.System.QS_SHOW_DATA_USAGE, 0, UserHandle.USER_CURRENT
+            ) != 0
+        } catch (_: Throwable) {
+            false
         }
-        tunerService.addTunable(tunable, QS_SHOW_DATA_USAGE)
-        onDispose { tunerService.removeTunable(tunable) }
     }
 
     var displaySubId by remember { mutableIntStateOf(currentDataSubId(context, subMgr)) }
@@ -200,14 +186,14 @@ fun BuildNumber(
         mainHandler.postDelayed(updateRunnable, 300)
     }
 
-    LaunchedEffect(showDataUsage.value) {
-        if (showDataUsage.value) updateUsage() else usageText = ""   // keep stable Text node
+    LaunchedEffect(showDataUsage) {
+        if (showDataUsage) updateUsage() else usageText = ""   // keep stable Text node
     }
 
     val latestUpdate by rememberUpdatedState(newValue = { updateUsage() })
 
-    DisposableEffect(showDataUsage.value) {
-        if (!showDataUsage.value) {
+    DisposableEffect(showDataUsage) {
+        if (!showDataUsage) {
             onDispose { }
         } else {
             val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -266,7 +252,7 @@ fun BuildNumber(
         }
     }
 
-    val textToShow = if (showDataUsage.value) usageText.orEmpty() else ""
+    val textToShow = if (showDataUsage) usageText.orEmpty() else ""
 
     val base = modifier
         .focusable()
