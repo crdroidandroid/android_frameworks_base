@@ -181,7 +181,7 @@ private fun Modifier.selectionBorder(
     selectionBorderWidth: Dp,
     selectionAlpha: () -> Float = { 0f },
 ): Modifier {
-    val shapeMode by rememberTileShapeMode()
+    val shapeMode = rememberTileShapeMode()
     val borderRadiusPx = with(LocalDensity.current) {
         when (shapeMode) {
             1 -> InactiveCornerRadius.toPx()
