@@ -240,7 +240,7 @@ public class AnimationUtils {
             throws NotFoundException {
         int animStyle = Settings.System.getInt(
                 context.getContentResolver(), 
-                "system_animation_style", 0);
+                "system_animation_style", 3);
         if (animStyle != lastAnimStyle) {
             clearCachedAnimations();
             lastAnimStyle = animStyle;
