@@ -235,6 +235,7 @@ constructor(
                     ),
             )
             val smallClockTopMargin = keyguardClockViewModel.getSmallClockTopMargin()
+                    + context.resources.getDimensionPixelSize(R.dimen.keyguard_clock_top_margin)
             create(R.id.small_clock_guideline_top, ConstraintSet.HORIZONTAL_GUIDELINE)
             setGuidelineBegin(R.id.small_clock_guideline_top, smallClockTopMargin)
             connect(customR.id.lockscreen_clock_view, TOP, R.id.small_clock_guideline_top, BOTTOM)
@@ -245,6 +246,7 @@ constructor(
             val smallClockBottom =
                 keyguardClockViewModel.getSmallClockTopMargin() +
                     context.resources.getDimensionPixelSize(customR.dimen.small_clock_height)
+                    - context.resources.getDimensionPixelSize(R.dimen.keyguard_clock_top_margin)
             val marginBetweenSmartspaceAndNotification =
                 context.resources.getDimensionPixelSize(
                     R.dimen.keyguard_status_view_bottom_margin
