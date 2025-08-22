@@ -348,7 +348,11 @@ private fun NumberButton(
     val interactionSource = remember { MutableInteractionSource() }
 
     Expandable(
-        color = MaterialTheme.colorScheme.outlineVariant,
+        color = if (isSystemInDarkTheme()) {
+            colorResource(id = android.R.color.system_neutral1_800)
+        } else {
+            colorResource(id = android.R.color.system_neutral1_0)
+        },
         shape = CircleShape,
         onClick = onClick,
         interactionSource = interactionSource,
