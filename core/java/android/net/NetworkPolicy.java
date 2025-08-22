@@ -103,6 +103,22 @@ public class NetworkPolicy implements Parcelable, Comparable<NetworkPolicy> {
         }
     }
 
+    public static RecurrenceRule buildWeeklyRule(int cycleDay, ZoneId cycleTimezone) {
+        if (cycleDay != NetworkPolicy.CYCLE_NONE) {
+            return RecurrenceRule.buildRecurringWeekly(cycleDay, cycleTimezone);
+        } else {
+            return RecurrenceRule.buildNever();
+        }
+    }
+
+    public static RecurrenceRule buildDailyRule(int cycleDay, ZoneId cycleTimezone) {
+        if (cycleDay != NetworkPolicy.CYCLE_NONE) {
+            return RecurrenceRule.buildRecurringDaily(cycleDay, cycleTimezone);
+        } else {
+            return RecurrenceRule.buildNever();
+        }
+    }
+
     @Deprecated
     public NetworkPolicy(NetworkTemplate template, int cycleDay, String cycleTimezone,
             long warningBytes, long limitBytes, boolean metered) {
