@@ -908,9 +908,9 @@
          split shade on keyguard-->
     <dimen name="keyguard_split_shade_top_margin">68dp</dimen>
     <!-- The margin between the status view and the notifications on Keyguard.-->
-    <dimen name="keyguard_status_view_bottom_margin">20dp</dimen>
+    <dimen name="keyguard_status_view_bottom_margin">16dp</dimen>
     <!-- Minimum margin between clock and status bar -->
-    <dimen name="keyguard_clock_top_margin">18dp</dimen>
+    <dimen name="keyguard_clock_top_margin">16dp</dimen>
     <!-- The amount to shift the clocks during a small/large transition -->
     <dimen name="keyguard_clock_switch_y_shift">14dp</dimen>
 
