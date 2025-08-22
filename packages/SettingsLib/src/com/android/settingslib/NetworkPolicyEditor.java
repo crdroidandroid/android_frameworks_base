@@ -155,10 +155,44 @@ public class NetworkPolicyEditor {
         }
     }
 
+    public int getPolicyCycleDayOfWeek(NetworkTemplate template) {
+        final NetworkPolicy policy = getPolicy(template);
+        if (policy != null && policy.cycleRule.isWeekly()) {
+            return policy.cycleRule.start.getDayOfWeek().getValue();
+        } else {
+            return CYCLE_NONE;
+        }
+    }
+
+    public int getPolicyCycleHour(NetworkTemplate template) {
+        final NetworkPolicy policy = getPolicy(template);
+        if (policy != null && policy.cycleRule.isDaily()) {
+            return policy.cycleRule.start.getHour();
+        } else {
+            return CYCLE_NONE;
+        }
+    }
+
     @Deprecated
     public void setPolicyCycleDay(NetworkTemplate template, int cycleDay, String cycleTimezone) {
         final NetworkPolicy policy = getOrCreatePolicy(template);
         policy.cycleRule = NetworkPolicy.buildRule(cycleDay, ZoneId.of(cycleTimezone));
+        policy.inferred = false;
+        policy.clearSnooze();
+        writeAsync();
+    }
+
+    public void setPolicyCycleDayOfWeek(NetworkTemplate template, int cycleDay, String cycleTimezone) {
+        final NetworkPolicy policy = getOrCreatePolicy(template);
+        policy.cycleRule = NetworkPolicy.buildWeeklyRule(cycleDay, ZoneId.of(cycleTimezone));
+        policy.inferred = false;
+        policy.clearSnooze();
+        writeAsync();
+    }
+
+    public void setPolicyCycleHour(NetworkTemplate template, int cycleHour, String cycleTimezone) {
+        final NetworkPolicy policy = getOrCreatePolicy(template);
+        policy.cycleRule = NetworkPolicy.buildDailyRule(cycleHour, ZoneId.of(cycleTimezone));
         policy.inferred = false;
         policy.clearSnooze();
         writeAsync();

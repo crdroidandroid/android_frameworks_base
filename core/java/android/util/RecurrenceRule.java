@@ -29,6 +29,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ProtocolException;
 import java.time.Clock;
+import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.time.Period;
 import java.time.ZoneId;
@@ -78,6 +79,26 @@ public class RecurrenceRule implements Parcelable {
                 now.toLocalDate().minusYears(1).withMonth(1).withDayOfMonth(dayOfMonth),
                 LocalTime.MIDNIGHT, zone);
         return new RecurrenceRule(start, null, Period.ofMonths(1));
+    }
+
+    @UnsupportedAppUsage
+    public static RecurrenceRule buildRecurringWeekly(int dayOfWeek, ZoneId zone) {
+        final ZonedDateTime now = ZonedDateTime.now(sClock).withZoneSameInstant(zone);
+        final DayOfWeek dayNow = now.getDayOfWeek();
+        final DayOfWeek dayStart = DayOfWeek.of(dayOfWeek);
+        final int minusDays = dayNow.getValue() - dayStart.getValue();
+        final ZonedDateTime start = ZonedDateTime.of(
+                now.toLocalDate().minusWeeks(1).minusDays(minusDays),
+                LocalTime.MIDNIGHT, zone);
+        return new RecurrenceRule(start, null, Period.ofWeeks(1));
+    }
+
+    @UnsupportedAppUsage
+    public static RecurrenceRule buildRecurringDaily(int hourOfDay, ZoneId zone) {
+        final ZonedDateTime now = ZonedDateTime.now(sClock).withZoneSameInstant(zone);
+        final ZonedDateTime start = ZonedDateTime.of(now.toLocalDate(),
+                LocalTime.MIDNIGHT.plusHours(hourOfDay), zone);
+        return new RecurrenceRule(start, null, Period.ofDays(1));
     }
 
     private RecurrenceRule(Parcel source) {
@@ -166,6 +187,24 @@ public class RecurrenceRule implements Parcelable {
                 && period.getYears() == 0
                 && period.getMonths() == 1
                 && period.getDays() == 0;
+    }
+
+    @UnsupportedAppUsage
+    public boolean isWeekly() {
+        return start != null
+                && period != null
+                && period.getYears() == 0
+                && period.getMonths() == 0
+                && period.getDays() == 7;
+    }
+
+    @UnsupportedAppUsage
+    public boolean isDaily() {
+        return start != null
+                && period != null
+                && period.getYears() == 0
+                && period.getMonths() == 0
+                && period.getDays() == 1;
     }
 
     public Iterator<Range<ZonedDateTime>> cycleIterator() {
