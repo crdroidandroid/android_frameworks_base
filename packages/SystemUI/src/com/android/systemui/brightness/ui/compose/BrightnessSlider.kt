@@ -18,6 +18,8 @@ package com.android.systemui.brightness.ui.compose
 
 import android.content.Context
 import android.graphics.PorterDuff
+import android.graphics.drawable.AnimatedStateListDrawable
+import android.graphics.drawable.StateListDrawable
 import android.os.UserHandle
 import android.provider.Settings
 import android.view.MotionEvent
@@ -93,6 +95,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.android.app.tracing.coroutines.launchTraced as launch
 import com.android.compose.modifiers.padding
@@ -371,12 +374,27 @@ fun BrightnessSlider(
             )
 
             AndroidView(
-                factory = { factoryContext ->
-                    ImageButton(factoryContext).apply {
+                factory = { ctx ->
+                    ImageButton(ctx).apply {
                         setBackgroundResource(0)
                         scaleType = ImageView.ScaleType.CENTER_INSIDE
-                        val drawable = factoryContext.getDrawable(R.drawable.ic_qs_brightness_auto)
-                        setImageDrawable(drawable)
+
+                        val animatedOrNull = runCatching {
+                            ResourcesCompat.getDrawable(
+                                resources, R.drawable.ic_qs_brightness_auto, ctx.theme
+                            )
+                        }.getOrNull()
+
+                        val fallback = {
+                            ResourcesCompat.getDrawable(
+                                resources,
+                                if (autoMode) R.drawable.ic_qs_brightness_auto_on
+                                else R.drawable.ic_qs_brightness_auto_off,
+                                ctx.theme
+                            )
+                        }
+
+                        setImageDrawable(animatedOrNull ?: fallback())
                     }
                 },
                 modifier = Modifier
@@ -384,18 +402,36 @@ fun BrightnessSlider(
                     .clip(CircleShape)
                     .background(autoBrightnessBackgroundColor),
                 update = { button ->
-                    val targetState = if (autoMode) {
-                        intArrayOf(android.R.attr.state_checked)
-                    } else {
-                        intArrayOf()
-                    }
-                    button.setImageState(targetState, false)
-                    button.setColorFilter(autoBrightnessIconTint.toArgb(), PorterDuff.Mode.SRC_IN)
-                    button.setOnClickListener {
-                        coroutineScope.launch {
-                            onIconClick()
+                    val targetState =
+                        if (autoMode) intArrayOf(android.R.attr.state_checked) else intArrayOf()
+
+                    val drawable = button.drawable
+                    val supportsState =
+                        drawable is StateListDrawable ||
+                        drawable is AnimatedStateListDrawable
+
+                    val transitioned = if (supportsState) {
+                        try {
+                            button.setImageState(targetState, /*animate=*/true)
+                            true
+                        } catch (_: Throwable) {
+                            false
                         }
+                    } else false
+
+                    if (!transitioned) {
+                        button.setImageDrawable(
+                            ResourcesCompat.getDrawable(
+                                button.resources,
+                                if (autoMode) R.drawable.ic_qs_brightness_auto_on
+                                else R.drawable.ic_qs_brightness_auto_off,
+                                button.context.theme
+                            )
+                        )
                     }
+
+                    button.setColorFilter(autoBrightnessIconTint.toArgb(), PorterDuff.Mode.SRC_IN)
+                    button.setOnClickListener { coroutineScope.launch { onIconClick() } }
                 }
             )
         }
