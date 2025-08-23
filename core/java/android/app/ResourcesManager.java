@@ -1782,7 +1782,7 @@ public class ResourcesManager {
             final WeakReference<ResourcesImpl> weakImplRef = mResourceImpls.valueAt(i);
             final ResourcesImpl impl = weakImplRef != null ? weakImplRef.get() : null;
             if (impl == null) {
-                Slog.w(TAG, "Found a null ResourcesImpl, skipped.");
+                if (DEBUG) Slog.w(TAG, "Found a null ResourcesImpl, skipped.");
                 continue;
             }
 
