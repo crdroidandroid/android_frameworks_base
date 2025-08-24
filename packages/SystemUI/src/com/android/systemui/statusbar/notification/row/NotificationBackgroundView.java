@@ -82,6 +82,8 @@ public class NotificationBackgroundView extends View implements Dumpable,
     // True only if the dismiss button is visible.
     private boolean mDrawDismissButtonCutout = false;
 
+    private boolean mIsBlurSupported = false;
+
     public NotificationBackgroundView(Context context, AttributeSet attrs) {
         super(context, attrs);
         mDontModifyCorners = getResources().getBoolean(R.bool.config_clipNotificationsToOutline);
@@ -331,7 +333,7 @@ public class NotificationBackgroundView extends View implements Dumpable,
         baseLayer.mutate().setTintMode(PorterDuff.Mode.SRC_ATOP);
         baseLayer.setTint(tintColor);
         mTintColor = tintColor;
-        if (notificationRowTransparency()) {
+        if (mIsBlurSupported) {
             updateBaseLayerColor();
         }
         setStatefulColors();
@@ -512,5 +514,9 @@ public class NotificationBackgroundView extends View implements Dumpable,
                 + " bgColor=" + DrawableDumpKt.getSolidColor(mBackground)
                 + ">";
 
+    }
+
+    public void setIsBlurSupported(boolean isBlurSupported) {
+        mIsBlurSupported = isBlurSupported;
     }
 }
