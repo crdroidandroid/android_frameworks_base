@@ -1011,7 +1011,7 @@ public class ExpandableNotificationRow extends ActivatableNotificationView
         } else if (isAboveShelf() != wasAboveShelf) {
             mAboveShelfChangedListener.onAboveShelfStateChanged(!wasAboveShelf);
         }
-        if (notificationRowTransparency()) {
+        if (mIsBlurSupported) {
             updateColors();
         }
     }
@@ -1717,7 +1717,7 @@ public class ExpandableNotificationRow extends ActivatableNotificationView
         if (view != null) {
             view.setBackgroundTintColor(color);
         }
-        if (notificationRowTransparency() && mBackgroundNormal != null) {
+        if (mIsBlurSupported && mBackgroundNormal != null) {
             if (NotificationBundleUi.isEnabled() && mEntryAdapter != null) {
                 mBackgroundNormal.setBgIsColorized(mEntryAdapter.isColorized());
             } else {
@@ -3196,9 +3196,15 @@ public class ExpandableNotificationRow extends ActivatableNotificationView
                     mChildrenContainer.setOnKeyguard(onKeyguard);
                 }
             }
-            if (notificationRowTransparency()) {
+            if (mIsBlurSupported) {
                 updateColors();
             }
+        }
+    }
+
+    public void updateIfNeeded() {
+        if (mIsBlurSupported) {
+            updateColors();
         }
     }
 
@@ -4046,7 +4052,7 @@ public class ExpandableNotificationRow extends ActivatableNotificationView
             }
         } else if (isChildInGroup()) {
             final int childColor = getShowingLayout().getBackgroundColorForExpansionState();
-            if ((Flags.notificationRowTransparency() || notificationsRedesignTemplates())
+            if ((mIsBlurSupported || notificationsRedesignTemplates())
                     && childColor == Color.TRANSPARENT) {
                 // If child is not customizing its background color, switch from the parent to
                 // the child background when the expansion finishes.
