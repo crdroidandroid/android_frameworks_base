@@ -34,14 +34,19 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.app.Fragment;
 import android.content.res.Resources;
+import android.database.ContentObserver;
 import android.graphics.Insets;
 import android.graphics.Rect;
 import android.graphics.Region;
+import android.os.Handler;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.util.IndentingPrintWriter;
 import android.util.Log;
 import android.util.MathUtils;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
+import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.WindowInsets;
@@ -86,6 +91,7 @@ import com.android.systemui.statusbar.PulseExpansionHandler;
 import com.android.systemui.statusbar.QsFrameTranslateController;
 import com.android.systemui.statusbar.StatusBarState;
 import com.android.systemui.statusbar.notification.domain.interactor.ActiveNotificationsInteractor;
+import com.android.systemui.statusbar.notification.row.ExpandableNotificationRow;
 import com.android.systemui.statusbar.notification.stack.AmbientState;
 import com.android.systemui.statusbar.notification.stack.NotificationStackScrollLayout;
 import com.android.systemui.statusbar.notification.stack.NotificationStackScrollLayoutController;
@@ -288,7 +294,8 @@ public class QuickSettingsControllerImpl implements QuickSettingsController, Dum
     private long mNotificationBoundsAnimationDuration;
 
     private int mOneFingerQuickSettingsIntercept;
-
+    private final ContentObserver mTranslucentObserver;
+    
     private final Region mInterceptRegion = new Region();
     /** The end bounds of a clipping animation. */
     private final Rect mClippingAnimationEndBounds = new Rect();
@@ -401,6 +408,13 @@ public class QuickSettingsControllerImpl implements QuickSettingsController, Dum
         mTunerService = tunerService;
 
         mLockscreenShadeTransitionController.addCallback(new LockscreenShadeTransitionCallback());
+
+        mTranslucentObserver = new ContentObserver(null) {
+            @Override
+            public void onChange(boolean selfChange) {
+                onTransparencyUpdated();
+            }
+        };
 
         dumpManager.registerDumpable(this);
 
@@ -2247,6 +2261,12 @@ public class QuickSettingsControllerImpl implements QuickSettingsController, Dum
             }
             mQs.setScrollListener(mQsScrollListener);
             mTunerService.addTunable(this, STATUS_BAR_QUICK_QS_PULLDOWN);
+                    mPanelView.getContext().getContentResolver().registerContentObserver(
+                    Settings.Secure.getUriFor(
+                            "notification_row_transparency"),
+                    false, mTranslucentObserver,
+                    UserHandle.USER_ALL);
+            mTranslucentObserver.onChange(true);
             updateExpansion();
         }
 
@@ -2254,6 +2274,8 @@ public class QuickSettingsControllerImpl implements QuickSettingsController, Dum
         @Override
         public void onFragmentViewDestroyed(String tag, Fragment fragment) {
             mTunerService.removeTunable(this);
+            mPanelView.getContext().getContentResolver().unregisterContentObserver(
+                    mTranslucentObserver);
             // Manual handling of fragment lifecycle is only required because this bridges
             // non-fragment and fragment code. Once we are using a fragment for the notification
             // panel, mQs will not need to be null cause it will be tied to the same lifecycle.
@@ -2447,4 +2469,21 @@ public class QuickSettingsControllerImpl implements QuickSettingsController, Dum
         void onFlingQsWithoutClick(ValueAnimator animator, float qsExpansionHeight,
                 float target, float vel);
     }
+
+    public final void onTransparencyUpdated() {
+        NotificationStackScrollLayoutController controller = mNotificationStackScrollLayoutController;
+        if (controller == null || controller.getView() == null) {
+            return;
+        }
+        NotificationStackScrollLayout view = controller.getView();
+        int childCount = view.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View child = view.getChildAt(i);
+            if (child instanceof ExpandableNotificationRow) {
+                final ExpandableNotificationRow row = (ExpandableNotificationRow) child;
+                child.post(row::updateIfNeeded);
+            }
+        }
+    }
+
 }

@@ -17,7 +17,11 @@
 package com.android.systemui.window.data.repository
 
 import android.app.ActivityManager
+import android.content.Context
+import android.database.ContentObserver
 import android.os.SystemProperties
+import android.os.UserHandle
+import android.provider.Settings
 import android.view.CrossWindowBlurListeners
 import com.android.systemui.common.coroutine.ChannelExt.trySendWithFailureLogging
 import com.android.systemui.dagger.SysUISingleton
@@ -44,6 +48,8 @@ interface WindowRootViewBlurRepository {
 
     /** Is blur supported based on settings toggle and battery power saver mode. */
     val isBlurSupported: StateFlow<Boolean>
+    
+    val isTranslucentSupported: StateFlow<Boolean>
 
     var blurAppliedListener: BlurAppliedListener?
 
@@ -66,6 +72,7 @@ constructor(
     crossWindowBlurListeners: CrossWindowBlurListeners,
     @Main private val executor: Executor,
     @Application private val scope: CoroutineScope,
+    @Application private val context: Context
 ) : WindowRootViewBlurRepository {
     override val blurRequestedByShade = MutableStateFlow(0)
 
@@ -86,8 +93,38 @@ constructor(
                 awaitClose { crossWindowBlurListeners.removeListener(sendUpdate) }
             } // stateIn because this is backed by a binder call.
             .stateIn(scope, SharingStarted.WhileSubscribed(), false)
+            
+    override val isTranslucentSupported: StateFlow<Boolean> =
+        conflatedCallbackFlow {
+            val sendUpdate = {
+                trySendWithFailureLogging(
+                    isTranslucentEnabled(),
+                    TAG,
+                    "unable to send notificationRowTransparency state change",
+                )
+            }
+            val observer = object : ContentObserver(null) {
+                override fun onChange(selfChange: Boolean) = sendUpdate()
+            }
+            val resolver = context.contentResolver
+            resolver.registerContentObserver(
+                Settings.Secure.getUriFor("notification_row_transparency"),
+                false,
+                observer
+            )
+            sendUpdate()
+            awaitClose { resolver.unregisterContentObserver(observer) }
+        }
+        .stateIn(scope, SharingStarted.WhileSubscribed(), isTranslucentEnabled())
 
     override var blurAppliedListener: BlurAppliedListener? = null
+
+    private fun isTranslucentEnabled(): Boolean {
+        return Settings.Secure.getIntForUser(
+            context.contentResolver,
+            "notification_row_transparency",
+            0, UserHandle.USER_CURRENT) == 1
+    }
 
     private fun isBlurAllowed(): Boolean {
         return ActivityManager.isHighEndGfx() && !isDisableBlurSysPropSet()

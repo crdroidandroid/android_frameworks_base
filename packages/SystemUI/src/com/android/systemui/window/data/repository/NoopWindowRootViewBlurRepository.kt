@@ -24,5 +24,6 @@ class NoopWindowRootViewBlurRepository @Inject constructor() : WindowRootViewBlu
     override val blurRequestedByShade: MutableStateFlow<Int> = MutableStateFlow(0)
     override val isBlurOpaque: MutableStateFlow<Boolean> = MutableStateFlow(true)
     override val isBlurSupported: StateFlow<Boolean> = MutableStateFlow(false)
+    override val isTranslucentSupported: StateFlow<Boolean> = MutableStateFlow(false)
     override var blurAppliedListener: BlurAppliedListener? = null
 }

@@ -53,7 +53,7 @@ constructor(
         }
     }
 
-    val isBlurSupported: Flow<Boolean> = windowRootViewBlurInteractor.isBlurCurrentlySupported
+    val isBlurSupported: Flow<Boolean> = windowRootViewBlurInteractor.isTranslucentSupported
 
     /** Notifies that the user has clicked the shelf. */
     fun onShelfClicked() {

@@ -30,6 +30,7 @@ import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Trace;
+import android.provider.Settings;
 import android.os.UserHandle;
 import android.text.Editable;
 import android.text.SpannedString;
@@ -246,7 +247,7 @@ public class RemoteInputView extends LinearLayout implements View.OnClickListene
         mProgressBar.setProgressTintList(accentColor);
         mProgressBar.setIndeterminateTintList(accentColor);
         mProgressBar.setSecondaryProgressTintList(accentColor);
-        if (!Flags.notificationRowTransparency()) {
+        if (!translucentEnabled()) {
             setBackgroundColor(backgroundColor);
         }
     }
@@ -462,7 +463,7 @@ public class RemoteInputView extends LinearLayout implements View.OnClickListene
                 if (mWrapper != null) {
                     mWrapper.setRemoteInputVisible(false);
                 }
-                if (Flags.notificationRowTransparency()) {
+                if (translucentEnabled()) {
                     if (actionsContainer != null) actionsContainer.setAlpha(1);
                 }
             }
@@ -829,7 +830,7 @@ public class RemoteInputView extends LinearLayout implements View.OnClickListene
                     ObjectAnimator.ofFloat(fadeOutView, View.ALPHA, 1f, 0f);
             fadeOutViewAlphaAnimator.setDuration(FOCUS_ANIMATION_CROSSFADE_DURATION);
             fadeOutViewAlphaAnimator.setInterpolator(InterpolatorsAndroidX.LINEAR);
-            if (!Flags.notificationRowTransparency()) {
+            if (!translucentEnabled()) {
                 animatorSet.addListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation, boolean isReverse) {
@@ -899,6 +900,11 @@ public class RemoteInputView extends LinearLayout implements View.OnClickListene
             mContentBackgroundBounds = contentBackgroundBounds;
         }
         setTranslationY(verticalBoundOffset);
+    }
+    
+    private boolean translucentEnabled() {
+        return Settings.Secure.getIntForUser(mContext.getContentResolver(), 
+            "notification_row_transparency", 0, UserHandle.USER_CURRENT) != 0;
     }
 
     /** Handler for button click on send action in IME. */
