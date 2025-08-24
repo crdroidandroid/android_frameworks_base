@@ -28,6 +28,7 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.VectorConverter
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -44,6 +45,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
@@ -150,6 +152,14 @@ fun BrightnessSlider(
     val cr = context.contentResolver
 
     var hapticsEnabled by remember { mutableStateOf(readEnableHaptics(cr)) }
+
+    val shapeMode = rememberSliderShapeMode()
+    val trackCornerDp: Dp = when (shapeMode) {
+        1 -> 24.dp  /* Circle */
+        2 -> 12.dp  /* Rounded Square */
+        3 -> 0.dp /* Square */
+        else -> SliderTrackRoundedCorner
+    }
 
     var value by remember(gammaValue) { mutableIntStateOf(gammaValue) }
     val animatedValue by
@@ -377,7 +387,7 @@ fun BrightnessSlider(
                                 )
                             }
                         },
-                trackCornerSize = SliderTrackRoundedCorner,
+                trackCornerSize = trackCornerDp,
                 trackInsideCornerSize = 2.dp,
                 drawStopIndicator = null,
                 thumbTrackGapSize = ThumbTrackGapSize,
@@ -406,6 +416,46 @@ fun BrightnessSlider(
             }
         }
     }
+}
+
+@Composable
+fun rememberSliderShapeMode(): Int {
+    val context = LocalContext.current
+    val contentResolver = context.contentResolver
+
+    fun readShapeMode(): Int {
+        return try {
+            Settings.System.getIntForUser(
+                contentResolver, Settings.System.QS_BRIGHTNESS_SLIDER_SHAPE, 0,
+                UserHandle.USER_CURRENT
+            )
+        } catch (_: Throwable) {
+            0
+        }
+    }
+
+    var shapeMode by remember { mutableIntStateOf(readShapeMode()) }
+
+    DisposableEffect(contentResolver) {
+        val observer = object : ContentObserver(null) {
+            override fun onChange(selfChange: Boolean) {
+                context.mainExecutor.execute {
+                    shapeMode = readShapeMode()
+                }
+            }
+        }
+
+        contentResolver.registerContentObserver(
+            Settings.System.getUriFor(Settings.System.QS_BRIGHTNESS_SLIDER_SHAPE),
+            false, observer, UserHandle.USER_ALL
+        )
+
+        onDispose {
+            contentResolver.unregisterContentObserver(observer)
+        }
+    }
+
+    return shapeMode
 }
 
 private fun Modifier.sliderBackground(
@@ -474,6 +524,20 @@ private fun drawAutoBrightnessButton(
     } else {
         HapticFeedbackConstants.TOGGLE_ON
     }
+    val animatedCornerRadius by animateDpAsState(
+        targetValue = if (autoMode) {
+            SliderTrackRoundedCorner
+        } else {
+            26.dp
+        }
+    )
+    val shapeMode = rememberSliderShapeMode()
+    val autoIconShape = when (shapeMode) {
+        1 -> CircleShape
+        2 -> RoundedCornerShape(12.dp)
+        3 -> RoundedCornerShape(0.dp)
+        else -> RoundedCornerShape(animatedCornerRadius)
+    }
 
     IconButton(
         onClick = {
@@ -484,7 +548,7 @@ private fun drawAutoBrightnessButton(
         },
         modifier = Modifier
             .size(52.dp)
-            .clip(CircleShape)
+            .clip(autoIconShape)
             .background(backgroundColor)
     ) {
         Icon(
@@ -516,6 +580,20 @@ fun BrightnessSliderContainer(
     val overriddenByAppState by viewModel.brightnessOverriddenByWindow.collectAsStateWithLifecycle()
     var dragging by remember { mutableStateOf(false) }
     var enabled by remember { mutableStateOf(false) }
+
+    val shapeMode = rememberSliderShapeMode()
+    val trackCornerDp: Dp = when (shapeMode) {
+        1 -> 24.dp  /* Circle */
+        2 -> 12.dp  /* Rounded Square */
+        3 -> 0.dp /* Square */
+        else -> SliderTrackRoundedCorner
+    }
+    val backgroundRoundedCorner: Dp = when (shapeMode) {
+        1 -> 50.dp  /* Circle */
+        2 -> 24.dp  /* Rounded Square */
+        3 -> 0.dp /* Square */
+        else -> dimensions.backgroundRoundedCorner
+    }
 
     DisposableEffectWithLifecycle(Unit) {
         enabled = true
@@ -569,12 +647,12 @@ fun BrightnessSliderContainer(
             modifier =
                 Modifier.borderOnFocus(
                         color = MaterialTheme.colorScheme.secondary,
-                        cornerSize = CornerSize(SliderTrackRoundedCorner),
+                        cornerSize = CornerSize(trackCornerDp),
                     )
                     .then(if (viewModel.showMirror) Modifier.drawInOverlay() else Modifier)
                     .sliderBackground(
                         DpSize(dimensions.backgroundFrameWidth, dimensions.backgroundFrameHeight),
-                        dimensions.backgroundRoundedCorner,
+                        backgroundRoundedCorner,
                         containerColor,
                     )
                     .fillMaxWidth()
