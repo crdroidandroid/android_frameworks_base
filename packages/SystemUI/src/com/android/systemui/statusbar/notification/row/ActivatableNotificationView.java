@@ -129,13 +129,8 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
     }
 
     protected void updateColors() {
-        if (notificationRowTransparency()) {
-            if (mIsBlurSupported) {
-                mNormalColor = SurfaceEffectColors.surfaceEffect1(getContext());
-            } else {
-                mNormalColor = mContext.getColor(
-                        com.android.internal.R.color.materialColorSurfaceContainer);
-            }
+        if (mIsBlurSupported) {
+            mNormalColor = SurfaceEffectColors.surfaceEffect1(getContext());
         } else {
             mNormalColor = mContext.getColor(
                     com.android.internal.R.color.materialColorSurfaceContainerHigh);
@@ -341,18 +336,16 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
     }
 
     public void setIsBlurSupported(boolean isBlurSupported) {
-        if (!notificationRowTransparency()) {
-            return;
-        }
         boolean usedTransparentBackground = usesTransparentBackground();
         mIsBlurSupported = isBlurSupported;
+        mBackgroundNormal.setIsBlurSupported(isBlurSupported);
         if (usedTransparentBackground != usesTransparentBackground()) {
             updateBackgroundColors();
         }
     }
 
     protected boolean usesTransparentBackground() {
-        return mIsBlurSupported && notificationRowTransparency();
+        return mIsBlurSupported;
     }
 
     @Override
