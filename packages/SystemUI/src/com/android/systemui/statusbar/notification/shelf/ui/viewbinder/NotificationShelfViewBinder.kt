@@ -48,9 +48,7 @@ object NotificationShelfViewBinder {
                 launch { viewModel.isAlignedToEnd.collect(::setAlignedToEnd) }
             }
 
-            if (Flags.notificationRowTransparency()) {
-                launch { viewModel.isBlurSupported.collect(shelf::setIsBlurSupported) }
-            }
+            launch { viewModel.isBlurSupported.collect(shelf::setIsBlurSupported) }
 
             registerViewListenersWhileAttached(shelf, viewModel)
         }
