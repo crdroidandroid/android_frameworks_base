@@ -301,6 +301,22 @@ constructor(
     }
 
     /**
+     * When flashlight is temporarily unavailable, we wait for it to to become available and then we
+     * call [connectToCameraLoadFlashlightInfo] to switch on to the [_state].
+     */
+    private val reconnectFlow: Flow<FlashlightModel> = conflatedCallbackFlow {
+        val callbackFromSystem =
+            object : TorchCallback() {
+                override fun onTorchModeChanged(camId: String, enabled: Boolean) {
+                    bgScope.launch { connectToCameraLoadFlashlightInfo() }
+                }
+            }
+        trySend(FlashlightModel.Unavailable.Temporarily.NotFound)
+        cameraManager.registerTorchCallback(bgDispatcher.asExecutor(), callbackFromSystem)
+        awaitClose { cameraManager.unregisterTorchCallback(callbackFromSystem) }
+    }
+
+    /**
      * The only place this repo diverges from the [CameraManager.getTorchStrengthLevel] API, when
      * the flashlight is off. This API will show the last enabled level, but that one will show the
      * device default.
@@ -316,8 +332,7 @@ constructor(
                     is FlashlightInfo.Supported.Initial ->
                         flowOf(FlashlightModel.Unavailable.Temporarily.Loading)
 
-                    is FlashlightInfo.Supported.ErrorLoading ->
-                        flowOf(FlashlightModel.Unavailable.Temporarily.NotFound)
+                    is FlashlightInfo.Supported.ErrorLoading -> reconnectFlow
 
                     is FlashlightInfo.Supported.LoadedSuccessfully -> _state
                 }
