@@ -76,7 +76,7 @@ class FlashlightRepositoryTest : SysuiTestCase() {
             startFlashlightRepository(true)
 
             assertThat(state).isEqualTo(FlashlightModel.Unavailable.Temporarily.NotFound)
-            verify(cameraManager, never()).registerTorchCallback(any<Executor>(), any())
+            verify(cameraManager, times(1)).registerTorchCallback(any<Executor>(), any())
         }
 
     @Test
@@ -88,7 +88,7 @@ class FlashlightRepositoryTest : SysuiTestCase() {
             val state by collectLastValue(underTest.state)
 
             assertThat(state).isEqualTo(FlashlightModel.Unavailable.Temporarily.NotFound)
-            verify(cameraManager, never())
+            verify(cameraManager, times(1)) // for fault-tolerance
                 .registerTorchCallback(Mockito.any<Executor>(), Mockito.any())
         }
 
@@ -442,7 +442,14 @@ class FlashlightRepositoryTest : SysuiTestCase() {
 
             underTest.setEnabled(true)
             runCurrent()
+
+            assertThat(state)
+                .isEqualTo(
+                    FlashlightModel.Available.Level(true, DEFAULT_DEFAULT_LEVEL, DEFAULT_MAX_LEVEL)
+                )
+
             underTest.setEnabled(true)
+            runCurrent()
 
             verify(cameraManager, times(1)).turnOnTorchWithStrengthLevel(anyString(), anyInt())
         }
@@ -462,6 +469,7 @@ class FlashlightRepositoryTest : SysuiTestCase() {
                 )
 
             underTest.setLevel(BASE_TORCH_LEVEL)
+            runCurrent()
 
             assertThat(state)
                 .isEqualTo(
@@ -469,6 +477,7 @@ class FlashlightRepositoryTest : SysuiTestCase() {
                 )
 
             underTest.setLevel(BASE_TORCH_LEVEL)
+            runCurrent()
 
             verify(cameraManager, times(1)).turnOnTorchWithStrengthLevel(anyString(), anyInt())
         }
@@ -585,6 +594,29 @@ class FlashlightRepositoryTest : SysuiTestCase() {
             assertThat(state)
                 .isEqualTo(
                     FlashlightModel.Available.Level(true, BASE_TORCH_LEVEL, DEFAULT_MAX_LEVEL)
+                )
+        }
+
+    @Test
+    fun initiallyFailLoadingThenFlashlightBecomesAvailable_afterCooldown_torchModeEnabledCallbackFromSystem_connectsAndSetLevel() =
+        kosmos.runTest {
+            injectCameraCharacteristics(false, CameraCharacteristics.LENS_FACING_BACK)
+
+            val state by collectLastValue(underTest.state)
+
+            startFlashlightRepository(true)
+
+            assertThat(state).isEqualTo(FlashlightModel.Unavailable.Temporarily.NotFound)
+
+            advanceTimeBy(RECONNECT_COOLDOWN.inWholeMilliseconds + 1000)
+            runCurrent()
+
+            injectCameraCharacteristics(true, CameraCharacteristics.LENS_FACING_BACK)
+            runCurrent()
+
+            assertThat(state)
+                .isEqualTo(
+                    FlashlightModel.Available.Level(false, DEFAULT_DEFAULT_LEVEL, DEFAULT_MAX_LEVEL)
                 )
         }
 
