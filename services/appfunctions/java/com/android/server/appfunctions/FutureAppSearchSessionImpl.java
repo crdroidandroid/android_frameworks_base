@@ -132,7 +132,9 @@ public class FutureAppSearchSessionImpl implements FutureAppSearchSession {
                                     new AndroidFuture<>();
 
                             session.put(
-                                    putDocumentsRequest, mExecutor, batchResultFuture::complete);
+                                    putDocumentsRequest,
+                                    mExecutor,
+                                    new BatchResultCallbackAdapter<>(batchResultFuture));
                             return batchResultFuture;
                         });
     }
