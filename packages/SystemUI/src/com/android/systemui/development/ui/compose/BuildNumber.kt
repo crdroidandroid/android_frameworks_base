@@ -54,7 +54,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
@@ -75,8 +74,6 @@ fun BuildNumber(
 ) {
     val context = LocalContext.current
     val haptics = LocalHapticFeedback.current
-    val clipboard = LocalClipboardManager.current
-    val copyA11y = stringResource(id = R.string.copy_to_clipboard_a11y_action)
 
     var usageText by remember { mutableStateOf<String?>(null) }
     val subMgr = remember { SubscriptionManager.from(context) }
@@ -274,15 +271,15 @@ fun BuildNumber(
                 onLongPress = {
                     if (textToShow.isNotEmpty()) {
                         haptics.performHapticFeedback(HapticFeedbackType.LongPress)
-                        clipboard.setText(AnnotatedString(textToShow))
+                        openDataUsageSettings(context)
                     }
                 }
             )
         }
         .semantics {
-            onLongClick(copyA11y) {
+            onLongClick("Open data usage settings") {
                 if (textToShow.isNotEmpty()) {
-                    clipboard.setText(AnnotatedString(textToShow))
+                    openDataUsageSettings(context)
                     true
                 } else false
             }
@@ -300,6 +297,24 @@ fun BuildNumber(
         color = textColor,
         maxLines = 1,
     )
+}
+
+fun openDataUsageSettings(context: Context) {
+    val intent = Intent(Settings.ACTION_DATA_USAGE_SETTINGS).apply {
+        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    }
+    try {
+        context.startActivityAsUser(intent, UserHandle.CURRENT)
+    } catch (_: Throwable) {
+        val fallback = Intent(Intent.ACTION_MAIN).apply {
+            setClassName(
+                "com.android.settings",
+                "com.android.settings.Settings\$DataUsageSummaryActivity"
+            )
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+        context.startActivityAsUser(fallback, UserHandle.CURRENT)
+    }
 }
 
 private fun currentDataSubId(context: Context, subMgr: SubscriptionManager): Int {
