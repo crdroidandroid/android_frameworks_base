@@ -45,6 +45,7 @@ class RuntimeExceptionAnswer : Answer<Any> {
     }
 }
 
+private val callbacks: MutableSet<CameraManager.TorchCallback> = mutableSetOf()
 private const val ID = "ID"
 private const val DEFAULT_DEFAULT_LEVEL = 21
 private const val DEFAULT_MAX_LEVEL = 45
@@ -53,11 +54,10 @@ private fun mockCameraManager(): CameraManager {
     val cameraManager = mock<CameraManager>(defaultAnswer = RuntimeExceptionAnswer())
     val cameraId = ID
     val max = DEFAULT_MAX_LEVEL
-
-    val callbacks: MutableSet<CameraManager.TorchCallback> = mutableSetOf()
-
     var enabled = false
     var level = DEFAULT_DEFAULT_LEVEL
+
+    callbacks.clear()
 
     doAnswer { _: InvocationOnMock ->
             val cameraIdList = arrayOf(cameraId)
@@ -126,7 +126,10 @@ private fun mockCameraManager(): CameraManager {
     return cameraManager
 }
 
-/** Overrides CameraManager.getCameraCharacteristics */
+/**
+ * Overrides CameraManager.getCameraCharacteristics. Sends callbacks on onTorchModeUnavailable or on
+ * torchModeChanged false
+ */
 fun Kosmos.injectCameraCharacteristics(
     flashAvailable: Boolean = true,
     direction: Int = CameraCharacteristics.LENS_FACING_BACK,
@@ -138,6 +141,12 @@ fun Kosmos.injectCameraCharacteristics(
         }
         .whenever(cameraManager)
         .getCameraCharacteristics(anyString())
+
+    if (flashAvailable) {
+        callbacks.forEach { it.onTorchModeChanged(ID, false) }
+    } else {
+        callbacks.forEach { it.onTorchModeUnavailable(ID) }
+    }
 }
 
 private fun mockCameraCharacteristics(
