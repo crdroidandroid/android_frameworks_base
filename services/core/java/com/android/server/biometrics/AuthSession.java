@@ -377,9 +377,6 @@ public final class AuthSession implements IBinder.DeathRecipient {
     }
 
     private boolean isConfirmationRequired(BiometricSensor sensor) {
-        if (sensor.modality == TYPE_FACE && SenseUtils.canUseProvider()) {
-            return true;
-        }
         return sensor.confirmationSupported()
                 && (sensor.confirmationAlwaysRequired(mUserId)
                 || mPreAuthInfo.confirmationRequested);
