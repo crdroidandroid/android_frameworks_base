@@ -30,10 +30,14 @@ import android.content.res.Resources.NotFoundException;
 import android.content.res.Resources.Theme;
 import android.content.res.XmlResourceParser;
 import android.os.SystemClock;
+import android.os.SystemProperties;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.TimeUtils;
 import android.util.Xml;
 import android.view.InflateException;
+
+import com.android.internal.R;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -215,6 +219,20 @@ public class AnimationUtils {
      */
     public static Animation loadAnimation(Context context, @AnimRes int id)
             throws NotFoundException {
+
+        if (SystemProperties.getBoolean("persist.sys.activity_anim_perf_override", false)) {
+            ActivityAnimations.maybeInit(context);
+            switch (id) {
+                case R.anim.activity_open_enter:
+                    return ActivityAnimations.getOpenEnter();
+                case R.anim.activity_open_exit:
+                    return ActivityAnimations.getOpenExit();
+                case R.anim.activity_close_enter:
+                    return ActivityAnimations.getCloseEnter();
+                case R.anim.activity_close_exit:
+                    return ActivityAnimations.getCloseExit();
+            }
+        }
 
         XmlResourceParser parser = null;
         try {
@@ -495,5 +513,101 @@ public class AnimationUtils {
             }
         }
         return interpolator;
+    }
+
+    /** @hide */
+    public final class ActivityAnimations {
+
+        private static Animation sOpenEnter;
+        private static Animation sOpenExit;
+        private static Animation sCloseEnter;
+        private static Animation sCloseExit;
+
+        private static Interpolator sFastOutExtraSlowInInterpolator;
+
+        private static final float DISTANCE = 0.1f;
+
+        private ActivityAnimations() {}
+
+        /** @hide */
+        public static void maybeInit(Context context) {
+            if (sFastOutExtraSlowInInterpolator == null) {
+                sFastOutExtraSlowInInterpolator = AnimationUtils.loadInterpolator(
+                        context, R.interpolator.fast_out_extra_slow_in);
+            }
+        }
+
+        private static class ActivityAnimFactory {
+            private float fromX = 0f, toX = 0f;
+            private long duration = 200L;
+
+            public ActivityAnimFactory fromX(float ratio) {
+                this.fromX = ratio;
+                return this;
+            }
+
+            public ActivityAnimFactory toX(float ratio) {
+                this.toX = ratio;
+                return this;
+            }
+
+            public Animation build() {
+                AnimationSet animationSet = new AnimationSet(false);
+                TranslateAnimation slide = new TranslateAnimation(
+                        Animation.RELATIVE_TO_SELF, fromX,
+                        Animation.RELATIVE_TO_SELF, toX,
+                        Animation.RELATIVE_TO_SELF, 0f,
+                        Animation.RELATIVE_TO_SELF, 0f
+                );
+                slide.setDuration(duration);
+                slide.setInterpolator(sFastOutExtraSlowInInterpolator);
+                animationSet.addAnimation(slide);
+                return animationSet;
+            }
+        }
+
+        /** @hide */
+        public static Animation getOpenEnter() {
+            if (sOpenEnter == null) {
+                sOpenEnter = new ActivityAnimFactory()
+                        .fromX(1.0f)
+                        .toX(0.0f)
+                        .build();
+            }
+            return sOpenEnter;
+        }
+
+        /** @hide */
+        public static Animation getOpenExit() {
+            if (sOpenExit == null) {
+                sOpenExit = new ActivityAnimFactory()
+                        .fromX(0.0f)
+                        .toX(-DISTANCE)
+                        .build();
+            }
+            return sOpenExit;
+        }
+
+        /** @hide */
+        public static Animation getCloseEnter() {
+            if (sCloseEnter == null) {
+                sCloseEnter = new ActivityAnimFactory()
+                        .fromX(-DISTANCE)
+                        .toX(0.0f)
+                        .build();
+            }
+            return sCloseEnter;
+        }
+
+        /** @hide */
+        public static Animation getCloseExit() {
+            if (sCloseExit == null) {
+                sCloseExit = new ActivityAnimFactory()
+                        .fromX(0.0f)
+                        .toX(1.0f)
+                        .build();
+            }
+            return sCloseExit;
+        }
     }
 }
