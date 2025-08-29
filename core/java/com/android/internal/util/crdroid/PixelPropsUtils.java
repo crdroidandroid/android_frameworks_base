@@ -413,27 +413,29 @@ public final class PixelPropsUtils {
 
         File dataFile = new File(Environment.getDataSystemDirectory(), DATA_FILE);
         String savedProps = readFromFile(dataFile);
-
+        List<String> fresh = new ArrayList<>();
         if (TextUtils.isEmpty(savedProps)) {
             Log.d(TAG, "Parsing props locally - data file unavailable");
-            sCertifiedProps = Arrays.asList(context.getResources().getStringArray(R.array.config_certifiedBuildProperties));
+            fresh = Arrays.asList(context.getResources()
+                     .getStringArray(R.array.config_certifiedBuildProperties));
         } else {
             Log.d(TAG, "Parsing props fetched by attestation service");
             try {
                 JSONObject parsedProps = new JSONObject(savedProps);
                 Iterator<String> keys = parsedProps.keys();
-
                 while (keys.hasNext()) {
                     String key = keys.next();
                     String value = parsedProps.getString(key);
-                    sCertifiedProps.add(key + ":" + value);
+                    fresh.add(key + ":" + value);
                 }
             } catch (JSONException e) {
                 Log.e(TAG, "Error parsing JSON data", e);
                 Log.d(TAG, "Parsing props locally as fallback");
-                sCertifiedProps = Arrays.asList(context.getResources().getStringArray(R.array.config_certifiedBuildProperties));
+                fresh = Arrays.asList(context.getResources()
+                         .getStringArray(R.array.config_certifiedBuildProperties));
             }
         }
+        sCertifiedProps = new ArrayList<>(fresh);
 
         // Alter build parameters to avoid hardware attestation enforcement
         for (String entry : sCertifiedProps) {
