@@ -17,11 +17,13 @@
 
 package com.android.internal.util.crdroid;
 
+import android.app.ActivityThread;
 import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.SystemProperties;
+import android.provider.Settings;
 import android.util.ArraySet;
 import android.util.Log;
 
@@ -381,10 +383,27 @@ public final class PixelPropsUtils {
     public static void onEngineGetCertificateChain() {
         if (!SystemProperties.getBoolean(SPOOF_PIXEL_PI, true))
             return;
+        if (isKeyboxXmlPresent()) {
+            if (DEBUG) Log.d(TAG, "KEYBOX_DATA present; not blocking attestation");
+            return;
+        }
         // Check stack for SafetyNet or Play Integrity
         if (isCallerSafetyNet() || sIsFinsky) {
             Log.i(TAG, "Blocked key attestation");
             throw new UnsupportedOperationException();
+        }
+    }
+
+    private static boolean isKeyboxXmlPresent() {
+        try {
+            Context ctx = ActivityThread.currentApplication() != null
+                    ? ActivityThread.currentApplication().getApplicationContext()
+                    : null;
+            if (ctx == null) return false;
+            String xml = Settings.Secure.getString(ctx.getContentResolver(), Settings.Secure.KEYBOX_DATA);
+            return xml != null && !xml.trim().isEmpty();
+        } catch (Throwable t) {
+            return false;
         }
     }
 }
