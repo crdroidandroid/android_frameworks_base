@@ -808,16 +808,14 @@ constructor(
                         }
                     }
                 }
-                PlatformTheme(isDarkTheme = isSystemInDarkTheme()) {
-                    Element(
-                        ElementKeys.FooterActions,
-                        Modifier.sysuiResTag(ResIdTags.qsFooterActions),
-                    ) {
-                        FooterActions(
-                            viewModel = viewModel.footerActionsViewModel,
-                            qsVisibilityLifecycleOwner = this@QSFragmentCompose,
-                        )
-                    }
+                Element(
+                    ElementKeys.FooterActions,
+                    Modifier.sysuiResTag(ResIdTags.qsFooterActions),
+                ) {
+                    FooterActions(
+                        viewModel = viewModel.footerActionsViewModel,
+                        qsVisibilityLifecycleOwner = this@QSFragmentCompose,
+                    )
                 }
             }
         }
