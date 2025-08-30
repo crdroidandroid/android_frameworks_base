@@ -75,6 +75,7 @@ public final class PixelPropsUtils {
 
     // Packages to Spoof as the most recent Pixel device
     private static final String[] packagesToChangeRecentPixel = {
+            "com.android.vending",
             "com.google.android.aicore",
             "com.google.android.apps.aiwallpapers",
             "com.google.android.apps.bard",
@@ -174,6 +175,7 @@ public final class PixelPropsUtils {
             "com.vng.pubgmobile"
     };
 
+    private static volatile boolean sIsFinsky = false;
     private static volatile List<String> sCertifiedProps = new ArrayList<>();
 
     static {
@@ -266,6 +268,10 @@ public final class PixelPropsUtils {
                         !SystemProperties.getBoolean(SPOOF_PIXEL_NETFLIX, false)) {
                     if (DEBUG) Log.d(TAG, "Netflix spoofing disabled by system prop");
                     return;
+            } else if (packageName.equals("com.android.vending")) {
+                sIsFinsky = true;
+                spoofBuildGms(context);
+                return;
             } else if (packageName.equals("com.google.android.gms")) {
                 final String processName = Application.getProcessName().toLowerCase();
                 if (processName.contains("unstable")) {
@@ -476,7 +482,7 @@ public final class PixelPropsUtils {
         if (!SystemProperties.getBoolean(SPOOF_PIXEL_PI, true))
             return;
         // Check stack for SafetyNet or Play Integrity
-        if (isCallerSafetyNet()) {
+        if (isCallerSafetyNet() || sIsFinsky) {
             Log.i(TAG, "Blocked key attestation");
             throw new UnsupportedOperationException();
         }
