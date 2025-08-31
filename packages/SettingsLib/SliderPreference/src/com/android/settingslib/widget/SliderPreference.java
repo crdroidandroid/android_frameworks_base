@@ -82,6 +82,8 @@ public class SliderPreference extends Preference {
     private boolean mTrackingTouch;
     private CharSequence mSliderContentDescription;
 
+    private OnPreferenceChangeListener mStopListener;
+
     /**
      * Listener reacting to the user pressing DPAD left/right keys if {@code
      * adjustable} attribute is set to true; it transfers the key presses to the {@link Slider}
@@ -123,6 +125,9 @@ public class SliderPreference extends Preference {
             if ((int) slider.getValue() != mSliderValue) {
                 syncValueInternal(slider);
             }
+            if (mStopListener != null) {
+                mStopListener.onPreferenceChange(SliderPreference.this, (int) slider.getValue());
+            }
         }
 
         @Override
@@ -130,6 +135,9 @@ public class SliderPreference extends Preference {
             mTrackingTouch = true;
         }
     };
+    public void setOnPreferenceChangeStopListener(OnPreferenceChangeListener listener) {
+        mStopListener = listener;
+    }
     private LabelFormatter mLabelFormater;
     // Whether the SliderPreference should continuously save the Slider value while it is being
     // dragged.
