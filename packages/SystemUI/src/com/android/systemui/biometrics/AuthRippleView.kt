@@ -95,7 +95,7 @@ class AuthRippleView(context: Context?, attrs: AttributeSet?) : View(context, at
         setLockScreenColor(Utils.getColorAttr(context,
                 R.attr.wallpaperTextColorAccent).defaultColor) // default color
 
-        dwellShader.color = 0xffffffff.toInt() // default color
+        dwellShader.color = Utils.getColorAttrDefaultColor(context, R.attr.wallpaperTextColorAccent)
         dwellShader.progress = 0f
         dwellShader.distortionStrength = .8f
         dwellPaint.shader = dwellShader
