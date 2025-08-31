@@ -48,9 +48,9 @@ class RippleForeground extends RippleComponent {
     // Time it takes for the ripple to slide from the touch to the center point
     private static final int RIPPLE_ORIGIN_DURATION = 225;
 
-    private static final int OPACITY_ENTER_DURATION = 75;
-    private static final int OPACITY_EXIT_DURATION = 150;
-    private static final int OPACITY_HOLD_DURATION = OPACITY_ENTER_DURATION + 150;
+    private static final int OPACITY_ENTER_DURATION = 80;
+    private static final int OPACITY_EXIT_DURATION = 190;
+    private static final int OPACITY_HOLD_DURATION = OPACITY_ENTER_DURATION + 190;
 
     // Parent-relative values for starting position.
     private float mStartingX;
