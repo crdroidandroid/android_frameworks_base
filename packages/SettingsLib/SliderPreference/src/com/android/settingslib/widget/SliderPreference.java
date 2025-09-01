@@ -306,6 +306,7 @@ public class SliderPreference extends Preference {
         // Set up slider color
         mSlider.setTrackActiveTintList(mTrackActiveColor);
         mSlider.setTrackInactiveTintList(mTrackInactiveColor);
+        mSlider.setThumbStrokeColor(mThumbColor);
         mSlider.setThumbTintList(mThumbColor);
         mSlider.setHaloTintList(mHaloColor);
         mSlider.setTickActiveTintList(mTrackInactiveColor);
