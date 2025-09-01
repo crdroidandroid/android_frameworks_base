@@ -63,6 +63,8 @@ public class FragmentHostManager {
     private final InterestingConfigChanges mConfigChanges = new InterestingConfigChanges(
             ActivityInfo.CONFIG_FONT_SCALE | ActivityInfo.CONFIG_LOCALE
                     | ActivityInfo.CONFIG_ASSETS_PATHS);
+    private final InterestingConfigChanges mOrientationChanges = new InterestingConfigChanges(
+            ActivityInfo.CONFIG_ORIENTATION);
     private final FragmentService mManager;
     private final ExtensionFragmentManager mPlugins = new ExtensionFragmentManager();
 
@@ -79,6 +81,7 @@ public class FragmentHostManager {
         mRootView = rootView;
         mLeakDetector = leakDetector;
         mConfigChanges.applyNewConfig(mContext.getResources());
+        mOrientationChanges.applyNewConfig(mContext.getResources());
         createFragmentHost(null);
     }
 
@@ -192,11 +195,23 @@ public class FragmentHostManager {
      * should be recreated.
      */
     protected void onConfigurationChanged(Configuration newConfig) {
-        if (mConfigChanges.applyNewConfig(mContext.getResources())) {
+        final boolean interestingChanged = mConfigChanges.applyNewConfig(mContext.getResources());
+        final boolean orientationChanged = mOrientationChanges.applyNewConfig(mContext.getResources());
+        final boolean splitShadeIncoming = orientationChanged &&
+                newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE;
+
+        if (interestingChanged) {
             reloadFragments();
-        } else {
-            mFragments.dispatchConfigurationChanged(newConfig);
+            return;
         }
+
+        // reload fragments if splitshade is coming. not necessary on portrait
+        if (splitShadeIncoming) {
+            reloadFragment("QS");
+            return;
+        }
+
+        mFragments.dispatchConfigurationChanged(newConfig);
     }
 
     private void dump(String prefix, FileDescriptor fd, PrintWriter writer, String[] args) {
@@ -244,6 +259,36 @@ public class FragmentHostManager {
         Parcelable p = destroyFragmentHost();
         // Generate a new fragment host and restore its state.
         createFragmentHost(p);
+        Trace.endSection();
+    }
+
+    public void reloadFragment(@NonNull String tag) {
+        Trace.beginSection("FragmentHostManager#reloadFragment");
+        if (mFragments == null) {
+            Trace.endSection();
+            return;
+        }
+        FragmentManager fm = getFragmentManager();
+        Fragment oldFragment = fm.findFragmentByTag(tag);
+        if (oldFragment == null) {
+            Trace.endSection();
+            return;
+        }
+        Fragment.SavedState savedState = null;
+        if (oldFragment.isAdded()) {
+            savedState = fm.saveFragmentInstanceState(oldFragment);
+        }
+        int containerId = oldFragment.getId();
+        fm.beginTransaction().remove(oldFragment).commitNow();
+        Fragment newFragment = mPlugins.instantiate(mContext, oldFragment.getClass().getName(), null);
+        if (savedState != null) {
+            newFragment.setInitialSavedState(savedState);
+        }
+        fm.beginTransaction().add(containerId, newFragment, tag).commitNow();
+        ArrayList<FragmentListener> listeners = mListeners.get(tag);
+        if (listeners != null && newFragment.getView() != null) {
+            listeners.forEach(listener -> listener.onFragmentViewCreated(tag, newFragment));
+        }
         Trace.endSection();
     }
 
