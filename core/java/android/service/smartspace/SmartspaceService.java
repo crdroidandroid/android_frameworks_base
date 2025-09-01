@@ -41,6 +41,7 @@ import android.util.Slog;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 
 /**
@@ -283,6 +284,7 @@ public abstract class SmartspaceService extends Service {
 
         private final Consumer<CallbackWrapper> mOnBinderDied;
         private ISmartspaceCallback mCallback;
+        private boolean mDeathRecipientLinked = false;
 
         CallbackWrapper(ISmartspaceCallback callback,
                 @Nullable Consumer<CallbackWrapper> onBinderDied) {
@@ -291,6 +293,7 @@ public abstract class SmartspaceService extends Service {
             if (mOnBinderDied != null) {
                 try {
                     mCallback.asBinder().linkToDeath(this, 0);
+                    mDeathRecipientLinked = true;
                 } catch (RemoteException e) {
                     Slog.e(TAG, "Failed to link to death: " + e);
                 }
@@ -321,15 +324,29 @@ public abstract class SmartspaceService extends Service {
         }
 
         public void destroy() {
-            if (mCallback != null && mOnBinderDied != null) {
-                mCallback.asBinder().unlinkToDeath(this, 0);
+            synchronized (this) {
+                if (mCallback != null && mOnBinderDied != null && mDeathRecipientLinked) {
+                    try {
+                        mCallback.asBinder().unlinkToDeath(this, 0);
+                    } catch (NoSuchElementException e) {
+                        // Death recipient was already unlinked or never existed
+                        Slog.w(TAG, "Death recipient not found during unlink", e);
+                    } catch (Exception e) {
+                        Slog.w(TAG, "Failed to unlink death recipient", e);
+                    }
+                    mDeathRecipientLinked = false;
+                }
+                mCallback = null;
             }
         }
 
         @Override
         public void binderDied() {
-            destroy();
-            mCallback = null;
+            synchronized (this) {
+                // When binder dies, the death recipient is automatically unlinked
+                mDeathRecipientLinked = false;
+                mCallback = null;
+            }
             if (mOnBinderDied != null) {
                 mOnBinderDied.accept(this);
             }
