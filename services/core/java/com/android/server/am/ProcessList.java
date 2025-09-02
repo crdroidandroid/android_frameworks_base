@@ -970,7 +970,7 @@ public final class ProcessList {
                                         // hold AMS lock here, otherwise it is a potential deadlock.
                                         Pair<Integer, Integer> foregroundServices =
                                                 ActiveServices.sNumForegroundServices.get();
-                                        LmkdStatsReporter.logKillOccurred(inputData,
+                                        LmkdStatsReporter.logKillOccurred(mService, inputData,
                                                 foregroundServices.first,
                                                 foregroundServices.second);
                                         return true;
@@ -2698,7 +2698,8 @@ public final class ProcessList {
                 + " pid=" + (app != null ? app.getPid() : -1));
         ProcessRecord predecessor = null;
         if (app != null && app.getPid() > 0) {
-            if ((!knownToBeDead && !app.isKilled()) || app.getThread() == null) {
+            if ((!knownToBeDead
+                    && !app.isKilled() && !app.isKilledByLmk()) || app.getThread() == null) {
                 // We already have the app running, or are waiting for it to
                 // come up (we have a pid but not yet its thread), so keep it.
                 if (DEBUG_PROCESSES) Slog.v(TAG_PROCESSES, "App already running: " + app);
