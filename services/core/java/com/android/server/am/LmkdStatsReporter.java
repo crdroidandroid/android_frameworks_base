@@ -51,7 +51,7 @@ public final class LmkdStatsReporter {
      * Logs the event when LMKD kills a process to reduce memory pressure.
      * Code: LMK_KILL_OCCURRED = 51
      */
-    public static void logKillOccurred(DataInputStream inputData, int totalForegroundServices,
+    public static void logKillOccurred(ActivityManagerService service, DataInputStream inputData, int totalForegroundServices,
             int procsWithForegroundServices) {
         try {
             final long pgFault = inputData.readLong();
@@ -69,6 +69,14 @@ public final class LmkdStatsReporter {
             final int thrashing = inputData.readInt();
             final int maxThrashing = inputData.readInt();
             final String procName = inputData.readUTF();
+            service.mHandler.post(() -> {
+                synchronized (service) {
+                    ProcessRecord app = service.getProcessRecordLocked(procName, uid);
+                    if (app != null) {
+                        app.setKilledByLmk(true);
+                    }
+                }
+            });
             FrameworkStatsLog.write(FrameworkStatsLog.LMK_KILL_OCCURRED, uid, procName, oomScore,
                     pgFault, pgMajFault, rssInBytes, cacheInBytes, swapInBytes, processStartTimeNS,
                     minOomScore, freeMemKb, freeSwapKb, mapKillReason(killReason), thrashing,
