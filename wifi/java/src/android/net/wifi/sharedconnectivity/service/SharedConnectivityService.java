@@ -269,7 +269,12 @@ public abstract class SharedConnectivityService extends Service {
     }
 
     private void onRegisterCallback(ISharedConnectivityCallback callback) {
-        mRemoteCallbackList.register(callback);
+        if (callback != null) {
+            mRemoteCallbackList.register(callback);
+        } else {
+            if (DEBUG) Log.w(TAG, "Attempted to register null callback");
+            return;
+        }
         try {
             callback.onServiceConnected();
         } catch (RemoteException e) {
@@ -281,7 +286,11 @@ public abstract class SharedConnectivityService extends Service {
     }
 
     private void onUnregisterCallback(ISharedConnectivityCallback callback) {
-        mRemoteCallbackList.unregister(callback);
+        if (callback != null) {
+            mRemoteCallbackList.unregister(callback);
+        } else {
+            if (DEBUG) Log.w(TAG, "Attempted to unregister null callback");
+        }
         if (mCountDownLatch != null) {
             mCountDownLatch.countDown();
         }
