@@ -15,6 +15,9 @@
  */
 package com.android.server.gesture.threefinger;
 
+import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
+import static com.android.server.gesture.threefinger.NtThreeFingerGesture.ActionMask;
+
 import android.content.Context;
 import android.graphics.PointF;
 import android.os.PowerManager;
@@ -24,16 +27,21 @@ import android.util.Slog;
 import android.util.SparseArray;
 import android.view.MotionEvent;
 
-import com.android.server.gesture.threefinger.NtThreeFingerGesture;
 import com.android.internal.util.NtThreeFingerGestureHelper;
 
 public abstract class ThreeFingerGestureImpl {
 
+    protected static final int HOLD_DELAY_MS = 500;
+
+    protected static final int ACTION_DOWN = 1;
+    protected static final int ACTION_MOVE = 2;
+    protected static final int ACTION_UP = 3;
+    protected static final int ACTION_CANCEL = 4;
+
     protected PowerManager powerManager;
     protected SparseArray<PointF> touchPoints = new SparseArray<>();
     protected Size screenSize;
-    protected boolean gestureStarted;
-    protected boolean gestureDetected = false;
+    protected boolean gestureActive;
     
     private final Context mContext;
 
@@ -41,19 +49,11 @@ public abstract class ThreeFingerGestureImpl {
         static final int[] actionMap;
 
         static {
-            actionMap = new int[NtThreeFingerGesture.ActionMask.values().length];
-            try {
-                actionMap[NtThreeFingerGesture.ActionMask.DOWN.ordinal()] = 1;
-            } catch (NoSuchFieldError ignored) {}
-            try {
-                actionMap[NtThreeFingerGesture.ActionMask.MOVE.ordinal()] = 2;
-            } catch (NoSuchFieldError ignored) {}
-            try {
-                actionMap[NtThreeFingerGesture.ActionMask.UP.ordinal()] = 3;
-            } catch (NoSuchFieldError ignored) {}
-            try {
-                actionMap[NtThreeFingerGesture.ActionMask.CANCEL.ordinal()] = 4;
-            } catch (NoSuchFieldError ignored) {}
+            actionMap = new int[ActionMask.values().length];
+            actionMap[ActionMask.DOWN.ordinal()] = ACTION_DOWN;
+            actionMap[ActionMask.MOVE.ordinal()] = ACTION_MOVE;
+            actionMap[ActionMask.UP.ordinal()] = ACTION_UP;
+            actionMap[ActionMask.CANCEL.ordinal()] = ACTION_CANCEL;
         }
     }
 
@@ -68,62 +68,66 @@ public abstract class ThreeFingerGestureImpl {
                 Math.max(metrics.widthPixels, metrics.heightPixels)
         );
 
-        Slog.d(getLogTag(), "Screen size: " + screenSize);
+        Slog.d(getTag(), "Screen size: " + screenSize);
 
         powerManager = (PowerManager) context.getSystemService(PowerManager.class);
     }
 
-    public boolean handle(NtThreeFingerGesture.ActionMask actionMask, MotionEvent motionEvent) {
-        if (motionEvent.getPointerCount() != 3) {
-            reset(motionEvent);
+    protected boolean handle(ActionMask mask, MotionEvent event) {
+        if (event.getPointerCount() != 3) {
+            reset(event);
             return false;
         }
-        int i = ActionMapper.actionMap[actionMask.ordinal()];
-        if (i == 1) {
-            gestureStarted = checkStartGesture(motionEvent);
-        } else {
-            if (handleMove(motionEvent)) {
-                gestureDetected = true;
-            }
+
+        boolean didSomething = false;
+        int action = ActionMapper.actionMap[mask.ordinal()];
+
+        switch (action) {
+            case ACTION_DOWN:
+                gestureActive = checkGestureStart(event);
+                break;
+            case ACTION_MOVE:
+                onGestureMove(event);
+                break;
+            case ACTION_UP:
+            case ACTION_CANCEL:
+                didSomething = onGestureFinish(event);
+                break;
         }
-        return !gestureStarted || gestureDetected;
+        return gestureActive || didSomething;
     }
 
     protected void reset(MotionEvent event) {
-        if (gestureDetected) {
-            handleEndGesture(event);
-        }
-        gestureDetected = false;
-        gestureStarted = false;
+        gestureActive = false;
     }
 
-    protected boolean checkStartGesture(MotionEvent motionEvent) {
-        if (motionEvent.getEventTime() - motionEvent.getDownTime() < 500) {
-            NtThreeFingerGestureHelper.getPoints(motionEvent, touchPoints);
-            if (NtThreeFingerGestureHelper.validStartingPoints(touchPoints)) {
-                if (powerManager.isInteractive()) {
-                    return true;
-                }
-                Slog.i(getLogTag(), "is not interactive, return");
-                return false;
-            }
-            Slog.d(getLogTag(), "invalid start points");
-        } else {
-            Slog.d(getLogTag(), "invalid finger down interval");
+    protected boolean checkGestureStart(MotionEvent event) {
+        if ((event.getEventTime() - event.getDownTime()) >= HOLD_DELAY_MS) {
+            Slog.d(getTag(), "invalid finger down interval");
+            return false;
         }
+        NtThreeFingerGestureHelper.getPoints(event, touchPoints);
+        if (!NtThreeFingerGestureHelper.validStartingPoints(touchPoints)) {
+            Slog.d(getTag(), "invalid start points");
+            return false;
+        }
+        if (!powerManager.isInteractive()) {
+            Slog.i(getTag(), "is not interactive, return");
+            return false;
+        }
+        return true;
+    }
+
+    protected abstract String getTag();
+
+    protected boolean onGestureFinish(MotionEvent event) {
         return false;
     }
 
-    protected abstract String getLogTag();
-
-    protected void handleEndGesture(MotionEvent event) {
-    }
-
-    protected boolean handleMove(MotionEvent event) {
-        return false;
+    protected void onGestureMove(MotionEvent event) {
     }
 
     protected boolean isPortrait() {
-        return mContext.getResources().getConfiguration().orientation == 1;
+        return mContext.getResources().getConfiguration().orientation == ORIENTATION_PORTRAIT;
     }
 }

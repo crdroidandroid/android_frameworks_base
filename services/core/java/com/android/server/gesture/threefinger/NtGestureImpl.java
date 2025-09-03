@@ -42,6 +42,7 @@ public class NtGestureImpl {
     private static final String TAG = "NtGestureImpl";
 
     public static final Uri THREE_FINGER_GESTURE_URI = Settings.Secure.getUriFor("nothing_three_finger_screenshot");
+    public static final Uri THREE_FINGER_LONG_PRESS_URI = Settings.Secure.getUriFor("nothing_three_finger_long_press");
     public static final Uri COMBO_SCREENSHOT_DISABLE_URI = Settings.Secure.getUriFor("nt_disable_combination_screenshot");
 
     private final Context mContext;
@@ -60,9 +61,10 @@ public class NtGestureImpl {
         thread.start();
         handler = new Handler(thread.getLooper());
 
-        gestureHandler = NtThreeFingerGesture.create(mContext, callbacks);
+        gestureHandler = NtThreeFingerGesture.create(mContext, callbacks, handler, mWindowManagerService);
         settingsObserver = new SettingsObserver(handler);
         settingsObserver.onChange(false, THREE_FINGER_GESTURE_URI);
+        settingsObserver.onChange(false, THREE_FINGER_LONG_PRESS_URI);
         settingsObserver.onChange(false, COMBO_SCREENSHOT_DISABLE_URI);
         gestureHandler.updateSettings();
         updateGestureMonitoring();
