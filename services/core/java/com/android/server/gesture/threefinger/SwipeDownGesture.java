@@ -15,6 +15,8 @@
  */
 package com.android.server.gesture.threefinger;
 
+import static com.android.server.gesture.threefinger.NtGestureImpl.Callbacks;
+
 import android.graphics.PointF;
 import android.content.Context;
 import android.util.Slog;
@@ -26,18 +28,19 @@ import com.android.internal.util.NtThreeFingerGestureHelper;
 public class SwipeDownGesture extends ThreeFingerGestureImpl {
     private static final float SWIPE_THRESHOLD_RATIO = 0.14f;
     private static final String TAG = "ThreeFinger[SwipeDown]";
-    private final NtGestureImpl.Callbacks mCallbacks;
+    private final Callbacks mCallbacks;
 
-    public SwipeDownGesture(Context context, NtGestureImpl.Callbacks callbacks) {
+    public SwipeDownGesture(Context context, Callbacks callbacks) {
         super(context);
         mCallbacks = callbacks;
     }
 
-    private boolean isThreeFingerSwipe(SparseArray<PointF> sparseArray) {
-        int height = (int) ((isPortrait() ? screenSize.getHeight() : screenSize.getWidth()) * 0.14f);
-        for (int i = 0; i < sparseArray.size(); i++) {
-            int iKeyAt = sparseArray.keyAt(i);
-            if (sparseArray.get(iKeyAt).y - touchPoints.get(iKeyAt).y < height) {
+    private boolean isTfSwipe(SparseArray<PointF> points) {
+        int distance = isPortrait() ? screenSize.getHeight() : screenSize.getWidth();
+        int height = (int) (distance * SWIPE_THRESHOLD_RATIO);
+        for (int i = 0; i < points.size(); i++) {
+            int iKeyAt = points.keyAt(i);
+            if (points.get(iKeyAt).y - touchPoints.get(iKeyAt).y < height) {
                 return false;
             }
         }
@@ -45,24 +48,19 @@ public class SwipeDownGesture extends ThreeFingerGestureImpl {
     }
 
     @Override
-    protected String getLogTag() {
+    protected String getTag() {
         return TAG;
-    }
-    
-    @Override
-    protected void handleEndGesture(MotionEvent event) {
-        mCallbacks.onThreeFingerSwipe();
-        Slog.i(TAG, "Taking screenshot via three-finger swipe down.");
     }
 
     @Override
-    protected boolean handleMove(MotionEvent event) {
-        if (!gestureStarted) {
+    protected boolean onGestureFinish(MotionEvent event) {
+        if (!gestureActive) {
             return false;
         }
-        SparseArray<PointF> sparseArray = new SparseArray<>();
-        NtThreeFingerGestureHelper.getPoints(event, sparseArray);
-        if (isThreeFingerSwipe(sparseArray)) {
+        SparseArray<PointF> points = new SparseArray<>();
+        NtThreeFingerGestureHelper.getPoints(event, points);
+        if (isTfSwipe(points)) {
+            mCallbacks.onThreeFingerSwipe();
             return true;
         }
         return false;
