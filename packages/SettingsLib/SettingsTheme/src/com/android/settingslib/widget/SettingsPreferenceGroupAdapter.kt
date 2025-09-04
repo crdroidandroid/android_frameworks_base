@@ -184,14 +184,16 @@ open class SettingsPreferenceGroupAdapter(preferenceGroup: PreferenceGroup) :
             }
 
         val v = holder.itemView
+
+        // Update background
+        v.setBackgroundResource(backgroundRes)
+
         // Update padding
         if (SettingsThemeHelper.isExpressiveTheme(context)) {
             val (paddingStart, paddingEnd) = getStartEndPadding(position, backgroundRes)
             v.setPaddingRelative(paddingStart, v.paddingTop, paddingEnd, v.paddingBottom)
             v.clipToOutline = backgroundRes != 0
         }
-        // Update background
-        v.setBackgroundResource(backgroundRes)
     }
 
     private fun getStartEndPadding(position: Int, backgroundRes: Int): Pair<Int, Int> {
