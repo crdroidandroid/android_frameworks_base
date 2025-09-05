@@ -165,10 +165,6 @@ public class DateTimeView extends TextView {
         if (mLocalTime == null || getVisibility() == GONE) {
             return;
         }
-        if (mShowRelativeTime) {
-            updateRelativeTime();
-            return;
-        }
 
         int display;
         ZoneId zoneId = ZoneId.systemDefault();
@@ -476,6 +472,13 @@ public class DateTimeView extends TextView {
                 final int count = mAttachedViews.size();
                 for (int i = 0; i < count; i++) {
                     DateTimeView view = mAttachedViews.get(i);
+                    if (view.mShowRelativeTime) {
+                        // Every minute, the status bar only needs to execute this function once
+                        // to update the display
+                        view.post(() -> view.updateRelativeTime());
+                        return;
+                    }
+
                     view.post(() -> view.clearFormatAndUpdate());
                 }
             }
