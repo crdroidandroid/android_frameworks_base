@@ -285,7 +285,9 @@ class KeyguardController {
 
     private void setWakeTransitionReady() {
         if (mWindowManager.mAtmService.getTransitionController().getCollectingTransitionType()
-                == WindowManager.TRANSIT_WAKE) {
+                == WindowManager.TRANSIT_WAKE
+                || mWindowManager.mAtmService.getTransitionController().getCollectingTransitionType()
+                        == WindowManager.TRANSIT_KEYGUARD_UNOCCLUDE) {
             mWindowManager.mAtmService.getTransitionController().setReady(
                     mRootWindowContainer.getDefaultDisplay());
         }
