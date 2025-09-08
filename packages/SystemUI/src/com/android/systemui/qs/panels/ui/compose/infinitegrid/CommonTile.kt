@@ -373,7 +373,7 @@ object CommonTileDefaults {
         }
 
     val Context.TileLabelBlurWidth: Dp get() = 20.dp * scaleRatio
-    val Context.TileTextSize: Dp get() = 16.dp * scaleRatio
+    val Context.TileTextSize: Dp get() = 14.dp * scaleRatio
     val Context.LargeTileIconSize: Dp get() = 24.dp * scaleRatio
     val Context.TileContentEndPadding: Dp get() = 20.dp * scaleRatio
     val Context.IconEndPadding: Dp get() = 12.dp * scaleRatio

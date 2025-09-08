@@ -75,7 +75,7 @@ frame when animating QS <-> QQS transition
         android:layout_height="wrap_content"
         android:id="@+id/barrier"
         app:barrierDirection="start"
-        app:constraint_referenced_ids="shade_header_system_icons" />
+        app:constraint_referenced_ids="shade_header_system_icons,privacy_container" />
 
     <com.android.systemui.statusbar.policy.Clock
         android:id="@+id/clock"
@@ -145,7 +145,6 @@ frame when animating QS <-> QQS transition
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:clipChildren="false"
                 android:paddingEnd="@dimen/signal_cluster_battery_padding" />
 
             <com.android.systemui.battery.BatteryMeterView

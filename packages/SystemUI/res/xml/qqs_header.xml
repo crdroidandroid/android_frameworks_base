@@ -75,6 +75,5 @@
             app:layout_constraintHorizontal_bias="1"
             app:layout_constraintStart_toEndOf="@+id/date"
             app:layout_constraintTop_toTopOf="parent"/>
-        <PropertySet android:alpha="0"/>
     </Constraint>
 </ConstraintSet>

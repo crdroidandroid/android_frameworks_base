@@ -298,7 +298,7 @@
     <dimen name="notification_max_heads_up_height">136dp</dimen>
 
     <!-- Side padding on the side of notifications -->
-    <dimen name="notification_side_paddings">16dp</dimen>
+    <dimen name="notification_side_paddings">22dp</dimen>
 
     <!-- Width of inline notification menu item buttons -->
     <dimen name="notification_menu_item_width">112dp</dimen>
@@ -333,7 +333,7 @@
     <dimen name="notification_min_interaction_height">40dp</dimen>
 
     <!-- Radius for notifications corners without adjacent notifications -->
-    <dimen name="notification_corner_radius">16dp</dimen>
+    <dimen name="notification_corner_radius">28dp</dimen>
 
     <!-- Stroke width for notifications focus state overlay, see id/notification_focus_outline -->
     <dimen name="notification_focus_stroke_width">3dp</dimen>
