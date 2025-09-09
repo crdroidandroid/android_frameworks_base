@@ -34,7 +34,7 @@
     <!-- Weather -->
     <string name="weather_condition_clouds">Nuageux</string>
     <string name="weather_condition_rain">Pluvieux</string>
-    <string name="weather_condition_clear">Clear Sky</string>
+    <string name="weather_condition_clear">Ciel dégagé</string>
     <string name="weather_condition_storm">Orageux</string>
     <string name="weather_condition_snow">Neigeux</string>
     <string name="weather_condition_wind">Venteux</string>
@@ -135,5 +135,5 @@
     <!-- 5G toggle in Internet Dialog -->
     <string name="enable_fiveg">Activer la 5G</string>
     <!-- Toast for timer chips long press -->
-    <string name="chip_longpress_hint">Long press to directly stop</string>
+    <string name="chip_longpress_hint">Appui long pour stopper immédiatement</string>
 </resources>
