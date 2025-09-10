@@ -566,6 +566,8 @@ android_library {
         "//frameworks/libs/systemui:iconloader_base",
         "SystemUI-tags",
         "SystemUI-proto",
+        "smartspace-proto-java",
+        "smartspace-proto-lite-java",
         "monet",
         "libmonet",
         "dagger2",
