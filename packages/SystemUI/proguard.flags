@@ -5,3 +5,10 @@
 }
 
 -keep,allowoptimization,allowaccessmodification class com.android.systemui.dagger.DaggerReferenceGlobalRootComponent** { !synthetic *; }
+
+# Custom rules
+-keep class com.android.systemui.smartspace.** { *; }
+
+# Google rules
+-keep class android.hardware.** { *; }
+-keep class com.google.** { *; }
