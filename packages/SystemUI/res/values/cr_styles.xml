@@ -5,4 +5,51 @@
 -->
 <resources>
 
+    <!-- Smartspace -->
+    <style name="DateWeatherText" parent="@style/EnhancedSmartspaceTextTitle">
+        <item name="android:textSize">@dimen/enhanced_smartspace_text_size_medium</item>
+    </style>
+    <style name="DefaultSmartspaceView">
+        <item name="remoteViewsCardCornerRadius">@dimen/lockscreen_remoteviews_card_corner_radius</item>
+    </style>
+    <style name="DotStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:alpha">0.0</item>
+    </style>
+    <style name="EnhancedSmartspaceTextSubtitle" parent="@style/EnhancedSmartspaceTextTitle">
+        <item name="android:textSize">?smartspaceSubtitleTextSize</item>
+        <item name="android:fontFamily">variable-title-medium</item>
+        <item name="android:letterSpacing">@dimen/smartspaceLetterSpacing</item>
+    </style>
+    <style name="EnhancedSmartspaceTextTitle" parent="@android:style/Theme.DeviceDefault.DayNight">
+        <item name="android:textSize">?smartspaceTitleTextSize</item>
+        <item name="android:textColor">?android:textColorPrimary</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:drawablePadding">@dimen/enhanced_smartspace_icon_margin</item>
+        <item name="android:fontFamily">variable-title-medium-emphasized</item>
+        <item name="android:lineHeight">24.0sp</item>
+    </style>
+    <style name="LauncherSmartspaceView">
+        <item name="remoteViewsCardCornerRadius">@dimen/launcher_remoteviews_card_corner_radius</item>
+    </style>
+    <style name="LockscreenDotStyle" parent="@style/DotStyle">
+        <item name="android:alpha">0.0</item>
+        <item name="android:scaleX">0.8</item>
+        <item name="android:scaleY">0.8</item>
+    </style>
+    <style name="Smartspace">
+        <item name="smartspaceSubtitleTextSize">@dimen/enhanced_smartspace_text_size_small</item>
+        <item name="smartspaceTitleTextSize">@dimen/enhanced_smartspace_text_size_title</item>
+    </style>
+    <style name="WeatherDreamOverlayComplication" parent="@style/EnhancedSmartspaceTextTitle">
+        <item name="android:textSize">@dimen/weather_dream_overlay_complication_text_size</item>
+        <item name="android:fontFamily">google-sans-flex</item>
+        <item name="android:lineHeight">@dimen/weather_dream_overlay_complication_line_height</item>
+    </style>
 </resources>

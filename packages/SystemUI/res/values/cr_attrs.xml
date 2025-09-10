@@ -5,4 +5,14 @@
 -->
 <resources>
 
+    <!-- Smartspace -->
+    <attr name="remoteViewsCardCornerRadius" format="dimension" />
+    <attr name="smartspaceSubtitleTextSize" format="dimension" />
+    <attr name="smartspaceTitleTextSize" format="dimension" />
+    <declare-styleable name="WeatherSmartspaceView">
+        <attr name="iconInset" format="dimension" />
+        <attr name="iconSize" format="dimension" />
+        <attr name="removeTextDescent" format="boolean" />
+        <attr name="textDescentExtraPadding" format="dimension" />
+    </declare-styleable>
 </resources>
