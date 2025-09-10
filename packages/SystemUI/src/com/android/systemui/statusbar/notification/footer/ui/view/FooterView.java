@@ -105,7 +105,7 @@ public class FooterView extends StackScrollerDecorView {
             }
         };
         mContext.getContentResolver().registerContentObserver(
-                Settings.System.getUriFor("notification_row_transparency"),
+                Settings.Secure.getUriFor("notification_row_transparency"),
                 false, mTransparencyObserver, UserHandle.USER_CURRENT);
         updateColors();
     }
@@ -412,7 +412,7 @@ public class FooterView extends StackScrollerDecorView {
         final Drawable historyBg = NotifRedesignFooter.isEnabled()
                 ? theme.getDrawable(R.drawable.notif_footer_btn_background).mutate() : null;
 
-        final boolean isNotificationTransparencyOn = Settings.System.getIntForUser(
+        final boolean isNotificationTransparencyOn = Settings.Secure.getIntForUser(
                 mContext.getContentResolver(),
                 "notification_row_transparency", 0, UserHandle.USER_CURRENT) == 1;
 
