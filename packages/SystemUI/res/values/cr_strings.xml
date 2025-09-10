@@ -60,4 +60,15 @@
     <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • Turbo Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
     <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • Turbo Charging</string>
+
+    <!-- Smartspace -->
+    <string name="accessibility_next_alarm">Next alarm at %s</string>
+    <string name="accessibility_smartspace_page">Page %1$d of %2$d</string>
+    <string name="active_mode_content_description">%1$s is on</string>
+    <string name="generic_smartspace_concatenated_desc">%1$s, %2$s</string>
+    <string name="music_controls_no_title">No title</string>
+    <string name="smartspace_content_desc">At a glance</string>
+    <string name="smartspace_flight_qr_code">QR code</string>
+    <string name="smartspace_icu_date_pattern">EEEMMMd</string>
+    <string name="smartspace_role_desc">View</string>
 </resources>

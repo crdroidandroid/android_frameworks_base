@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.systemui.smartspace.WeatherSmartspaceView android:orientation="horizontal"
+    android:id="@+id/weather_smartspace_view_large"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <com.google.android.systemui.smartspace.DoubleShadowTextView
+        android:textColor="?android:textColorPrimary"
+        android:layout_gravity="center"
+        android:id="@+id/weather_text_view"
+        android:focusable="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/enhanced_smartspace_base_action_icon_margin"
+        style="@style/DateWeatherText" />
+</com.google.android.systemui.smartspace.WeatherSmartspaceView>
