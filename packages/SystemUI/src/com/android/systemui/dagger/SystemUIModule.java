@@ -16,10 +16,13 @@
 
 package com.android.systemui.dagger;
 
+import android.app.AlarmManager;
 import android.app.INotificationManager;
 import android.app.Service;
 import android.app.backup.BackupManager;
+import android.content.ComponentName;
 import android.content.Context;
+import android.os.Handler;
 import android.service.dreams.IDreamManager;
 import android.view.Display;
 
@@ -60,6 +63,7 @@ import com.android.systemui.complication.dagger.ComplicationComponent;
 import com.android.systemui.compose.ComposeModule;
 import com.android.systemui.controls.dagger.ControlsModule;
 import com.android.systemui.dagger.qualifiers.Application;
+import com.android.systemui.dagger.qualifiers.Background;
 import com.android.systemui.dagger.qualifiers.Main;
 import com.android.systemui.dagger.qualifiers.SystemUser;
 import com.android.systemui.dagger.qualifiers.UiBackground;
@@ -91,6 +95,7 @@ import com.android.systemui.log.table.TableLogBuffer;
 import com.android.systemui.log.table.impl.TableLogBufferModule;
 import com.android.systemui.lowlight.dagger.LowLightModule;
 import com.android.systemui.lowlightclock.dagger.LowLightClockModule;
+import com.android.systemui.media.NotificationMediaManager;
 import com.android.systemui.mediaprojection.MediaProjectionModule;
 import com.android.systemui.mediaprojection.appselector.MediaProjectionActivitiesModule;
 import com.android.systemui.mediaprojection.taskswitcher.MediaProjectionTaskSwitcherModule;
@@ -113,6 +118,7 @@ import com.android.systemui.qs.footer.dagger.FooterActionsModule;
 import com.android.systemui.qs.tiles.impl.qr.ui.model.QRCodeScannerModule;
 import com.android.systemui.recents.Recents;
 import com.android.systemui.recordissue.RecordIssueModule;
+import com.android.systemui.res.R;
 import com.android.systemui.rotation.impl.RotationModule;
 import com.android.systemui.scene.shared.model.SceneContainerConfig;
 import com.android.systemui.scene.shared.model.SceneDataSource;
@@ -128,6 +134,7 @@ import com.android.systemui.shade.ShadeDisplayAwareModule;
 import com.android.systemui.shade.transition.LargeScreenShadeInterpolator;
 import com.android.systemui.shade.transition.LargeScreenShadeInterpolatorImpl;
 import com.android.systemui.shared.condition.Monitor;
+import com.android.systemui.smartspace.config.BcSmartspaceConfigProvider;
 import com.android.systemui.smartspace.dagger.SmartspaceModule;
 import com.android.systemui.startable.Dependencies;
 import com.android.systemui.statusbar.CommandQueue;
@@ -156,10 +163,12 @@ import com.android.systemui.statusbar.phone.ConfigurationControllerModule;
 import com.android.systemui.statusbar.phone.LetterboxModule;
 import com.android.systemui.statusbar.pipeline.dagger.StatusBarPipelineModule;
 import com.android.systemui.statusbar.policy.KeyguardStateController;
+import com.android.systemui.statusbar.policy.NextAlarmControllerImpl;
 import com.android.systemui.statusbar.policy.PolicyModule;
 import com.android.systemui.statusbar.policy.SensitiveNotificationProtectionController;
 import com.android.systemui.statusbar.policy.ZenModeController;
 import com.android.systemui.statusbar.policy.dagger.StatusBarPolicyModule;
+import com.android.systemui.statusbar.policy.domain.interactor.ZenModeInteractor;
 import com.android.systemui.statusbar.quickactions.dagger.StatusBarFeaturePodsModule;
 import com.android.systemui.statusbar.systemstatusicons.SystemStatusIconsModule;
 import com.android.systemui.statusbar.ui.binder.StatusBarViewBinderModule;
@@ -175,6 +184,7 @@ import com.android.systemui.usb.UsbModule;
 import com.android.systemui.user.UserModule;
 import com.android.systemui.user.domain.UserDomainLayerModule;
 import com.android.systemui.util.EventLogModule;
+import com.android.systemui.util.concurrency.DelayableExecutor;
 import com.android.systemui.util.concurrency.SysUIConcurrencyModule;
 import com.android.systemui.util.dagger.UtilModule;
 import com.android.systemui.util.kotlin.SysUICoroutinesModule;
@@ -185,6 +195,14 @@ import com.android.systemui.wallet.dagger.WalletModule;
 import com.android.systemui.wmshell.BubblesManager;
 import com.android.wm.shell.bubbles.Bubbles;
 
+import com.google.android.systemui.smartspace.BcSmartspaceDataProvider;
+import com.google.android.systemui.smartspace.DateSmartspaceDataProvider;
+import com.google.android.systemui.smartspace.KeyguardMediaViewController;
+import com.google.android.systemui.smartspace.KeyguardZenAlarmViewController;
+import com.google.android.systemui.smartspace.WeatherSmartspaceDataProvider;
+import com.google.android.systemui.smartspace.dagger.SmartspaceGoogleModule;
+import com.google.android.systemui.smartspace.dagger.SmartspaceStartableModule;
+
 import dagger.Binds;
 import dagger.BindsOptionalOf;
 import dagger.Module;
@@ -193,6 +211,7 @@ import dagger.multibindings.ClassKey;
 import dagger.multibindings.IntoMap;
 import dagger.multibindings.Multibinds;
 
+import kotlinx.coroutines.CoroutineDispatcher;
 import kotlinx.coroutines.CoroutineScope;
 
 import java.util.Collections;
@@ -283,6 +302,8 @@ import javax.inject.Named;
         SecurityRepositoryModule.class,
         ScreenRecordModule.class,
         SmartspaceModule.class,
+        SmartspaceStartableModule.class,
+        SmartspaceGoogleModule.class,
         StatusBarEventsModule.class,
         StatusBarFeaturePodsModule.class,
         StatusBarModule.class,
@@ -392,6 +413,10 @@ public abstract class SystemUIModule {
     abstract BcSmartspaceDataPlugin optionalDateSmartspaceConfigPlugin();
 
     @BindsOptionalOf
+    @Named(SmartspaceModule.GLANCEABLE_HUB_SMARTSPACE_DATA_PLUGIN)
+    abstract BcSmartspaceDataPlugin optionalGlanceableHubBcSmartspaceDataPlugin();
+
+    @BindsOptionalOf
     @Named(SmartspaceModule.WEATHER_SMARTSPACE_DATA_PLUGIN)
     abstract BcSmartspaceDataPlugin optionalWeatherSmartspaceConfigPlugin();
 
@@ -493,5 +518,75 @@ public abstract class SystemUIModule {
     @Provides
     static SettingsProxy.CurrentUserIdProvider provideCurrentUserId(UserTracker userTracker) {
         return userTracker::getUserId;
+    }
+
+    @Provides
+    @SysUISingleton
+    static KeyguardZenAlarmViewController provideKeyguardZenAlarmViewController(
+            Context context,
+            @Named(SmartspaceModule.DATE_SMARTSPACE_DATA_PLUGIN) BcSmartspaceDataPlugin datePlugin,
+            ZenModeController zenModeController,
+            ZenModeInteractor zenModeInteractor,
+            AlarmManager alarmManager,
+            NextAlarmControllerImpl nextAlarmController,
+            @Main Handler handler,
+            @Application CoroutineScope applicationScope,
+            @Background CoroutineDispatcher bgDispatcher) {
+        KeyguardZenAlarmViewController controller =
+                new KeyguardZenAlarmViewController(
+                        context,
+                        datePlugin,
+                        zenModeController,
+                        zenModeInteractor,
+                        alarmManager,
+                        nextAlarmController,
+                        handler,
+                        applicationScope,
+                        bgDispatcher);
+        controller.alarmImage =
+                context.getResources().getDrawable(R.drawable.ic_access_alarms_big, null);
+        return controller;
+    }
+    @Provides
+    @SysUISingleton
+    static KeyguardMediaViewController provideKeyguardMediaViewController(
+            Context context,
+            NotificationMediaManager mediaManager,
+            BcSmartspaceDataPlugin plugin,
+            UserTracker userTracker,
+            @Main DelayableExecutor uiExecutor) {
+        KeyguardMediaViewController controller =
+                new KeyguardMediaViewController(
+                        context, mediaManager, plugin, userTracker, uiExecutor);
+        controller.mediaComponent = new ComponentName(context, KeyguardMediaViewController.class);
+        return controller;
+    }
+    @Provides
+    @SysUISingleton
+    static BcSmartspaceConfigProvider provideBcSmartspaceConfigPlugin(FeatureFlags featureFlags) {
+        return new BcSmartspaceConfigProvider(featureFlags);
+    }
+    @Provides
+    @SysUISingleton
+    static BcSmartspaceDataPlugin provideBcSmartspaceDataPlugin() {
+        return new BcSmartspaceDataProvider();
+    }
+    @Provides
+    @SysUISingleton
+    @Named(SmartspaceModule.DATE_SMARTSPACE_DATA_PLUGIN)
+    static BcSmartspaceDataPlugin provideDateSmartspaceDataPlugin() {
+        return new DateSmartspaceDataProvider();
+    }
+    @Provides
+    @SysUISingleton
+    @Named(SmartspaceModule.GLANCEABLE_HUB_SMARTSPACE_DATA_PLUGIN)
+    static BcSmartspaceDataPlugin provideGlanceableHubBcSmartspaceDataPlugin() {
+        return new BcSmartspaceDataProvider();
+    }
+    @Provides
+    @SysUISingleton
+    @Named(SmartspaceModule.WEATHER_SMARTSPACE_DATA_PLUGIN)
+    static BcSmartspaceDataPlugin provideWeatherSmartspaceDataPlugin() {
+        return new WeatherSmartspaceDataProvider();
     }
 }
