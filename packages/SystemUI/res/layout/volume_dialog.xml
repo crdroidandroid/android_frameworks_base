@@ -41,9 +41,9 @@
         android:layout_marginBottom="@dimen/volume_dialog_components_spacing"
         android:clipChildren="false"
         app:layout_constraintBottom_toTopOf="@id/volume_dialog_main_slider_container"
-        app:layout_constraintEnd_toEndOf="@id/volume_dialog_background"
+        app:layout_constraintRight_toRightOf="@id/volume_dialog_background"
         app:layout_constraintHeight_default="spread"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_default="spread">
 
@@ -74,9 +74,9 @@
         android:layout_marginTop="@dimen/volume_dialog_components_spacing"
         android:clipChildren="false"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/volume_dialog_background"
+        app:layout_constraintRight_toRightOf="@id/volume_dialog_background"
         app:layout_constraintHeight_default="wrap"
-        app:layout_constraintStart_toStartOf="@id/volume_dialog_background"
+        app:layout_constraintLeft_toLeftOf="@id/volume_dialog_background"
         app:layout_constraintTop_toBottomOf="@id/volume_dialog_main_slider_container"
         app:layout_constraintVertical_bias="0"
         app:layout_constraintWidth_default="wrap">
