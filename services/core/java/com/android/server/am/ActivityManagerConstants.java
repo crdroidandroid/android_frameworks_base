@@ -57,7 +57,6 @@ import android.util.SparseBooleanArray;
 
 import com.android.internal.R;
 import com.android.internal.annotations.GuardedBy;
-import com.android.internal.util.MemInfoReader;
 import com.android.server.LocalServices;
 
 import dalvik.annotation.optimization.NeverCompile;
@@ -1493,7 +1492,7 @@ final class ActivityManagerConstants extends ContentObserver {
                 .map(ComponentName::unflattenFromString).collect(Collectors.toSet()));
         mCustomizedMaxCachedProcesses = context.getResources().getInteger(
                 com.android.internal.R.integer.config_customizedMaxCachedProcesses);
-        updateTotalMaxCachedProcesses();
+        CUR_MAX_CACHED_PROCESSES = Integer.min(mCustomizedMaxCachedProcesses, MAX_CACHED_PROCESSES);
         CUR_MAX_EMPTY_PROCESSES = computeEmptyProcessLimit(CUR_MAX_CACHED_PROCESSES);
 
         final int rawMaxEmptyProcesses = computeEmptyProcessLimit(CUR_MAX_CACHED_PROCESSES);
@@ -1512,34 +1511,6 @@ final class ActivityManagerConstants extends ContentObserver {
                 com.android.internal.R.integer.config_am_tieredCachedAdjUiTierSize);
         TIERED_CACHED_ADJ_UI_TIER_SIZE = Math.min(
                 mDefaultTieredCachedAdjUiTierSize, TIERED_CACHED_ADJ_MAX_UI_TIER_SIZE);
-    }
-
-    private void updateTotalMaxCachedProcesses() {
-        MemInfoReader memInfoReader = new MemInfoReader();
-        memInfoReader.readMemInfo();
-        long totalMemoryBytes = memInfoReader.getTotalSize();
-        long totalMemoryGB = totalMemoryBytes / (1024L * 1024L * 1024L);
-        int roundedMemoryGB = roundToNearestKnownRamSize(totalMemoryGB);
-        if (roundedMemoryGB <= 4) {
-            CUR_MAX_CACHED_PROCESSES = 32;
-        } else if (roundedMemoryGB > 4 && roundedMemoryGB <= 6) {
-            CUR_MAX_CACHED_PROCESSES = 64;
-        } else {
-            CUR_MAX_CACHED_PROCESSES = DEFAULT_MAX_CACHED_PROCESSES;
-        }
-    }
-
-    private int roundToNearestKnownRamSize(long memoryGB) {
-        int[] knownSizes = {1, 2, 3, 4, 6, 8, 10, 12, 16, 32, 48, 64};
-        if (memoryGB <= 0) {
-            return 1;
-        }
-        for (int size : knownSizes) {
-            if (memoryGB <= size) {
-                return size;
-            }
-        }
-        return knownSizes[knownSizes.length - 1];
     }
 
     public void start(ContentResolver resolver) {
@@ -2102,7 +2073,20 @@ final class ActivityManagerConstants extends ContentObserver {
     }
 
     private void updateMaxCachedProcesses() {
-        updateTotalMaxCachedProcesses();
+        String maxCachedProcessesFlag = DeviceConfig.getProperty(
+                DeviceConfig.NAMESPACE_ACTIVITY_MANAGER, KEY_MAX_CACHED_PROCESSES);
+        try {
+            CUR_MAX_CACHED_PROCESSES = mOverrideMaxCachedProcesses < 0
+                    ? (TextUtils.isEmpty(maxCachedProcessesFlag)
+                    ? mCustomizedMaxCachedProcesses : Integer.parseInt(maxCachedProcessesFlag))
+                    : mOverrideMaxCachedProcesses;
+        } catch (NumberFormatException e) {
+            // Bad flag value from Phenotype, revert to default.
+            Slog.e(TAG,
+                    "Unable to parse flag for max_cached_processes: " + maxCachedProcessesFlag, e);
+            CUR_MAX_CACHED_PROCESSES = mCustomizedMaxCachedProcesses;
+        }
+        CUR_MAX_CACHED_PROCESSES = Integer.min(CUR_MAX_CACHED_PROCESSES, MAX_CACHED_PROCESSES);
 
         CUR_MAX_EMPTY_PROCESSES = computeEmptyProcessLimit(CUR_MAX_CACHED_PROCESSES);
 
