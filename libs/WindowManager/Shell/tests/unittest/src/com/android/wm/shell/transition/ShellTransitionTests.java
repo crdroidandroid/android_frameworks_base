@@ -302,7 +302,8 @@ public class ShellTransitionTests extends ShellTestCase {
         IBinder transitToken = new Binder();
         transitions.requestStartTransition(transitToken,
                 new TransitionRequestInfo(TRANSIT_OPEN, null /* trigger */,
-                        new RemoteTransition(testRemote, "Test")));
+                        new TransitionRequestInfo.RemoteTransitionInfo(
+                                new RemoteTransition(testRemote, "Test"))));
         verify(mOrganizer, times(1)).startTransition(eq(transitToken), any());
         TransitionInfo info = new TransitionInfoBuilder(TRANSIT_OPEN)
                 .addChange(TRANSIT_OPEN).addChange(TRANSIT_CLOSE).build();
@@ -686,7 +687,8 @@ public class ShellTransitionTests extends ShellTestCase {
         IBinder transitToken = new Binder();
         assertNotNull(oneShot.handleRequest(transitToken,
                 new TransitionRequestInfo(transitType, null,
-                        new RemoteTransition(testRemote, "Test"))));
+                        new TransitionRequestInfo.RemoteTransitionInfo(
+                                new RemoteTransition(testRemote, "Test")))));
         assertNull(oneShot.handleRequest(transitToken,
                 new TransitionRequestInfo(transitType, null, null)));
 

@@ -181,7 +181,7 @@ public class RemoteTransitionHandler implements Transitions.TransitionHandler {
             remote.getRemoteTransition().startAnimation(transition, remoteInfo, remoteStartT, cb);
             // assume that remote will apply the start transaction.
             startTransaction.clear();
-            Transitions.setRunningRemoteTransitionDelegate(remote.getAppThread());
+            Transitions.setRunningRemoteTransitionDelegate(transition);
         } catch (RemoteException e) {
             Log.e(Transitions.TAG, "Error running remote transition.", e);
             if (remoteStartT != startTransaction) {

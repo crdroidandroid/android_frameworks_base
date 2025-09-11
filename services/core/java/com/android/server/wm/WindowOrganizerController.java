@@ -75,6 +75,7 @@ import static android.window.WindowContainerTransaction.HierarchyOp.HIERARCHY_OP
 import static android.window.WindowContainerTransaction.HierarchyOp.HIERARCHY_OP_TYPE_RESTORE_TRANSIENT_ORDER;
 import static android.window.WindowContainerTransaction.HierarchyOp.HIERARCHY_OP_TYPE_SET_ADJACENT_ROOTS;
 import static android.window.WindowContainerTransaction.HierarchyOp.HIERARCHY_OP_TYPE_SET_ALWAYS_ON_TOP;
+import static android.window.WindowContainerTransaction.HierarchyOp.HIERARCHY_OP_TYPE_SET_ANIMATION_DELEGATE;
 import static android.window.WindowContainerTransaction.HierarchyOp.HIERARCHY_OP_TYPE_SET_EXCLUDE_INSETS_TYPES;
 import static android.window.WindowContainerTransaction.HierarchyOp.HIERARCHY_OP_TYPE_SET_IS_TRIMMABLE;
 import static android.window.WindowContainerTransaction.HierarchyOp.HIERARCHY_OP_TYPE_SET_KEYGUARD_STATE;
@@ -108,6 +109,7 @@ import android.annotation.NonNull;
 import android.annotation.Nullable;
 import android.app.ActivityManager;
 import android.app.ActivityOptions;
+import android.app.IApplicationThread;
 import android.app.WindowConfiguration;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -1676,6 +1678,29 @@ class WindowOrganizerController extends IWindowOrganizerController.Stub
                     effects |= TRANSACT_EFFECTS_LIFECYCLE;
                 }
                 break;
+            }
+            case HIERARCHY_OP_TYPE_SET_ANIMATION_DELEGATE: {
+                final Transition transition = chain.getTransition();
+                if (transition == null) {
+                    Slog.e(TAG, "No transition to set animation delegate on");
+                    break;
+                }
+                // Unfortunately, IApplicationThread.Stub.asInterface will make a random Proxy
+                // object if the binder isn't the correct interface (instead of returning null),
+                // so we have to do our own check.
+                final IBinder binder = hop.getCaller();
+                android.os.IInterface iin = binder.queryLocalInterface(
+                        IApplicationThread.Stub.DESCRIPTOR);
+                if (!(iin instanceof IApplicationThread)) {
+                    Slog.e(TAG, "Not a valid process token: " + binder);
+                    break;
+                }
+                if (transition.mRemoteDelegate != null) {
+                    Slog.wtf(TAG, "Transition already has a remote delegate: "
+                            + transition.getSyncId());
+                    break;
+                }
+                transition.mRemoteDelegate = IApplicationThread.Stub.asInterface(hop.getCaller());
             }
         }
         return effects;

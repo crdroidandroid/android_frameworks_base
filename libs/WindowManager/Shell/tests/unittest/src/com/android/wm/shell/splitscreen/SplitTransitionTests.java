@@ -373,7 +373,7 @@ public class SplitTransitionTests extends ShellTestCase {
 
         // Create a request to bring home forward
         TransitionRequestInfo request = new TransitionRequestInfo(TRANSIT_TO_FRONT, homeTask,
-                mock(RemoteTransition.class));
+                mock(TransitionRequestInfo.RemoteTransitionInfo.class));
         IBinder transition = mock(IBinder.class);
         WindowContainerTransaction result = mStageCoordinator.handleRequest(transition, request);
         // Don't handle recents opening
@@ -398,7 +398,8 @@ public class SplitTransitionTests extends ShellTestCase {
     @Test
     @UiThreadTest
     public void testRemotePassThroughInvoked() throws RemoteException {
-        RemoteTransition remoteWrapper = mock(RemoteTransition.class);
+        TransitionRequestInfo.RemoteTransitionInfo remoteWrapper =
+                mock(TransitionRequestInfo.RemoteTransitionInfo.class);
         IRemoteTransition remoteTransition = mock(IRemoteTransition.class);
         IBinder remoteBinder = mock(IBinder.class);
         doReturn(remoteBinder).when(remoteTransition).asBinder();
@@ -433,7 +434,7 @@ public class SplitTransitionTests extends ShellTestCase {
 
         // Create a request to bring home forward
         TransitionRequestInfo request = new TransitionRequestInfo(TRANSIT_TO_FRONT, homeTask,
-                mock(RemoteTransition.class));
+                mock(TransitionRequestInfo.RemoteTransitionInfo.class));
         IBinder transition = mock(IBinder.class);
         WindowContainerTransaction result = mStageCoordinator.handleRequest(transition, request);
         // Don't handle recents opening

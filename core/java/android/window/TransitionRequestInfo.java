@@ -53,7 +53,7 @@ public final class TransitionRequestInfo implements Parcelable {
     private @Nullable TransitionRequestInfo.PipChange mPipChange;
 
     /** If non-null, a remote-transition associated with the source of this transition. */
-    private @Nullable RemoteTransition mRemoteTransition;
+    private @Nullable TransitionRequestInfo.RemoteTransitionInfo mRemoteTransitionInfo;
 
     /**
      * If non-null, this request was triggered by this display change. This will not be complete:
@@ -88,7 +88,7 @@ public final class TransitionRequestInfo implements Parcelable {
     public TransitionRequestInfo(
             @WindowManager.TransitionType int type,
             @Nullable ActivityManager.RunningTaskInfo triggerTask,
-            @Nullable RemoteTransition remoteTransition) {
+            @Nullable RemoteTransitionInfo remoteTransition) {
         this(type, triggerTask, null /* pipChange */, remoteTransition, null /* displayChange */,
                 null /* requestedLocation */, null /* userChange */,
                 null /* windowingLayerChange */, 0 /* flags */, -1 /* debugId */);
@@ -98,7 +98,7 @@ public final class TransitionRequestInfo implements Parcelable {
     public TransitionRequestInfo(
             @WindowManager.TransitionType int type,
             @Nullable ActivityManager.RunningTaskInfo triggerTask,
-            @Nullable RemoteTransition remoteTransition,
+            @Nullable RemoteTransitionInfo remoteTransition,
             int flags) {
         this(type, triggerTask, null /* pipChange */, remoteTransition, null /* displayChange */,
                 null /* requestedLocation */, null /* userChange */,
@@ -109,7 +109,7 @@ public final class TransitionRequestInfo implements Parcelable {
     public TransitionRequestInfo(
             @WindowManager.TransitionType int type,
             @Nullable ActivityManager.RunningTaskInfo triggerTask,
-            @Nullable RemoteTransition remoteTransition,
+            @Nullable RemoteTransitionInfo remoteTransition,
             @Nullable TransitionRequestInfo.DisplayChange displayChange,
             int flags) {
         this(type, triggerTask, null /* pipChange */, remoteTransition, displayChange,
@@ -122,7 +122,7 @@ public final class TransitionRequestInfo implements Parcelable {
             @WindowManager.TransitionType int type,
             @Nullable ActivityManager.RunningTaskInfo triggerTask,
             @Nullable ActivityManager.RunningTaskInfo pipTask,
-            @Nullable RemoteTransition remoteTransition,
+            @Nullable RemoteTransitionInfo remoteTransition,
             @Nullable TransitionRequestInfo.DisplayChange displayChange,
             int flags) {
         this(type, triggerTask,
@@ -134,6 +134,22 @@ public final class TransitionRequestInfo implements Parcelable {
     /** @hide */
     String typeToString() {
         return transitTypeToString(mType);
+    }
+
+    /** Get RemoteTransition info as a RemoteTransition object */
+    public RemoteTransition getRemoteTransition() {
+        if (mRemoteTransitionInfo == null) return null;
+        return new RemoteTransition(mRemoteTransitionInfo.getRemoteTransition(),
+                mRemoteTransitionInfo.getDebugName());
+    }
+
+    /** Set RemoteTransition info from a RemoteTransition object */
+    public void setRemoteTransition(RemoteTransition remoteTransition) {
+        if (remoteTransition == null) {
+            mRemoteTransitionInfo = null;
+            return;
+        }
+        mRemoteTransitionInfo = new RemoteTransitionInfo(remoteTransition);
     }
 
     /** Requested change to a display. */
@@ -343,7 +359,7 @@ public final class TransitionRequestInfo implements Parcelable {
         };
 
         @DataClass.Generated(
-                time = 1757490838236L,
+                time = 1758142326544L,
                 codegenVersion = "1.0.23",
                 sourceFile = "frameworks/base/core/java/android/window/TransitionRequestInfo.java",
                 inputSignatures = "private final  int mDisplayId\nprivate @android.annotation.Nullable android.graphics.Rect mStartAbsBounds\nprivate @android.annotation.Nullable android.graphics.Rect mEndAbsBounds\nprivate  int mStartRotation\nprivate  int mEndRotation\nprivate  boolean mPhysicalDisplayChanged\nprivate  int mDisconnectReparentDisplay\nclass DisplayChange extends java.lang.Object implements [android.os.Parcelable]\n@com.android.internal.util.DataClass(genToString=true, genSetters=true, genBuilder=false, genConstructor=false)")
@@ -480,7 +496,7 @@ public final class TransitionRequestInfo implements Parcelable {
         };
 
         @DataClass.Generated(
-                time = 1757490838258L,
+                time = 1758142326555L,
                 codegenVersion = "1.0.23",
                 sourceFile = "frameworks/base/core/java/android/window/TransitionRequestInfo.java",
                 inputSignatures = "private @android.annotation.NonNull android.window.WindowContainerToken mTaskFragmentToken\nprivate @android.annotation.NonNull android.app.ActivityManager.RunningTaskInfo mTaskInfo\nclass PipChange extends java.lang.Object implements [android.os.Parcelable]\n@com.android.internal.util.DataClass(genToString=true, genSetters=true, genBuilder=false, genConstructor=false)")
@@ -601,7 +617,7 @@ public final class TransitionRequestInfo implements Parcelable {
         };
 
         @DataClass.Generated(
-                time = 1757490838267L,
+                time = 1758142326558L,
                 codegenVersion = "1.0.23",
                 sourceFile = "frameworks/base/core/java/android/window/TransitionRequestInfo.java",
                 inputSignatures = "private  int mDisplayId\nprivate @android.annotation.NonNull android.graphics.Rect mBounds\nclass RequestedLocation extends java.lang.Object implements [android.os.Parcelable]\n@com.android.internal.util.DataClass(genToString=true, genSetters=true, genBuilder=false, genConstructor=false)")
@@ -706,7 +722,7 @@ public final class TransitionRequestInfo implements Parcelable {
         };
 
         @DataClass.Generated(
-                time = 1757490838272L,
+                time = 1758142326561L,
                 codegenVersion = "1.0.23",
                 sourceFile = "frameworks/base/core/java/android/window/TransitionRequestInfo.java",
                 inputSignatures = "private final  int mPreviousUserId\nprivate final  int mNewUserId\nclass UserChange extends java.lang.Object implements [android.os.Parcelable]\n@com.android.internal.util.DataClass(genToString=true, genSetters=true, genBuilder=false, genConstructor=false)")
@@ -815,10 +831,129 @@ public final class TransitionRequestInfo implements Parcelable {
         };
 
         @DataClass.Generated(
-                time = 1757490838279L,
+                time = 1758142326564L,
                 codegenVersion = "1.0.23",
                 sourceFile = "frameworks/base/core/java/android/window/TransitionRequestInfo.java",
                 inputSignatures = "private final @android.app.ActivityManager.AppTask.WindowingLayer int mWindowingLayer\nprivate final @android.annotation.NonNull android.os.IRemoteCallback mRemoteCallback\nclass WindowingLayerChange extends java.lang.Object implements [android.os.Parcelable]\n@com.android.internal.util.DataClass(genToString=true, genSetters=true, genBuilder=false, genConstructor=false)")
+        @Deprecated
+        private void __metadata() {}
+
+
+        //@formatter:on
+        // End of generated code
+
+    }
+
+    /**
+     * Information about the relevant RemoteTransition. Separate from RemoteTransition to prevent
+     * accidentally sending IApplicationThread out of system process.
+     *
+     * @see RemoteTransition
+     */
+    @DataClass(genToString = true, genConstructor = false)
+    public static final class RemoteTransitionInfo implements Parcelable {
+        @android.annotation.NonNull
+        private final IRemoteTransition mRemoteTransition;
+        @Nullable
+        private final String mDebugName;
+
+        public RemoteTransitionInfo(RemoteTransition remoteTransition) {
+            mRemoteTransition = remoteTransition.getRemoteTransition();
+            mDebugName = remoteTransition.getDebugName();
+        }
+
+
+
+        // Code below generated by codegen v1.0.23.
+        //
+        // DO NOT MODIFY!
+        // CHECKSTYLE:OFF Generated code
+        //
+        // To regenerate run:
+        // $ codegen $ANDROID_BUILD_TOP/frameworks/base/core/java/android/window/TransitionRequestInfo.java
+        //
+        // To exclude the generated code from IntelliJ auto-formatting enable (one-time):
+        //   Settings > Editor > Code Style > Formatter Control
+        //@formatter:off
+
+
+        @DataClass.Generated.Member
+        public @android.annotation.NonNull IRemoteTransition getRemoteTransition() {
+            return mRemoteTransition;
+        }
+
+        @DataClass.Generated.Member
+        public @Nullable String getDebugName() {
+            return mDebugName;
+        }
+
+        @Override
+        @DataClass.Generated.Member
+        public String toString() {
+            // You can override field toString logic by defining methods like:
+            // String fieldNameToString() { ... }
+
+            return "RemoteTransitionInfo { " +
+                    "remoteTransition = " + mRemoteTransition + ", " +
+                    "debugName = " + mDebugName +
+            " }";
+        }
+
+        @Override
+        @DataClass.Generated.Member
+        public void writeToParcel(@android.annotation.NonNull android.os.Parcel dest, int flags) {
+            // You can override field parcelling by defining methods like:
+            // void parcelFieldName(Parcel dest, int flags) { ... }
+
+            byte flg = 0;
+            if (mDebugName != null) flg |= 0x2;
+            dest.writeByte(flg);
+            dest.writeStrongInterface(mRemoteTransition);
+            if (mDebugName != null) dest.writeString(mDebugName);
+        }
+
+        @Override
+        @DataClass.Generated.Member
+        public int describeContents() { return 0; }
+
+        /** @hide */
+        @SuppressWarnings({"unchecked", "RedundantCast"})
+        @DataClass.Generated.Member
+        /* package-private */ RemoteTransitionInfo(@android.annotation.NonNull android.os.Parcel in) {
+            // You can override field unparcelling by defining methods like:
+            // static FieldType unparcelFieldName(Parcel in) { ... }
+
+            byte flg = in.readByte();
+            IRemoteTransition remoteTransition = IRemoteTransition.Stub.asInterface(in.readStrongBinder());
+            String debugName = (flg & 0x2) == 0 ? null : in.readString();
+
+            this.mRemoteTransition = remoteTransition;
+            com.android.internal.util.AnnotationValidations.validate(
+                    android.annotation.NonNull.class, null, mRemoteTransition);
+            this.mDebugName = debugName;
+
+            // onConstructed(); // You can define this method to get a callback
+        }
+
+        @DataClass.Generated.Member
+        public static final @android.annotation.NonNull Parcelable.Creator<RemoteTransitionInfo> CREATOR
+                = new Parcelable.Creator<RemoteTransitionInfo>() {
+            @Override
+            public RemoteTransitionInfo[] newArray(int size) {
+                return new RemoteTransitionInfo[size];
+            }
+
+            @Override
+            public RemoteTransitionInfo createFromParcel(@android.annotation.NonNull android.os.Parcel in) {
+                return new RemoteTransitionInfo(in);
+            }
+        };
+
+        @DataClass.Generated(
+                time = 1758142326566L,
+                codegenVersion = "1.0.23",
+                sourceFile = "frameworks/base/core/java/android/window/TransitionRequestInfo.java",
+                inputSignatures = "private final @android.annotation.NonNull android.window.IRemoteTransition mRemoteTransition\nprivate final @android.annotation.Nullable java.lang.String mDebugName\nclass RemoteTransitionInfo extends java.lang.Object implements [android.os.Parcelable]\n@com.android.internal.util.DataClass(genToString=true, genConstructor=false)")
         @Deprecated
         private void __metadata() {}
 
@@ -855,7 +990,7 @@ public final class TransitionRequestInfo implements Parcelable {
      * @param pipChange
      *   If non-null, this request might lead to a PiP transition; {@code PipChange} caches both
      *   {@code TaskFragment} token and the {@code TaskInfo} of the task with PiP candidate activity.
-     * @param remoteTransition
+     * @param remoteTransitionInfo
      *   If non-null, a remote-transition associated with the source of this transition.
      * @param displayChange
      *   If non-null, this request was triggered by this display change. This will not be complete:
@@ -878,7 +1013,7 @@ public final class TransitionRequestInfo implements Parcelable {
             @WindowManager.TransitionType int type,
             @Nullable ActivityManager.RunningTaskInfo triggerTask,
             @Nullable TransitionRequestInfo.PipChange pipChange,
-            @Nullable RemoteTransition remoteTransition,
+            @Nullable TransitionRequestInfo.RemoteTransitionInfo remoteTransitionInfo,
             @Nullable TransitionRequestInfo.DisplayChange displayChange,
             @Nullable TransitionRequestInfo.RequestedLocation requestedLocation,
             @Nullable TransitionRequestInfo.UserChange userChange,
@@ -890,7 +1025,7 @@ public final class TransitionRequestInfo implements Parcelable {
                 WindowManager.TransitionType.class, null, mType);
         this.mTriggerTask = triggerTask;
         this.mPipChange = pipChange;
-        this.mRemoteTransition = remoteTransition;
+        this.mRemoteTransitionInfo = remoteTransitionInfo;
         this.mDisplayChange = displayChange;
         this.mRequestedLocation = requestedLocation;
         this.mUserChange = userChange;
@@ -931,8 +1066,8 @@ public final class TransitionRequestInfo implements Parcelable {
      * If non-null, a remote-transition associated with the source of this transition.
      */
     @DataClass.Generated.Member
-    public @Nullable RemoteTransition getRemoteTransition() {
-        return mRemoteTransition;
+    public @Nullable TransitionRequestInfo.RemoteTransitionInfo getRemoteTransitionInfo() {
+        return mRemoteTransitionInfo;
     }
 
     /**
@@ -1010,8 +1145,8 @@ public final class TransitionRequestInfo implements Parcelable {
      * If non-null, a remote-transition associated with the source of this transition.
      */
     @DataClass.Generated.Member
-    public @android.annotation.NonNull TransitionRequestInfo setRemoteTransition(@android.annotation.NonNull RemoteTransition value) {
-        mRemoteTransition = value;
+    public @android.annotation.NonNull TransitionRequestInfo setRemoteTransitionInfo(@android.annotation.NonNull TransitionRequestInfo.RemoteTransitionInfo value) {
+        mRemoteTransitionInfo = value;
         return this;
     }
 
@@ -1064,7 +1199,7 @@ public final class TransitionRequestInfo implements Parcelable {
                 "type = " + typeToString() + ", " +
                 "triggerTask = " + mTriggerTask + ", " +
                 "pipChange = " + mPipChange + ", " +
-                "remoteTransition = " + mRemoteTransition + ", " +
+                "remoteTransitionInfo = " + mRemoteTransitionInfo + ", " +
                 "displayChange = " + mDisplayChange + ", " +
                 "requestedLocation = " + mRequestedLocation + ", " +
                 "userChange = " + mUserChange + ", " +
@@ -1083,7 +1218,7 @@ public final class TransitionRequestInfo implements Parcelable {
         int flg = 0;
         if (mTriggerTask != null) flg |= 0x2;
         if (mPipChange != null) flg |= 0x4;
-        if (mRemoteTransition != null) flg |= 0x8;
+        if (mRemoteTransitionInfo != null) flg |= 0x8;
         if (mDisplayChange != null) flg |= 0x10;
         if (mRequestedLocation != null) flg |= 0x20;
         if (mUserChange != null) flg |= 0x40;
@@ -1092,7 +1227,7 @@ public final class TransitionRequestInfo implements Parcelable {
         dest.writeInt(mType);
         if (mTriggerTask != null) dest.writeTypedObject(mTriggerTask, flags);
         if (mPipChange != null) dest.writeTypedObject(mPipChange, flags);
-        if (mRemoteTransition != null) dest.writeTypedObject(mRemoteTransition, flags);
+        if (mRemoteTransitionInfo != null) dest.writeTypedObject(mRemoteTransitionInfo, flags);
         if (mDisplayChange != null) dest.writeTypedObject(mDisplayChange, flags);
         if (mRequestedLocation != null) dest.writeTypedObject(mRequestedLocation, flags);
         if (mUserChange != null) dest.writeTypedObject(mUserChange, flags);
@@ -1116,7 +1251,7 @@ public final class TransitionRequestInfo implements Parcelable {
         int type = in.readInt();
         ActivityManager.RunningTaskInfo triggerTask = (flg & 0x2) == 0 ? null : (ActivityManager.RunningTaskInfo) in.readTypedObject(ActivityManager.RunningTaskInfo.CREATOR);
         TransitionRequestInfo.PipChange pipChange = (flg & 0x4) == 0 ? null : (TransitionRequestInfo.PipChange) in.readTypedObject(TransitionRequestInfo.PipChange.CREATOR);
-        RemoteTransition remoteTransition = (flg & 0x8) == 0 ? null : (RemoteTransition) in.readTypedObject(RemoteTransition.CREATOR);
+        TransitionRequestInfo.RemoteTransitionInfo remoteTransitionInfo = (flg & 0x8) == 0 ? null : (TransitionRequestInfo.RemoteTransitionInfo) in.readTypedObject(TransitionRequestInfo.RemoteTransitionInfo.CREATOR);
         TransitionRequestInfo.DisplayChange displayChange = (flg & 0x10) == 0 ? null : (TransitionRequestInfo.DisplayChange) in.readTypedObject(TransitionRequestInfo.DisplayChange.CREATOR);
         TransitionRequestInfo.RequestedLocation requestedLocation = (flg & 0x20) == 0 ? null : (TransitionRequestInfo.RequestedLocation) in.readTypedObject(TransitionRequestInfo.RequestedLocation.CREATOR);
         TransitionRequestInfo.UserChange userChange = (flg & 0x40) == 0 ? null : (TransitionRequestInfo.UserChange) in.readTypedObject(TransitionRequestInfo.UserChange.CREATOR);
@@ -1129,7 +1264,7 @@ public final class TransitionRequestInfo implements Parcelable {
                 WindowManager.TransitionType.class, null, mType);
         this.mTriggerTask = triggerTask;
         this.mPipChange = pipChange;
-        this.mRemoteTransition = remoteTransition;
+        this.mRemoteTransitionInfo = remoteTransitionInfo;
         this.mDisplayChange = displayChange;
         this.mRequestedLocation = requestedLocation;
         this.mUserChange = userChange;
@@ -1155,10 +1290,10 @@ public final class TransitionRequestInfo implements Parcelable {
     };
 
     @DataClass.Generated(
-            time = 1757490838308L,
+            time = 1758142326580L,
             codegenVersion = "1.0.23",
             sourceFile = "frameworks/base/core/java/android/window/TransitionRequestInfo.java",
-            inputSignatures = "private final @android.view.WindowManager.TransitionType int mType\nprivate @android.annotation.Nullable android.app.ActivityManager.RunningTaskInfo mTriggerTask\nprivate @android.annotation.Nullable android.window.TransitionRequestInfo.PipChange mPipChange\nprivate @android.annotation.Nullable android.window.RemoteTransition mRemoteTransition\nprivate @android.annotation.Nullable android.window.TransitionRequestInfo.DisplayChange mDisplayChange\nprivate @android.annotation.Nullable android.window.TransitionRequestInfo.RequestedLocation mRequestedLocation\nprivate @android.annotation.Nullable android.window.TransitionRequestInfo.UserChange mUserChange\nprivate @android.annotation.Nullable android.window.TransitionRequestInfo.WindowingLayerChange mWindowingLayerChange\nprivate final  int mFlags\nprivate final  int mDebugId\n  java.lang.String typeToString()\nclass TransitionRequestInfo extends java.lang.Object implements [android.os.Parcelable]\n@com.android.internal.util.DataClass(genToString=true, genSetters=true, genAidl=true)")
+            inputSignatures = "private final @android.view.WindowManager.TransitionType int mType\nprivate @android.annotation.Nullable android.app.ActivityManager.RunningTaskInfo mTriggerTask\nprivate @android.annotation.Nullable android.window.TransitionRequestInfo.PipChange mPipChange\nprivate @android.annotation.Nullable android.window.TransitionRequestInfo.RemoteTransitionInfo mRemoteTransitionInfo\nprivate @android.annotation.Nullable android.window.TransitionRequestInfo.DisplayChange mDisplayChange\nprivate @android.annotation.Nullable android.window.TransitionRequestInfo.RequestedLocation mRequestedLocation\nprivate @android.annotation.Nullable android.window.TransitionRequestInfo.UserChange mUserChange\nprivate @android.annotation.Nullable android.window.TransitionRequestInfo.WindowingLayerChange mWindowingLayerChange\nprivate final  int mFlags\nprivate final  int mDebugId\n  java.lang.String typeToString()\npublic  android.window.RemoteTransition getRemoteTransition()\npublic  void setRemoteTransition(android.window.RemoteTransition)\nclass TransitionRequestInfo extends java.lang.Object implements [android.os.Parcelable]\n@com.android.internal.util.DataClass(genToString=true, genSetters=true, genAidl=true)")
     @Deprecated
     private void __metadata() {}
 

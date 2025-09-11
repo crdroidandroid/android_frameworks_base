@@ -30,7 +30,6 @@ import static android.view.WindowManager.TRANSIT_OPEN;
 import static android.view.WindowManager.TRANSIT_PIP;
 import static android.view.WindowManager.TRANSIT_SLEEP;
 import static android.view.WindowManager.TRANSIT_TO_BACK;
-import static android.view.WindowManager.TRANSIT_TO_FRONT;
 import static android.window.DesktopModeFlags.ENABLE_DESKTOP_RECENTS_TRANSITIONS_CORNERS_BUGFIX;
 import static android.window.TransitionInfo.FLAG_MOVED_TO_TOP;
 import static android.window.TransitionInfo.FLAG_TRANSLUCENT;
@@ -206,9 +205,6 @@ public class RecentsTransitionHandler implements Transitions.TransitionHandler,
         ProtoLog.v(ShellProtoLogGroup.WM_SHELL_RECENTS_TRANSITION,
                 "startRecentsTransition");
 
-        // only care about latest one.
-        mAnimApp = appThread;
-
         // TODO(b/366021931): Formalize this later
         final boolean isSyntheticRequest = options.getBoolean(
                 "is_synthetic_recents_transition", /* defaultValue= */ false);
@@ -241,7 +237,7 @@ public class RecentsTransitionHandler implements Transitions.TransitionHandler,
             transition = startSyntheticRecentsTransition(listener, displayId);
         } else {
             transition = startRealRecentsTransition(intent, fillIn, options, wct, listener,
-                    displayId);
+                    displayId, appThread);
         }
         return transition;
     }
@@ -266,13 +262,14 @@ public class RecentsTransitionHandler implements Transitions.TransitionHandler,
      */
     private IBinder startRealRecentsTransition(PendingIntent intent, Intent fillIn, Bundle options,
             @Nullable WindowContainerTransaction requestWct, IRecentsAnimationRunner listener,
-            int displayId) {
+            int displayId, IApplicationThread appThread) {
         ProtoLog.v(ShellProtoLogGroup.WM_SHELL_RECENTS_TRANSITION,
                 "RecentsTransitionHandler.startRealRecentsTransition(): displayId=%d", displayId);
 
         final WindowContainerTransaction wct = requestWct != null
                 ? requestWct : new WindowContainerTransaction();
         wct.sendPendingIntent(intent, fillIn, options);
+        wct.setAnimationDelegate(appThread.asBinder());
 
         // Find the mixed handler which should handle this request (if we are in a state where a
         // mixed handler is needed).  This is slightly convoluted because starting the transition
@@ -362,7 +359,7 @@ public class RecentsTransitionHandler implements Transitions.TransitionHandler,
                     "RecentsTransitionHandler.startAnimation: failed to start animation");
             return false;
         }
-        Transitions.setRunningRemoteTransitionDelegate(animApp);
+        Transitions.setRunningRemoteTransitionDelegate(transition);
         return true;
     }
 

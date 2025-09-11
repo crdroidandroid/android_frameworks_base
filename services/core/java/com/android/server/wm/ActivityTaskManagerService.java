@@ -6293,7 +6293,10 @@ public class ActivityTaskManagerService extends IActivityTaskManager.Stub {
     }
 
     @Override
-    public void setRunningRemoteTransitionDelegate(IApplicationThread delegate) {
+    public void setRunningRemoteTransitionDelegate(IBinder transitionToken) {
+        final Transition transition = Transition.fromBinder(transitionToken);
+        if (transition == null) return;
+        final IApplicationThread delegate = transition.mRemoteDelegate;
         final TransitionController controller = getTransitionController();
         // A quick path without entering WM lock.
         if (delegate != null && controller.mRemotePlayer.reportRunning(delegate)) {

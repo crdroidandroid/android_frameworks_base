@@ -299,7 +299,9 @@ class DefaultMixedHandlerTest : ShellTestCase() {
         runningTask: RunningTaskInfo? = null,
         remote: RemoteTransition? = null,
     ): TransitionRequestInfo {
-        return TransitionRequestInfo(TRANSIT_OPEN, runningTask, remote)
+        val remoteInfo =
+            if (remote != null) TransitionRequestInfo.RemoteTransitionInfo(remote) else null
+        return TransitionRequestInfo(TRANSIT_OPEN, runningTask, remoteInfo)
     }
 
     private fun createRunningTask(taskId: Int = 0): RunningTaskInfo {

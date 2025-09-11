@@ -364,12 +364,14 @@ interface IActivityTaskManager {
     void detachNavigationBarFromApp(in IBinder transition);
 
     /**
-     * Marks a process as a delegate for the currently playing remote transition animation. This
-     * must be called from a process that is already a remote transition player or delegate. Any
-     * marked delegates are cleaned-up automatically at the end of the transition.
-     * @param caller is the IApplicationThread representing the calling process.
+     * Informs the transition system that the current transition is about to be animated by a
+     * remote process rather than the calling process. Core must have already been informed of
+     * the delegate process via RemoteTransition or WindowContainerTransaction.setAnimationDelegate.
+     * This must be called from a process that is already a remote transition player or delegate.
+     * Delegates are cleaned-up automatically at the end of the transition.
+     * @param transition is the token representing the transition being animated.
      */
-    void setRunningRemoteTransitionDelegate(in IApplicationThread caller);
+    void setRunningRemoteTransitionDelegate(in IBinder transition);
 
     /**
      * Prepare the back navigation in the server. This setups the leashed for sysui to animate
