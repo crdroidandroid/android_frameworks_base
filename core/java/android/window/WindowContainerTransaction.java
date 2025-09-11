@@ -486,6 +486,21 @@ public final class WindowContainerTransaction implements Parcelable {
     }
 
     /**
+     * Informs WM that a non-shell process is expected to animate this transition. This is only
+     * used for recents-launch since it has a special way to delegate remote animation. For normal
+     * launches, RemoteTransition in ActivityOptions provides the delegate.
+     * @hide
+     */
+    @NonNull
+    public WindowContainerTransaction setAnimationDelegate(@NonNull IBinder delegate) {
+        mHierarchyOps.add(new HierarchyOp.Builder(
+                HierarchyOp.HIERARCHY_OP_TYPE_SET_ANIMATION_DELEGATE)
+                .setInsetsFrameOwner(delegate)
+                .build());
+        return this;
+    }
+
+    /**
      * Sets to containers adjacent to each other. Containers below two visible adjacent roots will
      * be made invisible. This currently only applies to TaskFragment containers created by
      * organizer.
@@ -1505,6 +1520,7 @@ public final class WindowContainerTransaction implements Parcelable {
         public static final int HIERARCHY_OP_TYPE_SET_EXCLUDE_INSETS_TYPES = 21;
         public static final int HIERARCHY_OP_TYPE_SET_KEYGUARD_STATE = 22;
         public static final int HIERARCHY_OP_TYPE_SET_DISABLE_LAUNCH_ADJACENT = 23;
+        public static final int HIERARCHY_OP_TYPE_SET_ANIMATION_DELEGATE = 24;
 
         // The following key(s) are for use with mLaunchOptions:
         // When launching a task (eg. from recents), this is the taskId to be launched.
@@ -1894,6 +1910,7 @@ public final class WindowContainerTransaction implements Parcelable {
                 case HIERARCHY_OP_TYPE_RESTORE_BACK_NAVIGATION: return "restoreBackNav";
                 case HIERARCHY_OP_TYPE_SET_EXCLUDE_INSETS_TYPES: return "setExcludeInsetsTypes";
                 case HIERARCHY_OP_TYPE_SET_KEYGUARD_STATE: return "setKeyguardState";
+                case HIERARCHY_OP_TYPE_SET_ANIMATION_DELEGATE: return "setAnimationDelegate";
                 default: return "HOP(" + type + ")";
             }
         }
@@ -1983,6 +2000,9 @@ public final class WindowContainerTransaction implements Parcelable {
                     sb.append("container= ").append(mContainer)
                             .append(" isTrimmable= ")
                             .append(mIsTrimmableFromRecents);
+                case HIERARCHY_OP_TYPE_SET_ANIMATION_DELEGATE:
+                    sb.append(" caller=").append(mInsetsFrameOwner);
+                    break;
                 default:
                     sb.append("container=").append(mContainer)
                             .append(" reparent=").append(mReparent)

@@ -179,7 +179,8 @@ public class RecentsTransitionHandler implements Transitions.TransitionHandler,
         if (isSyntheticRequest) {
             transition = startSyntheticRecentsTransition(listener);
         } else {
-            transition = startRealRecentsTransition(intent, fillIn, options, listener);
+            transition = startRealRecentsTransition(intent, fillIn, options, listener,
+                    appThread);
         }
         return transition;
     }
@@ -209,12 +210,13 @@ public class RecentsTransitionHandler implements Transitions.TransitionHandler,
      * Starts a real WM-backed recents transition.
      */
     private IBinder startRealRecentsTransition(PendingIntent intent, Intent fillIn, Bundle options,
-            IRecentsAnimationRunner listener) {
+            IRecentsAnimationRunner listener, IApplicationThread appThread) {
         ProtoLog.v(ShellProtoLogGroup.WM_SHELL_RECENTS_TRANSITION,
                 "RecentsTransitionHandler.startRecentsTransition");
 
         final WindowContainerTransaction wct = new WindowContainerTransaction();
         wct.sendPendingIntent(intent, fillIn, options);
+        wct.setAnimationDelegate(appThread.asBinder());
 
         // Find the mixed handler which should handle this request (if we are in a state where a
         // mixed handler is needed).  This is slightly convoluted because starting the transition
@@ -301,7 +303,7 @@ public class RecentsTransitionHandler implements Transitions.TransitionHandler,
                     "RecentsTransitionHandler.startAnimation: failed to start animation");
             return false;
         }
-        Transitions.setRunningRemoteTransitionDelegate(animApp);
+        Transitions.setRunningRemoteTransitionDelegate(transition);
         return true;
     }
 

@@ -372,6 +372,9 @@ class SplitScreenTransitions {
             mSplitInvocationListenerExecutor.execute(() -> mSplitInvocationListener
                     .onSplitAnimationInvoked(true /*animationRunning*/));
         }
+        if (remoteTransition != null && remoteTransition.getAppThread() != null) {
+            wct.setAnimationDelegate(remoteTransition.getAppThread().asBinder());
+        }
         final IBinder transition = mTransitions.startTransition(transitType, wct, handler);
         setEnterTransition(transition, remoteTransition, extraTransitType, resizeAnim);
         return transition;
