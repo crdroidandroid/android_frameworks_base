@@ -153,18 +153,20 @@ public class UdfpsAnimation extends ImageView {
     }
 
     private void updateAnimationStyle(int styleIdx) {
-        Drawable bgDrawable = getBgDrawable(styleIdx);
-        if (styleIdx == 0 || bgDrawable == null) {
-            setBackground(null);
+        setBackground(null);
+        if (recognizingAnim != null) {
+            recognizingAnim.stop();
+            clearAnimation();
             recognizingAnim = null;
-        } else {
+        }
+        Drawable bgDrawable = getBgDrawable(styleIdx);
+        if (styleIdx != 0 && bgDrawable != null) {
             setBackground(bgDrawable);
             recognizingAnim = bgDrawable instanceof AnimationDrawable ? (AnimationDrawable) bgDrawable : null;
         }
     }
 
     private Drawable getBgDrawable(int styleIdx) {
-        String[] mStyleNames = null;
         Resources mApkResources = null;
         try {
             mApkResources = mContext.getPackageManager().getResourcesForApplication(UDFPS_ANIMATIONS_PACKAGE);
@@ -172,9 +174,11 @@ public class UdfpsAnimation extends ImageView {
             Log.e(LOG_TAG, "Failed to load package resources", e);
             return null;
         }
+        String[] mStyleNames = null;
         if (mApkResources != null) {
             int res = mApkResources.getIdentifier("udfps_animation_styles",
                     "array", UDFPS_ANIMATIONS_PACKAGE);
+            if (res == 0) return null;
             mStyleNames = mApkResources.getStringArray(res);
         }
         if (mStyleNames == null || styleIdx >= mStyleNames.length) {
@@ -185,6 +189,7 @@ public class UdfpsAnimation extends ImageView {
         try {
             int resId = mApkResources.getIdentifier(drawableName, "drawable", UDFPS_ANIMATIONS_PACKAGE);
             if (DEBUG) Log.i(LOG_TAG, "Got resource id: "+ resId +" from package");
+            if (resId == 0) return null;
             return mApkResources.getDrawable(resId);
         } catch (Resources.NotFoundException e) {
             Log.w(LOG_TAG, "Drawable resource not found: " + drawableName, e);
@@ -242,9 +247,9 @@ public class UdfpsAnimation extends ImageView {
         if (!mShowing && getWindowToken() == null) return;
         try {
             if (recognizingAnim != null) {
-                clearAnimation();
                 recognizingAnim.stop();
                 recognizingAnim.selectDrawable(0);
+                clearAnimation();
             }
             mWindowManager.removeView(this);
             mShowing = false;
