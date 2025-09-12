@@ -270,7 +270,7 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener, Dump
 
     private float mInFrontAlpha = NOT_INITIALIZED;
     private float mBehindAlpha = NOT_INITIALIZED;
-    private float mNotificationsAlpha = 0;
+    private float mNotificationsAlpha = NOT_INITIALIZED;
 
     private int mInFrontTint;
     private int mBehindTint;
@@ -306,6 +306,7 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener, Dump
                 mInFrontAlpha = alphas.getFrontAlpha();
                 mScrimInFront.setViewAlpha(mInFrontAlpha);
 
+                mNotificationsAlpha = alphas.getNotificationsAlpha();
                 mNotificationsScrim.setViewAlpha(mNotificationsAlpha);
 
                 mBehindAlpha = alphas.getBehindAlpha();
@@ -996,6 +997,7 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener, Dump
 
         mInFrontAlpha = mState.getFrontAlpha();
         mBehindAlpha = mState.getBehindAlpha();
+        mNotificationsAlpha = mState.getNotifAlpha();
 
         assertAlphasValid();
 
@@ -1020,16 +1022,21 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener, Dump
                     float behindFraction = getInterpolatedFraction();
                     behindFraction = (float) Math.pow(behindFraction, 0.8f);
                     mBehindAlpha = 1;
+                    mNotificationsAlpha = behindFraction * getDefaultScrimAlpha();
                 } else {
                     if (Flags.notificationShadeBlur()) {
                         // TODO (b/390730594): match any spec for controlling alpha based on shade
                         //  expansion fraction.
                         mBehindAlpha = mState.getBehindAlpha() * mPanelExpansionFraction;
                         mBehindTint = mState.getBehindTint();
+                        mNotificationsAlpha = mState.getNotifAlpha() * mPanelExpansionFraction;
                         mNotificationsTint = mState.getNotifTint();
                     } else {
                         mBehindAlpha = mLargeScreenShadeInterpolator.getBehindScrimAlpha(
                                 mPanelExpansionFraction * getDefaultScrimAlpha());
+                        mNotificationsAlpha =
+                                mLargeScreenShadeInterpolator.getNotificationScrimAlpha(
+                                        mPanelExpansionFraction);
                     }
                 }
                 mBehindTint = mState.getBehindTint();
@@ -1068,13 +1075,45 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener, Dump
             }
             mInFrontAlpha = mState.getFrontAlpha();
             if (mClipsQsScrim) {
+                mNotificationsAlpha = behindAlpha;
                 mNotificationsTint = behindTint;
                 mBehindAlpha = 1;
                 mBehindTint = Color.BLACK;
             } else {
                 mBehindAlpha = behindAlpha;
+                if (mState == ScrimState.KEYGUARD && mTransitionToFullShadeProgress > 0.0f) {
+                    mNotificationsAlpha = MathUtils
+                            .saturate(mTransitionToLockScreenFullShadeNotificationsProgress);
+                } else if (mState == ScrimState.SHADE_LOCKED) {
+                    // going from KEYGUARD to SHADE_LOCKED state
+                    if (Flags.notificationShadeBlur()) {
+                        mNotificationsAlpha = mState.getNotifAlpha() * getInterpolatedFraction();
+                    } else {
+                        mNotificationsAlpha = getInterpolatedFraction();
+                    }
+                } else if (mState == ScrimState.GLANCEABLE_HUB
+                        && mTransitionToFullShadeProgress == 0.0f) {
+                    // Notification scrim should not be visible on the glanceable hub unless the
+                    // shade is showing or transitioning in. Otherwise the notification scrim will
+                    // be visible as the bouncer transitions in or after the notification shade
+                    // closes.
+                    mNotificationsAlpha = 0;
+                } else {
+                    mNotificationsAlpha = Math.max(1.0f - getInterpolatedFraction(), mQsExpansion);
+                }
                 mNotificationsTint = mState.getNotifTint();
                 mBehindTint = behindTint;
+            }
+
+            // At the end of a launch animation over the lockscreen, the state is either KEYGUARD or
+            // SHADE_LOCKED and this code is called. We have to set the notification alpha to 0
+            // otherwise there is a flicker to its previous value.
+            boolean hideNotificationScrim = (mState == ScrimState.KEYGUARD
+                    && mTransitionToFullShadeProgress == 0
+                    && mQsExpansion == 0
+                    && !mClipsQsScrim);
+            if (mKeyguardOccluded || hideNotificationScrim) {
+                mNotificationsAlpha = 0;
             }
         }
         if (mState != ScrimState.UNLOCKED) {
@@ -1241,11 +1280,17 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener, Dump
         if (hideFlagShowWhenLockedActivities) {
             mBehindAlpha = 1;
         }
+        // Prevent notification scrim flicker when transitioning away from keyguard.
+        if (mKeyguardStateController.isKeyguardGoingAway()) {
+            mNotificationsAlpha = 0;
+            mBehindAlpha = 0;
+        }
 
         // Prevent flickering for activities above keyguard and quick settings in keyguard.
         if (mKeyguardOccluded
                 && (mState == ScrimState.KEYGUARD || mState == ScrimState.SHADE_LOCKED)) {
             mBehindAlpha = 0;
+            mNotificationsAlpha = 0;
         }
 
         setScrimAlpha(mScrimInFront, mInFrontAlpha);

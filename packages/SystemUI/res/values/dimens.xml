@@ -880,7 +880,7 @@
     <!-- The amount to translate lockscreen elements on the GONE->AOD transition, on device fold -->
     <dimen name="keyguard_enter_from_side_translation_x">-100dp</dimen>
 
-    <dimen name="notification_scrim_corner_radius">0dp</dimen>
+    <dimen name="notification_scrim_corner_radius">32dp</dimen>
 
     <!-- The minimum amount the user needs to swipe to go to the camera / phone. -->
     <dimen name="keyguard_min_swipe_amount">110dp</dimen>
