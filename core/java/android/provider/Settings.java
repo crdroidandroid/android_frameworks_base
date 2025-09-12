@@ -7081,12 +7081,6 @@ public final class Settings {
                 "notification_guts_kill_app_button";
 
         /**
-         * Whether to show charging animation
-         * @hide
-         */
-        public static final String CHARGING_ANIMATION = "charging_animation";
-
-        /**
          * Whether edge light is enabled.
          * Default 0
          * @hide
