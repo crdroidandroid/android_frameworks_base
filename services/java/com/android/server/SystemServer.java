@@ -167,7 +167,6 @@ import com.android.server.contextualsearch.ContextualSearchManagerService;
 import com.android.server.coverage.CoverageService;
 import com.android.server.cpu.CpuMonitorService;
 import com.android.server.crashrecovery.CrashRecoveryAdaptor;
-import com.android.server.crdroid.AttestationService;
 import com.android.server.crdroid.CustomDeviceConfigService;
 import com.android.server.credentials.CredentialManagerService;
 import com.android.server.criticalevents.CriticalEventLog;
@@ -2851,11 +2850,6 @@ public final class SystemServer implements Dumpable {
             mSystemServiceManager.startService(CustomDeviceConfigService.class);
             t.traceEnd();
 
-            // AttestationService
-            t.traceBegin("AttestationService");
-            mSystemServiceManager.startService(AttestationService.class);
-            t.traceEnd();
-            
             t.traceBegin("HideAppListService");
             mSystemServiceManager.startService(HideAppListService.class);
             t.traceEnd();    

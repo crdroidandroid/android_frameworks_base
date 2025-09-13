@@ -88,9 +88,4 @@
     <!-- Cycle through ringer modes -->
     <java-symbol type="string" name="volume_dialog_ringer_guidance_normal" />
 
-    <!-- Keybox -->
-    <java-symbol type="array" name="config_certifiedKeybox" />
-
-    <!-- Build properties from a GMS certified device against current platform SPL level -->
-    <java-symbol type="array" name="config_certifiedBuildProperties" />
 </resources>

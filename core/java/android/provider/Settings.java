@@ -13984,12 +13984,6 @@ public final class Settings {
          */
         public static final String VPN_ENFORCE_DNS_STORE = "vpn_enforce_dns_store";
 
-        /**
-         * User selectable keybox data.
-         * @hide
-         */
-        @Readable
-        public static final String KEYBOX_DATA = "keybox_data";
 
         /**
          * Control whether to hide ADB and Developer settings enable status.
