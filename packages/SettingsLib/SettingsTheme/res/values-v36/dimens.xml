@@ -16,5 +16,5 @@
   -->
 
 <resources>
-    <dimen name="settingslib_preference_corner_radius">20dp</dimen>
+    <dimen name="settingslib_preference_corner_radius">24dp</dimen>
 </resources>
