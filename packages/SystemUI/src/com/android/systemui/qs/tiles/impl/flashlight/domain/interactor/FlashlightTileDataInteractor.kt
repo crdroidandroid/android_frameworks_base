@@ -70,6 +70,7 @@ constructor(
                                 else FlashlightModel.Unavailable.Temporarily.CameraInUse
                             )
                         }
+			override fun onFlashlightStrengthChanged(level: Int) {}
                     }
                 flashlightController.addCallback(callback)
                 awaitClose { flashlightController.removeCallback(callback) }
