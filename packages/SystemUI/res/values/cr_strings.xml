@@ -22,6 +22,9 @@
     <!-- Name of the VoWiFi status bar icon. -->
     <string name="status_bar_vowifi">Wi-Fi calling (VoWiFi)</string>
 
+    <!-- Data disabled icon -->
+    <string name="data_disabled_icon_title">Data disabled icon</string>
+
     <!-- Status bar network traffic monitor strings -->
     <string name="kilobitspersecond_short">kb/s</string>
     <string name="megabitspersecond_short">Mb/s</string>
