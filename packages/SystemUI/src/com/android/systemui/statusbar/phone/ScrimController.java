@@ -1108,12 +1108,13 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener, Dump
             // At the end of a launch animation over the lockscreen, the state is either KEYGUARD or
             // SHADE_LOCKED and this code is called. We have to set the notification alpha to 0
             // otherwise there is a flicker to its previous value.
-            boolean hideNotificationScrim = (mState == ScrimState.KEYGUARD
+            boolean hideScrims = (mState == ScrimState.KEYGUARD
                     && mTransitionToFullShadeProgress == 0
                     && mQsExpansion == 0
                     && !mClipsQsScrim);
-            if (mKeyguardOccluded || hideNotificationScrim) {
+            if (mKeyguardOccluded || hideScrims) {
                 mNotificationsAlpha = 0;
+                mBehindAlpha = 0;
             }
         }
         if (mState != ScrimState.UNLOCKED) {
