@@ -392,7 +392,11 @@ fun BrightnessSlider(
 
         if (hasAutoBrightness && showAutoBrightness) {
             Spacer(modifier = Modifier.width(10.dp))
-            drawAutoBrightnessButton(autoMode = autoMode, onIconClick = onIconClick)
+            drawAutoBrightnessButton(
+                autoMode = autoMode,
+                hapticsEnabled = hapticsEnabled,
+                onIconClick = onIconClick
+            )
         }
     }
 
@@ -441,6 +445,7 @@ private fun readEnableHaptics(cr: ContentResolver): Boolean =
 @Composable
 private fun drawAutoBrightnessButton(
     autoMode: Boolean,
+    hapticsEnabled: Boolean,
     onIconClick: suspend () -> Unit,
 ) {
     val view = LocalView.current
@@ -486,7 +491,9 @@ private fun drawAutoBrightnessButton(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null, // Disable ripple effect
                 onClick = {
-                    view.performHapticFeedback(hapticConstant)
+                    if (hapticsEnabled) {
+                        view.performHapticFeedback(hapticConstant)
+                    }
                     coroutineScope.launch { onIconClick() }
                 }
             ),
