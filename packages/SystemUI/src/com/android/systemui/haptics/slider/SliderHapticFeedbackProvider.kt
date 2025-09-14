@@ -72,11 +72,25 @@ class SliderHapticFeedbackProvider(
     private val thresholdUntilNextDragCallMillis =
         lowTickDurationMs * config.numberOfLowTicks + config.deltaMillisForDragInterval
 
-    private val areAllPrimitivesSupported = vibratorHelper.areAllPrimitivesSupported(
+    private val areAllPrimitivesSupported by lazy {
+        vibratorHelper.areAllPrimitivesSupported(
             VibrationEffect.Composition.PRIMITIVE_TICK,
             VibrationEffect.Composition.PRIMITIVE_LOW_TICK,
             VibrationEffect.Composition.PRIMITIVE_CLICK
         ) ?: false
+    }
+
+    private val composedTick by lazy {
+        VibrationEffect.startComposition()
+            .addPrimitive(VibrationEffect.Composition.PRIMITIVE_TICK)
+            .compose()
+    }
+
+    private val composedClick by lazy {
+        VibrationEffect.startComposition()
+            .addPrimitive(VibrationEffect.Composition.PRIMITIVE_CLICK)
+            .compose()
+    }
 
     /**
      * Vibrate when the handle reaches either bookend with a certain velocity.
@@ -94,10 +108,7 @@ class SliderHapticFeedbackProvider(
             msdlPlayer.playToken(MSDLToken.DRAG_THRESHOLD_INDICATOR_LIMIT, properties)
         } else {
             if (areAllPrimitivesSupported) {
-                val vibration = VibrationEffect.startComposition()
-                    .addPrimitive(VibrationEffect.Composition.PRIMITIVE_CLICK, powerScale)
-                    .compose()
-                vibratorHelper.vibrate(vibration, VIBRATION_ATTRIBUTES_PIPELINING)
+                vibratorHelper.vibrate(composedClick, VIBRATION_ATTRIBUTES_PIPELINING)
             } else {
                 vibratorHelper.vibrate(doubleClickEffect, VIBRATION_ATTRIBUTES_PIPELINING)
             }
@@ -172,10 +183,7 @@ class SliderHapticFeedbackProvider(
             msdlPlayer.playToken(MSDLToken.DRAG_INDICATOR_DISCRETE, properties)
         } else {
             if (areAllPrimitivesSupported) {
-                val effect = VibrationEffect.startComposition()
-                    .addPrimitive(VibrationEffect.Composition.PRIMITIVE_TICK, scale)
-                    .compose()
-                vibratorHelper.vibrate(effect, VIBRATION_ATTRIBUTES_PIPELINING)
+                vibratorHelper.vibrate(composedTick, VIBRATION_ATTRIBUTES_PIPELINING)
             } else {
                 vibratorHelper.vibrate(textureClickEffect, VIBRATION_ATTRIBUTES_PIPELINING)
             }
