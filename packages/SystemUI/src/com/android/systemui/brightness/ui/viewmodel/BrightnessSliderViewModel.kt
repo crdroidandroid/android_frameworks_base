@@ -71,11 +71,6 @@ constructor(
             screenBrightnessInteractor.gammaBrightness,
         )
 
-    val autoMode by hydrator.hydratedStateOf(
-        traceName = "autoMode",
-        source = screenBrightnessInteractor.isAutoBrightnessEnabledFlow
-    )
-
     val maxBrightness = screenBrightnessInteractor.maxGammaBrightness
     val minBrightness = screenBrightnessInteractor.minGammaBrightness
 
@@ -116,10 +111,6 @@ constructor(
             is Drag.Dragging -> screenBrightnessInteractor.setTemporaryBrightness(drag.brightness)
             is Drag.Stopped -> screenBrightnessInteractor.setBrightness(drag.brightness)
         }
-    }
-
-    fun onIconClick() {
-        screenBrightnessInteractor.toggleBrightnessMode()
     }
 
     fun setIsDragging(dragging: Boolean) {

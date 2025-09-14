@@ -30,7 +30,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 /**
@@ -70,13 +69,6 @@ constructor(
         }
 
     val brightnessOverriddenByWindow = screenBrightnessRepository.isBrightnessOverriddenByWindow
-
-    val isAutoBrightnessEnabledFlow: StateFlow<Boolean> =
-        screenBrightnessRepository.isAutoBrightnessEnabledFlow
-
-    fun toggleBrightnessMode() {
-        screenBrightnessRepository.toggleBrightnessMode()
-    }
 
     /** Sets the brightness temporarily, while the user is changing it. */
     suspend fun setTemporaryBrightness(gammaBrightness: GammaBrightness) {
