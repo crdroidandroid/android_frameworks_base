@@ -26,11 +26,11 @@ data class SliderHapticFeedbackConfig(
     /** Interpolator factor for progress-based vibration scale interpolations. Must be positive */
     val progressInterpolatorFactor: Float = 1f,
     /** Minimum vibration scale for vibrations based on slider progress */
-    @FloatRange(from = 0.0, to = 1.0) val progressBasedDragMinScale: Float = 0f,
+    @FloatRange(from = 0.0, to = 1.0) val progressBasedDragMinScale: Float = 0.10f,
     /** Maximum vibration scale for vibrations based on slider progress */
-    @FloatRange(from = 0.0, to = 1.0) val progressBasedDragMaxScale: Float = 0.2f,
+    @FloatRange(from = 0.0, to = 1.0) val progressBasedDragMaxScale: Float = 0.85f,
     /** Additional vibration scaling due to velocity */
-    @FloatRange(from = 0.0, to = 1.0) val additionalVelocityMaxBump: Float = 0.15f,
+    @FloatRange(from = 0.0, to = 1.0) val additionalVelocityMaxBump: Float = 0.25f,
     /** Additional time delta to wait between drag texture vibrations */
     @FloatRange(from = 0.0) val deltaMillisForDragInterval: Float = 0f,
     /** Progress threshold beyond which a new drag texture is delivered */
@@ -46,7 +46,7 @@ data class SliderHapticFeedbackConfig(
     /** Vibration scale at the lower bookend of the slider */
     @FloatRange(from = 0.0, to = 1.0) val lowerBookendScale: Float = 0.05f,
     /** Exponent for power function compensation */
-    @FloatRange(from = 0.0, fromInclusive = false) val exponent: Float = 1f / 0.89f,
+    @FloatRange(from = 0.0, fromInclusive = false) val exponent: Float = 0.80f,
     /** The step-size that defines the slider quantization. Zero represents a continuous slider */
     @FloatRange(from = 0.0) val sliderStepSize: Float = 0f,
     /** A filter that determines values for which haptics are triggered */
