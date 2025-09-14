@@ -16,6 +16,8 @@
 
 package com.android.systemui.haptics.msdl.qs
 
+import android.os.VibrationAttributes
+import android.os.VibrationEffect
 import android.service.quicksettings.Tile
 import androidx.compose.runtime.Stable
 import com.android.systemui.Flags
@@ -23,6 +25,7 @@ import com.android.systemui.animation.Expandable
 import com.android.systemui.dagger.SysUISingleton
 import com.android.systemui.lifecycle.ExclusiveActivatable
 import com.android.systemui.qs.panels.ui.viewmodel.TileViewModel
+import com.android.systemui.statusbar.VibratorHelper
 import com.android.systemui.util.kotlin.pairwise
 import com.google.android.msdl.data.model.MSDLToken
 import com.google.android.msdl.domain.MSDLPlayer
@@ -44,6 +47,7 @@ class TileHapticsViewModel
 @AssistedInject
 constructor(
     private val msdlPlayer: MSDLPlayer,
+    private val vibratorHelper: VibratorHelper,
     @Assisted private val tileViewModel: TileViewModel,
 ) : ExclusiveActivatable() {
 
@@ -91,20 +95,72 @@ constructor(
     private val hapticsState: Flow<TileHapticsState> =
         merge(toggleHapticsState, interactionHapticsState)
 
+    private val vibrationAttrs =
+        VibrationAttributes.Builder()
+            .setUsage(VibrationAttributes.USAGE_TOUCH)
+            .setFlags(VibrationAttributes.FLAG_PIPELINED_EFFECT)
+            .build()
+
+    private val clickEffect = VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK)
+    private val heavyClick = VibrationEffect.createPredefined(VibrationEffect.EFFECT_HEAVY_CLICK)
+
+    private val areAllPrimitivesSupported by lazy {
+        vibratorHelper.areAllPrimitivesSupported(
+            VibrationEffect.Composition.PRIMITIVE_CLICK,
+            VibrationEffect.Composition.PRIMITIVE_THUD,
+        ) ?: false
+    }
+
+    private val composedHeavyClick by lazy {
+        VibrationEffect.startComposition()
+            .addPrimitive(VibrationEffect.Composition.PRIMITIVE_THUD, 1f)
+            .compose()
+    }
+
+    private val composedClick by lazy {
+        VibrationEffect.startComposition()
+            .addPrimitive(VibrationEffect.Composition.PRIMITIVE_CLICK)
+            .compose()
+    }
+
+    private fun vibrateToggle() = vibratorHelper.vibrate(composedClick, vibrationAttrs)
+
+    private fun vibrateLongPress() = vibratorHelper.vibrate(composedHeavyClick, vibrationAttrs)
+
     override suspend fun onActivated(): Nothing {
         try {
-            hapticsState.collect { hapticsState ->
-                val tokenToPlay: MSDLToken? =
-                    when (hapticsState) {
-                        TileHapticsState.TOGGLE_ON -> MSDLToken.SWITCH_ON
-                        TileHapticsState.TOGGLE_OFF -> MSDLToken.SWITCH_OFF
-                        TileHapticsState.LONG_PRESS -> MSDLToken.LONG_PRESS
-                        TileHapticsState.NO_HAPTICS -> null
+            hapticsState.collect { state ->
+                if (state == TileHapticsState.NO_HAPTICS) return@collect
+
+                if (Flags.msdlFeedback()) {
+                    val token =
+                        when (state) {
+                            TileHapticsState.TOGGLE_ON -> MSDLToken.SWITCH_ON
+                            TileHapticsState.TOGGLE_OFF -> MSDLToken.SWITCH_OFF
+                            TileHapticsState.LONG_PRESS -> MSDLToken.LONG_PRESS
+                            else -> null
+                        }
+                    token?.let { msdlPlayer.playToken(it) }
+                } else {
+                    if (areAllPrimitivesSupported) {
+                        when (state) {
+                            TileHapticsState.TOGGLE_ON,
+                            TileHapticsState.TOGGLE_OFF -> vibrateToggle()
+                            TileHapticsState.LONG_PRESS -> vibrateLongPress()
+                            else -> Unit
+                        }
+                    } else {
+                        when (state) {
+                            TileHapticsState.TOGGLE_ON,
+                            TileHapticsState.TOGGLE_OFF ->
+                                vibratorHelper.vibrate(clickEffect, vibrationAttrs)
+                            TileHapticsState.LONG_PRESS ->
+                                vibratorHelper.vibrate(heavyClick, vibrationAttrs)
+                            else -> Unit
+                        }
                     }
-                tokenToPlay?.let {
-                    msdlPlayer.playToken(it)
-                    resetStates()
                 }
+                resetStates()
             }
             awaitCancellation()
         } finally {
@@ -178,10 +234,5 @@ constructor(
 class TileHapticsViewModelFactoryProvider
 @Inject
 constructor(private val tileHapticsViewModelFactory: TileHapticsViewModel.Factory) {
-    fun getHapticsViewModelFactory(): TileHapticsViewModel.Factory? =
-        if (Flags.msdlFeedback()) {
-            tileHapticsViewModelFactory
-        } else {
-            null
-        }
+    fun getHapticsViewModelFactory(): TileHapticsViewModel.Factory? = tileHapticsViewModelFactory
 }
