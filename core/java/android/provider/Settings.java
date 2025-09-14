@@ -7333,10 +7333,16 @@ public final class Settings {
         public static final String QS_BRIGHTNESS_SLIDER_HAPTIC = "qs_brightness_slider_haptic";
 
         /**
-         * Whether to show daily data usage in the QS footer.
+         * Whether to show daily/weekly data usage in the QS footer.
          * @hide
          */
         public static final String QS_SHOW_DATA_USAGE = "qs_show_data_usage";
+
+        /**
+         * Persist setting for showing either daily or weekly data usage in the QS footer.
+         * @hide
+         */
+        public static final String QS_SHOW_DATA_USAGE_WINDOW = "qs_show_data_usage_window";
 
         /**
          * Customize QS tile shape.
