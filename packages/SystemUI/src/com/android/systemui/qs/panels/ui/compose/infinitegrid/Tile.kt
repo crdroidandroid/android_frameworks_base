@@ -167,8 +167,12 @@ fun Tile(
 
         val colors = TileDefaults.getColorForState(uiState, iconOnly)
         val hapticsViewModel: TileHapticsViewModel? =
-            rememberViewModel(traceName = "TileHapticsViewModel") {
-                tileHapticsViewModelFactoryProvider.getHapticsViewModelFactory()?.create(tile)
+            if (rememberTileHaptic()) {
+                rememberViewModel(traceName = "TileHapticsViewModel") {
+                    tileHapticsViewModelFactoryProvider.getHapticsViewModelFactory()?.create(tile)
+                }
+            } else {
+                null
             }
 
         val shapeMode = rememberTileShapeMode()
@@ -364,7 +368,7 @@ fun Modifier.tileCombinedClickable(
             onLongClick = onLongClick,
             onClickLabel = accessibilityUiState.clickLabel,
             onLongClickLabel = longPressLabel,
-            hapticFeedbackEnabled = !Flags.msdlFeedback(),
+            hapticFeedbackEnabled = rememberTileHaptic() && !Flags.msdlFeedback(),
         )
         .semantics {
             role = accessibilityUiState.accessibilityRole
@@ -398,6 +402,21 @@ fun rememberTileShapeMode(): Int {
             )
         } catch (_: Throwable) {
             0
+        }
+    }
+}
+
+@Composable
+fun rememberTileHaptic(): Boolean {
+    val context = LocalContext.current
+    return remember {
+        val cr = context.contentResolver
+        try {
+            Settings.System.getIntForUser(
+                cr, Settings.System.QS_TILE_HAPTIC, 0, UserHandle.USER_CURRENT
+            ) != 0
+        } catch (_: Throwable) {
+            false
         }
     }
 }

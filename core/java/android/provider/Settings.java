@@ -7387,6 +7387,12 @@ public final class Settings {
         public static final String QQS_TILES_ROWS = "qqs_tiles_rows";
 
         /**
+         * Haptic feedback on QS tiles
+         * @hide
+         */
+        public static final String QS_TILE_HAPTIC = "qs_tile_haptic";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
