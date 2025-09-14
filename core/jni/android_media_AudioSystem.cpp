@@ -1029,6 +1029,7 @@ static void convertAudioGainConfigToNative(JNIEnv *env,
     int *nValues = env->GetIntArrayElements(jValues, NULL);
     size_t size = env->GetArrayLength(jValues);
     memcpy(nAudioGainConfig->values, nValues, size * sizeof(int));
+    env->ReleaseIntArrayElements(jValues, nValues, JNI_ABORT);
     env->DeleteLocalRef(jValues);
 }
 
