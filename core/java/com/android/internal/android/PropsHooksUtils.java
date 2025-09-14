@@ -53,6 +53,7 @@ public class PropsHooksUtils {
     private static final Map<String, Object> propsOP9P = createMap("LE2101", "OnePlus");
     private static final Map<String, Object> propsF5 = createMap("23049PCD8G", "Xiaomi");
     private static final Map<String, Object> propsROG6 = createMap("ASUS_AI2201", "asus");
+    private static final Map<String, Object> propsROG6D = createMap("ASUS_AI2203_C", "asus");
     private static final Map<String, Object> propsROG8P = createMap("ASUS_AI2401_A", "asus");
     private static final Map<String, Object> propsLenovoY700 = createMap("Lenovo TB-9707F", "Lenovo");
     private static final Map<String, Object> propsS24Ultra = createMap("SM-S928B", "samsung");
@@ -134,6 +135,8 @@ public class PropsHooksUtils {
             "com.pearlabyss.blackdesertm",
             "com.pearlabyss.blackdesertm.gl"
         ), propsROG6);
+
+        addToMap(Set.of("com.proxima.dfm"), propsROG6D);
 
         addToMap(Set.of("com.ea.gp.apexlegendsmobilefps","com.mobile.legends"), propsROG8P);
 
