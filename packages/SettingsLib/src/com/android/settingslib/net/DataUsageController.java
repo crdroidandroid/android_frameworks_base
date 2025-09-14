@@ -38,7 +38,11 @@ import com.android.internal.R;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.util.ArrayUtils;
 
+import java.time.DayOfWeek;
 import java.time.ZonedDateTime;
+import java.time.ZoneId;
+import java.time.temporal.TemporalAdjusters;
+import java.time.temporal.WeekFields;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Set;
@@ -111,6 +115,12 @@ public class DataUsageController {
         return getDailyDataUsageInfo(template);
     }
 
+    public DataUsageInfo getWeeklyDataUsageInfo() {
+        NetworkTemplate template = DataUsageUtils.getMobileTemplate(mContext, mSubscriptionId);
+
+        return getWeeklyDataUsageInfo(template);
+    }
+
     public DataUsageInfo getWifiDataUsageInfo() {
         return getWifiDataUsageInfo(false);
     }
@@ -123,13 +133,20 @@ public class DataUsageController {
         return getDailyDataUsageInfo(getWifiNetworkTemplate(currentNetwork));
     }
 
+    public DataUsageInfo getWifiWeeklyDataUsageInfo(boolean currentNetwork) {
+        return getWeeklyDataUsageInfo(getWifiNetworkTemplate(currentNetwork));
+    }
+
     public NetworkTemplate getWifiNetworkTemplate(boolean currentNetwork) {
         final NetworkTemplate.Builder builder =
                 new NetworkTemplate.Builder(NetworkTemplate.MATCH_WIFI);
         if (currentNetwork) {
-            final String networkKey = mWifiManager.getConnectionInfo().getNetworkKey();
-            if (networkKey != null) {
-                builder.setWifiNetworkKeys(Set.of(networkKey));
+            final var info = mWifiManager.getConnectionInfo();
+            if (info != null) {
+                final String networkKey = info.getNetworkKey();
+                if (networkKey != null && !networkKey.isEmpty()) {
+                    builder.setWifiNetworkKeys(Set.of(networkKey));
+                }
             }
         }
         return builder.build();
@@ -182,6 +199,48 @@ public class DataUsageController {
             return warn("no entry data");
         }
         final DataUsageInfo usage = new DataUsageInfo();
+        usage.startDate = start;
+        usage.usageLevel = totalBytes;
+        usage.period = formatDateRange(start, end);
+        usage.cycleStart = start;
+        usage.cycleEnd = end;
+
+        if (policy != null) {
+            usage.limitLevel = policy.limitBytes > 0 ? policy.limitBytes : 0;
+            usage.warningLevel = policy.warningBytes > 0 ? policy.warningBytes : 0;
+        } else {
+            usage.warningLevel = getDefaultWarningLevel();
+        }
+        if (usage != null && mNetworkController != null) {
+            usage.carrier = mNetworkController.getMobileDataNetworkName();
+        }
+        return usage;
+    }
+
+    private long[] getWeekToDateWindowMillis() {
+        final ZoneId zone = ZoneId.systemDefault();
+        final DayOfWeek weekStart = WeekFields.of(Locale.getDefault()).getFirstDayOfWeek();
+
+        final ZonedDateTime now = ZonedDateTime.now(zone);
+        final ZonedDateTime startOfWeek =
+                now.with(TemporalAdjusters.previousOrSame(weekStart))
+                   .toLocalDate()
+                   .atStartOfDay(zone);
+
+        return new long[] { startOfWeek.toInstant().toEpochMilli(), now.toInstant().toEpochMilli() };
+    }
+
+    public DataUsageInfo getWeeklyDataUsageInfo(NetworkTemplate template) {
+        final NetworkPolicy policy = findNetworkPolicy(template);
+        final long[] win = getWeekToDateWindowMillis();
+        final long start = win[0];
+        final long end = win[1];
+
+        final long totalBytes = getUsageLevel(template, start, end);
+        if (totalBytes < 0L) {
+            return warn("no entry data");
+        }
+        DataUsageInfo usage = new DataUsageInfo();
         usage.startDate = start;
         usage.usageLevel = totalBytes;
         usage.period = formatDateRange(start, end);

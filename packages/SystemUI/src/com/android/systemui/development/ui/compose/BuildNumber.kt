@@ -48,6 +48,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -62,6 +63,9 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.AnnotatedString
 import com.android.settingslib.net.DataUsageController
 import com.android.systemui.res.R
+
+private const val WINDOW_DAILY = 0
+private const val WINDOW_WEEKLY = 1
 
 /**
  * BuildNumber composable replaced with a data usage readout
@@ -78,9 +82,9 @@ fun BuildNumber(
     var usageText by remember { mutableStateOf<String?>(null) }
     val subMgr = remember { SubscriptionManager.from(context) }
     val duc = remember { DataUsageController(context) }
+    val cr = context.contentResolver
 
     val showDataUsage = remember {
-        val cr = context.contentResolver
         try {
             Settings.System.getIntForUser(
                 cr, Settings.System.QS_SHOW_DATA_USAGE, 0, UserHandle.USER_CURRENT
@@ -88,6 +92,21 @@ fun BuildNumber(
         } catch (_: Throwable) {
             false
         }
+    }
+
+    var usageWindow by rememberSaveable {
+        mutableIntStateOf(
+            Settings.System.getIntForUser(
+                cr, Settings.System.QS_SHOW_DATA_USAGE_WINDOW, WINDOW_DAILY, UserHandle.USER_CURRENT
+            )
+        )
+    }
+
+    fun setUsageWindow(newVal: Int) {
+        usageWindow = newVal
+        Settings.System.putIntForUser(
+            cr, Settings.System.QS_SHOW_DATA_USAGE_WINDOW, newVal, UserHandle.USER_CURRENT
+        )
     }
 
     var displaySubId by remember { mutableIntStateOf(currentDataSubId(context, subMgr)) }
@@ -134,13 +153,12 @@ fun BuildNumber(
         return context.getString(R.string.usage_data_default_suffix)
     }
 
-    fun formatDataUsage(bytes: Long, suffix: String): String {
+    fun formatDataUsage(bytes: Long, suffix: String, weekly: Boolean): String {
         // Example: "1.23 GB used today (airtel)"
-        return StringBuilder(
-            Formatter.formatFileSize(context, bytes, Formatter.FLAG_IEC_UNITS)
-        )
+        val labelId = if (weekly) R.string.usage_data_weekly else R.string.usage_data
+        return StringBuilder(Formatter.formatFileSize(context, bytes, Formatter.FLAG_IEC_UNITS))
             .append(" ")
-            .append(context.getString(R.string.usage_data))
+            .append(context.getString(labelId))
             .append(" (")
             .append(suffix)
             .append(")")
@@ -150,26 +168,30 @@ fun BuildNumber(
     fun updateUsage() {
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val wm = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
-
         val wifi = isWifiConnected(cm, wm)
         val hasSims = subMgr.activeSubscriptionInfoCount > 0
+        val weekly = (usageWindow == WINDOW_WEEKLY)
 
         if (wifi) {
-            val info = duc.getWifiDailyDataUsageInfo(true) ?: duc.getWifiDailyDataUsageInfo(false)
+            val info = if (weekly)
+                duc.getWifiWeeklyDataUsageInfo(true) ?: duc.getWifiWeeklyDataUsageInfo(false)
+            else
+                duc.getWifiDailyDataUsageInfo(true) ?: duc.getWifiDailyDataUsageInfo(false)
+
             val suffix = ssidWithTruncation(wm)
             if (info != null) {
-                usageText = formatDataUsage(info.usageLevel, suffix)
+                usageText = formatDataUsage(info.usageLevel, suffix, weekly)
             }
         } else if (hasSims) {
             val subId = displaySubId.takeIf { SubscriptionManager.isValidSubscriptionId(it) }
                 ?: currentDataSubId(context, subMgr)
             displaySubId = subId
             duc.setSubscriptionId(subId)
-            val info = duc.getDailyDataUsageInfo()
+            val info = if (weekly) duc.getWeeklyDataUsageInfo() else duc.getDailyDataUsageInfo()
             val suffix = (info?.carrier?.takeIf { !it.isNullOrBlank() })
                 ?: fallbackCarrierName(subMgr, subId)
             if (info != null) {
-                usageText = formatDataUsage(info.usageLevel, suffix)
+                usageText = formatDataUsage(info.usageLevel, suffix, weekly)
             }
         } else {
             // Radios off / no SIM: keep last known text
@@ -183,7 +205,7 @@ fun BuildNumber(
         mainHandler.postDelayed(updateRunnable, 300)
     }
 
-    LaunchedEffect(showDataUsage) {
+    LaunchedEffect(showDataUsage, usageWindow) {
         if (showDataUsage) updateUsage() else usageText = ""   // keep stable Text node
     }
 
@@ -239,10 +261,22 @@ fun BuildNumber(
             }
             subMgr.addOnSubscriptionsChangedListener(context.mainExecutor, subListener)
 
+            val windowObserver = object : ContentObserver(mainHandler) {
+                override fun onChange(selfChange: Boolean) {
+                    usageWindow = Settings.System.getIntForUser(
+                        cr, Settings.System.QS_SHOW_DATA_USAGE_WINDOW, WINDOW_DAILY, UserHandle.USER_CURRENT
+                    )
+                    latestUpdate()
+                }
+            }
+            val windowUri = Settings.System.getUriFor(Settings.System.QS_SHOW_DATA_USAGE_WINDOW)
+            context.contentResolver.registerContentObserver(windowUri, false, windowObserver)
+
             onDispose {
                 context.unregisterReceiver(receiver)
                 cm.unregisterNetworkCallback(netCb)
                 context.contentResolver.unregisterContentObserver(settingsObserver)
+                context.contentResolver.unregisterContentObserver(windowObserver)
                 subMgr.removeOnSubscriptionsChangedListener(subListener)
                 mainHandler.removeCallbacksAndMessages(null)
             }
@@ -258,6 +292,13 @@ fun BuildNumber(
         .pointerInput(Unit) {
             detectTapGestures(
                 onTap = {
+                    if (!textToShow.isNullOrEmpty()) {
+                        val next = if (usageWindow == WINDOW_DAILY) WINDOW_WEEKLY else WINDOW_DAILY
+                        setUsageWindow(next)
+                        updateUsage()
+                    }
+                },
+                onDoubleTap = {
                     if (!textToShow.isNullOrEmpty()) {
                         val list = subMgr.activeSubscriptionInfoList
                         if (!list.isNullOrEmpty() && list.size > 1) {
