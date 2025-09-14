@@ -53,8 +53,9 @@ public class TunerSwitch extends SwitchPreferenceCompat implements Tunable {
 
     @Override
     protected boolean persistBoolean(boolean value) {
+        TunerService tunerService = Dependency.get(TunerService.class);
         for (String key : getKey().split(",")) {
-            Settings.Secure.putString(getContext().getContentResolver(), key, value ? "1" : "0");
+            tunerService.setValue(key, value ? "1" : "0");
         }
         return true;
     }
