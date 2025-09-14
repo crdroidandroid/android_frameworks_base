@@ -182,9 +182,13 @@ fun ContentScope.Tile(
             }
 
         val colors = TileDefaults.getColorForState(uiState, iconOnly)
-        val hapticsViewModel: TileHapticsViewModel =
-            rememberViewModel(traceName = "TileHapticsViewModel") {
-                tileHapticsViewModelFactory.create(tile)
+        val hapticsViewModel: TileHapticsViewModel? =
+            if (rememberTileHaptic()) {
+                rememberViewModel(traceName = "TileHapticsViewModel") {
+                    tileHapticsViewModelFactory.create(tile)
+                }
+            } else {
+                null
             }
 
         val shapeMode = rememberTileShapeMode()
@@ -269,7 +273,7 @@ fun ContentScope.Tile(
                 val useLongClickToSettings = !(iconOnly && isDualTarget && isClickable)
                 val longClick: (() -> Unit)? =
                     {
-                            hapticsViewModel.setTileInteractionState(
+                            hapticsViewModel?.setTileInteractionState(
                                 TileHapticsViewModel.TileInteractionState.LONG_CLICKED
                             )
 
@@ -307,7 +311,7 @@ fun ContentScope.Tile(
                             }
 
                             // Side effects of the click
-                            hapticsViewModel.setTileInteractionState(
+                            hapticsViewModel?.setTileInteractionState(
                                 TileHapticsViewModel.TileInteractionState.CLICKED
                             )
 
@@ -379,7 +383,7 @@ fun ContentScope.Tile(
                             val iconShape by TileDefaults.animateIconShapeAsState(uiState, shapeMode)
                             val secondaryClick: (() -> Unit)? =
                                 {
-                                        hapticsViewModel.setTileInteractionState(
+                                        hapticsViewModel?.setTileInteractionState(
                                             TileHapticsViewModel.TileInteractionState.CLICKED
                                         )
                                         tile.toggleClick()
@@ -609,6 +613,46 @@ fun rememberTileShapeMode(): Int {
     }
 
     return shapeMode
+}
+
+@Composable
+fun rememberTileHaptic(): Boolean {
+    val context = LocalContext.current
+    val contentResolver = context.contentResolver
+
+    fun readHapticEnabled(): Boolean {
+        return try {
+            Settings.System.getIntForUser(
+                contentResolver, Settings.System.QS_TILE_HAPTIC, 1,
+                UserHandle.USER_CURRENT
+            ) != 0
+        } catch (_: Throwable) {
+            false
+        }
+    }
+
+    var hapticEnabled by remember { mutableStateOf(readHapticEnabled()) }
+
+    DisposableEffect(contentResolver) {
+        val observer = object : ContentObserver(null) {
+            override fun onChange(selfChange: Boolean) {
+                context.mainExecutor.execute {
+                    hapticEnabled = readHapticEnabled()
+                }
+            }
+        }
+
+        contentResolver.registerContentObserver(
+            Settings.System.getUriFor(Settings.System.QS_TILE_HAPTIC),
+            false, observer, UserHandle.USER_ALL
+        )
+
+        onDispose {
+            contentResolver.unregisterContentObserver(observer)
+        }
+    }
+
+    return hapticEnabled
 }
 
 data class TileColors(
