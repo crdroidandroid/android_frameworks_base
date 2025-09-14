@@ -97,6 +97,12 @@
         android:key="mobile"
         android:title="@string/quick_settings_cellular_detail_title" />
 
+    <com.android.systemui.tuner.TunerSwitch
+        android:icon="@drawable/ic_statusbar_data_disabled"
+        android:key="system:data_disabled_icon"
+        android:title="@string/data_disabled_icon_title"
+        sysui:defValue="true" />
+
     <com.android.systemui.tuner.StatusBarSwitch
         android:icon="@drawable/ic_statusbar_data_saver"
         android:key="data_saver"
