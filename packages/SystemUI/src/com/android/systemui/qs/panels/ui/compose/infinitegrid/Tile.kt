@@ -183,8 +183,12 @@ fun ContentScope.Tile(
 
         val colors = TileDefaults.getColorForState(uiState, iconOnly)
         val hapticsViewModel: TileHapticsViewModel? =
-            rememberViewModel(traceName = "TileHapticsViewModel") {
-                tileHapticsViewModelFactoryProvider.getHapticsViewModelFactory()?.create(tile)
+            if (rememberTileHaptic()) {
+                rememberViewModel(traceName = "TileHapticsViewModel") {
+                    tileHapticsViewModelFactoryProvider.getHapticsViewModelFactory()?.create(tile)
+                }
+            } else {
+               null
             }
 
         val shapeMode = rememberTileShapeMode()
@@ -304,7 +308,7 @@ fun ContentScope.Tile(
                                 onLongClick = { longClick?.invoke() },
                                 onClickLabel = uiState.accessibilityUiState.clickLabel,
                                 onLongClickLabel = longPressLabel(),
-                                hapticFeedbackEnabled = !Flags.msdlFeedback(),
+                                hapticFeedbackEnabled = rememberTileHaptic() && !Flags.msdlFeedback(),
                             )
                     ) {
                         val iconProvider: Context.() -> Icon = { getTileIcon(icon = icon) }
@@ -480,7 +484,7 @@ fun Modifier.tileCombinedClickable(
             onLongClick = onLongClick,
             onClickLabel = accessibilityUiState.clickLabel,
             onLongClickLabel = longPressLabel,
-            hapticFeedbackEnabled = !Flags.msdlFeedback(),
+            hapticFeedbackEnabled = rememberTileHaptic() && !Flags.msdlFeedback(),
         )
         .semantics {
             val accessibilityRole =
@@ -546,6 +550,46 @@ fun rememberTileShapeMode(): Int {
     }
 
     return shapeMode
+}
+
+@Composable
+fun rememberTileHaptic(): Boolean {
+    val context = LocalContext.current
+    val contentResolver = context.contentResolver
+
+    fun readHapticEnabled(): Boolean {
+        return try {
+            Settings.System.getIntForUser(
+                contentResolver, Settings.System.QS_TILE_HAPTIC, 1,
+                UserHandle.USER_CURRENT
+            ) != 0
+        } catch (_: Throwable) {
+            false
+        }
+    }
+
+    var hapticEnabled by remember { mutableStateOf(readHapticEnabled()) }
+
+    DisposableEffect(contentResolver) {
+        val observer = object : ContentObserver(null) {
+            override fun onChange(selfChange: Boolean) {
+                context.mainExecutor.execute {
+                    hapticEnabled = readHapticEnabled()
+                }
+            }
+        }
+
+        contentResolver.registerContentObserver(
+            Settings.System.getUriFor(Settings.System.QS_TILE_HAPTIC),
+            false, observer, UserHandle.USER_ALL
+        )
+
+        onDispose {
+            contentResolver.unregisterContentObserver(observer)
+        }
+    }
+
+    return hapticEnabled
 }
 
 private object TileDefaults {
