@@ -317,10 +317,7 @@ public class UdfpsController implements DozeReceiver, Dumpable {
                         hideUdfpsAnimation();
                     }
                 } else {
-                    if (acquireInfo == FINGERPRINT_ACQUIRED_START
-                        || acquireInfo == FINGERPRINT_ACQUIRED_GOOD) {
-                        showUdfpsAnimation();
-                    }
+                    showUdfpsAnimation();
                 }
             });
         }
