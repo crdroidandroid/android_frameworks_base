@@ -367,6 +367,9 @@ private:
     nsecs_t mSyncDelayDuration = 0;
     nsecs_t mIdleDuration = 0;
 
+    // Lifetime tracker to safely handle delayed callbacks
+    std::shared_ptr<CanvasContext> mLifetimeTracker;
+
     ColorMode mColorMode = ColorMode::Default;
     float mTargetSdrHdrRatio = 1.f;
 

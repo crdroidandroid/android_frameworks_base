@@ -130,7 +130,8 @@ CanvasContext::CanvasContext(RenderThread& thread, bool translucent, RenderNode*
         , mProfiler(mJankTracker.frames(), thread.timeLord().frameIntervalNanos())
         , mContentDrawBounds(0, 0, 0, 0)
         , mRenderPipeline(std::move(renderPipeline))
-        , mHintSessionWrapper(std::make_shared<HintSessionWrapper>(uiThreadId, renderThreadId)) {
+        , mHintSessionWrapper(std::make_shared<HintSessionWrapper>(uiThreadId, renderThreadId))
+        , mLifetimeTracker(this, [](CanvasContext*) {}) {
     mRenderThread.cacheManager().registerCanvasContext(this);
     mRenderThread.renderState().registerContextCallback(this);
     rootRenderNode->makeRoot();
@@ -462,6 +463,7 @@ void CanvasContext::prepareTree(TreeInfo& info, int64_t* uiFrameInfo, int64_t sy
     info.out.skippedFrameReason = std::nullopt;
 
     mAnimationContext->startFrame(info.mode);
+
     for (const sp<RenderNode>& node : mRenderNodes) {
         // Only the primary target node will be drawn full - all other nodes would get drawn in
         // real time mode. In case of a window, the primary node is the window content and the other
@@ -545,9 +547,16 @@ void CanvasContext::prepareTree(TreeInfo& info, int64_t* uiFrameInfo, int64_t sy
         } else {
             const auto delay = info.out.animatedImageDelay - kFrameTime;
             int genId = mGenerationID;
-            mRenderThread.queue().postDelayed(delay, [this, genId]() {
-                if (mGenerationID == genId) {
-                    mRenderThread.postFrameCallback(this);
+
+            // Create a weak reference to safely check if this object still exists
+            std::weak_ptr<CanvasContext> weakRef = mLifetimeTracker;
+            mRenderThread.queue().postDelayed(delay, [weakRef, genId, &renderThread = mRenderThread]() {
+                // if context is expired, then weakRef.lock() will be return empty.
+                if (auto strongRef = weakRef.lock()) {
+                    CanvasContext* context = strongRef.get();
+                    if (context->mGenerationID == genId) {
+                        renderThread.postFrameCallback(context);
+                    }
                 }
             });
         }
