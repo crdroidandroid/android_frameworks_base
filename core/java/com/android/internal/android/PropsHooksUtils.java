@@ -89,6 +89,8 @@ public class PropsHooksUtils {
         featuresNexus.add("com.google.android.feature.PIXEL_EXPERIENCE");
         featuresNexus.add("com.google.android.feature.GOOGLE_BUILD");
         featuresNexus.add("com.google.android.feature.GOOGLE_EXPERIENCE");
+        featuresNexus.add("com.google.android.apps.dialer.call_recording_audio");
+        featuresNexus.add("com.google.android.apps.dialer.SUPPORTED");
 
         propsPixelXL.put("BRAND", "google");
         propsPixelXL.put("MANUFACTURER", "Google");
@@ -298,7 +300,7 @@ public class PropsHooksUtils {
     }
 
     public static boolean hasSystemFeature(String name, int version, boolean hasSystemFeature) {
-        if (shouldSpoofPhotos()) {
+        if (shouldSpoofPhotos() || (pkg != null && "com.google.android.dialer".equals(pkg))) {
             if (!isPixelDevice() && featuresPixel.contains(name)) return false;
             return featuresNexus.contains(name);
         }
