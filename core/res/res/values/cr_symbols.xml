@@ -96,4 +96,7 @@
 
     <!-- Build properties from a GMS certified device against current platform SPL level -->
     <java-symbol type="array" name="config_certifiedBuildProperties" />
+
+    <!-- Force apps to render in fullscreen, including the notch/cutout area -->
+    <java-symbol type="array" name="config_fullscreenCutoutApps" />
 </resources>

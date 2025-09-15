@@ -141,4 +141,10 @@
         <item>VERSION.RELEASE:1.0</item>
       -->
     </string-array>
+
+     <!-- Whitelisted apps forced into fullscreen mode, utilizing the display cutout (notch) region -->
+    <string-array name="config_fullscreenCutoutApps">
+      <!-- List the package name here -->
+      <item>com.amazon.avod.thirdpartyclient</item>
+    </string-array>
 </resources>
