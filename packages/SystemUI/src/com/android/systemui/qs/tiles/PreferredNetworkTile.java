@@ -118,7 +118,7 @@ public class PreferredNetworkTile extends QSTileImpl<State> {
         state.label = mContext.getResources().getString(R.string.quick_settings_preferred_network_label);
         final int mode = getPreferredNetworkMode();
         final int newMode = TelephonyManagerConstants.getTargetMode(mode);
-        state.state = newMode == -1 ? Tile.STATE_UNAVAILABLE : Tile.STATE_ACTIVE;
+        state.state = newMode == -1 ? Tile.STATE_UNAVAILABLE : (TelephonyManagerConstants.is5gMode(mode) ? Tile.STATE_ACTIVE : Tile.STATE_INACTIVE);
         state.secondaryLabel = newMode == -1 ? mContext.getResources().getString(R.string.quick_settings_preferred_network_unsupported)
                 : (TelephonyManagerConstants.is5gMode(mode) ?
                 mContext.getResources().getString(R.string.quick_settings_preferred_network_nr)
@@ -588,3 +588,4 @@ public class PreferredNetworkTile extends QSTileImpl<State> {
         public static final int NR = RAF_NR;
     }
 }
+
