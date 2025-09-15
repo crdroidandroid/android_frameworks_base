@@ -53,6 +53,8 @@ import android.annotation.NonNull;
 import android.annotation.Nullable;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.os.UserHandle;
+import lineageos.providers.LineageSettings;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.ContentObserver;
@@ -356,6 +358,27 @@ public final class NotificationPanelViewController implements
     private final TouchHandler mTouchHandler = new TouchHandler();
     private final BlurConfig mBlurConfig;
     private final TunerService mTunerService;
+    private boolean mLockscreenQsDisabled;
+
+    private final class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = mView.getContext().getContentResolver();
+            resolver.registerContentObserver(LineageSettings.System.getUriFor(
+                    "lockscreen_qs_disabled"), false, this,
+                    UserHandle.USER_ALL);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            updateLockscreenQsDisabled();
+        }
+    }
+
+    private SettingsObserver mSettingsObserver;
 
     private long mDownTime;
     private long mStatusBarLongPressDowntime = -1L;
@@ -850,6 +873,10 @@ public final class NotificationPanelViewController implements
         if (mView.isAttachedToWindow()) {
             onAttachStateChangeListener.onViewAttachedToWindow(mView);
         }
+
+        mSettingsObserver = new SettingsObserver(handler);
+        mSettingsObserver.observe();
+        updateLockscreenQsDisabled();
 
         mView.setOnApplyWindowInsetsListener((v, insets) -> onApplyShadeWindowInsets(insets));
 
@@ -2528,6 +2555,13 @@ public final class NotificationPanelViewController implements
         updateKeyguardStatusViewAlignment();
     }
 
+    private void updateLockscreenQsDisabled() {
+        mLockscreenQsDisabled = LineageSettings.System.getIntForUser(
+                mView.getContext().getContentResolver(),
+                "lockscreen_qs_disabled", 0,
+                UserHandle.USER_CURRENT) == 1;
+    }
+
     public void performHapticFeedback(int constant) {
         if (msdlFeedback()) {
             MSDLToken token;
@@ -3976,6 +4010,15 @@ public final class NotificationPanelViewController implements
         public boolean onInterceptTouchEvent(MotionEvent event) {
             if (!mUseExternalTouch) {
                 return false;
+            }
+
+            if (mLockscreenQsDisabled && isKeyguardShowing()
+                    && mQsController.shouldQuickSettingsIntercept(event.getX(), event.getY(),
+                    -1)) {
+                if (!mCentralSurfaces.isBouncerShowing()) {
+                    mCentralSurfaces.showBouncer(true);
+                }
+                return true;
             }
 
             mShadeLog.logMotionEvent(event, "NPVC onInterceptTouchEvent");
