@@ -107,9 +107,7 @@ public class AnimationUtils {
         AnimationState state = sAnimationState.get();
         state.animationClockLocked = true;
         state.currentVsyncTimeMillis = vsyncMillis;
-        if (!sExpectedPresentationTimeFlagValue) {
-            state.mExpectedPresentationTimeNanos = expectedPresentationTimeNanos;
-        }
+        state.mExpectedPresentationTimeNanos = expectedPresentationTimeNanos;
     }
 
     /**
@@ -154,7 +152,9 @@ public class AnimationUtils {
      */
     @TestApi
     public static void unlockAnimationClock() {
-        sAnimationState.get().animationClockLocked = false;
+        AnimationState state = sAnimationState.get();
+        state.animationClockLocked = false;
+        state.mExpectedPresentationTimeNanos = 0L;
     }
 
     /**
@@ -189,11 +189,13 @@ public class AnimationUtils {
     @FlaggedApi(FLAG_EXPECTED_PRESENTATION_TIME_READ_ONLY)
     public static long getExpectedPresentationTimeNanos() {
         if (!sExpectedPresentationTimeFlagValue) {
-            return SystemClock.uptimeMillis() * TimeUtils.NANOS_PER_MS;
+            return System.nanoTime();
         }
 
         AnimationState state = sAnimationState.get();
-        return state.mExpectedPresentationTimeNanos;
+        return (state.mExpectedPresentationTimeNanos != 0L)
+                ? state.mExpectedPresentationTimeNanos
+                : System.nanoTime();
     }
 
     /**
