@@ -50,7 +50,7 @@ public class FaceSetFeatureClient extends HalClientMonitor<ISenseService> {
             @NonNull BiometricLogger logger, @NonNull BiometricContext biometricContext,
             int feature, boolean enabled, byte[] hardwareAuthToken, int faceId) {
         super(context, lazyDaemon, token, listener, userId, owner, 0 /* cookie */, sensorId,
-                logger, biometricContext, false /* restricted */);
+                logger, biometricContext, false /* isMandatoryBiometrics */);
         mFeature = feature;
         mEnabled = enabled;
         mFaceId = faceId;

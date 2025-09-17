@@ -49,7 +49,7 @@ public class FaceGetFeatureClient extends HalClientMonitor<ISenseService> {
             @NonNull BiometricLogger logger, @NonNull BiometricContext biometricContext,
             int feature, int faceId) {
         super(context, lazyDaemon, token, listener, userId, owner, 0 /* cookie */, sensorId,
-                logger, biometricContext, false /* restricted */);
+                logger, biometricContext, false /* isMandatoryBiometrics */);
         mFeature = feature;
         mFaceId = faceId;
     }

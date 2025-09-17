@@ -49,7 +49,7 @@ public class FaceUpdateActiveUserClient extends HalClientMonitor<ISenseService> 
             @NonNull Map<Integer, Long> authenticatorIds) {
         super(context, lazyDaemon, null /* token */, null /* listener */, userId, owner,
                 0 /* cookie */, sensorId, logger, biometricContext,
-                true /* restricted */);
+                false /* isMandatoryBiometrics */);
         mHasEnrolledBiometrics = hasEnrolledBiometrics;
         mAuthenticatorIds = authenticatorIds;
     }
