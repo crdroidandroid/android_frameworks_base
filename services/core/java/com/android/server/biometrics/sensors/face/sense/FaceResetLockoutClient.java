@@ -45,7 +45,7 @@ public class FaceResetLockoutClient extends HalClientMonitor<ISenseService> {
             @NonNull byte[] hardwareAuthToken) {
         super(context, lazyDaemon, null /* token */, null /* listener */, userId, owner,
                 0 /* cookie */, sensorId, logger, biometricContext,
-                true /* restricted */);
+                false /* isMandatoryBiometrics */);
 
         mHardwareAuthToken = (byte[]) hardwareAuthToken.clone();
     }
