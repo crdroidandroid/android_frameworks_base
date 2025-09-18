@@ -346,7 +346,8 @@ public class FlashlightTile extends QSTileImpl<BooleanState> implements
                 Boolean flashAvailable = c.get(CameraCharacteristics.FLASH_INFO_AVAILABLE);
                 mDefaultLevel = c.get(CameraCharacteristics.FLASH_INFO_STRENGTH_DEFAULT_LEVEL);
                 mMaxLevel = c.get(CameraCharacteristics.FLASH_INFO_STRENGTH_MAXIMUM_LEVEL);
-                if (flashAvailable && mMaxLevel > mDefaultLevel) {
+                // Use the same logic as the old implementation: mMaxLevel > 1
+                if (flashAvailable && mMaxLevel > 1) {
                     return true;
                 }
             }
