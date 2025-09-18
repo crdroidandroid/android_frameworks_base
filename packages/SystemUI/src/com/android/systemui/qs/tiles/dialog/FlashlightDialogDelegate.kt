@@ -168,9 +168,19 @@ class FlashlightDialogDelegate @Inject constructor(
         try {
             val cm = cameraManager ?: return
             cameraId = getBackCameraId(cm)
-            val characteristics = cm.getCameraCharacteristics(cameraId!!)
-            maxLevel = characteristics.get(CameraCharacteristics.FLASH_INFO_STRENGTH_MAXIMUM_LEVEL) ?: 1
-            defaultLevel = characteristics.get(CameraCharacteristics.FLASH_INFO_STRENGTH_DEFAULT_LEVEL) ?: 1
+            if (cameraId != null) {
+                val characteristics = cm.getCameraCharacteristics(cameraId!!)
+                val flashAvailable = characteristics.get(CameraCharacteristics.FLASH_INFO_AVAILABLE) ?: false
+                maxLevel = characteristics.get(CameraCharacteristics.FLASH_INFO_STRENGTH_MAXIMUM_LEVEL) ?: 1
+                defaultLevel = characteristics.get(CameraCharacteristics.FLASH_INFO_STRENGTH_DEFAULT_LEVEL) ?: 1
+
+                // Use the same detection logic as the old implementation
+                if (!flashAvailable || maxLevel <= 1) {
+                    cameraId = null
+                    maxLevel = 1
+                    defaultLevel = 1
+                }
+            }
         } catch (e: CameraAccessException) {
             Log.d(TAG, "Flashlight not controllable, fallback to default")
             cameraId = null
