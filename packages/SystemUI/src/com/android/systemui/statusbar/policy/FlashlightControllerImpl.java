@@ -17,10 +17,13 @@
 package com.android.systemui.statusbar.policy;
 
 import android.annotation.WorkerThread;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraManager;
+import android.os.Handler;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.provider.Settings.Secure;
 import android.text.TextUtils;
@@ -32,6 +35,7 @@ import com.android.internal.annotations.GuardedBy;
 import com.android.systemui.broadcast.BroadcastSender;
 import com.android.systemui.dagger.SysUISingleton;
 import com.android.systemui.dagger.qualifiers.Background;
+import com.android.systemui.dagger.qualifiers.Main;
 import com.android.systemui.dump.DumpManager;
 import com.android.systemui.util.settings.SecureSettings;
 
@@ -56,11 +60,14 @@ public class FlashlightControllerImpl implements FlashlightController {
     private static final int DISPATCH_ERROR = 0;
     private static final int DISPATCH_CHANGED = 1;
     private static final int DISPATCH_AVAILABILITY_CHANGED = 2;
+    private static final int DISPATCH_STRENGTH_CHANGED = 3;
 
     private static final String ACTION_FLASHLIGHT_CHANGED =
         "com.android.settings.flashlight.action.FLASHLIGHT_CHANGED";
 
+    private final Context mContext;
     private final CameraManager mCameraManager;
+    private final Handler mHandler;
     private final Executor mExecutor;
     private final SecureSettings mSecureSettings;
     private final DumpManager mDumpManager;
@@ -79,16 +86,31 @@ public class FlashlightControllerImpl implements FlashlightController {
     private final AtomicReference<String> mCameraId;
     private final AtomicBoolean mInitted = new AtomicBoolean(false);
 
+    private static final String FLASHLIGHT_BRIGHTNESS_SETTING = "flashlight_brightness";
+
+    @GuardedBy("this")
+    private int mDefaultLevel;
+    @GuardedBy("this")
+    private int mMaxLevel;
+    @GuardedBy("this")
+    private int mCurrentLevel;
+    @GuardedBy("this")
+    private boolean mStrengthControlSupported;
+
     @Inject
     public FlashlightControllerImpl(
+            Context context,
             DumpManager dumpManager,
             CameraManager cameraManager,
+            @Main Handler mainHandler,
             @Background Executor bgExecutor,
             SecureSettings secureSettings,
             BroadcastSender broadcastSender,
             PackageManager packageManager
     ) {
+        mContext = context;
         mCameraManager = cameraManager;
+        mHandler = mainHandler;
         mExecutor = bgExecutor;
         mCameraId = new AtomicReference<>(null);
         mSecureSettings = secureSettings;
@@ -110,7 +132,29 @@ public class FlashlightControllerImpl implements FlashlightController {
     private void tryInitCamera() {
         if (!mHasFlashlight || mCameraId.get() != null) return;
         try {
-            mCameraId.set(getCameraId());
+            String id = getCameraId();
+            if (id != null) {
+                CameraCharacteristics c = mCameraManager.getCameraCharacteristics(id);
+                Boolean flashAvailable = c.get(CameraCharacteristics.FLASH_INFO_AVAILABLE);
+                if (flashAvailable != null && flashAvailable) {
+                    mDefaultLevel = c.get(CameraCharacteristics.FLASH_INFO_STRENGTH_DEFAULT_LEVEL);
+                    mMaxLevel = c.get(CameraCharacteristics.FLASH_INFO_STRENGTH_MAXIMUM_LEVEL);
+                    mStrengthControlSupported = (mMaxLevel > 1);
+                    mCameraId.set(id);
+
+                    if (mStrengthControlSupported) {
+                        float percent = Settings.System.getFloatForUser(
+                                mContext.getContentResolver(),
+                                FLASHLIGHT_BRIGHTNESS_SETTING,
+                                (float) mDefaultLevel / mMaxLevel,
+                                UserHandle.USER_CURRENT);
+                        synchronized (this) {
+                            mCurrentLevel = Math.max(1, Math.round(percent * mMaxLevel));
+                        }
+                        if (DEBUG) Log.d(TAG, "Restored torch level: " + mCurrentLevel);
+                    }
+                }
+            }
         } catch (Throwable e) {
             Log.e(TAG, "Couldn't initialize.", e);
             return;
@@ -131,7 +175,20 @@ public class FlashlightControllerImpl implements FlashlightController {
             synchronized (this) {
                 if (mFlashlightEnabled != enabled) {
                     try {
-                        mCameraManager.setTorchMode(mCameraId.get(), enabled);
+                        if (enabled) {
+                            if (mStrengthControlSupported) {
+                                int level = (mCurrentLevel > 0) ? mCurrentLevel : mDefaultLevel;
+                                level = Math.max(1, Math.min(level, mMaxLevel));
+                                if (DEBUG) Log.d(TAG, "Turning on torch with level " + level);
+                                mCameraManager.turnOnTorchWithStrengthLevel(mCameraId.get(), level);
+                            } else {
+                                if (DEBUG) Log.d(TAG, "Turning on torch (no strength support)");
+                                mCameraManager.setTorchMode(mCameraId.get(), true);
+                            }
+                        } else {
+                            if (DEBUG) Log.d(TAG, "Turning off torch");
+                            mCameraManager.setTorchMode(mCameraId.get(), false);
+                        }
                     } catch (CameraAccessException e) {
                         Log.e(TAG, "Couldn't set torch mode", e);
                         dispatchError();
@@ -153,6 +210,74 @@ public class FlashlightControllerImpl implements FlashlightController {
         return mTorchAvailable;
     }
 
+    public boolean isStrengthControlSupported() {
+        return mStrengthControlSupported;
+    }
+
+    public int getMaxLevel() {
+        return mMaxLevel;
+    }
+
+    public int getDefaultLevel() {
+        return mDefaultLevel;
+    }
+
+    public synchronized int getCurrentLevel() {
+        return mCurrentLevel;
+    }
+
+    public synchronized float getCurrentPercent() {
+        if (!mStrengthControlSupported || mMaxLevel <= 0) {
+            return 0f;
+        }
+        return Math.max(0.01f, (float) mCurrentLevel / (float) mMaxLevel);
+    }
+
+    public void setFlashlightStrengthLevel(int level) {
+        if (!mStrengthControlSupported) {
+            setFlashlight(level > 0);
+            return;
+        }
+        if (mCameraId.get() == null) {
+            mExecutor.execute(this::tryInitCamera);
+        }
+
+        final int requestedLevel = level;
+
+        mHandler.post(() -> {
+            if (mCameraId.get() == null) return;
+
+            int clampedLevel;
+            synchronized (this) {
+                clampedLevel = Math.max(1, Math.min(requestedLevel, mMaxLevel));
+                if (mCurrentLevel == clampedLevel) return;
+                mCurrentLevel = clampedLevel;
+            }
+
+            try {
+                if (DEBUG) Log.d(TAG, "Setting torch strength level: " + clampedLevel);
+                mCameraManager.turnOnTorchWithStrengthLevel(mCameraId.get(), clampedLevel);
+
+                dispatchStrengthChanged(clampedLevel);
+
+                mExecutor.execute(() -> {
+                    float percent = Math.max(0.01f, (float) clampedLevel / mMaxLevel);
+                    Settings.System.putFloatForUser(
+                            mContext.getContentResolver(),
+                            FLASHLIGHT_BRIGHTNESS_SETTING,
+                            percent,
+                            UserHandle.USER_CURRENT
+                    );
+                });
+
+            } catch (CameraAccessException e) {
+                Log.e(TAG, "Couldn't set torch strength level", e);
+                dispatchError();
+            }
+        });
+    }
+
+
     @Override
     public void addCallback(@NonNull FlashlightListener l) {
         synchronized (mListeners) {
@@ -163,6 +288,7 @@ public class FlashlightControllerImpl implements FlashlightController {
             mListeners.add(new WeakReference<>(l));
             l.onFlashlightAvailabilityChanged(isAvailable());
             l.onFlashlightChanged(isEnabled());
+            l.onFlashlightStrengthChanged(getCurrentLevel());
         }
     }
 
@@ -202,6 +328,17 @@ public class FlashlightControllerImpl implements FlashlightController {
 
     private void dispatchAvailabilityChanged(boolean available) {
         dispatchListeners(DISPATCH_AVAILABILITY_CHANGED, available);
+    }
+
+    private void dispatchStrengthChanged(int level) {
+        synchronized (mListeners) {
+            for (WeakReference<FlashlightListener> ref : mListeners) {
+                FlashlightListener l = ref.get();
+                if (l != null) {
+                    l.onFlashlightStrengthChanged(level);
+                }
+            }
+        }
     }
 
     private void dispatchListeners(int message, boolean argument) {
@@ -261,6 +398,24 @@ public class FlashlightControllerImpl implements FlashlightController {
                 mSecureSettings.putInt(Settings.Secure.FLASHLIGHT_AVAILABLE, 1);
                 mSecureSettings.putInt(Secure.FLASHLIGHT_ENABLED, enabled ? 1 : 0);
             }
+        }
+
+        @Override
+        @WorkerThread
+        public void onTorchStrengthLevelChanged(@NonNull String cameraId, int newStrengthLevel) {
+            if (!TextUtils.equals(cameraId, mCameraId.get())) return;
+            synchronized (FlashlightControllerImpl.this) {
+                if (mCurrentLevel == newStrengthLevel) return;
+                mCurrentLevel = newStrengthLevel;
+            }
+            float percent = Math.max(0.01f, (float) newStrengthLevel / (float) mMaxLevel);
+            Settings.System.putFloatForUser(
+                    mContext.getContentResolver(),
+                    FLASHLIGHT_BRIGHTNESS_SETTING,
+                    percent,
+                    UserHandle.USER_CURRENT);
+            if (DEBUG) Log.d(TAG, "Strength level changed: " + newStrengthLevel + "/" + mMaxLevel);
+            dispatchStrengthChanged(newStrengthLevel);
         }
 
         private void setCameraAvailable(boolean available) {
