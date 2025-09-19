@@ -17,15 +17,9 @@
 package com.android.systemui.qs.tiles.dialog
 
 import android.content.Context
-import android.hardware.camera2.CameraAccessException
-import android.hardware.camera2.CameraCharacteristics
-import android.hardware.camera2.CameraManager
 import android.os.Bundle
-import android.os.UserHandle
 import android.os.VibrationEffect
 import android.os.Vibrator
-import android.provider.Settings
-import android.util.Log
 import android.widget.Button
 import android.widget.FrameLayout
 import android.view.ContextThemeWrapper
@@ -49,13 +43,6 @@ class FlashlightDialogDelegate @Inject constructor(
 ) : SystemUIDialog.Delegate {
 
     private lateinit var slider: Slider
-
-    private val cameraManager: CameraManager?
-        get() = context.getSystemService(Context.CAMERA_SERVICE) as? CameraManager
-    private var cameraId: String? = null
-    private var maxLevel: Int = 1
-    private var defaultLevel: Int = 1
-    private var currentPercent: Float = 1f
 
     private val vibrator = context.getSystemService(Vibrator::class.java)
     private val flashlightMoveHaptic: VibrationEffect =
@@ -88,20 +75,8 @@ class FlashlightDialogDelegate @Inject constructor(
                 R.string.flashlight_strength_turn_on,
             { _, _ ->
                 val newState = !flashlightController.isEnabled()
-                if (newState) {
-                    val level = (currentPercent * maxLevel).toInt()
-                    val safeLevel = maxOf(level, 1)
-                    cameraId?.let { id ->
-                        try {
-                            cameraManager?.turnOnTorchWithStrengthLevel(id, safeLevel)
-                        } catch (_: CameraAccessException) {}
-                    }
-                } else {
-                    flashlightController.setFlashlight(false)
-                }
-
+                flashlightController.setFlashlight(newState)
                 slider.isEnabled = newState
-
                 dialog.getButton(SystemUIDialog.BUTTON_NEUTRAL)?.text =
                     if (newState)
                         dialog.context.getString(R.string.flashlight_strength_turn_off)
@@ -113,65 +88,32 @@ class FlashlightDialogDelegate @Inject constructor(
     }
 
     override fun onCreate(dialog: SystemUIDialog, savedInstanceState: Bundle?) {
-        val defaultPercent = defaultLevel.toFloat() / maxLevel.toFloat()
-        currentPercent = Settings.System.getFloatForUser(
-            dialog.context.contentResolver,
-            FLASHLIGHT_BRIGHTNESS_SETTING,
-            defaultPercent,
-            UserHandle.USER_CURRENT
-        )
+        val maxLevel = flashlightController.getMaxLevel()
+        val currentPercent = flashlightController.getCurrentPercent()
 
         slider.isEnabled = flashlightController.isEnabled()
         slider.valueFrom = 1f
         slider.valueTo = 100f
         slider.value = (currentPercent * 100f).coerceAtLeast(1f)
-        slider.setLabelFormatter { value ->
-            value.toInt().toString()
-        }
+        slider.setLabelFormatter { value -> value.toInt().toString() }
 
         var last = -1
         slider.addOnChangeListener { _, value, fromUser ->
             if (fromUser) {
-                val percent = (value / 100f)
+                val percent = value / 100f
                 val p = Math.round(percent * 100)
                 if (p != last) {
                     vibrator?.vibrate(flashlightMoveHaptic)
                     last = p
                 }
-                currentPercent = percent
-                updateFlashlightStrength()
+                updateFlashlightStrength(percent, maxLevel)
             }
         }
     }
 
     @MainThread
-    private fun updateFlashlightStrength() {
-        Settings.System.putFloatForUser(
-            context.contentResolver,
-            FLASHLIGHT_BRIGHTNESS_SETTING,
-            currentPercent,
-            UserHandle.USER_CURRENT
-        )
-
-        if (cameraId != null) {
-            try {
-                val level = (currentPercent * maxLevel).toInt().coerceAtLeast(1)
-                cameraManager?.turnOnTorchWithStrengthLevel(cameraId!!, level)
-            } catch (e: CameraAccessException) {
-                Log.e(TAG, "Unable to set torch strength", e)
-            }
-        }
-    }
-
-    fun setCameraInfo(camId: String?, maxLvl: Int, defLvl: Int): FlashlightDialogDelegate {
-        cameraId = camId
-        maxLevel = maxLvl
-        defaultLevel = defLvl
-        return this
-    }
-
-    companion object {
-        private const val TAG = "FlashlightDialogDelegate"
-        private const val FLASHLIGHT_BRIGHTNESS_SETTING = "flashlight_brightness"
+    private fun updateFlashlightStrength(percent: Float, maxLevel: Int) {
+        val level = (percent * maxLevel).toInt().coerceAtLeast(1)
+        flashlightController.setFlashlightStrengthLevel(level)
     }
 }

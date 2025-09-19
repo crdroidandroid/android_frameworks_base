@@ -116,6 +116,8 @@ constructor(
                             TAG,
                         )
                     }
+
+                    override fun onFlashlightStrengthChanged(level: Int) {}
                 }
 
             flashlightController.addCallback(flashlightCallback)
