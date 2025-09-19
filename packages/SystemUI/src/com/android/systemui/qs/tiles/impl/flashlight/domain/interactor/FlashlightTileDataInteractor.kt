@@ -54,6 +54,8 @@ constructor(private val flashlightController: FlashlightController) :
                         else FlashlightTileModel.FlashlightTemporarilyUnavailable
                     )
                 }
+
+                override fun onFlashlightStrengthChanged(level: Int) {}
             }
         flashlightController.addCallback(callback)
         awaitClose { flashlightController.removeCallback(callback) }
