@@ -98,7 +98,7 @@ public class FlashlightTile extends QSTileImpl<BooleanState> implements
     @Override
     public BooleanState newTileState() {
         BooleanState state = new BooleanState();
-        state.handlesLongClick = false;
+        state.handlesLongClick = true;
         return state;
     }
 
