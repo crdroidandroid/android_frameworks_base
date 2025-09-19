@@ -25,6 +25,13 @@ public interface FlashlightController extends CallbackController<FlashlightListe
     boolean isAvailable();
     boolean isEnabled();
 
+    boolean isStrengthControlSupported();
+    int getMaxLevel();
+    int getDefaultLevel();
+    int getCurrentLevel();
+    float getCurrentPercent();
+    void setFlashlightStrengthLevel(int level);
+
     @WeaklyReferencedCallback
     public interface FlashlightListener {
 
@@ -45,5 +52,8 @@ public interface FlashlightController extends CallbackController<FlashlightListe
          * @param available true if the flashlight is currently available.
          */
         void onFlashlightAvailabilityChanged(boolean available);
+
+        /** Called when the flashlight strength changes (if supported). */
+        void onFlashlightStrengthChanged(int level);
     }
 }
