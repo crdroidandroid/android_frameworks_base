@@ -112,8 +112,6 @@ class FlashlightDialogDelegate @Inject constructor(
     }
 
     override fun onCreate(dialog: SystemUIDialog, savedInstanceState: Bundle?) {
-        initCameraInfo()
-
         val defaultPercent = defaultLevel.toFloat() / maxLevel.toFloat()
         currentPercent = Settings.System.getFloatForUser(
             dialog.context.contentResolver,
@@ -164,41 +162,11 @@ class FlashlightDialogDelegate @Inject constructor(
         }
     }
 
-    private fun initCameraInfo() {
-        try {
-            val cm = cameraManager ?: return
-            cameraId = getBackCameraId(cm)
-            if (cameraId != null) {
-                val characteristics = cm.getCameraCharacteristics(cameraId!!)
-                val flashAvailable = characteristics.get(CameraCharacteristics.FLASH_INFO_AVAILABLE) ?: false
-                maxLevel = characteristics.get(CameraCharacteristics.FLASH_INFO_STRENGTH_MAXIMUM_LEVEL) ?: 1
-                defaultLevel = characteristics.get(CameraCharacteristics.FLASH_INFO_STRENGTH_DEFAULT_LEVEL) ?: 1
-
-                // Use the same detection logic as the old implementation
-                if (!flashAvailable || maxLevel <= 1) {
-                    cameraId = null
-                    maxLevel = 1
-                    defaultLevel = 1
-                }
-            }
-        } catch (e: CameraAccessException) {
-            Log.d(TAG, "Flashlight not controllable, fallback to default")
-            cameraId = null
-            maxLevel = 1
-            defaultLevel = 1
-        }
-    }
-
-    private fun getBackCameraId(cm: CameraManager): String? {
-        for (id in cm.cameraIdList) {
-            val c = cm.getCameraCharacteristics(id)
-            val flashAvailable = c.get(CameraCharacteristics.FLASH_INFO_AVAILABLE) ?: false
-            val lensFacing = c.get(CameraCharacteristics.LENS_FACING)
-            if (flashAvailable && lensFacing == CameraCharacteristics.LENS_FACING_BACK) {
-                return id
-            }
-        }
-        return null
+    fun setCameraInfo(camId: String?, maxLvl: Int, defLvl: Int): FlashlightDialogDelegate {
+        cameraId = camId
+        maxLevel = maxLvl
+        defaultLevel = defLvl
+        return this
     }
 
     companion object {
