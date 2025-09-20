@@ -76,6 +76,7 @@ public class FlashlightTile extends QSTileImpl<BooleanState> implements
     private final Provider<FlashlightDialogDelegate> mFlashlightDialogProvider;
     private final DialogTransitionAnimator mDialogTransitionAnimator;
     private final ContentObserver mBrightnessObserver;
+    private final boolean mStrengthControlSupported;
 
     private CameraManager mCameraManager;
 
@@ -118,7 +119,8 @@ public class FlashlightTile extends QSTileImpl<BooleanState> implements
             }
         };
 
-        if (isStrengthControlSupported()) {
+        mStrengthControlSupported = isStrengthControlSupported();
+        if (mStrengthControlSupported) {
             mContext.getContentResolver().registerContentObserver(
                     Settings.System.getUriFor(FLASHLIGHT_BRIGHTNESS_SETTING),
                     false,
@@ -131,7 +133,7 @@ public class FlashlightTile extends QSTileImpl<BooleanState> implements
     @Override
     protected void handleDestroy() {
         super.handleDestroy();
-        if (isStrengthControlSupported()) {
+        if (mStrengthControlSupported) {
             mContext.getContentResolver().unregisterContentObserver(mBrightnessObserver);
             getCameraManager().unregisterTorchCallback(mTorchCallback);
         }
@@ -141,9 +143,6 @@ public class FlashlightTile extends QSTileImpl<BooleanState> implements
     public BooleanState newTileState() {
         BooleanState state = new BooleanState();
         state.handlesLongClick = false;
-        if (isStrengthControlSupported()) {
-            state.handlesSecondaryClick = true;
-        }
         return state;
     }
 
@@ -167,11 +166,13 @@ public class FlashlightTile extends QSTileImpl<BooleanState> implements
             return;
         }
 
-        if (isStrengthControlSupported()) {
+        if (mStrengthControlSupported) {
             Runnable runnable = new Runnable() {
                 @Override
                 public void run() {
-                    SystemUIDialog dialog = mFlashlightDialogProvider.get().createDialog();
+                    SystemUIDialog dialog = mFlashlightDialogProvider.get()
+                            .setCameraInfo(mCameraId, mMaxLevel, mDefaultLevel)
+                            .createDialog();
                     if (expandable != null) {
                         DialogTransitionAnimator.Controller controller =
                                 expandable.dialogTransitionController(
@@ -203,7 +204,7 @@ public class FlashlightTile extends QSTileImpl<BooleanState> implements
         boolean newState = !mState.value;
         refreshState(newState);
 
-        if (isStrengthControlSupported() && newState) {
+        if (mStrengthControlSupported && newState) {
             try {
                 int level = Math.max((int) (mCurrentPercent * mMaxLevel), 1);
                 mCameraManager.turnOnTorchWithStrengthLevel(mCameraId, level);
@@ -229,6 +230,7 @@ public class FlashlightTile extends QSTileImpl<BooleanState> implements
         state.label = mHost.getContext().getString(R.string.quick_settings_flashlight_label);
         state.secondaryLabel = "";
         state.stateDescription = "";
+        state.handlesSecondaryClick = mStrengthControlSupported;
         if (!mFlashlightController.isAvailable()) {
             state.secondaryLabel = mContext.getString(
                     R.string.quick_settings_flashlight_camera_in_use);
@@ -237,7 +239,7 @@ public class FlashlightTile extends QSTileImpl<BooleanState> implements
             state.icon = maybeLoadResourceIcon(R.drawable.qs_flashlight_icon_off);
             return;
         }
-        if (isStrengthControlSupported()) {
+        if (mStrengthControlSupported) {
             boolean enabled = mFlashlightController.isEnabled();
             mCurrentPercent = Settings.System.getFloatForUser(
                     mContext.getContentResolver(),
