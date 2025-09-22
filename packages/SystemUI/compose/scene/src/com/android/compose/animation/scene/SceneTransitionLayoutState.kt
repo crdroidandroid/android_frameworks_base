@@ -659,7 +659,7 @@ internal class MutableSceneTransitionLayoutStateImpl(
     }
 
     override suspend fun startTransition(transition: TransitionState.Transition, chain: Boolean) {
-        Log.i(TAG, "startTransition(transition=$transition, chain=$chain)")
+        Log.d(TAG, "startTransition(transition=$transition, chain=$chain)")
         checkThread()
 
         // Notify to VRI that the next frame is going to be expensive.
@@ -774,7 +774,7 @@ internal class MutableSceneTransitionLayoutStateImpl(
             return
         }
 
-        Log.i(TAG, "finishTransition(transition=$transition)")
+        Log.d(TAG, "finishTransition(transition=$transition)")
         check(transitionStates.fastAll { it is TransitionState.Transition })
 
         // Mark this transition as finished.
@@ -797,7 +797,7 @@ internal class MutableSceneTransitionLayoutStateImpl(
         }
 
         val idle = TransitionState.Idle(lastTransition.currentScene, lastTransition.currentOverlays)
-        Log.i(TAG, "all transitions finished. idle=$idle")
+        Log.d(TAG, "all transitions finished. idle=$idle")
         finishedTransitions.clear()
         this.transitionStates = listOf(idle)
     }
