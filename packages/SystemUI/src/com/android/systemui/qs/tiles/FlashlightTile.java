@@ -118,6 +118,26 @@ public class FlashlightTile extends QSTileImpl<BooleanState> implements
 
     @Override
     protected void handleClick(@Nullable Expandable expandable) {
+        handleSecondaryClick(expandable);
+    }
+
+    @Override
+    protected void handleSecondaryClick(@Nullable Expandable expandable) {
+        if (ActivityManager.isUserAMonkey()) {
+            return;
+        }
+        boolean newState = !mState.value;
+        refreshState(newState);
+        mFlashlightController.setFlashlight(newState);
+    }
+
+    @Override
+    public CharSequence getTileLabel() {
+        return mContext.getString(R.string.quick_settings_flashlight_label);
+    }
+
+    @Override
+    protected void handleLongClick(@Nullable Expandable expandable) {
         if (ActivityManager.isUserAMonkey()) {
             return;
         }
@@ -148,26 +168,6 @@ public class FlashlightTile extends QSTileImpl<BooleanState> implements
         } else {
             handleSecondaryClick(expandable);
         }
-    }
-
-    @Override
-    protected void handleSecondaryClick(@Nullable Expandable expandable) {
-        if (ActivityManager.isUserAMonkey()) {
-            return;
-        }
-        boolean newState = !mState.value;
-        refreshState(newState);
-        mFlashlightController.setFlashlight(newState);
-    }
-
-    @Override
-    public CharSequence getTileLabel() {
-        return mContext.getString(R.string.quick_settings_flashlight_label);
-    }
-
-    @Override
-    protected void handleLongClick(@Nullable Expandable expandable) {
-        handleClick(expandable);
     }
 
     @Override
