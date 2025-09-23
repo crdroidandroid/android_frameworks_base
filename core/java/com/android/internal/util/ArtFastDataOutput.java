@@ -84,6 +84,10 @@ public class ArtFastDataOutput extends FastDataOutput {
     public void writeUTF(String s) throws IOException {
         // Attempt to write directly to buffer space if there's enough room,
         // otherwise fall back to chunking into place
+        if (s == null) {
+            return;
+        }
+
         if (mBufferCap - mBufferPos < 2 + s.length()) drain();
 
         // Magnitude of this returned value indicates the number of bytes
