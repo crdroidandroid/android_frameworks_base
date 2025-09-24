@@ -367,7 +367,7 @@ final class SaveUi {
         window.setDimAmount(0.6f);
         window.addPrivateFlags(WindowManager.LayoutParams.SYSTEM_FLAG_SHOW_FOR_ALL_USERS);
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-        window.setGravity(Gravity.BOTTOM | Gravity.CENTER);
+        window.setGravity(Gravity.CENTER);
         window.setCloseOnTouchOutside(true);
         final WindowManager.LayoutParams params = window.getAttributes();
 
