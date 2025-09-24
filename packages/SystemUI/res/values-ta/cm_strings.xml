@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright (c) 2015, The CyanogenMod Project
+ * Copyright (c) 2017-2021 The LineageOS Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="clock">மணினி</string>
+    <string name="global_action_restart_more">மறுதொடக்கம்\u2026</string>
+    <string name="global_action_restart_system">முறைமை</string>
+    <string name="global_action_restart_recovery">மீட்டெடுப்பு</string>
+    <string name="global_action_restart_bootloader">தொடக்கயேற்றி</string>
+    <string name="global_action_restart_download">பதிவிறக்கம்</string>
+    <string name="global_action_restart_fastboot">விரைதொடக்கம்</string>
+    <string name="global_action_restart_progress">மறுதொடங்குகின்றது\u2026</string>
+    <string name="global_action_restart_recovery_progress">மீட்டெடுப்பு முறையில் மறுதொடங்குகின்றது\u2026</string>
+    <string name="global_action_restart_bootloader_progress">தொடக்கயேற்றி முறையில் மறுதொடங்குகின்றது\u2026</string>
+    <string name="global_action_restart_download_progress">பதிவிறக்க முறையில் மறுதொடங்குகின்றது\u2026</string>
+    <string name="global_action_restart_fastboot_progress">விரைதொடக்க முறையில் மறுதொடங்குகின்றது\u2026</string>
+    <string name="global_action_current_user">தற்போது</string>
+    <string name="global_action_users">பயனர்கள்</string>
+    <string name="status_bar_icons_title">நிலைப்பட்டிப் படவுருகள்</string>
+    <string name="drag_or_tap_to_add_tiles">பிடித்து இழுத்து அல்லது தட்டி ஓடுகளைச் சேர்க்க</string>
+    <string name="quick_settings_ambient_display_label">சூழல்சார் திரை</string>
+    <string name="accessibility_quick_settings_ambient_display_off">சூழல்சார் திரை நிறுத்தம்.</string>
+    <string name="accessibility_quick_settings_ambient_display_on">சூழல்சார் திரை இயக்கம்.</string>
+    <string name="quick_settings_aod_label">AOD</string>
+    <string name="quick_settings_aod_off_powersave_label">AOD நிறுத்தம்\nமின்கலச் சேமிப்பான்</string>
+    <string name="quick_settings_caffeine_label">தொடர்விழிப்பு</string>
+    <string name="accessibility_quick_settings_caffeine_off">தொடர்விழிப்பு நிறுத்தம்.</string>
+    <string name="accessibility_quick_settings_caffeine_on">தொடர்விழிப்பு இயக்கம்.</string>
+    <string name="quick_settings_heads_up_label">தலையுயர்த்தி</string>
+    <string name="accessibility_quick_settings_heads_up_off">தலையுயர்த்தி நிறுத்தம்.</string>
+    <string name="accessibility_quick_settings_heads_up_on">தலையுயர்த்தி இயக்கம்.</string>
+    <string name="quick_settings_powershare_label">கம்பியில்லா மின்பகிர்வு</string>
+    <string name="quick_settings_powershare_off_powersave_label">கம்பியில்லா மின்பகிர்வு நிறுத்தம்\nமின்கலச் சேமிப்பான்</string>
+    <string name="quick_settings_powershare_off_low_battery_label">கம்பியில்லா மின்பகிர்வு நிறுத்தம்\nமின்கலம் மிகக்குறைவு</string>
+    <string name="quick_settings_powershare_enabled_label">கம்பியில்லா மின்பகிர்வு இயக்கப்பட்டது</string>
+    <string name="quick_settings_reading_mode">படிப்புப் பயன்முறை</string>
+    <string name="accessibility_quick_settings_reading_mode_on">படிப்புப் பயன்முறை இயக்கம்.</string>
+    <string name="accessibility_quick_settings_reading_mode_off">படிப்புப் பயன்முறை நிறுத்தம்.</string>
+    <string name="quick_settings_sync_label">ஒத்திசைவு</string>
+    <string name="accessibility_quick_settings_sync_off">ஒத்திசைவு நிறுத்தம்.</string>
+    <string name="accessibility_quick_settings_sync_on">ஒத்திசைவு இயக்கம்.</string>
+    <string name="quick_settings_profiles_label">முறைமை தனியமைப்புகள்</string>
+    <string name="accessibility_quick_settings_profiles_off">தனியமைப்புகள் நிறுத்தம்.</string>
+    <string name="accessibility_quick_settings_profiles">தனியமைப்பு: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
+    <string name="quick_settings_usb_tether_label">USB இணைப்புப்பகிர்வு</string>
+    <string name="quick_settings_vpn_label">VPN</string>
+    <string name="quick_settings_vpn_connect_dialog_title">\u2026 உடன் இணைக்க</string>
+    <string name="vpn_credentials_hint"><xliff:g id="name">%s</xliff:g> உடன் இணைக்க உங்கள் சான்றுகளை உள்ளிடவும்</string>
+    <string name="vpn_credentials_username">பயனர்பெயர்</string>
+    <string name="vpn_credentials_password">கடவுச்சொல்</string>
+    <string name="vpn_credentials_dialog_connect">இணைக்க</string>
+    <string name="status_bar_firewall">தீயரண்</string>
+    <string name="screenrecord_lowquality_label">குறைந்த தரம்</string>
+    <string name="screenrecord_lowquality_summary">சிறிய கோப்பு அளவிற்கு</string>
+    <string name="screenrecord_longer_timeout_switch_label">பெரிய கோப்பு அளவு வரம்பு</string>
+    <string name="screenrecord_longer_timeout_switch_summary">பதிவித்தலை 15 GB அளவிற்கு வரம்பிடுக</string>
+    <string name="screenrecord_skip_time_label">நேரங்குறியைத் தவிர்க்க</string>
+    <string name="screenrecord_skip_time_summary">3 நொடி காத்திருப்பை அகற்றுக</string>
+    <string name="screenrecord_hevc_switch_label">HEVC குறியேற்றம்</string>
+    <string name="screenrecord_hevc_switch_summary">கூடுதல் திறன் வாய்ந்த HEVC குறியேற்றியைப் பயன்படுத்துக</string>
+    <string name="battery_notification_channel_tv">மின்கல எச்சரிக்கை</string>
+    <string name="screenshot_delete_label">நீக்குக</string>
+    <string name="screenshot_delete_description">திரைப்பிடிப்பை நீக்குக</string>
+    <string name="screen_pinning_description_no_navbar">நீங்கள் செருகியதை அகற்றும் வரை இது பார்வையில் வைத்திருக்கும். செருகியதை அகற்ற, செருகு என்பதைத் தொட்டுப் பிடிக்கவும்.</string>
+    <string name="screen_pinning_toast_no_navbar">இந்தத் திரையை அகற்ற, பின்செல் பொத்தானைத் தொட்டுப் பிடிக்கவும்</string>
+</resources>
