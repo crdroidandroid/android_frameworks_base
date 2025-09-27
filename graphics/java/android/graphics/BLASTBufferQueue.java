@@ -33,6 +33,8 @@ public final class BLASTBufferQueue {
 
     private static native long nativeCreate(String name, boolean updateDestinationFrame);
     private static native void nativeDestroy(long ptr);
+    private static native void nativeSetUndequeuedBufferCount(long ptr, int count);
+    private static native int nativeGetUndequeuedBufferCount(long ptr);
     private static native Surface nativeGetSurface(long ptr, boolean includeSurfaceControlHandle);
     private static native boolean nativeSyncNextTransaction(long ptr,
             Consumer<SurfaceControl.Transaction> callback, boolean acquireSingleBuffer);
@@ -104,6 +106,20 @@ public final class BLASTBufferQueue {
      */
     public Surface createSurfaceWithHandle() {
         return nativeGetSurface(mNativeObject, true /* includeSurfaceControlHandle */);
+    }
+
+    /**
+     * Set undequeued buffer count
+     */
+    public void setUndequeuedBufferCount(int count) {
+        nativeSetUndequeuedBufferCount(mNativeObject, count);
+    }
+
+    /**
+     * @return the count of undequeued buffer
+     */
+    public int getUndequeuedBufferCount() {
+        return nativeGetUndequeuedBufferCount(mNativeObject);
     }
 
     /**
