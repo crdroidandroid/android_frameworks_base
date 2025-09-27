@@ -58,6 +58,7 @@ import com.android.internal.annotations.GuardedBy;
 import com.android.internal.os.ApplicationSharedMemory;
 import com.android.internal.policy.PhoneWindow;
 import com.android.internal.util.FastPrintWriter;
+import com.android.internal.util.ScrollOptimizer;
 
 import java.io.FileDescriptor;
 import java.io.FileOutputStream;
@@ -384,6 +385,36 @@ public final class WindowManagerGlobal {
         return null;
     }
 
+    private int getVisibleRootCount (ArrayList<ViewRootImpl> roots) {
+        int visibleRootCount = 0;
+        int lastLeft = -1;
+        int lastTop = -1;
+        int lastWidth = 0;
+        int lastHeight = 0;
+        for (int i = roots.size() - 1; i >= 0; --i) {
+            View root_view = roots.get(i).getView();
+            if (root_view != null && root_view.getVisibility() == View.VISIBLE) {
+                int left = root_view.getLeft();
+                int top = root_view.getTop();
+                int width = root_view.getRight() - root_view.getLeft() ;
+                int height = root_view.getBottom() - root_view.getTop() ;
+                // Filter the invalid visible views.
+                if (width != 0 && height != 0) {
+                    // Filter the overwritten visible views.
+                    if (lastWidth != width || lastHeight != height ||
+                        lastLeft != left || lastTop != top ) {
+                        visibleRootCount++;
+                    }
+                    lastLeft = left;
+                    lastTop = top;
+                    lastWidth = width;
+                    lastHeight = height;
+                }
+            }
+        }
+        return visibleRootCount;
+    }
+
     public void addView(View view, ViewGroup.LayoutParams params,
             Display display, Window parentWindow, int userId) {
         if (view == null) {
@@ -481,6 +512,12 @@ public final class WindowManagerGlobal {
             }
 
             view.setLayoutParams(wparams);
+
+            int visibleRootCount = 0;
+            visibleRootCount = getVisibleRootCount(mRoots);
+            if (visibleRootCount > 1) {
+                ScrollOptimizer.disableOptimizer(true);
+            }
 
             mViews.add(view);
             mRoots.add(root);
@@ -606,6 +643,18 @@ public final class WindowManagerGlobal {
                 final View view = mViews.remove(index);
                 mDyingViews.remove(view);
             }
+            // The visibleRootCount more than one means multi-layer, and multi-layer rendering
+            // can result in unexpected pending between UI thread and render thread with
+            // pre-rendering enabled. Need to disable pre-rendering for multi-layer cases.
+            int visibleRootCount = 0;
+            visibleRootCount = getVisibleRootCount(mRoots);
+
+            if (visibleRootCount > 1) {
+                ScrollOptimizer.disableOptimizer(true);
+            } else if (visibleRootCount == 1) {
+                ScrollOptimizer.disableOptimizer(false);
+            }
+
             allViewsRemoved = mRoots.isEmpty();
             mWindowViewsListenerGroup.accept(getWindowViews());
 
