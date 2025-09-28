@@ -19971,41 +19971,50 @@ public class ActivityManagerService extends IActivityManager.Stub
     }
 
     @Override
-    public void releaseMemory(int minAdj, int maxKillCount, boolean includeUIProcesses, boolean skipCamera) {
-        if (minAdj == 0) return;
+    public void releaseMemory(int minAdj, int maxKillCount,
+                              boolean includeUIProcesses, boolean skipCamera) {
+        if (minAdj <= 0) return;
 
-        try {
-            ArrayList<ProcessRecord> processList = 
-                (ArrayList<ProcessRecord>) mProcessList.getLruProcessesLOSP().clone();
+        final int currentUser = mUserController.getCurrentUserId();
+        final ArrayList<ProcessRecord> victims = new ArrayList<>();
 
-            ArrayList<ProcessToKill> toKill = new ArrayList<>();
+        synchronized (this) {
+            synchronized (mProcLock) {
+                mCachedAppOptimizer.compactAllSystem();
 
-            for (ProcessRecord record : processList) {
-                if (record != null && record.getSetAdj() >= minAdj) {
-                    boolean hasUI = record.hasActivities();
-                    if (!hasUI || includeUIProcesses) {
-                        toKill.add(new ProcessToKill(
-                            record.getPid(),
-                            record.getSetAdj(),
-                            record.processName
-                        ));
-                    }
-                }
+                mProcessList.forEachLruProcessesLOSP(false, proc -> {
+                    if (proc == null || proc.getThread() == null) return;
+
+                    final int setAdj = proc.getSetAdj();
+                    final int state = proc.getSetProcState();
+
+                    // Exclusions
+                    if (proc.isPersistent()) return;
+                    if (proc.userId != currentUser) return;
+                    if (state <= ActivityManager.PROCESS_STATE_IMPORTANT_FOREGROUND) return;
+                    if (state == ActivityManager.PROCESS_STATE_HOME) return;
+                    if (!includeUIProcesses && proc.hasActivities()) return;
+
+                    if (setAdj >= minAdj) victims.add(proc);
+                });
             }
+        }
 
-            Collections.sort(toKill, new ProcessComparator());
+        victims.sort((a, b) -> Integer.compare(b.getSetAdj(), a.getSetAdj()));
 
-            int killedCount = 0;
-            for (ProcessToKill info : toKill) {
-                Process.killProcess(info.pid);
-                killedCount++;
-
-                if (killedCount >= maxKillCount) {
-                    return;
+        int killed = 0;
+        for (ProcessRecord proc : victims) {
+            if (killed >= maxKillCount) break;
+            final String reason = "screen-on memory reclaim";
+            mHandler.post(() -> {
+                synchronized (ActivityManagerService.this) {
+                    proc.killLocked(reason,
+                            ApplicationExitInfo.REASON_OTHER,
+                            ApplicationExitInfo.SUBREASON_MEMORY_PRESSURE, true);
                 }
-            }
-
-        } catch (Exception e) {}
+            });
+            killed++;
+        }
     }
 
     public class ProcessComparator implements Comparator<ProcessToKill> {
