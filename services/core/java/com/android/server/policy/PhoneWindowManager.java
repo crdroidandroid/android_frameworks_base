@@ -433,7 +433,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private static final long MEMORY_RELEASE_INTERVAL_MS = 5 * 60 * 1000L; // 5 minutes
     private long lastMemoryReleaseTime = 0L;
 
-    private static final long GC_INTERVAL_MS = 10 * 60 * 1000L; // 10 minutes
+    private static final long GC_INTERVAL_MS = 5 * 60 * 1000L; // 5 minutes
     private long lastGcTime = 0L;
 
     /**
@@ -6510,8 +6510,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 System.gc();
                 System.runFinalization();
                 System.gc();
+                try {
+                    mActivityManagerService.compactAllSystem();
+                } catch (RemoteException e) {
+                }
                 lastGcTime = currentTime;
-                Log.v("GcOpt", "performing garbage collection for system_server");
+                Slog.d(TAG, "Performing garbage collection for system_server");
             }
         }
     };
