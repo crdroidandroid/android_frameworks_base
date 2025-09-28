@@ -80,15 +80,14 @@ final class PackageHandler extends Handler {
                 break;
             }
             case POST_INSTALL: {
-                if (DEBUG_INSTALL) Log.v(TAG, "Handling post-install for " + msg.arg1);
-
                 final InstallRequest request;
-                final int token;
-                final boolean didRestore;
+                final int token = msg.arg1;
+                final boolean didRestore = (msg.arg2 != 0);
+
+                if (DEBUG_INSTALL) Log.v(TAG, "Handling post-install for " + token);
+
                 synchronized (mPm.mRunningInstalls) {
-                    request= mPm.mRunningInstalls.get(msg.arg1);
-                    token = msg.arg1;
-                    didRestore = (msg.arg2 != 0);
+                    request= mPm.mRunningInstalls.get(token);
                     mPm.mRunningInstalls.delete(token);
                 }
 
