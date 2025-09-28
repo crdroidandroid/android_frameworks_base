@@ -32,6 +32,7 @@ import android.view.SurfaceControl;
 import android.view.WindowManager;
 
 import java.io.PrintWriter;
+import java.util.NoSuchElementException;
 
 class InputConsumerImpl implements IBinder.DeathRecipient {
     final WindowManagerService mService;
@@ -101,8 +102,11 @@ class InputConsumerImpl implements IBinder.DeathRecipient {
         if (mToken == null) {
             return;
         }
-
-        mToken.unlinkToDeath(this, 0);
+        try {
+            mToken.unlinkToDeath(this, 0);
+        } catch (NoSuchElementException e) {
+            // unlinkToDeath called on unlinked Binder.
+        }
     }
 
     void layout(SurfaceControl.Transaction t, int dw, int dh) {
