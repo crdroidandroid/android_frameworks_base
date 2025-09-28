@@ -452,6 +452,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private static final long GC_INTERVAL_MS = 5 * 60 * 1000L; // 5 minutes
     private long lastGcTime = 0L;
 
+    private static final long LS_INTERVAL_MS = 60 * 60 * 1000L; // 60 minutes
+    private long lastLsTime = 0L;
+
     /**
      * Keyguard stuff
      */
@@ -7248,6 +7251,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         @Override
         public void run() {
             long currentTime = System.currentTimeMillis();
+            if (lastLsTime == 0L || currentTime - lastLsTime > LS_INTERVAL_MS) {
+                try {
+                    mActivityManagerService.forceStopPackage("com.android.launcher3", mCurrentUserId);
+                } catch (RemoteException e) {
+                }
+                lastLsTime = currentTime;
+                Slog.d(TAG, "Performing launcher restart");
+            }
             if (lastGcTime == 0L || currentTime - lastGcTime > GC_INTERVAL_MS) {
                 System.gc();
                 System.runFinalization();
