@@ -204,24 +204,28 @@ class MediaViewController @Inject constructor(
         mediaScrim.post { mediaScrim.setRenderEffect(effect) }
     }
 
-    private suspend fun shouldShowMediaArt(): Boolean {
+    private fun shouldShowMediaArt(): Boolean {
+        if (!featureEnabled) return false
+        if (artworkDrawable == null) return false
         val isPortrait = context.resources.configuration.orientation != Configuration.ORIENTATION_LANDSCAPE
         val isKeyguard = ScrimUtils.get().isKeyguardShowing()
         val isDozing = ScrimUtils.get().isDozing()
-        val isPanelFullyCollapsed = ScrimUtils.get().isPanelFullyCollapsed()
+        val isCollapsed = ScrimUtils.get().isPanelFullyCollapsed()
+        if (!isPortrait || !isKeyguard || isDozing || !isCollapsed) return false
+        if (!isMediaPlaying) return false
+        if (bouncerShowingOrKeyguardDismissing) return false
+        return true
+    }
 
-        val shouldShow = featureEnabled && !isDozing &&
-            isPortrait && isKeyguard &&
-            isMediaPlaying && isPanelFullyCollapsed &&
-            !bouncerShowingOrKeyguardDismissing
-
-        return shouldShow
+    private fun cancelScrimAnim() {
+        mediaScrim.animate().setListener(null).cancel()
     }
 
     private fun showMediaArt() {
         if (dismissingKeyguard) {
             return
         }
+        cancelScrimAnim()
         updateMediaArt()
         mediaScrim.apply {
             alpha = 0f
@@ -350,6 +354,7 @@ class MediaViewController @Inject constructor(
         if (dismissingKeyguard) return
         dismissingKeyguard = true
         mediaArtJob?.cancel()
+        cancelScrimAnim()
         mediaScrim.animate()
             .alpha(0f)
             .setDuration(100)
@@ -463,7 +468,9 @@ class MediaViewController @Inject constructor(
     fun albumArtVisible() = isAlbumArtVisible
 
     fun setSubjectAlpha(alpha: Float) {
-        mediaScrim.post { mediaScrim.alpha = alpha }
+        mediaScrim.post {
+            mediaScrim.alpha = alpha.coerceIn(0f, 1f)
+        }
     }
 
     fun onDetachedFromWindow() {
@@ -471,6 +478,7 @@ class MediaViewController @Inject constructor(
         if (listening) {
             MediaSessionManager.get().removeListener(this)
             ScrimUtils.get().removeListener(this)
+            listening = false
         }
         mediaArtJob?.cancel()
     }
