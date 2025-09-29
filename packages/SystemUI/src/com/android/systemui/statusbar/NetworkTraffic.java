@@ -48,6 +48,8 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.core.content.res.ResourcesCompat;
+
 import com.android.systemui.Dependency;
 import com.android.systemui.res.R;
 import com.android.systemui.plugins.DarkIconDispatcher;
@@ -471,10 +473,16 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable,
         super.onDetachedFromWindow();
         if (mAttached) {
             clearHandlerCallbacks();
+            if (mKeyguardUpdateMonitor != null) {
+                mKeyguardUpdateMonitor.removeCallback(mUpdateCallback);
+                mKeyguardUpdateMonitor = null;
+            }
             mContext.unregisterReceiver(mIntentReceiver);
             mConnectivityManager.unregisterNetworkCallback(mDefaultNetworkCallback);
             mConnectivityManager.unregisterNetworkCallback(mNetworkCallback);
             Dependency.get(TunerService.class).removeTunable(this);
+            mDrawable = null;
+            setCompoundDrawables(null, null, null, null);
             mAttached = false;
         }
     }
@@ -535,6 +543,9 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable,
                     String txtFont = getResources().getString(com.android.internal.R.string.config_bodyFontFamily);
                     setTypeface(Typeface.create(txtFont, Typeface.BOLD));
                     setLineSpacing(0.80f, 0.80f);
+                    setLayoutDirection(View.LAYOUT_DIRECTION_LOCALE);
+                    setTextDirection(View.TEXT_DIRECTION_LOCALE);
+                    setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
                 }
                 updateViews();
                 break;
@@ -592,14 +603,11 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable,
     }
 
     private void clearHandlerCallbacks() {
-        mTrafficHandler.removeMessages(MESSAGE_TYPE_PERIODIC_REFRESH);
-        mTrafficHandler.removeMessages(MESSAGE_TYPE_UPDATE_VIEW);
+        mTrafficHandler.removeCallbacksAndMessages(null);
     }
 
     private void setTrafficDrawable() {
         final int drawableResId;
-        final Drawable drawable;
-
         if (mHideArrows) {
             drawableResId = 0;
         } else if (!mTrafficActive) {
@@ -613,11 +621,12 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable,
         } else {
             drawableResId = 0;
         }
-        drawable = drawableResId != 0 ? getResources().getDrawable(drawableResId) : null;
+        final Drawable drawable = mHideArrows ? null
+            : ResourcesCompat.getDrawable(getResources(), drawableResId, getContext().getTheme());
         if (mDrawable != drawable || mIconTint != newTint) {
             mDrawable = drawable;
             mIconTint = newTint;
-            setCompoundDrawablesWithIntrinsicBounds(null, null, mDrawable, null);
+            setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, mDrawable, null);
             updateTrafficDrawable();
         }
     }
