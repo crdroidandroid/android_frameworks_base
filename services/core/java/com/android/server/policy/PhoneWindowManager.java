@@ -4840,6 +4840,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         final int metaState = event.getMetaState();
 
         switch (keyCode) {
+            case KeyEvent.KEYCODE_ASSIST:
+            case KeyEvent.KEYCODE_MENU:
+                return interceptSystemKeysAndShortcutsOld(focusedToken, event);
             case KeyEvent.KEYCODE_HOME:
                 return handleHomeShortcuts(focusedToken, event);
             case KeyEvent.KEYCODE_VOLUME_UP:
