@@ -82,7 +82,6 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.android.compose.modifiers.height
-import com.android.compose.modifiers.size
 import com.android.compose.modifiers.sliderPercentage
 import com.android.compose.modifiers.width
 import com.android.systemui.compose.modifiers.sysuiResTag
@@ -108,6 +107,10 @@ import com.android.systemui.haptics.slider.SliderHapticFeedbackConfig
 import com.android.systemui.haptics.slider.compose.ui.SliderHapticsViewModel
 import com.android.systemui.lifecycle.rememberViewModel
 import com.android.systemui.res.R
+import java.lang.Math.toDegrees
+import kotlin.math.atan
+import kotlin.math.pow
+import kotlin.math.sqrt
 import platform.test.motion.compose.values.MotionTestValueKey
 import platform.test.motion.compose.values.motionTestValues
 
@@ -372,21 +375,40 @@ private class BeamShape : Shape {
     }
 }
 
+/**
+ * This is pre-rotation so we are drawing from left to right. See
+ * {VerticalFlashlightSlider_drawBeamPath.png} for how the beam tip is drawn.
+ */
 private fun Path.drawBeamPath(size: Size, density: Density, center: Offset) {
     val leftSideLength = with(density) { MIN_TRACK_HEIGHT.toPx() }
     val topLeftY = center.y - leftSideLength / 2
     val bottomLeftY = center.y + leftSideLength / 2
 
+    // The following values are calculated for the beam tip
+    val bigBase = with(density) { MAX_TRACK_HEIGHT.toPx() }
+    val height = with(density) { TRACK_LENGTH.toPx() }
+    val displacement = displacement(leftSideLength, bigBase, height)
+    val radius = tipRadius(displacement.toDouble(), leftSideLength.toDouble()).toFloat()
+    val offsetDegrees = arcStartOffset(leftSideLength, bigBase, height).toFloat()
+
+    // draw the 3 sides of trapezoid
     moveTo(leftSideLength / 2, topLeftY) // start at top-left
     lineTo(size.width, 0f) // top  (moving right and up)
     lineTo(size.width, size.height) // right (moving down)
     lineTo(leftSideLength / 2, bottomLeftY) // bottom (moving left and up)
 
-    arcTo(
-        rect = Rect(left = 0f, top = topLeftY, right = leftSideLength, bottom = bottomLeftY),
-        startAngleDegrees = 90f, // point left
-        sweepAngleDegrees = 180f, // half the circle
-        forceMoveTo = true,
+    // now draw the tip
+    arcTo( // left side (moving up)
+        rect =
+            Rect(
+                left = displacement,
+                top = center.y - radius,
+                right = displacement + (radius * 2),
+                bottom = center.y + radius,
+            ),
+        startAngleDegrees = 90f + offsetDegrees, // point south + offsetDegrees to west
+        sweepAngleDegrees = 180f - 2 * offsetDegrees, // to stop at offsetDegrees before north
+        forceMoveTo = false,
     )
 }
 
@@ -396,6 +418,23 @@ object VerticalFlashlightSliderMotionTestKeys {
     val TrackEndAlpha = MotionTestValueKey<Float>("trackEndAlpha")
     val TrackHeight = MotionTestValueKey<Dp>("trackHeight")
     val TrackWidth = MotionTestValueKey<Dp>("trackWidth")
+}
+
+/** The degree at which the arc should start */
+private fun arcStartOffset(smallBase: Float, bigBase: Float, adjacent: Float): Double {
+    val opposite = (bigBase - smallBase) / 2
+    return toDegrees(atan((opposite / adjacent).toDouble()))
+}
+
+/** The distance to the right that should the center of tip move. */
+private fun displacement(smallBase: Float, bigBase: Float, height: Float): Float {
+    val opposite = (bigBase - smallBase) / 2
+    return (smallBase / 2) * (opposite / height)
+}
+
+/** Radius of the circle the beam-tip arc is cut from */
+private fun tipRadius(d: Double, smallBase: Double): Double {
+    return sqrt(d.pow(2) + (smallBase / 2).pow(2))
 }
 
 private object Specs {
