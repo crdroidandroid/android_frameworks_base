@@ -21,11 +21,16 @@
     <!-- Whether to enable framework dimming for UDFPS -->
     <bool name="config_udfpsFrameworkDimming">false</bool>
 
-    <!-- Array of brightness-alpha LUT for framework dimming -->
+    <!-- Brightness-to-alpha lookup table (LUT) for UDFPS framework dimming.
+         Each entry is in the format <brightness>,<alpha> where:
+           - brightness = panel backlight level
+           - alpha = dim layer transparency applied at that brightness
+         Rules:
+           • The entries should be strictly ascending by brightness.
+           • First entry = <minBrightness,maxAlpha>.
+           • Last entry  = <maxBrightness,minAlpha>.
+    -->
     <string-array name="config_udfpsDimmingBrightnessAlphaArray" translatable="false">
-          <item>0,255</item>
-          <item>1,248</item>
-          <item>2,242</item>
           <item>3,238</item>
           <item>4,236</item>
           <item>6,236</item>

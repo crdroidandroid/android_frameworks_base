@@ -70,6 +70,7 @@ class UdfpsHelper(
             val (brightness, alpha) = it.split(",").map { value -> value.trim().toInt() }
             brightness to alpha
         }
+    val maxPanelBrightness: Int = brightnessAlphaMap.keys.max()
 
     private val dimLayoutParams = WindowManager.LayoutParams(
         WindowManager.LayoutParams.TYPE_NAVIGATION_BAR_PANEL,
@@ -148,7 +149,7 @@ class UdfpsHelper(
     // brightness_alpha_lut array from the kernel. This provides a comparable array.
     private fun brightnessToAlpha() {
         val adjustedBrightness =
-            (currentBrightness.coerceIn(minBrightness, maxBrightness) * 4095).toInt()
+            (currentBrightness.coerceIn(minBrightness, maxBrightness) * maxPanelBrightness).toInt()
 
         val targetAlpha = brightnessAlphaMap[adjustedBrightness]?.div(255.0f)
             ?: interpolateAlpha(adjustedBrightness)
