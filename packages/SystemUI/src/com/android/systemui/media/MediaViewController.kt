@@ -57,7 +57,7 @@ class MediaViewController @Inject constructor(
     private val context: Context
 ) : MediaSessionManager.MediaDataListener, ScrimUtils.ScrimEventListener {
 
-    private val coroutineScope = CoroutineScope(Dispatchers.Main + Job())
+    private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
     private var scrimState = STATE_SCRIM_HIDDEN
 
@@ -88,6 +88,9 @@ class MediaViewController @Inject constructor(
     private var mediaArtJob: Job? = null
     private var isAlbumArtVisible = false
     private var dismissingKeyguard = false
+    private var coalesceJob: Job? = null
+
+    private val sharedTypedValue = TypedValue()
 
     init {
         context.contentResolver.registerContentObserver(
@@ -143,7 +146,10 @@ class MediaViewController @Inject constructor(
             UserHandle.USER_CURRENT
         ).coerceIn(0, 600)
 
-        setupMediaFilter()
+
+        if (!featureEnabled) {
+            cleanupResources(false)
+        }
 
         if (featureEnabled && !listening) {
             MediaSessionManager.get().addListener(this)
@@ -201,7 +207,17 @@ class MediaViewController @Inject constructor(
             else -> null
         }
 
-        mediaScrim.post { mediaScrim.setRenderEffect(effect) }
+        mediaScrim.setRenderEffect(effect)
+        if (mediaFilter == 4) {
+            context.theme.resolveAttribute(android.R.attr.colorAccent, sharedTypedValue, true)
+            val accent = sharedTypedValue.data
+            mediaScrim.colorFilter = PorterDuffColorFilter(
+                Color.argb(150, Color.red(accent), Color.green(accent), Color.blue(accent)),
+                PorterDuff.Mode.SRC_ATOP
+            )
+        } else {
+            mediaScrim.colorFilter = null
+        }
     }
 
     private fun shouldShowMediaArt(): Boolean {
@@ -222,11 +238,11 @@ class MediaViewController @Inject constructor(
     }
 
     private fun showMediaArt() {
-        if (dismissingKeyguard) {
-            return
-        }
+        if (isAlbumArtVisible && scrimState == STATE_SCRIM_VISIBLE) return
+        if (dismissingKeyguard) return
         cancelScrimAnim()
         updateMediaArt()
+        setupMediaFilter()
         mediaScrim.apply {
             alpha = 0f
             visibility = View.VISIBLE
@@ -241,25 +257,33 @@ class MediaViewController @Inject constructor(
     }
 
     private fun updateMediaArt() {
-        mediaArtJob?.cancel()
-        mediaArtJob = coroutineScope.launch {
-            processArtwork().let { drawable ->
-                mediaScrim.setImageDrawable(drawable)
+        coalesceJob?.cancel()
+        coalesceJob = coroutineScope.launch {
+            delay(40)
+            mediaArtJob?.cancel()
+            mediaArtJob = launch(Dispatchers.Default) {
+                val drawable = try {
+                    processArtwork()
+                } catch (t: Throwable) {
+                    Log.w(TAG, "processArtwork failed", t)
+                    LayerDrawable(arrayOf())
+                }
+                withContext(Dispatchers.Main) {
+                    mediaScrim.setImageDrawable(null)
+                    mediaScrim.setImageDrawable(drawable)
+                }
             }
         }
     }
 
     private suspend fun processArtwork(): LayerDrawable = withContext(Dispatchers.Default) {
+        if (!featureEnabled) return@withContext LayerDrawable(arrayOf())
         val drawable = artworkDrawable ?: return@withContext LayerDrawable(arrayOf())
 
         val bitmap = drawableToBitmap(drawable)
         val resizedBitmap = getResizedBitmap(bitmap)
 
-        val processedBitmap = if (mediaFilter == 4) {
-            applyCustomTint(resizedBitmap)
-        } else {
-            resizedBitmap
-        }
+        val processedBitmap = resizedBitmap
 
         val bitmapDrawable = BitmapDrawable(context.resources, processedBitmap).apply {
             alpha = 255
@@ -271,34 +295,34 @@ class MediaViewController @Inject constructor(
             mediaFadeLevel / 100f
         )
 
-        val overlayBitmap = Bitmap.createBitmap(
-            processedBitmap.width,
-            processedBitmap.height,
-            Bitmap.Config.ARGB_8888
-        )
-        val canvas = Canvas(overlayBitmap)
-        canvas.drawColor(fadeColor)
-        val overlay = BitmapDrawable(context.resources, overlayBitmap)
+        val overlay = ColorDrawable(fadeColor)
 
-        val layers = arrayOf(bitmapDrawable, overlay)
+        val layers = arrayOf<Drawable>(bitmapDrawable, overlay)
         return@withContext LayerDrawable(layers).apply {
             setBounds(0, 0, processedBitmap.width, processedBitmap.height)
+            setLayerInset(1, 0, 0, 0, 0)
         }
     }
 
     private fun drawableToBitmap(drawable: Drawable): Bitmap {
         if (drawable is BitmapDrawable) {
-            return drawable.bitmap
+            drawable.bitmap?.let { return it }
         }
 
-        val bitmap = Bitmap.createBitmap(
-            drawable.intrinsicWidth,
-            drawable.intrinsicHeight,
+        val w = max(1, drawable.intrinsicWidth)
+        val h = max(1, drawable.intrinsicHeight)
+
+        val cfg = if (drawable.opacity == PixelFormat.OPAQUE) {
+            Bitmap.Config.RGB_565
+        } else {
             Bitmap.Config.ARGB_8888
-        )
+        }
+        val bitmap = Bitmap.createBitmap(w, h, cfg)
         val canvas = Canvas(bitmap)
+        val oldBounds = Rect(drawable.bounds)
         drawable.setBounds(0, 0, canvas.width, canvas.height)
         drawable.draw(canvas)
+        drawable.setBounds(oldBounds)
         return bitmap
     }
 
@@ -310,8 +334,16 @@ class MediaViewController @Inject constructor(
         val ratioH = displayBounds.height() / bitmap.height.toFloat()
         val ratio = max(ratioH, ratioW)
 
-        val desiredHeight = (ratio * bitmap.height).roundToInt().coerceAtLeast(0)
-        val desiredWidth = (ratio * bitmap.width).roundToInt().coerceAtLeast(0)
+        val desiredHeight = (ratio * bitmap.height).roundToInt().coerceAtLeast(1)
+        val desiredWidth = (ratio * bitmap.width ).roundToInt().coerceAtLeast(1)
+
+        if (abs(desiredWidth - bitmap.width) <= 1 && abs(desiredHeight - bitmap.height) <= 1) {
+            val xPixelShift = max((bitmap.width - displayBounds.width()) / 2, 0)
+            val yPixelShift = max((bitmap.height - displayBounds.height()) / 2, 0)
+            val cropWidth = min(displayBounds.width(), bitmap.width - xPixelShift)
+            val cropHeight = min(displayBounds.height(), bitmap.height - yPixelShift)
+            return Bitmap.createBitmap(bitmap, xPixelShift, yPixelShift, cropWidth, cropHeight)
+        }
 
         val scaledBitmap = Bitmap.createScaledBitmap(bitmap, desiredWidth, desiredHeight, true)
 
@@ -320,52 +352,44 @@ class MediaViewController @Inject constructor(
         val cropWidth = min(displayBounds.width(), scaledBitmap.width - xPixelShift)
         val cropHeight = min(displayBounds.height(), scaledBitmap.height - yPixelShift)
 
-        return Bitmap.createBitmap(
+        val cropped = Bitmap.createBitmap(
             scaledBitmap,
-            max(xPixelShift, 0),
-            max(yPixelShift, 0),
+            xPixelShift,
+            yPixelShift,
             cropWidth,
             cropHeight
         )
+        if (scaledBitmap != cropped && !scaledBitmap.isRecycled) {
+            scaledBitmap.recycle()
+        }
+        return cropped
     }
 
-    private fun applyCustomTint(bitmap: Bitmap): Bitmap {
-        val tintedBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
-        val canvas = Canvas(tintedBitmap)
-        val tintPaint = Paint()
-
-        val typedValue = TypedValue()
-        context.theme.resolveAttribute(android.R.attr.colorAccent, typedValue, true)
-        val accentColor = typedValue.data
-
-        val tintColor = Color.argb(
-            150,
-            Color.red(accentColor),
-            Color.green(accentColor),
-            Color.blue(accentColor)
-        )
-        tintPaint.color = tintColor
-
-        canvas.drawRect(0f, 0f, tintedBitmap.width.toFloat(), tintedBitmap.height.toFloat(), tintPaint)
-        return tintedBitmap
+    private fun clearResources() {
+        mediaScrim.setImageDrawable(null)
+        mediaScrim.setRenderEffect(null)
+        mediaScrim.colorFilter = null
+        mediaScrim.visibility = View.GONE
+        scrimState = STATE_SCRIM_HIDDEN
+        isAlbumArtVisible = false
+        dismissingKeyguard = false
     }
 
-    fun cleanupResources() {
+    fun cleanupResources(animate: Boolean) {
         if (dismissingKeyguard) return
         dismissingKeyguard = true
         mediaArtJob?.cancel()
         cancelScrimAnim()
+        if (!animate) {
+            clearResources()
+            return;
+        }
         mediaScrim.animate()
             .alpha(0f)
             .setDuration(100)
             .setListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
-                    mediaScrim.setImageDrawable(null)
-                    mediaScrim.visibility = View.GONE
-                    mediaScrim.background = null
-                    scrimState = STATE_SCRIM_HIDDEN
-                    isAlbumArtVisible = false
-                    dismissingKeyguard = false
+                    clearResources()
                 }
             })
             .start()
@@ -382,8 +406,9 @@ class MediaViewController @Inject constructor(
     }
 
     override fun onPlaybackStateChanged(state: Int) {
-        isMediaPlaying = state == PlaybackState.STATE_PLAYING 
+        isMediaPlaying = state == PlaybackState.STATE_PLAYING
         coroutineScope.launch {
+            if (!isMediaPlaying) artworkDrawable = null
             onMediaStateChanged()
         }
     }
@@ -391,21 +416,21 @@ class MediaViewController @Inject constructor(
     override fun onPrimaryBouncerShowingChanged(showing: Boolean) {
         bouncerShowingOrKeyguardDismissing = showing
         if (showing) {
-            cleanupResources()
+            cleanupResources(true)
         }
     }
 
     override fun onKeyguardGoingAwayChanged(goingAway: Boolean) {
         bouncerShowingOrKeyguardDismissing = goingAway
         if (goingAway) {
-            cleanupResources()
+            cleanupResources(true)
         }
     }
 
     override fun onKeyguardFadingAwayChanged(fadingAway: Boolean) {
         bouncerShowingOrKeyguardDismissing = fadingAway
         if (fadingAway) {
-            cleanupResources()
+            cleanupResources(true)
         }
     }
 
@@ -437,7 +462,7 @@ class MediaViewController @Inject constructor(
         if (showing) {
             dismissingKeyguard = false
         } else {
-            cleanupResources()
+            cleanupResources(false)
         }
         coroutineScope.launch {
             onMediaStateChanged()
@@ -445,7 +470,7 @@ class MediaViewController @Inject constructor(
     }
 
     override fun onScreenTurnedOff() {
-        cleanupResources()
+        cleanupResources(false)
     }
 
     override fun onStartedWakingUp() {
@@ -459,7 +484,7 @@ class MediaViewController @Inject constructor(
         if (show && scrimState == STATE_SCRIM_HIDDEN) {
             showMediaArt()
         } else if (!show && scrimState == STATE_SCRIM_VISIBLE) {
-            cleanupResources()
+            cleanupResources(true)
         }
     }
 
@@ -481,6 +506,13 @@ class MediaViewController @Inject constructor(
             listening = false
         }
         mediaArtJob?.cancel()
+        mediaScrim.setImageDrawable(null)
+        mediaScrim.setRenderEffect(null)
+        mediaScrim.colorFilter = null
+        artworkDrawable = null
+        isAlbumArtVisible = false
+        coalesceJob?.cancel()
+        coroutineScope.cancel()
     }
 
     companion object {
