@@ -375,6 +375,8 @@ constructor(
             Utils.getColorAttrDefaultColor(context, android.R.attr.textColorPrimaryInverse)
 
         iconManager.setTint(fgColor, bgColor)
+        iconContainer.setIsUsingQs(true)
+        iconContainer.setNetworkTrafficColor(fgColor)
 
         if (!NewStatusBarIcons.isEnabled) {
             batteryIcon.isVisible = true
@@ -469,6 +471,8 @@ constructor(
 
         updateQsBatteryStyle()
 
+        iconContainer.setIsUsingQs(true)
+
         tunerService.addTunable(this, QS_BATTERY_STYLE)
         tunerService.addTunable(this, STATUS_BAR_BATTERY_STYLE)
         tunerService.addTunable(this, QS_SHOW_BATTERY_PERCENT)
@@ -483,6 +487,7 @@ constructor(
         statusBarIconController.removeIconGroup(iconManager)
         nextAlarmController.removeCallback(nextAlarmCallback)
         systemIconsHoverContainer.setOnHoverListener(null)
+        iconContainer.setIsUsingQs(false)
         tunerService.removeTunable(this)
     }
 
