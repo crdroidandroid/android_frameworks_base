@@ -30,6 +30,7 @@ class PulseView @JvmOverloads constructor(
     private var renderer: PulseRenderer? = null
     private var engine: PulseEngine? = null
     private var isAttached = false
+    private var isVisible = false
     private var settingsRepo: PulseSettingsRepository? = null
 
     init {
@@ -63,14 +64,14 @@ class PulseView @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        if (isAttached) {
+        if (isAttached && isVisible) {
             renderer?.onDraw(canvas, width, height)
             postInvalidateOnAnimation()
         }
     }
 
     fun updateVisualizerData(data: PulseData) {
-        if (isAttached && data.isDataValid) {
+        if (isAttached && isVisible && data.isDataValid) {
             engine?.processFFT(data.fftBytes!!)
         }
     }
@@ -80,6 +81,7 @@ class PulseView @JvmOverloads constructor(
     }
 
     fun setVisibility(visible: Boolean) {
+        isVisible = visible
         visibility = if (visible) VISIBLE else GONE
     }
 }
