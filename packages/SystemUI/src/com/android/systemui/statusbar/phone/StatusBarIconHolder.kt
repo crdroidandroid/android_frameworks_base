@@ -17,7 +17,6 @@ package com.android.systemui.statusbar.phone
 
 import android.annotation.IntDef
 import com.android.internal.statusbar.StatusBarIcon
-import com.android.systemui.statusbar.phone.PhoneStatusBarPolicy.NetworkTrafficState
 import com.android.systemui.statusbar.pipeline.icons.shared.model.ModernStatusBarViewCreator
 
 /** Wraps [com.android.internal.statusbar.StatusBarIcon] so we can still have a uniform list */
@@ -67,12 +66,6 @@ open class StatusBarIconHolder private constructor() {
             " tag=$tag" +
             " visible=$isVisible)")
     }
-
-    var networkTrafficState: NetworkTrafficState? = null
-        get() = field
-        set(value) {
-            field = value
-        }
 
     companion object {
         const val TYPE_ICON = 0
@@ -146,10 +139,9 @@ open class StatusBarIconHolder private constructor() {
         }
 
         @JvmStatic
-        fun fromNetworkTrafficState(state: NetworkTrafficState): StatusBarIconHolder {
+        fun fromNetworkTraffic(): StatusBarIconHolder {
             val holder = StatusBarIconHolder()
             holder.type = TYPE_NETWORK_TRAFFIC
-            holder.networkTrafficState = state
             return holder
         }
     }
