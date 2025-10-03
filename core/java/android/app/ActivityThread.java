@@ -262,6 +262,7 @@ import com.android.internal.os.SomeArgs;
 import com.android.internal.os.logging.MetricsLoggerWrapper;
 import com.android.internal.policy.DecorView;
 import com.android.internal.protolog.ProtoLog;
+import com.android.internal.util.android.FontController;
 import com.android.internal.util.ArrayUtils;
 import com.android.internal.util.FastPrintWriter;
 import com.android.internal.util.Preconditions;
@@ -7313,6 +7314,8 @@ public final class ActivityThread extends ClientTransactionHandler
         mConfigurationController.handleConfigurationChanged(config);
         updateDeviceIdForNonUIContexts(deviceId);
 
+        FontController.OnConfigurationChanged(getApplication().getResources());
+
         // These are only done to maintain @UnsupportedAppUsage and should be removed someday.
         mCurDefaultDisplayDpi = mConfigurationController.getCurDefaultDisplayDpi();
         mConfiguration = mConfigurationController.getConfiguration();
@@ -8115,6 +8118,9 @@ public final class ActivityThread extends ClientTransactionHandler
         data.info = getPackageInfo(data.appInfo, mCompatibilityInfo, null /* baseLoader */,
                 false /* securityViolation */, true /* includeCode */,
                 false /* registerPackage */, isSdkSandbox);
+
+        FontController.OnConfigurationChanged(data.info.getResources());
+
         if (isSdkSandbox) {
             data.info.setSdkSandboxStorage(data.sdkSandboxClientAppVolumeUuid,
                     data.sdkSandboxClientAppPackage);
