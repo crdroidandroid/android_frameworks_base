@@ -48,7 +48,6 @@ import com.android.systemui.statusbar.StatusBarIconView;
 import com.android.systemui.statusbar.StatusIconDisplayable;
 import com.android.systemui.statusbar.connectivity.ui.MobileContextProvider;
 import com.android.systemui.statusbar.phone.DemoStatusIcons;
-import com.android.systemui.statusbar.phone.PhoneStatusBarPolicy.NetworkTrafficState;
 import com.android.systemui.statusbar.phone.StatusBarIconHolder;
 import com.android.systemui.statusbar.phone.StatusBarIconHolder.BindableIconHolder;
 import com.android.systemui.statusbar.phone.StatusBarLocation;
@@ -193,7 +192,7 @@ public class IconManager implements DemoModeCommandReceiver {
             case TYPE_ICON -> addIcon(index, slot, blocked, holder.getIcon());
             case TYPE_WIFI_NEW -> addNewWifiIcon(index, slot);
             case TYPE_MOBILE_NEW -> addNewMobileIcon(index, slot, holder.getTag());
-            case TYPE_NETWORK_TRAFFIC -> addNetworkTraffic(index, slot, holder.getNetworkTrafficState());
+            case TYPE_NETWORK_TRAFFIC -> addNetworkTraffic(index, slot);
             case TYPE_BINDABLE ->
                 // Safe cast, since only BindableIconHolders can set this tag on themselves
                     addBindableIcon((BindableIconHolder) holder, index);
@@ -260,9 +259,8 @@ public class IconManager implements DemoModeCommandReceiver {
         return view;
     }
 
-    private NetworkTraffic addNetworkTraffic(int index, String slot, NetworkTrafficState state) {
+    private NetworkTraffic addNetworkTraffic(int index, String slot) {
         NetworkTraffic view = onCreateNetworkTraffic(slot);
-        view.applyNetworkTrafficState(state);
         mGroup.addView(view, index, onCreateLayoutParams(Shape.WRAP_CONTENT));
         return view;
     }
@@ -366,18 +364,8 @@ public class IconManager implements DemoModeCommandReceiver {
             case TYPE_BINDABLE:
                 // Nothing, the new icons update themselves
                 return;
-            case TYPE_NETWORK_TRAFFIC:
-                onSetNetworkTraffic(viewIndex, holder.getNetworkTrafficState());
-                return;
             default:
                 break;
-        }
-    }
-
-    public void onSetNetworkTraffic(int viewIndex, NetworkTrafficState state) {
-        NetworkTraffic view = (NetworkTraffic) mGroup.getChildAt(viewIndex);
-        if (view != null) {
-            view.applyNetworkTrafficState(state);
         }
     }
 
