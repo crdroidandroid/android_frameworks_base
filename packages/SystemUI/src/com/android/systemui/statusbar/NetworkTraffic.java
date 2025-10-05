@@ -25,7 +25,6 @@ import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Rect;
-import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
@@ -48,6 +47,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.core.content.res.ResourcesCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 
 import com.android.keyguard.KeyguardUpdateMonitor;
 import com.android.keyguard.KeyguardUpdateMonitorCallback;
@@ -395,7 +395,7 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable,
         if (isShadeInQs() && isLightMode) {
             setTextColor(Color.BLACK);
             if (mDrawable != null) {
-                mDrawable.setColorFilter(Color.BLACK, PorterDuff.Mode.MULTIPLY);
+                DrawableCompat.setTint(mDrawable, Color.BLACK);
             }
             return;
         }
@@ -403,7 +403,7 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable,
         mTint = DarkIconDispatcher.getTint(areas, this, tint);
         setTextColor(mTint);
         if (mDrawable != null) {
-            mDrawable.setColorFilter(mTint, PorterDuff.Mode.MULTIPLY);
+            DrawableCompat.setTint(mDrawable, mTint);
         }
     }
 
@@ -655,6 +655,9 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable,
         }
         final Drawable drawable = mHideArrows ? null
             : ResourcesCompat.getDrawable(getResources(), drawableResId, getContext().getTheme());
+        if (drawable != null) {
+            DrawableCompat.setTint(drawable, mTint);
+        }
         if (mDrawable != drawable) {
             mDrawable = drawable;
             setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, mDrawable, null);
