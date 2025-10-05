@@ -253,7 +253,7 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable,
                     }
 
                     // Update view if there's anything new to show
-                    if (output != getText()) {
+                    if (!TextUtils.equals(output, getText())) {
                         setText(output);
                     }
                 }
