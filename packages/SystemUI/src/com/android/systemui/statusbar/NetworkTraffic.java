@@ -204,6 +204,9 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable,
                     case MESSAGE_TYPE_REMOVE_NETWORK:
                         mLinkPropertiesMap.remove((Network) msg.obj);
                         mNetworksChanged = true;
+                        mTxBytes = 0;
+                        mRxBytes = 0;
+                        displayStatsAndReschedule();
                         break;
                 }
             }
