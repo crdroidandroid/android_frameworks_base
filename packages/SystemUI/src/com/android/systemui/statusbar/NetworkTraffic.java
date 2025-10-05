@@ -129,8 +129,11 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable,
     private ConnectivityManager mConnectivityManager;
     private final Handler mTrafficHandler;
 
-    private RelativeSizeSpan mSpeedRelativeSizeSpan = new RelativeSizeSpan(0.68f);
-    private RelativeSizeSpan mUnitRelativeSizeSpan = new RelativeSizeSpan(0.63f);
+    private final RelativeSizeSpan mSpeedRelativeSizeSpan = new RelativeSizeSpan(0.68f);
+    private final RelativeSizeSpan mUnitRelativeSizeSpan = new RelativeSizeSpan(0.63f);
+    private final DecimalFormat mDecimalFormat_0_2 = new DecimalFormat("0.##");
+    private final DecimalFormat mDecimalFormat_2_0 = new DecimalFormat("##0");
+    private final DecimalFormat mDecimalFormat_1_1 = new DecimalFormat("#0.#");
 
     private boolean mEnabled = false;
     private boolean mConnectionAvailable = true;
@@ -307,7 +310,6 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable,
             }
 
             private CharSequence formatOutput(long speed) {
-                DecimalFormat decimalFormat;
                 String unit;
                 String formatSpeed;
                 SpannableString spanUnitString;
@@ -328,32 +330,25 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable,
 
                 if (speed >= Giga) {
                     unit = gunit;
-                    decimalFormat = new DecimalFormat("0.##");
-                    formatSpeed = decimalFormat.format(speed / (float)Giga);
+                    formatSpeed = mDecimalFormat_0_2.format(speed / (float)Giga);
                 } else if (speed >= 100 * Mega) {
-                    decimalFormat = new DecimalFormat("##0");
                     unit = munit;
-                    formatSpeed = decimalFormat.format(speed / (float)Mega);
+                    formatSpeed = mDecimalFormat_2_0.format(speed / (float)Mega);
                 } else if (speed >= 10 * Mega) {
-                    decimalFormat = new DecimalFormat("#0.#");
                     unit = munit;
-                    formatSpeed = decimalFormat.format(speed / (float)Mega);
+                    formatSpeed = mDecimalFormat_1_1.format(speed / (float)Mega);
                 } else if (speed >= Mega) {
-                    decimalFormat = new DecimalFormat("0.##");
                     unit = munit;
-                    formatSpeed = decimalFormat.format(speed / (float)Mega);
+                    formatSpeed = mDecimalFormat_0_2.format(speed / (float)Mega);
                 } else if (speed >= 100 * Kilo) {
-                    decimalFormat = new DecimalFormat("##0");
                     unit = kunit;
-                    formatSpeed = decimalFormat.format(speed / (float)Kilo);
+                    formatSpeed = mDecimalFormat_2_0.format(speed / (float)Kilo);
                 } else if (speed >= 10 * Kilo) {
-                    decimalFormat = new DecimalFormat("#0.#");
                     unit = kunit;
-                    formatSpeed = decimalFormat.format(speed / (float)Kilo);
+                    formatSpeed = mDecimalFormat_1_1.format(speed / (float)Kilo);
                 } else {
-                    decimalFormat = new DecimalFormat("0.##");
                     unit = kunit;
-                    formatSpeed = decimalFormat.format(speed / (float)Kilo);
+                    formatSpeed = mDecimalFormat_0_2.format(speed / (float)Kilo);
                 }
                 spanSpeedString = new SpannableString(formatSpeed);
                 spanSpeedString.setSpan(mSpeedRelativeSizeSpan, 0, (formatSpeed).length(),
