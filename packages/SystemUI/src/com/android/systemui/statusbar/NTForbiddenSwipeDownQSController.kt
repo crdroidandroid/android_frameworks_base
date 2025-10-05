@@ -21,22 +21,37 @@ import android.net.Uri
 import android.os.Handler
 import android.os.UserHandle
 import android.provider.Settings
+
+import com.android.keyguard.KeyguardUpdateMonitor
+import com.android.keyguard.KeyguardUpdateMonitorCallback
 import com.android.systemui.SystemUIApplication
 import com.android.systemui.dagger.SysUISingleton
 import com.android.systemui.util.ScrimUtils
+
 import javax.inject.Inject
 
 @SysUISingleton
 class NTForbiddenSwipeDownQSController @Inject constructor(
-    private val context: Context
+    private val context: Context,
+    private val keyguardUpdateMonitor: KeyguardUpdateMonitor
 ) : ScrimUtils.ScrimEventListener {
 
     private var enableSwipeDownQS: Int = ENABLE
     private var forbiddenSwipeDownQS: Boolean = false
     private var keyguardShowing: Boolean = false
+    private var userUnlocked: Boolean = false
     private var listening = false
 
+    private val keyguardUpdateMonitorCallback = object : KeyguardUpdateMonitorCallback() {
+        override fun onUserUnlocked() {
+            userUnlocked = true
+            updateForbiddenSwipeDownState()
+        }
+    }
+
     init {
+        userUnlocked = keyguardUpdateMonitor.isUserUnlocked(UserHandle.USER_CURRENT)
+        keyguardUpdateMonitor.registerCallback(keyguardUpdateMonitorCallback)
         registerSettingsObserver()
         updateSettings()
     }
@@ -49,13 +64,13 @@ class NTForbiddenSwipeDownQSController @Inject constructor(
     private fun registerSettingsObserver() {
         context.contentResolver.registerContentObserver(Settings.Secure.getUriFor(
             Settings.Secure.ENABLE_LOCKSCREEN_QUICK_SETTINGS),
-            false,             
+            false,
             object : ContentObserver(Handler()) {
                 override fun onChange(selfChange: Boolean, uri: Uri?) {
                     super.onChange(selfChange, uri)
                     updateSettings()
                 }
-            }, 
+            },
             UserHandle.USER_ALL)
     }
 
@@ -73,9 +88,9 @@ class NTForbiddenSwipeDownQSController @Inject constructor(
     }
 
     private fun updateForbiddenSwipeDownState() {
-        forbiddenSwipeDownQS = keyguardShowing && enableSwipeDownQS == DISABLE
+        forbiddenSwipeDownQS = (keyguardShowing || !userUnlocked) && enableSwipeDownQS == DISABLE
     }
-    
+
     override fun onKeyguardShowingChanged(showing: Boolean) {
         keyguardShowing = showing
         updateForbiddenSwipeDownState()
