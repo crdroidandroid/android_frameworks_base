@@ -199,7 +199,9 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable,
                 // Add interface stats, including stats from Clat's IPv4 interface
                 // (for applicable IPv6 networks). Stats are 0 if it doesn't exist.
                 final String[] ifaces = mLinkPropertiesMap.values().stream()
-                        .map(link -> link.getInterfaceName()).filter(iface -> iface != null)
+                        .map(LinkProperties::getInterfaceName)
+                        .filter(iface -> iface != null && !iface.isEmpty())
+                        .distinct()
                         .flatMap(iface -> Stream.of(iface, CLAT_PREFIX + iface))
                         .toArray(String[]::new);
                 for (String iface : ifaces) {
