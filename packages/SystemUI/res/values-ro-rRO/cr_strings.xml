@@ -81,7 +81,7 @@
     <string name="quick_settings_sound_label">Sunet</string>
     <string name="quick_settings_sound_ring">Sonerie</string>
     <string name="quick_settings_sound_vibrate">Vibrează</string>
-    <string name="quick_settings_sound_silent">Silent</string>
+    <string name="quick_settings_sound_silent">Silențios</string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">Info procesor</string>
     <!-- FPS Info tile -->
@@ -124,15 +124,15 @@
     <!-- Text while recognizing face -->
     <string name="face_unlock_recognizing">Recunoașterea feței...</string>
     <!-- Preferred network tile -->
-    <string name="qs_preferred_network_label">Preferred network</string>
+    <string name="qs_preferred_network_label">Rețea preferată</string>
     <string name="qs_preferred_network_lte">4G / LTE</string>
     <string name="qs_preferred_network_nr">5G / NR</string>
     <string name="qs_preferred_network_3g">3G</string>
-    <string name="qs_preferred_network_unsupported">Unsupported</string>
+    <string name="qs_preferred_network_unsupported">Neacceptat</string>
     <!-- Flashlight Strength -->
-    <string name="flashlight_strength_title">Flashlight Strength</string>
-    <string name="flashlight_strength_turn_off">Turn off</string>
-    <string name="flashlight_strength_turn_on">Turn on</string>
+    <string name="flashlight_strength_title">Putere lanternă</string>
+    <string name="flashlight_strength_turn_off">Opriți</string>
+    <string name="flashlight_strength_turn_on">Porniți</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="one">%d dispozitiv conectat</item>
@@ -143,7 +143,7 @@
     <string name="enable_fiveg">Activează 5G</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">utilizat azi</string>
-    <string name="usage_data_weekly">used this week</string>
+    <string name="usage_data_weekly">utilizat în această săptămână</string>
     <string name="usage_data_default_suffix">Date</string>
     <string name="usage_wifi_default_suffix">Wi-Fi</string>
     <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
