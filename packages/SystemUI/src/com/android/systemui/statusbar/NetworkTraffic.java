@@ -365,7 +365,6 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable,
     public static NetworkTraffic fromContext(Context context, String slot) {
         NetworkTraffic v = new NetworkTraffic(context);
         v.setSlot(slot);
-        v.setGravity(Gravity.CENTER);
         int paddingHorizontal = (int) context.getResources().getDisplayMetrics().density;
         v.setPadding(paddingHorizontal, 0, paddingHorizontal, 0);
         v.setVisibleState(STATE_ICON);
@@ -572,12 +571,17 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable,
                         TunerService.parseIntegerSwitch(newValue, false);
                 if (mEnabled) {
                     setLines(2);
+                    setMaxLines(2);
                     String txtFont = getResources().getString(com.android.internal.R.string.config_bodyFontFamily);
                     setTypeface(Typeface.create(txtFont, Typeface.BOLD));
                     setLineSpacing(0.80f, 0.80f);
                     setLayoutDirection(View.LAYOUT_DIRECTION_LOCALE);
                     setTextDirection(View.TEXT_DIRECTION_LOCALE);
-                    setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
+                    setTextAlignment(View.TEXT_ALIGNMENT_VIEW_END);
+                    setGravity(Gravity.END | Gravity.CENTER_VERTICAL);
+                    setElegantTextHeight(false);
+                    setFontFeatureSettings("'tnum' 1");
+                    setIncludeFontPadding(false);
                 }
                 updateViews();
                 break;
@@ -611,11 +615,6 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable,
             case NETWORK_TRAFFIC_HIDEARROW:
                 mHideArrows =
                         TunerService.parseIntegerSwitch(newValue, false);
-                if (!mHideArrows) {
-                    setGravity(Gravity.END|Gravity.CENTER_VERTICAL);
-                } else {
-                    setGravity(Gravity.CENTER);
-                }
                 setTrafficDrawable();
                 break;
             default:
