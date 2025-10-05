@@ -45,12 +45,12 @@
     <!-- Button to restart SystemUI, within the Restart Options dialog -->
     <string name="global_action_restart_systemui">SystemUI</string>
     <!-- On The Go -->
-    <string name="onthego_notif_ticker">Tryb \"W ruchu\" aktywowany</string>
-    <string name="onthego_notif_title">Tryb \"W ruchu\" jest aktywny</string>
+    <string name="onthego_notif_ticker"> Aktywowano tryb \"w ruchu\"</string>
+    <string name="onthego_notif_title">Tryb \"w ruchu\" jest aktywny</string>
     <string name="onthego_notif_stop">Zatrzymaj</string>
     <string name="onthego_notif_options">Opcje</string>
-    <string name="onthego_notif_error">Nie można uruchomić trybu \"W ruchu\"</string>
-    <string name="onthego_notif_restart">Uruchom ponownie tryb \"W ruchu\"</string>
+    <string name="onthego_notif_error">Nie można uruchomić trybu \"w ruchu\"</string>
+    <string name="onthego_notif_restart">Uruchom ponownie tryb \"w ruchu\"</string>
     <string name="onthego_notif_camera_changed">Zmieniono tryb pracy aparatu</string>
     <string name="onthego_transparency">Przezroczystość</string>
     <string name="onthego_front_camera">Użyj przedniego aparatu</string>
@@ -92,14 +92,14 @@
     <string name="quick_settings_compass_label">Kompas</string>
     <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
     <string name="quick_settings_compass_init">Inicjowanie\u2026</string>
-    <string name="quick_settings_compass_N">N</string>
-    <string name="quick_settings_compass_NE">Pn-Wsch</string>
-    <string name="quick_settings_compass_E">Wsch</string>
-    <string name="quick_settings_compass_SE">Płd. Wsch.</string>
+    <string name="quick_settings_compass_N">Płn</string>
+    <string name="quick_settings_compass_NE">Płn.-Wsch.</string>
+    <string name="quick_settings_compass_E">Wsch.</string>
+    <string name="quick_settings_compass_SE">Płd.-Wsch.</string>
     <string name="quick_settings_compass_S">Płd.</string>
-    <string name="quick_settings_compass_SW">Płd. Zach.</string>
+    <string name="quick_settings_compass_SW">Płd.-Zach.</string>
     <string name="quick_settings_compass_W">Zach.</string>
-    <string name="quick_settings_compass_NW">Płn. Zach.</string>
+    <string name="quick_settings_compass_NW">Płn.-Zach.</string>
     <!-- DataSwitch Tile -->
     <string name="qs_data_switch_label">Przełączanie SIM dla danych</string>
     <!-- Volume panel QS tile -->
