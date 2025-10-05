@@ -10,14 +10,14 @@
     <string name="url_copy_failed">Адбылася памылка падчас загрузкі лога на Pasty</string>
     <!-- Lock gesture -->
     <string name="gesture_locked_warning">Правядзіце яшчэ раз, каб разблакіраваць жэсты</string>
+    <!-- App lock -->
+    <string name="unlock_application">Разблакіраваць <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
     <!-- Pocket Lock -->
     <string name="pocket_mode_title">Рэжым \"У кішэні\" уключаны</string>
     <string name="pocket_mode_illustration_description">Ілюстрацыя тэлефона ў кішэні</string>
     <string name="pocket_mode_instructions_header">Для выкарыстання тэлефона:</string>
     <string name="pocket_mode_instruction_step1">1. Пераканайцеся, што сіняя вобласць (датчык набліжэння), паказаная вышэй, не мае перашкод і не мае бруду або пылу.</string>
     <string name="pocket_mode_instruction_step2">2. Каб выйсці з кішэннага рэжыму, націсніце і ўтрымлівайце кнопку сілкавання.</string>
-    <!-- App lock -->
-    <string name="unlock_application">Разблакіраваць <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
     <!-- Cycle through ringer modes -->
     <string name="volume_dialog_ringer_guidance_normal">Calls and notifications will ring</string>
     <!-- GameSpace -->
