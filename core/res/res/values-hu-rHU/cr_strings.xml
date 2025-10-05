@@ -10,14 +10,14 @@
     <string name="url_copy_failed">Hiba történt a napló Pasty-feltöltése során</string>
     <!-- Lock gesture -->
     <string name="gesture_locked_warning">Csúsztasson újból a vezérlések feloldásához</string>
+    <!-- App lock -->
+    <string name="unlock_application">Feloldja a következőt: <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
     <!-- Pocket Lock -->
     <string name="pocket_mode_title">A Zsebmód aktív</string>
     <string name="pocket_mode_illustration_description">A zsebben lévő telefon illusztrációja</string>
     <string name="pocket_mode_instructions_header">A telefonja használatához:</string>
     <string name="pocket_mode_instruction_step1">1. Győződjön meg arról, hogy a közelségérzékelő kék területe nincs takarásban, ill. szennyeződés- és pormentes.</string>
     <string name="pocket_mode_instruction_step2">2. Tartsa lenyomva a bekapcsológombot a Zsebmódból való lkilépéshez.</string>
-    <!-- App lock -->
-    <string name="unlock_application">Feloldja a következőt: <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
     <!-- Cycle through ringer modes -->
     <string name="volume_dialog_ringer_guidance_normal">A hívások és az értesítések rezegni fognak</string>
     <!-- GameSpace -->
