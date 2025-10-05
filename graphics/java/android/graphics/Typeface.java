@@ -257,7 +257,7 @@ public class Typeface {
      */
     public static final String DEFAULT_FAMILY = "sans-serif";
 
-    private static String sFontName = DEFAULT_FAMILY;
+    private static volatile String sFontName = DEFAULT_FAMILY;
 
     // Style value for building typeface.
     private static final int STYLE_NORMAL = 0;
@@ -1504,10 +1504,12 @@ public class Typeface {
 
     /** @hide */
     public static void changeFont(Resources res) {
-        sDynamicTypefaceCache.evictAll();
+        synchronized (sDynamicCacheLock) {
+            sDynamicTypefaceCache.evictAll();
+        }
 
         int configId = res.getIdentifier("config_bodyFontFamily", "string", "android");
-        String fontFamily = configId != 0 ? res.getString(configId) : DEFAULT_FAMILY;
+        String fontFamily = res.getString(configId);
 
         sFontName = fontFamily;
 
