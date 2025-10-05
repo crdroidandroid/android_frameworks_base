@@ -33,7 +33,7 @@
     <!-- Weather -->
     <string name="weather_condition_clouds">くもり</string>
     <string name="weather_condition_rain">雨</string>
-    <string name="weather_condition_clear">Clear Sky</string>
+    <string name="weather_condition_clear">快晴</string>
     <string name="weather_condition_storm">嵐</string>
     <string name="weather_condition_snow">雪</string>
     <string name="weather_condition_wind">強風</string>
@@ -134,5 +134,5 @@
     <!-- 5G toggle in Internet Dialog -->
     <string name="enable_fiveg">5G通信を有効化</string>
     <!-- Toast for timer chips long press -->
-    <string name="chip_longpress_hint">Long press to directly stop</string>
+    <string name="chip_longpress_hint">長押しで直接停止</string>
 </resources>
