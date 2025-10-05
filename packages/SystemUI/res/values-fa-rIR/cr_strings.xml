@@ -8,11 +8,6 @@
     <string name="status_bar_nfc">ان‌اف‌سی</string>
     <string name="status_bar_data_saver">ذخیره‌کننده داده</string>
     <string name="status_bar_call_strength">قدرت تماس</string>
-    <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
-    <plurals name="quick_settings_internet_hotspot_summary_num_devices">
-        <item quantity="one">%d دستگاه وصل است</item>
-        <item quantity="other">%d دستگاه های متصل</item>
-    </plurals>
     <!-- Notification counter -->
     <!-- Name of the roaming status bar icon. -->
     <string name="status_bar_roaming">نشانگر رومینگ</string>
@@ -27,10 +22,6 @@
     <string name="kilobytespersecond_short">ک‌ب/ث</string>
     <string name="megabytespersecond_short">م‌ب/ث</string>
     <string name="gigabytespersecond_short">گ‌ب/ث</string>
-    <!-- Data usage info in QS footer -->
-    <string name="usage_data">مصرف امروز</string>
-    <string name="usage_data_default_suffix">داده</string>
-    <string name="usage_wifi_default_suffix">Wi-Fi</string>
     <!-- Weather -->
     <string name="weather_condition_clouds">ابری</string>
     <string name="weather_condition_rain">بارانی</string>
@@ -51,6 +42,8 @@
     <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • شارژ سریع (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> تا کامل شود)</string>
     <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • شارژ سریع</string>
+    <!-- Button to restart SystemUI, within the Restart Options dialog -->
+    <string name="global_action_restart_systemui">رابط کاربری</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">ویژگی در حرکت فعال شد</string>
     <string name="onthego_notif_title">ویژگی در حرکت فعال است</string>
@@ -64,8 +57,6 @@
     <string name="onthego_service_toggle">راه‌اندازی مجدد سرویس به طور خودکار</string>
     <string name="onthego_channel_name">اصلی</string>
     <string name="global_action_onthego">در حرکت</string>
-    <!-- Button to restart SystemUI, within the Restart Options dialog -->
-    <string name="global_action_restart_systemui">رابط کاربری</string>
     <!-- Alert slide extras -->
     <string name="volume_ringer_priority_only">اولویت</string>
     <string name="volume_ringer_alarms_only">زنگ هشدار</string>
@@ -90,7 +81,7 @@
     <string name="quick_settings_sound_label">صدا</string>
     <string name="quick_settings_sound_ring">زنگ</string>
     <string name="quick_settings_sound_vibrate">لرزش</string>
-    <string name="quick_settings_sound_mute">بی‌صدا</string>
+    <string name="quick_settings_sound_silent">Silent</string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">اطلاعات پردازنده</string>
     <!-- FPS Info tile -->
@@ -132,8 +123,30 @@
     <string name="accessibility_assistant_button">دستیار هوش مصنوعی</string>
     <!-- Text while recognizing face -->
     <string name="face_unlock_recognizing">درحال شناسایی چهره...</string>
+    <!-- Preferred network tile -->
+    <string name="qs_preferred_network_label">Preferred network</string>
+    <string name="qs_preferred_network_lte">4G / LTE</string>
+    <string name="qs_preferred_network_nr">5G / NR</string>
+    <string name="qs_preferred_network_3g">3G</string>
+    <string name="qs_preferred_network_unsupported">Unsupported</string>
+    <!-- Flashlight Strength -->
+    <string name="flashlight_strength_title">Flashlight Strength</string>
+    <string name="flashlight_strength_turn_off">Turn off</string>
+    <string name="flashlight_strength_turn_on">Turn on</string>
+    <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
+    <plurals name="quick_settings_internet_hotspot_summary_num_devices">
+        <item quantity="one">%d دستگاه وصل است</item>
+        <item quantity="other">%d دستگاه های متصل</item>
+    </plurals>
     <!-- 5G toggle in Internet Dialog -->
     <string name="enable_fiveg">فعال کردن 5G</string>
-    <!-- Toast for timer chips long press -->
-    <string name="chip_longpress_hint">نگه داشتن طولانی برای توقف مستقیم</string>
+    <!-- Data usage info in QS footer -->
+    <string name="usage_data">مصرف امروز</string>
+    <string name="usage_data_weekly">used this week</string>
+    <string name="usage_data_default_suffix">داده</string>
+    <string name="usage_wifi_default_suffix">Wi-Fi</string>
+    <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
+    <string name="screenrecord_delete_label">حذف</string>
+    <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
+    <string name="screenrecord_delete_description">فیلم ضبط صفحه حذف شد</string>
 </resources>
