@@ -81,7 +81,7 @@
     <string name="quick_settings_sound_label">声音</string>
     <string name="quick_settings_sound_ring">铃声</string>
     <string name="quick_settings_sound_vibrate">振动</string>
-    <string name="quick_settings_sound_silent">Silent</string>
+    <string name="quick_settings_sound_silent">静音</string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">CPU 信息</string>
     <!-- FPS Info tile -->
@@ -124,15 +124,15 @@
     <!-- Text while recognizing face -->
     <string name="face_unlock_recognizing">正在识别面部...</string>
     <!-- Preferred network tile -->
-    <string name="qs_preferred_network_label">Preferred network</string>
-    <string name="qs_preferred_network_lte">4G / LTE</string>
-    <string name="qs_preferred_network_nr">5G / NR</string>
+    <string name="qs_preferred_network_label">首选网络类型</string>
+    <string name="qs_preferred_network_lte">4g / LTE</string>
+    <string name="qs_preferred_network_nr">5g / NR</string>
     <string name="qs_preferred_network_3g">3G</string>
-    <string name="qs_preferred_network_unsupported">Unsupported</string>
+    <string name="qs_preferred_network_unsupported">不支持</string>
     <!-- Flashlight Strength -->
-    <string name="flashlight_strength_title">Flashlight Strength</string>
-    <string name="flashlight_strength_turn_off">Turn off</string>
-    <string name="flashlight_strength_turn_on">Turn on</string>
+    <string name="flashlight_strength_title">手电筒强度</string>
+    <string name="flashlight_strength_turn_off">关闭</string>
+    <string name="flashlight_strength_turn_on">开启</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="other">已连接 %d 台设备</item>
@@ -141,7 +141,7 @@
     <string name="enable_fiveg">启用5G</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">今日使用</string>
-    <string name="usage_data_weekly">used this week</string>
+    <string name="usage_data_weekly">本周使用</string>
     <string name="usage_data_default_suffix">数据</string>
     <string name="usage_wifi_default_suffix">Wi-Fi</string>
     <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
