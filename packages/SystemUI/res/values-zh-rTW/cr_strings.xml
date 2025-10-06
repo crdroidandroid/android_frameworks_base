@@ -81,7 +81,7 @@
     <string name="quick_settings_sound_label">音效</string>
     <string name="quick_settings_sound_ring">鈴聲</string>
     <string name="quick_settings_sound_vibrate">震動</string>
-    <string name="quick_settings_sound_silent">Silent</string>
+    <string name="quick_settings_sound_silent">靜音</string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">處理器資訊</string>
     <!-- FPS Info tile -->
@@ -124,15 +124,15 @@
     <!-- Text while recognizing face -->
     <string name="face_unlock_recognizing">臉部辨識中...</string>
     <!-- Preferred network tile -->
-    <string name="qs_preferred_network_label">Preferred network</string>
+    <string name="qs_preferred_network_label">偏好網絡</string>
     <string name="qs_preferred_network_lte">4G / LTE</string>
     <string name="qs_preferred_network_nr">5G / NR</string>
     <string name="qs_preferred_network_3g">3G</string>
-    <string name="qs_preferred_network_unsupported">Unsupported</string>
+    <string name="qs_preferred_network_unsupported">不支援</string>
     <!-- Flashlight Strength -->
-    <string name="flashlight_strength_title">Flashlight Strength</string>
-    <string name="flashlight_strength_turn_off">Turn off</string>
-    <string name="flashlight_strength_turn_on">Turn on</string>
+    <string name="flashlight_strength_title">手電筒強度</string>
+    <string name="flashlight_strength_turn_off">關閉</string>
+    <string name="flashlight_strength_turn_on">開啟</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="other">%d 台裝置</item>
@@ -141,7 +141,7 @@
     <string name="enable_fiveg">啟用 5G</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">今日已用</string>
-    <string name="usage_data_weekly">used this week</string>
+    <string name="usage_data_weekly">本週已使用</string>
     <string name="usage_data_default_suffix">行動數據</string>
     <string name="usage_wifi_default_suffix">Wi-Fi</string>
     <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
