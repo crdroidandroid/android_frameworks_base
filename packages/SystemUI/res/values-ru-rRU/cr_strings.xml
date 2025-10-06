@@ -144,7 +144,7 @@
     <string name="enable_fiveg">Включить 5G</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">за сегодня</string>
-    <string name="usage_data_weekly">использовано за неделю</string>
+    <string name="usage_data_weekly">за неделю</string>
     <string name="usage_data_default_suffix">Данные</string>
     <string name="usage_wifi_default_suffix">Wi-Fi</string>
     <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
