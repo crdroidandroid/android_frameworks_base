@@ -163,6 +163,9 @@ constructor(
         internal val QS_SHOW_BATTERY_PERCENT =
             "system:" + Settings.System.QS_SHOW_BATTERY_PERCENT
 
+        internal val NETWORK_TRAFFIC_ENABLED =
+            "system:" + Settings.System.NETWORK_TRAFFIC_ENABLED
+
         private fun Int.stateToString() =
             when (this) {
                 QQS_HEADER_CONSTRAINT -> "QQS Header"
@@ -478,6 +481,7 @@ constructor(
         tunerService.addTunable(this, QS_BATTERY_STYLE)
         tunerService.addTunable(this, STATUS_BAR_BATTERY_STYLE)
         tunerService.addTunable(this, QS_SHOW_BATTERY_PERCENT)
+        tunerService.addTunable(this, NETWORK_TRAFFIC_ENABLED)
     }
 
     override fun onViewDetached() {
@@ -508,6 +512,11 @@ constructor(
             QS_SHOW_BATTERY_PERCENT -> {
                 qsBatteryPercent = TunerService.parseInteger(value, 2)
                 updateQsBatteryStyle()
+            }
+
+            NETWORK_TRAFFIC_ENABLED -> {
+                if (TunerService.parseIntegerSwitch(value, false))
+                    updateIconManagerColors()
             }
 
             else -> return
