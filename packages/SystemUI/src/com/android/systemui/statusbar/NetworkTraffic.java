@@ -142,6 +142,8 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable,
 
     private boolean isUsingQs;
 
+    private int mCurrentWidth = -1;
+
     public NetworkTraffic(Context context) {
         this(context, null);
     }
@@ -485,6 +487,14 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable,
         }
     }
 
+    @Override
+    public void onRtlPropertiesChanged(int layoutDirection) {
+        super.onRtlPropertiesChanged(layoutDirection);
+        if (mAttached && mDrawable != null) {
+            setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, mDrawable, null);
+        }
+    }
+
     private void updateVisibility() {
         boolean visible = mEnabled && mIsActive
                 && !TextUtils.isEmpty(getText())
@@ -492,14 +502,24 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable,
 
         if (visible != mVisible) {
             mVisible = visible;
+            setFixedWidth();
             setVisibility(mVisible ? View.VISIBLE : View.GONE);
-            ViewGroup.LayoutParams lp = getLayoutParams();
-            if (lp != null) {
-                float density = getResources().getDisplayMetrics().density;
-                int iconSize = (int) (18 * density); // 18.dp
-                lp.width = mVisible ? iconSize : 0;
-                setLayoutParams(lp);
-            }
+        }
+    }
+
+    private void setFixedWidth() {
+        int requiredWidth = 0;
+        if (mVisible && !mHideArrows) {
+            requiredWidth = (int) (30 * getResources().getDisplayMetrics().density);
+        } else if (mVisible) {
+            requiredWidth = (int) (18 * getResources().getDisplayMetrics().density);
+        }
+        if (requiredWidth == mCurrentWidth) return;
+        ViewGroup.LayoutParams lp = getLayoutParams();
+        if (lp != null) {
+            mCurrentWidth = requiredWidth;
+            lp.width = requiredWidth;
+            setLayoutParams(lp);
         }
     }
 
@@ -523,12 +543,16 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable,
                         TunerService.parseIntegerSwitch(newValue, false);
                 if (mEnabled) {
                     setLines(2);
+                    setMaxLines(2);
                     String txtFont = getResources().getString(com.android.internal.R.string.config_bodyFontFamily);
                     setTypeface(Typeface.create(txtFont, Typeface.BOLD));
                     setLineSpacing(0.80f, 0.80f);
                     setLayoutDirection(View.LAYOUT_DIRECTION_LOCALE);
                     setTextDirection(View.TEXT_DIRECTION_LOCALE);
-                    setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
+                    setTextAlignment(View.TEXT_ALIGNMENT_VIEW_END);
+                    setElegantTextHeight(false);
+                    setFontFeatureSettings("'tnum' 1");
+                    setIncludeFontPadding(false);
                 }
                 updateViews();
                 break;
@@ -563,6 +587,7 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable,
                 mHideArrows =
                         TunerService.parseIntegerSwitch(newValue, false);
                 setTrafficDrawable();
+                setFixedWidth();
                 break;
             default:
                 break;
