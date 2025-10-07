@@ -32,6 +32,7 @@ import android.annotation.IntDef;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Handler;
+import android.os.UserHandle;
 import android.util.Log;
 import android.util.MathUtils;
 import android.util.Pair;
@@ -79,6 +80,7 @@ import com.android.systemui.shade.transition.LargeScreenShadeInterpolator;
 import com.android.systemui.statusbar.notification.stack.ViewState;
 import com.android.systemui.statusbar.policy.ConfigurationController;
 import com.android.systemui.statusbar.policy.KeyguardStateController;
+import com.android.systemui.util.ScrimUtils;
 import com.android.systemui.util.kotlin.JavaAdapter;
 import com.android.systemui.util.wakelock.DelayedWakeLock;
 import com.android.systemui.util.wakelock.WakeLock;
@@ -441,6 +443,11 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener, Dump
                 .getBoolean(R.bool.notification_scrim_transparent);
         updateScrims();
         mKeyguardUpdateMonitor.registerCallback(mKeyguardVisibilityCallback);
+
+        // Initialize ScrimUtils with current unlock state to prevent race conditions
+        ScrimUtils.get().setUserUnlocked(
+            mKeyguardUpdateMonitor.isUserUnlocked(UserHandle.USER_CURRENT)
+        );
 
         // prepare() sets proper initial values for most states
         for (ScrimState state : ScrimState.values()) {
@@ -1746,6 +1753,22 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener, Dump
         public void onKeyguardVisibilityChanged(boolean visible) {
             mNeedsDrawableColorUpdate = true;
             scheduleUpdate();
+        }
+
+        @Override
+        public void onUserUnlocked() {
+            // Notify ScrimUtils that user has unlocked
+            // This allows all ScrimEventListeners to properly track unlock state
+            // and prevent race conditions during Direct Boot
+            ScrimUtils.get().setUserUnlocked(true);
+        }
+
+        @Override
+        public void onUserSwitchComplete(int userId) {
+            // Reset unlock state when user switches
+            ScrimUtils.get().setUserUnlocked(
+                mKeyguardUpdateMonitor.isUserUnlocked(userId)
+            );
         }
     }
 }

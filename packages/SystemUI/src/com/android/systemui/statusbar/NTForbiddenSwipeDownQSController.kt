@@ -34,6 +34,7 @@ class NTForbiddenSwipeDownQSController @Inject constructor(
     private var enableSwipeDownQS: Int = ENABLE
     private var forbiddenSwipeDownQS: Boolean = false
     private var keyguardShowing: Boolean = false
+    private var userUnlocked: Boolean = true
     private var listening = false
 
     init {
@@ -42,13 +43,14 @@ class NTForbiddenSwipeDownQSController @Inject constructor(
     }
 
     fun getForbiddenSwipeDownQS(): Boolean = forbiddenSwipeDownQS
+
     fun setForbiddenSwipeDownQS(value: Boolean) {
         forbiddenSwipeDownQS = value
     }
 
     private fun registerSettingsObserver() {
-        context.contentResolver.registerContentObserver(Settings.Secure.getUriFor(
-            Settings.Secure.ENABLE_LOCKSCREEN_QUICK_SETTINGS),
+        context.contentResolver.registerContentObserver(
+            Settings.Secure.getUriFor(Settings.Secure.ENABLE_LOCKSCREEN_QUICK_SETTINGS),
             false,             
             object : ContentObserver(Handler()) {
                 override fun onChange(selfChange: Boolean, uri: Uri?) {
@@ -56,12 +58,18 @@ class NTForbiddenSwipeDownQSController @Inject constructor(
                     updateSettings()
                 }
             }, 
-            UserHandle.USER_ALL)
+            UserHandle.USER_ALL
+        )
     }
 
     private fun updateSettings() {
-        enableSwipeDownQS = Settings.Secure.getIntForUser(context.contentResolver,
-            Settings.Secure.ENABLE_LOCKSCREEN_QUICK_SETTINGS, ENABLE, UserHandle.USER_CURRENT)
+        enableSwipeDownQS = Settings.Secure.getIntForUser(
+            context.contentResolver,
+            Settings.Secure.ENABLE_LOCKSCREEN_QUICK_SETTINGS, 
+            ENABLE, 
+            UserHandle.USER_CURRENT
+        )
+        
         if (enableSwipeDownQS == DISABLE && !listening) {
             ScrimUtils.get().addListener(this)
             listening = true
@@ -69,15 +77,23 @@ class NTForbiddenSwipeDownQSController @Inject constructor(
             ScrimUtils.get().removeListener(this)
             listening = false
         }
+        
         updateForbiddenSwipeDownState()
     }
 
     private fun updateForbiddenSwipeDownState() {
-        forbiddenSwipeDownQS = keyguardShowing && enableSwipeDownQS == DISABLE
+        // Fix: Prevent QS pulldown before first unlock AND when keyguard is showing
+        // Uses ScrimUtils centralized unlock tracking to avoid race conditions
+        forbiddenSwipeDownQS = (keyguardShowing || !userUnlocked) && enableSwipeDownQS == DISABLE
     }
     
     override fun onKeyguardShowingChanged(showing: Boolean) {
         keyguardShowing = showing
+        updateForbiddenSwipeDownState()
+    }
+
+    override fun onUserUnlockedChanged(unlocked: Boolean) {
+        userUnlocked = unlocked
         updateForbiddenSwipeDownState()
     }
     
@@ -85,6 +101,7 @@ class NTForbiddenSwipeDownQSController @Inject constructor(
         private const val TAG = "ForbiddenSwipeDownQSController"
         private const val ENABLE = 1
         private const val DISABLE = 0
+
         @JvmStatic
         fun get(context: Context): NTForbiddenSwipeDownQSController {
             val app = context.applicationContext as SystemUIApplication

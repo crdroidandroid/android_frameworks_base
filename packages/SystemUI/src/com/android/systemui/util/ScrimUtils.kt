@@ -34,6 +34,7 @@ class ScrimUtils private constructor() {
         fun onStartedWakingUp() {}
         fun onScreenTurnedOff() {}
         fun setPulsing(pulsing: Boolean) {}
+        fun onUserUnlockedChanged(unlocked: Boolean) {}
     }
 
     private val listeners = WeakListenerManager<ScrimEventListener>()
@@ -41,6 +42,7 @@ class ScrimUtils private constructor() {
     private var mIsDozing = false
     private val mQsVisible = AtomicBoolean(false)
     private val mPulsing = AtomicBoolean(false)
+    private var mUserUnlocked = false
 
     @Volatile private var mExpandedFraction = 0f
     @Volatile private var mBarState = -1
@@ -67,6 +69,13 @@ class ScrimUtils private constructor() {
         if (mKeyguardShowing != showing) {
             mKeyguardShowing = showing
             notifyListeners(Consumer { it.onKeyguardShowingChanged(showing) })
+        }
+    }
+
+    fun setUserUnlocked(unlocked: Boolean) {
+        if (mUserUnlocked != unlocked) {
+            mUserUnlocked = unlocked
+            notifyListeners(Consumer { it.onUserUnlockedChanged(unlocked) })
         }
     }
 
@@ -121,6 +130,8 @@ class ScrimUtils private constructor() {
     fun isDozing(): Boolean = mIsDozing
 
     fun isKeyguardShowing(): Boolean = mKeyguardShowing || mBarState == KEYGUARD
+
+    fun isUserUnlocked(): Boolean = mUserUnlocked
 
     fun isPanelFullyCollapsed(): Boolean =
         if (mBarState == SHADE_LOCKED || mBarState == KEYGUARD) {
