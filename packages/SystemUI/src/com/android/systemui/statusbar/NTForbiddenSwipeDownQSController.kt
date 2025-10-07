@@ -21,6 +21,8 @@ import android.net.Uri
 import android.os.Handler
 import android.os.UserHandle
 import android.provider.Settings
+import com.android.keyguard.KeyguardUpdateMonitor
+import com.android.keyguard.KeyguardUpdateMonitorCallback
 import com.android.systemui.SystemUIApplication
 import com.android.systemui.dagger.SysUISingleton
 import com.android.systemui.util.ScrimUtils
@@ -28,27 +30,43 @@ import javax.inject.Inject
 
 @SysUISingleton
 class NTForbiddenSwipeDownQSController @Inject constructor(
-    private val context: Context
+    private val context: Context,
+    private val keyguardUpdateMonitor: KeyguardUpdateMonitor
 ) : ScrimUtils.ScrimEventListener {
 
     private var enableSwipeDownQS: Int = ENABLE
     private var forbiddenSwipeDownQS: Boolean = false
     private var keyguardShowing: Boolean = false
+    private var userUnlocked: Boolean = false
     private var listening = false
 
+    private val keyguardUpdateMonitorCallback = object : KeyguardUpdateMonitorCallback() {
+        override fun onUserUnlocked() {
+            userUnlocked = true
+            updateForbiddenSwipeDownState()
+        }
+    }
+
     init {
+        // Initialize userUnlocked state from KeyguardUpdateMonitor
+        userUnlocked = keyguardUpdateMonitor.isUserUnlocked(UserHandle.USER_CURRENT)
+        
+        // Register callback to track when user unlocks
+        keyguardUpdateMonitor.registerCallback(keyguardUpdateMonitorCallback)
+        
         registerSettingsObserver()
         updateSettings()
     }
 
     fun getForbiddenSwipeDownQS(): Boolean = forbiddenSwipeDownQS
+
     fun setForbiddenSwipeDownQS(value: Boolean) {
         forbiddenSwipeDownQS = value
     }
 
     private fun registerSettingsObserver() {
-        context.contentResolver.registerContentObserver(Settings.Secure.getUriFor(
-            Settings.Secure.ENABLE_LOCKSCREEN_QUICK_SETTINGS),
+        context.contentResolver.registerContentObserver(
+            Settings.Secure.getUriFor(Settings.Secure.ENABLE_LOCKSCREEN_QUICK_SETTINGS),
             false,             
             object : ContentObserver(Handler()) {
                 override fun onChange(selfChange: Boolean, uri: Uri?) {
@@ -56,12 +74,18 @@ class NTForbiddenSwipeDownQSController @Inject constructor(
                     updateSettings()
                 }
             }, 
-            UserHandle.USER_ALL)
+            UserHandle.USER_ALL
+        )
     }
 
     private fun updateSettings() {
-        enableSwipeDownQS = Settings.Secure.getIntForUser(context.contentResolver,
-            Settings.Secure.ENABLE_LOCKSCREEN_QUICK_SETTINGS, ENABLE, UserHandle.USER_CURRENT)
+        enableSwipeDownQS = Settings.Secure.getIntForUser(
+            context.contentResolver,
+            Settings.Secure.ENABLE_LOCKSCREEN_QUICK_SETTINGS, 
+            ENABLE, 
+            UserHandle.USER_CURRENT
+        )
+        
         if (enableSwipeDownQS == DISABLE && !listening) {
             ScrimUtils.get().addListener(this)
             listening = true
@@ -69,11 +93,14 @@ class NTForbiddenSwipeDownQSController @Inject constructor(
             ScrimUtils.get().removeListener(this)
             listening = false
         }
+        
         updateForbiddenSwipeDownState()
     }
 
     private fun updateForbiddenSwipeDownState() {
-        forbiddenSwipeDownQS = keyguardShowing && enableSwipeDownQS == DISABLE
+        // Fix: Prevent QS pulldown before first unlock AND when keyguard is showing
+        // This resolves the race condition during Direct Boot (pre-unlock state)
+        forbiddenSwipeDownQS = (keyguardShowing || !userUnlocked) && enableSwipeDownQS == DISABLE
     }
     
     override fun onKeyguardShowingChanged(showing: Boolean) {
@@ -85,6 +112,7 @@ class NTForbiddenSwipeDownQSController @Inject constructor(
         private const val TAG = "ForbiddenSwipeDownQSController"
         private const val ENABLE = 1
         private const val DISABLE = 0
+
         @JvmStatic
         fun get(context: Context): NTForbiddenSwipeDownQSController {
             val app = context.applicationContext as SystemUIApplication
