@@ -120,6 +120,7 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
     private boolean mDismissed;
     private boolean mRefocusOnDismiss;
     protected boolean mIsBlurSupported;
+    protected boolean mUseTransparency;
 
     public ActivatableNotificationView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -129,7 +130,7 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
     }
 
     protected void updateColors() {
-        if (mIsBlurSupported) {
+        if (mIsBlurSupported && mUseTransparency) {
             mNormalColor = SurfaceEffectColors.surfaceEffect1(getContext());
         } else {
             mNormalColor = mContext.getColor(
@@ -336,16 +337,22 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
     }
 
     public void setIsBlurSupported(boolean isBlurSupported) {
-        boolean usedTransparentBackground = usesTransparentBackground();
         mIsBlurSupported = isBlurSupported;
-        mBackgroundNormal.setIsBlurSupported(isBlurSupported);
-        if (usedTransparentBackground != usesTransparentBackground()) {
-            updateBackgroundColors();
-        }
+        updateTransparency();
+    }
+
+    public void setUseTransparency(boolean useTransparency) {
+        mUseTransparency = useTransparency;
+        updateTransparency();
+    }
+
+    public void updateTransparency() {
+        mBackgroundNormal.setIsBlurSupported(usesTransparentBackground());
+        updateBackgroundColors();
     }
 
     protected boolean usesTransparentBackground() {
-        return mIsBlurSupported;
+        return mIsBlurSupported && mUseTransparency;
     }
 
     @Override
