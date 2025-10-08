@@ -1121,6 +1121,8 @@ public class QuickSettingsControllerImpl implements QuickSettingsController, Dum
         // Update the light bar
         mLightBarController.setQsExpanded(mFullyExpanded);
 
+        onTransparencyUpdated(adjustedExpansionFraction);
+
         // Update full screen state
         setQsFullScreen(/* qsFullScreen = */ mFullyExpanded && !mSplitShadeEnabled);
     }
@@ -2293,25 +2295,19 @@ public class QuickSettingsControllerImpl implements QuickSettingsController, Dum
             if (STATUS_BAR_QUICK_QS_PULLDOWN.equals(key)) {
                 mOneFingerQuickSettingsIntercept = TunerService.parseInteger(newValue, 0);
             } else if (NOTIFICATION_ROW_TRANSPARENCY.equals(key)) {
-                onTransparencyUpdated();
+                onTransparencyUpdated(0f);
             }
         }
     }
 
-    private final void onTransparencyUpdated() {
+    private final void onTransparencyUpdated(float expansion) {
+        if (expansion != 0.01f) return;
         NotificationStackScrollLayoutController controller = mNotificationStackScrollLayoutController;
         if (controller == null || controller.getView() == null) {
             return;
         }
         NotificationStackScrollLayout view = controller.getView();
-        int childCount = view.getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            View child = view.getChildAt(i);
-            if (child instanceof ExpandableNotificationRow) {
-                final ExpandableNotificationRow row = (ExpandableNotificationRow) child;
-                child.post(row::updateIfNeeded);
-            }
-        }
+        view.post(() -> view.updateBgColor(mBarState == KEYGUARD));
     }
 
     private final class LockscreenShadeTransitionCallback

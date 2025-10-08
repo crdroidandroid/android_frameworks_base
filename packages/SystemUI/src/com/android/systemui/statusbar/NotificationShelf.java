@@ -169,6 +169,7 @@ public class NotificationShelf extends ActivatableNotificationView {
         if (!mShowNotificationShelf) {
             setVisibility(GONE);
         }
+        updateIfNeeded();
     }
 
     @Override
@@ -279,6 +280,12 @@ public class NotificationShelf extends ActivatableNotificationView {
         } else {
             viewState.setYTranslation(stackBottom - viewState.height);
         }
+        updateIfNeeded();
+    }
+
+    void updateIfNeeded() {
+        if (!mIsBlurSupported || mAmbientState == null) return;
+        setUseTransparency(!mAmbientState.isOnKeyguard());
     }
 
     /**
@@ -571,6 +578,7 @@ public class NotificationShelf extends ActivatableNotificationView {
         if (mNotGoneIndex == -1) {
             mNotGoneIndex = notGoneIndex;
         }
+        updateIfNeeded();
     }
 
     private ExpandableView getHostLayoutChildAt(int index) {
