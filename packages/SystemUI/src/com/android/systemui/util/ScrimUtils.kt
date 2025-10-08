@@ -44,7 +44,7 @@ class ScrimUtils private constructor() {
 
     @Volatile private var mExpandedFraction = 0f
     @Volatile private var mBarState = -1
-    @Volatile private var mKeyguardShowing = true
+    @Volatile private var mKeyguardShowing = false
 
     companion object {
         @Volatile private var instance: ScrimUtils? = null
