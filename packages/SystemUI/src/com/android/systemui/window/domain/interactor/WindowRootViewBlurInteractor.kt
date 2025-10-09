@@ -98,6 +98,9 @@ constructor(
     /** Whether notification row translucency is enabled via user setting. */
     val isTranslucentSupported: StateFlow<Boolean> = repository.isTranslucentSupported
 
+    /** Whether lockscreen notification translucency is enabled via user setting. */
+    val isLockscreenTranslucentSupported: StateFlow<Boolean> = repository.isLockscreenTranslucentSupported
+
     /** Whether the blurred wallpaper is supported. This feature is disabled on desktop. */
     val isBlurredWallpaperSupported: Boolean =
         resources.getBoolean(R.bool.config_supportBlurredWallpaper)
