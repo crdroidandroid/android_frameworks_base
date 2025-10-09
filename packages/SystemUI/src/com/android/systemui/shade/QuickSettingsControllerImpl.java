@@ -134,6 +134,8 @@ public class QuickSettingsControllerImpl implements QuickSettingsController, Dum
             "lineagesystem:" + LineageSettings.System.STATUS_BAR_QUICK_QS_PULLDOWN;
     private static final String NOTIFICATION_ROW_TRANSPARENCY =
             Settings.Secure.NOTIFICATION_ROW_TRANSPARENCY;
+    private static final String NOTIFICATION_ROW_TRANSPARENCY_LOCKSCREEN =
+            Settings.Secure.NOTIFICATION_ROW_TRANSPARENCY_LOCKSCREEN;
 
     private QS mQs;
     private final Lazy<NotificationPanelViewController> mPanelViewControllerLazy;
@@ -2271,6 +2273,7 @@ public class QuickSettingsControllerImpl implements QuickSettingsController, Dum
             mQs.setScrollListener(mQsScrollListener);
             mTunerService.addTunable(this, STATUS_BAR_QUICK_QS_PULLDOWN);
             mTunerService.addTunable(this, NOTIFICATION_ROW_TRANSPARENCY);
+            mTunerService.addTunable(this, NOTIFICATION_ROW_TRANSPARENCY_LOCKSCREEN);
             updateExpansion();
         }
 
@@ -2296,7 +2299,8 @@ public class QuickSettingsControllerImpl implements QuickSettingsController, Dum
         public void onTuningChanged(String key, String newValue) {
             if (STATUS_BAR_QUICK_QS_PULLDOWN.equals(key)) {
                 mOneFingerQuickSettingsIntercept = TunerService.parseInteger(newValue, 0);
-            } else if (NOTIFICATION_ROW_TRANSPARENCY.equals(key)) {
+            } else if (NOTIFICATION_ROW_TRANSPARENCY.equals(key) ||
+                NOTIFICATION_ROW_TRANSPARENCY_LOCKSCREEN.equals(key)) {
                 onTransparencyUpdated();
             }
         }
