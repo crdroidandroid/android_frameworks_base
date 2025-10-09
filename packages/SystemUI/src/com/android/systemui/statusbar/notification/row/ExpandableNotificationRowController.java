@@ -422,8 +422,10 @@ public class ExpandableNotificationRowController implements NotifViewController 
             }
         });
 
-        collectFlow(mView, mWindowRootViewBlurInteractor.isTranslucentSupported(),
+        collectFlow(mView, mWindowRootViewBlurInteractor.isBlurCurrentlySupported(),
                     mView::setIsBlurSupported);
+        collectFlow(mView, mWindowRootViewBlurInteractor.isTranslucentEnabled(),
+                    mView::setIsTranslucencyEnabled);
     }
 
     private final StatusBarStateController.StateListener mStatusBarStateListener =

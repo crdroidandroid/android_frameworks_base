@@ -771,20 +771,11 @@ public class NotificationStackScrollLayout
         mScrollViewFields.sendRemoteInputRowBottomBound(bottom);
     }
 
-    void updateBgColor() {
+    public void updateBgColor() {
         for (int i = 0; i < getChildCount(); i++) {
             View child = getChildAt(i);
             if (child instanceof ActivatableNotificationView activatableView) {
                 activatableView.updateBackgroundColors();
-            }
-        }
-    }
-
-    public void updateBgColor(boolean onKeyguard) {
-        for (int i = 0; i < getChildCount(); i++) {
-            View child = getChildAt(i);
-            if (child instanceof ActivatableNotificationView activatableView) {
-                activatableView.setUseTransparency(!onKeyguard);
             }
         }
     }
