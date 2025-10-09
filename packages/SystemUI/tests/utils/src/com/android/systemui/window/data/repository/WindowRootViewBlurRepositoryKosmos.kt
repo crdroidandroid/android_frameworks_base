@@ -30,6 +30,7 @@ class FakeWindowRootViewBlurRepository : WindowRootViewBlurRepository {
     override val scaleRequestedByShade: MutableStateFlow<Float> = MutableStateFlow(1.0f)
     override val isBlurSupported: MutableStateFlow<Boolean> = MutableStateFlow(false)
     override val isTranslucentSupported: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    override val isLockscreenTranslucentSupported: MutableStateFlow<Boolean> = MutableStateFlow(false)
     override var blurAppliedListener: BlurAppliedListener? = null
     override val trackingShadeMotion: MutableStateFlow<Boolean> = MutableStateFlow(false)
 }
