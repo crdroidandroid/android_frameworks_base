@@ -120,6 +120,7 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
     private boolean mDismissed;
     private boolean mRefocusOnDismiss;
     private boolean mTranslucencyEnabled;
+    protected boolean mLockscreenTranslucencyEnabled;
     private boolean mUseTranslucency;
 
     public ActivatableNotificationView(Context context, AttributeSet attrs) {
@@ -343,6 +344,13 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
     public void setIsTranslucencyEnabled(boolean isTranslucencyEnabled) {
         if (mTranslucencyEnabled != isTranslucencyEnabled) {
             mTranslucencyEnabled = isTranslucencyEnabled;
+            updateIfNeeded();
+        }
+    }
+
+    public void setIsLockscreenTranslucencyEnabled(boolean isTranslucencyEnabled) {
+        if (mLockscreenTranslucencyEnabled != isTranslucencyEnabled) {
+            mLockscreenTranslucencyEnabled = isTranslucencyEnabled;
             updateIfNeeded();
         }
     }
