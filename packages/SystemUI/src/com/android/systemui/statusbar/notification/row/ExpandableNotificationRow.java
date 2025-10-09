@@ -4744,6 +4744,7 @@ public class ExpandableNotificationRow extends ActivatableNotificationView
     protected boolean usesTransparentBackground() {
         // Row background should be opaque when it's displayed as a heads-up notification or
         // displayed on keyguard.
-        return super.usesTransparentBackground() && !mIsHeadsUp && !mOnKeyguard;
+        if (mOnKeyguard) return mLockscreenTranslucencyEnabled;
+        return super.usesTransparentBackground() && !mIsHeadsUp;
     }
 }
