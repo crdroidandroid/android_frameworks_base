@@ -53,6 +53,9 @@ interface WindowRootViewBlurRepository {
     /** Whether notification row translucency is enabled via user setting. */
     val isTranslucentSupported: StateFlow<Boolean>
 
+    /** Whether lockscreen notification translucency is enabled via user setting. */
+    val isLockscreenTranslucentSupported: StateFlow<Boolean>
+
     var blurAppliedListener: BlurAppliedListener?
 
     /** true when tracking shade motion that might lead to a shade expansion. */
@@ -126,6 +129,32 @@ constructor(
         }
         .stateIn(scope, SharingStarted.WhileSubscribed(), isTranslucentEnabled())
 
+    override val isLockscreenTranslucentSupported: StateFlow<Boolean> =
+        conflatedCallbackFlow {
+            val sendUpdate = {
+                trySendWithFailureLogging(
+                    isLockscreenTranslucentEnabled(),
+                    TAG,
+                    "unable to send notificationRowTransparency lockscreen state change",
+                )
+            }
+            val observer =
+                object : ContentObserver(null) {
+                    override fun onChange(selfChange: Boolean) = sendUpdate()
+                }
+            val resolver = context.contentResolver
+            resolver.registerContentObserver(
+                Settings.Secure.getUriFor(
+                    Settings.Secure.NOTIFICATION_ROW_TRANSPARENCY_LOCKSCREEN,
+                ),
+                true,
+                observer,
+            )
+            sendUpdate()
+            awaitClose { resolver.unregisterContentObserver(observer) }
+        }
+        .stateIn(scope, SharingStarted.WhileSubscribed(), isLockscreenTranslucentEnabled())
+
     override var blurAppliedListener: BlurAppliedListener? = null
 
     private fun isTranslucentEnabled(): Boolean =
@@ -135,6 +164,12 @@ constructor(
             1,
             UserHandle.USER_CURRENT,
         ) == 1
+
+    private fun isLockscreenTranslucentEnabled(): Boolean =
+        Settings.Secure.getIntForUser(
+            context.contentResolver,
+            Settings.Secure.NOTIFICATION_ROW_TRANSPARENCY_LOCKSCREEN,
+            1, UserHandle.USER_CURRENT) == 1
 
     private fun isBlurAllowed(): Boolean {
         return ActivityManager.isHighEndGfx() && !isDisableBlurSysPropSet()
