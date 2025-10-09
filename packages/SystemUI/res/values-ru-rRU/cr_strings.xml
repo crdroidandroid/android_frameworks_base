@@ -81,7 +81,7 @@
     <string name="quick_settings_sound_label">Звук</string>
     <string name="quick_settings_sound_ring">Звонок</string>
     <string name="quick_settings_sound_vibrate">Вибрация</string>
-    <string name="quick_settings_sound_silent">Silent</string>
+    <string name="quick_settings_sound_silent">Беззвучный</string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">Информация о CPU</string>
     <!-- FPS Info tile -->
@@ -124,15 +124,15 @@
     <!-- Text while recognizing face -->
     <string name="face_unlock_recognizing">Распознавание лица…</string>
     <!-- Preferred network tile -->
-    <string name="qs_preferred_network_label">Preferred network</string>
+    <string name="qs_preferred_network_label">Предпочтительная сеть</string>
     <string name="qs_preferred_network_lte">4G / LTE</string>
     <string name="qs_preferred_network_nr">5G / NR</string>
     <string name="qs_preferred_network_3g">3G</string>
-    <string name="qs_preferred_network_unsupported">Unsupported</string>
+    <string name="qs_preferred_network_unsupported">Не поддерживается</string>
     <!-- Flashlight Strength -->
-    <string name="flashlight_strength_title">Flashlight Strength</string>
-    <string name="flashlight_strength_turn_off">Turn off</string>
-    <string name="flashlight_strength_turn_on">Turn on</string>
+    <string name="flashlight_strength_title">Яркость фонарика</string>
+    <string name="flashlight_strength_turn_off">Отключить</string>
+    <string name="flashlight_strength_turn_on">Включить</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="one">Подключено устройств: %d</item>
@@ -144,7 +144,7 @@
     <string name="enable_fiveg">Включить 5G</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">за сегодня</string>
-    <string name="usage_data_weekly">used this week</string>
+    <string name="usage_data_weekly">за неделю</string>
     <string name="usage_data_default_suffix">Данные</string>
     <string name="usage_wifi_default_suffix">Wi-Fi</string>
     <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
