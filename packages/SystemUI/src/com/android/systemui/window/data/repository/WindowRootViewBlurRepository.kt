@@ -51,6 +51,8 @@ interface WindowRootViewBlurRepository {
 
     val isTranslucentSupported: StateFlow<Boolean>
 
+    val isLockscreenTranslucentSupported: StateFlow<Boolean>
+
     var blurAppliedListener: BlurAppliedListener?
 
     companion object {
@@ -117,12 +119,42 @@ constructor(
         }
         .stateIn(scope, SharingStarted.WhileSubscribed(), isTranslucentEnabled())
 
+    override val isLockscreenTranslucentSupported: StateFlow<Boolean> =
+        conflatedCallbackFlow {
+            val sendUpdate = {
+                trySendWithFailureLogging(
+                    isLockscreenTranslucentSupported(),
+                    TAG,
+                    "unable to send notificationRowTransparency state change",
+                )
+            }
+            val observer = object : ContentObserver(null) {
+                override fun onChange(selfChange: Boolean) = sendUpdate()
+            }
+            val resolver = context.contentResolver
+            resolver.registerContentObserver(
+                Settings.Secure.getUriFor(Settings.Secure.NOTIFICATION_ROW_TRANSPARENCY_LOCKSCREEN),
+                true,
+                observer
+            )
+            sendUpdate()
+            awaitClose { resolver.unregisterContentObserver(observer) }
+        }
+        .stateIn(scope, SharingStarted.WhileSubscribed(), isLockscreenTranslucentSupported())
+
     override var blurAppliedListener: BlurAppliedListener? = null
 
     private fun isTranslucentEnabled(): Boolean {
         return Settings.Secure.getIntForUser(
             context.contentResolver,
             Settings.Secure.NOTIFICATION_ROW_TRANSPARENCY,
+            1, UserHandle.USER_CURRENT) == 1
+    }
+
+    private fun isLockscreenTranslucentSupported(): Boolean {
+        return Settings.Secure.getIntForUser(
+            context.contentResolver,
+            Settings.Secure.NOTIFICATION_ROW_TRANSPARENCY_LOCKSCREEN,
             1, UserHandle.USER_CURRENT) == 1
     }
 
