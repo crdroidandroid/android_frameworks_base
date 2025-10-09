@@ -119,8 +119,8 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
     protected Point mTargetPoint;
     private boolean mDismissed;
     private boolean mRefocusOnDismiss;
-    protected boolean mIsBlurSupported;
-    protected boolean mUseTransparency;
+    private boolean mTranslucencyEnabled;
+    private boolean mUseTranslucency;
 
     public ActivatableNotificationView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -130,7 +130,7 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
     }
 
     protected void updateColors() {
-        if (mIsBlurSupported && mUseTransparency) {
+        if (usesTransparentBackground()) {
             mNormalColor = SurfaceEffectColors.surfaceEffect1(getContext());
         } else {
             mNormalColor = mContext.getColor(
@@ -337,22 +337,27 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
     }
 
     public void setIsBlurSupported(boolean isBlurSupported) {
-        mIsBlurSupported = isBlurSupported;
-        updateTransparency();
+        // no-op
     }
 
-    public void setUseTransparency(boolean useTransparency) {
-        mUseTransparency = useTransparency;
-        updateTransparency();
+    public void setIsTranslucencyEnabled(boolean isTranslucencyEnabled) {
+        if (mTranslucencyEnabled != isTranslucencyEnabled) {
+            mTranslucencyEnabled = isTranslucencyEnabled;
+            updateIfNeeded();
+        }
     }
 
-    public void updateTransparency() {
-        mBackgroundNormal.setIsBlurSupported(usesTransparentBackground());
-        updateBackgroundColors();
+    protected void updateIfNeeded() {
+        boolean enabled = usesTransparentBackground();
+        if (mUseTranslucency != enabled) {
+            mUseTranslucency = enabled;
+            mBackgroundNormal.setIsBlurSupported(enabled);
+            updateBackgroundColors();
+        }
     }
 
     protected boolean usesTransparentBackground() {
-        return mIsBlurSupported && mUseTransparency;
+        return mTranslucencyEnabled;
     }
 
     @Override
