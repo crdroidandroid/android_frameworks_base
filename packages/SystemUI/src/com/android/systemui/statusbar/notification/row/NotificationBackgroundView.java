@@ -271,11 +271,14 @@ public class NotificationBackgroundView extends View implements Dumpable,
      * hover states, pressed states or other similar states is activated.
      */
     private void setStatefulColors() {
-        if (mTintColor != mNormalColor) {
-            ColorStateList newColor = ContrastColorUtil.isColorDark(mTintColor)
-                    ? mDarkColoredStatefulColors : mLightColoredStatefulColors;
-            ((GradientDrawable) getStatefulBackgroundLayer().mutate()).setColor(newColor);
-        }
+        if (!(mBackground instanceof LayerDrawable)) return;
+        Drawable stateful = getStatefulBackgroundLayer().mutate();
+        stateful.clearColorFilter();
+        stateful.setTintMode(PorterDuff.Mode.SRC_ATOP);
+        ColorStateList tint = ContrastColorUtil.isColorDark(mTintColor)
+                ? mDarkColoredStatefulColors : mLightColoredStatefulColors;
+        stateful.setTintList(tint);
+        stateful.setAlpha(mIsBlurSupported && isColorized() ? (int) (MAX_ALPHA * 0.9f) : MAX_ALPHA);
     }
 
     /**
@@ -315,27 +318,30 @@ public class NotificationBackgroundView extends View implements Dumpable,
     }
 
     private void updateBaseLayerColor() {
+        if (!(mBackground instanceof LayerDrawable)) return;
+        Drawable baseLayer = getBaseBackgroundLayer().mutate();
+        baseLayer.clearColorFilter();
         // BG base layer being a drawable, there isn't a method like setColor() to color it.
         // Instead, we set a color filter that essentially replaces every pixel of the drawable.
         // For non-colorized notifications, this function specifies a new color token.
         // For colorized notifications, this uses a color that matches the tint color at 90% alpha.
-        int color = isColorized()
+        if (mIsBlurSupported) {
+            int color = isColorized()
                 ? ColorUtils.setAlphaComponent(mTintColor, (int) (MAX_ALPHA * 0.9f))
                 : mNormalColor;
-        getBaseBackgroundLayer().setColorFilter(
-                new PorterDuffColorFilter(
+            baseLayer.setColorFilter(
+                    new PorterDuffColorFilter(
                         color,
                         PorterDuff.Mode.SRC)); // SRC operator discards the drawable's color+alpha
+        } else {
+            baseLayer.setTintMode(PorterDuff.Mode.SRC_ATOP);
+            baseLayer.setTint(mTintColor);
+        }
     }
 
     public void setTint(int tintColor) {
-        Drawable baseLayer = getBaseBackgroundLayer();
-        baseLayer.mutate().setTintMode(PorterDuff.Mode.SRC_ATOP);
-        baseLayer.setTint(tintColor);
         mTintColor = tintColor;
-        if (mIsBlurSupported) {
-            updateBaseLayerColor();
-        }
+        updateBaseLayerColor();
         setStatefulColors();
         invalidate();
     }
@@ -401,14 +407,6 @@ public class NotificationBackgroundView extends View implements Dumpable,
         } else {
             mRippleColor = null;
         }
-    }
-
-    public void setDrawableAlpha(int drawableAlpha) {
-        mDrawableAlpha = drawableAlpha;
-        if (mExpandAnimationRunning) {
-            return;
-        }
-        mBackground.setAlpha(drawableAlpha);
     }
 
     /**
@@ -485,9 +483,6 @@ public class NotificationBackgroundView extends View implements Dumpable,
             // spot during animation anyways.
             gradientDrawable.setAntiAlias(!running);
         }
-        if (!mExpandAnimationRunning) {
-            setDrawableAlpha(mDrawableAlpha);
-        }
         invalidate();
     }
 
@@ -517,7 +512,11 @@ public class NotificationBackgroundView extends View implements Dumpable,
     }
 
     public void setIsBlurSupported(boolean isBlurSupported) {
-        mIsBlurSupported = isBlurSupported;
-        updateBaseLayerColor();
+        if (mIsBlurSupported != isBlurSupported) {
+            mIsBlurSupported = isBlurSupported;
+            updateBaseLayerColor();
+            setStatefulColors();
+            invalidate();
+        }
     }
 }
