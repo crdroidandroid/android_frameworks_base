@@ -283,11 +283,6 @@ public class NotificationShelf extends ActivatableNotificationView {
         updateIfNeeded();
     }
 
-    void updateIfNeeded() {
-        if (!mIsBlurSupported || mAmbientState == null) return;
-        setUseTransparency(!mAmbientState.isOnKeyguard());
-    }
-
     /**
      * Set the actual width of the shelf, this will only differ from width for short shelves.
      */
@@ -1101,6 +1096,12 @@ public class NotificationShelf extends ActivatableNotificationView {
                 pw.println("mStatusBarHeight: " + mStatusBarHeight);
             });
         }
+    }
+
+    @Override
+    protected boolean usesTransparentBackground() {
+        return super.usesTransparentBackground() &&
+            (mAmbientState == null || !mAmbientState.isOnKeyguard());
     }
 
     public class ShelfState extends ExpandableViewState {

@@ -49,7 +49,7 @@ interface WindowRootViewBlurRepository {
     /** Is blur supported based on settings toggle and battery power saver mode. */
     val isBlurSupported: StateFlow<Boolean>
 
-    val isTranslucentSupported: StateFlow<Boolean>
+    val isTranslucentEnabled: StateFlow<Boolean>
 
     var blurAppliedListener: BlurAppliedListener?
 
@@ -94,7 +94,7 @@ constructor(
             } // stateIn because this is backed by a binder call.
             .stateIn(scope, SharingStarted.WhileSubscribed(), false)
 
-    override val isTranslucentSupported: StateFlow<Boolean> =
+    override val isTranslucentEnabled: StateFlow<Boolean> =
         conflatedCallbackFlow {
             val sendUpdate = {
                 trySendWithFailureLogging(
