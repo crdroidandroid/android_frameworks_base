@@ -129,6 +129,7 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
      */
     protected boolean mOnKeyguard;
     protected boolean mIsBlurSupported;
+    protected boolean mIsLockscreenBlurSupported;
     protected boolean mUseTransparent;
 
     public ActivatableNotificationView(Context context, AttributeSet attrs) {
@@ -360,6 +361,11 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
 
     public void setIsBlurSupported(boolean isBlurSupported) {
         mIsBlurSupported = isBlurSupported;
+        updateIfNeeded();
+    }
+
+    public void setIsLockscreenBlurSupported(boolean isBlurSupported) {
+        mIsLockscreenBlurSupported = isBlurSupported;
         updateIfNeeded();
     }
 
