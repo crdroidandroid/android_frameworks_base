@@ -57,6 +57,7 @@ fun AlertDialogContent(
     positiveButton: (@Composable () -> Unit)? = null,
     negativeButton: (@Composable () -> Unit)? = null,
     neutralButton: (@Composable () -> Unit)? = null,
+    contentTopPadding: Dp = 16.dp,
     contentBottomPadding: Dp = 32.dp,
 ) {
     Column(
@@ -86,7 +87,7 @@ fun AlertDialogContent(
                 title()
             }
         }
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(contentTopPadding))
 
         // Content.
         val contentColor = MaterialTheme.colorScheme.onSurfaceVariant
