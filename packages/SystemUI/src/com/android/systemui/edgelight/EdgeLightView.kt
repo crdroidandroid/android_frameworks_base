@@ -15,6 +15,8 @@
  */
 package com.android.systemui.edgelight
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
@@ -28,18 +30,14 @@ class EdgeLightView(context: Context) : FrameLayout(context) {
 
     private val edgePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
-        strokeWidth = EDGE_WIDTH.toFloat()
+        strokeWidth = EDGE_WIDTH
         strokeCap = Paint.Cap.BUTT
     }
 
     private val totalPulseDuration = resources.getInteger(R.integer.doze_pulse_duration_visible).toLong()
     private val pulseCount = 3
-    private val singlePulseDuration = totalPulseDuration / pulseCount
 
     private val fadeFraction = 0.2f
-    private val holdFraction = 1f - 2 * fadeFraction
-    private val fadeDuration = (singlePulseDuration * fadeFraction).toLong()
-    private val holdDuration = (singlePulseDuration * holdFraction).toLong()
 
     private var pulseAnimator: ValueAnimator? = null
 
@@ -66,6 +64,7 @@ class EdgeLightView(context: Context) : FrameLayout(context) {
 
     init {
         layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
+        importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO
         setWillNotDraw(false)
         visible = false
     }
@@ -84,9 +83,25 @@ class EdgeLightView(context: Context) : FrameLayout(context) {
                     else -> 1f
                 }
             }
+            addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    visible = false
+                    pulseAnimator = null
+                }
+                override fun onAnimationCancel(animation: Animator) {
+                    visible = false
+                    pulseAnimator = null
+                }
+            })
             repeatCount = 0
             start()
         }
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        pulseAnimator?.cancel()
+        pulseAnimator = null
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -108,6 +123,6 @@ class EdgeLightView(context: Context) : FrameLayout(context) {
     }
 
     companion object {
-        private const val EDGE_WIDTH = 16
+        private const val EDGE_WIDTH = 16f
     }
 }
