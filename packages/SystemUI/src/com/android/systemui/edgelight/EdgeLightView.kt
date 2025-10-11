@@ -28,9 +28,15 @@ import com.android.systemui.res.R
 
 class EdgeLightView(context: Context) : FrameLayout(context) {
 
+    var userStrokeWidth: Int = 8
+        set(value) {
+            field = value.coerceIn(2, 32)
+            edgePaint.strokeWidth = field * resources.displayMetrics.density
+            invalidate()
+        }
+
     private val edgePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
-        strokeWidth = EDGE_WIDTH
         strokeCap = Paint.Cap.BUTT
     }
 
@@ -141,9 +147,5 @@ class EdgeLightView(context: Context) : FrameLayout(context) {
             width - halfStroke, height.toFloat(),
             edgePaint
         )
-    }
-
-    companion object {
-        private const val EDGE_WIDTH = 16f
     }
 }
