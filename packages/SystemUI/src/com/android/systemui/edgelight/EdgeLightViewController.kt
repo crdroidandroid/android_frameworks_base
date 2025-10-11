@@ -91,6 +91,7 @@ constructor(
             } else {
                 edgeLightView.paintColor = getColor()
                 edgeLightView.userPulseCount = currentSettings.pulseCount
+                edgeLightView.userStrokeWidth = currentSettings.strokeWidth
             }
         }
     }
