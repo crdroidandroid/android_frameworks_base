@@ -34,10 +34,16 @@ class EdgeLightView(context: Context) : FrameLayout(context) {
         strokeCap = Paint.Cap.BUTT
     }
 
-    private val totalPulseDuration = resources.getInteger(R.integer.doze_pulse_duration_visible).toLong()
-    private val pulseCount = 3
+    private val totalPulseDuration =
+        resources.getInteger(R.integer.doze_pulse_duration_visible).toLong()
+
+    var userPulseCount: Int = 3
+        set(value) {
+            field = value.coerceIn(1, 5)
+        }
 
     private val fadeFraction = 0.2f
+    private val MIN_SEGMENTS = 3
 
     private var pulseAnimator: ValueAnimator? = null
 
@@ -71,16 +77,31 @@ class EdgeLightView(context: Context) : FrameLayout(context) {
 
     private fun startPulse() {
         visible = true
-        pulseAnimator = ValueAnimator.ofFloat(0f, pulseCount.toFloat()).apply {
+
+        val totalSegments = maxOf(userPulseCount, MIN_SEGMENTS)
+        val active = BooleanArray(totalSegments)
+
+        for (i in 0 until userPulseCount) {
+            val idx = (((i + 0.5f) * totalSegments) / userPulseCount).toInt()
+                .coerceIn(0, totalSegments - 1)
+            active[idx] = true
+        }
+
+        pulseAnimator = ValueAnimator.ofFloat(0f, totalSegments.toFloat()).apply {
             duration = totalPulseDuration
             addUpdateListener { animator ->
                 val progress = animator.animatedValue as Float
-                val pulseIndex = progress.toInt()
-                val fraction = progress - pulseIndex
-                alpha = when {
-                    fraction < fadeFraction -> fraction / fadeFraction
-                    fraction > 1f - fadeFraction -> (1f - fraction) / fadeFraction
-                    else -> 1f
+                val segmentIndex = progress.toInt().coerceIn(0, totalSegments - 1)
+                val fraction = progress - segmentIndex
+
+                if (active[segmentIndex]) {
+                    alpha = when {
+                        fraction < fadeFraction -> fraction / fadeFraction
+                        fraction > 1f - fadeFraction -> (1f - fraction) / fadeFraction
+                        else -> 1f
+                    }
+                } else {
+                    alpha = 0f
                 }
             }
             addListener(object : AnimatorListenerAdapter() {
