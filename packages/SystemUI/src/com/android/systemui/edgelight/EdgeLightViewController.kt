@@ -16,13 +16,18 @@
 package com.android.systemui.edgelight
 
 import android.app.Notification
+import android.app.WallpaperManager
 import android.content.Context
 import android.service.notification.NotificationListenerService.RankingMap
 import android.service.notification.StatusBarNotification
 import android.widget.FrameLayout
+
+import com.android.settingslib.Utils
+
 import com.android.systemui.dagger.SysUISingleton
 import com.android.systemui.statusbar.NotificationListener
 import com.android.systemui.util.ScrimUtils
+
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
@@ -40,14 +45,13 @@ constructor(
     private val settingsRepo = EdgeLightSettingsRepository(context)
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
+    private val wallpaperManager = context.getSystemService(WallpaperManager::class.java)!!
+
     private var currentSettings = settingsRepo.currentSettings()
     private var _pendingNotification: StatusBarNotification? = null
 
     private val pendingNotification: StatusBarNotification?
         get() = _pendingNotification.also { _pendingNotification = null }
-
-    private val accentColor: Int
-        get() = context.getColor(android.R.color.system_accent1_100)
 
     private var job: Job? = null
 
@@ -74,8 +78,11 @@ constructor(
         }
 
         val color = when (settings.colorMode) {
+            COLOR_MODE_ACCENT -> Utils.getColorAccentDefaultColor(context)
             COLOR_MODE_CUSTOM -> settings.customColor
-            else -> accentColor
+            COLOR_MODE_WALLPAPER -> wallpaperManager.getWallpaperColors(WallpaperManager.FLAG_SYSTEM)
+                    ?.primaryColor?.toArgb() ?: Utils.getColorAccentDefaultColor(context)
+            else -> Utils.getColorAccentDefaultColor(context)
         }
 
         edgeLightView.paintColor = color
@@ -85,8 +92,12 @@ constructor(
 
     private fun getColor(sbn: StatusBarNotification?): Int =
         when (currentSettings.colorMode) {
+            COLOR_MODE_ACCENT -> Utils.getColorAccentDefaultColor(context)
             COLOR_MODE_CUSTOM -> currentSettings.customColor
-            else -> sbn?.notification?.color ?: accentColor
+            COLOR_MODE_WALLPAPER -> wallpaperManager.getWallpaperColors(WallpaperManager.FLAG_SYSTEM)
+                    ?.primaryColor?.toArgb() ?: Utils.getColorAccentDefaultColor(context)
+            COLOR_MODE_NOTIFICATION -> sbn?.notification?.color ?: Utils.getColorAccentDefaultColor(context)
+            else -> Utils.getColorAccentDefaultColor(context)
         }
 
     private fun showEdgeLights(color: Int) {
@@ -167,6 +178,9 @@ constructor(
     override fun onNotificationRankingUpdate(rankingMap: RankingMap) {}
 
     companion object {
+        private const val COLOR_MODE_ACCENT = "accent"
+        private const val COLOR_MODE_NOTIFICATION = "notification"
+        private const val COLOR_MODE_WALLPAPER = "wallpaper"
         private const val COLOR_MODE_CUSTOM = "custom"
 
         @Volatile
