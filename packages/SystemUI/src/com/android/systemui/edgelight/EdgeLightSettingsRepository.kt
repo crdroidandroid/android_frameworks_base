@@ -38,10 +38,12 @@ class EdgeLightSettingsRepository(context: Context) {
 
     private val resolver: ContentResolver = context.contentResolver
 
+    private val DEFAULT_CUSTOM_COLOR = Color.WHITE
+
     val settingsFlow: Flow<EdgeLightSettings> = combine(
         observeSettingInt(SETTING_ENABLED, 0),
         observeSettingString(SETTING_COLOR_MODE, "accent"),
-        observeSettingInt(SETTING_CUSTOM_COLOR, -1)
+        observeSettingInt(SETTING_CUSTOM_COLOR, DEFAULT_CUSTOM_COLOR)
     ) { enabled, mode, color ->
         EdgeLightSettings(enabled == 1, mode, color)
     }.distinctUntilChanged()
@@ -49,7 +51,7 @@ class EdgeLightSettingsRepository(context: Context) {
     fun currentSettings(): EdgeLightSettings = EdgeLightSettings(
         isEnabled = Settings.System.getIntForUser(resolver, SETTING_ENABLED, 0, UserHandle.USER_CURRENT) == 1,
         colorMode = Settings.System.getStringForUser(resolver, SETTING_COLOR_MODE, UserHandle.USER_CURRENT) ?: "accent",
-        customColor = Settings.System.getIntForUser(resolver, SETTING_CUSTOM_COLOR, Color.WHITE, UserHandle.USER_CURRENT)
+        customColor = Settings.System.getIntForUser(resolver, SETTING_CUSTOM_COLOR, DEFAULT_CUSTOM_COLOR, UserHandle.USER_CURRENT)
     )
 
     private fun observeSettingInt(key: String, default: Int): Flow<Int> = callbackFlow {
