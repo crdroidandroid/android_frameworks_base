@@ -18,6 +18,7 @@ package com.android.systemui.edgelight
 import android.app.Notification
 import android.app.WallpaperManager
 import android.content.Context
+import android.graphics.Color
 import android.service.notification.NotificationListenerService.RankingMap
 import android.service.notification.StatusBarNotification
 import android.widget.FrameLayout
@@ -27,6 +28,7 @@ import com.android.settingslib.Utils
 import com.android.systemui.dagger.SysUISingleton
 import com.android.systemui.statusbar.NotificationListener
 import com.android.systemui.util.ScrimUtils
+import com.android.internal.util.ContrastColorUtil
 
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -48,10 +50,6 @@ constructor(
     private val wallpaperManager = context.getSystemService(WallpaperManager::class.java)!!
 
     private var currentSettings = settingsRepo.currentSettings()
-    private var _pendingNotification: StatusBarNotification? = null
-
-    private val pendingNotification: StatusBarNotification?
-        get() = _pendingNotification.also { _pendingNotification = null }
 
     private var job: Job? = null
 
@@ -61,64 +59,44 @@ constructor(
     private var lastNotificationKey: String? = null
     private var lastNotificationText: CharSequence? = null
     private var lastNotificationTime: Long = 0L
-    private val deduplicationWindowMs = 5000L
+    private val deduplicationWindowMs = 3000L
+    private var lastNotifColor: Int = Color.TRANSPARENT
 
     init {
         INSTANCE = this
 
         ScrimUtils.get().addListener(this)
-        listener.addNotificationHandler(this)
         updateView()
-    }
-
-    private fun updateView(settings: EdgeLightSettings) {
-        if (!settings.isEnabled) {
-            edgeLightView.visible = false
-            return
-        }
-
-        val color = when (settings.colorMode) {
-            COLOR_MODE_ACCENT -> Utils.getColorAccentDefaultColor(context)
-            COLOR_MODE_CUSTOM -> settings.customColor
-            COLOR_MODE_WALLPAPER -> wallpaperManager.getWallpaperColors(WallpaperManager.FLAG_SYSTEM)
-                    ?.primaryColor?.toArgb() ?: Utils.getColorAccentDefaultColor(context)
-            else -> Utils.getColorAccentDefaultColor(context)
-        }
-
-        edgeLightView.paintColor = color
     }
 
     fun getEdgeLightView(): FrameLayout = edgeLightView
 
-    private fun getColor(sbn: StatusBarNotification?): Int =
+    private fun getColor(): Int =
         when (currentSettings.colorMode) {
             COLOR_MODE_ACCENT -> Utils.getColorAccentDefaultColor(context)
             COLOR_MODE_CUSTOM -> currentSettings.customColor
             COLOR_MODE_WALLPAPER -> wallpaperManager.getWallpaperColors(WallpaperManager.FLAG_SYSTEM)
                     ?.primaryColor?.toArgb() ?: Utils.getColorAccentDefaultColor(context)
-            COLOR_MODE_NOTIFICATION -> sbn?.notification?.color ?: Utils.getColorAccentDefaultColor(context)
+            COLOR_MODE_NOTIFICATION -> lastNotifColor
             else -> Utils.getColorAccentDefaultColor(context)
         }
-
-    private fun showEdgeLights(color: Int) {
-        edgeLightView.apply {
-            paintColor = color
-            visible = true
-            pulseRunning = true
-        }
-    }
 
     private fun updateView() {
         job?.cancel()
         job = scope.launch {
-            val settings = settingsRepo.settingsFlow.first()
-            currentSettings = settings
-            updateView(settings)
+            currentSettings = settingsRepo.settingsFlow.first()
+            if (!currentSettings.isEnabled) {
+                edgeLightView.pulseRunning = false
+                edgeLightView.visible = false
+            } else {
+                edgeLightView.paintColor = getColor()
+            }
         }
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification, rankingMap: RankingMap) {
-        if (!currentSettings.isEnabled || !dozing) return
+        if (!currentSettings.isEnabled || !dozing
+                || currentSettings.colorMode != COLOR_MODE_NOTIFICATION) return
 
         val currentKey = sbn.key
         val currentText = sbn.notification.extras.getCharSequence(Notification.EXTRA_TEXT)
@@ -126,7 +104,7 @@ constructor(
 
         if (currentKey == lastNotificationKey &&
             currentText == lastNotificationText &&
-            (now - lastNotificationTime < deduplicationWindowMs)) {
+            (now - lastNotificationTime <= deduplicationWindowMs)) {
             return
         }
 
@@ -134,18 +112,30 @@ constructor(
         lastNotificationText = currentText
         lastNotificationTime = now
 
-        _pendingNotification = sbn
+        val notifColor = sbn?.notification?.color ?: Color.TRANSPARENT
+        val accent = Utils.getColorAccentDefaultColor(context)
+
+        lastNotifColor = when {
+            notifColor == Color.TRANSPARENT || notifColor == 0 -> accent
+            ContrastColorUtil.isColorDark(notifColor) -> accent
+            else -> notifColor
+        }
+        edgeLightView.paintColor = lastNotifColor
     }
 
     override fun onDozingChanged() {
+        if (!currentSettings.isEnabled) return
         if (!dozing) {
             edgeLightView.pulseRunning = false
+            edgeLightView.visible = false
         }
     }
 
     override fun onKeyguardShowingChanged(showing: Boolean) {
+        if (!currentSettings.isEnabled) return
         if (!showing) {
             edgeLightView.pulseRunning = false
+            edgeLightView.visible = false
             listener.removeNotificationHandler(this)
         } else {
             listener.addNotificationHandler(this)
@@ -154,22 +144,27 @@ constructor(
     }
 
     override fun onKeyguardFadingAwayChanged(fadingAway: Boolean) {
+        if (!currentSettings.isEnabled) return
         if (fadingAway) {
             edgeLightView.pulseRunning = false
+            edgeLightView.visible = false
         }
     }
 
     override fun onKeyguardGoingAwayChanged(goingAway: Boolean) {
+        if (!currentSettings.isEnabled) return
         if (goingAway) {
             edgeLightView.pulseRunning = false
+            edgeLightView.visible = false
         }
     }
 
     override fun setPulsing(pulsing: Boolean) {
-        if (!pulsing || !currentSettings.isEnabled || !dozing) return
-        val sbn = pendingNotification
-        val color = getColor(sbn)
-        showEdgeLights(color)
+        if (!currentSettings.isEnabled || !pulsing || !dozing) return
+        edgeLightView.apply {
+            visible = true
+            pulseRunning = true
+        }
     }
 
     override fun onNotificationRemoved(sbn: StatusBarNotification, rankingMap: RankingMap) {}
