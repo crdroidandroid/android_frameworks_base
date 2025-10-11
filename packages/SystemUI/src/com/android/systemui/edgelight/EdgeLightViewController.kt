@@ -90,6 +90,7 @@ constructor(
                 edgeLightView.visible = false
             } else {
                 edgeLightView.paintColor = getColor()
+                edgeLightView.userPulseCount = currentSettings.pulseCount
             }
         }
     }
