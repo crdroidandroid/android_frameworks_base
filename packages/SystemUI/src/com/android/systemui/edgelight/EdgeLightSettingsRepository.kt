@@ -32,7 +32,8 @@ data class EdgeLightSettings(
     val isEnabled: Boolean,
     val colorMode: String,
     val customColor: Int,
-    val pulseCount: Int
+    val pulseCount: Int,
+    val strokeWidth: Int
 )
 
 class EdgeLightSettingsRepository(context: Context) {
@@ -45,17 +46,20 @@ class EdgeLightSettingsRepository(context: Context) {
         observeSettingInt(SETTING_ENABLED, 0),
         observeSettingString(SETTING_COLOR_MODE, "accent"),
         observeSettingInt(SETTING_CUSTOM_COLOR, DEFAULT_CUSTOM_COLOR),
-        observeSettingInt(SETTING_PULSE_COUNT, 3)
-    ) { enabled, mode, color, pulses ->
-        val clamped = pulses.coerceIn(1, 5)
-        EdgeLightSettings(enabled == 1, mode, color, clamped)
+        observeSettingInt(SETTING_PULSE_COUNT, 3),
+        observeSettingInt(SETTING_STROKE_WIDTH, 8)
+    ) { enabled, mode, color, pulses, width ->
+        val pulsesClamped = pulses.coerceIn(1, 5)
+        val widthClamped = width.coerceIn(2, 32)
+        EdgeLightSettings(enabled == 1, mode, color, pulsesClamped, widthClamped)
     }.distinctUntilChanged()
 
     fun currentSettings(): EdgeLightSettings = EdgeLightSettings(
         isEnabled = Settings.System.getIntForUser(resolver, SETTING_ENABLED, 0, UserHandle.USER_CURRENT) == 1,
         colorMode = Settings.System.getStringForUser(resolver, SETTING_COLOR_MODE, UserHandle.USER_CURRENT) ?: "accent",
         customColor = Settings.System.getIntForUser(resolver, SETTING_CUSTOM_COLOR, DEFAULT_CUSTOM_COLOR, UserHandle.USER_CURRENT),
-        pulseCount = Settings.System.getIntForUser(resolver, SETTING_PULSE_COUNT, 3, UserHandle.USER_CURRENT)
+        pulseCount = Settings.System.getIntForUser(resolver, SETTING_PULSE_COUNT, 3, UserHandle.USER_CURRENT),
+        strokeWidth = Settings.System.getIntForUser(resolver, SETTING_STROKE_WIDTH, 8, UserHandle.USER_CURRENT)
     )
 
     private fun observeSettingInt(key: String, default: Int): Flow<Int> = callbackFlow {
@@ -87,5 +91,6 @@ class EdgeLightSettingsRepository(context: Context) {
         private const val SETTING_COLOR_MODE = Settings.System.EDGE_LIGHT_COLOR_MODE
         private const val SETTING_CUSTOM_COLOR = Settings.System.EDGE_LIGHT_CUSTOM_COLOR
         private const val SETTING_PULSE_COUNT = Settings.System.EDGE_LIGHT_PULSE_COUNT
+        private const val SETTING_STROKE_WIDTH = Settings.System.EDGE_LIGHT_STROKE_WIDTH
     }
 }
