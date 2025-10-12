@@ -43,5 +43,5 @@ fun SettingsTheme(content: @Composable () -> Unit) {
 }
 
 val isSpaExpressiveEnabled by lazy {
-    SpaEnvironmentFactory.optionalInstance?.isSpaExpressiveEnabled ?: false
+    SpaEnvironmentFactory.optionalInstance?.isSpaExpressiveEnabled ?: true
 }
