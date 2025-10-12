@@ -865,10 +865,9 @@ namespace PaintGlue {
 
     static jlong setShader(CRITICAL_JNI_PARAMS_COMMA jlong objHandle, jlong shaderHandle) {
         Paint* obj = reinterpret_cast<Paint*>(objHandle);
-        sk_sp<SkShader> oldShader = sk_ref_sp(obj->getShader());
-        SkShader* newShader = reinterpret_cast<SkShader*>(shaderHandle);
-        obj->setShader(sk_ref_sp(newShader));
-        return reinterpret_cast<jlong>(oldShader.release());
+        SkShader* shader = reinterpret_cast<SkShader*>(shaderHandle);
+        obj->setShader(sk_ref_sp(shader));
+        return reinterpret_cast<jlong>(obj->getShader());
     }
 
     static jlong setColorFilter(CRITICAL_JNI_PARAMS_COMMA jlong objHandle, jlong filterHandle) {
