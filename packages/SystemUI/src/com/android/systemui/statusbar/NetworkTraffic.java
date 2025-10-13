@@ -174,14 +174,13 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable,
                         final LinkPropertiesHolder lph = (LinkPropertiesHolder) msg.obj;
                         mLinkPropertiesMap.put(lph.getNetwork(), lph.getLinkProperties());
                         mNetworksChanged = true;
+                        updateViews();
                         break;
 
                     case MESSAGE_TYPE_REMOVE_NETWORK:
                         mLinkPropertiesMap.remove((Network) msg.obj);
                         mNetworksChanged = true;
-                        mTxBytes = 0;
-                        mRxBytes = 0;
-                        mTrafficHandler.sendEmptyMessage(MESSAGE_TYPE_UPDATE_VIEW);
+                        updateViews();
                         break;
                 }
             }
@@ -190,9 +189,13 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable,
                 final long now = SystemClock.elapsedRealtime();
                 long timeDelta = now - mLastUpdateTime; /* ms */
 
-                if (timeDelta < mRefreshInterval * 1000 * 0.95f) {
+                if (mLastUpdateTime == 0 || timeDelta <= 500) {
+                    mLastTxBytes = 0;
+                    mLastRxBytes = 0;
+                    mLastUpdateTime = now;
                     return;
                 }
+
                 // Sum tx and rx bytes from all sources of interest
                 long txBytes = 0;
                 long rxBytes = 0;
@@ -607,13 +610,9 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable,
 
     private void updateViews() {
         if (mEnabled) {
-            updateViewState();
+            mTrafficHandler.removeMessages(MESSAGE_TYPE_UPDATE_VIEW);
+            mTrafficHandler.sendEmptyMessageDelayed(MESSAGE_TYPE_UPDATE_VIEW, 1000);
         }
-    }
-
-    private void updateViewState() {
-        mTrafficHandler.removeMessages(MESSAGE_TYPE_UPDATE_VIEW);
-        mTrafficHandler.sendEmptyMessageDelayed(MESSAGE_TYPE_UPDATE_VIEW, 1000);
     }
 
     private void clearHandlerCallbacks() {
