@@ -340,7 +340,7 @@ public class LegacyPermissionManagerService extends ILegacyPermissionManager.Stu
                     // Filter out packages that don't have app IDs which means they don't have
                     // permission states either.
                     if (pkg.getUid() != -1) {
-                        permissionManagerInternal.resetRuntimePermissions(pkg, userId);
+                        permissionManagerInternal.resetRuntimePermissions(pkg, userId, true);
                     }
                 });
             }

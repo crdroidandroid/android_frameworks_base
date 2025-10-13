@@ -380,11 +380,11 @@ public class PermissionManagerServiceTracingDecorator implements PermissionManag
     }
 
     @Override
-    public void resetRuntimePermissions(@NonNull AndroidPackage pkg, int userId) {
+    public void resetRuntimePermissions(@NonNull AndroidPackage pkg, int userId, boolean restorePregrants) {
         Trace.traceBegin(TRACE_TAG,
                 "TaggedTracingPermissionManagerServiceImpl#resetRuntimePermissions");
         try {
-            mService.resetRuntimePermissions(pkg, userId);
+            mService.resetRuntimePermissions(pkg, userId, restorePregrants);
         } finally {
             Trace.traceEnd(TRACE_TAG);
         }

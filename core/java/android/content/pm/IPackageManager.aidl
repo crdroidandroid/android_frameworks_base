@@ -484,9 +484,12 @@ interface IPackageManager {
      * @param packageName The package name of the application whose cache
      * files need to be deleted
      * @param observer a callback used to notify when the operation is completed.
+     * @param userId the user to delete application data for
+     * @param restorePregrantedPermissions whether to restore the pre-granted permissions, or leave
+     *        them untouched
      */
     @EnforcePermission("CLEAR_APP_USER_DATA")
-    void clearApplicationUserData(in String packageName, IPackageDataObserver observer, int userId);
+    void clearApplicationUserData(in String packageName, IPackageDataObserver observer, int userId, boolean restorePregrantedPermissions);
 
     /**
      * Clear the profile data of an application.

@@ -259,10 +259,14 @@ class AppIdPermissionPolicy : SchemePolicy() {
         appId: Int,
         userId: Int
     ) {
-        resetRuntimePermissions(packageName, userId)
+        resetRuntimePermissions(packageName, userId, true)
     }
 
-    fun MutateStateScope.resetRuntimePermissions(packageName: String, userId: Int) {
+    fun MutateStateScope.resetRuntimePermissions(
+        packageName: String,
+        userId: Int,
+        restorePregrants: Boolean,
+    ) {
         // It's okay to skip resetting permissions for packages that are removed,
         // because their states will be trimmed in onPackageRemoved()/onAppIdRemoved()
         val packageState = newState.externalState.packageStates[packageName] ?: return
@@ -287,11 +291,8 @@ class AppIdPermissionPolicy : SchemePolicy() {
             }
             var newFlags = oldFlags
             newFlags =
-                if (
-                    newFlags.hasBits(PermissionFlags.ROLE) ||
-                        newFlags.hasBits(PermissionFlags.PREGRANT)
-                ) {
-                    newFlags or PermissionFlags.RUNTIME_GRANTED
+                if (newFlags.hasAnyBit(PermissionFlags.ROLE or PermissionFlags.PREGRANT)) {
+                    if (restorePregrants) newFlags or PermissionFlags.RUNTIME_GRANTED else newFlags
                 } else {
                     newFlags andInv PermissionFlags.RUNTIME_GRANTED
                 }

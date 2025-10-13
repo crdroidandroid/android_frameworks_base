@@ -334,6 +334,8 @@ interface IActivityManager {
     List<ActivityManager.ProcessErrorStateInfo> getProcessesInErrorState();
     boolean clearApplicationUserData(in String packageName, boolean keepState,
             in IPackageDataObserver observer, int userId);
+    boolean clearApplicationUserDataWithoutPermissionReset(in String packageName, boolean keepState,
+            in IPackageDataObserver observer, int userId);
     void stopAppForUser(in String packageName, int userId);
     /** Returns {@code false} if the callback could not be registered, {@true} otherwise. */
     boolean registerForegroundServiceObserver(in IForegroundServiceObserver callback);

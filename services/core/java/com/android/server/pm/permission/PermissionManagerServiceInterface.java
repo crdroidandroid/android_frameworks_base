@@ -444,7 +444,8 @@ public interface PermissionManagerServiceInterface extends PermissionManagerInte
      *
      * TODO(zhanghai): Turn this into package change callback?
      */
-    void resetRuntimePermissions(@NonNull AndroidPackage pkg, @UserIdInt int userId);
+    void resetRuntimePermissions(@NonNull AndroidPackage pkg, @UserIdInt int userId,
+            boolean restorePregrants);
 
     /**
      * Reset the runtime permission state changes for all packages in a user.
