@@ -18,10 +18,7 @@ package com.android.systemui.statusbar;
 
 import static com.android.systemui.statusbar.StatusBarIconView.STATE_ICON;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.Typeface;
@@ -132,7 +129,7 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable,
     private final DecimalFormat mDecimalFormat_1_1 = new DecimalFormat("#0.#");
 
     private boolean mEnabled = false;
-    private boolean mConnectionAvailable = true;
+    private volatile boolean mHasValidatedInternet;
 
     private final HashMap<Network, LinkProperties> mLinkPropertiesMap = new HashMap<>();
     // Used to indicate that the set of sources contributing
@@ -237,7 +234,10 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable,
                         mMode == MODE_DOWNSTREAM_ONLY || mMode == MODE_UPSTREAM_AND_DOWNSTREAM;
                 final boolean aboveThreshold = (showUpstream && mTxBytes > mAutoHideThreshold)
                         || (showDownstream && mRxBytes > mAutoHideThreshold);
-                mIsActive = mAttached && mConnectionAvailable && (!mAutoHide || aboveThreshold);
+                mIsActive = mAttached
+                        && mHasValidatedInternet
+                        && (!mAutoHide || aboveThreshold);
+
                 int submode = MODE_UPSTREAM_AND_DOWNSTREAM;
                 final boolean trafficactive = (mTxBytes > 0 || mRxBytes > 0);
 
@@ -410,9 +410,9 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable,
                 public void onLinkPropertiesChanged(Network network,
                         LinkProperties linkProperties) {
                     if (mTrafficHandler != null) {
-                        Message msg = new Message();
-                        msg.what = MESSAGE_TYPE_ADD_NETWORK;
-                        msg.obj = new LinkPropertiesHolder(network, linkProperties);
+                        Message msg = Message.obtain(mTrafficHandler,
+                                MESSAGE_TYPE_ADD_NETWORK,
+                                new LinkPropertiesHolder(network, linkProperties));
                         mTrafficHandler.sendMessage(msg);
                     }
                 }
@@ -422,7 +422,8 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable,
                     LinkProperties lp = mConnectivityManager == null ? null : 
                         mConnectivityManager.getLinkProperties(network);
                     if (lp != null && mTrafficHandler != null) {
-                        Message msg = Message.obtain(mTrafficHandler, MESSAGE_TYPE_ADD_NETWORK,
+                        Message msg = Message.obtain(mTrafficHandler,
+                                MESSAGE_TYPE_ADD_NETWORK,
                                 new LinkPropertiesHolder(network, lp));
                         mTrafficHandler.sendMessage(msg);
                     }
@@ -431,26 +432,43 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable,
                 @Override
                 public void onLost(Network network) {
                     if (mTrafficHandler != null) {
-                        Message msg = new Message();
-                        msg.what = MESSAGE_TYPE_REMOVE_NETWORK;
-                        msg.obj = network;
+                        Message msg = Message.obtain(mTrafficHandler,
+                            MESSAGE_TYPE_REMOVE_NETWORK, network);
                         mTrafficHandler.sendMessage(msg);
                     }
                 }
             };
 
-    private ConnectivityManager.NetworkCallback mDefaultNetworkCallback =
-            new ConnectivityManager.NetworkCallback() {
-        @Override
-        public void onAvailable(Network network) {
-            updateViews();
-        }
+    private boolean hasValidatedInternet(Network network) {
+        if (network == null) return false;
+        NetworkCapabilities caps = mConnectivityManager.getNetworkCapabilities(network);
+        return caps != null
+                && caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+                && caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
+    }
 
-        @Override
-        public void onLost(Network network) {
-            updateViews();
-        }
-    };
+    private final ConnectivityManager.NetworkCallback mDefaultNetworkCallback =
+            new ConnectivityManager.NetworkCallback() {
+                @Override
+                public void onAvailable(Network network) {
+                    mHasValidatedInternet = hasValidatedInternet(network);
+                    updateViews();
+                }
+
+                @Override
+                public void onCapabilitiesChanged(Network network, NetworkCapabilities caps) {
+                    mHasValidatedInternet = caps != null
+                            && caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+                            && caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
+                    updateViews();
+                }
+
+                @Override
+                public void onLost(Network network) {
+                    mHasValidatedInternet = false;
+                    updateViews();
+                }
+            };
 
     @Override
     protected void onAttachedToWindow() {
@@ -467,14 +485,9 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable,
             tunerService.addTunable(this, NETWORK_TRAFFIC_REFRESH_INTERVAL);
             tunerService.addTunable(this, NETWORK_TRAFFIC_HIDEARROW);
 
+            mHasValidatedInternet = hasValidatedInternet(mConnectivityManager.getActiveNetwork());
             mConnectivityManager.registerNetworkCallback(mRequest, mNetworkCallback);
             mConnectivityManager.registerDefaultNetworkCallback(mDefaultNetworkCallback);
-
-            mConnectionAvailable = mConnectivityManager.getActiveNetworkInfo() != null;
-
-            IntentFilter filter = new IntentFilter();
-            filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-            mContext.registerReceiver(mIntentReceiver, filter, null, mTrafficHandler);
 
             Dependency.get(DarkIconDispatcher.class).addDarkReceiver(this);
 
@@ -487,7 +500,6 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable,
         super.onDetachedFromWindow();
         if (mAttached) {
             clearHandlerCallbacks();
-            mContext.unregisterReceiver(mIntentReceiver);
             mConnectivityManager.unregisterNetworkCallback(mDefaultNetworkCallback);
             mConnectivityManager.unregisterNetworkCallback(mNetworkCallback);
             Dependency.get(DarkIconDispatcher.class).removeDarkReceiver(this);
@@ -533,18 +545,6 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable,
             setLayoutParams(lp);
         }
     }
-
-    private final BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (action == null) return;
-            if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
-                mConnectionAvailable = mConnectivityManager.getActiveNetworkInfo() != null;
-                updateViews();
-            }
-        }
-    };
 
     @Override
     public void onTuningChanged(String key, String newValue) {
