@@ -1045,6 +1045,10 @@ class WindowOrganizerController extends IWindowOrganizerController.Stub
             tr.setMainWindowSizeChangeTransaction(t);
         }
 
+        ActivityRecord ar = null;
+        if (tr.getChildCount() == 1 && tr.inPinnedWindowingMode()) {
+            ar = tr.topRunningActivity();
+        }
         int effects = applyChanges(tr, c);
         if ((c.getChangeMask() & WindowContainerTransaction.Change.CHANGE_HIDDEN) != 0) {
             if (tr.setForceHidden(FLAG_FORCE_HIDDEN_FOR_TASK_ORG, c.getHidden())) {
@@ -1102,6 +1106,9 @@ class WindowOrganizerController extends IWindowOrganizerController.Stub
         }
         if (childWindowingMode > -1) {
             tr.forAllActivities(a -> { a.setWindowingMode(childWindowingMode); });
+            if (ar != null && tr.getChildCount() == 0) {
+                ar.setWindowingMode(childWindowingMode);
+            }
         }
 
         if (c.getWindowingMode() == WINDOWING_MODE_PINNED
