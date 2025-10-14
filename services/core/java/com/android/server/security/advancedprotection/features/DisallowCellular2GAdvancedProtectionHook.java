@@ -25,6 +25,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.UserManager;
 import android.security.advancedprotection.AdvancedProtectionFeature;
+import android.telephony.TelephonyManager;
 import android.util.Slog;
 
 /** @hide */
@@ -35,11 +36,13 @@ public final class DisallowCellular2GAdvancedProtectionHook extends AdvancedProt
             new AdvancedProtectionFeature(FEATURE_ID_DISALLOW_CELLULAR_2G);
     private final DevicePolicyManager mDevicePolicyManager;
     private final PackageManager mPackageManager;
+    private final TelephonyManager mTelephonyManager;
 
     public DisallowCellular2GAdvancedProtectionHook(@NonNull Context context, boolean enabled) {
         super(context, enabled);
         mDevicePolicyManager = context.getSystemService(DevicePolicyManager.class);
         mPackageManager = context.getPackageManager();
+        mTelephonyManager = context.getSystemService(TelephonyManager.class);
 
         onAdvancedProtectionChanged(enabled);
     }
@@ -52,7 +55,9 @@ public final class DisallowCellular2GAdvancedProtectionHook extends AdvancedProt
 
     @Override
     public boolean isAvailable() {
-        return mPackageManager.hasSystemFeature(PackageManager.FEATURE_TELEPHONY);
+        return mPackageManager.hasSystemFeature(PackageManager.FEATURE_TELEPHONY)
+            && mTelephonyManager.isRadioInterfaceCapabilitySupported(
+                TelephonyManager.CAPABILITY_USES_ALLOWED_NETWORK_TYPES_BITMASK);
     }
 
     @Override
