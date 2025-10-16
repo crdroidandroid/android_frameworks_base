@@ -343,7 +343,6 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable,
     public static NetworkTraffic fromContext(Context context, String slot) {
         NetworkTraffic v = new NetworkTraffic(context);
         v.setSlot(slot);
-        v.setGravity(Gravity.CENTER);
         return v;
     }
 
@@ -564,8 +563,8 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable,
                     setLayoutDirection(View.LAYOUT_DIRECTION_LOCALE);
                     setTextDirection(View.TEXT_DIRECTION_LOCALE);
                     setTextAlignment(View.TEXT_ALIGNMENT_VIEW_END);
+                    setGravity(Gravity.END|Gravity.CENTER_VERTICAL);
                     setElegantTextHeight(false);
-                    setFontFeatureSettings("'tnum' 1");
                     setIncludeFontPadding(false);
                 }
                 updateViews();
