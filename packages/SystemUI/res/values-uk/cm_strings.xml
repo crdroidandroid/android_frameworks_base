@@ -56,4 +56,6 @@
     <string name="vpn_credentials_username">Користувацьке ім\'я</string>
     <string name="vpn_credentials_password">Пароль</string>
     <string name="vpn_credentials_dialog_connect">З\'єднатись</string>
+    <string name="screenshot_delete_label">Видалити</string>
+    <string name="screenshot_delete_description">Видалити знімок екрана</string>
 </resources>
