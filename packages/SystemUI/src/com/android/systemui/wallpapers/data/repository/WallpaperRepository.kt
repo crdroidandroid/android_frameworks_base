@@ -31,13 +31,13 @@ import android.provider.Settings
 import android.util.Log
 import android.view.View
 import com.android.internal.R
+import com.android.internal.util.crdroid.Utils.ambientAod
 import com.android.systemui.broadcast.BroadcastDispatcher
 import com.android.systemui.common.ui.domain.interactor.ConfigurationInteractor
 import com.android.systemui.dagger.SysUISingleton
 import com.android.systemui.dagger.qualifiers.Background
 import com.android.systemui.res.R as SysUIR
 import com.android.systemui.shade.ShadeDisplayAware
-import com.android.systemui.shared.Flags.ambientAod
 import com.android.systemui.shared.Flags.extendedWallpaperEffects
 import com.android.systemui.user.data.model.SelectedUserModel
 import com.android.systemui.user.data.model.SelectionStatus
@@ -132,9 +132,7 @@ constructor(
                 ::Pair,
             )
             .map {
-                val userEnabled =
-                    secureSettings.getInt(Settings.Secure.DOZE_ALWAYS_ON_WALLPAPER_ENABLED, 1) == 1
-                userEnabled && configEnabled() && ambientAod()
+                configEnabled()
             }
             .flowOn(bgDispatcher)
 
@@ -203,11 +201,11 @@ constructor(
                 context.resources.getInteger(SysUIR.integer.config_dozeSupportsAodWallpaperOverride)
             ) {
                 0 -> false
-                1 -> true
+                1 -> null /* follow user setting here */
                 else -> null
             }
         return if (sysuiOverride != null) sysuiOverride
-        else context.resources.getBoolean(R.bool.config_dozeSupportsAodWallpaper)
+        else ambientAod()
     }
 
     private suspend fun getWallpaper(
