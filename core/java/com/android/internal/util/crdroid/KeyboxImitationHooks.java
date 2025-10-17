@@ -96,7 +96,7 @@ public class KeyboxImitationHooks {
         try {
             KeyEntryResponse response = new KeyEntryResponse();
             KeyMetadata metadata = new KeyMetadata();
-            metadata.keySecurityLevel = params.securityLevel;
+            metadata.keySecurityLevel = 1;
 
             KeyboxUtils.putCertificateChain(metadata, chain.toArray(new Certificate[chain.size()]));
 
@@ -113,7 +113,7 @@ public class KeyboxImitationHooks {
                 a.keyParameter = new KeyParameter();
                 a.keyParameter.tag = Tag.PURPOSE;
                 a.keyParameter.value = KeyParameterValue.keyPurpose(i);
-                a.securityLevel = params.securityLevel;
+                a.securityLevel = 1;
                 authorizations.add(a);
             }
 
@@ -122,7 +122,7 @@ public class KeyboxImitationHooks {
                 a.keyParameter = new KeyParameter();
                 a.keyParameter.tag = Tag.DIGEST;
                 a.keyParameter.value = KeyParameterValue.digest(i);
-                a.securityLevel = params.securityLevel;
+                a.securityLevel = 1;
                 authorizations.add(a);
             }
 
@@ -130,28 +130,28 @@ public class KeyboxImitationHooks {
             a.keyParameter = new KeyParameter();
             a.keyParameter.tag = Tag.ALGORITHM;
             a.keyParameter.value = KeyParameterValue.algorithm(params.algorithm);
-            a.securityLevel = params.securityLevel;
+            a.securityLevel = 1;
             authorizations.add(a);
 
             a = new Authorization();
             a.keyParameter = new KeyParameter();
             a.keyParameter.tag = Tag.KEY_SIZE;
             a.keyParameter.value = KeyParameterValue.integer(params.keySize);
-            a.securityLevel = params.securityLevel;
+            a.securityLevel = 1;
             authorizations.add(a);
 
             a = new Authorization();
             a.keyParameter = new KeyParameter();
             a.keyParameter.tag = Tag.EC_CURVE;
             a.keyParameter.value = KeyParameterValue.ecCurve(params.ecCurve);
-            a.securityLevel = params.securityLevel;
+            a.securityLevel = 1;
             authorizations.add(a);
 
             a = new Authorization();
             a.keyParameter = new KeyParameter();
             a.keyParameter.tag = Tag.NO_AUTH_REQUIRED;
             a.keyParameter.value = KeyParameterValue.boolValue(true); // TODO: copy
-            a.securityLevel = params.securityLevel;
+            a.securityLevel = 1;
             authorizations.add(a);
 
             // TODO: ORIGIN, OS_VERSION, OS_PATCHLEVEL, VENDOR_PATCHLEVEL, BOOT_PATCHLEVEL,

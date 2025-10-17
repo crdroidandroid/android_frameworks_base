@@ -387,8 +387,6 @@ public final class KeyboxChainGenerator {
         public byte[] manufacturer;
         public byte[] model;
 
-        public int securityLevel;
-
         public KeyGenParameters(KeyParameter[] params) {
             for (KeyParameter kp : params) {
                 switch (kp.tag) {
@@ -416,7 +414,6 @@ public final class KeyboxChainGenerator {
                     case Tag.ATTESTATION_ID_PRODUCT -> product = kp.value.getBlob();
                     case Tag.ATTESTATION_ID_MANUFACTURER -> manufacturer = kp.value.getBlob();
                     case Tag.ATTESTATION_ID_MODEL -> model = kp.value.getBlob();
-                    case Tag.HARDWARE_TYPE -> securityLevel = kp.value.getSecurityLevel();
                 }
             }
         }
