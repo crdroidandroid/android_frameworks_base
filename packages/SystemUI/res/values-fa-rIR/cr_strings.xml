@@ -81,7 +81,7 @@
     <string name="quick_settings_sound_label">صدا</string>
     <string name="quick_settings_sound_ring">زنگ</string>
     <string name="quick_settings_sound_vibrate">لرزش</string>
-    <string name="quick_settings_sound_silent">Silent</string>
+    <string name="quick_settings_sound_silent">سکوت</string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">اطلاعات پردازنده</string>
     <!-- FPS Info tile -->
@@ -124,15 +124,15 @@
     <!-- Text while recognizing face -->
     <string name="face_unlock_recognizing">درحال شناسایی چهره...</string>
     <!-- Preferred network tile -->
-    <string name="qs_preferred_network_label">Preferred network</string>
-    <string name="qs_preferred_network_lte">4G / LTE</string>
-    <string name="qs_preferred_network_nr">5G / NR</string>
-    <string name="qs_preferred_network_3g">3G</string>
-    <string name="qs_preferred_network_unsupported">Unsupported</string>
+    <string name="qs_preferred_network_label">شبکه ترجیحی</string>
+    <string name="qs_preferred_network_lte">نسل چهارم / LTE</string>
+    <string name="qs_preferred_network_nr">نسل پنجم / NR</string>
+    <string name="qs_preferred_network_3g">نسل‌سوم</string>
+    <string name="qs_preferred_network_unsupported">پشتیبانی نشده</string>
     <!-- Flashlight Strength -->
-    <string name="flashlight_strength_title">Flashlight Strength</string>
-    <string name="flashlight_strength_turn_off">Turn off</string>
-    <string name="flashlight_strength_turn_on">Turn on</string>
+    <string name="flashlight_strength_title">قدرت چراغ قوه</string>
+    <string name="flashlight_strength_turn_off">خاموش</string>
+    <string name="flashlight_strength_turn_on">روشن</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="one">%d دستگاه وصل است</item>
@@ -142,7 +142,7 @@
     <string name="enable_fiveg">فعال کردن 5G</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">مصرف امروز</string>
-    <string name="usage_data_weekly">used this week</string>
+    <string name="usage_data_weekly">مصرفی این هفته</string>
     <string name="usage_data_default_suffix">داده</string>
     <string name="usage_wifi_default_suffix">Wi-Fi</string>
     <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
