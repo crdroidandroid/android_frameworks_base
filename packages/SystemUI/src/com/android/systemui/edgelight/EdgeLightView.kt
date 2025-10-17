@@ -21,6 +21,8 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.graphics.Path
+import android.graphics.RectF
 import android.view.View
 import android.widget.FrameLayout
 import androidx.core.view.isVisible
@@ -32,6 +34,12 @@ class EdgeLightView(context: Context) : FrameLayout(context) {
         set(value) {
             field = value.coerceIn(2, 32)
             edgePaint.strokeWidth = field * resources.displayMetrics.density
+            invalidate()
+        }
+
+    var edgeStyle: String = STYLE_DEFAULT
+        set(value) {
+            field = value
             invalidate()
         }
 
@@ -52,6 +60,10 @@ class EdgeLightView(context: Context) : FrameLayout(context) {
     private val MIN_SEGMENTS = 3
 
     private var pulseAnimator: ValueAnimator? = null
+
+    private val roundedPath = Path()
+    private val roundedRect = RectF()
+    private var cornerRadius: Float = 0f
 
     var visible: Boolean
         get() = isVisible
@@ -79,6 +91,18 @@ class EdgeLightView(context: Context) : FrameLayout(context) {
         importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO
         setWillNotDraw(false)
         visible = false
+
+        cornerRadius = try {
+            resources.getDimension(
+                resources.getIdentifier(
+                    "rounded_corner_radius",
+                    "dimen",
+                    "android"
+                )
+            )
+        } catch (e: Exception) {
+            32f * resources.displayMetrics.density
+        }
     }
 
     private fun startPulse() {
@@ -133,19 +157,58 @@ class EdgeLightView(context: Context) : FrameLayout(context) {
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
+
+        when (edgeStyle) {
+            STYLE_ROUNDED -> drawRoundedEdges(canvas)
+            else -> drawDefaultEdges(canvas)
+        }
+    }
+
+    private fun drawDefaultEdges(canvas: Canvas) {
         val halfStroke = edgePaint.strokeWidth / 2
         edgePaint.strokeCap = Paint.Cap.BUTT
         edgePaint.alpha = 255
         edgePaint.maskFilter = null
+
         canvas.drawLine(
             halfStroke, 0f,
             halfStroke, height.toFloat(),
             edgePaint
         )
+
         canvas.drawLine(
             width - halfStroke, 0f,
             width - halfStroke, height.toFloat(),
             edgePaint
         )
+    }
+
+    private fun drawRoundedEdges(canvas: Canvas) {
+        val halfStroke = edgePaint.strokeWidth / 2
+        edgePaint.strokeCap = Paint.Cap.ROUND
+        edgePaint.alpha = 255
+        edgePaint.maskFilter = null
+
+        roundedRect.set(
+            halfStroke,
+            halfStroke,
+            width.toFloat() - halfStroke,
+            height.toFloat() - halfStroke
+        )
+
+        roundedPath.reset()
+        roundedPath.addRoundRect(
+            roundedRect,
+            cornerRadius,
+            cornerRadius,
+            Path.Direction.CW
+        )
+
+        canvas.drawPath(roundedPath, edgePaint)
+    }
+
+    companion object {
+        const val STYLE_DEFAULT = "default"
+        const val STYLE_ROUNDED = "rounded"
     }
 }
