@@ -23,6 +23,7 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.annotation.VisibleForTesting
+import com.android.internal.util.crdroid.Utils.ambientAod
 import com.android.systemui.customization.R as customR
 import com.android.systemui.customization.clocks.DefaultClockFaceLayout
 import com.android.systemui.customization.clocks.R as clocksR
@@ -45,7 +46,6 @@ import com.android.systemui.plugins.clocks.ThemeConfig
 import com.android.systemui.plugins.clocks.TimeFormatKind
 import com.android.systemui.plugins.clocks.WeatherData
 import com.android.systemui.plugins.clocks.ZenData
-import com.android.systemui.shared.Flags.ambientAod
 import java.io.PrintWriter
 import java.util.Locale
 
