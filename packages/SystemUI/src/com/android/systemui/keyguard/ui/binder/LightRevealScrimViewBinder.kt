@@ -21,9 +21,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.android.app.animation.Interpolators.ALPHA_IN
 import com.android.app.tracing.coroutines.launchTraced as launch
+import com.android.internal.util.crdroid.Utils.ambientAod
 import com.android.systemui.keyguard.ui.viewmodel.LightRevealScrimViewModel
 import com.android.systemui.lifecycle.repeatWhenAttached
-import com.android.systemui.shared.Flags.ambientAod
 import com.android.systemui.statusbar.LightRevealScrim
 import com.android.systemui.wallpapers.ui.viewmodel.WallpaperViewModel
 

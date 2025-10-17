@@ -11269,6 +11269,7 @@ public final class Settings {
          *
          * @hide
          */
+        @Readable
         public static final String DOZE_ALWAYS_ON_WALLPAPER_ENABLED =
                 "doze_always_on_wallpaper_enabled";
 
