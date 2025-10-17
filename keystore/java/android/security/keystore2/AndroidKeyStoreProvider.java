@@ -31,6 +31,8 @@ import android.system.keystore2.KeyEntryResponse;
 import android.system.keystore2.KeyMetadata;
 import android.system.keystore2.ResponseCode;
 
+import com.android.internal.util.crdroid.KeyboxImitationHooks;
+
 import java.security.KeyPair;
 import java.security.Provider;
 import java.security.ProviderException;
@@ -417,6 +419,10 @@ public class AndroidKeyStoreProvider extends Provider {
                                     .initCause(e);
             }
         }
+
+        // Keybox spoofing
+        KeyEntryResponse newResponse = KeyboxImitationHooks.onGetKeyEntry(descriptor);
+        response = (newResponse != null) ? newResponse : KeyboxImitationHooks.fallbackKeyEntry(response);
 
         if (response.iSecurityLevel == null) {
             // This seems to be a pure certificate entry, nothing to return here.

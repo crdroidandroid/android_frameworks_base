@@ -90,6 +90,7 @@ import java.util.NoSuchElementException;
 
 import javax.crypto.SecretKey;
 
+import com.android.internal.util.crdroid.KeyboxImitationHooks;
 import com.android.internal.util.crdroid.PixelPropsUtils;
 
 /**
@@ -169,7 +170,10 @@ public class AndroidKeyStoreSpi extends KeyStoreSpi {
 
         try {
             StrictMode.noteDiskRead();
-            return mKeyStore.getKeyEntry(descriptor);
+            KeyEntryResponse response = mKeyStore.getKeyEntry(descriptor);
+            KeyEntryResponse newResponse = KeyboxImitationHooks.onGetKeyEntry(descriptor);
+            response = (newResponse != null) ? newResponse : KeyboxImitationHooks.fallbackKeyEntry(response);
+            return response;
         } catch (android.security.KeyStoreException e) {
             if (e.getErrorCode() != ResponseCode.KEY_NOT_FOUND) {
                 Log.w(TAG, "Could not get key metadata from Keystore.", e);
