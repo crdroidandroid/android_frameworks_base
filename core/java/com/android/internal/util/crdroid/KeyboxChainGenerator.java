@@ -260,9 +260,9 @@ public final class KeyboxChainGenerator {
     }
 
     private static ASN1OctetString getAsn1OctetString(ASN1Encodable[] teeEnforcedEncodables, ASN1Encodable[] softwareEnforcedEncodables, KeyGenParameters params) throws IOException {
-        ASN1Integer attestationVersion = new ASN1Integer(100);
+        ASN1Integer attestationVersion = new ASN1Integer(400);
         ASN1Enumerated attestationSecurityLevel = new ASN1Enumerated(1);
-        ASN1Integer keymasterVersion = new ASN1Integer(100);
+        ASN1Integer keymasterVersion = new ASN1Integer(400);
         ASN1Enumerated keymasterSecurityLevel = new ASN1Enumerated(1);
         ASN1OctetString attestationChallenge = new DEROctetString(params.attestationChallenge);
         ASN1OctetString uniqueId = new DEROctetString("".getBytes());
