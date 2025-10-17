@@ -78,6 +78,7 @@ constructor(
             COLOR_MODE_WALLPAPER -> wallpaperManager.getWallpaperColors(WallpaperManager.FLAG_SYSTEM)
                     ?.primaryColor?.toArgb() ?: Utils.getColorAccentDefaultColor(context)
             COLOR_MODE_NOTIFICATION -> lastNotifColor
+            COLOR_MODE_RAINBOW -> EdgeLightView.COLOR_RAINBOW
             else -> Utils.getColorAccentDefaultColor(context)
         }
 
@@ -89,7 +90,14 @@ constructor(
                 edgeLightView.pulseRunning = false
                 edgeLightView.visible = false
             } else {
-                edgeLightView.paintColor = getColor()
+                val color = getColor()
+                val isRainbow = currentSettings.colorMode == COLOR_MODE_RAINBOW
+
+                edgeLightView.useRainbowGradient = isRainbow
+                if (!isRainbow) {
+                    edgeLightView.paintColor = color
+                }
+
                 edgeLightView.userPulseCount = currentSettings.pulseCount
                 edgeLightView.userStrokeWidth = currentSettings.strokeWidth
                 edgeLightView.edgeStyle = currentSettings.edgeStyle
@@ -180,6 +188,7 @@ constructor(
         private const val COLOR_MODE_NOTIFICATION = "notification"
         private const val COLOR_MODE_WALLPAPER = "wallpaper"
         private const val COLOR_MODE_CUSTOM = "custom"
+        private const val COLOR_MODE_RAINBOW = "rainbow"
 
         @Volatile
         private var INSTANCE: EdgeLightViewController? = null
