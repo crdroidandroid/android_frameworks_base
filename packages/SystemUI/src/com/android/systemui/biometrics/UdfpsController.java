@@ -1082,7 +1082,7 @@ public class UdfpsController implements DozeReceiver, Dumpable {
                 && Settings.Secure.getIntForUser(
                         mContext.getContentResolver(),
                         Settings.Secure.SCREEN_OFF_UNLOCK_UDFPS_ENABLED,
-                        0,
+                        mContext.getResources().getBoolean(R.bool.config_screen_off_udfps_default_on) ? 1 : 0,
                         mContext.getUserId()) != 0;
     }
 
