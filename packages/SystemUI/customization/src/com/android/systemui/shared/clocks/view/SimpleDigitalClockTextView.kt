@@ -36,6 +36,7 @@ import android.view.animation.PathInterpolator
 import android.widget.TextView
 import com.android.app.animation.Interpolators
 import com.android.internal.annotations.VisibleForTesting
+import com.android.internal.util.crdroid.Utils.ambientAod
 import com.android.systemui.animation.AxisDefinition
 import com.android.systemui.animation.GSFAxes
 import com.android.systemui.animation.TextAnimator
@@ -47,7 +48,6 @@ import com.android.systemui.plugins.clocks.VPoint
 import com.android.systemui.plugins.clocks.VPointF
 import com.android.systemui.plugins.clocks.VPointF.Companion.size
 import com.android.systemui.plugins.clocks.VRectF
-import com.android.systemui.shared.Flags.ambientAod
 import com.android.systemui.shared.clocks.CanvasUtil.translate
 import com.android.systemui.shared.clocks.CanvasUtil.use
 import com.android.systemui.shared.clocks.ClockContext
