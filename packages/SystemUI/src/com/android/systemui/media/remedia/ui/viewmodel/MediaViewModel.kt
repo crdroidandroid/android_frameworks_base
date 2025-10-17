@@ -311,7 +311,8 @@ constructor(
 
     /** Notifies that the card at [cardIndex] has been selected in the UI. */
     fun onCardSelected(cardIndex: Int) {
-        check(cardIndex >= 0 && cardIndex < cards.size)
+        if (cardIndex == selectedCardIndex) return
+        check(cardIndex >= 0 && cardIndex < cards.size) { "Invalid card index $cardIndex" }
         selectedCardIndex = cardIndex
         interactor.storeCurrentCarouselIndex(selectedCardIndex)
     }
