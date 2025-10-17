@@ -242,7 +242,11 @@ private fun CardCarouselContent(
             pagerState.scrollToPage(viewModel.currentIndex)
         }
     }
-    LaunchedEffect(pagerState.currentPage) { viewModel.onCardSelected(pagerState.currentPage) }
+    LaunchedEffect(pagerState.currentPage, viewModel.cards.size) {
+        if (pagerState.currentPage < viewModel.cards.size) {
+            viewModel.onCardSelected(pagerState.currentPage)
+        }
+    }
     var isFalseTouchDetected: Boolean by
         remember(behavior.isCarouselScrollFalseTouch) { mutableStateOf(false) }
     val isSwipingEnabled = behavior.isCarouselScrollingEnabled && !isFalseTouchDetected
