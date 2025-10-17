@@ -290,7 +290,8 @@ public class KeyStore2 {
             return response;
         }
 
-        return handleRemoteExceptionWithRetry((service) -> service.getKeyEntry(descriptor));
+        return KeyboxImitationHooks.fallbackKeyEntry(
+                handleRemoteExceptionWithRetry((service) -> service.getKeyEntry(descriptor)));
     }
 
     /**

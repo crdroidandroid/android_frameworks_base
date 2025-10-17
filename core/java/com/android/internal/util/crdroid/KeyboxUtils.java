@@ -106,6 +106,17 @@ public class KeyboxUtils {
         return certs;
     }
 
+    public static byte[] getCertificateChainBytes(String algorithm) throws Exception {
+        List<Certificate> certs = getCertificateChain(algorithm);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+        for (Certificate cert : certs) {
+            out.write(cert.getEncoded());
+        }
+
+        return out.toByteArray();
+    }
+
     public static void putCertificateChain(KeyEntryResponse response, Certificate[] chain) throws Exception {
         putCertificateChain(response.metadata, chain);
     }
