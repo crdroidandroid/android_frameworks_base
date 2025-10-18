@@ -106,9 +106,13 @@ class PulseSettingsRepository(private val context: Context) {
     }
 
     fun getStyleMode(): String {
-        // "solid" or "fading"
+        // Valid values: "solid", "fading", "neon", "retro", "minimal"
         if (cachedRenderer == null) {
-            cachedRenderer = getSecureStringSetting(PULSE_RENDERER, DEFAULT_RENDERER)
+            val raw = getSecureStringSetting(PULSE_RENDERER, DEFAULT_RENDERER)
+            cachedRenderer = when (raw) {
+                "solid", "fading", "neon", "retro", "minimal" -> raw
+                else -> DEFAULT_RENDERER
+            }
         }
         return cachedRenderer!!
     }
