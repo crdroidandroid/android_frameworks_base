@@ -90,6 +90,8 @@ class PulseViewController @Inject constructor(
     val shouldShowPulse: Boolean
         get() = settingsRepository.isPulseEnabled() &&
             ScrimUtils.get().isKeyguardShowing() &&
+            (!ScrimUtils.get().isDozing() ||
+            settingsRepository.isPulseAmbientEnabled()) &&
             MediaSessionManager.get().isMediaPlaying
 
     override fun onDataUpdate(data: PulseData) {
@@ -107,6 +109,10 @@ class PulseViewController @Inject constructor(
     }
 
     override fun onKeyguardShowingChanged(showing: Boolean) {
+        mainScope.launch { updatePulseState() }
+    }
+
+    override fun onDozingChanged() {
         mainScope.launch { updatePulseState() }
     }
 
