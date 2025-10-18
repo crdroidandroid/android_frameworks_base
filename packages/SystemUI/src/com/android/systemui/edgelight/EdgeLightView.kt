@@ -73,6 +73,7 @@ class EdgeLightView(context: Context) : FrameLayout(context) {
         get() = edgePaint.color
         set(value) {
             edgePaint.color = value
+            edgePaint.alpha = 255
             invalidate()
         }
 
@@ -107,6 +108,7 @@ class EdgeLightView(context: Context) : FrameLayout(context) {
 
     private fun startPulse() {
         visible = true
+        alpha = 0f
 
         val totalSegments = maxOf(userPulseCount, MIN_SEGMENTS)
         val active = BooleanArray(totalSegments)
@@ -167,7 +169,6 @@ class EdgeLightView(context: Context) : FrameLayout(context) {
     private fun drawDefaultEdges(canvas: Canvas) {
         val halfStroke = edgePaint.strokeWidth / 2
         edgePaint.strokeCap = Paint.Cap.BUTT
-        edgePaint.alpha = 255
         edgePaint.maskFilter = null
 
         canvas.drawLine(
@@ -186,7 +187,6 @@ class EdgeLightView(context: Context) : FrameLayout(context) {
     private fun drawRoundedEdges(canvas: Canvas) {
         val halfStroke = edgePaint.strokeWidth / 2
         edgePaint.strokeCap = Paint.Cap.ROUND
-        edgePaint.alpha = 255
         edgePaint.maskFilter = null
 
         roundedRect.set(
