@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2024-2025 Lunaris AOSP
+ *           (C) 2025 crDroid Android Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,23 +37,16 @@ internal class MinimalStyleRenderer(
     private val smoothing = 0.3f
     private var spacing = 0f
     private var viewH = 0
+    private var lastW = 0
     private var barCount = 0
 
     override fun onSizeChanged(viewWidth: Int, viewHeight: Int) {
         viewH = viewHeight
+        lastW = viewWidth
         barCount = settings.getBarCount()
 
-        if (currentHeights.size != barCount) {
-            currentHeights = FloatArray(barCount) { 2f }
-            targetHeights = FloatArray(barCount) { 2f }
-            points = FloatArray(barCount * 2)
-        }
-
-        spacing = if (barCount > 1) {
-            viewWidth.toFloat() / (barCount - 1)
-        } else {
-            viewWidth.toFloat()
-        }
+        ensureArrays(barCount)
+        spacing = computeSpacing(lastW, barCount)
     }
 
     override fun onColor(color: Int) {
@@ -74,11 +68,24 @@ internal class MinimalStyleRenderer(
             currentHeights = FloatArray(heights.size) { 2f }
         }
         System.arraycopy(heights, 0, targetHeights, 0, heights.size)
+
+        val desiredBars = settings.getBarCount()
+        if (desiredBars != barCount) {
+            barCount = desiredBars
+            if (lastW > 0) {
+                spacing = computeSpacing(lastW, barCount)
+            }
+            ensureArrays(barCount)
+        }
     }
 
     override fun draw(canvas: Canvas, viewWidth: Int, viewHeight: Int) {
         val count = minOf(barCount, currentHeights.size, targetHeights.size)
         if (count <= 0) return
+
+        if (points.size < count * 2) {
+            points = FloatArray(count * 2)
+        }
 
         for (i in 0 until count) {
             val target = targetHeights[i]
@@ -93,11 +100,14 @@ internal class MinimalStyleRenderer(
             val x = i * spacing
             val y = viewHeight - h
 
-            points[i * 2] = x
-            points[i * 2 + 1] = y
+            val base = i * 2
+            if (base + 1 < points.size) {
+                points[base] = x
+                points[base + 1] = y
+            }
         }
 
-        if (count >= 2) {
+        if (count >= 2 && points.size >= 4) {
             val path = Path()
             path.moveTo(points[0], points[1])
 
@@ -123,5 +133,23 @@ internal class MinimalStyleRenderer(
         points = FloatArray(0)
         currentHeights = FloatArray(0)
         targetHeights = FloatArray(0)
+        barCount = 0
+        lastW = 0
+    }
+
+    private fun ensureArrays(targetBars: Int) {
+        if (currentHeights.size != targetBars) {
+            currentHeights = FloatArray(targetBars) { 2f }
+        }
+        if (targetHeights.size != targetBars) {
+            targetHeights = FloatArray(targetBars) { 2f }
+        }
+        if (points.size != targetBars * 2) {
+            points = FloatArray(targetBars * 2)
+        }
+    }
+
+    private fun computeSpacing(width: Int, bars: Int): Float {
+        return if (bars > 1) width.toFloat() / (bars - 1) else width.toFloat()
     }
 }
