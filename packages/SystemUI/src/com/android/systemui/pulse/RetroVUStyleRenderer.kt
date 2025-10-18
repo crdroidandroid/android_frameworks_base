@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2024-2025 Lunaris AOSP
+ *           (C) 2025 crDroid Android Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -128,6 +129,9 @@ internal class RetroVUStyleRenderer(
 
     override fun draw(canvas: Canvas, viewWidth: Int, viewHeight: Int) {
         val count = barRects.size
+        if (count <= 0) return
+
+        val unlitSegments = (0.5f * segmentCount).toInt()
 
         for (i in 0 until count) {
             val rect = barRects[i]
@@ -141,15 +145,15 @@ internal class RetroVUStyleRenderer(
 
             currentHeights[i] = h
 
-            val heightPercent = h / maxH
+            val heightPercent = if (maxH > 0f) h / maxH else 0f
             val litSegments = (heightPercent * segmentCount).toInt()
 
             for (seg in 0 until segmentCount) {
                 val segRect = segmentRects[i][seg]
 
-                if (seg < litSegments) {
+                if (seg <= litSegments) {
                     canvas.drawRect(segRect, segmentPaints[seg])
-                } else {
+                } else if (seg < unlitSegments) {
                     canvas.drawRect(segRect, backgroundPaint)
                 }
             }
