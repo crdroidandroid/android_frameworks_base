@@ -64,9 +64,16 @@ class PulseRenderer(
 
     private fun ensureStyleUpToDate() {
         val want = settingsRepo.getStyleMode()
-        if ((want == "solid" && style !is SolidLineStyleRenderer) ||
-            (want == "fading" && style !is FadingBlockStyleRenderer)) {
-            // swap style, preserve size and color
+        val needsSwap = when (want) {
+            "solid" -> style !is SolidLineStyleRenderer
+            "fading" -> style !is FadingBlockStyleRenderer
+            "neon" -> style !is NeonStyleRenderer
+            "retro" -> style !is RetroVUStyleRenderer
+            "minimal" -> style !is MinimalStyleRenderer
+            else -> false
+        }
+
+        if (needsSwap) {
             val prevW = lastViewW
             val prevH = lastViewH
             val prevColor = lastColor.takeIf { it != 0 } ?: getPulseColor()
@@ -80,6 +87,9 @@ class PulseRenderer(
     private fun createStyle(mode: String): PulseStyleRenderer {
         return when (mode) {
             "fading" -> FadingBlockStyleRenderer(settingsRepo)
+            "neon" -> NeonStyleRenderer(settingsRepo)
+            "retro" -> RetroVUStyleRenderer(settingsRepo)
+            "minimal" -> MinimalStyleRenderer(settingsRepo)
             else -> SolidLineStyleRenderer(settingsRepo)
         }
     }
