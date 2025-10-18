@@ -90,14 +90,7 @@ constructor(
                 edgeLightView.pulseRunning = false
                 edgeLightView.visible = false
             } else {
-                val color = getColor()
-                val isRainbow = currentSettings.colorMode == COLOR_MODE_RAINBOW
-
-                edgeLightView.useRainbowGradient = isRainbow
-                if (!isRainbow) {
-                    edgeLightView.paintColor = color
-                }
-
+                edgeLightView.paintColor = getColor()
                 edgeLightView.userPulseCount = currentSettings.pulseCount
                 edgeLightView.userStrokeWidth = currentSettings.strokeWidth
                 edgeLightView.edgeStyle = currentSettings.edgeStyle
