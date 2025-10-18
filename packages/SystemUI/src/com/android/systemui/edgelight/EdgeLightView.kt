@@ -21,6 +21,7 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.LinearGradient
+import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
@@ -65,6 +66,9 @@ class EdgeLightView(context: Context) : FrameLayout(context) {
 
     private var pulseAnimator: ValueAnimator? = null
 
+    private var rainbowAnimator: ValueAnimator? = null
+    private var rainbowRotation: Float = 0f
+
     private val roundedPath = Path()
     private val roundedRect = RectF()
     private var cornerRadius: Float = 0f
@@ -93,9 +97,12 @@ class EdgeLightView(context: Context) : FrameLayout(context) {
     var pulseRunning: Boolean
         get() = pulseAnimator?.isRunning == true
         set(value) {
-            if (value && !pulseRunning) startPulse()
-            else if (!value) {
-                pulseAnimator?.cancel()
+            if (value && !pulseRunning) {
+                startPulse()
+                startRainbowAnimation()
+            } else if (!value) {
+                stopRainbowAnimation()
+                stopPulse()
                 visible = false
             }
         }
@@ -166,10 +173,15 @@ class EdgeLightView(context: Context) : FrameLayout(context) {
         }
     }
 
-    override fun onDetachedFromWindow() {
-        super.onDetachedFromWindow()
+    private fun stopPulse() {
         pulseAnimator?.cancel()
         pulseAnimator = null
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        stopRainbowAnimation()
+        stopPulse()
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -241,25 +253,54 @@ class EdgeLightView(context: Context) : FrameLayout(context) {
     private fun _updateRainbowGradient() {
         edgePaint.shader = when (edgeStyle) {
             STYLE_ROUNDED -> {
-                SweepGradient(
-                    width / 2f,
-                    height / 2f,
-                    RAINBOW,
-                    null
-                )
+                val matrix = Matrix()
+                matrix.postRotate(rainbowRotation, width / 2f, height / 2f)
+                SweepGradient(width / 2f, height / 2f, RAINBOW, null).also {
+                    it.setLocalMatrix(matrix)
+                }
             }
             else -> {
+                val offset = (rainbowRotation / 360f) * height
                 LinearGradient(
-                    0f,
-                    0f,
-                    0f,
-                    height.toFloat(),
-                    RAINBOW,
-                    null,
-                    Shader.TileMode.CLAMP
+                    0f, -offset, 0f, height.toFloat() - offset,
+                    RAINBOW, null, Shader.TileMode.REPEAT
                 )
             }
         }
+    }
+
+    private fun startRainbowAnimation() {
+        if (!useRainbowGradient || edgePaint.shader == null) return
+        if (rainbowAnimator?.isRunning == true) return
+
+        rainbowAnimator = ValueAnimator.ofFloat(0f, 360f).apply {
+            duration = totalPulseDuration
+            repeatCount = ValueAnimator.INFINITE
+            repeatMode = ValueAnimator.RESTART
+            interpolator = android.view.animation.LinearInterpolator()
+            addUpdateListener { animator ->
+                rainbowRotation = animator.animatedValue as Float
+                _updateRainbowGradient()
+                invalidate()
+            }
+            addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    rainbowAnimator = null
+                    rainbowRotation = 0f
+                }
+                override fun onAnimationCancel(animation: Animator) {
+                    rainbowAnimator = null
+                    rainbowRotation = 0f
+                }
+            })
+            start()
+        }
+    }
+
+    private fun stopRainbowAnimation() {
+        rainbowAnimator?.cancel()
+        rainbowAnimator = null
+        rainbowRotation = 0f
     }
 
     companion object {
