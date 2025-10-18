@@ -20,10 +20,10 @@ import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
-import android.graphics.LinearGradient
 import android.graphics.Shader
 import android.graphics.SweepGradient
 import android.view.View
@@ -43,6 +43,7 @@ class EdgeLightView(context: Context) : FrameLayout(context) {
     var edgeStyle: String = STYLE_DEFAULT
         set(value) {
             field = value
+            if (useRainbowGradient) updateRainbowGradient()
             invalidate()
         }
 
@@ -75,24 +76,19 @@ class EdgeLightView(context: Context) : FrameLayout(context) {
     var paintColor: Int
         get() = edgePaint.color
         set(value) {
-            edgePaint.color = value
-            edgePaint.alpha = 255
             if (value != COLOR_RAINBOW) {
+                useRainbowGradient = false
                 edgePaint.shader = null
+                edgePaint.color = value
+                edgePaint.alpha = 255
+            } else {
+                useRainbowGradient = true
+                updateRainbowGradient()
             }
             invalidate()
         }
 
-    var useRainbowGradient: Boolean = false
-        set(value) {
-            field = value
-            if (value) {
-                updateRainbowGradient()
-            } else {
-                edgePaint.shader = null
-            }
-            invalidate()
-        }
+    private var useRainbowGradient = false
 
     var pulseRunning: Boolean
         get() = pulseAnimator?.isRunning == true
@@ -177,13 +173,17 @@ class EdgeLightView(context: Context) : FrameLayout(context) {
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        if (useRainbowGradient) {
-            updateRainbowGradient()
-        }
-
         when (edgeStyle) {
             STYLE_ROUNDED -> drawRoundedEdges(canvas)
             else -> drawDefaultEdges(canvas)
+        }
+    }
+
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+        if (useRainbowGradient) {
+            updateRainbowGradient()
+            invalidate()
         }
     }
 
@@ -229,25 +229,20 @@ class EdgeLightView(context: Context) : FrameLayout(context) {
     }
 
     private fun updateRainbowGradient() {
-        if (width == 0 || height == 0) return
+        if (width == 0 || height == 0) {
+            post { _updateRainbowGradient() }
+        } else {
+            _updateRainbowGradient()
+        }
+    }
 
-        val colors = intArrayOf(
-            0xFFFF0000.toInt(),
-            0xFFFF7F00.toInt(),
-            0xFFFFFF00.toInt(),
-            0xFF00FF00.toInt(),
-            0xFF0000FF.toInt(),
-            0xFF4B0082.toInt(),
-            0xFF9400D3.toInt(),
-            0xFFFF0000.toInt() 
-        )
-
+    private fun _updateRainbowGradient() {
         edgePaint.shader = when (edgeStyle) {
             STYLE_ROUNDED -> {
                 SweepGradient(
                     width / 2f,
                     height / 2f,
-                    colors,
+                    RAINBOW,
                     null
                 )
             }
@@ -257,7 +252,7 @@ class EdgeLightView(context: Context) : FrameLayout(context) {
                     0f,
                     0f,
                     height.toFloat(),
-                    colors,
+                    RAINBOW,
                     null,
                     Shader.TileMode.CLAMP
                 )
@@ -269,5 +264,10 @@ class EdgeLightView(context: Context) : FrameLayout(context) {
         const val STYLE_DEFAULT = "default"
         const val STYLE_ROUNDED = "rounded"
         const val COLOR_RAINBOW = -1
+        private val RAINBOW = intArrayOf(
+            0xFFFF0000.toInt(), 0xFFFF7F00.toInt(), 0xFFFFFF00.toInt(),
+            0xFF00FF00.toInt(), 0xFF0000FF.toInt(), 0xFF4B0082.toInt(),
+            0xFF9400D3.toInt(), 0xFFFF0000.toInt()
+        )
     }
 }
