@@ -117,6 +117,8 @@ class EdgeLightView(context: Context) : FrameLayout(context) {
         } catch (e: Exception) {
             32f * resources.displayMetrics.density
         }
+
+        edgePaint.strokeWidth = userStrokeWidth * resources.displayMetrics.density
     }
 
     private fun startPulse() {
