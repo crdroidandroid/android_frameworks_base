@@ -53,15 +53,6 @@ class EdgeLightView(context: Context) : FrameLayout(context) {
         }
 
     var animationEffect: String = EFFECT_NONE
-        set(value) {
-            if (field != value) {
-                field = value
-                stopEffectAnimation()
-                if (value != EFFECT_NONE && isVisible) {
-                    startEffectAnimation()
-                }
-            }
-        }
 
     private val edgePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
@@ -96,14 +87,7 @@ class EdgeLightView(context: Context) : FrameLayout(context) {
 
     var visible: Boolean
         get() = isVisible
-        set(value) {
-            isVisible = value
-            if (value && animationEffect != EFFECT_NONE) {
-                startEffectAnimation()
-            } else if (!value) {
-                stopEffectAnimation()
-            }
-        }
+        set(value) { isVisible = value }
 
     var paintColor: Int
         get() = edgePaint.color
@@ -125,9 +109,11 @@ class EdgeLightView(context: Context) : FrameLayout(context) {
         set(value) {
             if (value && !pulseRunning) {
                 startPulse()
+                startEffectAnimation()
                 startRainbowAnimation()
             } else if (!value) {
                 stopRainbowAnimation()
+                stopEffectAnimation()
                 stopPulse()
                 visible = false
             }
@@ -582,6 +568,7 @@ class EdgeLightView(context: Context) : FrameLayout(context) {
 
     private fun startRainbowAnimation() {
         if (!useRainbowGradient || edgePaint.shader == null) return
+        if (animationEffect in MOVING_EFFECT) return
         if (rainbowAnimator?.isRunning == true) return
 
         rainbowAnimator = ValueAnimator.ofFloat(0f, 360f).apply {
@@ -616,8 +603,9 @@ class EdgeLightView(context: Context) : FrameLayout(context) {
     }
 
     private fun startEffectAnimation() {
-        if (effectAnimator?.isRunning == true) return
         if (animationEffect == EFFECT_NONE) return
+        if (effectAnimator?.isRunning == true) return
+
         sparkles.clear()
 
         val duration = when (animationEffect) {
@@ -668,6 +656,7 @@ class EdgeLightView(context: Context) : FrameLayout(context) {
         const val EFFECT_SPARKLE = "sparkle"
         const val EFFECT_CHASE = "chase"
         const val EFFECT_COMET = "comet"
+        private val MOVING_EFFECT = arrayOf(EFFECT_WAVE, EFFECT_SPARKLE, EFFECT_CHASE, EFFECT_COMET)
         private val RAINBOW = intArrayOf(
             0xFFFF0000.toInt(), 0xFFFF7F00.toInt(), 0xFFFFFF00.toInt(),
             0xFF00FF00.toInt(), 0xFF0000FF.toInt(), 0xFF4B0082.toInt(),
