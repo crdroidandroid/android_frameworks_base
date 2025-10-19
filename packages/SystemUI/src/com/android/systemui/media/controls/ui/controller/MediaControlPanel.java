@@ -128,6 +128,7 @@ import com.android.systemui.surfaceeffects.turbulencenoise.TurbulenceNoiseView;
 import com.android.systemui.util.ColorUtilKt;
 import com.android.systemui.util.animation.TransitionLayout;
 import com.android.systemui.util.concurrency.DelayableExecutor;
+import com.android.systemui.util.settings.SecureSettings;
 import com.android.systemui.util.settings.GlobalSettings;
 
 import dagger.Lazy;
@@ -232,6 +233,7 @@ public class MediaControlPanel {
     private TurbulenceNoiseController mTurbulenceNoiseController;
     private LoadingEffect mLoadingEffect;
     private final GlobalSettings mGlobalSettings;
+    private final SecureSettings mSecureSettings;
     private TurbulenceNoiseAnimationConfig mTurbulenceNoiseAnimationConfig;
     private boolean mWasPlaying = false;
     private boolean mButtonClicked = false;
@@ -287,7 +289,8 @@ public class MediaControlPanel {
             ActivityIntentHelper activityIntentHelper,
             CommunalSceneInteractor communalSceneInteractor,
             NotificationLockscreenUserManager lockscreenUserManager,
-            GlobalSettings globalSettings
+            GlobalSettings globalSettings,
+            SecureSettings secureSettings
     ) {
         mContext = context;
         mBackgroundExecutor = backgroundExecutor;
@@ -314,7 +317,7 @@ public class MediaControlPanel {
         });
 
         mGlobalSettings = globalSettings;
-        updateAnimatorDurationScale();
+        mSecureSettings = secureSettings;
     }
 
     /**
@@ -407,7 +410,9 @@ public class MediaControlPanel {
     void updateAnimatorDurationScale() {
         if (mSeekBarObserver != null) {
             mSeekBarObserver.setAnimationEnabled(
-                    mGlobalSettings.getFloat(Settings.Global.ANIMATOR_DURATION_SCALE, 1f) > 0f);
+                    mGlobalSettings.getFloat(Settings.Global.ANIMATOR_DURATION_SCALE, 1f) > 0f &&
+                    mSecureSettings.getIntForUser(Settings.Secure.MEDIA_SQUIGGLE_ANIMATION,
+                    1, UserHandle.USER_CURRENT) != 0);
         }
     }
 
@@ -432,6 +437,7 @@ public class MediaControlPanel {
         mSeekBarViewModel.setEnabledChangeListener(mEnabledChangeListener);
         mSeekBarViewModel.setContentDescriptionListener(mContentDescriptionListener);
         mMediaViewController.attach(player);
+        updateAnimatorDurationScale();
 
         vh.getPlayer().setOnLongClickListener(v -> {
             if (mFalsingManager.isFalseLongTap(FalsingManager.LOW_PENALTY)) return true;
