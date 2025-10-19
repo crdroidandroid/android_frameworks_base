@@ -94,6 +94,7 @@ constructor(
                 edgeLightView.userPulseCount = currentSettings.pulseCount
                 edgeLightView.userStrokeWidth = currentSettings.strokeWidth
                 edgeLightView.edgeStyle = currentSettings.edgeStyle
+                edgeLightView.animationEffect = currentSettings.animationEffect
             }
         }
     }
