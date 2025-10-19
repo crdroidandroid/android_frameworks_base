@@ -25,6 +25,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
+import android.os.UserHandle
 import android.provider.Settings
 import android.view.View
 import android.view.animation.Interpolator
@@ -67,6 +68,7 @@ import com.android.systemui.util.animation.TransitionLayoutController
 import com.android.systemui.util.animation.TransitionViewState
 import com.android.systemui.util.concurrency.DelayableExecutor
 import com.android.systemui.util.settings.GlobalSettings
+import com.android.systemui.util.settings.SecureSettings
 import java.lang.Float.max
 import java.lang.Float.min
 import java.util.Random
@@ -86,6 +88,7 @@ constructor(
     private val seekBarViewModel: SeekBarViewModel,
     @Main private val mainExecutor: DelayableExecutor,
     private val globalSettings: GlobalSettings,
+    private val secureSettings: SecureSettings,
 ) {
 
     companion object {
@@ -739,7 +742,9 @@ constructor(
         if (!SceneContainerFlag.isEnabled) return
         if (this::seekBarObserver.isInitialized) {
             seekBarObserver.animationEnabled =
-                globalSettings.getFloat(Settings.Global.ANIMATOR_DURATION_SCALE, 1f) > 0f
+                globalSettings.getFloat(Settings.Global.ANIMATOR_DURATION_SCALE, 1f) > 0f &&
+                secureSettings.getIntForUser(Settings.Secure.MEDIA_SQUIGGLE_ANIMATION,
+                    1, UserHandle.USER_CURRENT) != 0
         }
     }
 
