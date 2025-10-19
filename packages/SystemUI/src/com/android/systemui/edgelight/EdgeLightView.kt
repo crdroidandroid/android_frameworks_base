@@ -606,8 +606,6 @@ class EdgeLightView(context: Context) : FrameLayout(context) {
         if (animationEffect == EFFECT_NONE) return
         if (effectAnimator?.isRunning == true) return
 
-        sparkles.clear()
-
         val duration = when (animationEffect) {
             EFFECT_BREATHING -> 3000L
             EFFECT_WAVE -> 2000L
@@ -622,12 +620,23 @@ class EdgeLightView(context: Context) : FrameLayout(context) {
             repeatCount = ValueAnimator.INFINITE
             repeatMode = ValueAnimator.RESTART
             interpolator = android.view.animation.LinearInterpolator()
-
             addUpdateListener { animator ->
                 effectProgress = animator.animatedValue as Float
                 invalidate()
             }
+            addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    effectAnimator = null
+                    effectProgress = 0f
+                    sparkles.clear()
+                }
 
+                override fun onAnimationCancel(animation: Animator) {
+                    effectAnimator = null
+                    effectProgress = 0f
+                    sparkles.clear()
+                }
+            })
             start()
         }
     }
