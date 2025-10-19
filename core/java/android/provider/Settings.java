@@ -7411,6 +7411,12 @@ public final class Settings {
         public static final String EDGE_LIGHT_STYLE = "edge_light_style";
 
         /**
+         * Edge light animation effect type
+         * @hide
+         */
+        public static final String EDGE_LIGHT_ANIMATION_EFFECT = "edge_light_animation_effect";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
