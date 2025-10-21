@@ -924,7 +924,8 @@ public class ApplicationPackageManager extends PackageManager {
 
         if (name != null && pkg != null && PRIV_PKGS.contains(pkg)) {
             final boolean photosSpoof = "com.google.android.apps.photos".equals(pkg)
-                && SystemProperties.getBoolean("persist.sys.pixelprops.gphotos", true);
+                && (Settings.Secure.getInt(mContext.getContentResolver(),
+                Settings.Secure.PI_PHOTOS_SPOOF, 1) == 1);
             if (photosSpoof) {
                 if (FEATURES_PIXEL.contains(name)) return false;
                 if (FEATURES_PIXEL_OTHERS.contains(name)) return true;
