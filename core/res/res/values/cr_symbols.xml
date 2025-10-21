@@ -93,7 +93,4 @@
 
     <!-- Mediadata max bitmap size -->
     <java-symbol type="integer" name="config_maxBitmapSizePx" />
-
-    <!-- Build properties from a GMS certified device against current platform SPL level -->
-    <java-symbol type="array" name="config_certifiedBuildProperties" />
 </resources>
