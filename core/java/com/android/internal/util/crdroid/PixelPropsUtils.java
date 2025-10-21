@@ -17,12 +17,14 @@
 
 package com.android.internal.util.crdroid;
 
+import android.app.ActivityThread;
 import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Environment;
 import android.os.SystemProperties;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.ArraySet;
 import android.util.Log;
@@ -54,12 +56,6 @@ public final class PixelPropsUtils {
     private static final String TAG = PixelPropsUtils.class.getSimpleName();
     private static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
     private static final String DATA_FILE = "gms_certified_props.json";
-
-    private static final String SPOOF_PIXEL_PI = "persist.sys.pixelprops.pi";
-    private static final String SPOOF_PIXEL_GMS_CERT_CHAIN = "persist.sys.pixelprops.gmscertchain";
-    private static final String SPOOF_PIXEL_GAMES = "persist.sys.pixelprops.games";
-    private static final String SPOOF_PIXEL_GPHOTOS = "persist.sys.pixelprops.gphotos";
-    private static final String SPOOF_PIXEL_NETFLIX = "persist.sys.pixelprops.netflix";
 
     private static final Map<String, Object> propsToChangeGeneric = new HashMap<>();
     private static final Map<String, Object> propsToChangePixel10ProXL = new HashMap<>();
@@ -253,11 +249,13 @@ public final class PixelPropsUtils {
             Map<String,Object> propsToChange = null;
 
             if (packageName.equals("com.google.android.apps.photos")) {
-                if (SystemProperties.getBoolean(SPOOF_PIXEL_GPHOTOS, true)) {
+                if (Settings.Secure.getInt(context.getContentResolver(),
+                        Settings.Secure.PI_PHOTOS_SPOOF, 1) == 1) {
                     propsToChange = propsToChangePixelXL;
                 }
-            } else if (packageName.equals("com.netflix.mediaclient") && 
-                        !SystemProperties.getBoolean(SPOOF_PIXEL_NETFLIX, false)) {
+            } else if (packageName.equals("com.netflix.mediaclient") &&
+                        Settings.Secure.getInt(context.getContentResolver(),
+                        Settings.Secure.PI_NETFLIX_SPOOF, 0) != 1) {
                     if (DEBUG) Log.d(TAG, "Netflix spoofing disabled by system prop");
                     return;
             } else if (packageName.equals("com.google.android.gms")) {
@@ -282,8 +280,9 @@ public final class PixelPropsUtils {
                 if (DEBUG) Log.d(TAG, "Defining props for: " + packageName);
                 applyProps(propsToChange);
             }
-        } else {
-            if (!SystemProperties.getBoolean(SPOOF_PIXEL_GAMES, false))
+        } else if (isGamePackage(packageName)) {
+            if (Settings.Secure.getInt(context.getContentResolver(),
+                    Settings.Secure.PI_GAMES_SPOOF, 0) != 1)
                 return;
 
             Map<String,Object> propsToChange = null;
@@ -315,6 +314,19 @@ public final class PixelPropsUtils {
                 applyProps(propsToChange);
             }
         }
+    }
+
+    private static boolean isGamePackage(String pkg) {
+        return PKGS_ROG6.contains(pkg)
+            || PKGS_ROG6D.contains(pkg)
+            || PKGS_LENOVOY700.contains(pkg)
+            || PKGS_OP8P.contains(pkg)
+            || PKGS_OP9P.contains(pkg)
+            || PKGS_MI11TP.contains(pkg)
+            || PKGS_MI13P.contains(pkg)
+            || PKGS_F5.contains(pkg)
+            || PKGS_BS4.contains(pkg)
+            || PKGS_S24U.contains(pkg);
     }
 
     private static void applyProps(Map<String,Object> props) {
@@ -360,8 +372,10 @@ public final class PixelPropsUtils {
     }
 
     private static void spoofBuildGms(Context context) {
-        if (!SystemProperties.getBoolean(SPOOF_PIXEL_PI, true))
+        if (Settings.Secure.getInt(context.getContentResolver(),
+                Settings.Secure.PI_ENABLE_SPOOF, 1) != 1)
             return;
+
 
         File dataFile = new File(Environment.getDataSystemDirectory(), DATA_FILE);
         long mtime = dataFile.exists() ? dataFile.lastModified() : -1;
@@ -434,14 +448,23 @@ public final class PixelPropsUtils {
     }
 
     public static void onEngineGetCertificateChain() {
-        if (!SystemProperties.getBoolean(SPOOF_PIXEL_PI, true))
+        Context context = ActivityThread.currentApplication() != null
+                ? ActivityThread.currentApplication().getApplicationContext()
+                : null;
+        if (context == null) return;
+
+        if (Settings.Secure.getInt(context.getContentResolver(),
+                Settings.Secure.PI_ENABLE_SPOOF, 1) != 1)
             return;
+
         // If a keybox is found, don't block key attestation
-        if (SystemProperties.getBoolean(SPOOF_PIXEL_GMS_CERT_CHAIN, false)
+        if (Settings.Secure.getInt(context.getContentResolver(),
+                Settings.Secure.PI_GMS_CERT_CHAIN, 0) == 1
                 && KeyProviderManager.isKeyboxAvailable()) {
             Log.i(TAG, "Key attestation blocking is disabled because a keybox is defined to spoof");
             return;
         }
+
         // Check stack for SafetyNet
         if (isCallerSafetyNet()) {
             Log.i(TAG, "Blocked key attestation");
