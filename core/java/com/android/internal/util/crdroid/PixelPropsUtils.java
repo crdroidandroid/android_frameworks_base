@@ -388,25 +388,20 @@ public final class PixelPropsUtils {
         String savedProps = readFromFile(dataFile);
         List<String> fresh = new ArrayList<>();
         if (TextUtils.isEmpty(savedProps)) {
-            if (DEBUG) Log.d(TAG, "Parsing props locally - data file unavailable");
-            fresh = Arrays.asList(context.getResources()
-                     .getStringArray(R.array.config_certifiedBuildProperties));
-        } else {
-            if (DEBUG) Log.d(TAG, "Parsing props fetched by attestation service");
-            try {
-                JSONObject parsedProps = new JSONObject(savedProps);
-                Iterator<String> keys = parsedProps.keys();
-                while (keys.hasNext()) {
-                    String key = keys.next();
-                    String value = parsedProps.getString(key);
-                    fresh.add(key + ":" + value);
-                }
-            } catch (JSONException e) {
-                Log.e(TAG, "Error parsing JSON data", e);
-                Log.d(TAG, "Parsing props locally as fallback");
-                fresh = Arrays.asList(context.getResources()
-                         .getStringArray(R.array.config_certifiedBuildProperties));
+            return;
+        }
+        if (DEBUG) Log.d(TAG, "Parsing props fetched by attestation service");
+        try {
+            JSONObject parsedProps = new JSONObject(savedProps);
+            Iterator<String> keys = parsedProps.keys();
+            while (keys.hasNext()) {
+                String key = keys.next();
+                String value = parsedProps.getString(key);
+                fresh.add(key + ":" + value);
             }
+        } catch (JSONException e) {
+            Log.e(TAG, "Error parsing JSON data", e);
+            return;
         }
         sCertifiedProps = new ArrayList<>(fresh);
         sCertPropsMtime = mtime;
