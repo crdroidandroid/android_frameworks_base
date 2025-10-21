@@ -11965,11 +11965,11 @@ public class BatteryStatsImpl extends BatteryStats {
                         //
                         // This means that we may have apps that transmitted/received packets not be
                         // blamed for this, but this is fine as scans are relatively more expensive.
-                        if (totalScanTimeMs > rxTimeMs) {
+                        if (totalScanTimeMs != 0 && totalScanTimeMs > rxTimeMs) {
                             scanRxTimeSinceMarkMs = (rxTimeMs * scanRxTimeSinceMarkMs) /
                                     totalScanTimeMs;
                         }
-                        if (totalScanTimeMs > txTimeMs) {
+                        if (totalScanTimeMs != 0 && totalScanTimeMs > txTimeMs) {
                             scanTxTimeSinceMarkMs = (txTimeMs * scanTxTimeSinceMarkMs) /
                                     totalScanTimeMs;
                         }
@@ -11993,7 +11993,7 @@ public class BatteryStatsImpl extends BatteryStats {
                     final long wifiLockTimeSinceMarkMs =
                             uid.mFullWifiLockTimer.getTimeSinceMarkLocked(
                                     elapsedRealtimeMs * 1000) / 1000;
-                    if (wifiLockTimeSinceMarkMs > 0) {
+                    if (wifiLockTimeSinceMarkMs > 0 && totalWifiLockTimeMs != 0) {
                         // Set the new mark so that next time we get new data since this point.
                         uid.mFullWifiLockTimer.setMark(elapsedRealtimeMs);
 
