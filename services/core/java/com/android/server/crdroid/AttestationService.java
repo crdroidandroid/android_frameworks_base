@@ -14,7 +14,7 @@ import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.os.Environment;
 import android.os.SELinux;
-import android.os.SystemProperties;
+import android.provider.Settings;
 import android.system.ErrnoException;
 import android.system.Os;
 import android.util.AtomicFile;
@@ -46,7 +46,6 @@ public final class AttestationService extends SystemService {
     private static final String TAG = AttestationService.class.getSimpleName();
 
     private static final String API = "https://raw.githubusercontent.com/crdroidandroid/android_vendor_certification/refs/heads/15.0/gms_certified_props.json";
-    private static final String SPOOF_PIXEL_PI = "persist.sys.pixelprops.pi";
     private static final String DATA_FILE = "gms_certified_props.json";
     private static final long INITIAL_DELAY = 0; // Start immediately on boot
     private static final long INTERVAL = 8; // Interval in hours
@@ -191,7 +190,8 @@ public final class AttestationService extends SystemService {
     private class FetchGmsCertifiedProps implements Runnable {
         @Override
         public void run() {
-            if (!SystemProperties.getBoolean(SPOOF_PIXEL_PI, true)) {
+            if (Settings.Secure.getInt(mContext.getContentResolver(),
+                    Settings.Secure.PI_ENABLE_SPOOF, 1) != 1) {
                 mPendingUpdate = false;
                 return;
             }
