@@ -21,6 +21,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.FloatRange
 import androidx.annotation.StringRes
 import androidx.compose.runtime.getValue
+import androidx.core.content.res.ResourcesCompat
 import com.android.systemui.brightness.domain.interactor.BrightnessMirrorShowingInteractor
 import com.android.systemui.brightness.domain.interactor.BrightnessPolicyEnforcementInteractor
 import com.android.systemui.brightness.domain.interactor.ScreenBrightnessInteractor
@@ -29,7 +30,6 @@ import com.android.systemui.classifier.Classifier
 import com.android.systemui.classifier.domain.interactor.FalsingInteractor
 import com.android.systemui.common.shared.model.Icon
 import com.android.systemui.common.shared.model.asIcon
-import com.android.systemui.graphics.ImageLoader
 import com.android.systemui.haptics.slider.compose.ui.SliderHapticsViewModel
 import com.android.systemui.lifecycle.HydratedActivatable
 import com.android.systemui.res.R
@@ -61,7 +61,6 @@ constructor(
     private val falsingInteractor: FalsingInteractor,
     @Assisted val supportsMirroring: Boolean,
     private val brightnessWarningToast: BrightnessWarningToast,
-    private val imageLoader: ImageLoader,
 ) : HydratedActivatable() {
 
     init {
@@ -101,14 +100,13 @@ constructor(
 
     suspend fun loadImage(@DrawableRes resId: Int, context: Context): Icon.Loaded? {
         return withTimeoutOrNull(500L) {
-            imageLoader
-                .loadDrawable(
-                    android.graphics.drawable.Icon.createWithResource(context, resId),
-                    context = context,
-                    maxHeight = 200,
-                    maxWidth = 200,
-                )
-                ?.asIcon(null, resId)
+            val drawable = ResourcesCompat.getDrawable(
+                context.resources,
+                resId,
+                context.theme
+            ) ?: return@withTimeoutOrNull null
+
+            drawable.asIcon(null, resId)
         }
     }
 
