@@ -458,16 +458,17 @@ public final class PixelPropsUtils {
             return;
         }
 
-        if (Settings.Secure.getInt(context.getContentResolver(),
+        boolean isKeyBoxAvailable = KeyProviderManager.isKeyboxAvailable();
+
+        if (!isKeyBoxAvailable && Settings.Secure.getInt(context.getContentResolver(),
                 Settings.Secure.PI_ENABLE_SPOOF, 1) != 1) {
             if (DEBUG) Log.d(TAG, "onEngineGetCertificateChain disabled by setting");
             return;
         }
 
         // If a keybox is found, don't block key attestation
-        if (Settings.Secure.getInt(context.getContentResolver(),
-                Settings.Secure.PI_GMS_CERT_CHAIN, 0) == 1
-                && KeyProviderManager.isKeyboxAvailable()) {
+        if (isKeyBoxAvailable && Settings.Secure.getInt(context.getContentResolver(),
+                Settings.Secure.PI_GMS_CERT_CHAIN, 0) == 1) {
             Log.i(TAG, "Key attestation blocking is disabled because a keybox is defined to spoof");
             return;
         }
