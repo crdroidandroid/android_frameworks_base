@@ -1059,6 +1059,7 @@ private fun LazyGridItemScope.TileGridCell(
             }
         },
         contentDescription = decorationClickLabel,
+        iconOnly = cell.isIcon
     ) {
         val placeableColor = MaterialTheme.colorScheme.primary.copy(alpha = .4f)
         val backgroundColor by
@@ -1130,7 +1131,7 @@ private fun LazyGridItemScope.TileGridCell(
                     CornerSize(InactiveCornerRadius),
                 )
                 .thenIf(isSelectable) { draggableModifier }
-                .tileBackground { backgroundColor }
+                .tileBackground ( { backgroundColor }, iconOnly = cell.isIcon )
                 .clickable { selectionState.onTap(cell.tile.tileSpec) }
                 .thenIf(isSelectable) { selectableModifier }
         ) {
@@ -1230,7 +1231,7 @@ private fun AvailableTileGridCell(
                         MaterialTheme.colorScheme.secondary,
                         CornerSize(InactiveCornerRadius),
                     )
-                    .tileBackground { colors.background }
+                    .tileBackground ( { colors.background }, iconOnly = true)
                     .clickable(
                         enabled = !cell.isCurrent,
                         onClick = onClick,
@@ -1399,18 +1400,37 @@ private fun MeasureScope.iconHorizontalCenter(containerSize: Int): Float {
 @Composable
 private fun editTileShape(shapeMode: Int): RoundedCornerShape {
     val radius = when (shapeMode) {
-        1 -> InactiveCornerRadius // circle-ish
-        2 -> ActiveTileCornerRadius // rounded square
-        3 -> 0.dp // square
+        1 -> InactiveCornerRadius // Circle-ish
+        2 -> ActiveTileCornerRadius // Rounded Square
+        3 -> 0.dp // Square
+        4 -> InactiveCornerRadius // Circle
         else -> InactiveCornerRadius
     }
     return RoundedCornerShape(radius)
 }
 
 @Composable
-private fun Modifier.tileBackground(color: () -> Color): Modifier {
+private fun Modifier.tileBackground(
+    color: () -> Color,
+    iconOnly: Boolean,
+): Modifier {
     val shapeMode = rememberTileShapeMode()
-    return clip(editTileShape(shapeMode)).drawBehind { drawRect(color()) }
+    return if (shapeMode == 4 && iconOnly) {
+        // Draw a centered circle that fits the tile's min dimension
+        drawBehind {
+            val border = 0f
+            val diameter = minOf(size.width, size.height) - border
+            val radius = diameter / 2f
+            drawCircle(
+                color = color(),
+                radius = radius,
+                center = Offset(size.width / 2f, size.height / 2f)
+            )
+        }
+    } else {
+        clip(editTileShape(shapeMode))
+            .drawBehind { drawRect(color()) }
+    }
 }
 
 private object EditModeTileDefaults {
