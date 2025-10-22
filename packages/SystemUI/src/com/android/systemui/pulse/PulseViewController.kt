@@ -36,10 +36,10 @@ class PulseViewController @Inject constructor(
     private val settingsRepository: PulseSettingsRepository =
         PulseSettingsRepository(context).apply {
             startObserving()
-            setOnSettingsChangedListener { onSettingsChanged() }
+            setOnSettingsChangedListener { updateState() }
         }
 
-    private val pulseView: PulseView =
+    private val view: PulseView =
         PulseView(context).apply {
             initialize(settingsRepository)
             setVisibility(false)
@@ -50,6 +50,33 @@ class PulseViewController @Inject constructor(
             setDataListener(this@PulseViewController)
         }
 
+    val pulseEnabled: Boolean
+        get() = settingsRepository.isPulseEnabled()
+
+    val ambientEnabled: Boolean
+        get() = settingsRepository.isPulseAmbientEnabled()
+
+    val keyguardShowing: Boolean
+        get() = ScrimUtils.get().isKeyguardShowing()
+
+    val dozing: Boolean
+        get() = ScrimUtils.get().isDozing()
+
+    var pulseRunning: Boolean = false
+        set(value) {
+            if (value == field) return
+            field = value
+            updatePulse(value)
+        }
+
+    val mediaPlaying: Boolean
+        get() = MediaSessionManager.get().isMediaPlaying
+
+    val showPulse: Boolean
+        get() = pulseEnabled && mediaPlaying 
+                && ((keyguardShowing && !dozing)
+                || (dozing && ambientEnabled))
+
     init {
         INSTANCE = this
 
@@ -57,80 +84,58 @@ class PulseViewController @Inject constructor(
         MediaSessionManager.get().addListener(this)
     }
 
-    fun getPulseView(): PulseView = pulseView
+    fun getPulseView(): PulseView = view
 
-    private fun updatePulseState() {
-        if (shouldShowPulse) {
-            if (!isRunning) start() 
-        } else {
-            if (isRunning) stop()
-        }
+    private fun updateState() {
+        pulseRunning = showPulse
     }
 
-    private fun start() {
+    private fun updatePulse(show: Boolean) {
         mainScope.launch {
-            pulseView.setVisibility(true)
-            audioProcessor.startCapture()
+            view.setVisibility(show)
+            if (show) audioProcessor.startCapture()
+            else audioProcessor.stopCapture()
         }
     }
-
-    private fun stop() {
-        mainScope.launch {
-            pulseView.setVisibility(false)
-            audioProcessor.stopCapture()
-        }
-    }
-
-    private fun onSettingsChanged() {
-        mainScope.launch { updatePulseState() }
-    }
-
-    val isRunning: Boolean
-        get() = audioProcessor.isCapturing()
-
-    val shouldShowPulse: Boolean
-        get() = settingsRepository.isPulseEnabled() &&
-            ScrimUtils.get().isKeyguardShowing() &&
-            (!ScrimUtils.get().isDozing() ||
-            settingsRepository.isPulseAmbientEnabled()) &&
-            MediaSessionManager.get().isMediaPlaying
 
     override fun onDataUpdate(data: PulseData) {
-        if (settingsRepository.isPulseEnabled()) {
-            mainScope.launch { pulseView.updateVisualizerData(data) }
+        if (showPulse) {
+            mainScope.launch { 
+                view.updateVisualizerData(data) 
+            }
         }
     }
 
     override fun onPlaybackStateChanged(state: Int) {
-        mainScope.launch { updatePulseState() }
+        updateState()
     }
 
     override fun onMediaColorsChanged(color: Int) {
-        pulseView.onMediaColorsChanged(color)
+        if (pulseEnabled) view.onMediaColorsChanged(color)
     }
 
     override fun onKeyguardShowingChanged(showing: Boolean) {
-        mainScope.launch { updatePulseState() }
+        updateState()
     }
 
     override fun onDozingChanged() {
-        mainScope.launch { updatePulseState() }
+        updateState()
     }
 
     override fun onKeyguardFadingAwayChanged(fadingAway: Boolean) {
-        stop()
+        pulseRunning = false
     }
 
     override fun onKeyguardGoingAwayChanged(goingAway: Boolean) {
-        stop()
+        pulseRunning = false
     }
 
     override fun onScreenTurnedOff() {
-        stop()
+        pulseRunning = false
     }
 
     override fun onStartedWakingUp() {
-        mainScope.launch { updatePulseState() }
+        updateState()
     }
 
     fun destroy() {
