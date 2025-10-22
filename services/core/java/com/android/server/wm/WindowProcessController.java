@@ -709,7 +709,8 @@ public class WindowProcessController extends ConfigurationContainer<Configuratio
             int appSwitchState, BalCheckConfiguration checkConfiguration) {
         return mBgLaunchController.areBackgroundActivityStartsAllowed(mPid, mUid,
                 mInfo.packageName, appSwitchState, checkConfiguration,
-                hasActivityInVisibleTask(), mInstrumentingWithBackgroundActivityStartPrivileges,
+                hasActivityInVisibleTask(), inPinnedWindowingMode(),
+                mInstrumentingWithBackgroundActivityStartPrivileges,
                 mAtm.getLastStopAppSwitchesTime(),
                 mLastActivityLaunchTime, mLastActivityFinishTime);
     }
@@ -876,6 +877,21 @@ public class WindowProcessController extends ConfigurationContainer<Configuratio
     @HotPath(caller = HotPath.LRU_UPDATE)
     public boolean hasActivitiesOrRecentTasks() {
         return mHasActivities || mHasRecentTasks;
+    }
+
+    /**
+     * Check if any Activity is visible (or visibility requested) and not pinned.
+     */
+    boolean hasVisibleNotPinnedActivity() {
+        if (!hasVisibleActivities()) return false;
+        for (int i = mActivities.size() - 1; i >= 0; --i) {
+            final ActivityRecord activityRecord = mActivities.get(i);
+            if ((activityRecord.isVisible() || activityRecord.isVisibleRequested())
+                    && !activityRecord.inPinnedWindowingMode()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Nullable
