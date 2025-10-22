@@ -1015,6 +1015,7 @@ private fun LazyGridItemScope.TileGridCell(
             }
         },
         contentDescription = decorationClickLabel,
+        iconOnly = cell.isIcon,
     ) {
         // Rapidly composing elements with the draggable modifier can cause visual jank. This
         // usually happens when resizing a tile multiple times. We can fix this by applying the
@@ -1086,6 +1087,7 @@ private fun LazyGridItemScope.TileGridCell(
                     cornerRadius = InactiveTileCornerRadius,
                     alpha = { containerAlpha },
                     color = { colors.background },
+                    iconOnly = cell.isIcon,
                 )
                 .keyboardShortcuts(cell.tile.tileSpec, selectionState) {
                     onResize(FinalResizeOperation(cell.tile.tileSpec, !cell.isIcon))
@@ -1183,7 +1185,11 @@ private fun AvailableTileGridCell(
                         MaterialTheme.colorScheme.secondary,
                         CornerSize(InactiveTileCornerRadius),
                     )
-                    .tileBackground(cornerRadius = InactiveTileCornerRadius) { colors.background }
+                    .tileBackground(
+                        cornerRadius = InactiveTileCornerRadius,
+                        color = { colors.background },
+                        iconOnly = true,
+                    )
                     .clickable(
                         enabled = !cell.isCurrent,
                         onClick = onClick,
@@ -1336,6 +1342,7 @@ fun EditTile(
                             cornerRadius = InactiveTileCornerRadius,
                             alpha = { progress() },
                             color = { colors.iconBackground },
+                            iconOnly = true,
                         )
                     } else {
                         it
@@ -1373,9 +1380,10 @@ private fun MeasureScope.iconHorizontalCenter(
 private fun editTileShape(cornerRadius: Dp): RoundedCornerShape {
     val shapeMode = rememberTileShapeMode()
     val radius = when (shapeMode) {
-        1 -> InactiveTileCornerRadius /* Circle */
+        1 -> InactiveTileCornerRadius /* Circle-ish */
         2 -> ActiveTileCornerRadius /* Rounded Square */
         3 -> 0.dp /* Square */
+        4 -> InactiveTileCornerRadius /* Circle */
         else -> cornerRadius
     }
     return RoundedCornerShape(radius)
@@ -1386,9 +1394,26 @@ private fun Modifier.tileBackground(
     cornerRadius: Dp,
     alpha: () -> Float = { 1f },
     color: () -> Color,
+    iconOnly: Boolean,
 ): Modifier {
-    // Clip tile contents from overflowing past the tile
-    return clip(editTileShape(cornerRadius)).drawBehind { drawRect(color(), alpha = alpha()) }
+    val shapeMode = rememberTileShapeMode()
+    return if (shapeMode == 4 && iconOnly) {
+        // Draw a centered circle that fits the tile's min dimension
+        drawBehind {
+            val border = 0f
+            val diameter = minOf(size.width, size.height) - border
+            val radius = diameter / 2f
+            drawCircle(
+                color = color(),
+                alpha = alpha(),
+                radius = radius,
+                center = Offset(size.width / 2f, size.height / 2f)
+            )
+        }
+    } else {
+        // Clip tile contents from overflowing past the tile
+        clip(editTileShape(cornerRadius)).drawBehind { drawRect(color(), alpha = alpha()) }
+    }
 }
 
 private fun Modifier.keyboardShortcuts(
