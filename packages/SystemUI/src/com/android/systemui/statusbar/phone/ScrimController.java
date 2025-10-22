@@ -1693,8 +1693,12 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener, Dump
     }
 
     private void onThemeChanged() {
+        cancelAnimator(ViewState.getChildTag(mScrimBehind, TAG_KEY_ANIM));
+        cancelAnimator(ViewState.getChildTag(mNotificationsScrim, TAG_KEY_ANIM));
+        cancelAnimator(ViewState.getChildTag(mScrimInFront, TAG_KEY_ANIM));
         updateThemeColors();
-        scheduleUpdate();
+        mState.prepare(mState);
+        applyAndDispatchState();
     }
 
     @Override
