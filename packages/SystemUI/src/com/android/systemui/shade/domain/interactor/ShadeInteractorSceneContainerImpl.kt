@@ -264,10 +264,8 @@ constructor(
             "toggleNotificationsShade should only be called when dualShade is enabled."
         }
         if (isNotificationsExpanded.value) {
-            android.util.Log.e("amehfooz", "Collapse notification shade")
             collapseNotificationsShade(loggingReason, transitionKey)
         } else {
-            android.util.Log.e("amehfooz", "Expand Notifications Shade")
             expandNotificationsShade(loggingReason, transitionKey)
         }
     }
