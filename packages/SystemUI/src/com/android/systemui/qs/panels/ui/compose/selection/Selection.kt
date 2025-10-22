@@ -86,6 +86,7 @@ import com.android.systemui.qs.panels.ui.compose.selection.TileState.Placeable
 import com.android.systemui.qs.panels.ui.compose.selection.TileState.Removable
 import com.android.systemui.qs.panels.ui.compose.selection.TileState.Selected
 import kotlin.math.cos
+import kotlin.math.min
 import kotlin.math.roundToInt
 import kotlin.math.sin
 
@@ -109,6 +110,7 @@ fun InteractiveTileContainer(
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
     onClickLabel: String? = null,
+    iconOnly: Boolean,
     content: @Composable BoxScope.() -> Unit = {},
 ) {
     val transition: Transition<TileState> = updateTransition(tileState)
@@ -126,6 +128,7 @@ fun InteractiveTileContainer(
         modifier.resizable(tileState == Selected, resizingState).selectionBorder(
             MaterialTheme.colorScheme.primary,
             SelectedBorderWidth,
+            iconOnly
         ) {
             selectionBorderAlpha
         }
@@ -179,7 +182,8 @@ fun InteractiveTileContainer(
 private fun Modifier.selectionBorder(
     selectionColor: Color,
     selectionBorderWidth: Dp,
-    selectionAlpha: () -> Float = { 0f },
+    iconOnly: Boolean,
+    selectionAlpha: () -> Float = { 0f }
 ): Modifier {
     val shapeMode = rememberTileShapeMode()
     val borderRadiusPx = with(LocalDensity.current) {
@@ -187,6 +191,7 @@ private fun Modifier.selectionBorder(
             1 -> InactiveCornerRadius.toPx()
             2 -> ActiveTileCornerRadius.toPx()
             3 -> 0f
+            4 -> InactiveCornerRadius.toPx()
             else -> InactiveCornerRadius.toPx()
         }
     }
@@ -194,16 +199,34 @@ private fun Modifier.selectionBorder(
     return drawWithContent {
         drawContent()
 
-        // Draw the border on the inside of the tile
-        val borderWidth = selectionBorderWidth.toPx()
-        drawRoundRect(
-            SolidColor(selectionColor),
-            cornerRadius = CornerRadius(borderRadiusPx),
-            topLeft = Offset(borderWidth / 2, borderWidth / 2),
-            size = Size(size.width - borderWidth, size.height - borderWidth),
-            style = Stroke(borderWidth),
-            alpha = selectionAlpha(),
-        )
+        val borderWidthPx = selectionBorderWidth.toPx()
+        val alpha = selectionAlpha()
+
+        if (shapeMode == 4 && iconOnly) {
+            val w = this.size.width
+            val h = this.size.height
+            val radius = (min(w, h) - borderWidthPx) / 2f
+
+            drawCircle(
+                brush = SolidColor(selectionColor),
+                radius = radius,
+                center = Offset(w / 2f, h / 2f),
+                style = Stroke(borderWidthPx),
+                alpha = alpha,
+            )
+        } else {
+            val topLeft = Offset(borderWidthPx / 2f, borderWidthPx / 2f)
+            val sz = Size(this.size.width - borderWidthPx, this.size.height - borderWidthPx)
+
+            drawRoundRect(
+                brush = SolidColor(selectionColor),
+                cornerRadius = CornerRadius(borderRadiusPx),
+                topLeft = topLeft,
+                size = sz,
+                style = Stroke(borderWidthPx),
+                alpha = alpha,
+            )
+        }
     }
 }
 
