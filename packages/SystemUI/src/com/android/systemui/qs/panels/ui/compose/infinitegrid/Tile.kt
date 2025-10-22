@@ -30,18 +30,22 @@ import androidx.annotation.VisibleForTesting
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -184,8 +188,10 @@ fun ContentScope.Tile(
             }
 
         val shapeMode = rememberTileShapeMode()
-        // TODO(b/361789146): Draw the shapes instead of clipping
-        val tileShape by TileDefaults.animateTileShapeAsState(uiState, shapeMode)
+        val wantCircle = shapeMode == 4 && iconOnly
+        val tileShape =
+            if (wantCircle) CircleShape
+            else TileDefaults.animateTileShapeAsState(uiState, shapeMode).value
         val animatedColor by animateColorAsState(colors.background, label = "QSTileBackgroundColor")
         val isDualTarget = uiState.handlesToggleClick
         val interactionSource = remember { MutableInteractionSource() }
@@ -219,6 +225,10 @@ fun ContentScope.Tile(
             contentRevealModifier = Modifier
         }
 
+        val outerShape = if (wantCircle) RoundedCornerShape(0.dp) else tileShape
+        val outerColor: () -> Color = if (wantCircle) { { Color.Transparent } } else { { animatedColor } }
+        val focusBorderColor = MaterialTheme.colorScheme.secondary
+
         val expandable =
             if (dynamicTargetResolutionEnabled()) tile.expandable
             else remember { Expandable(mutableSetOf()) }
@@ -229,19 +239,22 @@ fun ContentScope.Tile(
         ) { modifier ->
             TileExpandable(
                 expandable = expandable,
-                color = { animatedColor },
-                shape = tileShape,
+                color = outerColor,
+                shape = outerShape,
                 squishiness = squishiness,
                 hapticsViewModel = hapticsViewModel,
                 modifier =
                     modifier
                         .then(surfaceRevealModifier)
-                        .borderOnFocus(
-                            color = MaterialTheme.colorScheme.secondary,
-                            tileShape.topEnd,
-                        )
+                        .thenIf(!wantCircle) {
+                            modifier.borderOnFocus(
+                                color = focusBorderColor,
+                                outerShape.topEnd,
+                            )
+                        }
                         .sysuiResTag("tile_expandable")
                         .fillMaxWidth()
+                        .height(TileHeight)
                         .bounceable(
                             currentBounceableInfo.bounceable,
                             currentBounceableInfo.previousTile,
@@ -276,9 +289,8 @@ fun ContentScope.Tile(
                 // Bounce the tile's container if it is toggleable and is not a large
                 // dual target tile. These don't toggle on main click.
                 val bounceContainer = uiState.isToggleable && (iconOnly || !isDualTarget)
-                TileContainer(
-                    interactionSource = interactionSource.takeIf { bounceContainer },
-                    onClick = onClick@{
+                val click: (() -> Unit)? =
+                    onClick@{
                             if (!isClickable) return@onClick
 
                             if (iconOnly && isDualTarget) {
@@ -310,51 +322,88 @@ fun ContentScope.Tile(
                                 // And show footer text feedback for icons
                                 requestToggleTextFeedback(tile.spec)
                             }
-                        },
-                    onLongClick = longClick,
-                    accessibilityUiState = uiState.accessibilityUiState,
-                    iconOnly = iconOnly,
-                    isDualTarget = isDualTarget,
-                    modifier = contentRevealModifier,
-                ) {
-                    val iconProvider: Context.() -> Icon = { getTileIcon(icon = icon) }
-                    if (iconOnly) {
-                        SmallTileContent(
-                            iconProvider = iconProvider,
-                            color = colors.icon,
-                            modifier =
-                                Modifier.align(Alignment.Center).bounceScale {
-                                    currentBounceableInfo.bounceable.iconBounceScale
-                                },
-                        )
-                    } else {
-                        val iconShape by TileDefaults.animateIconShapeAsState(uiState, shapeMode)
-                        val secondaryClick: (() -> Unit)? =
-                            {
-                                    hapticsViewModel.setTileInteractionState(
-                                        TileHapticsViewModel.TileInteractionState.CLICKED
-                                    )
-                                    tile.toggleClick()
-                                }
-                                .takeIf { isDualTarget }
-                        LargeTileContent(
-                            label = uiState.label,
-                            secondaryLabel = uiState.secondaryLabel,
-                            iconProvider = iconProvider,
-                            sideDrawable = uiState.sideDrawable,
-                            colors = colors,
-                            iconShape = iconShape,
-                            toggleClick = secondaryClick,
-                            onLongClick = longClick,
-                            accessibilityUiState = uiState.accessibilityUiState,
-                            squishiness = squishiness,
-                            isVisible = isVisible,
-                            textScale = { currentBounceableInfo.bounceable.textBounceScale },
-                            modifier =
-                                Modifier.largeTilePadding(
-                                    isDualTarget = uiState.handlesSettingsClick
-                                ),
-                        )
+                    }
+                if (wantCircle) {
+                    val interaction = remember { MutableInteractionSource() }
+
+                    Box(Modifier.fillMaxSize()) {
+                        Box(
+                            modifier = Modifier
+                                .size(TileHeight)
+                                .align(Alignment.Center)
+                                .clip(CircleShape)
+                                .background(animatedColor)
+                                .indication(interaction, LocalIndication.current)
+                                .tileCombinedClickable(
+                                    onClick = { click?.invoke() ?: Unit },
+                                    onLongClick = { longClick?.invoke() },
+                                    accessibilityUiState = uiState.accessibilityUiState,
+                                    interactionSource = interactionSource.takeIf { bounceContainer },
+                                    iconOnly = true,
+                                    isDualTarget = isDualTarget,
+                                )
+                                .tileTestTag(iconOnly),
+                        ) {
+                            val iconProvider: Context.() -> Icon = { getTileIcon(icon = icon) }
+                            SmallTileContent(
+                                iconProvider = iconProvider,
+                                color = colors.icon,
+                                modifier =
+                                    Modifier.align(Alignment.Center).bounceScale {
+                                        currentBounceableInfo.bounceable.iconBounceScale
+                                    },
+                            )
+                        }
+                    }
+                } else {
+                    TileContainer(
+                        interactionSource = interactionSource.takeIf { bounceContainer },
+                        onClick = click,
+                        onLongClick = longClick,
+                        accessibilityUiState = uiState.accessibilityUiState,
+                        iconOnly = iconOnly,
+                        isDualTarget = isDualTarget,
+                        modifier = contentRevealModifier,
+                    ) {
+                        val iconProvider: Context.() -> Icon = { getTileIcon(icon = icon) }
+                        if (iconOnly) {
+                            SmallTileContent(
+                                iconProvider = iconProvider,
+                                color = colors.icon,
+                                modifier =
+                                    Modifier.align(Alignment.Center).bounceScale {
+                                        currentBounceableInfo.bounceable.iconBounceScale
+                                    },
+                            )
+                        } else {
+                            val iconShape by TileDefaults.animateIconShapeAsState(uiState, shapeMode)
+                            val secondaryClick: (() -> Unit)? =
+                                {
+                                        hapticsViewModel.setTileInteractionState(
+                                            TileHapticsViewModel.TileInteractionState.CLICKED
+                                        )
+                                        tile.toggleClick()
+                                    }
+                                    .takeIf { isDualTarget }
+                            LargeTileContent(
+                                label = uiState.label,
+                                secondaryLabel = uiState.secondaryLabel,
+                                iconProvider = iconProvider,
+                                sideDrawable = uiState.sideDrawable,
+                                colors = colors,
+                                iconShape = iconShape,
+                                toggleClick = secondaryClick,
+                                onLongClick = longClick,
+                                accessibilityUiState = uiState.accessibilityUiState,
+                                squishiness = squishiness,
+                                isVisible = isVisible,
+                                textScale = { currentBounceableInfo.bounceable.textBounceScale },
+                                modifier =
+                                    Modifier.largeTilePadding(
+                                        isDualTarget = uiState.handlesSettingsClick
+                                    ),
+                            )
+                        }
                     }
                 }
             }
@@ -700,9 +749,10 @@ private object TileDefaults {
     fun animateShapeAsState(targetValue: Dp, label: String, shapeMode: Int): State<RoundedCornerShape> {
         val animatedCornerRadius by animateDpAsState(
             targetValue = when (shapeMode) {
-                    1 -> InactiveTileCornerRadius /* Circle */
+                    1 -> InactiveTileCornerRadius /* Circle-ish */
                     2 -> ActiveTileCornerRadius /* Rounded Square */
                     3 -> 0.dp /* Square */
+                    4 -> InactiveTileCornerRadius /* Circle */
                     else -> targetValue
                  },
             label = label
