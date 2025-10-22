@@ -86,7 +86,6 @@ public final class PixelPropsUtils {
 
     static {
         Collections.addAll(PKGS_RECENT_PIXEL,
-            "com.android.vending",
             "com.google.android.aicore",
             "com.google.android.apps.aiwallpapers",
             "com.google.android.apps.bard",
@@ -235,7 +234,6 @@ public final class PixelPropsUtils {
         propsToChangeS24U.put("MODEL", "SM-S928B");
     }
 
-    private static volatile boolean sIsFinsky = false;
     private static volatile List<String> sCertifiedProps;
     private static volatile long sCertPropsMtime = -1;
 
@@ -262,10 +260,6 @@ public final class PixelPropsUtils {
                         Settings.Secure.PI_NETFLIX_SPOOF, 0) != 1) {
                     if (DEBUG) Log.d(TAG, "Netflix spoofing disabled by setting");
                     return;
-            } else if (packageName.equals("com.android.vending")) {
-                sIsFinsky = true;
-                spoofBuildGms(context);
-                return;
             } else if (packageName.equals("com.google.android.gms")) {
                 final String processName = Application.getProcessName().toLowerCase();
                 if (processName.contains("unstable")) {
@@ -480,7 +474,7 @@ public final class PixelPropsUtils {
         }
 
         // Check stack for SafetyNet or Play Integrity
-        if (isCallerSafetyNet() || sIsFinsky) {
+        if (isCallerSafetyNet()) {
             Log.i(TAG, "Blocked key attestation");
             throw new UnsupportedOperationException();
         }
