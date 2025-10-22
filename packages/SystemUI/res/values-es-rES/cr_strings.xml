@@ -81,7 +81,7 @@
     <string name="quick_settings_sound_label">Sonido</string>
     <string name="quick_settings_sound_ring">Timbre</string>
     <string name="quick_settings_sound_vibrate">Vibrar</string>
-    <string name="quick_settings_sound_silent">Silent</string>
+    <string name="quick_settings_sound_silent"></string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">Información de CPU</string>
     <!-- FPS Info tile -->
@@ -124,9 +124,9 @@
     <!-- Text while recognizing face -->
     <string name="face_unlock_recognizing">Reconociendo rostro...</string>
     <!-- Preferred network tile -->
-    <string name="qs_preferred_network_label">Preferred network</string>
+    <string name="qs_preferred_network_label"></string>
     <string name="qs_preferred_network_lte">4G / LTE</string>
-    <string name="qs_preferred_network_nr">5G / NR</string>
+    <string name="qs_preferred_network_nr"></string>
     <string name="qs_preferred_network_3g">3G</string>
     <string name="qs_preferred_network_unsupported">Unsupported</string>
     <!-- Flashlight Strength -->
