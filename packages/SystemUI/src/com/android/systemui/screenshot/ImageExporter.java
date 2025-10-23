@@ -395,8 +395,16 @@ public class ImageExporter {
             if (resultUri == null) {
                 // If file overwriting is disabled or there is no existing file to overwrite, create
                 // and insert a new entry.
-                resultUri = resolver.insert(uriWithUserId, values);
-                Log.d(TAG, "Inserted new URI: " + resultUri);
+                try {
+                    resultUri = resolver.insert(uriWithUserId, values);
+                    Log.d(TAG, "Inserted new URI: " + resultUri);
+                } catch (IllegalStateException e) {
+                    // A race on the screenshots directory may cause
+                    // this transaction to fail. Catch and eat the
+                    // exception and defer to the error handling
+                    // below.
+                    Log.w(TAG, "Failed to create new entry", e);
+                }
             }
 
             if (resultUri == null) {
