@@ -191,11 +191,12 @@ constructor(
 
     /** Event indicating that the user has started interacting with the seek bar. */
     @AnyThread
-    fun onSeekStarting() =
-        bgExecutor.execute {
-            scrubbing = true
-            isFalseSeek = false
-        }
+    fun onSeekStarting() = bgExecutor.execute {
+        scrubbing = true
+        isFalseSeek = false
+        cancel?.run()
+        cancel = null
+    }
 
     /**
      * Event indicating that the user has moved the seek bar.
