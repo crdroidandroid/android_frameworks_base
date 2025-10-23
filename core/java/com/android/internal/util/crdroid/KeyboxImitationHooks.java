@@ -6,8 +6,10 @@
 package com.android.internal.util.crdroid;
 
 import android.hardware.security.keymint.Algorithm;
+import android.hardware.security.keymint.KeyOrigin;
 import android.hardware.security.keymint.KeyParameter;
 import android.hardware.security.keymint.KeyParameterValue;
+import android.hardware.security.keymint.KeyPurpose;
 import android.hardware.security.keymint.Tag;
 import android.os.Binder;
 import android.system.keystore2.Authorization;
@@ -60,6 +62,10 @@ public class KeyboxImitationHooks {
         KeyGenParameters params = new KeyGenParameters(args.toArray(new KeyParameter[args.size()]));
 
         if (params.attestationChallenge == null) {
+            return null;
+        }
+
+        if (params.purpose == null || !params.purpose.contains(KeyPurpose.SIGN)) {
             return null;
         }
 
@@ -150,12 +156,58 @@ public class KeyboxImitationHooks {
             a = new Authorization();
             a.keyParameter = new KeyParameter();
             a.keyParameter.tag = Tag.NO_AUTH_REQUIRED;
-            a.keyParameter.value = KeyParameterValue.boolValue(true); // TODO: copy
+            a.keyParameter.value = KeyParameterValue.boolValue(true);
             a.securityLevel = params.securityLevel;
             authorizations.add(a);
 
-            // TODO: ORIGIN, OS_VERSION, OS_PATCHLEVEL, VENDOR_PATCHLEVEL, BOOT_PATCHLEVEL,
-            // CREATION_DATETIME, USER_ID
+            a = new Authorization();
+            a.keyParameter = new KeyParameter();
+            a.keyParameter.tag = Tag.ORIGIN;
+            a.keyParameter.value = KeyParameterValue.origin(params.origin);
+            a.securityLevel = params.securityLevel;
+            authorizations.add(a);
+
+            a = new Authorization();
+            a.keyParameter = new KeyParameter();
+            a.keyParameter.tag = Tag.OS_VERSION;
+            a.keyParameter.value = KeyParameterValue.integer(params.osVersion);
+            a.securityLevel = params.securityLevel;
+            authorizations.add(a);
+
+            a = new Authorization();
+            a.keyParameter = new KeyParameter();
+            a.keyParameter.tag = Tag.OS_PATCHLEVEL;
+            a.keyParameter.value = KeyParameterValue.integer(params.osPatchLevel);
+            a.securityLevel = params.securityLevel;
+            authorizations.add(a);
+
+            a = new Authorization();
+            a.keyParameter = new KeyParameter();
+            a.keyParameter.tag = Tag.VENDOR_PATCHLEVEL;
+            a.keyParameter.value = KeyParameterValue.integer(params.vendorPatchLevel);
+            a.securityLevel = params.securityLevel;
+            authorizations.add(a);
+
+            a = new Authorization();
+            a.keyParameter = new KeyParameter();
+            a.keyParameter.tag = Tag.BOOT_PATCHLEVEL;
+            a.keyParameter.value = KeyParameterValue.integer(params.bootPatchLevel);
+            a.securityLevel = params.securityLevel;
+            authorizations.add(a);
+
+            a = new Authorization();
+            a.keyParameter = new KeyParameter();
+            a.keyParameter.tag = Tag.CREATION_DATETIME;
+            a.keyParameter.value = KeyParameterValue.longInteger(params.creationDateTime);
+            a.securityLevel = params.securityLevel;
+            authorizations.add(a);
+
+            a = new Authorization();
+            a.keyParameter = new KeyParameter();
+            a.keyParameter.tag = Tag.USER_ID;
+            a.keyParameter.value = KeyParameterValue.integer(params.userId);
+            a.securityLevel = params.securityLevel;
+            authorizations.add(a);
 
             metadata.authorizations = authorizations.toArray(new Authorization[0]);
             response.metadata = metadata;
