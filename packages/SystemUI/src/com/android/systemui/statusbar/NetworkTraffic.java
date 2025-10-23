@@ -559,7 +559,7 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable,
                     setMaxLines(2);
                     String txtFont = getResources().getString(com.android.internal.R.string.config_bodyFontFamily);
                     setTypeface(Typeface.create(txtFont, Typeface.BOLD));
-                    setLineSpacing(0.80f, 0.80f);
+                    setLineSpacing(0f, 0.95f);
                     setLayoutDirection(View.LAYOUT_DIRECTION_LOCALE);
                     setTextDirection(View.TEXT_DIRECTION_LOCALE);
                     setTextAlignment(View.TEXT_ALIGNMENT_VIEW_END);
