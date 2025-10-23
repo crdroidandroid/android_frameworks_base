@@ -321,10 +321,13 @@ constructor(
 
     @WorkerThread
     private fun checkPlaybackPosition() {
-        val duration = _data.duration ?: -1
-        val currentPosition = playbackState?.computePosition(duration.toLong())?.toInt()
-        if (currentPosition != null && _data.elapsedTime != currentPosition) {
-            _data = _data.copy(elapsedTime = currentPosition)
+        val duration = _data.duration.takeIf { it > 0 } ?: -1
+        val pos = playbackState?.computePosition(duration.toLong())?.toInt()
+        if (pos != null) {
+            val clamped = if (duration >= 0) pos.coerceIn(0, duration) else pos.coerceAtLeast(0)
+            if (_data.elapsedTime != clamped) {
+                _data = _data.copy(elapsedTime = clamped)
+            }
         }
     }
 
