@@ -11,12 +11,16 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.hardware.security.keymint.Algorithm;
 import android.hardware.security.keymint.EcCurve;
+import android.hardware.security.keymint.KeyOrigin;
 import android.hardware.security.keymint.KeyParameter;
 import android.hardware.security.keymint.Tag;
 import android.os.Binder;
 import android.os.Build;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.security.keystore.KeyProperties;
 import android.system.keystore2.KeyDescriptor;
+import android.util.Base64;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -141,16 +145,43 @@ public final class KeyboxChainGenerator {
 
     private static Extension createExtension(KeyGenParameters params, int uid) {
         try {
-            SecureRandom random = new SecureRandom();
+            Context context = ActivityThread.currentApplication();
+            if (context == null) {
+                Log.e(TAG, "Context is null in createExtension");
+                return null;
+            }
+            SecureRandom secureRandom = new SecureRandom();
+            
+            String key = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.VBOOT_KEY);
+            byte[] verifiedBootKey;
+            if (key == null) {
+                byte[] randomBytes = new byte[32];
+                secureRandom.nextBytes(randomBytes);
+                String encoded = Base64.encodeToString(randomBytes, Base64.NO_WRAP);
+                Settings.Secure.putString(context.getContentResolver(), Settings.Secure.VBOOT_KEY, encoded);
+                verifiedBootKey = randomBytes;
+            } else {
+                verifiedBootKey = Base64.decode(key, Base64.NO_WRAP);
+            }
 
-            byte[] bytes1 = new byte[32];
-            byte[] bytes2 = new byte[32];
+            String hash = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.VBOOT_HASH);
+            byte[] verifiedBootHash;
+            if (hash == null) {
+                byte[] randomBytes = new byte[32];
+                secureRandom.nextBytes(randomBytes);
+                String encoded = Base64.encodeToString(randomBytes, Base64.NO_WRAP);
+                Settings.Secure.putString(context.getContentResolver(), Settings.Secure.VBOOT_HASH, encoded);
+                verifiedBootHash = randomBytes;
+            } else {
+                verifiedBootHash = Base64.decode(hash, Base64.NO_WRAP);
+            }
 
-            random.nextBytes(bytes1);
-            random.nextBytes(bytes2);
-
-            ASN1Encodable[] rootOfTrustEncodables = {new DEROctetString(bytes1), ASN1Boolean.TRUE,
-                    new ASN1Enumerated(0), new DEROctetString(bytes2)};
+            ASN1Encodable[] rootOfTrustEncodables = {
+                    new DEROctetString(verifiedBootKey),
+                    ASN1Boolean.TRUE,
+                    new ASN1Enumerated(0),
+                    new DEROctetString(verifiedBootHash)
+            };
 
             ASN1Sequence rootOfTrustSeq = new DERSequence(rootOfTrustEncodables);
 
@@ -160,17 +191,13 @@ public final class KeyboxChainGenerator {
             var Adigest = new DERSet(fromIntList(params.digest));
             var AecCurve = new ASN1Integer(params.ecCurve);
             var AnoAuthRequired = DERNull.INSTANCE;
+            var Aorigin = new ASN1Integer(0);
 
             // To be loaded
             var AosVersion = new ASN1Integer(getOsVersion());
             var AosPatchLevel = new ASN1Integer(getPatchLevel());
-
-            var AapplicationID = createApplicationId(uid);
             var AbootPatchlevel = new ASN1Integer(getPatchLevelLong());
             var AvendorPatchLevel = new ASN1Integer(getPatchLevelLong());
-
-            var AcreationDateTime = new ASN1Integer(System.currentTimeMillis());
-            var Aorigin = new ASN1Integer(0);
 
             var purpose = new DERTaggedObject(true, 1, Apurpose);
             var algorithm = new DERTaggedObject(true, 2, Aalgorithm);
@@ -178,12 +205,10 @@ public final class KeyboxChainGenerator {
             var digest = new DERTaggedObject(true, 5, Adigest);
             var ecCurve = new DERTaggedObject(true, 10, AecCurve);
             var noAuthRequired = new DERTaggedObject(true, 503, AnoAuthRequired);
-            var creationDateTime = new DERTaggedObject(true, 701, AcreationDateTime);
             var origin = new DERTaggedObject(true, 702, Aorigin);
             var rootOfTrust = new DERTaggedObject(true, 704, rootOfTrustSeq);
             var osVersion = new DERTaggedObject(true, 705, AosVersion);
             var osPatchLevel = new DERTaggedObject(true, 706, AosPatchLevel);
-            var applicationID = new DERTaggedObject(true, 709, AapplicationID);
             var vendorPatchLevel = new DERTaggedObject(true, 718, AvendorPatchLevel);
             var bootPatchLevel = new DERTaggedObject(true, 719, AbootPatchlevel);
 
@@ -211,7 +236,13 @@ public final class KeyboxChainGenerator {
                         bootPatchLevel};
             }
 
-            ASN1Encodable[] softwareEnforced = {applicationID, creationDateTime};
+            var AcreationDateTime = new ASN1Integer(System.currentTimeMillis());
+            var AapplicationID = createApplicationId(uid);
+
+            var creationDateTime = new DERTaggedObject(true, 701, AcreationDateTime);
+            var applicationID = new DERTaggedObject(true, 709, AapplicationID);
+
+            ASN1Encodable[] softwareEnforced = {creationDateTime, applicationID};
 
             ASN1OctetString keyDescriptionOctetStr = getAsn1OctetString(teeEnforcedEncodables, softwareEnforced, params);
 
@@ -265,7 +296,7 @@ public final class KeyboxChainGenerator {
         ASN1Integer keymasterVersion = new ASN1Integer(100);
         ASN1Enumerated keymasterSecurityLevel = new ASN1Enumerated(1);
         ASN1OctetString attestationChallenge = new DEROctetString(params.attestationChallenge);
-        ASN1OctetString uniqueId = new DEROctetString("".getBytes());
+        ASN1OctetString uniqueId = new DEROctetString(new byte[0]);
         ASN1Encodable softwareEnforced = new DERSequence(softwareEnforcedEncodables);
         ASN1Sequence teeEnforced = new DERSequence(teeEnforcedEncodables);
 
@@ -308,8 +339,10 @@ public final class KeyboxChainGenerator {
                     new ASN1Integer(info.getLongVersionCode());
             packageInfoAA[i] = new DERSequence(arr);
 
-            for (Signature s : info.signatures) {
-                signatures.add(new Digest(dg.digest(s.toByteArray())));
+            if (info != null && info.signatures != null) {
+                for (Signature s : info.signatures) {
+                    if (s != null) signatures.add(new Digest(dg.digest(s.toByteArray())));
+                }
             }
         }
 
@@ -389,6 +422,15 @@ public final class KeyboxChainGenerator {
 
         public int securityLevel;
 
+        // Extra fields for response metadata
+        public int osVersion = KeyboxChainGenerator.getOsVersion();
+        public int osPatchLevel = KeyboxChainGenerator.getPatchLevel();
+        public int vendorPatchLevel = KeyboxChainGenerator.getPatchLevelLong();
+        public int bootPatchLevel = KeyboxChainGenerator.getPatchLevelLong();
+        public long creationDateTime = System.currentTimeMillis();
+        public int userId = UserHandle.myUserId();
+        public int origin = KeyOrigin.GENERATED;
+
         public KeyGenParameters(KeyParameter[] params) {
             for (KeyParameter kp : params) {
                 switch (kp.tag) {
@@ -397,19 +439,15 @@ public final class KeyboxChainGenerator {
                     case Tag.CERTIFICATE_SERIAL -> certificateSerial = new BigInteger(kp.value.getBlob());
                     case Tag.CERTIFICATE_NOT_BEFORE -> certificateNotBefore = new Date(kp.value.getDateTime());
                     case Tag.CERTIFICATE_NOT_AFTER -> certificateNotAfter = new Date(kp.value.getDateTime());
-                    case Tag.CERTIFICATE_SUBJECT -> certificateSubject =
-                            new X500Name(new X500Principal(kp.value.getBlob()).getName());
+                    case Tag.CERTIFICATE_SUBJECT ->
+                            certificateSubject = new X500Name(new X500Principal(kp.value.getBlob()).getName());
                     case Tag.RSA_PUBLIC_EXPONENT -> rsaPublicExponent = BigInteger.valueOf(kp.value.getLongInteger());
                     case Tag.EC_CURVE -> {
                         ecCurve = kp.value.getEcCurve();
                         ecCurveName = getEcCurveName(ecCurve);
                     }
-                    case Tag.PURPOSE -> {
-                        purpose.add(kp.value.getKeyPurpose());
-                    }
-                    case Tag.DIGEST -> {
-                        digest.add(kp.value.getDigest());
-                    }
+                    case Tag.PURPOSE -> purpose.add(kp.value.getKeyPurpose());
+                    case Tag.DIGEST -> digest.add(kp.value.getDigest());
                     case Tag.ATTESTATION_CHALLENGE -> attestationChallenge = kp.value.getBlob();
                     case Tag.ATTESTATION_ID_BRAND -> brand = kp.value.getBlob();
                     case Tag.ATTESTATION_ID_DEVICE -> device = kp.value.getBlob();
@@ -422,16 +460,14 @@ public final class KeyboxChainGenerator {
         }
 
         private static String getEcCurveName(int curve) {
-            String res;
-            switch (curve) {
-                case EcCurve.CURVE_25519 -> res = "CURVE_25519";
-                case EcCurve.P_224 -> res = "secp224r1";
-                case EcCurve.P_256 -> res = "secp256r1";
-                case EcCurve.P_384 -> res = "secp384r1";
-                case EcCurve.P_521 -> res = "secp521r1";
+            return switch (curve) {
+                case EcCurve.CURVE_25519 -> "CURVE_25519";
+                case EcCurve.P_224 -> "secp224r1";
+                case EcCurve.P_256 -> "secp256r1";
+                case EcCurve.P_384 -> "secp384r1";
+                case EcCurve.P_521 -> "secp521r1";
                 default -> throw new IllegalArgumentException("unknown curve");
-            }
-            return res;
+            };
         }
     }
 }
