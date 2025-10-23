@@ -70,10 +70,12 @@ public class HidProfile implements LocalBluetoothProfile {
                 device.refresh();
             }
             mIsProfileReady=true;
+            mProfileManager.callServiceConnectedListeners();
         }
 
         public void onServiceDisconnected(int profile) {
             mIsProfileReady=false;
+            mProfileManager.callServiceDisconnectedListeners();
         }
     }
 
