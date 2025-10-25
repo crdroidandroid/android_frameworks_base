@@ -421,6 +421,7 @@ public final class KeyboxChainGenerator {
         public byte[] model;
 
         public int securityLevel;
+        public boolean noAuthRequired;
 
         // Extra fields for response metadata
         public int osVersion = KeyboxChainGenerator.getOsVersion();
@@ -455,6 +456,7 @@ public final class KeyboxChainGenerator {
                     case Tag.ATTESTATION_ID_MANUFACTURER -> manufacturer = kp.value.getBlob();
                     case Tag.ATTESTATION_ID_MODEL -> model = kp.value.getBlob();
                     case Tag.HARDWARE_TYPE -> securityLevel = kp.value.getSecurityLevel();
+                    case Tag.NO_AUTH_REQUIRED -> noAuthRequired = kp.value.getBoolValue();
                 }
             }
         }
