@@ -16,6 +16,7 @@
 
 package com.android.server.graphics.fonts;
 
+import static com.android.server.graphics.fonts.FontManagerService.axFontFeatureSupport;
 import static com.android.server.graphics.fonts.FontManagerService.SystemFontException;
 
 import android.annotation.NonNull;
@@ -601,14 +602,16 @@ final class UpdatableFontDir {
                         FontManager.RESULT_ERROR_FAILED_TO_WRITE_FONT_FILE,
                         "Failed to write font file to storage.", e);
             }
-            try {
-                // Do not parse font file before setting up fs-verity.
-                // setUpFsverity throws IOException if failed.
-                mFsverityUtil.setUpFsverity(tempNewFontFile.getAbsolutePath());
-            } catch (IOException e) {
-                throw new SystemFontException(
-                        FontManager.RESULT_ERROR_VERIFICATION_FAILURE,
-                        "Failed to setup fs-verity.", e);
+            if (!axFontFeatureSupport) {
+                try {
+                    // Do not parse font file before setting up fs-verity.
+                    // setUpFsverity throws IOException if failed.
+                    mFsverityUtil.setUpFsverity(tempNewFontFile.getAbsolutePath());
+                } catch (IOException e) {
+                    throw new SystemFontException(
+                            FontManager.RESULT_ERROR_VERIFICATION_FAILURE,
+                            "Failed to setup fs-verity.", e);
+                }
             }
             String fontFileName;
             try {
