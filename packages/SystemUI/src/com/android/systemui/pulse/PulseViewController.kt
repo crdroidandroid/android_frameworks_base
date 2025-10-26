@@ -72,11 +72,6 @@ class PulseViewController @Inject constructor(
     val mediaPlaying: Boolean
         get() = MediaSessionManager.get().isMediaPlaying
 
-    val showPulse: Boolean
-        get() = pulseEnabled && mediaPlaying 
-                && ((keyguardShowing && !dozing)
-                || (dozing && ambientEnabled))
-
     init {
         INSTANCE = this
 
@@ -87,7 +82,9 @@ class PulseViewController @Inject constructor(
     fun getPulseView(): PulseView = view
 
     private fun updateState() {
-        pulseRunning = showPulse
+        pulseRunning = pulseEnabled && mediaPlaying 
+                && ((keyguardShowing && !dozing)
+                || (dozing && ambientEnabled))
     }
 
     private fun updatePulse(show: Boolean) {
@@ -99,7 +96,7 @@ class PulseViewController @Inject constructor(
     }
 
     override fun onDataUpdate(data: PulseData) {
-        if (showPulse) {
+        if (pulseRunning) {
             mainScope.launch { 
                 view.updateVisualizerData(data) 
             }
