@@ -131,7 +131,7 @@ class PulseViewController @Inject constructor(
     }
 
     override fun onScreenTurnedOff() {
-        pulseRunning = false
+        if (!dozing || !ambientEnabled) pulseRunning = false
     }
 
     override fun onStartedWakingUp() {
