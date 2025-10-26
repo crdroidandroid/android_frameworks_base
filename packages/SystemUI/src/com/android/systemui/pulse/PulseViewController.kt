@@ -32,18 +32,13 @@ class PulseViewController @Inject constructor(
     ScrimUtils.ScrimEventListener {
 
     private val mainScope = MainScope()
+    private var listenersRegistered = false
 
     private val settingsRepository: PulseSettingsRepository =
-        PulseSettingsRepository(context).apply {
-            startObserving()
-            setOnSettingsChangedListener { updateState() }
-        }
+        PulseSettingsRepository(context)
 
     private val view: PulseView =
-        PulseView(context).apply {
-            initialize(settingsRepository)
-            setVisibility(false)
-        }
+        PulseView(context)
 
     private val audioProcessor: PulseAudioDataProcessor =
         PulseAudioDataProcessor(context).apply {
@@ -75,16 +70,41 @@ class PulseViewController @Inject constructor(
     init {
         INSTANCE = this
 
-        ScrimUtils.get().addListener(this)
-        MediaSessionManager.get().addListener(this)
+        view.initialize(settingsRepository)
+        settingsRepository.setOnSettingsChangedListener { onSettingsChanged() }
+        settingsRepository.startObserving()
+        onSettingsChanged()
     }
 
     fun getPulseView(): PulseView = view
 
     private fun updateState() {
-        pulseRunning = pulseEnabled && mediaPlaying 
+        if (!pulseEnabled) {
+            pulseRunning = false
+            return
+        }
+        pulseRunning = mediaPlaying 
                 && ((keyguardShowing && !dozing)
                 || (dozing && ambientEnabled))
+    }
+
+    private fun onSettingsChanged() {
+        val enabled = pulseEnabled
+        if (enabled && !listenersRegistered) {
+            ScrimUtils.get().addListener(this)
+            MediaSessionManager.get().addListener(this)
+            listenersRegistered = true
+        } else if (!enabled && listenersRegistered) {
+            ScrimUtils.get().removeListener(this)
+            MediaSessionManager.get().removeListener(this)
+            listenersRegistered = false
+            pulseRunning = false
+            mainScope.launch {
+                view.setVisibility(false)
+                audioProcessor.stopCapture()
+            }
+        }
+        updateState()
     }
 
     private fun updatePulse(show: Boolean) {
@@ -136,6 +156,14 @@ class PulseViewController @Inject constructor(
     }
 
     fun destroy() {
+        pulseRunning = false
+        settingsRepository.stopObserving()
+        if (listenersRegistered) {
+            ScrimUtils.get().removeListener(this)
+            MediaSessionManager.get().removeListener(this)
+            listenersRegistered = false
+        }
+        audioProcessor.cleanup()
         mainScope.cancel()
     }
 
