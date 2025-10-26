@@ -34,14 +34,9 @@ public class KeyboxImitationHooks {
 
     private static final String TAG = "KeyboxImitationHooks";
     private static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
-    private static boolean mSuccess = false;
 
     public static KeyEntryResponse onGetKeyEntry(KeyDescriptor descriptor) {
         if (!KeyProviderManager.isKeyboxAvailable()) {
-            return null;
-        }
-
-        if (!mSuccess) {
             return null;
         }
 
@@ -89,7 +84,6 @@ public class KeyboxImitationHooks {
                 return null;
             }
             KeyboxUtils.append(uid, descriptor.alias, response);
-            mSuccess = true;
             return response.metadata;
         } catch (Exception e) {
             Log.e(TAG, "Failed to generate key", e);
@@ -221,10 +215,6 @@ public class KeyboxImitationHooks {
             Log.e(TAG, "Failed to build key entry response", e);
             return null;
         }
-    }
-
-    public static void setSuccessFlag(boolean flag) {
-        mSuccess = flag;
     }
 
     private static void dlog(String msg) {
