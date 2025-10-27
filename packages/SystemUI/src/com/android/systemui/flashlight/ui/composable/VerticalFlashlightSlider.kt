@@ -274,8 +274,7 @@ private fun TrapezoidTrack(
 
         Canvas(
             modifier =
-                modifier
-                    .width { (TRACK_LENGTH * (sliderState.value / maxSliderRange)).roundToPx() }
+                Modifier.width { (TRACK_LENGTH * (sliderState.value / maxSliderRange)).roundToPx() }
                     .height { canvasHeight.roundToPx() }
                     .testTag(TRACK_TEST_TAG)
                     .motionTestValues {
