@@ -169,6 +169,7 @@ import com.android.server.cpu.CpuMonitorService;
 import com.android.server.crashrecovery.CrashRecoveryAdaptor;
 import com.android.server.crdroid.AttestationService;
 import com.android.server.crdroid.CustomDeviceConfigService;
+import com.android.server.crdroid.VbmetaHashService;
 import com.android.server.credentials.CredentialManagerService;
 import com.android.server.criticalevents.CriticalEventLog;
 import com.android.server.devicepolicy.DevicePolicyManagerService;
@@ -2843,6 +2844,11 @@ public final class SystemServer implements Dumpable {
             // AttestationService
             t.traceBegin("AttestationService");
             mSystemServiceManager.startService(AttestationService.class);
+            t.traceEnd();
+
+            // VbmetaHashService
+            t.traceBegin("VbmetaHashService");
+            mSystemServiceManager.startService(VbmetaHashService.class);
             t.traceEnd();
 
             if (context.getResources().getBoolean(R.bool.config_dozeAlwaysOnDisplayAvailable)) {
