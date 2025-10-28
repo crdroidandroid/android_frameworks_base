@@ -1680,13 +1680,98 @@ public final class ImageDecoder implements AutoCloseable {
                 checkForExtended());
     }
 
+    private static OnHeaderDecodedListener sDefaultProcessListener = null;
+    private static ThreadLocal<OnHeaderDecodedListener> sDefaultThreadListener =
+            new ThreadLocal<>();
+
+    // Listeners are nullable so must use separate object to lock.
+    private static final Object sListenerLock = new Object();
+
+    /**
+     * Set the thread-level default {@link OnHeaderDecodedListener}. A subsequent call
+     * will overwrite any previous calls.
+     *
+     * <p>If set, this is the first {@link OnHeaderDecodedListener} to run during image decoding.
+     * At the time of decoding, a listener can also be provided to
+     * {@link #decodeDrawable(Source, OnHeaderDecodedListener)} which is run after the
+     * thread-level default.
+     *
+     * <p>Note: setting a thread-level default will cause the process-level default set by
+     * {@link #setDefaultProcessListener(OnHeaderDecodedListener)} to be skipped on that thread.
+     * The listener passed to {@link #decodeDrawable} will always run.
+     *
+     * @hide
+     */
+    public static void setDefaultThreadListener(@Nullable OnHeaderDecodedListener listener) {
+        sDefaultThreadListener.set(listener);
+    }
+
+    /**
+     * Return the thread-level default {@link OnHeaderDecodedListener}.
+     *
+     * @hide
+     */
+    @Nullable
+    public static OnHeaderDecodedListener getDefaultThreadListener() {
+        return sDefaultThreadListener.get();
+    }
+
+    /**
+     * Set the process-level default {@link OnHeaderDecodedListener}. A subsequent call
+     * will overwrite any previous calls.
+     *
+     * <p>If there is no thread-level default set on the current thread, this is the first
+     * {@link OnHeaderDecodedListener} to run during image decoding. At the time of decoding, a
+     * listener can also be provided to {@link #decodeDrawable(Source, OnHeaderDecodedListener)}
+     * which is run after the process-level default.
+     *
+     * <p>Note: setting a thread-level default via
+     * {@link #setDefaultThreadListener(OnHeaderDecodedListener)} will cause the process-level
+     * default to be skipped on that thread. The listener passed to {@link #decodeDrawable} will
+     * always run.
+     *
+     * @hide
+     */
+    public static void setDefaultProcessListener(@Nullable OnHeaderDecodedListener listener) {
+        synchronized (sListenerLock) {
+            sDefaultProcessListener = listener;
+        }
+    }
+
+    /**
+     * Return the process-level default {@link OnHeaderDecodedListener}.
+     *
+     * @hide
+     */
+    @Nullable
+    public static OnHeaderDecodedListener getDefaultProcessListener() {
+        synchronized (sListenerLock) {
+            return sDefaultProcessListener;
+        }
+    }
+
     private void callHeaderDecoded(@Nullable OnHeaderDecodedListener listener,
             @NonNull Source src) {
-        if (listener != null) {
+
+        OnHeaderDecodedListener threadListener = getDefaultThreadListener();
+        OnHeaderDecodedListener processListener = getDefaultProcessListener();
+
+        if (listener != null || threadListener != null || processListener != null) {
             ImageInfo info =
                     new ImageInfo(
                             new Size(mWidth, mHeight), mAnimated, getMimeType(), getColorSpace());
-            listener.onHeaderDecoded(this, info, src);
+
+            // Thread listener preferred over process listener to set defaults.
+            if (threadListener != null) {
+                threadListener.onHeaderDecoded(this, info, src);
+            } else if (processListener != null) {
+                processListener.onHeaderDecoded(this, info, src);
+            }
+
+            // Always invoke a provided listener.
+            if (listener != null) {
+                listener.onHeaderDecoded(this, info, src);
+            }
         }
     }
 
