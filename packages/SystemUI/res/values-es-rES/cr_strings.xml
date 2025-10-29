@@ -132,7 +132,7 @@
     <!-- Flashlight Strength -->
     <string name="flashlight_strength_title">Intensidad de la linterna</string>
     <string name="flashlight_strength_turn_off">Apagar</string>
-    <string name="flashlight_strength_turn_on">Turn on</string>
+    <string name="flashlight_strength_turn_on">Encender</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="one">%d dispositivo conectado</item>
@@ -142,7 +142,7 @@
     <string name="enable_fiveg">Habilitar 5G</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">usado hoy</string>
-    <string name="usage_data_weekly">used this week</string>
+    <string name="usage_data_weekly">usado esta semana</string>
     <string name="usage_data_default_suffix">Datos</string>
     <string name="usage_wifi_default_suffix">Wi-Fi</string>
     <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
