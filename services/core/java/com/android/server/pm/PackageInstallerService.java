@@ -1037,6 +1037,14 @@ public class PackageInstallerService extends IPackageInstaller.Stub implements
                 // For now, installs to adopted media are treated as internal from
                 // an install flag point-of-view.
                 params.installFlags |= PackageManager.INSTALL_INTERNAL;
+                // Check if volumeUuid value is valid, else fail.
+                try {
+                    StorageManager.convert(params.volumeUuid);
+                } catch (IllegalArgumentException e) {
+                    throw new IllegalArgumentException("Invalid volumeUuid value in session "
+                            + "params: "
+                            + params.volumeUuid);
+                }
             } else {
                 params.installFlags |= PackageManager.INSTALL_INTERNAL;
 
