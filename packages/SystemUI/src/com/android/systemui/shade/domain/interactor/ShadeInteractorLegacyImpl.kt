@@ -17,7 +17,6 @@
 package com.android.systemui.shade.domain.interactor
 
 import android.graphics.Rect
-import com.android.app.tracing.FlowTracing.traceAsCounter
 import com.android.compose.animation.scene.TransitionKey
 import com.android.systemui.dagger.SysUISingleton
 import com.android.systemui.dagger.qualifiers.Application
@@ -82,7 +81,6 @@ constructor(
                 }
             }
             .distinctUntilChanged()
-            .traceAsCounter("panel_expansion") { (it * 100f).toInt() }
             .stateIn(scope, SharingStarted.Eagerly, 0f)
 
     @Deprecated("Do not use. isNotificationsExpanded is only relevant in SceneContainer")
