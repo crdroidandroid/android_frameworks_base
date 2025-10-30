@@ -23,7 +23,6 @@ import android.util.Log
 import androidx.annotation.FloatRange
 import com.android.app.tracing.TraceStateLogger
 import com.android.app.tracing.TrackGroupUtils.trackGroup
-import com.android.app.tracing.coroutines.TrackTracer
 import com.android.systemui.dagger.SysUISingleton
 import com.android.systemui.util.Compile
 import java.util.concurrent.CopyOnWriteArrayList
@@ -114,7 +113,6 @@ class ShadeExpansionStateManager @Inject constructor() {
         )
 
         if (Trace.isTagEnabled(TRACE_TAG)) {
-            TrackTracer.instantForGroup("shade", "panel_expansion", fraction)
             stateLogger.log(state.panelStateToString())
         }
 
