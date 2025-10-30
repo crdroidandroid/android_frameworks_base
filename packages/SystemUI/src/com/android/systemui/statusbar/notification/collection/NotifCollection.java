@@ -238,7 +238,6 @@ public class NotifCollection implements Dumpable, PipelineDumpable {
 
     /** @see NotifPipeline#getAllNotifs() */
     Collection<NotificationEntry> getAllNotifs() {
-        Assert.isMainThread();
         return mReadOnlyNotificationSet;
     }
 
