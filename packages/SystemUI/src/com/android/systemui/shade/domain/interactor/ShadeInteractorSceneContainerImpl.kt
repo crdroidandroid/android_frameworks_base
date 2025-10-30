@@ -17,7 +17,6 @@
 package com.android.systemui.shade.domain.interactor
 
 import android.graphics.Rect
-import com.android.app.tracing.FlowTracing.traceAsCounter
 import com.android.compose.animation.scene.ContentKey
 import com.android.compose.animation.scene.ObservableTransitionState
 import com.android.compose.animation.scene.OverlayKey
@@ -68,7 +67,6 @@ constructor(
             .flatMapLatest { shadeMode ->
                 transitionProgressExpansion(shadeMode.notificationsContentKey)
             }
-            .traceAsCounter("panel_expansion") { (it * 100f).toInt() }
             .stateIn(scope, SharingStarted.Eagerly, 0f)
 
     override val isNotificationsExpanded: StateFlow<Boolean> =
