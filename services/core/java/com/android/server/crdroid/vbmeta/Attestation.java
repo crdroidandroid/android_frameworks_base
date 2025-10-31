@@ -1,7 +1,6 @@
 package com.android.server.crdroid.vbmeta;
 
 import android.os.Build;
-import android.util.Log;
 
 import java.security.cert.CertificateParsingException;
 import java.security.cert.X509Certificate;
@@ -14,7 +13,6 @@ public abstract class Attestation {
     static final String ASN1_OID = "1.3.6.1.4.1.11129.2.1.17";
     static final String KNOX_OID = "1.3.6.1.4.1.236.11.3.23.7";
     static final String KEY_USAGE_OID = "2.5.29.15"; // Standard key usage extension.
-    static final String CRL_DP_OID = "2.5.29.31"; // Standard CRL Distribution Points extension.
 
     public static final int KM_SECURITY_LEVEL_SOFTWARE = 0;
     public static final int KM_SECURITY_LEVEL_TRUSTED_ENVIRONMENT = 1;
@@ -32,10 +30,6 @@ public abstract class Attestation {
     public static Attestation loadFromCertificate(X509Certificate x509Cert) throws CertificateParsingException {
         if (x509Cert.getExtensionValue(ASN1_OID) == null) {
             throw new CertificateParsingException("No attestation extensions found");
-        }
-
-        if (x509Cert.getExtensionValue(CRL_DP_OID) != null) {
-            Log.w("Attestation", "CRL Distribution Points extension found in leaf certificate.");
         }
 
         return new ASN1Attestation(x509Cert);
@@ -74,6 +68,8 @@ public abstract class Attestation {
                 return "KeyMint 2.0";
             case 300:
                 return "KeyMint 3.0";
+            case 400:
+                return "KeyMint 4.0";
             default:
                 return "Unknown (" + version + ")";
         }
@@ -99,6 +95,8 @@ public abstract class Attestation {
                 return "KeyMint 2.0";
             case 300:
                 return "KeyMint 3.0";
+            case 400:
+                return "KeyMint 4.0";
             default:
                 return "Unknown (" + version + ")";
         }
