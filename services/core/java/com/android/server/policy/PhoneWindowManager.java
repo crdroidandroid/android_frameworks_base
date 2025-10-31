@@ -878,9 +878,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     // Lineage additions
     private static final int MSG_TOGGLE_TORCH = 100;
     private static final int MSG_CAMERA_LONG_PRESS = 101;
+    private static final int MSG_TORCH_POWER_SHORT_PRESS = 102;
 
     private CameraManager mCameraManager;
     private String mRearFlashCameraId;
+    private boolean mTorchPowerButtonTurnOff;
     private boolean mTorchLongPressPowerEnabled;
     private boolean mTorchEnabled;
     private int mTorchTimeout;
@@ -1015,6 +1017,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 case MSG_TOGGLE_TORCH:
                     toggleTorch();
                     break;
+                case MSG_TORCH_POWER_SHORT_PRESS:
+                    toggleTorch();
+                    break;
                 case MSG_CAMERA_LONG_PRESS:
                     mIsLongPress = true;
                     break;
@@ -1120,6 +1125,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(LineageSettings.System.getUriFor(
                     LineageSettings.System.TORCH_LONG_PRESS_POWER_TIMEOUT), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(LineageSettings.System.getUriFor(
+                    LineageSettings.System.TORCH_POWER_BUTTON_TURN_OFF), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(LineageSettings.System.getUriFor(
                     LineageSettings.System.CLICK_PARTIAL_SCREENSHOT), false, this,
@@ -1387,6 +1395,18 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 if (mResolvedLongPressOnPowerBehavior == LONG_PRESS_POWER_TORCH &&
                         (!isScreenOn() || isDozeMode())) {
                     wakeUpFromWakeKey(event);
+                }
+                // Check if torch is on and power button should turn it off instead of waking screen
+                if (mTorchEnabled && mTorchPowerButtonTurnOff && !isScreenOn()) {
+                    mPowerKeyHandled = true;
+                    mHandler.removeMessages(MSG_TORCH_POWER_SHORT_PRESS);
+                    Message msg = mHandler.obtainMessage(MSG_TORCH_POWER_SHORT_PRESS);
+                    msg.setAsynchronous(true);
+                    msg.sendToTarget();
+                } else {
+                    if (mResolvedLongPressOnPowerBehavior == LONG_PRESS_POWER_TORCH && (!isScreenOn() || isDozeMode())) {
+                        wakeUpFromWakeKey(event);
+                    }
                 }
             }
         }
@@ -3695,6 +3715,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             mTorchTimeout = LineageSettings.System.getIntForUser(
                     resolver, LineageSettings.System.TORCH_LONG_PRESS_POWER_TIMEOUT, 0,
                     UserHandle.USER_CURRENT);
+            mTorchPowerButtonTurnOff = LineageSettings.System.getIntForUser(
+                    resolver, LineageSettings.System.TORCH_POWER_BUTTON_TURN_OFF, 0,
+                    UserHandle.USER_CURRENT) == 1;
             mClickPartialScreenshot = LineageSettings.System.getIntForUser(resolver,
                     LineageSettings.System.CLICK_PARTIAL_SCREENSHOT, 0,
                     UserHandle.USER_CURRENT) == 1;
