@@ -135,7 +135,7 @@ class PulseViewController @Inject constructor(
         updateState()
     }
 
-    override fun onDozingChanged() {
+    override fun onDozingChanged(dozing: Boolean) {
         updateState()
     }
 
