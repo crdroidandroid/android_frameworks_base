@@ -53,8 +53,7 @@ constructor(
 
     private var job: Job? = null
 
-    private val dozing: Boolean
-        get() = ScrimUtils.get().isDozing()
+    private var isDozing = false
 
     private var lastNotificationKey: String? = null
     private var lastNotificationText: CharSequence? = null
@@ -100,7 +99,7 @@ constructor(
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification, rankingMap: RankingMap) {
-        if (!currentSettings.isEnabled || !dozing
+        if (!currentSettings.isEnabled || !isDozing
                 || currentSettings.colorMode != COLOR_MODE_NOTIFICATION) return
 
         val currentKey = sbn.key
@@ -130,7 +129,8 @@ constructor(
 
     override fun onDozingChanged(dozing: Boolean) {
         if (!currentSettings.isEnabled) return
-        if (!dozing) {
+        isDozing = dozing
+        if (!isDozing) {
             edgeLightView.pulseRunning = false
             edgeLightView.visible = false
         }
@@ -165,7 +165,7 @@ constructor(
     }
 
     override fun setPulsing(pulsing: Boolean) {
-        if (!currentSettings.isEnabled || !pulsing || !dozing) return
+        if (!currentSettings.isEnabled || !pulsing || !isDozing) return
         edgeLightView.apply {
             visible = true
             pulseRunning = true
