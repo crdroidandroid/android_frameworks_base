@@ -16,6 +16,7 @@
 package com.android.systemui.pulse
 
 import android.content.Context
+import android.media.session.PlaybackState
 import com.android.systemui.dagger.SysUISingleton
 import com.android.systemui.media.MediaSessionManager
 import com.android.systemui.util.ScrimUtils
@@ -34,6 +35,11 @@ class PulseViewController @Inject constructor(
     private val mainScope = MainScope()
     private var listenersRegistered = false
 
+    private var isMediaPlaying = false
+    private var bouncerShowingOrKeyguardDismissing = false
+    private var keyguardShowing = false
+    private var isDozing = false
+
     private val settingsRepository: PulseSettingsRepository =
         PulseSettingsRepository(context)
 
@@ -51,11 +57,8 @@ class PulseViewController @Inject constructor(
     val ambientEnabled: Boolean
         get() = settingsRepository.isPulseAmbientEnabled()
 
-    val keyguardShowing: Boolean
-        get() = ScrimUtils.get().isKeyguardShowing()
-
-    val dozing: Boolean
-        get() = ScrimUtils.get().isDozing()
+    private val isCollapsed: Boolean
+        get() = ScrimUtils.get().isPanelFullyCollapsed()
 
     var pulseRunning: Boolean = false
         set(value) {
@@ -63,9 +66,6 @@ class PulseViewController @Inject constructor(
             field = value
             updatePulse(value)
         }
-
-    val mediaPlaying: Boolean
-        get() = MediaSessionManager.get().isMediaPlaying
 
     init {
         INSTANCE = this
@@ -83,9 +83,11 @@ class PulseViewController @Inject constructor(
             pulseRunning = false
             return
         }
-        pulseRunning = mediaPlaying 
-                && ((keyguardShowing && !dozing)
-                || (dozing && ambientEnabled))
+        pulseRunning = isMediaPlaying 
+                && !bouncerShowingOrKeyguardDismissing
+                && isCollapsed
+                && ((keyguardShowing && !isDozing)
+                || (isDozing && ambientEnabled))
     }
 
     private fun onSettingsChanged() {
@@ -124,6 +126,7 @@ class PulseViewController @Inject constructor(
     }
 
     override fun onPlaybackStateChanged(state: Int) {
+        isMediaPlaying = state == PlaybackState.STATE_PLAYING
         updateState()
     }
 
@@ -132,23 +135,44 @@ class PulseViewController @Inject constructor(
     }
 
     override fun onKeyguardShowingChanged(showing: Boolean) {
+        keyguardShowing = showing
         updateState()
     }
 
     override fun onDozingChanged(dozing: Boolean) {
+        isDozing = dozing
+        updateState()
+    }
+
+    override fun onExpandedFractionChanged(expandedFraction: Float) {
+        updateState()
+    }
+
+    override fun onBarStateChanged(state: Int) {
+        updateState()
+    }
+
+    override fun onQsVisibilityChanged(visible: Boolean) {
         updateState()
     }
 
     override fun onKeyguardFadingAwayChanged(fadingAway: Boolean) {
-        pulseRunning = false
+        bouncerShowingOrKeyguardDismissing = fadingAway
+        updateState()
     }
 
     override fun onKeyguardGoingAwayChanged(goingAway: Boolean) {
-        pulseRunning = false
+        bouncerShowingOrKeyguardDismissing = goingAway
+        updateState()
+    }
+
+    override fun onPrimaryBouncerShowingChanged(showing: Boolean) {
+        bouncerShowingOrKeyguardDismissing = showing
+        updateState()
     }
 
     override fun onScreenTurnedOff() {
-        if (!dozing || !ambientEnabled) pulseRunning = false
+        pulseRunning = false
     }
 
     override fun onStartedWakingUp() {
