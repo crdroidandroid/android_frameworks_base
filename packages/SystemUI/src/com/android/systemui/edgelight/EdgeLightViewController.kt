@@ -128,7 +128,7 @@ constructor(
         edgeLightView.paintColor = lastNotifColor
     }
 
-    override fun onDozingChanged() {
+    override fun onDozingChanged(dozing: Boolean) {
         if (!currentSettings.isEnabled) return
         if (!dozing) {
             edgeLightView.pulseRunning = false
