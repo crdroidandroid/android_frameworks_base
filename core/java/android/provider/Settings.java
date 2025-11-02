@@ -7362,6 +7362,11 @@ public final class Settings {
         /**
          * @hide
          */
+        public static final String AMBIENT_MEDIA_ART_ENABLED = "ambient_media_art_enabled";
+
+        /**
+         * @hide
+         */
         public static final String LS_MEDIA_ART_FILTER = "ls_media_art_filter";
 
         /**
