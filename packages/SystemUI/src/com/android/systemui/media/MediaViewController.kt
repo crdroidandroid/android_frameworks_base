@@ -62,9 +62,12 @@ class MediaViewController @Inject constructor(
 
     private var listening = false
     private var featureEnabled = false
+    private var ambientEnabled = true
     private var artworkDrawable: Drawable? = null
     private var isMediaPlaying = false
     private var bouncerShowingOrKeyguardDismissing = false
+    private var keyguardShowing = false
+    private var isDozing = false
 
     private var mediaFilter = 0
     private var mediaFadeLevel = 40
@@ -91,11 +94,22 @@ class MediaViewController @Inject constructor(
 
     private val sharedTypedValue = TypedValue()
 
+    private val isCollapsed: Boolean
+        get() = ScrimUtils.get().isPanelFullyCollapsed()
+
+    private val isPortrait: Boolean
+        get() = context.resources.configuration.orientation != Configuration.ORIENTATION_LANDSCAPE
+
     init {
         INSTANCE = this
 
         context.contentResolver.registerContentObserver(
             Settings.System.getUriFor(Settings.System.LS_MEDIA_ART_ENABLED),
+            false,
+            settingsObserver
+        )
+        context.contentResolver.registerContentObserver(
+            Settings.System.getUriFor(Settings.System.AMBIENT_MEDIA_ART_ENABLED),
             false,
             settingsObserver
         )
@@ -123,6 +137,13 @@ class MediaViewController @Inject constructor(
             context.contentResolver,
             Settings.System.LS_MEDIA_ART_ENABLED,
             0,
+            UserHandle.USER_CURRENT
+        ) == 1
+
+        ambientEnabled = Settings.System.getIntForUser(
+            context.contentResolver,
+            Settings.System.AMBIENT_MEDIA_ART_ENABLED,
+            1,
             UserHandle.USER_CURRENT
         ) == 1
 
@@ -223,14 +244,13 @@ class MediaViewController @Inject constructor(
 
     private fun shouldShowMediaArt(): Boolean {
         if (!featureEnabled) return false
-        if (artworkDrawable == null) return false
-        val isPortrait = context.resources.configuration.orientation != Configuration.ORIENTATION_LANDSCAPE
-        val isKeyguard = ScrimUtils.get().isKeyguardShowing()
-        val isCollapsed = ScrimUtils.get().isPanelFullyCollapsed()
-        if (!isPortrait || !isKeyguard || !isCollapsed) return false
         if (!isMediaPlaying) return false
         if (bouncerShowingOrKeyguardDismissing) return false
-        return true
+        if (artworkDrawable == null) return false
+        if (!isPortrait || !isCollapsed) return false
+        if (isDozing && ambientEnabled) return true
+        if (keyguardShowing && !isDozing) return true
+        return false
     }
 
     private fun cancelScrimAnim() {
@@ -435,6 +455,7 @@ class MediaViewController @Inject constructor(
     }
 
     override fun onDozingChanged(dozing: Boolean) {
+        isDozing = dozing
         coroutineScope.launch {
             onMediaStateChanged()
         }
@@ -459,7 +480,8 @@ class MediaViewController @Inject constructor(
     }
 
     override fun onKeyguardShowingChanged(showing: Boolean) {
-        if (showing) {
+        keyguardShowing = showing
+        if (keyguardShowing) {
             dismissingKeyguard = false
         } else {
             cleanupResources(false)
