@@ -31,7 +31,7 @@ class ScrimUtils private constructor() {
         fun onKeyguardFadingAwayChanged(fadingAway: Boolean) {}
         fun onKeyguardGoingAwayChanged(goingAway: Boolean) {}
         fun onPrimaryBouncerShowingChanged(showing: Boolean) {}
-        fun onDozingChanged() {}
+        fun onDozingChanged(dozing: Boolean) {}
         fun onExpandedFractionChanged(expandedFraction: Float) {}
         fun onBarStateChanged(state: Int) {}
         fun onQsVisibilityChanged(visible: Boolean) {}
@@ -112,7 +112,7 @@ class ScrimUtils private constructor() {
     fun onDozingChanged(dozing: Boolean) {
         if (mIsDozing == null || mIsDozing != dozing) {
             mIsDozing = dozing
-            listeners.notify { it.onDozingChanged() }
+            listeners.notify { it.onDozingChanged(dozing) }
         }
     }
 
