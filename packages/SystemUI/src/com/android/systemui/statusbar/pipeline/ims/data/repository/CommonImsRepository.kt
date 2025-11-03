@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2022 The Android Open Source Project
  * Copyright (C) 2024 The LibreMobileOS Foundation
+ * Copyright (C) 2025 crDroid Android Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +17,8 @@
  */
 package com.android.systemui.statusbar.pipeline.ims.data.repository
 
+import android.content.Context
+import android.content.pm.PackageManager
 import android.telephony.SubscriptionInfo
 import android.telephony.SubscriptionManager
 import com.android.systemui.common.coroutine.ConflatedCallbackFlow.conflatedCallbackFlow
@@ -35,7 +38,9 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
@@ -59,25 +64,28 @@ constructor(
     @Application private val scope: CoroutineScope,
     private val imsRepoFactory: ImsRepositoryImpl.Factory,
     tunerService: TunerService,
+    @Application private val context: Context,
 ) : CommonImsRepository {
 
     private var subIdRepositoryCache: MutableMap<Int, ImsRepository> =
         mutableMapOf()
 
-    private val mobileSubscriptionsChangeEvent: Flow<Unit> = conflatedCallbackFlow {
-        val callback = object : SubscriptionManager.OnSubscriptionsChangedListener() {
-            override fun onSubscriptionsChanged() {
-                trySend(Unit)
+    private val mobileSubscriptionsChangeEvent: Flow<Unit> =
+        if (!hasTelephony()) {
+            flowOf(Unit)
+        } else conflatedCallbackFlow {
+            val callback = object : SubscriptionManager.OnSubscriptionsChangedListener() {
+                override fun onSubscriptionsChanged() { trySend(Unit) }
             }
+            try {
+                subscriptionManager.addOnSubscriptionsChangedListener(bgDispatcher.asExecutor(), callback)
+            } catch (_: SecurityException) {
+                trySend(Unit)
+                close()
+                return@conflatedCallbackFlow
+            }
+            awaitClose { subscriptionManager.removeOnSubscriptionsChangedListener(callback) }
         }
-
-        subscriptionManager.addOnSubscriptionsChangedListener(
-            bgDispatcher.asExecutor(),
-            callback,
-        )
-
-        awaitClose { subscriptionManager.removeOnSubscriptionsChangedListener(callback) }
-    }
 
     private val subscriptions: StateFlow<List<Int>> =
         mobileSubscriptionsChangeEvent
@@ -89,9 +97,14 @@ constructor(
     private fun dropUnusedReposFromCache(newIds: List<Int>) {
         // Remove any connection repository from the cache that isn't in the new set of IDs. They
         // will get garbage collected once their subscribers go away
-        subIdRepositoryCache =
-            subIdRepositoryCache.filter { checkSub(it.key, newIds) }.toMutableMap()
+        val keep = newIds.toSet()
+        subIdRepositoryCache = subIdRepositoryCache.filterKeys { it in keep }.toMutableMap()
     }
+
+    private fun hasTelephony(): Boolean =
+        try {
+            context.packageManager.hasSystemFeature(PackageManager.FEATURE_TELEPHONY)
+        } catch (_: Throwable) { false }
 
     /**
      * True if the checked subId is in the list of current subs
@@ -110,17 +123,22 @@ constructor(
     }
 
     private suspend fun fetchSubscriptionsList(): List<SubscriptionInfo> =
-        withContext(bgDispatcher) { subscriptionManager.completeActiveSubscriptionInfoList }
+        withContext(bgDispatcher) {
+            try {
+                subscriptionManager.completeActiveSubscriptionInfoList ?: emptyList()
+            } catch (_: SecurityException) {
+                emptyList()
+            } catch (_: Throwable) {
+                emptyList()
+            }
+        }
 
     override val imsStates: StateFlow<List<ImsStateModel>> =
         subscriptions
-            .map { subIds ->
-                subIds.map { getRepoForSubId(it) }
-            }
+            .map { ids -> ids.map { getRepoForSubId(it) } }
             .flatMapLatest { repos ->
-                combine(repos.map { it.imsState }) { values ->
-                    values.toList()
-                }
+                if (repos.isEmpty()) flowOf(emptyList())
+                else combine(repos.map { it.imsState }) { it.toList() }
             }
             .stateIn(scope, started = SharingStarted.WhileSubscribed(), listOf())
 
