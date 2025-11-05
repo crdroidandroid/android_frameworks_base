@@ -212,9 +212,9 @@ constructor(
 
         // Animators must be started on the main thread.
         return withContext("$TAG#startTransition", mainDispatcher) {
-            withContextMutex.unlock()
             if (lastStep.from == info.from && lastStep.to == info.to) {
                 Log.i(TAG, "Duplicate call to start the transition, rejecting: $info")
+                withContextMutex.unlock()
                 return@withContext null
             }
             val isAnimatorRunning = lastAnimator?.isRunning() ?: false
@@ -284,6 +284,7 @@ constructor(
                 animator.addListener(animatorListener)
                 animator.addUpdateListener(updateListener)
                 animator.start()
+                withContextMutex.unlock()
                 return@withContext null
             }
                 ?: run {
@@ -294,6 +295,7 @@ constructor(
 
                     // No animator, so it's manual. Provide a mechanism to callback
                     updateTransitionId = UUID.randomUUID()
+                    withContextMutex.unlock()
                     return@withContext updateTransitionId
                 }
         }
