@@ -184,24 +184,16 @@ class ShadeStartableTest(flags: FlagsParameterization) : SysuiTestCase() {
             assertThat(currentScene).isEqualTo(Scenes.Shade)
 
             changeScene(Scenes.QuickSettings, transitionState) { progress ->
-                assertThat(latestChangeEvent?.fraction).isEqualTo(1 - progress)
+                assertThat(latestChangeEvent?.fraction).isEqualTo(1f)
                 assertThat(notificationShadeDepthController.qsPanelExpansion).isEqualTo(progress)
-                assertThat(notificationShadeDepthController.shadeExpansion).isEqualTo(1 - progress)
+                assertThat(notificationShadeDepthController.shadeExpansion).isEqualTo(1f)
                 assertThat(notificationShadeDepthController.transitionToFullShadeProgress)
-                    .isEqualTo(
-                        max(
-                            notificationShadeDepthController.qsPanelExpansion,
-                            notificationShadeDepthController.shadeExpansion,
-                        )
-                    )
+                    .isEqualTo(Math.max(progress, 1 - progress))
             }
             assertThat(currentScene).isEqualTo(Scenes.QuickSettings)
 
             changeScene(Scenes.Lockscreen, transitionState) { progress ->
-                if (!transitionState.value.isIdle(Scenes.Lockscreen)) {
-                    assertThat(latestChangeEvent?.fraction).isZero()
-                    assertThat(notificationShadeDepthController.shadeExpansion).isZero()
-                } else {
+                if (transitionState.value.isIdle(Scenes.Lockscreen)) {
                     assertThat(latestChangeEvent?.fraction).isEqualTo(1f)
                     assertThat(notificationShadeDepthController.shadeExpansion).isEqualTo(1f)
                 }
