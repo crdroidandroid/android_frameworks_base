@@ -334,4 +334,12 @@ public class LocalImageResolverTest {
         Icon icon = Icon.createWithResource("invalid.package", R.drawable.test32x24);
         assertThat(LocalImageResolver.resolveResourcesForIcon(mContext, icon)).isNull();
     }
+
+    @Test(expected = IOException.class)
+    public void resolveImage_asset_invalidMimeType() throws IOException {
+        // dng mimetype is not supported
+        Uri uri = Uri.parse("android.resource://"
+                + mContext.getPackageName() + "/" + R.raw.dng_opcode_MapTable_ProcessArea);
+        LocalImageResolver.resolveImage(uri, mContext);
+    }
 }

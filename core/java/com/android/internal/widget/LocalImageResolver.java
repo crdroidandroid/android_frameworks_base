@@ -34,6 +34,7 @@ import android.util.Size;
 import com.android.internal.annotations.VisibleForTesting;
 
 import java.io.IOException;
+import java.util.Locale;
 
 /** A class to extract Drawables from a MessagingStyle/ConversationStyle message. */
 public class LocalImageResolver {
@@ -258,6 +259,28 @@ public class LocalImageResolver {
     private static void onHeaderDecoded(ImageDecoder decoder, ImageDecoder.ImageInfo info,
             int maxWidth, int maxHeight) {
         final Size size = info.getSize();
+
+        final String mimeType = info.getMimeType();
+        boolean isAllowedCodec = false;
+        if (mimeType != null) {
+            switch (mimeType.toLowerCase(Locale.US)) {
+                case "image/png":
+                case "image/jpeg":
+                case "image/webp":
+                case "image/gif":
+                case "image/bmp":
+                case "image/x-ico":
+                case "image/vnd.wap.wbmp":
+                case "image/heif":
+                case "image/heic":
+                case "image/avif":
+                    isAllowedCodec = true;
+                    break;
+            }
+        }
+        if (!isAllowedCodec) {
+            throw new RuntimeException("Image mime type (" + mimeType + ") is not allowed.");
+        }
 
         if (size.getWidth() > DEFAULT_DECODE_HARD_LIMIT_PX
                 || size.getHeight() > DEFAULT_DECODE_HARD_LIMIT_PX) {
