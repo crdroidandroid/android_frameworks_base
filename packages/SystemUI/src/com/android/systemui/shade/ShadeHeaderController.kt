@@ -264,6 +264,7 @@ constructor(
                 iconContainer.setQsExpansionTransitioning(value > 0f && value < 1.0f)
                 updatePosition()
                 updateIgnoredSlots()
+                updateShadeHeaderColors()
             }
         }
 
@@ -343,9 +344,7 @@ constructor(
             }
 
             override fun onDensityOrFontScaleChanged() {
-                clock.setTextAppearance(R.style.TextAppearance_QS_Status)
-                date.setTextAppearance(R.style.TextAppearance_QS_Status)
-                mShadeCarrierGroup.updateTextAppearance(R.style.TextAppearance_QS_Status)
+                updateShadeHeaderColors()
                 loadConstraints()
                 header.minHeight =
                     resources.getDimensionPixelSize(R.dimen.large_screen_shade_header_min_height)
@@ -481,7 +480,7 @@ constructor(
 
         updateQsBatteryStyle()
 
-        iconContainer.setIsUsingQs(true)
+        updateShadeHeaderColors()
 
         tunerService.addTunable(this, QS_BATTERY_STYLE)
         tunerService.addTunable(this, STATUS_BAR_BATTERY_STYLE)
