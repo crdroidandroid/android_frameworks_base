@@ -17,6 +17,7 @@
 package com.android.systemui.statusbar.pipeline.mobile.ui.view
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.ImageView
@@ -42,6 +43,14 @@ class ModernStatusBarMobileView(
             "isCollecting=${binding.isCollecting()}, " +
             "visibleState=${getVisibleStateString(visibleState)}); " +
             "viewString=${super.toString()}"
+    }
+
+    fun setImageTintList(colorStateList: ColorStateList) {
+        requireViewById<ImageView>(R.id.mobile_in).imageTintList = colorStateList
+        requireViewById<ImageView>(R.id.mobile_out).imageTintList = colorStateList
+        requireViewById<ImageView>(R.id.mobile_signal).imageTintList = colorStateList
+        requireViewById<ImageView>(R.id.mobile_type).imageTintList = colorStateList
+        requireViewById<ImageView>(R.id.mobile_hd).imageTintList = colorStateList
     }
 
     companion object {

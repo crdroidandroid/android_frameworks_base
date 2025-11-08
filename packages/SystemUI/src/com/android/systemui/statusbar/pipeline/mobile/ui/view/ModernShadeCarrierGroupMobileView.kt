@@ -17,6 +17,7 @@
 package com.android.systemui.statusbar.pipeline.mobile.ui.view
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
@@ -43,6 +44,14 @@ class ModernShadeCarrierGroupMobileView(
         return "ModernShadeCarrierGroupMobileView(" +
             "subId=$subId, " +
             "viewString=${super.toString()}"
+    }
+
+    fun setCarrierTextColor(color: Int) {
+        requireViewById<AutoMarqueeTextView>(R.id.mobile_carrier_text).setTextColor(color)
+    }
+
+    fun setImageTintList(colorStateList: ColorStateList) {
+        requireViewById<ModernStatusBarMobileView>(R.id.mobile_combo).setImageTintList(colorStateList)
     }
 
     fun updateTextAppearance(resId: Int) {
