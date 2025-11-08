@@ -208,6 +208,7 @@ constructor(
                 iconContainer.setQsExpansionTransitioning(value > 0f && value < 1.0f)
                 updatePosition()
                 updateIgnoredSlots()
+                updateShadeHeaderColors()
             }
         }
 
@@ -283,9 +284,7 @@ constructor(
             }
 
             override fun onDensityOrFontScaleChanged() {
-                clock.setTextAppearance(R.style.TextAppearance_QS_Status)
-                date.setTextAppearance(R.style.TextAppearance_QS_Status)
-                mShadeCarrierGroup.updateTextAppearance(R.style.TextAppearance_QS_Status_Carriers)
+                updateShadeHeaderColors()
                 loadConstraints()
                 header.minHeight =
                     resources.getDimensionPixelSize(R.dimen.large_screen_shade_header_min_height)
@@ -382,6 +381,8 @@ constructor(
         systemIconsHoverContainer.setOnHoverListener(
             statusOverlayHoverListenerFactory.createListener(systemIconsHoverContainer)
         )
+
+        updateShadeHeaderColors()
     }
 
     override fun onViewDetached() {
