@@ -155,6 +155,9 @@ public class ShadeCarrier extends LinearLayout {
         mColorStateList = colorStateList;
         mMobileRoaming.setImageTintList(mColorStateList);
         mMobileSignal.setImageTintList(mColorStateList);
+        if (mModernMobileView != null) {
+            mModernMobileView.setImageTintList(mColorStateList);
+        }
     }
 
     @VisibleForTesting
@@ -168,6 +171,9 @@ public class ShadeCarrier extends LinearLayout {
 
     public void setCarrierTextColor(int color) {
         mCarrierText.setTextColor(color);
+        if (mModernMobileView != null) {
+            mModernMobileView.setCarrierTextColor(color);
+        }
     }
 
     public void updateTextAppearance(@StyleRes int resId) {
