@@ -62,10 +62,8 @@ public class ShadeCarrierGroup extends LinearLayout {
         getNoSimTextView().setTextColor(color);
         ShadeCarrier[] shadeCarriers = { getCarrier1View(), getCarrier2View(), getCarrier3View() };
         for (ShadeCarrier shadeCarrier : shadeCarriers) {
-            for (int i = 0; i < shadeCarrier.getChildCount(); i++) {
-                shadeCarrier.updateColors(colorStateList);
-                shadeCarrier.setCarrierTextColor(color);
-            }
+            shadeCarrier.updateColors(colorStateList);
+            shadeCarrier.setCarrierTextColor(color);
         }
     }
 
