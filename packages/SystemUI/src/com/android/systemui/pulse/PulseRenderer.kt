@@ -70,6 +70,7 @@ class PulseRenderer(
             "neon" -> style !is NeonStyleRenderer
             "retro" -> style !is RetroVUStyleRenderer
             "minimal" -> style !is MinimalStyleRenderer
+            "sparkle" -> style !is SparkleStyleRenderer
             else -> false
         }
 
@@ -90,6 +91,7 @@ class PulseRenderer(
             "neon" -> NeonStyleRenderer(settingsRepo)
             "retro" -> RetroVUStyleRenderer(settingsRepo)
             "minimal" -> MinimalStyleRenderer(settingsRepo)
+            "sparkle" -> SparkleStyleRenderer(settingsRepo)
             else -> SolidLineStyleRenderer(settingsRepo)
         }
     }
