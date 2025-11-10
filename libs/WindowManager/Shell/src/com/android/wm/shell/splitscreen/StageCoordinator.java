@@ -160,6 +160,7 @@ import com.android.wm.shell.common.split.OffscreenTouchZone;
 import com.android.wm.shell.common.split.SplitDecorManager;
 import com.android.wm.shell.common.split.SplitLayout;
 import com.android.wm.shell.common.split.SplitState;
+import com.android.wm.shell.common.split.SplitTransitionUtils;
 import com.android.wm.shell.common.split.SplitWindowManager;
 import com.android.wm.shell.common.split.TouchInterceptLayer;
 import com.android.wm.shell.desktopmode.DesktopTasksController;
@@ -3680,11 +3681,19 @@ public class StageCoordinator extends StageCoordinatorAbstract {
             @NonNull Transitions.TransitionFinishCallback finishCallback) {
         if (!mSplitTransitions.isPendingTransition(transition)) {
             // Not entering or exiting, so just do some house-keeping and validation.
+            ProtoLog.d(WM_SHELL_SPLIT_SCREEN, "startAnimation: transition=%d isSplitActive=%b",
+                    info.getDebugId(), isSplitActive());
 
-            // If we're not in split-mode, just abort so something else can handle it.
-            if (!isSplitActive()) return false;
+            if (!isSplitActive()) {
+                final WindowContainerTransaction wct =
+                        SplitTransitionUtils.handleMalformedEnterTransition(info,
+                                (taskInfo) -> getStageOfTask(taskInfo));
+                if (wct != null) {
+                    mTransitions.startTransition(TRANSIT_CLOSE, wct, null);
+                }
+                return false;
+            }
 
-            ProtoLog.d(WM_SHELL_SPLIT_SCREEN, "startAnimation: transition=%d", info.getDebugId());
             mSplitLayout.setFreezeDividerWindow(false);
             final StageChangeRecord record = new StageChangeRecord();
             final int transitType = info.getType();
