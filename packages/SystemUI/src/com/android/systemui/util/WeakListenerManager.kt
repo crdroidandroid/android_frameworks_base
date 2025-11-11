@@ -18,78 +18,80 @@ package com.android.systemui.util
 import android.os.Handler
 import android.os.Looper
 import java.lang.ref.WeakReference
-import java.util.concurrent.ConcurrentLinkedQueue
-import java.util.concurrent.Executor
-import java.util.concurrent.Executors
-import java.util.function.Consumer
 
 class WeakListenerManager<T> {
 
-    private val listeners = ConcurrentLinkedQueue<WeakReference<T>>()
+    private val listeners = ArrayList<WeakReference<T>>()
+    private val mainHandler = Handler(Looper.getMainLooper())
+
     private var onActive: (() -> Unit)? = null
     private var onInactive: (() -> Unit)? = null
     private var isActive = false
 
-    private val bgExecutor: Executor = Executors.newSingleThreadExecutor()
-    private val mainHandler = Handler(Looper.getMainLooper())
+    private var cleanupScheduled = false
+    private val cleanupRunnable = Runnable {
+        synchronized(listeners) {
+            listeners.removeAll { it.get() == null }
+            cleanupScheduled = false
+        }
+    }
 
     fun addListener(listener: T) {
-        if (listeners.any { it.get() === listener }) return
-        listeners.add(WeakReference(listener))
-        cleanup()
-        if (!isActive && listeners.isNotEmpty()) {
-            isActive = true
-            onActive?.invoke()
+        synchronized(listeners) {
+            if (listeners.any { it.get() === listener }) return
+            listeners.add(WeakReference(listener))
+            scheduleCleanup()
+
+            if (!isActive && listeners.any { it.get() != null }) {
+                isActive = true
+                onActive?.invoke()
+            }
         }
     }
 
     fun removeListener(listener: T) {
-        listeners.removeIf { it.get() == null || it.get() === listener }
-        cleanup()
-        if (isActive && listeners.isEmpty()) {
-            isActive = false
-            onInactive?.invoke()
-        }
-    }
+        synchronized(listeners) {
+            listeners.removeAll { it.get() == null || it.get() === listener }
 
-    fun notify(action: (T) -> Unit) {
-        if (listeners.isEmpty()) return
-        bgExecutor.execute {
-            val snapshot = listeners
-                .mapNotNull { it.get() }
-                .toMutableList()
-            cleanup()
-            if (snapshot.isNotEmpty()) {
-                for (listener in snapshot) {
-                    mainHandler.post { action(listener) }
-                }
+            if (isActive && listeners.none { it.get() != null }) {
+                isActive = false
+                onInactive?.invoke()
             }
         }
     }
 
     fun notifyOnMain(action: (T) -> Unit) {
-        mainHandler.post {
-            val snapshot = listeners.mapNotNull { it.get() }.toList()
-            cleanup()
-            snapshot.forEach { listener ->
-                action(listener)
-            }
+        val snapshot = synchronized(listeners) {
+            listeners.mapNotNull { it.get() }
         }
+
+        if (snapshot.isEmpty()) return
+
+        mainHandler.post {
+            snapshot.forEach(action)
+        }
+
+        scheduleCleanup()
     }
 
-    fun notifyConsumer(action: Consumer<T>) {
-        notify { action.accept(it) }
-    }
+    // meh, lazy to rewrite other calls to this :) 
+    fun notify(action: (T) -> Unit) = notifyOnMain(action)
 
     fun setLifecycleCallbacks(onActive: (() -> Unit)?, onInactive: (() -> Unit)?) {
         this.onActive = onActive
         this.onInactive = onInactive
     }
 
-    fun size(): Int = listeners.count { it.get() != null }
+    fun size(): Int = synchronized(listeners) {
+        listeners.count { it.get() != null }
+    }
+
     fun isEmpty(): Boolean = size() == 0
 
-    private fun cleanup() {
-        listeners.removeIf { it.get() == null }
+    private fun scheduleCleanup() {
+        if (!cleanupScheduled) {
+            cleanupScheduled = true
+            mainHandler.postDelayed(cleanupRunnable, 5000)
+        }
     }
 }

@@ -26,10 +26,8 @@ import com.android.systemui.Dumpable
 import com.android.systemui.statusbar.StatusBarState.KEYGUARD
 import com.android.systemui.statusbar.StatusBarState.SHADE_LOCKED
 import javax.inject.Inject
-import java.io.FileDescriptor
 import java.io.PrintWriter
 import java.util.concurrent.atomic.AtomicBoolean
-import java.util.function.Consumer
 
 /* Scrim - aka testing utils */
 @SysUISingleton
@@ -66,8 +64,6 @@ class ScrimUtils @Inject constructor(dumpManager: DumpManager) : Dumpable {
     private var keyguardRetryRunnable: Runnable? = null
 
     companion object {
-        @Volatile private var instance: ScrimUtils? = null
-
         @JvmStatic
         fun get(): ScrimUtils = Dependency.get(ScrimUtils::class.java)
     }
@@ -79,36 +75,32 @@ class ScrimUtils @Inject constructor(dumpManager: DumpManager) : Dumpable {
     fun addListener(listener: ScrimEventListener) = listeners.addListener(listener)
     fun removeListener(listener: ScrimEventListener) = listeners.removeListener(listener)
 
-    private fun notifyListeners(callback: Consumer<ScrimEventListener>) {
-        listeners.notifyConsumer(callback)
-    }
-
     fun setKeyguardShowing(showing: Boolean) {
         if (mKeyguardShowing == null || mKeyguardShowing != showing) {
             mKeyguardShowing = showing
-            notifyListeners(Consumer { it.onKeyguardShowingChanged(showing) })
+            listeners.notifyOnMain { it.onKeyguardShowingChanged(showing) }
         }
     }
 
     fun onKeyguardFadingAwayChanged(fadingAway: Boolean) {
-        notifyListeners(Consumer { it.onKeyguardFadingAwayChanged(fadingAway) })
+        listeners.notifyOnMain { it.onKeyguardFadingAwayChanged(fadingAway) }
         postKeyguardRetry()
     }
 
     fun onKeyguardGoingAwayChanged(goingAway: Boolean) {
-        notifyListeners(Consumer { it.onKeyguardGoingAwayChanged(goingAway) })
+        listeners.notifyOnMain { it.onKeyguardGoingAwayChanged(goingAway) }
         postKeyguardRetry()
     }
 
     fun onPrimaryBouncerShowingChanged(showing: Boolean) {
-        notifyListeners(Consumer { it.onPrimaryBouncerShowingChanged(showing) })
+        listeners.notifyOnMain { it.onPrimaryBouncerShowingChanged(showing) }
         postKeyguardRetry()
     }
 
     private fun postKeyguardRetry() {
         keyguardRetryRunnable?.let { mainHandler.removeCallbacks(it) }
         keyguardRetryRunnable = Runnable {
-            notifyListeners(Consumer { it.onKeyguardShowingChanged(mKeyguardShowing == true) })
+            listeners.notifyOnMain { it.onKeyguardShowingChanged(mKeyguardShowing == true) }
         }
         mainHandler.postDelayed(keyguardRetryRunnable!!, mFadingAwayDuration)
     }
@@ -116,7 +108,7 @@ class ScrimUtils @Inject constructor(dumpManager: DumpManager) : Dumpable {
     fun setExpandedFraction(fraction: Float) {
         if (mExpandedFraction == null || (fraction == 0.0f || fraction == 1.0f && mExpandedFraction != fraction)) {
             mExpandedFraction = fraction
-            notifyListeners(Consumer { it.onExpandedFractionChanged(fraction) })
+            listeners.notifyOnMain { it.onExpandedFractionChanged(fraction) }
         }
     }
 
@@ -128,10 +120,9 @@ class ScrimUtils @Inject constructor(dumpManager: DumpManager) : Dumpable {
     }
 
     fun setBarState(state: Int) {
-        val stateChanged = mBarState == null || mBarState != state
-        if (stateChanged) {
+        if (mBarState == null || mBarState != state) {
             mBarState = state
-            notifyListeners(Consumer { it.onBarStateChanged(state) })
+            listeners.notifyOnMain { it.onBarStateChanged(state) }
         }
         // hack 4 bug: 
         // 1. user is on keyguard but is mBarState == SHADE
@@ -142,24 +133,24 @@ class ScrimUtils @Inject constructor(dumpManager: DumpManager) : Dumpable {
 
     fun setQsVisible(visible: Boolean) {
         if (mQsVisible.getAndSet(visible) != visible) {
-            notifyListeners(Consumer { it.onQsVisibilityChanged(visible) })
+            listeners.notifyOnMain { it.onQsVisibilityChanged(visible) }
         }
     }
 
     fun setPulsing(pulsing: Boolean) {
         if (mPulsing.getAndSet(pulsing) != pulsing) {
-            notifyListeners(Consumer { it.setPulsing(pulsing) })
+            listeners.notifyOnMain { it.setPulsing(pulsing) }
         }
     }
 
     fun onStartedWakingUp() {
         mAwake = true
-        notifyListeners(Consumer { it.onStartedWakingUp() })
+        listeners.notifyOnMain { it.onStartedWakingUp() }
     }
 
     fun onScreenTurnedOff() {
         mAwake = false
-        notifyListeners(Consumer { it.onScreenTurnedOff() })
+        listeners.notifyOnMain { it.onScreenTurnedOff() }
     }
 
     fun onNotificationPosted(sbn: StatusBarNotification) {
