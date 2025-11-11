@@ -245,6 +245,8 @@ final class HandwritingModeController {
         mDelegationIdleTimeoutRunnable =  () -> {
             Slog.d(TAG, "Stylus handwriting delegation idle timed-out.");
             clearPendingHandwritingDelegation();
+            mRecordingGesture = false;
+            mRecordingGestureAfterStylusUp = false;
             if (mHandwritingBuffer != null) {
                 mHandwritingBuffer.forEach(MotionEvent::recycle);
                 mHandwritingBuffer.clear();
