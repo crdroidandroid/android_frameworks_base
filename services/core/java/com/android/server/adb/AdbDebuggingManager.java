@@ -413,6 +413,8 @@ public class AdbDebuggingManager {
                     } catch (Exception e) {
                         /* Don't loop too fast if adbd dies, before init restarts it */
                         SystemClock.sleep(1000);
+                        /* Meaningless to further read the socket as opening it fails */
+                        continue;
                     }
                 }
                 try {
