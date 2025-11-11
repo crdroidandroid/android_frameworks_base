@@ -941,7 +941,7 @@ public final class ViewRootImpl implements ViewParent,
     int mLastTouchPointerId;
     /** Tracks last {@link MotionEvent#getToolType(int)} with {@link MotionEvent#ACTION_UP}. **/
     private int mLastClickToolType;
-
+    private CharSequence mLastBackKeyDownTitle;
     private boolean mProfileRendering;
     private Choreographer.FrameCallback mRenderProfiler;
     private boolean mRenderProfilingEnabled;
@@ -7774,12 +7774,14 @@ public final class ViewRootImpl implements ViewParent,
                 }
             } else if (topCallback != null) {
                 if (keyEvent.getAction() == KeyEvent.ACTION_UP) {
-                    if (!keyEvent.isCanceled()) {
+                    if (!keyEvent.isCanceled() && getTitle()!= null && getTitle().equals(mLastBackKeyDownTitle)) {
                         dispatcher.tryInvokeSystemNavigationObserverCallback();
                         topCallback.onBackInvoked();
                     } else {
                         Log.d(mTag, "Skip onBackInvoked(), reason: keyEvent.isCanceled=true");
                     }
+                } else {
+                    mLastBackKeyDownTitle = getTitle();
                 }
             }
             // Do not cancel the keyEvent if no callback can handle the back event.
