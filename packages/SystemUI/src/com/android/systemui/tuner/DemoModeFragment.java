@@ -22,7 +22,6 @@ import android.os.Bundle;
 
 import androidx.preference.Preference;
 import androidx.preference.Preference.OnPreferenceChangeListener;
-import androidx.preference.PreferenceFragment;
 import androidx.preference.PreferenceScreen;
 import androidx.preference.SwitchPreferenceCompat;
 
@@ -34,7 +33,9 @@ import com.android.systemui.demomode.DemoModeController;
 import com.android.systemui.res.R;
 import com.android.systemui.util.settings.GlobalSettings;
 
-public class DemoModeFragment extends PreferenceFragment implements OnPreferenceChangeListener {
+import com.android.settingslib.widget.SettingsBasePreferenceFragment;
+
+public class DemoModeFragment extends SettingsBasePreferenceFragment implements OnPreferenceChangeListener {
 
     private static final String[] STATUS_ICONS = {
         "volume",

@@ -18,13 +18,14 @@ package com.android.systemui.tuner;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
-import androidx.preference.PreferenceFragment;
 
 import com.android.internal.logging.MetricsLogger;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 import com.android.systemui.res.R;
 
-public class StatusBarTuner extends PreferenceFragment {
+import com.android.settingslib.widget.SettingsBasePreferenceFragment;
+
+public class StatusBarTuner extends SettingsBasePreferenceFragment {
 
     private MetricsLogger mMetricsLogger;
 
