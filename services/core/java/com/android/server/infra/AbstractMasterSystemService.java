@@ -1279,8 +1279,9 @@ public abstract class AbstractMasterSystemService<M extends AbstractMasterSystem
         visitServicesLocked((s) -> {
             ComponentName serviceComponentName = s
                     .getServiceComponentName();
-            if (serviceComponentName != null && serviceComponentName
-                    .getPackageName().equals(packageName)) {
+            int serviceUserId = s.getUserId();
+            if (serviceComponentName != null && serviceUserId == userId
+                    && serviceComponentName.getPackageName().equals(packageName)) {
                 if (!serviceInValidServiceList(serviceComponentName,
                         validServices)) {
                     handleServiceRemovedMultiModeLocked(

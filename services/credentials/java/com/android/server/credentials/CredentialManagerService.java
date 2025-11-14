@@ -1238,7 +1238,7 @@ public final class CredentialManagerService
             if (!settingsWrapper.putStringForUser(
                     Settings.Secure.CREDENTIAL_SERVICE_PRIMARY,
                     String.join(":", filteredPrimaryProviders),
-                    UserHandle.myUserId(),
+                    userId,
                     /* overrideableByRestore= */ true)) {
                 Slog.e(TAG, "Failed to remove primary service: " + componentName);
                 return;
@@ -1246,9 +1246,8 @@ public final class CredentialManagerService
         }
 
         // Read the credential providers to remove any reference of the removed service.
-        String rawCredentialProviders =
-                settingsWrapper.getStringForUser(
-                        Settings.Secure.CREDENTIAL_SERVICE, UserHandle.myUserId());
+        String rawCredentialProviders = settingsWrapper.getStringForUser(
+            Settings.Secure.CREDENTIAL_SERVICE, userId);
 
         // Remove any provider services that are same as the one being removed.
         Set<String> filteredCredentialProviders = getStoredProvidersExceptService(
@@ -1256,7 +1255,7 @@ public final class CredentialManagerService
         if (!settingsWrapper.putStringForUser(
                 Settings.Secure.CREDENTIAL_SERVICE,
                 String.join(":", filteredCredentialProviders),
-                UserHandle.myUserId(),
+                userId,
                 /* overrideableByRestore= */ true)) {
             Slog.e(TAG, "Failed to remove secondary service: " + componentName);
         }
