@@ -67,10 +67,11 @@ public class TunerActivity extends CollapsingToolbarBaseActivity implements
         setContentView(R.layout.tuner_activity);
 
         DynamicColors.applyToActivityIfAvailable(this);
-        setTheme(com.android.settingslib.widget.theme.R.style.Theme_SubSettingsBase);
+        setTheme(com.android.settingslib.widget.theme.R.style.Theme_SubSettingsBase_Expressive);
 
         // Handle window insets for padding adjustments
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.content_frame), (view, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(
+            com.android.settingslib.collapsingtoolbar.R.id.content_frame), (view, insets) -> {
             Insets systemInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars());
 
             view.setPadding(
@@ -82,9 +83,9 @@ public class TunerActivity extends CollapsingToolbarBaseActivity implements
             return insets;
         });
 
-        if (getFragmentManager().findFragmentByTag(TAG_TUNER) == null) {
+        if (getSupportFragmentManager().findFragmentByTag(TAG_TUNER) == null) {
             final String action = getIntent().getAction();
-            final Fragment fragment;
+            final androidx.fragment.app.Fragment fragment;
             if ("com.android.settings.action.DEMO_MODE".equals(action)) {
                 fragment = new DemoModeFragment(mDemoModeController, mGlobalSettings);
             } else if ("com.android.settings.action.STATUS_BAR_TUNER".equals(action)) {
@@ -92,9 +93,13 @@ public class TunerActivity extends CollapsingToolbarBaseActivity implements
             } else {
                 fragment = new TunerFragment();
             }
-
-            getFragmentManager().beginTransaction().replace(R.id.content_frame,
-                    fragment, TAG_TUNER).commit();
+            getSupportFragmentManager()
+                .beginTransaction()
+                .replace(
+                    com.android.settingslib.collapsingtoolbar.R.id.content_frame,
+                    fragment
+                )
+                .commit();
         }
     }
 
@@ -106,18 +111,23 @@ public class TunerActivity extends CollapsingToolbarBaseActivity implements
 
     @Override
     public void onBackPressed() {
-        if (getFragmentManager().popBackStackImmediate()) {
+        if (getSupportFragmentManager().popBackStackImmediate()) {
             String title = titleStack.poll();
             if (title != null) {
                 setTitle(title);
             }
             try {
-                Fragment f = getFragmentManager().findFragmentById(R.id.content_frame);
-                Fragment fragment = (Fragment) f.getClass().newInstance();
+                androidx.fragment.app.Fragment f = getSupportFragmentManager().findFragmentById(
+                    com.android.settingslib.collapsingtoolbar.R.id.content_frame);
+                androidx.fragment.app.Fragment fragment = (androidx.fragment.app.Fragment) f.getClass().newInstance();
                 fragment.setArguments(f.getArguments());
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.replace(R.id.content_frame, fragment);
-                transaction.commit();
+                getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(
+                        com.android.settingslib.collapsingtoolbar.R.id.content_frame,
+                        fragment
+                    )
+                .commit();
             } catch (InstantiationException | IllegalAccessException e) {
                 Log.d("TunerActivity", "Problem launching fragment", e);
             }
