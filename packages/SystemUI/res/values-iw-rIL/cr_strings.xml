@@ -15,6 +15,10 @@
     <string name="status_bar_hd_calling">שיחות HD (VoLTE/VoNR)</string>
     <!-- Name of the VoWiFi status bar icon. -->
     <string name="status_bar_vowifi">שיחות באמצעות Wi-Fi (VoWiFi)</string>
+    <!-- Data disabled icon -->
+    <string name="data_disabled_icon_title">Data disabled icon</string>
+    <!-- 4G icon instead LTE -->
+    <string name="fourg_icon_title">4G icon</string>
     <!-- Status bar network traffic monitor strings -->
     <string name="kilobitspersecond_short">קילוביט/שניה</string>
     <string name="megabitspersecond_short">מגהביט/שניה</string>
