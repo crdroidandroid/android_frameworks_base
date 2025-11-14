@@ -15,6 +15,10 @@
     <string name="status_bar_hd_calling">HD-hívás (VoLTE/VoNR)</string>
     <!-- Name of the VoWiFi status bar icon. -->
     <string name="status_bar_vowifi">WiFi-hívás (VoWiFi)</string>
+    <!-- Data disabled icon -->
+    <string name="data_disabled_icon_title">Data disabled icon</string>
+    <!-- 4G icon instead LTE -->
+    <string name="fourg_icon_title">4G icon</string>
     <!-- Status bar network traffic monitor strings -->
     <string name="kilobitspersecond_short">kb/s</string>
     <string name="megabitspersecond_short">Mb/s</string>
@@ -81,7 +85,7 @@
     <string name="quick_settings_sound_label">Hang</string>
     <string name="quick_settings_sound_ring">Csengés</string>
     <string name="quick_settings_sound_vibrate">Rezgés</string>
-    <string name="quick_settings_sound_silent">Silent</string>
+    <string name="quick_settings_sound_silent">Csendes</string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">CPU-adatok</string>
     <!-- FPS Info tile -->
@@ -124,15 +128,15 @@
     <!-- Text while recognizing face -->
     <string name="face_unlock_recognizing">Arcfelismerés...</string>
     <!-- Preferred network tile -->
-    <string name="qs_preferred_network_label">Preferred network</string>
+    <string name="qs_preferred_network_label">Előnyben részesített hálózat</string>
     <string name="qs_preferred_network_lte">4G / LTE</string>
     <string name="qs_preferred_network_nr">5G / NR</string>
     <string name="qs_preferred_network_3g">3G</string>
-    <string name="qs_preferred_network_unsupported">Unsupported</string>
+    <string name="qs_preferred_network_unsupported">Nem támogatott</string>
     <!-- Flashlight Strength -->
-    <string name="flashlight_strength_title">Flashlight Strength</string>
-    <string name="flashlight_strength_turn_off">Turn off</string>
-    <string name="flashlight_strength_turn_on">Turn on</string>
+    <string name="flashlight_strength_title">Zseblámpa erőssége</string>
+    <string name="flashlight_strength_turn_off">Kikapcsolás</string>
+    <string name="flashlight_strength_turn_on">Bekapcsolás</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="one">%d készülék csatlakoztatva</item>
@@ -142,7 +146,7 @@
     <string name="enable_fiveg">Az 5G engedélyezése</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">ma elhasználva</string>
-    <string name="usage_data_weekly">used this week</string>
+    <string name="usage_data_weekly">felhasználva ezen a héten</string>
     <string name="usage_data_default_suffix">Adat</string>
     <string name="usage_wifi_default_suffix">Wi-Fi</string>
     <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
