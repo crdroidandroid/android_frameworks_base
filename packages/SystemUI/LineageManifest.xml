@@ -32,7 +32,7 @@
             android:name=".tuner.StatusBarTuner"
             android:targetActivity=".tuner.TunerActivity"
             android:icon="@drawable/tuner"
-            android:theme="@style/Theme.SubSettingsBase"
+            android:theme="@style/Theme.SubSettingsBase.Expressive"
             android:label="@string/status_bar_icons_title"
             android:process=":tuner"
             android:exported="true">
