@@ -106,8 +106,15 @@ public class DataSwitchTile extends QSTileImpl<BooleanState> {
         mPanelInteractor = panelInteractor;
     }
 
+    public static boolean isVoiceCapable(Context context) {
+        TelephonyManager telephony =
+                (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        return telephony != null && telephony.isVoiceCapable();
+    }
+
     @Override
     public boolean isAvailable() {
+        if (!isVoiceCapable(mContext)) return false;
         int count = TelephonyManager.getDefault().getPhoneCount();
         Log.d(TAG, "phoneCount: " + count);
         return count >= 2;
