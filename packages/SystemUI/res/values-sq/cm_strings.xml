@@ -77,4 +77,5 @@
     <string name="battery_notification_channel_tv">Paralajmërim për baterinë</string>
     <string name="screenshot_delete_label">Fshije</string>
     <string name="screenshot_delete_description">Fshi pamjen e ekranit</string>
+    <string name="screen_pinning_description_no_navbar">Kjo e ruan në pamje deri sa ta heqësh nga gozhdimi. Prek dhe mbaj të shtypur \"Përmbledhje\" për ta hequr nga gozhdimi.</string>
 </resources>
