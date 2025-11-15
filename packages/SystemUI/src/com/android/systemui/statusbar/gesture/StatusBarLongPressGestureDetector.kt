@@ -26,6 +26,7 @@ import com.android.systemui.statusbar.policy.DeviceProvisionedController
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import com.android.systemui.statusbar.NTForbiddenSwipeDownQSController
 
 /** Accepts touch events, detects long press, and calls ShadeViewController#onStatusBarLongPress. */
 class StatusBarLongPressGestureDetector
@@ -35,7 +36,9 @@ constructor(
     val shadeViewController: ShadeViewController,
     val shadeController: ShadeController,
     val deviceProvisionedController: DeviceProvisionedController,
+    val forbiddenSwipeDownQSController: NTForbiddenSwipeDownQSController,
 ) {
+    val forbidden get() = forbiddenSwipeDownQSController.getForbiddenSwipeDownQS()
 
     val gestureDetector =
         GestureDetector(
@@ -46,7 +49,7 @@ constructor(
                         shadeController.isShadeEnabled() &&
                             deviceProvisionedController.isDeviceProvisioned()
                     ) {
-                        shadeViewController.onStatusBarLongPress(event)
+                        if (!forbidden) shadeViewController.onStatusBarLongPress(event)
                     }
                 }
             },
