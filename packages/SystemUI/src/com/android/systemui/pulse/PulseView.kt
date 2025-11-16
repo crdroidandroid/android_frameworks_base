@@ -77,7 +77,7 @@ class PulseView @JvmOverloads constructor(
     }
 
     fun onMediaColorsChanged(color: Int) {
-        renderer?.onMediaColorsChanged(color)
+        post { renderer?.onMediaColorsChanged(color) }
     }
 
     fun setVisibility(visible: Boolean) {
