@@ -178,6 +178,11 @@ class PulseViewController @Inject constructor(
         updateState()
     }
 
+    override fun onUserChanged() {
+        settingsRepository.invalidateCache()
+        updateState()
+    }
+
     fun destroy() {
         pulseRunning = false
         settingsRepository.stopObserving()
