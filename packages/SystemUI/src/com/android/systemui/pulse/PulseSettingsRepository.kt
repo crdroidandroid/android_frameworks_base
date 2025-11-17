@@ -66,7 +66,8 @@ class PulseSettingsRepository(private val context: Context) {
             Settings.Secure.getUriFor(PULSE_COLOR),
             Settings.Secure.getUriFor(PULSE_RENDERER)
         ).forEach { uri ->
-            context.contentResolver.registerContentObserver(uri, false, settingsObserver!!)
+            context.contentResolver.registerContentObserver(uri, false,
+                settingsObserver!!, UserHandle.USER_ALL)
         }
     }
 
@@ -128,7 +129,7 @@ class PulseSettingsRepository(private val context: Context) {
         return cachedRenderer!!
     }
 
-    private fun invalidateCache() {
+    fun invalidateCache() {
         cachedEnabled = null
         cachedAmbientEnabled = null
         cachedBarCount = null
