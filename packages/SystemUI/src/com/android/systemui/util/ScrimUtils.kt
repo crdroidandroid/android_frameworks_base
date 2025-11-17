@@ -37,6 +37,7 @@ class ScrimUtils private constructor() {
         fun onQsVisibilityChanged(visible: Boolean) {}
         fun onStartedWakingUp() {}
         fun onScreenTurnedOff() {}
+        fun onUserChanged() {}
         fun setPulsing(pulsing: Boolean) {}
         fun onNotificationPosted(sbn: StatusBarNotification) {}
     }
@@ -148,6 +149,10 @@ class ScrimUtils private constructor() {
     fun onScreenTurnedOff() {
         mAwake = false
         listeners.notify { it.onScreenTurnedOff() }
+    }
+
+    fun onUserChanged() {
+        listeners.notify { it.onUserChanged() }
     }
 
     fun onNotificationPosted(sbn: StatusBarNotification) {
