@@ -105,27 +105,32 @@ class MediaViewController @Inject constructor(
         context.contentResolver.registerContentObserver(
             Settings.System.getUriFor(Settings.System.LS_MEDIA_ART_ENABLED),
             false,
-            settingsObserver
+            settingsObserver,
+            UserHandle.USER_ALL
         )
         context.contentResolver.registerContentObserver(
             Settings.System.getUriFor(Settings.System.AMBIENT_MEDIA_ART_ENABLED),
             false,
-            settingsObserver
+            settingsObserver,
+            UserHandle.USER_ALL
         )
         context.contentResolver.registerContentObserver(
             Settings.System.getUriFor(Settings.System.LS_MEDIA_ART_FILTER),
             false,
-            settingsObserver
+            settingsObserver,
+            UserHandle.USER_ALL
         )
         context.contentResolver.registerContentObserver(
             Settings.System.getUriFor(Settings.System.LS_MEDIA_ART_FADE_LEVEL),
             false,
-            settingsObserver
+            settingsObserver,
+            UserHandle.USER_ALL
         )
         context.contentResolver.registerContentObserver(
             Settings.System.getUriFor(Settings.System.LS_MEDIA_ART_BLUR_LEVEL),
             false,
-            settingsObserver
+            settingsObserver,
+            UserHandle.USER_ALL
         )
 
         updateSettings()
