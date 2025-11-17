@@ -2716,6 +2716,7 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, CoreSt
         public void onUserChanged(int newUser, Context userContext) {
             mHandler.sendMessage(mHandler.obtainMessage(MSG_USER_SWITCH_COMPLETE,
                     newUser, 0));
+            ScrimUtils.get().onUserChanged();
         }
     };
 
