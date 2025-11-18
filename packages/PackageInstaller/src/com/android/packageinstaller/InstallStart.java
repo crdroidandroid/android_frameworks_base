@@ -125,7 +125,7 @@ public class InstallStart extends Activity {
         boolean isDocumentsManager = checkPermission(Manifest.permission.MANAGE_DOCUMENTS,
                 -1, callingUid) == PackageManager.PERMISSION_GRANTED;
         boolean isSystemDownloadsProvider = PackageUtil.getSystemDownloadsProviderInfo(
-                                                mPackageManager, callingUid) != null;
+                mPackageManager, callingUid) != null;
 
         boolean isPrivilegedAndKnown = (sourceInfo != null && sourceInfo.isPrivilegedApp()) &&
             intent.getBooleanExtra(Intent.EXTRA_NOT_UNKNOWN_SOURCE, false);
@@ -133,7 +133,18 @@ public class InstallStart extends Activity {
             checkPermission(Manifest.permission.INSTALL_PACKAGES, /* pid= */ -1, callingUid)
                     == PackageManager.PERMISSION_GRANTED;
 
-        boolean isTrustedSource = isPrivilegedAndKnown || isInstallPkgPermissionGranted;
+        // Bypass the unknown source user restrictions check when either of the following
+        // two conditions is met:
+        // 1. An installer with the INSTALL_PACKAGES permission initiated the
+        // installation via the PackageInstaller APIs and not via an
+        // ACTION_VIEW or ACTION_INSTALL_PACKAGE intent.
+        // 2. An installer is a privileged app and it has set the
+        // EXTRA_NOT_UNKNOWN_SOURCE flag to be true in the intent.
+        final boolean isIntentInstall =
+                Intent.ACTION_VIEW.equals(intentAction)
+                        || Intent.ACTION_INSTALL_PACKAGE.equals(intentAction);
+        final boolean isTrustedSource =
+                (!isIntentInstall && isInstallPkgPermissionGranted) || isPrivilegedAndKnown;
 
         if (!isTrustedSource && !isSystemDownloadsProvider && !isDocumentsManager
                 && callingUid != Process.INVALID_UID) {
@@ -156,20 +167,7 @@ public class InstallStart extends Activity {
             mAbortInstall = true;
         }
 
-        // Bypass the unknown source user restrictions check when either of the following
-        // two conditions is met:
-        // 1. An installer with the INSTALL_PACKAGES permission initiated the
-        // installation via the PackageInstaller APIs and not via an
-        // ACTION_VIEW or ACTION_INSTALL_PACKAGE intent.
-        // 2. An installer is a privileged app and initiated the installer via
-        // the ACTION_INSTALL_PACKAGE or ACTION_VIEW intent, but it has set the
-        // EXTRA_NOT_UNKNOWN_SOURCE flag to be true in the intent.
-        final boolean isIntentInstall =
-                Intent.ACTION_VIEW.equals(intentAction)
-                        || Intent.ACTION_INSTALL_PACKAGE.equals(intentAction);
-        final boolean bypassUnknownSourceRestrictions =
-                (!isIntentInstall && isInstallPkgPermissionGranted) || isPrivilegedAndKnown;
-        checkDevicePolicyRestrictions(bypassUnknownSourceRestrictions);
+        checkDevicePolicyRestrictions(isTrustedSource);
 
         final String installerPackageNameFromIntent = getIntent().getStringExtra(
                 Intent.EXTRA_INSTALLER_PACKAGE_NAME);
@@ -319,9 +317,9 @@ public class InstallStart extends Activity {
         return callingUid == installerUid;
     }
 
-    private void checkDevicePolicyRestrictions(boolean bypassUnknownSourceRestrictions) {
+    private void checkDevicePolicyRestrictions(boolean isTrustedSource) {
         String[] restrictions;
-        if (bypassUnknownSourceRestrictions) {
+        if (isTrustedSource) {
             restrictions = new String[] { UserManager.DISALLOW_INSTALL_APPS };
         } else {
             restrictions =  new String[] {
