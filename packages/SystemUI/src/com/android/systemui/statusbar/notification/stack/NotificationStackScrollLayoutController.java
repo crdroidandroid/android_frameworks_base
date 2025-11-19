@@ -1376,7 +1376,7 @@ public class NotificationStackScrollLayoutController implements Dumpable {
             mView.setRenderEffect(RenderEffect.createBlurEffect(
                     blurRadius,
                     blurRadius,
-                    Shader.TileMode.MIRROR));
+                    Shader.TileMode.CLAMP));
         } else {
             debugLog("Resetting blur RenderEffect for NotificationStackScrollLayoutController");
             mView.setRenderEffect(null);
