@@ -344,6 +344,8 @@ public class ServiceState implements Parcelable {
     private String mOperatorAlphaShortRaw;
     private boolean mIsDataRoamingFromRegistration;
     private boolean mIsIwlanPreferred;
+    /** Force LTE CA flag per SIM @hide */
+    private Boolean mForceLteCA = null;
 
     /**
      * get String description of roaming type
@@ -426,6 +428,7 @@ public class ServiceState implements Parcelable {
         mOperatorAlphaShortRaw = s.mOperatorAlphaShortRaw;
         mIsDataRoamingFromRegistration = s.mIsDataRoamingFromRegistration;
         mIsIwlanPreferred = s.mIsIwlanPreferred;
+        mForceLteCA = (s.mForceLteCA != null) ? Boolean.valueOf(s.mForceLteCA) : null;
     }
 
     /**
@@ -455,6 +458,8 @@ public class ServiceState implements Parcelable {
         mOperatorAlphaShortRaw = in.readString();
         mIsDataRoamingFromRegistration = in.readBoolean();
         mIsIwlanPreferred = in.readBoolean();
+        int forceLteCAByte = in.readInt();
+        mForceLteCA = (forceLteCAByte == -1) ? null : (forceLteCAByte == 1);
     }
 
     public void writeToParcel(Parcel out, int flags) {
@@ -478,6 +483,7 @@ public class ServiceState implements Parcelable {
         out.writeString(mOperatorAlphaShortRaw);
         out.writeBoolean(mIsDataRoamingFromRegistration);
         out.writeBoolean(mIsIwlanPreferred);
+        out.writeInt(mForceLteCA == null ? -1 : (mForceLteCA ? 1 : 0));
     }
 
     public int describeContents() {
@@ -933,7 +939,8 @@ public class ServiceState implements Parcelable {
                     mOperatorAlphaLongRaw,
                     mOperatorAlphaShortRaw,
                     mIsDataRoamingFromRegistration,
-                    mIsIwlanPreferred);
+                    mIsIwlanPreferred,
+                    mForceLteCA);
         }
     }
 
@@ -959,7 +966,8 @@ public class ServiceState implements Parcelable {
                     && mNetworkRegistrationInfos.containsAll(s.mNetworkRegistrationInfos)
                     && mNrFrequencyRange == s.mNrFrequencyRange
                     && mIsDataRoamingFromRegistration == s.mIsDataRoamingFromRegistration
-                    && mIsIwlanPreferred == s.mIsIwlanPreferred;
+                    && mIsIwlanPreferred == s.mIsIwlanPreferred
+                    && Objects.equals(mForceLteCA, s.mForceLteCA);
         }
     }
 
@@ -1139,6 +1147,7 @@ public class ServiceState implements Parcelable {
                     .append(", mIsDataRoamingFromRegistration=")
                     .append(mIsDataRoamingFromRegistration)
                     .append(", mIsIwlanPreferred=").append(mIsIwlanPreferred)
+                    .append(", mForceLteCA=").append(mForceLteCA)
                     .append(", mIsUsingNonTerrestrialNetwork=")
                     .append(isUsingNonTerrestrialNetwork())
                     .append("}").toString();
@@ -1184,6 +1193,7 @@ public class ServiceState implements Parcelable {
         mOperatorAlphaShortRaw = null;
         mIsDataRoamingFromRegistration = false;
         mIsIwlanPreferred = false;
+        mForceLteCA = null;
     }
 
     public void setStateOutOfService() {
@@ -1376,6 +1386,7 @@ public class ServiceState implements Parcelable {
         m.putBoolean("isDataRoamingFromRegistration", getDataRoamingFromRegistration());
         m.putBoolean("isUsingCarrierAggregation", isUsingCarrierAggregation());
         m.putInt("ArfcnRsrpBoost", mArfcnRsrpBoost);
+        m.putInt("forceLteCA", mForceLteCA == null ? -1 : (mForceLteCA ? 1 : 0));
         m.putInt("ChannelNumber", mChannelNumber);
         m.putIntArray("CellBandwidths", mCellBandwidths);
         m.putInt("mNrFrequencyRange", mNrFrequencyRange);
@@ -1423,15 +1434,30 @@ public class ServiceState implements Parcelable {
         addNetworkRegistrationInfo(regInfo);
     }
 
-    /** @hide */
+    /** 
+     * @return true if using carrier aggregation, false otherwise
+     * Checks both hardware CA and per-SIM forced CA
+     * @hide 
+     */
     public boolean isUsingCarrierAggregation() {
-        if (getCellBandwidths().length > 1) return true;
+        // Check hardware-based carrier aggregation
+        boolean hardwareCA = getCellBandwidths().length > 1;
 
         synchronized (mNetworkRegistrationInfos) {
             for (NetworkRegistrationInfo nri : mNetworkRegistrationInfos) {
-                if (nri.isUsingCarrierAggregation()) return true;
+                if (nri.isUsingCarrierAggregation()) {
+                    hardwareCA = true;
+                    break;
+                }
             }
         }
+        
+        // Apply override if explicitly set
+        if (mForceLteCA != null) {
+            return mForceLteCA.booleanValue();
+        }
+        
+        // Default: return false (LTE+ requires toggle to be ON)
         return false;
     }
 
@@ -2067,6 +2093,27 @@ public class ServiceState implements Parcelable {
      */
     public void setIwlanPreferred(boolean isIwlanPreferred) {
         mIsIwlanPreferred = isIwlanPreferred;
+    }
+
+    /**
+     * Set Force LTE Carrier Aggregation for this ServiceState instance.
+     * This is used for per-SIM Force LTE_CA feature.
+     * 
+     * @param force true to force LTE CA, false otherwise
+     * @hide
+     */
+    public void setForceLteCA(Boolean force) {
+        mForceLteCA = force;
+    }
+
+    /**
+     * Get Force LTE Carrier Aggregation setting for this ServiceState.
+     * 
+     * @return true if Force LTE CA is enabled for this SIM, false otherwise
+     * @hide
+     */
+    public Boolean getForceLteCA() {
+        return mForceLteCA;
     }
 
     /**
