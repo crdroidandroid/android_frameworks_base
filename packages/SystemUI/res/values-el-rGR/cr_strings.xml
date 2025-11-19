@@ -34,7 +34,7 @@
     <!-- Weather -->
     <string name="weather_condition_clouds">Συννεφιά</string>
     <string name="weather_condition_rain">Βροχερός</string>
-    <string name="weather_condition_clear">Clear Sky</string>
+    <string name="weather_condition_clear">Καθαρός Ουρανός</string>
     <string name="weather_condition_storm">Καταιγίδες</string>
     <string name="weather_condition_snow">Χιονώδης</string>
     <string name="weather_condition_wind">Θυελλώδεις</string>
