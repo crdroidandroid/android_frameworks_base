@@ -42,6 +42,8 @@ import android.os.BatteryManager;
 import android.provider.Settings.Global;
 import android.util.ArrayMap;
 
+import android.annotation.Nullable;
+
 import java.util.Map;
 
 /**
@@ -465,6 +467,24 @@ public class GlobalSettingsValidators {
         ));
         VALIDATORS.put(Global.HEARING_DEVICE_LOCAL_AMBIENT_VOLUME, ANY_STRING_VALIDATOR);
         VALIDATORS.put(Global.HEARING_DEVICE_LOCAL_NOTIFICATION, ANY_STRING_VALIDATOR);
+
+        // Force LTE Carrier Aggregation per SIM (accepts -1=unset, 0=off, 1=on)
+        Validator triStateValidator = new Validator() {
+        @Override
+        public boolean validate(@Nullable String value) {
+                try {
+                int intValue = Integer.parseInt(value);
+                return intValue == -1 || intValue == 0 || intValue == 1;
+                } catch (NumberFormatException e) {
+                return false;
+                }
+        }
+        };
+        VALIDATORS.put(Global.FORCE_LTE_CA, triStateValidator);
+        VALIDATORS.put(Global.FORCE_LTE_CA_0, triStateValidator);
+        VALIDATORS.put(Global.FORCE_LTE_CA_1, triStateValidator);
+
+
         VALIDATORS.put(
                 Global.Wearable.WEAR_SYSTEM_STATUS_TRAY_CONFIGURATION,
                 new DiscreteValueValidator(
