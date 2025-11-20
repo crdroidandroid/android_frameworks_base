@@ -39,18 +39,22 @@ class KeyguardSmartspaceViewModel
 @Inject
 constructor(
     @Application applicationScope: CoroutineScope,
-    smartspaceController: LockscreenSmartspaceController,
+    private val smartspaceController: LockscreenSmartspaceController,
     keyguardClockViewModel: KeyguardClockViewModel,
-    smartspaceInteractor: KeyguardSmartspaceInteractor,
+    private val smartspaceInteractor: KeyguardSmartspaceInteractor,
     shadeModeInteractor: ShadeModeInteractor,
 ) {
     /** Whether the smartspace section is available in the build. */
-    val isSmartspaceEnabled: Boolean = smartspaceController.isEnabled
+    val isSmartspaceEnabled: Boolean
+        get() = smartspaceController.isEnabled
+
     /** Whether the weather area is available in the build. */
-    private val isWeatherEnabled: StateFlow<Boolean> = smartspaceInteractor.isWeatherEnabled
+    private val isWeatherEnabled: StateFlow<Boolean>
+        get() = smartspaceInteractor.isWeatherEnabled
 
     /** Whether the data and weather areas are decoupled in the build. */
-    val isDateWeatherDecoupled: Boolean = smartspaceController.isDateWeatherDecoupled
+    val isDateWeatherDecoupled: Boolean
+        get() = smartspaceController.isDateWeatherDecoupled
 
     /** Whether the date area should be visible. */
     val isDateVisible: StateFlow<Boolean> =
