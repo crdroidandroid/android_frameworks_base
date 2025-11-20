@@ -302,7 +302,8 @@ constructor(
         dumpManager.registerDumpable(this)
     }
 
-    val isDateWeatherDecoupled: Boolean = datePlugin != null && weatherPlugin != null
+    val isDateWeatherDecoupled: Boolean
+        get() = datePlugin != null && weatherPlugin != null
 
     val isWeatherEnabled: Boolean
         get() {
