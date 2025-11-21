@@ -15,6 +15,10 @@
     <string name="status_bar_hd_calling">Chiamata HD (VoLTE/VoNR)</string>
     <!-- Name of the VoWiFi status bar icon. -->
     <string name="status_bar_vowifi">Chiamata Wi-Fi (VoWiFi)</string>
+    <!-- Data disabled icon -->
+    <string name="data_disabled_icon_title">Data disabled icon</string>
+    <!-- 4G icon instead LTE -->
+    <string name="fourg_icon_title">4G icon</string>
     <!-- Status bar network traffic monitor strings -->
     <string name="kilobitspersecond_short">kb/s</string>
     <string name="megabitspersecond_short">Mb/s</string>
