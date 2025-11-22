@@ -1504,6 +1504,10 @@ public class Typeface {
 
     /** @hide */
     public static void changeFont(Resources res) {
+        if (res == null) {
+            return;
+        }
+
         synchronized (sDynamicCacheLock) {
             sDynamicTypefaceCache.evictAll();
         }
