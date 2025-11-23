@@ -339,8 +339,8 @@ constructor(
 
     var shouldUpdateSquishinessOnMedia by mutableStateOf(false)
 
-    val qsMediaTranslationY by derivedStateOf {
-        if (
+    val qsMediaTranslationY: Float
+        get() = if (
             !MediaControlsInComposeFlag.isEnabled &&
                 !Flags.mediaControlsTranslationFix() &&
                 qsExpansion > 0f &&
@@ -354,7 +354,6 @@ constructor(
         } else {
             0f
         }
-    }
 
     val animateTilesExpansion: Boolean
         get() = inFirstPage && !mediaSuddenlyAppearingInLandscape
