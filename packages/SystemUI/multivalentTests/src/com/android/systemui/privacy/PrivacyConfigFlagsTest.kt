@@ -16,11 +16,8 @@
 
 package com.android.systemui.privacy
 
-import android.location.flags.Flags
-import android.platform.test.annotations.EnableFlags
-import android.platform.test.flag.junit.FlagsParameterization
-import android.platform.test.flag.junit.FlagsParameterization.allCombinationsOf
 import android.provider.DeviceConfig
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
 import com.android.internal.config.sysui.SystemUiDeviceConfigFlags
 import com.android.systemui.SysuiTestCase
@@ -39,39 +36,33 @@ import org.mockito.Mockito.atLeastOnce
 import org.mockito.Mockito.never
 import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
-import platform.test.runner.parameterized.ParameterizedAndroidJunit4
-import platform.test.runner.parameterized.Parameters
 
-@RunWith(ParameterizedAndroidJunit4::class)
+@RunWith(AndroidJUnit4::class)
 @SmallTest
 @android.platform.test.annotations.EnabledOnRavenwood
-class PrivacyConfigFlagsTest(flags: FlagsParameterization) : SysuiTestCase() {
+class PrivacyConfigFlagsTest : SysuiTestCase() {
     companion object {
         private const val MIC_CAMERA = SystemUiDeviceConfigFlags.PROPERTY_MIC_CAMERA_ENABLED
+        private const val LOCATION = SystemUiDeviceConfigFlags.PROPERTY_LOCATION_INDICATORS_ENABLED
         private const val MEDIA_PROJECTION =
-            SystemUiDeviceConfigFlags.PROPERTY_MEDIA_PROJECTION_INDICATORS_ENABLED
-
-        @JvmStatic
-        @Parameters(name = "{0}")
-        fun getParams(): List<FlagsParameterization> {
-            return allCombinationsOf(Flags.FLAG_LOCATION_INDICATORS_ENABLED)
-        }
-    }
-
-    init {
-        mSetFlagsRule.setFlagsParameterization(flags)
+                SystemUiDeviceConfigFlags.PROPERTY_MEDIA_PROJECTION_INDICATORS_ENABLED
     }
 
     private lateinit var privacyConfig: PrivacyConfig
 
-    @Mock private lateinit var callback: PrivacyConfig.Callback
-    @Mock private lateinit var dumpManager: DumpManager
+    @Mock
+    private lateinit var callback: PrivacyConfig.Callback
+    @Mock
+    private lateinit var dumpManager: DumpManager
 
     private lateinit var executor: FakeExecutor
     private lateinit var deviceConfigProxy: DeviceConfigProxy
 
     fun createPrivacyConfig(): PrivacyConfig {
-        return PrivacyConfig(executor, deviceConfigProxy, dumpManager)
+        return PrivacyConfig(
+                executor,
+                deviceConfigProxy,
+                dumpManager)
     }
 
     @Before
@@ -87,13 +78,11 @@ class PrivacyConfigFlagsTest(flags: FlagsParameterization) : SysuiTestCase() {
     }
 
     @Test
-    @EnableFlags(Flags.FLAG_LOCATION_INDICATORS_ENABLED)
     fun testMicCameraListeningByDefault() {
         assertTrue(privacyConfig.micCameraAvailable)
     }
 
     @Test
-    @EnableFlags(Flags.FLAG_LOCATION_INDICATORS_ENABLED)
     fun testMicCameraChanged() {
         changeMicCamera(false) // default is true
         executor.runAllReady()
@@ -104,7 +93,6 @@ class PrivacyConfigFlagsTest(flags: FlagsParameterization) : SysuiTestCase() {
     }
 
     @Test
-    @EnableFlags(Flags.FLAG_LOCATION_INDICATORS_ENABLED)
     fun testMediaProjectionChanged() {
         changeMediaProjection(false) // default is true
         executor.runAllReady()
@@ -115,9 +103,8 @@ class PrivacyConfigFlagsTest(flags: FlagsParameterization) : SysuiTestCase() {
     }
 
     @Test
-    @EnableFlags(Flags.FLAG_LOCATION_INDICATORS_ENABLED)
     fun testLocationChanged() {
-        changeMicCamera(true)
+        changeLocation(true)
         executor.runAllReady()
 
         verify(callback).onFlagLocationChanged(true)
@@ -125,8 +112,8 @@ class PrivacyConfigFlagsTest(flags: FlagsParameterization) : SysuiTestCase() {
     }
 
     @Test
-    @EnableFlags(Flags.FLAG_LOCATION_INDICATORS_ENABLED)
     fun testMicCamAndLocationChanged() {
+        changeLocation(true)
         changeMicCamera(false)
         executor.runAllReady()
 
@@ -138,7 +125,6 @@ class PrivacyConfigFlagsTest(flags: FlagsParameterization) : SysuiTestCase() {
     }
 
     @Test
-    @EnableFlags(Flags.FLAG_LOCATION_INDICATORS_ENABLED)
     fun testMicDeleted_stillAvailable() {
         changeMicCamera(true)
         executor.runAllReady()
@@ -150,15 +136,15 @@ class PrivacyConfigFlagsTest(flags: FlagsParameterization) : SysuiTestCase() {
     }
 
     private fun changeMicCamera(value: Boolean?) = changeProperty(MIC_CAMERA, value)
-
+    private fun changeLocation(value: Boolean?) = changeProperty(LOCATION, value)
     private fun changeMediaProjection(value: Boolean?) = changeProperty(MEDIA_PROJECTION, value)
 
     private fun changeProperty(name: String, value: Boolean?) {
         deviceConfigProxy.setProperty(
-            DeviceConfig.NAMESPACE_PRIVACY,
-            name,
-            value?.toString(),
-            false,
+                DeviceConfig.NAMESPACE_PRIVACY,
+                name,
+                value?.toString(),
+                false
         )
     }
 }
