@@ -87,6 +87,12 @@ public class PermissionUsageHelper implements AppOpsManager.OnOpActiveChangedLis
     private static final String PROPERTY_CAMERA_MIC_ICONS_ENABLED = "camera_mic_icons_enabled";
 
     /**
+     * Whether to show the location indicators.
+     */
+    private static final String PROPERTY_LOCATION_INDICATORS_ENABLED =
+            "location_indicators_enabled";
+
+    /**
      * How long after an access to show it as "recent"
      */
     private static final String RECENT_ACCESS_TIME_MS = "recent_access_time_ms";
@@ -106,6 +112,11 @@ public class PermissionUsageHelper implements AppOpsManager.OnOpActiveChangedLis
                 PROPERTY_CAMERA_MIC_ICONS_ENABLED, true);
     }
 
+    private static boolean shouldShowLocationIndicator() {
+        return DeviceConfig.getBoolean(DeviceConfig.NAMESPACE_PRIVACY,
+                PROPERTY_LOCATION_INDICATORS_ENABLED, false);
+    }
+
     private static long getRecentThreshold(Long now) {
         return now - DeviceConfig.getLong(DeviceConfig.NAMESPACE_PRIVACY,
                 RECENT_ACCESS_TIME_MS, DEFAULT_RECENT_TIME_MS);
@@ -115,6 +126,11 @@ public class PermissionUsageHelper implements AppOpsManager.OnOpActiveChangedLis
         return now - DeviceConfig.getLong(DeviceConfig.NAMESPACE_PRIVACY,
                 RUNNING_ACCESS_TIME_MS, DEFAULT_RUNNING_TIME_MS);
     }
+
+    private static final List<String> LOCATION_OPS = List.of(
+            OPSTR_COARSE_LOCATION,
+            OPSTR_FINE_LOCATION
+    );
 
     private static final List<String> MIC_OPS = List.of(
             OPSTR_PHONE_CALL_MICROPHONE,
@@ -284,6 +300,9 @@ public class PermissionUsageHelper implements AppOpsManager.OnOpActiveChangedLis
         }
 
         List<String> ops = new ArrayList<>(CAMERA_OPS);
+        if (shouldShowLocationIndicator()) {
+            ops.addAll(LOCATION_OPS);
+        }
         if (includeMicrophoneUsage) {
             ops.addAll(MIC_OPS);
         }
