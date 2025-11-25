@@ -189,13 +189,6 @@ flag {
 }
 
 flag {
-    name: "location_indicators_enabled"
-    namespace: "location"
-    description: "Enables modified location privacy item behavior"
-    bug: "419834493"
-}
-
-flag {
     name: "change_get_adas_allowlist_from_hidden_to_system"
     namespace: "location"
     description: "Changes the getAdasAllowlist API from hidden to system"

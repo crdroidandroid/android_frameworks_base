@@ -133,6 +133,11 @@ public final class SystemUiDeviceConfigFlags {
     public static final String PROPERTY_MIC_CAMERA_ENABLED = "camera_mic_icons_enabled";
 
     /**
+     * Whether to show app ops chip for location.
+     */
+    public static final String PROPERTY_LOCATION_INDICATORS_ENABLED = "location_indicators_enabled";
+
+    /**
      * Whether to show privacy chip for media projection.
      */
     public static final String PROPERTY_MEDIA_PROJECTION_INDICATORS_ENABLED =
