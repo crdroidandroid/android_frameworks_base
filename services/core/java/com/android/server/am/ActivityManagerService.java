@@ -2923,6 +2923,38 @@ public class ActivityManagerService extends IActivityManager.Stub
         return mProcessList.getProcessRecordLocked(processName, uid);
     }
 
+    public ProcessRecord getProcessRecord(String str) {
+        ProcessRecord processRecordLocked = null;
+        synchronized (mProcLock) {
+            try {
+                int currentUserId = getCurrentUserId();
+                int packageUid = getPackageManagerInternal().getPackageUid(str, 0, currentUserId);
+                processRecordLocked = getProcessRecordLocked(str, packageUid);
+            } catch (Exception e) {
+            }
+        }
+        return processRecordLocked;
+    }
+
+    public ProcessRecord getProcessRecordByPid(int pid) {
+        ProcessRecord curProc;
+        synchronized (mPidsSelfLocked) {
+            curProc = mPidsSelfLocked.get(pid);
+        }
+        if (curProc == null) {
+            Slog.d("getProcessRecordByPid", "pid: " + pid + " is not exist, return!");
+            return null;
+        }
+        return curProc;
+    }
+
+    public boolean isPackageTopApp(String str) {
+        ProcessRecord gameProc = getProcessRecord(str);
+        return gameProc != null
+            && gameProc.getThread() != null
+            && gameProc.getCurrentSchedulingGroup() == ProcessList.SCHED_GROUP_TOP_APP;
+    }
+
     @GuardedBy(anyOf = {"this", "mProcLock"})
     final ProcessMap<ProcessRecord> getProcessNamesLOSP() {
         return mProcessList.getProcessNamesLOSP();

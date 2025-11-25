@@ -2231,6 +2231,17 @@ public class ActivityTaskSupervisor implements RecentTasks.Callbacks {
         }
     }
 
+    boolean reportResumedActivityLocked(ActivityRecord r) {
+        this.mStoppingActivities.remove(r);
+        Task rootTask = r.getRootTask();
+        if (rootTask.getDisplayArea().allResumedActivitiesComplete()) {
+            this.mRootWindowContainer.ensureActivitiesVisible();
+            this.mRootWindowContainer.executeAppTransitionForAllDisplay();
+            return true;
+        }
+        return false;
+    }
+
     // Called when WindowManager has finished animating the launchingBehind activity to the back.
     private void handleLaunchTaskBehindCompleteLocked(ActivityRecord r) {
         final Task task = r.getTask();
