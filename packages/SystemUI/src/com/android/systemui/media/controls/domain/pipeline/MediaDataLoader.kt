@@ -71,6 +71,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.ensureActive
+import kotlin.math.min
 
 /** Loads media information from media style [StatusBarNotification] classes. */
 @SysUISingleton
@@ -89,8 +90,11 @@ constructor(
     private val mediaProcessingJobs = ConcurrentHashMap<String, Job>()
 
     private val artworkWidth: Int =
-        context.resources.getDimensionPixelSize(
-            com.android.internal.R.dimen.config_mediaMetadataBitmapMaxSize
+        min(
+            context.resources.getDimensionPixelSize(
+                com.android.internal.R.dimen.config_mediaMetadataBitmapMaxSize
+            ),
+            500
         )
     private val artworkHeight: Int =
         context.resources.getDimensionPixelSize(R.dimen.qs_media_session_height_expanded)
