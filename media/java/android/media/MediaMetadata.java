@@ -23,6 +23,9 @@ import android.compat.annotation.UnsupportedAppUsage;
 import android.content.ContentResolver;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.media.browse.MediaBrowser;
 import android.media.session.MediaController;
 import android.media.session.MediaSession;
@@ -986,14 +989,26 @@ public final class MediaMetadata implements Parcelable {
         }
 
         private Bitmap scaleBitmap(Bitmap bmp, int maxDimension) {
-            float maxDimensionF = maxDimension;
-            float widthScale = maxDimensionF / bmp.getWidth();
-            float heightScale = maxDimensionF / bmp.getHeight();
-            float scale = Math.min(widthScale, heightScale);
-            int height = (int) (bmp.getHeight() * scale);
-            int width = (int) (bmp.getWidth() * scale);
+            if (bmp == null) return null;
+            int srcWidth = bmp.getWidth();
+            int srcHeight = bmp.getHeight();
+            float scale = Math.max(
+                (float) maxDimension / srcWidth,
+                (float) maxDimension / srcHeight
+            );
+            float scaledWidth = scale * srcWidth;
+            float scaledHeight = scale * srcHeight;
+            float dx = (maxDimension - scaledWidth) / 2f;
+            float dy = (maxDimension - scaledHeight) / 2f;
+            Bitmap output = Bitmap.createBitmap(maxDimension, maxDimension, bmp.getConfig());
+            Canvas canvas = new Canvas(output);
+            Matrix matrix = new Matrix();
+            matrix.setScale(scale, scale);
+            matrix.postTranslate(dx, dy);
+            Paint paint = new Paint(Paint.FILTER_BITMAP_FLAG);
+            canvas.drawBitmap(bmp, matrix, paint);
             StrictMode.noteSlowCall("Downscaling oversized MediaMetadata Bitmap");
-            return Bitmap.createScaledBitmap(bmp, width, height, true);
+            return output;
         }
     }
 }
