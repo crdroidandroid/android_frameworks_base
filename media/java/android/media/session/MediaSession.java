@@ -263,10 +263,9 @@ public final class MediaSession {
             throw new IllegalArgumentException("overridePackageName cannot be same as calling app");
         }
         mContext = context;
-        mMaxBitmapSize =
-                context.getResources()
-                        .getDimensionPixelSize(
-                                com.android.internal.R.dimen.config_mediaMetadataBitmapMaxSize);
+        int bitmapSize = context.getResources().getDimensionPixelSize(
+                com.android.internal.R.dimen.config_mediaMetadataBitmapMaxSize);
+        mMaxBitmapSize = Math.min(bitmapSize, 500);
         mCbStub = new CallbackStub(this);
         MediaSessionManager manager =
                 (MediaSessionManager) context.getSystemService(Context.MEDIA_SESSION_SERVICE);
