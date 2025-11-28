@@ -24,7 +24,7 @@
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/>
 
     <application
-        android:theme="@style/Theme.SubSettingsBase"
+        android:theme="@style/Theme.SubSettingsBase.Expressive"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:enableOnBackInvokedCallback="true"
