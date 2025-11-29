@@ -71,6 +71,7 @@ class PulseRenderer(
             "retro" -> style !is RetroVUStyleRenderer
             "minimal" -> style !is MinimalStyleRenderer
             "sparkle" -> style !is SparkleStyleRenderer
+            "matrix" -> style !is MatrixStyleRenderer
             else -> false
         }
 
@@ -92,6 +93,7 @@ class PulseRenderer(
             "retro" -> RetroVUStyleRenderer(settingsRepo)
             "minimal" -> MinimalStyleRenderer(settingsRepo)
             "sparkle" -> SparkleStyleRenderer(settingsRepo)
+            "matrix" -> MatrixStyleRenderer(settingsRepo)
             else -> SolidLineStyleRenderer(settingsRepo)
         }
     }
