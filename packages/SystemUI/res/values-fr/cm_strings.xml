@@ -77,4 +77,6 @@
     <string name="battery_notification_channel_tv">Avertissement batterie</string>
     <string name="screenshot_delete_label">Supprimer</string>
     <string name="screenshot_delete_description">Supprimer la capture d\'écran</string>
+    <string name="screen_pinning_description_no_navbar">Cela reste affiché tant que vous ne le désépinglez pas. Touchez et maintenez le bouton Retour pour désépingler.</string>
+    <string name="screen_pinning_toast_no_navbar">Pour désépingler cet écran, touchez et maintenez le bouton Retour</string>
 </resources>
