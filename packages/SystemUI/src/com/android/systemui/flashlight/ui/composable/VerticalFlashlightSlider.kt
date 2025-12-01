@@ -99,6 +99,7 @@ import com.android.systemui.flashlight.ui.composable.Specs.THUMB_MAX_HEIGHT
 import com.android.systemui.flashlight.ui.composable.Specs.THUMB_MIN_HEIGHT
 import com.android.systemui.flashlight.ui.composable.Specs.THUMB_WIDTH
 import com.android.systemui.flashlight.ui.composable.Specs.TOP_BORDER_HEIGHT
+import com.android.systemui.flashlight.ui.composable.Specs.TOP_BORDER_WIDTH
 import com.android.systemui.flashlight.ui.composable.Specs.TRACK_LENGTH
 import com.android.systemui.flashlight.ui.composable.Specs.TRAPEZOID_BOTTOM_LEFT_HEIGHT_RATIO
 import com.android.systemui.flashlight.ui.composable.Specs.TRAPEZOID_TOP_LEFT_HEIGHT_RATIO
@@ -159,7 +160,8 @@ fun VerticalFlashlightSlider(
     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.TopCenter) {
         Spacer(
             modifier =
-                Modifier.size(TRACK_LENGTH, TOP_BORDER_HEIGHT).background(colors.inactiveTrackColor)
+                Modifier.size(TOP_BORDER_WIDTH, TOP_BORDER_HEIGHT)
+                    .background(colors.inactiveTrackColor, RoundedCornerShape(100))
         )
         Column(
             modifier = modifier.fillMaxWidth().wrapContentHeight(),
@@ -473,6 +475,7 @@ private object Specs {
     val BLUR_X = 20.dp // max 60
     val BLUR_Y = 5.dp // max 30
     val TOP_BORDER_HEIGHT = 2.dp
+    val TOP_BORDER_WIDTH = TRACK_LENGTH - 2.dp
 
     val EdgeTreatment = BlurredEdgeTreatment(BeamShape())
     const val BLUR_CONTRACTION = 1f // max 1
