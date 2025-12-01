@@ -161,6 +161,7 @@ public abstract class FileObserver {
                     observer = (FileObserver) weak.get();
                     if (observer == null) {
                         mRealObservers.remove(wfd);
+                        return;
                     }
                 }
             }
