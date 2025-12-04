@@ -62,6 +62,7 @@ import android.graphics.Insets;
 import android.graphics.Rect;
 import android.graphics.Region;
 import android.graphics.RenderEffect;
+import android.graphics.drawable.Animatable;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
@@ -4536,13 +4537,40 @@ public final class NotificationPanelViewController implements
                 mQsHeaderImageView.setImageAlpha( (int)
                     (mShadeHeaderExpansion * (255 - mHeaderImageShadow)));
             }
+
+            // Handle Animation (GIF/WebP) playback
+            Drawable currentDrawable = mQsHeaderImageView.getDrawable();
+            if (currentDrawable instanceof Animatable) {
+                Animatable anim = (Animatable) currentDrawable;
+                if (!anim.isRunning()) {
+                    anim.start();
+                }
+            }
+
         } else {
             mQsHeaderLayout.setVisibility(View.GONE);
+
+            // Stop animation if hidden to save battery
+            Drawable currentDrawable = mQsHeaderImageView.getDrawable();
+            if (currentDrawable instanceof Animatable) {
+                Animatable anim = (Animatable) currentDrawable;
+                if (anim.isRunning()) {
+                    anim.stop();
+                }
+            }
+
         }
     }
 
     private void setNotificationPanelHeaderBackground(Drawable dw, boolean force) {
-        if (mQsHeaderImageView.getDrawable() != null && !force) {
+        // If the new drawable is an animation, set it directly.
+        if (dw instanceof Animatable) {
+            mQsHeaderImageView.setImageDrawable(dw);
+            ((Animatable) dw).start();
+            return;
+        }
+
+        if (mQsHeaderImageView.getDrawable() != null && !force && !(mQsHeaderImageView.getDrawable() instanceof Animatable)) {
             Drawable[] layers = new Drawable[]{mQsHeaderImageView.getDrawable(), dw};
             TransitionDrawable transitionDrawable = new TransitionDrawable(layers);
             transitionDrawable.setCrossFadeEnabled(true);
