@@ -21,9 +21,7 @@ package com.android.systemui.crdroid.header;
 import android.content.Context;
 import android.content.res.Resources;
 import android.database.ContentObserver;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
+import android.graphics.ImageDecoder;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.util.Log;
@@ -124,9 +122,13 @@ public class FileHeaderProvider implements
         File file = new File(mContext.getFilesDir(), HEADER_FILE_NAME);
         if (file.exists()) {
             if (DEBUG) Log.i(TAG, "Load header image");
-            Bitmap image = ImageHelper.getCompressedBitmap(file.getAbsolutePath());
-            if (image != null) {
-                mImage = new BitmapDrawable(mContext.getResources(), image);
+            try {
+                ImageDecoder.Source source = ImageDecoder.createSource(file);
+                mImage = ImageDecoder.decodeDrawable(source, (decoder, info, s) -> {
+                    decoder.setAllocator(ImageDecoder.ALLOCATOR_SOFTWARE);
+                });
+            } catch (IOException e) {
+                Log.e(TAG, "Failed to decode header image", e);
             }
         }
     }
