@@ -88,7 +88,7 @@ public class NavBarTuner extends TunerPreferenceFragment {
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        addPreferencesFromResource(R.xml.nav_bar_tuner);
+        setPreferencesFromResource(R.xml.nav_bar_tuner, rootKey);
         bindLayout((ListPreference) findPreference(LAYOUT));
         bindButton(NAV_BAR_LEFT, NAVSPACE, LEFT);
         bindButton(NAV_BAR_RIGHT, MENU_IME_ROTATE, RIGHT);

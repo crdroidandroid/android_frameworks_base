@@ -25,7 +25,7 @@ import android.os.Process;
 
 import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
-import androidx.preference.PreferenceFragment;
+import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceScreen;
 import androidx.preference.PreferenceViewHolder;
 
@@ -37,7 +37,7 @@ import com.android.systemui.tuner.TunerService.Tunable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShortcutPicker extends PreferenceFragment implements Tunable {
+public class ShortcutPicker extends PreferenceFragmentCompat implements Tunable {
 
     private final ArrayList<SelectablePreference> mSelectablePreferences = new ArrayList<>();
     private String mKey;

@@ -34,7 +34,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.preference.Preference;
-import androidx.preference.PreferenceFragment;
+import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -55,7 +55,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.function.Consumer;
 
-public class LockscreenFragment extends PreferenceFragment {
+public class LockscreenFragment extends PreferenceFragmentCompat {
 
     private static final String KEY_LEFT = "left";
     private static final String KEY_RIGHT = "right";
@@ -78,7 +78,7 @@ public class LockscreenFragment extends PreferenceFragment {
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         mTunerService = Dependency.get(TunerService.class);
         mHandler = new Handler();
-        addPreferencesFromResource(R.xml.lockscreen_settings);
+        setPreferencesFromResource(R.xml.lockscreen_settings, rootKey);
         setupGroup(LOCKSCREEN_LEFT_BUTTON, LOCKSCREEN_LEFT_UNLOCK);
         setupGroup(LOCKSCREEN_RIGHT_BUTTON, LOCKSCREEN_RIGHT_UNLOCK);
     }

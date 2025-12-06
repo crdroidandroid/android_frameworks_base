@@ -29,7 +29,7 @@ import android.util.ArrayMap;
 import android.util.ArraySet;
 import android.view.View;
 
-import androidx.preference.PreferenceFragment;
+import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceScreen;
 import androidx.preference.PreferenceViewHolder;
 import androidx.preference.SwitchPreferenceCompat;
@@ -46,7 +46,7 @@ import com.android.systemui.shared.plugins.PluginPrefs;
 import java.util.List;
 import java.util.Set;
 
-public class PluginFragment extends PreferenceFragment {
+public class PluginFragment extends PreferenceFragmentCompat {
 
     public static final String ACTION_PLUGIN_SETTINGS
             = "com.android.systemui.action.PLUGIN_SETTINGS";
