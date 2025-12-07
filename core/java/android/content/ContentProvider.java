@@ -590,13 +590,14 @@ public abstract class ContentProvider implements ContentInterface, ComponentCall
                 throws FileNotFoundException {
             uri = validateIncomingUri(uri);
             uri = maybeGetUriWithoutUserId(uri);
-            enforceFilePermission(attributionSource, uri, mode);
+            final String updatedMode = validateFileMode(mode);
+            enforceFilePermission(attributionSource, uri, updatedMode);
             traceBegin(TRACE_TAG_ACTIVITY_MANAGER, "openFile: ", uri.getAuthority());
             final AttributionSource original = setCallingAttributionSource(
                     attributionSource);
             try {
                 return mInterface.openFile(
-                        uri, mode, CancellationSignal.fromTransport(cancellationSignal));
+                        uri, updatedMode, CancellationSignal.fromTransport(cancellationSignal));
             } catch (RemoteException e) {
                 throw e.rethrowAsRuntimeException();
             } finally {
@@ -611,13 +612,14 @@ public abstract class ContentProvider implements ContentInterface, ComponentCall
                 throws FileNotFoundException {
             uri = validateIncomingUri(uri);
             uri = maybeGetUriWithoutUserId(uri);
-            enforceFilePermission(attributionSource, uri, mode);
+            final String updatedMode = validateFileMode(mode);
+            enforceFilePermission(attributionSource, uri, updatedMode);
             traceBegin(TRACE_TAG_ACTIVITY_MANAGER, "openAssetFile: ", uri.getAuthority());
             final AttributionSource original = setCallingAttributionSource(
                     attributionSource);
             try {
                 return mInterface.openAssetFile(
-                        uri, mode, CancellationSignal.fromTransport(cancellationSignal));
+                        uri, updatedMode, CancellationSignal.fromTransport(cancellationSignal));
             } catch (RemoteException e) {
                 throw e.rethrowAsRuntimeException();
             } finally {
@@ -780,6 +782,25 @@ public abstract class ContentProvider implements ContentInterface, ComponentCall
                 setCallingAttributionSource(original);
                 Trace.traceEnd(TRACE_TAG_ACTIVITY_MANAGER);
             }
+        }
+
+        private String validateFileMode(String mode) {
+            // We currently only support the following modes: r, w, wt, wa, rw, rwt
+            // Note: ideally, we should check against the allowed modes and throw a
+            // SecurityException if the mode doesn't match any of them but to avoid app compat
+            // issues, we're silently dropping bits which allow modifying files when the write bit
+            // is not specified.
+            if (mode != null && mode.indexOf('w') == -1) {
+                // Don't allow truncation without write
+                if (mode.indexOf('t') != -1) {
+                    mode = mode.replace("t", "");
+                }
+                // Don't allow appending without write
+                if (mode.indexOf('a') != -1) {
+                    mode = mode.replace("a", "");
+                }
+            }
+            return mode;
         }
 
         @Override

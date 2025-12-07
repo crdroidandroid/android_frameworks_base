@@ -1849,4 +1849,7 @@
 
     <!-- The name of the screen for seeing and installing system updates. [CHAR LIMIT=40]-->
     <string name="system_update_settings_list_item_title">System Updates</string>
+
+    <!-- The exclamation symbol defined for the battery meter. [CHAR LIMIT=NONE]-->
+    <string name="config_batteryMeterExclamationPath" translatable="false">M7 12.5h.5V12 6 5.5H7 5 4.5V6v6 .5H5 7ZM4.9064 16.0629l.0147.016.016.0147c.2966.2719.6605.4064 1.0629.4064.4024 0 .7673-.1352 1.0536-.4214.294-.294.4464-.6629.4464-1.0786 0-.4092-.1485-.7731-.4462-1.0538C6.7731 13.6485 6.4092 13.5 6 13.5c-.4157 0-.7846.1525-1.0785.4464L5.275 14.3l-.3536-.3536C4.6352 14.2327 4.5 14.5976 4.5 15c0 .4023.1345.7663.4064 1.0629Z</string>
 </resources>

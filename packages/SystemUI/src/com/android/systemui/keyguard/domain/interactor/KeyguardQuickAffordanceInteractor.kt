@@ -22,11 +22,11 @@ import android.app.admin.DevicePolicyManager
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import android.view.accessibility.AccessibilityManager
 import com.android.app.tracing.coroutines.withContextTraced as withContext
 import com.android.compose.animation.scene.ObservableTransitionState
 import com.android.internal.widget.LockPatternUtils
 import com.android.keyguard.logging.KeyguardQuickAffordancesLogger
+import com.android.systemui.accessibility.domain.interactor.AccessibilityInteractor
 import com.android.systemui.animation.DialogTransitionAnimator
 import com.android.systemui.animation.Expandable
 import com.android.systemui.dagger.SysUISingleton
@@ -89,7 +89,7 @@ constructor(
     private val devicePolicyManager: DevicePolicyManager,
     private val dockManager: DockManager,
     private val biometricSettingsRepository: BiometricSettingsRepository,
-    private val accessibilityManager: AccessibilityManager,
+    private val accessibilityInteractor: AccessibilityInteractor,
     @Background private val backgroundDispatcher: CoroutineDispatcher,
     @ShadeDisplayAware private val appContext: Context,
     private val sceneInteractor: Lazy<SceneInteractor>,
@@ -114,8 +114,10 @@ constructor(
      * If `false`, the UI goes back to using single taps.
      */
     fun useLongPress(): Flow<Boolean> =
-        dockManager.retrieveIsDocked().map { isDocked ->
-            !isDocked && !accessibilityManager.isEnabled()
+        combine(dockManager.retrieveIsDocked(), accessibilityInteractor.isEnabledFiltered) {
+            isDocked,
+            isAccessibilityEnabled ->
+            !isDocked && !isAccessibilityEnabled
         }
 
     /** Returns an observable for the quick affordance at the given position. */

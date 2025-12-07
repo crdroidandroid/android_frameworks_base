@@ -608,6 +608,18 @@ public abstract class MediaBrowserService extends Service {
          */
         public static final String EXTRA_SUGGESTED = "android.service.media.extra.SUGGESTED";
 
+        /**
+         * A key for the root hint when connecting a browser to indicate that the bind connection
+         * should not include capabilities.
+         *
+         * <p>When using {@link #EXTRA_RECENT}, this flag is assumed to be set as well.
+         *
+         * @see android.content.Context#BIND_INCLUDE_CAPABILITIES
+         * @hide
+         */
+        public static final String EXTRA_EXCLUDE_CAPABILITIES =
+                "android.service.media.extra.EXCLUDE_CAPABILITIES";
+
         private final String mRootId;
         private final Bundle mExtras;
 

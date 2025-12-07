@@ -911,6 +911,62 @@ public class UiModeManagerServiceTest extends UiServiceTestCase {
     }
 
     @Test
+    public void customTime_clearsOverrides_whenOverrideOnIsSet() throws RemoteException {
+        when(mPowerManager.isInteractive()).thenReturn(false);
+
+        mService.setNightMode(MODE_NIGHT_CUSTOM);
+        LocalTime scheduleStart = LocalTime.now().plusHours(2);
+        LocalTime scheduleEnd = LocalTime.now().plusHours(3);
+        mService.setCustomNightModeStart(scheduleStart.toNanoOfDay() / 1000);
+        mService.setCustomNightModeEnd(scheduleEnd.toNanoOfDay() / 1000);
+        assertThat(isNightModeActivated()).isFalse();
+
+        mService.setNightModeActivated(true);
+
+        //Verify override is set and night mode is ON due to override
+        Boolean[] overrides = mUiManagerService.getNightModeOverrides();
+        assertThat(overrides[0]).isTrue();  // mOverrideNightModeOn
+        assertThat(overrides[1]).isFalse(); // mOverrideNightModeOff
+        assertThat(isNightModeActivated()).isTrue(); // Night mode is ON due to override
+
+        LocalTime newStartTime = LocalTime.now().plusHours(1);
+        mService.setCustomNightModeStart(newStartTime.toNanoOfDay() / 1000);
+
+        // Verify overrides are cleared
+        overrides = mUiManagerService.getNightModeOverrides();
+        assertThat(overrides[0]).isFalse(); // mOverrideNightModeOn should be cleared
+        assertThat(overrides[1]).isFalse(); // mOverrideNightModeOff should be cleared
+    }
+
+    @Test
+    public void customTime_clearsOverrides_whenOverrideOffIsSet() throws RemoteException {
+        when(mPowerManager.isInteractive()).thenReturn(false);
+
+        mService.setNightMode(MODE_NIGHT_CUSTOM);
+        LocalTime scheduleStart = LocalTime.now().minusHours(2);
+        LocalTime scheduleEnd = LocalTime.now().plusHours(3);
+        mService.setCustomNightModeStart(scheduleStart.toNanoOfDay() / 1000);
+        mService.setCustomNightModeEnd(scheduleEnd.toNanoOfDay() / 1000);
+        assertThat(isNightModeActivated()).isTrue();
+
+        mService.setNightModeActivated(false);
+
+        //Verify override is set and night mode is OFF due to override
+        Boolean[] overrides = mUiManagerService.getNightModeOverrides();
+        assertThat(overrides[0]).isFalse();  // mOverrideNightModeOn
+        assertThat(overrides[1]).isTrue(); // mOverrideNightModeOff
+        assertThat(isNightModeActivated()).isFalse(); // Night mode is ON due to override
+
+        LocalTime newEndTime = LocalTime.now().plusHours(1);
+        mService.setCustomNightModeStart(newEndTime.toNanoOfDay() / 1000);
+
+        // Verify overrides are cleared
+        overrides = mUiManagerService.getNightModeOverrides();
+        assertThat(overrides[0]).isFalse(); // mOverrideNightModeOn should be cleared
+        assertThat(overrides[1]).isFalse(); // mOverrideNightModeOff should be cleared
+    }
+
+    @Test
     public void customTime_alarmSetInTheFutureWhenOn() throws RemoteException {
         LocalDateTime now = LocalDateTime.now();
         when(mPowerManager.isInteractive()).thenReturn(false);

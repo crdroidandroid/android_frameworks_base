@@ -19,6 +19,9 @@ package com.android.systemui.statusbar.policy;
 import static android.os.BatteryManager.CHARGING_POLICY_ADAPTIVE_LONGLIFE;
 import static android.os.BatteryManager.CHARGING_POLICY_DEFAULT;
 import static android.os.BatteryManager.EXTRA_CHARGING_STATUS;
+import static android.os.BatteryManager.BATTERY_HEALTH_DEAD;
+import static android.os.BatteryManager.BATTERY_HEALTH_UNKNOWN;
+import static android.os.BatteryManager.EXTRA_HEALTH;
 import static android.os.BatteryManager.EXTRA_PRESENT;
 
 import static com.android.settingslib.fuelgauge.BatterySaverLogging.SAVER_ENABLED_QS;
@@ -94,6 +97,7 @@ public class BatteryControllerImpl extends BroadcastReceiver implements BatteryC
     private int mPluggedChargingSource;
     protected boolean mCharging;
     private boolean mStateUnknown = false;
+    private boolean mStateAlert = false;
     private boolean mCharged;
     protected boolean mPowerSave;
     private boolean mAodPowerSave;
@@ -192,6 +196,8 @@ public class BatteryControllerImpl extends BroadcastReceiver implements BatteryC
         ipw.println(mPowerSave);
         ipw.print("mStateUnknown=");
         ipw.println(mStateUnknown);
+        ipw.print("mStateAlert=");
+        ipw.println(mStateAlert);
         ipw.println("Callbacks:------------------");
         // Since the above lines are already indented, we need to indent twice for the callbacks.
         ipw.increaseIndent();
@@ -236,6 +242,7 @@ public class BatteryControllerImpl extends BroadcastReceiver implements BatteryC
         cb.onWirelessChargingChanged(mWirelessCharging);
         cb.onIsBatteryDefenderChanged(mIsBatteryDefender);
         cb.onIsIncompatibleChargingChanged(mIsIncompatibleCharging);
+        cb.onBatteryAlertStateChanged(mStateAlert);
     }
 
     @Override
@@ -289,6 +296,14 @@ public class BatteryControllerImpl extends BroadcastReceiver implements BatteryC
             if (mPluggedChargingSource != previousPluggedChargingSource) {
                 updatePowerSave();
             }
+
+            int batteryHealth = intent.getIntExtra(EXTRA_HEALTH, BATTERY_HEALTH_UNKNOWN);
+            boolean isAlert = batteryHealth == BATTERY_HEALTH_DEAD;
+            if (isAlert != mStateAlert) {
+                mStateAlert = isAlert;
+                fireBatteryAlertStateChanged();
+            }
+
             fireBatteryLevelChanged();
         } else if (action.equals(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED)) {
             updatePowerSave();
@@ -510,6 +525,10 @@ public class BatteryControllerImpl extends BroadcastReceiver implements BatteryC
                 (callback) -> callback.onIsIncompatibleChargingChanged(mIsIncompatibleCharging));
     }
 
+    private void fireBatteryAlertStateChanged() {
+        dispatchSafeChange((callback) -> callback.onBatteryAlertStateChanged(mStateAlert));
+    }
+
     @Override
     public void dispatchDemoCommand(String command, Bundle args) {
         if (!mDemoModeController.isInDemoMode()) {
@@ -522,6 +541,7 @@ public class BatteryControllerImpl extends BroadcastReceiver implements BatteryC
         String present = args.getString("present");
         String defender = args.getString("defender");
         String incompatible = args.getString("incompatible");
+        String alert = args.getString("alert");
         if (level != null) {
             mLevel = Math.min(Math.max(Integer.parseInt(level), 0), 100);
         }
@@ -543,6 +563,10 @@ public class BatteryControllerImpl extends BroadcastReceiver implements BatteryC
         if (incompatible != null) {
             mIsIncompatibleCharging = incompatible.equals("true");
             fireIsIncompatibleChargingChanged();
+        }
+        if (alert != null) {
+            mStateAlert = alert.equals("true");
+            fireBatteryAlertStateChanged();
         }
         fireBatteryLevelChanged();
     }

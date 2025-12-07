@@ -65,7 +65,7 @@ final class MediaButtonReceiverHolder {
     // Filter apps regardless of the phone's locked/unlocked state.
     private static final int PACKAGE_MANAGER_COMMON_FLAGS =
             PackageManager.MATCH_DIRECT_BOOT_AWARE | PackageManager.MATCH_DIRECT_BOOT_UNAWARE;
-
+    private static final int MAX_COMPONENT_NAME_LENGTH = 1024;
     private final int mUserId;
     private final PendingIntent mPendingIntent;
     private final ComponentName mComponentName;
@@ -173,35 +173,58 @@ final class MediaButtonReceiverHolder {
 
     /**
      * Sends the media key event to the media button receiver.
-     * <p>
-     * This prioritizes using use pending intent for sending media key event.
+     *
+     * <p>This prioritizes using use pending intent for sending media key event.
      *
      * @param context context to be used to call PendingIntent#send
      * @param keyEvent keyEvent to send
-     * @param resultCode result code to be used to call PendingIntent#send
-     *                   Ignored if there's no valid pending intent.
-     * @param onFinishedListener callback to be used to get result of PendingIntent#send.
-     *                           Ignored if there's no valid pending intent.
-     * @param handler handler to be used to call onFinishedListener
-     *                Ignored if there's no valid pending intent.
-     * @param fgsAllowlistDurationMs duration for which the media button receiver will be
-     *                               allowed to start FGS from BG.
+     * @param resultCode result code to be used to call PendingIntent#send. Ignored if there's no
+     *     valid pending intent.
+     * @param mediaSessionService {@link MediaSessionService} triggering the event
+     * @param callingPackageName package name of the caller
+     * @param callingPid PID of the caller
+     * @param callingUid UID of the caller
+     * @param reportedPackageName package name that is reported to the receiver using {@link
+     *     Intent#EXTRA_PACKAGE_NAME}
+     * @param onFinishedListener callback to be used to get result of PendingIntent#send. Ignored if
+     *     there's no valid pending intent.
+     * @param handler handler to be used to call onFinishedListener. Ignored if there's no valid
+     *     pending intent.
      * @see PendingIntent#send(Context, int, Intent, PendingIntent.OnFinished, Handler)
      */
-    public boolean send(Context context, KeyEvent keyEvent, String callingPackageName,
-            int resultCode, PendingIntent.OnFinished onFinishedListener, Handler handler,
-            long fgsAllowlistDurationMs) {
+    public boolean send(
+            Context context,
+            KeyEvent keyEvent,
+            MediaSessionService mediaSessionService,
+            String callingPackageName,
+            int callingPid,
+            int callingUid,
+            String reportedPackageName,
+            int resultCode,
+            PendingIntent.OnFinished onFinishedListener,
+            Handler handler) {
         Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
         mediaButtonIntent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
         mediaButtonIntent.putExtra(Intent.EXTRA_KEY_EVENT, keyEvent);
         // TODO: Find a way to also send PID/UID in secure way.
-        mediaButtonIntent.putExtra(Intent.EXTRA_PACKAGE_NAME, callingPackageName);
+        mediaButtonIntent.putExtra(Intent.EXTRA_PACKAGE_NAME, reportedPackageName);
 
-        final BroadcastOptions options = BroadcastOptions.makeBasic();
-        options.setTemporaryAppAllowlist(fgsAllowlistDurationMs,
-                PowerWhitelistManager.TEMPORARY_ALLOWLIST_TYPE_FOREGROUND_SERVICE_ALLOWED,
-                PowerWhitelistManager.REASON_MEDIA_BUTTON, "");
-        options.setBackgroundActivityStartsAllowed(true);
+        PackageManager packageManager = context.getPackageManager();
+        try {
+            int targetUid = packageManager.getPackageUidAsUser(mPackageName, mUserId);
+            mediaSessionService.tempAllowlistTargetPkgIfPossible(
+                    targetUid,
+                    /* targetPackage= */ mPackageName,
+                    callingPid,
+                    callingUid,
+                    callingPackageName,
+                    /* reason= */ TAG);
+        } catch (PackageManager.NameNotFoundException e) {
+            // Package name doesn't exist.
+            if (DEBUG_KEY_EVENT) {
+                Log.d(TAG, "Can't allowlist, package " + mPackageName + "doesn't exist");
+            }
+        }
         if (mPendingIntent != null) {
             if (DEBUG_KEY_EVENT) {
                 Log.d(TAG, "Sending " + keyEvent + " to the last known PendingIntent "
@@ -209,8 +232,7 @@ final class MediaButtonReceiverHolder {
             }
             try {
                 mPendingIntent.send(
-                        context, resultCode, mediaButtonIntent, onFinishedListener, handler,
-                        /* requiredPermission= */ null, options.toBundle());
+                        context, resultCode, mediaButtonIntent, onFinishedListener, handler);
             } catch (PendingIntent.CanceledException e) {
                 Log.w(TAG, "Error sending key event to media button receiver " + mPendingIntent, e);
                 return false;
@@ -233,8 +255,7 @@ final class MediaButtonReceiverHolder {
                         break;
                     default:
                         // Legacy behavior for other cases.
-                        context.sendBroadcastAsUser(mediaButtonIntent, userHandle,
-                                /* receiverPermission= */ null, options.toBundle());
+                        context.sendBroadcastAsUser(mediaButtonIntent, userHandle);
                 }
             } catch (Exception e) {
                 Log.w(TAG, "Error sending media button to the restored intent "
@@ -349,6 +370,13 @@ final class MediaButtonReceiverHolder {
             if (componentInfo != null && TextUtils.equals(componentInfo.packageName,
                     pendingIntent.getCreatorPackage())
                     && componentInfo.packageName != null && componentInfo.name != null) {
+                int componentNameLength =
+                        componentInfo.packageName.length() + componentInfo.name.length() + 1;
+                if (componentNameLength > MAX_COMPONENT_NAME_LENGTH) {
+                    Log.w(TAG, "detected and ignored component name with overly long package"
+                            + " or name, pi=" + pendingIntent);
+                    continue;
+                }
                 return new ComponentName(componentInfo.packageName, componentInfo.name);
             }
         }

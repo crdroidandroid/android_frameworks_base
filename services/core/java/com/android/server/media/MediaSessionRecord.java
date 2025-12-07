@@ -1461,9 +1461,6 @@ public class MediaSessionRecord extends MediaSessionRecordImpl implements IBinde
         public void sendCommand(String packageName, int pid, int uid, String command, Bundle args,
                 ResultReceiver cb) {
             try {
-                final String reason = TAG + ":" + command;
-                mService.tempAllowlistTargetPkgIfPossible(getUid(), getPackageName(),
-                        pid, uid, packageName, reason);
                 mCb.onCommand(packageName, pid, uid, command, args, cb);
             } catch (RemoteException e) {
                 Slog.e(TAG, "Remote failure in sendCommand.", e);

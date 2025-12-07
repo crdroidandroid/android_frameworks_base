@@ -4,6 +4,9 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.UserInfo
+import android.os.UserHandle
+import android.permission.PermissionGroupUsage
 import android.permission.PermissionManager
 import android.safetycenter.SafetyCenterManager
 import android.view.View
@@ -21,6 +24,7 @@ import com.android.systemui.privacy.PrivacyDialogController
 import com.android.systemui.privacy.PrivacyDialogControllerV2
 import com.android.systemui.privacy.PrivacyItemController
 import com.android.systemui.privacy.logging.PrivacyLogger
+import com.android.systemui.settings.UserTracker
 import com.android.systemui.shade.data.repository.shadeDialogContextInteractor
 import com.android.systemui.statusbar.phone.StatusIconContainer
 import com.android.systemui.statusbar.policy.DeviceProvisionedController
@@ -32,6 +36,8 @@ import com.android.systemui.util.mockito.capture
 import com.android.systemui.util.mockito.eq
 import com.android.systemui.util.mockito.nullable
 import com.android.systemui.util.time.FakeSystemClock
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -81,6 +87,9 @@ class HeaderPrivacyIconsControllerTest : SysuiTestCase() {
     @Mock
     private lateinit var featureFlags: FeatureFlags
 
+    @Mock
+    private lateinit var userTracker: UserTracker
+
     private val uiExecutor = FakeExecutor(FakeSystemClock())
     private val backgroundExecutor = FakeExecutor(FakeSystemClock())
     private lateinit var cameraSlotName: String
@@ -118,6 +127,7 @@ class HeaderPrivacyIconsControllerTest : SysuiTestCase() {
                 deviceProvisionedController,
                 featureFlags,
                 kosmos.shadeDialogContextInteractor,
+                userTracker,
         )
 
         backgroundExecutor.runAllReady()
@@ -269,8 +279,61 @@ class HeaderPrivacyIconsControllerTest : SysuiTestCase() {
         verify(privacyDialogController, never()).showDialog(any(Context::class.java))
     }
 
+    @Test
+    fun testPermGroupUsage_filtersOutInactiveUsers() {
+        whenever(userTracker.userProfiles).thenReturn(listOf(createUserInfo(USER_ID)))
+        whenever(permissionManager.getIndicatorAppOpUsageData(false))
+            .thenReturn(listOf(createPermUsage(USER_ID), createPermUsage(OTHER_USER_ID)))
+        val usages = controller.permGroupUsage()
+        assertEquals(1, usages.size)
+        assertEquals(USER_ID, UserHandle.getUserId(usages[0].uid))
+    }
+
+    @Test
+    fun testPermGroupUsage_alwaysReturnPhoneCallUsage() {
+        whenever(userTracker.userProfiles).thenReturn(listOf(createUserInfo(USER_ID)))
+        whenever(permissionManager.getIndicatorAppOpUsageData(false))
+            .thenReturn(listOf(createPermUsage(OTHER_USER_ID, isPhone = true)))
+        val usages = controller.permGroupUsage()
+        assertEquals(OTHER_USER_ID, UserHandle.getUserId(usages[0].uid))
+    }
+
+    @Test
+    fun testPermGroupUsage_returnsProfileUsages() {
+        whenever(userTracker.userProfiles)
+            .thenReturn(listOf(createUserInfo(USER_ID), createUserInfo(PROFILE_USER_ID)))
+        whenever(permissionManager.getIndicatorAppOpUsageData(false))
+            .thenReturn(listOf(createPermUsage(USER_ID), createPermUsage(PROFILE_USER_ID)))
+        val usages = controller.permGroupUsage()
+        assertEquals(2, usages.size)
+        assertNotNull(usages.firstOrNull { UserHandle.getUserId(it.uid) == USER_ID })
+        assertNotNull(usages.firstOrNull { UserHandle.getUserId(it.uid) == PROFILE_USER_ID })
+    }
+
+    private fun createPermUsage(user: Int, isPhone: Boolean = false): PermissionGroupUsage =
+        PermissionGroupUsage(
+            "",
+            UserHandle.getUid(user, 0),
+            0,
+            "",
+            true,
+            isPhone,
+            null,
+            null,
+            null,
+            "",
+        )
+
+    private fun createUserInfo(userId: Int) = UserInfo(userId, "", 0)
+
     private fun setPrivacyController(micCamera: Boolean, location: Boolean) {
         whenever(privacyItemController.micCameraAvailable).thenReturn(micCamera)
         whenever(privacyItemController.locationAvailable).thenReturn(location)
+    }
+
+    companion object {
+        const val USER_ID = 0
+        const val PROFILE_USER_ID = 1
+        const val OTHER_USER_ID = 2
     }
 }

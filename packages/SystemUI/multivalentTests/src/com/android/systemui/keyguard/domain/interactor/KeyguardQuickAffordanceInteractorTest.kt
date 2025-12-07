@@ -19,12 +19,13 @@ package com.android.systemui.keyguard.domain.interactor
 
 import android.app.admin.DevicePolicyManager
 import android.os.UserHandle
-import android.view.accessibility.AccessibilityManager
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
 import com.android.internal.widget.LockPatternUtils
 import com.android.keyguard.logging.KeyguardQuickAffordancesLogger
 import com.android.systemui.SysuiTestCase
+import com.android.systemui.accessibility.domain.interactor.AccessibilityInteractor
+import com.android.systemui.accessibility.domain.interactor.accessibilityInteractor
 import com.android.systemui.animation.DialogTransitionAnimator
 import com.android.systemui.common.shared.model.ContentDescription
 import com.android.systemui.common.shared.model.Icon
@@ -94,7 +95,7 @@ class KeyguardQuickAffordanceInteractorTest : SysuiTestCase() {
     @Mock private lateinit var shadeInteractor: ShadeInteractor
     @Mock private lateinit var logger: KeyguardQuickAffordancesLogger
     @Mock private lateinit var metricsLogger: KeyguardQuickAffordancesMetricsLogger
-    @Mock private lateinit var accessibilityManager: AccessibilityManager
+    @Mock private lateinit var accessibilityInteractor: AccessibilityInteractor
 
     private lateinit var underTest: KeyguardQuickAffordanceInteractor
 
@@ -196,13 +197,13 @@ class KeyguardQuickAffordanceInteractorTest : SysuiTestCase() {
                 biometricSettingsRepository = biometricSettingsRepository,
                 backgroundDispatcher = kosmos.testDispatcher,
                 appContext = context,
-                accessibilityManager = accessibilityManager,
+                accessibilityInteractor = accessibilityInteractor,
                 sceneInteractor = { kosmos.sceneInteractor },
             )
         kosmos.keyguardQuickAffordanceInteractor = underTest
 
         whenever(shadeInteractor.anyExpansion).thenReturn(MutableStateFlow(0f))
-        whenever(accessibilityManager.isEnabled()).thenReturn(false)
+        whenever(accessibilityInteractor.isEnabledFiltered).thenReturn(MutableStateFlow(false))
     }
 
     @Test
@@ -673,7 +674,7 @@ class KeyguardQuickAffordanceInteractorTest : SysuiTestCase() {
     @Test
     fun useLongPress_withA11yEnabled_isFalse() =
         testScope.runTest {
-            whenever(accessibilityManager.isEnabled()).thenReturn(true)
+            whenever(accessibilityInteractor.isEnabledFiltered).thenReturn(MutableStateFlow(true))
             val useLongPress by collectLastValue(underTest.useLongPress())
             assertThat(useLongPress).isFalse()
         }
@@ -681,7 +682,7 @@ class KeyguardQuickAffordanceInteractorTest : SysuiTestCase() {
     @Test
     fun useLongPress_withA11yDisabled_isFalse() =
         testScope.runTest {
-            whenever(accessibilityManager.isEnabled()).thenReturn(false)
+            whenever(accessibilityInteractor.isEnabledFiltered).thenReturn(MutableStateFlow(false))
             val useLongPress by collectLastValue(underTest.useLongPress())
             assertThat(useLongPress).isTrue()
         }

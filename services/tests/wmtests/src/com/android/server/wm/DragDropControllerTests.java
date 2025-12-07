@@ -260,7 +260,8 @@ public class DragDropControllerTests extends WindowTestsBase {
         attrs.privateFlags |= PRIVATE_FLAG_INTERCEPT_GLOBAL_DRAG_AND_DROP;
         policy.validateAddingWindowLw(attrs, Binder.getCallingPid(), Binder.getCallingUid());
 
-        verify(mWm.mAtmService).enforceTaskPermission(any());
+        verify(mWm.mContext).enforcePermission(
+                eq(android.Manifest.permission.MANAGE_ACTIVITY_TASKS), anyInt(), anyInt(), any());
     }
 
     @Test

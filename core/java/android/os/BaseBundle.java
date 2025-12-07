@@ -457,11 +457,11 @@ public class BaseBundle implements Parcel.ClassLoaderProvider {
             if (mOwnsLazyValues) {
                 Preconditions.checkState(mLazyValues >= 0,
                         "Lazy values ref count below 0");
-                // No more lazy values in mMap, so we can recycle the parcel early rather than
+                // No more lazy values in mMap, so we can destroy the parcel early rather than
                 // waiting for the next GC run
                 Parcel parcel = mWeakParcelledData.get();
                 if (mLazyValues == 0 && parcel != null) {
-                    recycleParcel(parcel);
+                    parcel.destroy();
                     mWeakParcelledData = null;
                 }
             }
@@ -516,7 +516,8 @@ public class BaseBundle implements Parcel.ClassLoaderProvider {
             mWeakParcelledData = null;
             if (ownsParcel) {
                 if (numLazyValues[0] == 0) {
-                    recycleParcel(parcelledData);
+                    // No lazy value, we can directly recycle this parcel
+                    parcelledData.recycle();
                 } else {
                     mWeakParcelledData = new WeakReference<>(parcelledData);
                 }
@@ -554,12 +555,6 @@ public class BaseBundle implements Parcel.ClassLoaderProvider {
      */
     private static boolean isEmptyParcel(Parcel p) {
         return p == NoImagePreloadHolder.EMPTY_PARCEL;
-    }
-
-    private static void recycleParcel(Parcel p) {
-        if (p != null && !isEmptyParcel(p)) {
-            p.recycle();
-        }
     }
 
     /**
@@ -667,7 +662,10 @@ public class BaseBundle implements Parcel.ClassLoaderProvider {
     public void clear() {
         unparcel();
         if (mOwnsLazyValues && mWeakParcelledData != null) {
-            recycleParcel(mWeakParcelledData.get());
+            Parcel parcel = mWeakParcelledData.get();
+            if (parcel != null) {
+                parcel.destroy();
+            }
         }
 
         mWeakParcelledData = null;

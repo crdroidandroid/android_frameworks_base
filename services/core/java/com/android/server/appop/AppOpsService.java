@@ -54,7 +54,6 @@ import static android.app.AppOpsManager.SAMPLING_STRATEGY_BOOT_TIME_SAMPLING;
 import static android.app.AppOpsManager.SAMPLING_STRATEGY_RARELY_USED;
 import static android.app.AppOpsManager.SAMPLING_STRATEGY_UNIFORM;
 import static android.app.AppOpsManager.SAMPLING_STRATEGY_UNIFORM_OPS;
-import static android.app.AppOpsManager.SECURITY_EXCEPTION_ON_INVALID_ATTRIBUTION_TAG_CHANGE;
 import static android.app.AppOpsManager.WATCH_FOREGROUND_CHANGES;
 import static android.app.AppOpsManager._NUM_OP;
 import static android.app.AppOpsManager.extractFlagsFromKey;
@@ -111,6 +110,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManagerInternal;
+import android.content.pm.ParceledListSlice;
 import android.content.pm.PermissionInfo;
 import android.content.pm.UserInfo;
 import android.database.ContentObserver;
@@ -205,6 +205,7 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.Instant;
@@ -1826,11 +1827,13 @@ public class AppOpsService extends IAppOpsService.Stub {
 
     @Override
     public List<AppOpsManager.PackageOps> getPackagesForOps(int[] ops) {
-        return getPackagesForOpsForDevice(ops, PERSISTENT_DEVICE_ID_DEFAULT);
+        ParceledListSlice<AppOpsManager.PackageOps> packageOps = getPackagesForOpsForDevice(ops,
+                PERSISTENT_DEVICE_ID_DEFAULT);
+        return packageOps == null ? null : packageOps.getList();
     }
 
     @Override
-    public List<AppOpsManager.PackageOps> getPackagesForOpsForDevice(int[] ops,
+    public ParceledListSlice<AppOpsManager.PackageOps> getPackagesForOpsForDevice(int[] ops,
             @NonNull String persistentDeviceId) {
         final int callingUid = Binder.getCallingUid();
         final boolean hasAllPackageAccess = mContext.checkPermission(
@@ -1867,7 +1870,7 @@ public class AppOpsService extends IAppOpsService.Stub {
                 }
             }
         }
-        return res;
+        return res == null ? null : new ParceledListSlice<>(res);
     }
 
     @Override
@@ -5017,19 +5020,7 @@ public class AppOpsService extends IAppOpsService.Stub {
                     msg = "package " + packageName + " not found, can't check for "
                             + "attributionTag " + attributionTag;
                 }
-
-                try {
-                    if (!mPlatformCompat.isChangeEnabledByPackageName(
-                            SECURITY_EXCEPTION_ON_INVALID_ATTRIBUTION_TAG_CHANGE, packageName,
-                            userId) || !mPlatformCompat.isChangeEnabledByUid(
-                                    SECURITY_EXCEPTION_ON_INVALID_ATTRIBUTION_TAG_CHANGE,
-                            callingUid)) {
-                        // Do not override tags if overriding is not enabled for this package
-                        isAttributionTagValid = true;
-                    }
-                    Slog.e(TAG, msg);
-                } catch (RemoteException neverHappens) {
-                }
+                Slog.e(TAG, msg);
             }
         } finally {
             Binder.restoreCallingIdentity(ident);

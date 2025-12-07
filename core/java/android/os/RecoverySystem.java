@@ -37,6 +37,7 @@ import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.hardware.display.DisplayManager;
+import android.os.image.DynamicSystemManager;
 import android.provider.Settings;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
@@ -934,8 +935,14 @@ public class RecoverySystem {
     public static void rebootWipeUserData(Context context, boolean shutdown, String reason,
             boolean force, boolean wipeEuicc, boolean keepMemtagMode) throws IOException {
         UserManager um = (UserManager) context.getSystemService(Context.USER_SERVICE);
+        DynamicSystemManager dsuManager = (DynamicSystemManager)
+                    context.getSystemService(Context.DYNAMIC_SYSTEM_SERVICE);
         if (!force && um.hasUserRestriction(UserManager.DISALLOW_FACTORY_RESET)) {
             throw new SecurityException("Wiping data is not allowed for this user.");
+        }
+
+        if (dsuManager.isInUse()) {
+            throw new SecurityException("Wiping data is not allowed while in DSU mode.");
         }
         final ConditionVariable condition = new ConditionVariable();
 

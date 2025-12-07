@@ -28,8 +28,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 class FakeAccessibilityRepository(
     override val isTouchExplorationEnabled: MutableStateFlow<Boolean>,
     override val isEnabled: MutableStateFlow<Boolean>,
+    override val isEnabledFiltered: MutableStateFlow<Boolean>,
 ) : AccessibilityRepository {
-    @Inject constructor() : this(MutableStateFlow(false), MutableStateFlow(false))
+    @Inject
+    constructor() : this(MutableStateFlow(false), MutableStateFlow(false), MutableStateFlow(false))
 
     private var recommendedTimeout: Duration = 0.milliseconds
 

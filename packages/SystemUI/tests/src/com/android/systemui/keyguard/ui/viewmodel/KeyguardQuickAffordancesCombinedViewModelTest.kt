@@ -26,6 +26,7 @@ import androidx.test.filters.SmallTest
 import com.android.internal.widget.LockPatternUtils
 import com.android.keyguard.logging.KeyguardQuickAffordancesLogger
 import com.android.systemui.SysuiTestCase
+import com.android.systemui.accessibility.domain.interactor.accessibilityInteractor
 import com.android.systemui.animation.DialogTransitionAnimator
 import com.android.systemui.animation.Expandable
 import com.android.systemui.common.shared.model.Icon
@@ -290,7 +291,7 @@ class KeyguardQuickAffordancesCombinedViewModelTest : SysuiTestCase() {
                         biometricSettingsRepository = biometricSettingsRepository,
                         backgroundDispatcher = kosmos.testDispatcher,
                         appContext = mContext,
-                        accessibilityManager = mock(),
+                        accessibilityInteractor = kosmos.accessibilityInteractor,
                         sceneInteractor = { kosmos.sceneInteractor },
                     ),
                 keyguardInteractor = keyguardInteractor,

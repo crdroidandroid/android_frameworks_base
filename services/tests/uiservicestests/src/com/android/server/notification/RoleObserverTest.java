@@ -25,11 +25,15 @@ import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 
 import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import static java.util.Arrays.asList;
@@ -50,6 +54,7 @@ import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.PowerManager;
+import android.os.RemoteException;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.permission.PermissionManager;
@@ -171,7 +176,8 @@ public class RoleObserverTest extends UiServiceTestCase {
                     mock(NotificationChannelLogger.class), new TestableFlagResolver(),
                     mock(PermissionManager.class),
                     mock(PowerManager.class),
-                    new NotificationManagerService.PostNotificationTrackerFactory() {});
+                    new NotificationManagerService.PostNotificationTrackerFactory() {},
+                    new NotificationListenerStats());
         } catch (SecurityException e) {
             if (!e.getMessage().contains("Permission Denial: not allowed to send broadcast")) {
                 throw e;
@@ -231,6 +237,32 @@ public class RoleObserverTest extends UiServiceTestCase {
         // make sure we told pref helper about the state of the world
         verify(mPreferencesHelper, times(1)).updateDefaultApps(0, null, dialer0Pair);
         verify(mPreferencesHelper, times(1)).updateDefaultApps(0, null, emer0Pair);
+    }
+
+    @Test
+    public void testInit_withInvalidPackages_invalidIgnored() throws Exception {
+        UserHandle user = new UserHandle(0);
+        when(mUm.getUserHandles(anyBoolean())).thenReturn(List.of(user));
+        String invalidDialerPkg = "invalidDialer";
+        String validEmergencyPkg = "emergency";
+        doThrow(new RemoteException(new PackageManager.NameNotFoundException())).when(mPm)
+                .getPackageUid(eq(invalidDialerPkg), anyLong(), eq(user.getIdentifier()));
+        doReturn(40).when(mPm)
+                .getPackageUid(eq(validEmergencyPkg), anyLong(), eq(user.getIdentifier()));
+        when(mRoleManager.getRoleHoldersAsUser(ROLE_DIALER, user))
+                .thenReturn(List.of(invalidDialerPkg));
+        when(mRoleManager.getRoleHoldersAsUser(ROLE_EMERGENCY, user))
+                .thenReturn(List.of(validEmergencyPkg));
+
+        mRoleObserver.init();
+
+        // Only valid packages were passed to PreferencesHelper
+        ArraySet<Pair<String, Integer>> expectedEmergencyApps = new ArraySet<>();
+        expectedEmergencyApps.add(new Pair<>(validEmergencyPkg, 40));
+        ArraySet<Pair<String, Integer>> expectedDialerApps = new ArraySet<>();
+        verify(mPreferencesHelper).updateDefaultApps(0, null, expectedEmergencyApps);
+        verify(mPreferencesHelper).updateDefaultApps(0, null, expectedDialerApps);
+        verifyNoMoreInteractions(mPreferencesHelper);
     }
 
     @Test

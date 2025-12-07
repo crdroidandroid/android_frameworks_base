@@ -17,6 +17,10 @@
 package com.android.server.companion.utils;
 
 import static android.app.role.RoleManager.MANAGE_HOLDERS_FLAG_DONT_KILL_APP;
+import static android.companion.AssociationRequest.DEVICE_PROFILE_APP_STREAMING;
+import static android.companion.AssociationRequest.DEVICE_PROFILE_COMPUTER;
+import static android.companion.AssociationRequest.DEVICE_PROFILE_GLASSES;
+import static android.companion.AssociationRequest.DEVICE_PROFILE_WATCH;
 
 import android.annotation.NonNull;
 import android.annotation.SuppressLint;
@@ -40,6 +44,12 @@ import java.util.function.Consumer;
 public final class RolesUtils {
 
     private static final String TAG = "CDM_RolesUtils";
+
+    public static final Set<String> NLS_PROFILES = Set.of(
+            DEVICE_PROFILE_WATCH,
+            DEVICE_PROFILE_GLASSES,
+            DEVICE_PROFILE_APP_STREAMING,
+            DEVICE_PROFILE_COMPUTER);
 
     private static final Set<String> ROLELESS_DEVICE_PROFILES;
     static {

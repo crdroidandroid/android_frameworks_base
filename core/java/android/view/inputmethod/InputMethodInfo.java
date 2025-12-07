@@ -40,6 +40,7 @@ import android.content.res.XmlResourceParser;
 import android.graphics.drawable.Drawable;
 import android.icu.util.ULocale;
 import android.inputmethodservice.InputMethodService;
+import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
@@ -53,6 +54,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -113,6 +115,24 @@ public final class InputMethodInfo implements Parcelable {
     public static final int MAX_IMES_PER_PACKAGE = 20;
 
     static final String TAG = "InputMethodInfo";
+
+    /**
+     * The maximum allowed size in bytes for an input method's metadata XML file
+     * (typically {@code inputmethod.xml} referenced by
+     * {@link android.inputmethodservice.InputMethod#SERVICE_META_DATA}).
+     * This limit is enforced to prevent {@link OutOfMemoryError OutOfMemoryErrors}
+     * when the Android system parses input method manifests.
+     * <p>
+     * An excessively large metadata file, whether due to misconfiguration or
+     * malicious intent, could consume an unreasonable amount of memory in the
+     * system process, potentially leading to instability or denial of service.
+     * </p>
+     * <p>
+     * The current recommended value is 200 KB (200 * 1024 bytes), which is
+     * significantly larger than typical input method metadata files.
+     * </p>
+     */
+    private static final int MAX_METADATA_SIZE_BYTES = 200 * 1024; // 200 KB
 
     /**
      * The Service that implements this input method component.
@@ -273,13 +293,13 @@ public final class InputMethodInfo implements Parcelable {
         XmlResourceParser parser = null;
         final ArrayList<InputMethodSubtype> subtypes = new ArrayList<InputMethodSubtype>();
         try {
+            Resources res = pm.getResourcesForApplication(si.applicationInfo);
+            validateXmlMetaData(si, res);
             parser = si.loadXmlMetaData(pm, InputMethod.SERVICE_META_DATA);
             if (parser == null) {
                 throw new XmlPullParserException("No "
                         + InputMethod.SERVICE_META_DATA + " meta-data");
             }
-
-            Resources res = pm.getResourcesForApplication(si.applicationInfo);
 
             AttributeSet attrs = Xml.asAttributeSet(parser);
 
@@ -426,6 +446,55 @@ public final class InputMethodInfo implements Parcelable {
         mShowInInputMethodPicker = showInInputMethodPicker;
         mIsVrOnly = isVrOnly;
         mIsVirtualDeviceOnly = isVirtualDeviceOnly;
+    }
+
+    /**
+     * Validates the XML metadata for an input method service to prevent OOM errors
+     * from excessively large XML files.
+     *
+     * @param si The ServiceInfo of the input method.
+     * @param res The input method app resources.
+     * @throws IOException if there's an issue reading the resource.
+     * @throws NameNotFoundException if the application's resources cannot be found.
+     * @throws XmlPullParserException if the metadata file exceeds the size limit.
+     */
+    private static void validateXmlMetaData(@NonNull ServiceInfo si, @NonNull Resources res)
+            throws IOException, NameNotFoundException, XmlPullParserException {
+        final Bundle metaData = si.metaData;
+        if (metaData == null) {
+            // No metadata, skip validation.
+            return;
+        }
+        final int resourceId = metaData.getInt(InputMethod.SERVICE_META_DATA);
+        if (resourceId == 0) {
+            // No metadata, skip validation.
+            return;
+        }
+
+        // Validate file size using InputStream.skip()
+        long totalBytesSkipped = 0;
+        // Loop to ensure we skip the required number of bytes, as a single
+        // call to skip() is not guaranteed to skip the full amount.
+        try (InputStream is = res.openRawResource(resourceId)) {
+            while (totalBytesSkipped < MAX_METADATA_SIZE_BYTES) {
+                long bytesSkipped = is.skip(MAX_METADATA_SIZE_BYTES - totalBytesSkipped);
+                if (bytesSkipped <= 0) {
+                    // end of the stream.
+                    break;
+                }
+                totalBytesSkipped += bytesSkipped;
+            }
+
+            // If we successfully skipped exactly MAX_METADATA_SIZE_BYTES
+            if (totalBytesSkipped == MAX_METADATA_SIZE_BYTES) {
+                // try to read one more byte.
+                if (is.read() != -1) {
+                    throw new XmlPullParserException(
+                            "Input method metadata exceeds maximum allowed limit of 200KB for "
+                                    + si.packageName + ". InputMethod will not be loaded. ");
+                }
+            }
+        }
     }
 
     /**

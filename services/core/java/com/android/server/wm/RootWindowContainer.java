@@ -2356,13 +2356,14 @@ class RootWindowContainer extends WindowContainer<DisplayContent>
             mService.getTaskChangeNotificationController().notifyActivityPinned(r);
         } else {
             mService.getTaskChangeNotificationController().notifyActivityUnpinned();
+            // Revoke the TRUSTED_OVERLAY here as a blanket policy.
+            if (task.getSurfaceControl() != null) {
+                mWmService.mTransactionFactory.get()
+                        .setTrustedOverlay(task.getSurfaceControl(), false)
+                        .apply();
+            }
         }
         mWindowManager.mPolicy.setPipVisibilityLw(inPip);
-        if (task.getSurfaceControl() != null) {
-            mWmService.mTransactionFactory.get()
-                    .setTrustedOverlay(task.getSurfaceControl(), inPip)
-                    .apply();
-        }
     }
 
     void executeAppTransitionForAllDisplay() {

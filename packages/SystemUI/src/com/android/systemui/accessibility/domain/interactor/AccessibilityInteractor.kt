@@ -16,10 +16,12 @@
 
 package com.android.systemui.accessibility.domain.interactor
 
+import android.accessibilityservice.AccessibilityServiceInfo
 import com.android.systemui.accessibility.data.repository.AccessibilityRepository
 import com.android.systemui.dagger.SysUISingleton
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 
 @SysUISingleton
 class AccessibilityInteractor
@@ -32,4 +34,7 @@ constructor(
 
     /** @see [android.view.accessibility.AccessibilityManager.isEnabled] */
     val isEnabled: Flow<Boolean> = a11yRepo.isEnabled
+
+    /** This returns whether a filtered set of [AccessibilityServiceInfo]s are enabled. */
+    val isEnabledFiltered: StateFlow<Boolean> = a11yRepo.isEnabledFiltered
 }

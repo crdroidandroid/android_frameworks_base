@@ -217,6 +217,7 @@ public class KeyguardIndicationController {
     private boolean mBatteryDefender;
     /** Whether the battery defender is triggered with the device plugged. */
     private boolean mEnableBatteryDefender;
+    private boolean mBatteryDead;
     private boolean mIncompatibleCharger;
     private int mChargingWattage;
     private int mBatteryLevel = -1;
@@ -1133,6 +1134,12 @@ public class KeyguardIndicationController {
         if (mPowerCharged) {
             return mContext.getResources().getString(R.string.keyguard_charged);
         }
+
+        String percentage = NumberFormat.getPercentInstance().format(mBatteryLevel / 100f);
+        if (mBatteryDead) {
+            return mContext.getResources().getString(R.string.keyguard_plugged_in, percentage);
+        }
+
         final boolean hasChargingTime = mChargingTimeRemaining > 0;
         int chargingId;
         if (mPowerPluggedInWired) {
@@ -1167,7 +1174,6 @@ public class KeyguardIndicationController {
                     : R.string.keyguard_plugged_in;
         }
 
-        String percentage = NumberFormat.getPercentInstance().format(mBatteryLevel / 100f);
         if (hasChargingTime) {
             String chargingTimeFormatted = Formatter.formatShortElapsedTimeRoundingUpToMinutes(
                     mContext, mChargingTimeRemaining);
@@ -1327,6 +1333,7 @@ public class KeyguardIndicationController {
             mBatteryLevel = status.level;
             mBatteryPresent = status.present;
             mBatteryDefender = isBatteryDefender(status);
+            mBatteryDead = status.isDead();
             // when the battery is overheated, device doesn't charge so only guard on pluggedIn:
             mEnableBatteryDefender = mBatteryDefender && status.isPluggedIn();
             mIncompatibleCharger = status.incompatibleCharger.orElse(false);

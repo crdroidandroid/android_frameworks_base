@@ -71,39 +71,39 @@ public class BundleRecyclingTest {
     }
 
     @Test
-    public void bundleClear_whenParcelled_recyclesParcel() {
+    public void bundleClear_whenParcelled_destroysParcel() {
         setUpBundle(/* lazy */ 1);
         assertTrue(mBundle.isParcelled());
-        verify(mParcelSpy, times(0)).recycle();
+        verify(mParcelSpy, times(0)).destroy();
 
         mBundle.clear();
-        verify(mParcelSpy, times(1)).recycle();
+        verify(mParcelSpy, times(1)).destroy();
         assertTrue(mBundle.isDefinitelyEmpty());
 
-        // Should not recycle again
+        // Should not destroy again
         mBundle.clear();
-        verify(mParcelSpy, times(1)).recycle();
+        verify(mParcelSpy, times(1)).destroy();
     }
 
     @Test
-    public void bundleClear_whenUnparcelledWithLazy_recyclesParcel() {
+    public void bundleClear_whenUnparcelledWithLazy_destroysParcel() {
         setUpBundle(/* lazy */ 1);
 
         // Will unparcel but keep the CustomParcelable lazy
         assertFalse(mBundle.isEmpty());
-        verify(mParcelSpy, times(0)).recycle();
+        verify(mParcelSpy, times(0)).destroy();
 
         mBundle.clear();
-        verify(mParcelSpy, times(1)).recycle();
+        verify(mParcelSpy, times(1)).destroy();
         assertTrue(mBundle.isDefinitelyEmpty());
 
         // Should not recycle again
         mBundle.clear();
-        verify(mParcelSpy, times(1)).recycle();
+        verify(mParcelSpy, times(1)).destroy();
     }
 
     @Test
-    public void bundleClear_whenClearedWithSharedParcel_doesNotRecycleParcel() {
+    public void bundleClear_whenClearedWithSharedParcel_doesNotDestroyParcel() {
         setUpBundle(/* lazy */ 1);
 
         Bundle copy = new Bundle();
@@ -115,11 +115,11 @@ public class BundleRecyclingTest {
         copy.clear();
         assertTrue(copy.isDefinitelyEmpty());
 
-        verify(mParcelSpy, never()).recycle();
+        verify(mParcelSpy, never()).destroy();
     }
 
     @Test
-    public void bundleClear_whenClearedWithCopiedParcel_doesNotRecycleParcel() {
+    public void bundleClear_whenClearedWithCopiedParcel_doesNotDestroyParcel() {
         setUpBundle(/* lazy */ 1);
 
         // Will unparcel but keep the CustomParcelable lazy
@@ -134,75 +134,75 @@ public class BundleRecyclingTest {
         copy.clear();
         assertTrue(copy.isDefinitelyEmpty());
 
-        verify(mParcelSpy, never()).recycle();
+        verify(mParcelSpy, never()).destroy();
     }
 
     @Test
-    public void bundleGet_whenUnparcelledWithLazyValueUnwrapped_recyclesParcel() {
+    public void bundleGet_whenUnparcelledWithLazyValueUnwrapped_destroysParcel() {
         setUpBundle(/* lazy */ 1);
 
         // Will unparcel with a lazy value, and immediately unwrap the lazy value,
         // with no lazy values left at the end of getParcelable
         // Ref counting should immediately recycle
         assertNotNull(mBundle.getParcelable("lazy0", CustomParcelable.class));
-        verify(mParcelSpy, times(1)).recycle();
+        verify(mParcelSpy, times(1)).destroy();
 
         // Should not recycle again
         assertNotNull(mBundle.getParcelable("lazy0", CustomParcelable.class));
         mBundle.clear();
-        verify(mParcelSpy, times(1)).recycle();
+        verify(mParcelSpy, times(1)).destroy();
     }
 
     @Test
-    public void bundleGet_whenMultipleLazy_recyclesParcelWhenAllUnwrapped() {
+    public void bundleGet_whenMultipleLazy_destroysParcelWhenAllUnwrapped() {
         setUpBundle(/* lazy */ 2);
 
         assertNotNull(mBundle.getParcelable("lazy0", CustomParcelable.class));
-        verify(mParcelSpy, times(0)).recycle();
+        verify(mParcelSpy, times(0)).destroy();
 
         assertNotNull(mBundle.getParcelable("lazy0", CustomParcelable.class));
-        verify(mParcelSpy, times(0)).recycle();
+        verify(mParcelSpy, times(0)).destroy();
 
         assertNotNull(mBundle.getParcelable("lazy1", CustomParcelable.class));
-        verify(mParcelSpy, times(1)).recycle();
+        verify(mParcelSpy, times(1)).destroy();
 
         // Should not recycle again
         assertNotNull(mBundle.getParcelable("lazy0", CustomParcelable.class));
         mBundle.clear();
-        verify(mParcelSpy, times(1)).recycle();
+        verify(mParcelSpy, times(1)).destroy();
         assertTrue(mBundle.isDefinitelyEmpty());
     }
 
     @Test
-    public void bundleGet_whenLazyAndNonLazy_recyclesParcelWhenAllUnwrapped() {
+    public void bundleGet_whenLazyAndNonLazy_destroysParcelWhenAllUnwrapped() {
         setUpBundle(/* lazy */ 1, /* nonLazy */ 1);
 
         assertNotNull(mBundle.getParcelable("lazy0", CustomParcelable.class));
-        verify(mParcelSpy, times(1)).recycle();
+        verify(mParcelSpy, times(1)).destroy();
 
-        // Should not recycle again
+        // Should not destroy again
         assertNotNull(mBundle.getString("nonLazy0"));
         assertNotNull(mBundle.getParcelable("lazy0", CustomParcelable.class));
         mBundle.clear();
-        verify(mParcelSpy, times(1)).recycle();
+        verify(mParcelSpy, times(1)).destroy();
     }
 
     @Test
-    public void bundleGet_whenLazyAndNonLazy_doesNotRecycleWhenOnlyNonLazyRetrieved() {
+    public void bundleGet_whenLazyAndNonLazy_doesNotDestroyWhenOnlyNonLazyRetrieved() {
         setUpBundle(/* lazy */ 1, /* nonLazy */ 1);
 
         assertNotNull(mBundle.getString("nonLazy0"));
-        verify(mParcelSpy, times(0)).recycle();
+        verify(mParcelSpy, times(0)).destroy();
 
         assertNotNull(mBundle.getString("nonLazy0"));
-        verify(mParcelSpy, times(0)).recycle();
+        verify(mParcelSpy, times(0)).destroy();
 
         assertNotNull(mBundle.getParcelable("lazy0", CustomParcelable.class));
-        verify(mParcelSpy, times(1)).recycle();
+        verify(mParcelSpy, times(1)).destroy();
     }
 
     @Test
-    public void bundleGet_withWithSharedParcel_doesNotRecycleParcel() {
+    public void bundleGet_withWithSharedParcel_doesNotDestroyParcel() {
         setUpBundle(/* lazy */ 1);
 
         Bundle copy = new Bundle();
@@ -214,17 +214,17 @@ public class BundleRecyclingTest {
         assertNotNull(copy.getParcelable("lazy0", CustomParcelable.class));
         copy.clear();
 
-        verify(mParcelSpy, never()).recycle();
+        verify(mParcelSpy, never()).destroy();
     }
 
     @Test
-    public void bundleGet_getAfterLazyCleared_doesNotRecycleAgain() {
+    public void bundleGet_getAfterLazyCleared_doesNotDestroyAgain() {
         setUpBundle(/* lazy */ 1);
         mBundle.clear();
-        verify(mParcelSpy, times(1)).recycle();
+        verify(mParcelSpy, times(1)).destroy();
 
         assertNull(mBundle.getParcelable("lazy0", CustomParcelable.class));
-        verify(mParcelSpy, times(1)).recycle();
+        verify(mParcelSpy, times(1)).destroy();
     }
 
     private void setUpBundle(int lazy) {

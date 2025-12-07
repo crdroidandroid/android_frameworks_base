@@ -541,6 +541,7 @@ import com.android.server.LockGuard;
 import com.android.server.SystemServerInitThreadPool;
 import com.android.server.SystemService;
 import com.android.server.SystemServiceManager;
+import com.android.server.accounts.AccountManagerService;
 import com.android.server.devicepolicy.ActiveAdmin.TrustAgentInfo;
 import com.android.server.inputmethod.InputMethodManagerInternal;
 import com.android.server.net.NetworkPolicyManagerInternal;
@@ -22811,22 +22812,8 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
     }
 
     private boolean hasAccountsOnAnyUser() {
-        long callingIdentity = Binder.clearCallingIdentity();
-        try {
-            for (UserInfo user : mUserManagerInternal.getUsers(/* excludeDying= */ true)) {
-                AccountManager am = mContext.createContextAsUser(
-                                UserHandle.of(user.id), /* flags= */ 0)
-                        .getSystemService(AccountManager.class);
-                Account[] accounts = am.getAccounts();
-                if (accounts.length != 0) {
-                    return true;
-                }
-            }
-
-            return false;
-        } finally {
-            Binder.restoreCallingIdentity(callingIdentity);
-        }
+        AccountManagerService accountManagerService = AccountManagerService.getSingleton();
+        return accountManagerService.getAllAccountsForSystemProcess().length != 0;
     }
 
     private void setBypassDevicePolicyManagementRoleQualificationStateInternal(

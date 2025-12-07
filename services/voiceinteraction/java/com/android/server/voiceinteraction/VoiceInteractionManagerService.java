@@ -933,12 +933,20 @@ public class VoiceInteractionManagerService extends SystemService {
                         }
                     }
                 }
-                if (numAvailable > 1) {
-                    Slog.w(TAG, "more than one voice recognition service found, picking first");
+
+                // If prefPackage isn't found then only default to system recognizer.
+                // prefPackage could be either the current recognizer or the default recognizer.
+                for (int i = 0; i < numAvailable; i++) {
+                    ServiceInfo serviceInfo = available.get(i).getServiceInfo();
+                    if ((serviceInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
+                        continue;
+                    }
+                    return new ComponentName(serviceInfo.packageName, serviceInfo.name);
                 }
 
-                ServiceInfo serviceInfo = available.get(0).getServiceInfo();
-                return new ComponentName(serviceInfo.packageName, serviceInfo.name);
+                Slog.w(TAG, "no auto selectable voice recognition services found for user "
+                        + userHandle);
+                return null;
             }
         }
 
@@ -2676,10 +2684,11 @@ public class VoiceInteractionManagerService extends SystemService {
                                 switchImplementationIfNeededLocked(true);
                             }
                         }
-                        return;
                     }
 
-                    if (curAssistant != null) {
+                    // If interactor isn't null, then we would have done the needed checks already
+                    // in the above code.
+                    if (curInteractor == null && curAssistant != null) {
                         int change = isPackageDisappearing(curAssistant.getPackageName());
                         if (change == PACKAGE_PERMANENT_CHANGE) {
                             // If the currently set assistant is being removed, then we should

@@ -24,8 +24,8 @@
         <item name="android:textColor">@color/status_bar_clock_color</item>
     </style>
 
+    <!-- TODO(b/411157074): This style can be removed once the style for the status bar clock is solidified. -->
     <style name="TextAppearance.StatusBar.Default.Clock">
-        <item name="android:fontFeatureSettings">tnum</item>
     </style>
 
     <style name="TextAppearance.StatusBar.UserChip" parent="@*android:style/TextAppearance.StatusBar.Icon">

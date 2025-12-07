@@ -28,7 +28,6 @@ import android.graphics.Rect
 import android.graphics.drawable.DrawableWrapper
 import android.util.PathParser
 import com.android.settingslib.graph.ThemedBatteryDrawable
-import com.android.systemui.res.R
 import com.android.systemui.battery.BatterySpecs.BATTERY_HEIGHT
 import com.android.systemui.battery.BatterySpecs.BATTERY_HEIGHT_WITH_SHIELD
 import com.android.systemui.battery.BatterySpecs.BATTERY_WIDTH
@@ -36,6 +35,7 @@ import com.android.systemui.battery.BatterySpecs.BATTERY_WIDTH_WITH_SHIELD
 import com.android.systemui.battery.BatterySpecs.SHIELD_LEFT_OFFSET
 import com.android.systemui.battery.BatterySpecs.SHIELD_STROKE
 import com.android.systemui.battery.BatterySpecs.SHIELD_TOP_OFFSET
+import com.android.systemui.res.R
 
 /**
  * A battery drawable that accessorizes [ThemedBatteryDrawable] with additional information if
@@ -43,10 +43,8 @@ import com.android.systemui.battery.BatterySpecs.SHIELD_TOP_OFFSET
  *
  * For now, it adds a shield in the bottom-right corner when [displayShield] is true.
  */
-class AccessorizedBatteryDrawable(
-    private val context: Context,
-    frameColor: Int,
-) : DrawableWrapper(ThemedBatteryDrawable(context, frameColor)) {
+class AccessorizedBatteryDrawable(private val context: Context, frameColor: Int) :
+    DrawableWrapper(ThemedBatteryDrawable(context, frameColor)) {
     private val mainBatteryDrawable: ThemedBatteryDrawable
         get() = drawable as ThemedBatteryDrawable
 
@@ -105,7 +103,7 @@ class AccessorizedBatteryDrawable(
             b.left,
             b.top,
             /* right= */ b.left + mainWidth.toInt(),
-            /* bottom= */ b.top + mainHeight.toInt()
+            /* bottom= */ b.top + mainHeight.toInt(),
         )
 
         if (displayShield) {
@@ -196,6 +194,16 @@ class AccessorizedBatteryDrawable(
     /** Returns whether power save is currently enabled. */
     fun getPowerSaveEnabled(): Boolean {
         return mainBatteryDrawable.powerSaveEnabled
+    }
+
+    /** Sets whether battery alert is enabled. */
+    fun setAlertEnabled(alertEnabled: Boolean) {
+        mainBatteryDrawable.alertEnabled = alertEnabled
+    }
+
+    /** Returns whether battery alert is currently enabled. */
+    fun getAlertEnabled(): Boolean {
+        return mainBatteryDrawable.alertEnabled
     }
 
     /** Sets the colors to use for the icon. */

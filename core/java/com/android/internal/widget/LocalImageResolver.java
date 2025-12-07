@@ -47,6 +47,12 @@ public class LocalImageResolver {
     static final int DEFAULT_MAX_SAFE_ICON_SIZE_PX = 480;
 
     /**
+     * If an image is larger than this, we won't even attempt to decode it, as we risk taking up all
+     * of the device memory.
+     */
+    private static final int DEFAULT_DECODE_HARD_LIMIT_PX = 4096;
+
+    /**
      * Resolve an image from the given Uri using {@link ImageDecoder} if it contains a
      * bitmap reference.
      * Negative or zero dimensions will result in icon loaded in its original size.
@@ -252,6 +258,16 @@ public class LocalImageResolver {
     private static void onHeaderDecoded(ImageDecoder decoder, ImageDecoder.ImageInfo info,
             int maxWidth, int maxHeight) {
         final Size size = info.getSize();
+
+        if (size.getWidth() > DEFAULT_DECODE_HARD_LIMIT_PX
+                || size.getHeight() > DEFAULT_DECODE_HARD_LIMIT_PX) {
+            // The image is larger than what we can reasonably expect to decode without filling up
+            // the device memory, so let's bail.
+            throw new RuntimeException(
+                    "Image dimensions (" + size.getWidth() + "x" + size.getHeight()
+                            + ") exceed the maximum allowed size.");
+        }
+
         final int originalSize = Math.max(size.getHeight(), size.getWidth());
         final int maxSize = Math.max(maxWidth, maxHeight);
         final double ratio = (originalSize > maxSize)
