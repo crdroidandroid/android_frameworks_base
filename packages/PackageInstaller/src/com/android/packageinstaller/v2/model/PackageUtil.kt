@@ -509,8 +509,6 @@ object PackageUtil {
     @JvmStatic
     fun isMaterialDesignEnabled(context: Context): Boolean {
         return android.content.pm.Flags.usePiaV2()
-                && context.resources.getBoolean(
-            android.R.bool.config_enableMaterialDesignInPackageInstaller)
     }
 
     /**
