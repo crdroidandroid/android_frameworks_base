@@ -31,27 +31,13 @@ public class WifiIcons {
      * Check the aconfig flag to decide on which icons to use. Can be removed once the flag is gone
      */
     private static int[] getIconsBasedOnFlag() {
-        if (newStatusBarIcons()) {
-            // TODO(b/396664075):
-            // The new wifi icons only define a range of [0, 3]. Since this array is indexed on
-            // level, we can simulate the range squash by mapping both level 3 to drawn-level 2, and
-            // level 4 to drawn-level 3
-            return new int[] {
-                R.drawable.ic_wifi_0,
-                R.drawable.ic_wifi_1,
-                R.drawable.ic_wifi_2,
-                R.drawable.ic_wifi_2,
-                R.drawable.ic_wifi_3
-            };
-        } else {
-            return new int[] {
-                com.android.internal.R.drawable.ic_wifi_signal_0,
-                com.android.internal.R.drawable.ic_wifi_signal_1,
-                com.android.internal.R.drawable.ic_wifi_signal_2,
-                com.android.internal.R.drawable.ic_wifi_signal_3,
-                com.android.internal.R.drawable.ic_wifi_signal_4
-            };
-        }
+        return new int[] {
+            com.android.internal.R.drawable.ic_wifi_signal_0,
+            com.android.internal.R.drawable.ic_wifi_signal_1,
+            com.android.internal.R.drawable.ic_wifi_signal_2,
+            com.android.internal.R.drawable.ic_wifi_signal_3,
+            com.android.internal.R.drawable.ic_wifi_signal_4
+        };
     }
 
     public static final int[] WIFI_NO_INTERNET_ICONS = getErrorIconsBasedOnFlag();
@@ -64,7 +50,7 @@ public class WifiIcons {
                 R.drawable.ic_wifi_1_error,
                 R.drawable.ic_wifi_2_error,
                 R.drawable.ic_wifi_2_error,
-                R.drawable.ic_wifi_3_error,
+                R.drawable.ic_wifi_3_error
             };
         } else {
             return new int[] {

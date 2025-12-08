@@ -118,27 +118,13 @@ open class WifiUtils {
         val WIFI_PIE = getIconsBasedOnFlag()
 
         private fun getIconsBasedOnFlag(): IntArray {
-            return if (newStatusBarIcons()) {
-                // TODO(b/396664075):
-                // The new wifi icons only define a range of [0, 3]. Since this array is indexed on
-                // level, we can simulate the range squash by mapping both level 3 to drawn-level 2,
-                // and level 4 to drawn-level 3
-                intArrayOf(
-                    R.drawable.ic_wifi_0,
-                    R.drawable.ic_wifi_1,
-                    R.drawable.ic_wifi_2,
-                    R.drawable.ic_wifi_2,
-                    R.drawable.ic_wifi_3,
-                )
-            } else {
-                intArrayOf(
+            return intArrayOf(
                     com.android.internal.R.drawable.ic_wifi_signal_0,
                     com.android.internal.R.drawable.ic_wifi_signal_1,
                     com.android.internal.R.drawable.ic_wifi_signal_2,
                     com.android.internal.R.drawable.ic_wifi_signal_3,
                     com.android.internal.R.drawable.ic_wifi_signal_4
                 )
-            }
         }
 
         val NO_INTERNET_WIFI_PIE = getErrorIconsBasedOnFlag()
