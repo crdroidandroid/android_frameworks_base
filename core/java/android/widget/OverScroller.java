@@ -24,7 +24,119 @@ import android.os.Build;
 import android.util.Log;
 import android.view.ViewConfiguration;
 import android.view.animation.AnimationUtils;
+import android.view.animation.BaseInterpolator;
 import android.view.animation.Interpolator;
+
+/**
+ * @hide
+ */
+class AXUIInterpolator extends BaseInterpolator {
+    private static final double DEFAULT_STIFFNESS = 40.0;
+    private static final double DEFAULT_DAMPING_RATIO = 1.15;
+    private static final float DEFAULT_MAX_VELOCITY = 15000.0f;
+
+    private final double mOmega;
+    private final double mDampingRatio;
+    private final double mInitialVelocityNorm;
+    private final float mDurationScale;
+    private final double mDampedFreq;
+    private final double mCoefficient;
+    private float mNormalizationFactor = -1.0f;
+
+    public AXUIInterpolator(double stiffness, double dampingRatio, double velocity,
+            float durationScale, float maxVelocity) {
+        mOmega = Math.sqrt(stiffness <= 0.0 ? DEFAULT_STIFFNESS : stiffness);
+        mDampingRatio = dampingRatio <= 0.0 ? DEFAULT_DAMPING_RATIO : dampingRatio;
+        mInitialVelocityNorm = Math.abs(velocity) / (maxVelocity <= 0.0f ? DEFAULT_MAX_VELOCITY : maxVelocity);
+        mDurationScale = durationScale <= 0.0f ? 1.0f : durationScale;
+
+        if (mDampingRatio < 1.0) {
+            // Underdamped
+            mDampedFreq = Math.sqrt(1.0 - (mDampingRatio * mDampingRatio)) * mOmega;
+            mCoefficient = ((mDampingRatio * mOmega) - mInitialVelocityNorm) / mDampedFreq;
+        } else if (Double.compare(1.0, mDampingRatio) == 0) {
+            // Critically damped
+            mDampedFreq = 0.0;
+            mCoefficient = (-mInitialVelocityNorm) + mOmega;
+        } else {
+            // Overdamped
+            mDampedFreq = 0.0;
+            mCoefficient = (-mInitialVelocityNorm) + (mDampingRatio * mOmega);
+        }
+    }
+
+    private float calculatePosition(float t) {
+        if (t < 0.0f) t = 0.0f;
+        double time = t * mDurationScale;
+        double expTerm = Math.exp((-mDampingRatio) * mOmega * time);
+        double displacement;
+
+        if (mDampingRatio < 1.0) {
+            // Underdamped oscillation
+            displacement = (Math.cos(mDampedFreq * time) +
+                    (mCoefficient * Math.sin(mDampedFreq * time))) * expTerm;
+        } else if (Double.compare(1.0, mDampingRatio) == 0) {
+            // Critically damped
+            displacement = ((mCoefficient * time) + 1.0) * Math.exp((-mOmega) * time);
+        } else {
+            // Overdamped
+            double sqrtTerm = mOmega * Math.sqrt((mDampingRatio * mDampingRatio) - 1.0);
+            displacement = (expTerm / sqrtTerm) *
+                    (((-mInitialVelocityNorm + (mOmega * mDampingRatio)) *
+                            Math.sinh(mDampingRatio * time)) +
+                            (Math.cosh(mDampingRatio * time) * sqrtTerm));
+        }
+        return (float) (1.0 - displacement);
+    }
+
+    @Override
+    public float getInterpolation(float input) {
+        if (mNormalizationFactor == -1.0f) {
+            float endValue = calculatePosition(1.0f);
+            mNormalizationFactor = endValue != 0.0f ? endValue : 1.0f;
+        }
+        return calculatePosition(input) / mNormalizationFactor;
+    }
+
+    /**
+     */
+    public float getVelocityRatio(float t) {
+        double time = t >= 0.0f ? t : 0.0f;
+        double expTerm = Math.exp((-mDurationScale) * mDampingRatio * mOmega * time);
+        double velocityMagnitude;
+
+        if (mDampingRatio < 1.0) {
+            double sinTerm = Math.sin(mDurationScale * mDampedFreq * time);
+            double cosTerm = Math.cos(mDurationScale * mDampedFreq * time);
+            velocityMagnitude = Math.abs(
+                    ((sinTerm * (-mDurationScale) *
+                            ((mCoefficient * mDampingRatio * mOmega) + mDampedFreq)) +
+                            (cosTerm * mDurationScale *
+                                    ((mCoefficient * mDampedFreq) - (mDampingRatio * mOmega)))) * expTerm);
+        } else if (Double.compare(1.0, mDampingRatio) != 0) {
+            // Overdamped
+            double sqrtTerm = mOmega * Math.sqrt((mDampingRatio * mDampingRatio) - 1.0);
+            double sqrtTermSq = sqrtTerm * sqrtTerm;
+            velocityMagnitude = Math.abs((expTerm / sqrtTerm) *
+                    ((Math.sinh(mDurationScale * mDampingRatio * time) * mDurationScale *
+                            ((sqrtTermSq + (mInitialVelocityNorm * mDampingRatio * mOmega)) -
+                                    ((mDampingRatio * mDampingRatio) * mOmega * mOmega))) +
+                            (Math.cosh(mDurationScale * mDampingRatio * time) * mDurationScale *
+                                    mDampingRatio * (((mDampingRatio * mOmega) - mInitialVelocityNorm) -
+                                    (mOmega * sqrtTerm)))));
+        } else {
+            // Critically damped
+            velocityMagnitude = Math.abs(mDurationScale *
+                    ((mCoefficient - mOmega) - (((mCoefficient * mDurationScale) * mOmega) * time)) *
+                    Math.exp((-mDurationScale) * mOmega * time));
+        }
+        return (float) velocityMagnitude;
+    }
+
+    public float getDurationScale() {
+        return mDurationScale;
+    }
+}
 
 /**
  * This class encapsulates scrolling with the ability to overshoot the bounds
@@ -599,6 +711,101 @@ public class OverScroller {
         private static final int CUBIC = 1;
         private static final int BALLISTIC = 2;
 
+        private static final double AX_STIFFNESS = 40.0;
+        private static final double AX_DAMPING_RATIO = 1.15;
+        private static final float AX_MAX_VELOCITY = 15000.0f;
+        private static final double AX_FRICTION_NORMAL = 14.0;
+        private static final double AX_FRICTION_SLOW = 12.0;
+        private static final double AX_FRICTION_MID = 16.0;
+
+        private static final double VELOCITY_THRESHOLD_LOW = 5000.0;
+        private static final double VELOCITY_THRESHOLD_HIGH = 8000.0;
+        private static final double FRICTION_COEF_1 = 0.35;
+        private static final double FRICTION_COEF_2 = 0.2;
+        private static final double FRICTION_COEF_3 = 0.3;
+
+        private static final double MIN_VELOCITY_ADJUST_FRICTION = 1000.0;
+        private static final double MID_VELOCITY_ADJUST_FRICTION = 4000.0;
+        private static final double MAX_VELOCITY_ADJUST_FRICTION = 10000.0;
+
+        private static final float SCALE_FACTOR_HIGH = 1.2f;
+        private static final float SCALE_FACTOR_MID = 0.8f;
+        private static final float SCALE_FACTOR_LOW = 0.5f;
+        private static final float VELOCITY_6K = 6000.0f;
+        private static final float VELOCITY_10K = 10000.0f;
+        private static final float VELOCITY_20K = 20000.0f;
+
+        private AXUIInterpolator mSpringInterpolator;
+        private boolean mUseSpringPhysics = true;
+        private int mSpringSplineDuration;
+        private int mSpringDistanceOld;
+        private int mSpringDistanceNew;
+        private double mMinSplineDelta = FRICTION_COEF_2;
+        private int mOvershootDistance;
+        private int mIterationCount = 0;
+        private boolean mFinishedEarly = false;
+        private float mDeltaTime;
+        private int mPhysicsIterations = 0;
+        private long mLastUpdateTime;
+
+        private FrictionConfig mCurrentFriction;
+        private final FrictionConfig mPrimaryFriction = new FrictionConfig(AX_FRICTION_NORMAL, 0.0);
+        private final FrictionConfig mSpringFriction = new FrictionConfig(AX_FRICTION_NORMAL, AX_STIFFNESS);
+
+        private final CurrentState mPhysicsState = new CurrentState();
+        private final CurrentState mPhysicsState2 = new CurrentState();
+
+        /**
+         */
+        private static class FrictionConfig {
+            double mDamping;
+            double mStiffness;
+
+            FrictionConfig(double damping, double stiffness) {
+                mDamping = calculateDamping((float) damping);
+                mStiffness = calculateStiffness((float) stiffness);
+            }
+
+            void setDampingFromVelocity(double value) {
+                mDamping = calculateDamping((float) value);
+            }
+
+            void setStiffnessFromValue(double value) {
+                mStiffness = calculateStiffness((float) value);
+            }
+
+            static float calculateDamping(float f) {
+                if (f == 0.0f) {
+                    return 0.0f;
+                }
+                return ((f - 8.0f) * 3.0f) + 25.0f;
+            }
+
+            static double calculateStiffness(float f) {
+                if (f == 0.0f) {
+                    return 0.0;
+                }
+                return ((f - 30.0f) * 3.62f) + 194.0f;
+            }
+        }
+
+        /**
+         */
+        private static class CurrentState {
+            double mPosition;
+            double mVelocity;
+
+            void reset() {
+                mPosition = 0.0;
+                mVelocity = 0.0;
+            }
+
+            void set(double position, double velocity) {
+                mPosition = position;
+                mVelocity = velocity;
+            }
+        }
+
         static {
             float x_min = 0.0f;
             float y_min = 0.0f;
@@ -679,6 +886,117 @@ public class OverScroller {
                 final float timeCoef = t_inf + (x - x_inf) / (x_sup - x_inf) * (t_sup - t_inf);
                 mDuration *= timeCoef;
             }
+        }
+
+
+        /**
+         */
+        private double getVelocityFrictionCoef(float velocity) {
+            double absVel = Math.abs(velocity);
+            if (absVel <= VELOCITY_THRESHOLD_LOW) {
+                return FRICTION_COEF_2;
+            } else if (absVel > VELOCITY_THRESHOLD_HIGH) {
+                return FRICTION_COEF_1;
+            } else {
+                return FRICTION_COEF_3;
+            }
+        }
+
+        /**
+         */
+        private float getDurationScaleFactor(float velocity) {
+            float absVel = Math.abs(velocity);
+            if (absVel <= 2000.0f) {
+                return SCALE_FACTOR_HIGH;
+            } else if (absVel <= VELOCITY_6K) {
+                float ratio = (absVel - 2000.0f) / 4000.0f;
+                return SCALE_FACTOR_HIGH - (ratio * 0.4f);
+            } else if (absVel <= VELOCITY_10K) {
+                return SCALE_FACTOR_MID;
+            } else if (absVel > VELOCITY_20K) {
+                return SCALE_FACTOR_LOW;
+            } else {
+                float ratio = (absVel - VELOCITY_10K) / VELOCITY_10K;
+                return SCALE_FACTOR_MID - (ratio * 0.3f);
+            }
+        }
+
+        /**
+         */
+        private void initSpringPhysics(int position, int velocity) {
+            mPhysicsIterations = 1;
+            mFinishedEarly = false;
+            mPrimaryFriction.setDampingFromVelocity(AX_FRICTION_NORMAL);
+            mPrimaryFriction.setStiffnessFromValue(0.0);
+            mCurrentFriction = mPrimaryFriction;
+            mPhysicsState.set(position, velocity);
+            mStartTime = AnimationUtils.currentAnimationTimeMillis();
+            mLastUpdateTime = mStartTime;
+        }
+
+        /**
+         */
+        private void updateSpringPhysics() {
+            double pos = mPhysicsState.mPosition;
+            double vel = mPhysicsState.mVelocity;
+            double pos2 = mPhysicsState2.mPosition;
+
+            adjustFrictionForVelocity();
+
+            double stiffness = mCurrentFriction.mStiffness;
+            double target = mFinal;
+            double force = (target - pos2) * stiffness;
+            float dt = mDeltaTime;
+
+            double midPos = pos + (dt * vel) / 2.0;
+            double midVel = vel + (dt * force) / 2.0;
+            double damping = mCurrentFriction.mDamping;
+            double midForce = ((target - midPos) * stiffness) - (damping * midVel);
+            double midVel2 = vel + (dt * midForce) / 2.0;
+            double midForce2 = ((target - (pos + (dt * midVel) / 2.0)) * stiffness) - (damping * midVel2);
+            double finalPos = pos + (dt * midVel2);
+            double finalVel = vel + (dt * midForce2);
+            double finalForce = (stiffness * (target - finalPos)) - (damping * finalVel);
+
+            double avgVel = ((midVel + midVel2) * 2.0 + vel + finalVel) * 0.167;
+            mPhysicsState2.mVelocity = finalVel;
+            mPhysicsState2.mPosition = finalPos;
+            mPhysicsState.mVelocity = vel + (dt * (force + ((midForce + midForce2) * 2.0) + finalForce) * 0.167);
+            mPhysicsState.mPosition = pos + (dt * avgVel);
+            mPhysicsIterations++;
+        }
+
+        /**
+         */
+        private void adjustFrictionForVelocity() {
+            if (mPhysicsIterations != 1) {
+                return;
+            }
+            double absVel = Math.abs(mPhysicsState.mVelocity);
+            if (absVel > MID_VELOCITY_ADJUST_FRICTION && absVel < MAX_VELOCITY_ADJUST_FRICTION) {
+                mCurrentFriction.mDamping = FrictionConfig.calculateDamping((float) AX_FRICTION_MID);
+            } else if (absVel >= MAX_VELOCITY_ADJUST_FRICTION) {
+                mCurrentFriction.setDampingFromVelocity(AX_FRICTION_NORMAL);
+            } else {
+                mCurrentFriction.mDamping = FrictionConfig.calculateDamping((float) AX_FRICTION_SLOW);
+            }
+        }
+
+        /**
+         */
+        private boolean hasLostVelocity() {
+            return Math.abs(mPhysicsState.mVelocity) < 5.0;
+        }
+
+        /**
+         */
+        private void updateWithSpringInterpolator(float progress) {
+            if (mSpringInterpolator == null) return;
+            float posRatio = mSpringInterpolator.getInterpolation(progress);
+            float velRatio = mSpringInterpolator.getVelocityRatio(progress);
+            mPhysicsState.mPosition = (mSpringDistanceOld * posRatio) + mStart;
+            mPhysicsState.mVelocity = ((mSpringDistanceOld * velRatio) / mSpringSplineDuration) * 1000.0f;
+            mPhysicsIterations++;
         }
 
         void startScroll(int start, int distance, int duration) {
@@ -781,6 +1099,25 @@ public class OverScroller {
             if (mFinal > max) {
                 adjustDuration(mStart, mFinal, max);
                 mFinal = max;
+            }
+
+            if (mUseSpringPhysics && velocity != 0) {
+                mMinSplineDelta = getVelocityFrictionCoef(Math.abs(velocity));
+                mOvershootDistance = over;
+                mIterationCount = 0;
+                mFinishedEarly = false;
+
+                float durationScale = getDurationScaleFactor(Math.abs(velocity));
+                mSpringInterpolator = new AXUIInterpolator(
+                        AX_STIFFNESS, AX_DAMPING_RATIO,
+                        velocity, durationScale, AX_MAX_VELOCITY);
+
+                mSpringDistanceOld = mSplineDistance;
+                mSpringDistanceNew = mFinal - start;
+                mSpringSplineDuration = mSplineDuration;
+
+                initSpringPhysics(start, velocity);
+                mPhysicsState2.reset();
             }
         }
 
@@ -924,20 +1261,27 @@ public class OverScroller {
             switch (mState) {
                 case SPLINE: {
                     final float t = (float) currentTime / mSplineDuration;
-                    final int index = (int) (NB_SAMPLES * t);
-                    float distanceCoef = 1.f;
-                    float velocityCoef = 0.f;
-                    if (index < NB_SAMPLES) {
-                        final float t_inf = (float) index / NB_SAMPLES;
-                        final float t_sup = (float) (index + 1) / NB_SAMPLES;
-                        final float d_inf = SPLINE_POSITION[index];
-                        final float d_sup = SPLINE_POSITION[index + 1];
-                        velocityCoef = (d_sup - d_inf) / (t_sup - t_inf);
-                        distanceCoef = d_inf + (t - t_inf) * velocityCoef;
-                    }
 
-                    distance = distanceCoef * mSplineDistance;
-                    mCurrVelocity = velocityCoef * mSplineDistance / mSplineDuration * 1000.0f;
+                    if (mUseSpringPhysics && mSpringInterpolator != null && mSpringSplineDuration > 0) {
+                        float posRatio = mSpringInterpolator.getInterpolation(t);
+                        float velRatio = mSpringInterpolator.getVelocityRatio(t);
+                        distance = posRatio * mSpringDistanceOld;
+                        mCurrVelocity = ((mSpringDistanceOld * velRatio) / mSpringSplineDuration) * 1000.0f;
+                    } else {
+                        final int index = (int) (NB_SAMPLES * t);
+                        float distanceCoef = 1.f;
+                        float velocityCoef = 0.f;
+                        if (index < NB_SAMPLES) {
+                            final float t_inf = (float) index / NB_SAMPLES;
+                            final float t_sup = (float) (index + 1) / NB_SAMPLES;
+                            final float d_inf = SPLINE_POSITION[index];
+                            final float d_sup = SPLINE_POSITION[index + 1];
+                            velocityCoef = (d_sup - d_inf) / (t_sup - t_inf);
+                            distanceCoef = d_inf + (t - t_inf) * velocityCoef;
+                        }
+                        distance = distanceCoef * mSplineDistance;
+                        mCurrVelocity = velocityCoef * mSplineDistance / mSplineDuration * 1000.0f;
+                    }
                     break;
                 }
 
