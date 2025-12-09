@@ -58,32 +58,31 @@ constructor(@Assisted private val context: Context) :
         layoutDirection = currentConfig.layoutDirection
     }
 
-    override fun notifyThemeChanged() {
+    private inline fun forEachListener(block: (ConfigurationListener) -> Unit) {
         // Avoid concurrent modification exception
-        val listeners = synchronized(this.listeners) { ArrayList(this.listeners) }
+        val snapshot = synchronized(listeners) { listeners.toList() }
+        snapshot.forEach(block)
+    }
 
-        listeners.filterForEach({ this.listeners.filterNotNull().contains(it) }) { it.onThemeChanged() }
+    override fun notifyThemeChanged() {
+        forEachListener { it.onThemeChanged() }
     }
 
     override fun dispatchOnMovedToDisplay(newDisplayId: Int, newConfiguration: Configuration) {
-        val listeners = synchronized(this.listeners) { ArrayList(this.listeners) }
-        listeners.filterForEach({ this.listeners.contains(it) }) {
-            it.onMovedToDisplay(newDisplayId, newConfiguration)
-        }
+        forEachListener { it.onMovedToDisplay(newDisplayId, newConfiguration) }
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
-        // Avoid concurrent modification exception
-        val listeners = synchronized(this.listeners) { ArrayList(this.listeners) }
-        listeners.filterForEach({ this.listeners.filterNotNull().contains(it) }) { it.onConfigChanged(newConfig) }
+        // First notify raw config change
+        forEachListener { it.onConfigChanged(newConfig) }
+
         val fontScale = newConfig.fontScale
         val density = newConfig.densityDpi
         val uiMode = newConfig.uiMode and Configuration.UI_MODE_NIGHT_MASK
         val uiModeChanged = uiMode != this.uiMode
-        if (density != this.density || fontScale != this.fontScale || inCarMode && uiModeChanged) {
-            listeners.filterForEach({ this.listeners.filterNotNull().contains(it) }) {
-                it.onDensityOrFontScaleChanged()
-            }
+
+        if (density != this.density || fontScale != this.fontScale || (inCarMode && uiModeChanged)) {
+            forEachListener { it.onDensityOrFontScaleChanged() }
             this.density = density
             this.fontScale = fontScale
         }
@@ -91,9 +90,7 @@ constructor(@Assisted private val context: Context) :
         val smallestScreenWidth = newConfig.smallestScreenWidthDp
         if (smallestScreenWidth != this.smallestScreenWidth) {
             this.smallestScreenWidth = smallestScreenWidth
-            listeners.filterForEach({ this.listeners.filterNotNull().contains(it) }) {
-                it.onSmallestScreenWidthChanged()
-            }
+            forEachListener { it.onSmallestScreenWidthChanged() }
         }
 
         val maxBounds = newConfig.windowConfiguration.maxBounds
@@ -103,41 +100,37 @@ constructor(@Assisted private val context: Context) :
             // would be a direct reference to windowConfiguration.maxBounds, so the if statement
             // above would always fail. See b/245799099 for more information.
             this.maxBounds.set(maxBounds)
-            listeners.filterForEach({ this.listeners.filterNotNull().contains(it) }) { it.onMaxBoundsChanged() }
+            forEachListener { it.onMaxBoundsChanged() }
         }
 
         val localeList = newConfig.locales
         if (localeList != this.localeList) {
             this.localeList = localeList
-            listeners.filterForEach({ this.listeners.filterNotNull().contains(it) }) { it.onLocaleListChanged() }
+            forEachListener { it.onLocaleListChanged() }
         }
 
         if (uiModeChanged) {
             // We need to force the style re-evaluation to make sure that it's up to date
             // and attrs were reloaded.
             context.theme.applyStyle(context.themeResId, true)
-
             this.uiMode = uiMode
-            listeners.filterForEach({ this.listeners.filterNotNull().contains(it) }) { it.onUiModeChanged() }
+            forEachListener { it.onUiModeChanged() }
         }
 
         if (layoutDirection != newConfig.layoutDirection) {
             layoutDirection = newConfig.layoutDirection
-            listeners.filterForEach({ this.listeners.filterNotNull().contains(it) }) {
-                it.onLayoutDirectionChanged(layoutDirection == LAYOUT_DIRECTION_RTL)
-            }
+            val isRtl = layoutDirection == LAYOUT_DIRECTION_RTL
+            forEachListener { it.onLayoutDirectionChanged(isRtl) }
         }
 
         if (lastConfig.updateFrom(newConfig) and ActivityInfo.CONFIG_ASSETS_PATHS != 0) {
-            listeners.filterForEach({ this.listeners.filterNotNull().contains(it) }) { it.onThemeChanged() }
+            forEachListener { it.onThemeChanged() }
         }
 
         val newOrientation = newConfig.orientation
         if (orientation != newOrientation) {
             orientation = newOrientation
-            listeners.filterForEach({ this.listeners.filterNotNull().contains(it) }) {
-                it.onOrientationChanged(orientation)
-            }
+            forEachListener { it.onOrientationChanged(orientation) }
         }
     }
 
