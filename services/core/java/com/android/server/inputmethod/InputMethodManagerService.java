@@ -1259,9 +1259,12 @@ public final class InputMethodManagerService implements IInputMethodManagerImpl.
                     InputMethodSettingsRepository.put(userId, settings);
 
                     final int profileParentId = userManagerInternal.getProfileParentId(userId);
+                    final boolean value =
+                            InputMethodDrawsNavBarResourceMonitor.evaluate(context,
+                                    profileParentId);
                     final boolean showNavBarIme = Settings.Secure.getIntForUser(
                         context.getContentResolver(), Settings.Secure.NAVBAR_IME_SPACE, 1, userId) == 1;
-                    userData.mImeDrawsNavBar.set(showNavBarIme);
+                    userData.mImeDrawsNavBar.set(value && showNavBarIme);
 
                     userData.mBackgroundLoadLatch.countDown();
                     Slog.d(TAG, "Complete initialization for user=" + userId);
@@ -5498,13 +5501,15 @@ public final class InputMethodManagerService implements IInputMethodManagerImpl.
     @WorkerThread
     private void onUpdateResourceOverlay(@UserIdInt int userId) {
         final int profileParentId = mUserManagerInternal.getProfileParentId(userId);
+        final boolean value =
+                InputMethodDrawsNavBarResourceMonitor.evaluate(mContext, profileParentId);
         final var profileUserIds = mUserManagerInternal.getProfileIds(profileParentId, false);
         final boolean showNavBarIme = Settings.Secure.getIntForUser(
             mContext.getContentResolver(), Settings.Secure.NAVBAR_IME_SPACE, 1, userId) == 1;
         final ArrayList<UserData> updatedUsers = new ArrayList<>();
         for (int profileUserId : profileUserIds) {
             final var userData = getUserData(profileUserId);
-            userData.mImeDrawsNavBar.set(showNavBarIme);
+            userData.mImeDrawsNavBar.set(value && showNavBarIme);
             updatedUsers.add(userData);
         }
         synchronized (ImfLock.class) {

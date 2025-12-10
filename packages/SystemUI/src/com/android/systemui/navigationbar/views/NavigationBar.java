@@ -658,7 +658,9 @@ public class NavigationBar extends ViewController<NavigationBarView> implements 
             public void onChange(boolean selfChange, Uri uri) {
                 super.onChange(selfChange, uri);
                 if (mView != null) {
-                    mView.setNavBarMode(mNavBarMode, getShowNavBarIme());
+                    mView.setNavBarMode(mNavBarMode, mNavigationModeController.getImeDrawsImeNavBar()
+                            && getShowNavBarIme());
+
                 }
             }
         };
@@ -1866,7 +1868,8 @@ public class NavigationBar extends ViewController<NavigationBarView> implements 
     }
 
     private void setNavBarMode(int mode) {
-        mView.setNavBarMode(mode, getShowNavBarIme());
+        mView.setNavBarMode(mode, mNavigationModeController.getImeDrawsImeNavBar()
+                && getShowNavBarIme());
         if (isGesturalMode(mode)) {
             mRegionSamplingHelper.start(mSamplingBounds);
         } else {
