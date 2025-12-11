@@ -1384,8 +1384,15 @@ final class KeyGestureController {
                 mAccessibilityShortcutController.performAccessibilityShortcut();
                 break;
             case MSG_SCREENSHOT_SHORTCUT:
-                TakeScreenshotData data = (TakeScreenshotData) msg.obj;
-                takeScreenshot(data.source, data.type, data.displayId);
+                Object o = msg.obj;
+                if (o instanceof TakeScreenshotData) {
+                    TakeScreenshotData data = (TakeScreenshotData) o;
+                    takeScreenshot(data.source, data.type, data.displayId);
+                } else {
+                    int source = msg.arg1 != 0 ? msg.arg1 : SCREENSHOT_KEY_OTHER;
+                    int displayId = msg.arg2 != 0 ? msg.arg2 : Display.DEFAULT_DISPLAY;
+                    takeScreenshot(source, WindowManager.TAKE_SCREENSHOT_FULLSCREEN, displayId);
+                }
                 break;
             case MSG_EXIT_FOCUSED_APP:
                 handleKeyGesture((AidlKeyGestureEvent) msg.obj, /* focusedToken= */null);
