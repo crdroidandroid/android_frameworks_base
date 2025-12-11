@@ -1172,10 +1172,16 @@ final class KeyGestureController {
                 mAccessibilityShortcutController.performAccessibilityShortcut();
                 break;
             case MSG_SCREENSHOT_SHORTCUT:
-                TakeScreenshotData data = (TakeScreenshotData) msg.obj;
-                takeScreenshot(data.source, data.type, data.displayId);
+                Object o = msg.obj;
+                if (o instanceof TakeScreenshotData) {
+                    TakeScreenshotData data = (TakeScreenshotData) o;
+                    takeScreenshot(data.source, data.type, data.displayId);
+                } else {
+                    int source = msg.arg1 != 0 ? msg.arg1 : SCREENSHOT_KEY_OTHER;
+                    int displayId = msg.arg2 != 0 ? msg.arg2 : Display.DEFAULT_DISPLAY;
+                    takeScreenshot(source, WindowManager.TAKE_SCREENSHOT_FULLSCREEN, displayId);
+                }
                 break;
-
         }
         return true;
     }
@@ -1701,8 +1707,14 @@ final class KeyGestureController {
                     break;
                 case KeyGestureEvent.KEY_GESTURE_TYPE_TAKE_SCREENSHOT:
                     if (complete) {
-                        mHandler.sendMessage(mHandler.obtainMessage(MSG_SCREENSHOT_SHORTCUT,
-                                SCREENSHOT_KEY_OTHER, event.getDisplayId()));
+                        mHandler.sendMessage(
+                                mHandler.obtainMessage(
+                                        MSG_SCREENSHOT_SHORTCUT,
+                                        new TakeScreenshotData(
+                                                SCREENSHOT_KEY_OTHER,
+                                                WindowManager.TAKE_SCREENSHOT_FULLSCREEN,
+                                                event.getDisplayId()
+                                        )));
                     }
                     break;
                 case KeyGestureEvent.KEY_GESTURE_TYPE_SCREENSHOT_CHORD:
