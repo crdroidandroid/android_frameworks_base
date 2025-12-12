@@ -326,10 +326,6 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
     protected void setBackgroundTintColor(int color) {
         if (color != mCurrentBackgroundTint) {
             mCurrentBackgroundTint = color;
-            if (notificationBackgroundTintOptimization() && color == mNormalColor) {
-                // We don't need to tint a normal notification
-                color = 0;
-            }
             mBackgroundNormal.setTint(color);
         }
     }
