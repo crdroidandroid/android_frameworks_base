@@ -18,7 +18,6 @@ package com.android.systemui.statusbar
 import android.content.Context
 import android.os.UserHandle
 import android.provider.Settings
-import com.android.systemui.SystemUIApplication
 import com.android.systemui.dagger.SysUISingleton
 import com.android.systemui.util.ScrimUtils
 import javax.inject.Inject
@@ -40,10 +39,18 @@ class NTForbiddenSwipeDownQSController @Inject constructor(
     fun getForbiddenSwipeDownQS(): Boolean = (keyguardShowing || dozing) && !enableSwipeDownQS
 
     companion object {
+        @Volatile
+        private var INSTANCE: NTForbiddenSwipeDownQSController? = null
+
         @JvmStatic
         fun get(context: Context): NTForbiddenSwipeDownQSController {
-            val app = context.applicationContext as SystemUIApplication
-            return app.sysUIComponent.forbiddenSwipeDownQSController()
+            return INSTANCE ?: throw IllegalStateException(
+                "NTForbiddenSwipeDownQSController not initialized"
+            )
         }
+    }
+
+    init {
+        INSTANCE = this
     }
 }
