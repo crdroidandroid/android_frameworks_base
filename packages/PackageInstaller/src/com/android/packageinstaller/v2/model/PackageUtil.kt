@@ -513,9 +513,6 @@ object PackageUtil {
         var result: Boolean
         try {
             result = android.content.pm.Flags.usePiaV2()
-                    && context.resources.getBoolean(
-                android.R.bool.config_enableMaterialDesignInPackageInstaller
-            )
         } catch (_: Resources.NotFoundException) {
             return false
         }
