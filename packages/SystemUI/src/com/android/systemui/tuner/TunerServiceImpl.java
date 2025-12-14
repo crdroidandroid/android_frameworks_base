@@ -343,12 +343,10 @@ public class TunerServiceImpl extends TunerService {
         } else {
             uri = Settings.Secure.getUriFor(key);
         }
-        synchronized (this) {
-            if (!mListeningUris.containsKey(uri)) {
-                mListeningUris.put(uri, key);
-                mContentResolver.registerContentObserver(uri, false, mObserver,
-                        isLineageGlobal(key) ? UserHandle.USER_ALL : mCurrentUser);
-            }
+        if (!mListeningUris.containsKey(uri)) {
+            mListeningUris.put(uri, key);
+            mContentResolver.registerContentObserver(uri, false, mObserver,
+                    isLineageGlobal(key) ? UserHandle.USER_ALL : mCurrentUser);
         }
         // Send the first state.
         String value = DejankUtils.whitelistIpcs(() -> getValue(key));
