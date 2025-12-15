@@ -2342,6 +2342,9 @@ class DatabaseHelper extends SQLiteOpenHelper {
             loadIntegerSetting(stmt, Settings.Global.CELL_ON,
                     R.integer.def_cell_on);
 
+            loadBooleanSetting(stmt, Settings.Global.DISABLE_WINDOW_BLURS,
+                    R.bool.def_disable_window_blurs);
+
             // Enable or disable Cell Broadcast SMS
             loadSetting(stmt, Settings.Global.CDMA_CELL_BROADCAST_SMS,
                     RILConstants.CDMA_CELL_BROADCAST_SMS_DISABLED);

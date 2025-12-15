@@ -224,6 +224,9 @@
     <!-- Default for Settings.System.VIBRATE_WHEN_RINGING -->
     <bool name="def_vibrate_when_ringing">false</bool>
 
+    <!-- Default for Settings.Global.DISABLE_WINDOW_BLURS -->
+    <bool name="def_disable_window_blurs">false</bool>
+
     <!-- Default for Settings.Global.CELL_ON; see PhoneConstants.CELL_ON_FLAG.
         0: cellular off; 1: cellular on. -->
     <integer name="def_cell_on">1</integer>
