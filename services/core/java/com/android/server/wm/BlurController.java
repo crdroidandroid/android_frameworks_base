@@ -28,6 +28,7 @@ import android.net.ConnectivityManager;
 import android.os.PowerManager;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
+import android.os.SystemProperties;
 import android.provider.Settings;
 import android.view.ICrossWindowBlurEnabledListener;
 import android.view.TunnelModeEnabledListener;
@@ -144,7 +145,10 @@ final class BlurController {
     }
 
     private boolean getBlurDisabledSetting() {
+        boolean disableByDefault = SystemProperties.getBoolean("ro.surface_flinger.blur_disabled_by_default", false);
+        int defaultValue = disableByDefault ? 1 : 0;
+
         return Settings.Global.getInt(mContext.getContentResolver(),
-                Settings.Global.DISABLE_WINDOW_BLURS, 0) == 1;
+                Settings.Global.DISABLE_WINDOW_BLURS, defaultValue) == 1;
     }
 }
