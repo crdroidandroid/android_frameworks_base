@@ -2412,10 +2412,14 @@ public class WallpaperManagerService extends IWallpaperManager.Stub
     }
 
     private boolean hasPermission(WallpaperData data, String permission) {
+        ComponentName component = data.getComponent();
+        if (component == null) {
+            return false;
+        }
         try {
             return PackageManager.PERMISSION_GRANTED == mIPackageManager.checkPermission(
                     permission,
-                    data.getComponent().getPackageName(),
+                    component.getPackageName(),
                     data.userId);
         } catch (RemoteException e) {
             Slog.e(TAG, "Failed to check wallpaper service permission", e);
