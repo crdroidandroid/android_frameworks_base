@@ -26,6 +26,7 @@ import static com.android.server.wallpaper.WallpaperUtils.WALLPAPER_LOCK_ORIG;
 import static com.android.server.wallpaper.WallpaperUtils.getWallpaperDir;
 
 import android.annotation.NonNull;
+import android.annotation.Nullable;
 import android.app.IWallpaperManagerCallback;
 import android.app.WallpaperColors;
 import android.app.WallpaperManager.ScreenOrientation;
@@ -239,7 +240,8 @@ class WallpaperData {
         return result;
     }
 
-    @NonNull ComponentName getComponent() {
+    @Nullable
+    ComponentName getComponent() {
         return mDescription.getComponent();
     }
 
