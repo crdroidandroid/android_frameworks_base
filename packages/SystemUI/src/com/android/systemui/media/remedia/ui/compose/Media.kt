@@ -87,11 +87,13 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.center
 import androidx.compose.ui.graphics.Brush
@@ -168,6 +170,7 @@ import com.android.systemui.media.remedia.ui.viewmodel.MediaViewModel
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
+import kotlinx.coroutines.launch
 
 /**
  * Renders a media controls UI element.
@@ -1294,14 +1297,32 @@ private fun ContentScope.PlayPauseAction(
             targetValue = buttonCornerRadius(viewModel.state != MediaSessionState.Paused),
             label = "PlayPauseAction.cornerRadius",
         )
+
+    val scaleAnimatable = remember { Animatable(1.0f) }
+    val scope = rememberCoroutineScope()
+
     // This element can be animated when switching between scenes inside a media card.
     Element(key = Media.Elements.PlayPauseButton, modifier = modifier) {
         PlatformButton(
-            onClick = viewModel.onClick ?: {},
+            onClick = {
+                viewModel.onClick?.let {
+                    it()
+                    scope.launch {
+                        scaleAnimatable.animateTo(
+                            targetValue = 1.125f,
+                            animationSpec = tween(durationMillis = 250),
+                        )
+                        scaleAnimatable.animateTo(
+                            targetValue = 1.0f,
+                            animationSpec = tween(durationMillis = 250),
+                        )
+                    }
+                }
+            },
             enabled = viewModel.onClick != null,
             colors = ButtonDefaults.buttonColors(containerColor = buttonColor),
             shape = RoundedCornerShape(cornerRadius),
-            modifier = Modifier.size(buttonSize),
+            modifier = Modifier.size(buttonSize).scale(scaleAnimatable.value),
         ) {
             when (viewModel.state) {
                 is MediaSessionState.Playing,
