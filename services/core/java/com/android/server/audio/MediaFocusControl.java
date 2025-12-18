@@ -34,11 +34,14 @@ import android.media.audiopolicy.AudioPolicy;
 import android.media.audiopolicy.IAudioPolicyCallback;
 import android.os.Binder;
 import android.os.Build;
+import android.database.ContentObserver;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Message;
 import android.os.RemoteException;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.Log;
 
@@ -100,6 +103,21 @@ public class MediaFocusControl implements PlayerFocusEnforcer {
     private final @NonNull PlayerFocusEnforcer mFocusEnforcer;
     private boolean mMultiAudioFocusEnabled = false;
 
+    private final ContentObserver mMultiAudioFocusObserver = new ContentObserver(
+            new Handler(Looper.getMainLooper())) {
+        @Override
+        public void onChange(boolean selfChange) {
+            final ContentResolver cr = mContext.getContentResolver();
+            mMultiAudioFocusEnabled = Settings.System.getIntForUser(cr,
+                    Settings.System.MULTI_AUDIO_FOCUS_ENABLED, 0, cr.getUserId()) != 0;
+            Log.i(TAG, "Multi audio focus " + (mMultiAudioFocusEnabled ? "enabled" : "disabled"));
+        }
+    };
+
+    boolean isMultiAudioFocusEnabled() {
+        return mMultiAudioFocusEnabled;
+    }
+
     private boolean mRingOrCallActive = false;
 
     private final Object mExtFocusChangeLock = new Object();
@@ -121,6 +139,9 @@ public class MediaFocusControl implements PlayerFocusEnforcer {
         mMultiAudioFocusEnabled = Settings.System.getIntForUser(cr,
                 Settings.System.MULTI_AUDIO_FOCUS_ENABLED,
                 multiAudioFocusEnabledDefault ? 1 : 0, cr.getUserId()) != 0;
+        cr.registerContentObserver(
+                Settings.System.getUriFor(Settings.System.MULTI_AUDIO_FOCUS_ENABLED),
+                false, mMultiAudioFocusObserver, UserHandle.USER_ALL);
         initFocusThreading();
     }
 
