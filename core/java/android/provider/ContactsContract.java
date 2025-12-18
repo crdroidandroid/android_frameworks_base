@@ -3298,6 +3298,9 @@ public final class ContactsContract {
                 Bundle response = nullSafeCall(resolver, ContactsContract.AUTHORITY_URI,
                         QUERY_DEFAULT_ACCOUNT_FOR_NEW_CONTACTS_METHOD, null, null);
 
+                if (response == null) {
+                    return DefaultAccountAndState.ofNotSet();
+                }
                 int defaultAccountState = response.getInt(KEY_DEFAULT_ACCOUNT_STATE, -1);
                 if (DefaultAccountAndState.isCloudOrSimAccount(defaultAccountState)) {
                     String accountName = response.getString(Settings.ACCOUNT_NAME);
