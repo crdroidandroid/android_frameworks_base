@@ -248,15 +248,21 @@ public class FlashlightControllerImpl implements FlashlightController {
             if (mCameraId.get() == null) return;
 
             int clampedLevel;
+            boolean wasEnabled;
             synchronized (this) {
                 clampedLevel = Math.max(1, Math.min(requestedLevel, mMaxLevel));
-                if (mCurrentLevel == clampedLevel) return;
+                if (mCurrentLevel == clampedLevel && !mFlashlightEnabled) return;
                 mCurrentLevel = clampedLevel;
+                wasEnabled = mFlashlightEnabled;
             }
 
             try {
-                if (DEBUG) Log.d(TAG, "Setting torch strength level: " + clampedLevel);
-                mCameraManager.turnOnTorchWithStrengthLevel(mCameraId.get(), clampedLevel);
+                if (DEBUG) Log.d(TAG, "Setting torch strength level: " + clampedLevel + 
+                        ", wasEnabled: " + wasEnabled);
+                
+                if (wasEnabled) {
+                    mCameraManager.turnOnTorchWithStrengthLevel(mCameraId.get(), clampedLevel);
+                }
 
                 dispatchStrengthChanged(clampedLevel);
 
