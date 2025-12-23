@@ -4319,6 +4319,12 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
 
             final int childIndex = getAndVerifyPreorderedIndex(childrenCount, i, customOrder);
             final View child = getAndVerifyPreorderedView(preorderedList, children, childIndex);
+            if (child == null) {
+                Log.e(View.VIEW_LOG_TAG, "dispatchDraw: child view is null"
+                        + " curIndex=" + i + ", pkg =" +  mContext.getPackageName()
+                        + " mChildrenCount=" + mChildrenCount);
+                return;
+            }
             if ((child.mViewFlags & VISIBILITY_MASK) == VISIBLE || child.getAnimation() != null) {
                 more |= drawChild(canvas, child, drawingTime);
             }
