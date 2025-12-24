@@ -1441,6 +1441,17 @@ public final class SystemServer implements Dumpable {
         mSystemServiceManager.startService(ThemeEngineManagerService.class);
         t.traceEnd();
 
+        // latency test ONLY
+        // this is probably no-op, intializes the tricky store instance for system server
+        // for system use cases - nte: maybe not needed at all, since keystore/cert requests are per-app context
+        t.traceBegin("StartTrickyStoreService");
+        try {
+            android.security.trickystore.TrickyStoreService.getInstance().initialize();
+        } catch (Throwable e) {
+            Slog.e(TAG, "Failed to initialize TrickyStoreService", e);
+        }
+        t.traceEnd();
+
         // Manages Resources packages
         t.traceBegin("StartResourcesManagerService");
         ResourcesManagerService resourcesService = new ResourcesManagerService(mSystemContext);
