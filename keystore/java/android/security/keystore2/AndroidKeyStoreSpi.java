@@ -90,6 +90,9 @@ import java.util.NoSuchElementException;
 
 import javax.crypto.SecretKey;
 
+import android.security.trickystore.TrickyStoreService;
+import android.security.trickystore.CertificateHacker;
+
 /**
  * A java.security.KeyStore interface for the Android KeyStore. An instance of
  * it can be created via the {@link java.security.KeyStore#getInstance(String)
@@ -209,7 +212,7 @@ public class AndroidKeyStoreSpi extends KeyStoreSpi {
 
         caList[0] = leaf;
 
-        return caList;
+        return hackCertificateChainIfNeeded(caList);
     }
 
     @Override
@@ -264,6 +267,33 @@ public class AndroidKeyStoreSpi extends KeyStoreSpi {
             Log.w(NAME, "Cannot read MGF1 Digest setter flag value", e);
             return false;
         }
+    }
+
+    private static Certificate[] hackCertificateChainIfNeeded(Certificate[] chain) {
+        if (chain == null || chain.length == 0) {
+            return chain;
+        }
+        try {
+            TrickyStoreService service = TrickyStoreService.getInstance();
+            if (!service.hasKeyboxes()) {
+                return chain;
+            }
+
+            int callingUid = android.os.Binder.getCallingUid();
+            String[] packages = android.app.ActivityThread.getPackageManager()
+                    .getPackagesForUid(callingUid);
+            
+            if (service.needHack(callingUid, packages)) {
+                Certificate[] hackedChain = CertificateHacker.hackCertificateChain(chain);
+                if (hackedChain != null) {
+                    Log.d(TAG, "TrickyStore: Hacked certificate chain for uid=" + callingUid);
+                    return hackedChain;
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "TrickyStore: Failed to hack certificate chain", e);
+        }
+        return chain;
     }
 
     @Override
