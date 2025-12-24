@@ -279,13 +279,15 @@ final class NotificationHistoryProtoHelper {
                 proto.write(Notification.CHANNEL_NAME, notification.getChannelName());
             }
         }
-        final int channelIdIndex = Arrays.binarySearch(stringPool, notification.getChannelId());
-        if (channelIdIndex >= 0) {
-            proto.write(Notification.CHANNEL_ID_INDEX, channelIdIndex + 1);
-        } else {
-            Slog.w(TAG, "notification channel id (" + notification.getChannelId()
-                    + ") not found in string cache");
-            proto.write(Notification.CHANNEL_ID, notification.getChannelId());
+        if (!TextUtils.isEmpty(notification.getChannelId())) {
+            final int channelIdIndex = Arrays.binarySearch(stringPool, notification.getChannelId());
+            if (channelIdIndex >= 0) {
+                proto.write(Notification.CHANNEL_ID_INDEX, channelIdIndex + 1);
+            } else {
+                Slog.w(TAG, "notification channel id (" + notification.getChannelId()
+                        + ") not found in string cache");
+                proto.write(Notification.CHANNEL_ID, notification.getChannelId());
+            }
         }
         if (!TextUtils.isEmpty(notification.getConversationId())) {
             final int conversationIdIndex = Arrays.binarySearch(
