@@ -132,6 +132,7 @@ import android.os.Binder;
 import android.os.BluetoothServiceManager;
 import android.os.Build;
 import android.security.pif.PlayIntegritySpoofService;
+import android.security.gameprops.GamePropsSpoofService;
 import android.os.Bundle;
 import android.os.CancellationSignal;
 import android.os.DdmSyncStageUpdater;
@@ -7886,6 +7887,11 @@ public final class ActivityThread extends ClientTransactionHandler
             if (pifService.isSpoofSignatureEnabled()) {
                 pifService.spoofSignature();
             }
+        }
+
+        GamePropsSpoofService gamePropsService = GamePropsSpoofService.getInstance();
+        if (gamePropsService.isEnabled()) {
+            gamePropsService.spoofForPackage(data.appInfo.packageName);
         }
 
         if (mProfiler.profileFd != null) {
