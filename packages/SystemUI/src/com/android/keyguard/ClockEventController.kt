@@ -482,6 +482,10 @@ constructor(
             localeBroadcastReceiver,
             IntentFilter(Intent.ACTION_LOCALE_CHANGED),
         )
+
+        // Proactively update timezone on listener registration to avoid race conditions on startup.
+        clock?.events?.onTimeZoneChanged(IcuTimeZone.getDefault())
+
         configurationController.addCallback(configListener)
         batteryController.addCallback(batteryCallback)
         keyguardUpdateMonitor.registerCallback(keyguardUpdateMonitorCallback)
