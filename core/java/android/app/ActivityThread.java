@@ -131,6 +131,7 @@ import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.BluetoothServiceManager;
 import android.os.Build;
+import android.security.pif.PlayIntegritySpoofService;
 import android.os.Bundle;
 import android.os.CancellationSignal;
 import android.os.DdmSyncStageUpdater;
@@ -7878,6 +7879,14 @@ public final class ActivityThread extends ClientTransactionHandler
         // Pass data directory path to ART. This is used for caching information and
         // should be set before any application code is loaded.
         VMRuntime.setProcessDataDirectory(data.appInfo.dataDir);
+
+        PlayIntegritySpoofService pifService = PlayIntegritySpoofService.getInstance();
+        if (pifService.shouldSpoof(data.processName)) {
+            pifService.spoofBuildFields(data.processName);
+            if (pifService.isSpoofSignatureEnabled()) {
+                pifService.spoofSignature();
+            }
+        }
 
         if (mProfiler.profileFd != null) {
             mProfiler.startProfiling();
