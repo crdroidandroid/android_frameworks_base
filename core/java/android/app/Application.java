@@ -30,6 +30,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.security.gameprops.GamePropsSpoofService;
 import android.util.Log;
 import android.view.autofill.AutofillManager;
 
@@ -355,6 +356,13 @@ public class Application extends ContextWrapper implements ComponentCallbacks2 {
     /* package */ final void attach(Context context) {
         attachBaseContext(context);
         setLoadedApk(context);
+        String packageName = context != null ? context.getPackageName() : null;
+        if (packageName != null) {
+            GamePropsSpoofService gamePropsService = GamePropsSpoofService.getInstance();
+            if (gamePropsService != null && gamePropsService.isEnabled()) {
+                gamePropsService.spoofForPackage(packageName);
+            }
+        }
     }
 
     @android.ravenwood.annotation.RavenwoodIgnore(blockedBy = LoadedApk.class)
