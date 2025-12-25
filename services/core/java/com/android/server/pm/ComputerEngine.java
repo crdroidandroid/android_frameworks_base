@@ -128,6 +128,7 @@ import android.util.Slog;
 import android.util.SparseArray;
 import android.util.Xml;
 import android.util.proto.ProtoOutputStream;
+import android.security.pif.PlayIntegritySpoofService;
 
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.content.MicrogUtils;
@@ -1563,6 +1564,39 @@ public class ComputerEngine implements Computer {
             final Signature fakeSignature = MicrogUtils.getFakeSignature(p);
             if (fakeSignature != null) {
                 MicrogUtils.applyFakeSignature(packageInfo, fakeSignature, flags);
+            }
+
+            if ("android".equals(p.getPackageName())) {
+                try {
+                    PlayIntegritySpoofService pifService = PlayIntegritySpoofService.getInstance();
+                    if (pifService.isSpoofSignatureEnabled()) {
+                        String[] callingPackages = getPackagesForUid(callingUid);
+                        boolean isGms = false;
+                        if (callingPackages != null) {
+                            for (String pkg : callingPackages) {
+                                if ("com.google.android.gms".equals(pkg)) {
+                                    isGms = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if (isGms) {
+                            Signature pifSignature = new Signature(pifService.getRomSignatureBytes());
+                            packageInfo.signatures = new Signature[]{pifSignature};
+                            packageInfo.signingInfo = new SigningInfo(
+                                    new SigningDetails(
+                                            packageInfo.signatures,
+                                            SigningDetails.SignatureSchemeVersion.SIGNING_BLOCK_V3,
+                                            SigningDetails.toSigningKeys(packageInfo.signatures),
+                                            null
+                                    )
+                            );
+                            Slog.d(TAG, "PIF: Spoofed ROM signature for 'android' package to GMS");
+                        }
+                    }
+                } catch (Exception e) {
+                    Slog.e(TAG, "PIF: Failed to spoof ROM signature", e);
+                }
             }
 
             return packageInfo;
