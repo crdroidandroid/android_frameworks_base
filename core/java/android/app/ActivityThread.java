@@ -7894,6 +7894,10 @@ public final class ActivityThread extends ClientTransactionHandler
             gamePropsService.spoofForPackage(data.appInfo.packageName);
         }
 
+        if (pifService.shouldSpoofPhotos(data.appInfo.packageName)) {
+            pifService.spoofPhotosProps();
+        }
+
         if (mProfiler.profileFd != null) {
             mProfiler.startProfiling();
         }

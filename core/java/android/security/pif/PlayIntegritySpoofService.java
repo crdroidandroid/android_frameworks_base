@@ -1,5 +1,6 @@
 package android.security.pif;
 
+import android.app.ActivityThread;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
@@ -7,6 +8,7 @@ import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.SystemProperties;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.util.JsonReader;
 import android.util.Log;
@@ -19,6 +21,7 @@ import java.io.StringReader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /** @hide */
@@ -36,6 +39,50 @@ public final class PlayIntegritySpoofService {
     private static final String DROIDGUARD_PACKAGE = "com.google.android.gms.unstable";
     private static final String VENDING_PACKAGE = "com.android.vending";
     private static final String GMS_PACKAGE = "com.google.android.gms";
+    private static final String GPHOTOS_PACKAGE = "com.google.android.apps.photos";
+
+    private static final Map<String, Object> PIXEL_XL_PROPS = Map.of(
+        "BRAND", "google",
+        "MANUFACTURER", "Google",
+        "DEVICE", "marlin",
+        "PRODUCT", "marlin",
+        "HARDWARE", "marlin",
+        "ID", "QP1A.191005.007.A3",
+        "MODEL", "Pixel XL",
+        "FINGERPRINT", "google/marlin/marlin:10/QP1A.191005.007.A3/5972272:user/release-keys"
+    );
+
+    private static final Set<String> NEXUS_FEATURES = Set.of(
+        "com.google.android.apps.photos.NEXUS_PRELOAD",
+        "com.google.android.apps.photos.nexus_preload",
+        "com.google.android.feature.PIXEL_EXPERIENCE",
+        "com.google.android.feature.GOOGLE_BUILD",
+        "com.google.android.feature.GOOGLE_EXPERIENCE"
+    );
+
+    private static final Set<String> PIXEL_FEATURES = Set.of(
+        "com.google.android.feature.PIXEL_2022_EXPERIENCE",
+        "com.google.android.feature.PIXEL_2022_MIDYEAR_EXPERIENCE",
+        "com.google.android.feature.PIXEL_2023_EXPERIENCE",
+        "com.google.android.feature.PIXEL_2023_MIDYEAR_EXPERIENCE",
+        "com.google.android.feature.PIXEL_2024_EXPERIENCE",
+        "com.google.android.feature.PIXEL_2024_MIDYEAR_EXPERIENCE",
+        "com.google.android.feature.PIXEL_2025_EXPERIENCE",
+        "com.google.android.feature.PIXEL_2025_MIDYEAR_EXPERIENCE",
+        "com.google.android.feature.PIXEL_2026_EXPERIENCE",
+        "com.google.android.feature.PIXEL_2026_MIDYEAR_EXPERIENCE",
+        "com.google.android.feature.PIXEL_2021_EXPERIENCE",
+        "com.google.android.feature.PIXEL_2021_MIDYEAR_EXPERIENCE",
+        "com.google.android.feature.PIXEL_2020_EXPERIENCE",
+        "com.google.android.feature.PIXEL_2020_MIDYEAR_EXPERIENCE",
+        "PIXEL_2017_PRELOAD",
+        "PIXEL_2018_PRELOAD",
+        "PIXEL_2019_MIDYEAR_PRELOAD",
+        "PIXEL_2019_PRELOAD",
+        "PIXEL_2020_EXPERIENCE",
+        "PIXEL_2020_MIDYEAR_EXPERIENCE",
+        "PIXEL_EXPERIENCE"
+    );
 
     private static final String ROM_SIGNATURE_DATA = "MIIFyTCCA7GgAwIBAgIVALyxxl+zDS9SL68SzOr48309eAZyMA0GCSqGSIb3DQEBCwUAMHQxCzAJ" +
             "BgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYwFAYDVQQHEw1Nb3VudGFpbiBWaWV3MRQw" +
@@ -74,6 +121,7 @@ public final class PlayIntegritySpoofService {
     private boolean mSpoofSignature = false;
     private boolean mSpoofVendingBuild = true;
     private boolean mSpoofVendingSdk = false;
+    private boolean mSpoofPhotos = false;
     private boolean mDebug = false;
 
     private final Map<String, String> mBuildFields = new ConcurrentHashMap<>();
@@ -217,6 +265,9 @@ public final class PlayIntegritySpoofService {
                 break;
             case "spoofVendingSdk":
                 mSpoofVendingSdk = "1".equals(value) || "true".equalsIgnoreCase(value);
+                break;
+            case "spoofPhotos":
+                mSpoofPhotos = "1".equals(value) || "true".equalsIgnoreCase(value);
                 break;
             case "DEBUG":
                 mDebug = "1".equals(value) || "true".equalsIgnoreCase(value);
@@ -465,6 +516,30 @@ public final class PlayIntegritySpoofService {
 
     public byte[] getRomSignatureBytes() {
         return Base64.decode(ROM_SIGNATURE_DATA, Base64.DEFAULT);
+    }
+
+    public boolean shouldSpoofPhotos(String packageName) {
+        return mConfigLoaded && mSpoofPhotos && TextUtils.equals(GPHOTOS_PACKAGE, packageName);
+    }
+
+    public void spoofPhotosProps() {
+        for (Map.Entry<String, Object> entry : PIXEL_XL_PROPS.entrySet()) {
+            spoofField(entry.getKey(), String.valueOf(entry.getValue()), "Photos");
+        }
+        Log.i(TAG, "Photos spoofing enabled - device appears as Pixel XL");
+    }
+
+    public Boolean hasSystemFeature(String name, int version) {
+        final String pkgName = ActivityThread.currentPackageName();
+        if (shouldSpoofPhotos(pkgName)) {
+            if (!isPixelDevice() && PIXEL_FEATURES.contains(name)) return false;
+            return NEXUS_FEATURES.contains(name);
+        }
+        return null;
+    }
+
+    private static boolean isPixelDevice() {
+        return SystemProperties.get("ro.soc.manufacturer", "").equalsIgnoreCase("google");
     }
 
     public void logBuildFields() {
