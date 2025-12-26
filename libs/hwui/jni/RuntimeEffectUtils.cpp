@@ -94,7 +94,9 @@ void UpdateChild(JNIEnv* env, SkRuntimeEffectBuilder* builder, const char* child
         return;
     }
 
-    builderChild = sk_ref_sp(childEffect);
+    sk_sp<SkFlattenable> childEffectTemp = sk_ref_sp(childEffect);
+    childEffectTemp->unref();
+    builderChild = childEffectTemp;
 }
 
 }  // namespace uirenderer
