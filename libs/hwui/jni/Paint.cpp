@@ -920,7 +920,9 @@ namespace PaintGlue {
                                    jlong xfermodeHandle) {
         Paint* paint = reinterpret_cast<Paint*>(paintHandle);
         SkBlender* blender = reinterpret_cast<SkBlender*>(xfermodeHandle);
-        paint->setBlender(sk_ref_sp(blender));
+        sk_sp<SkBlender> blenderTemp = sk_ref_sp(blender);
+        blenderTemp->unref();
+        paint->setBlender(blenderTemp);
     }
 
     static jlong setPathEffect(CRITICAL_JNI_PARAMS_COMMA jlong objHandle, jlong effectHandle) {
