@@ -1452,6 +1452,14 @@ public final class SystemServer implements Dumpable {
         }
         t.traceEnd();
 
+        t.traceBegin("InitVBMetaDigest");
+        try {
+            android.security.trickystore.AttestationUtils.initBootHash();
+        } catch (Throwable e) {
+            Slog.e(TAG, "Failed to init VBMeta digest", e);
+        }
+        t.traceEnd();
+
         // Manages Resources packages
         t.traceBegin("StartResourcesManagerService");
         ResourcesManagerService resourcesService = new ResourcesManagerService(mSystemContext);
