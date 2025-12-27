@@ -1777,12 +1777,20 @@ public final class SystemServer implements Dumpable {
 
             // latency test ONLY
             // this is probably no-op, intializes the tricky store instance for system server 
-            // for system use cases - nte: maybe not needed at all, since keystore/cert requests are per-app context
+            // for system use cases - setting vbmeta digest prop
             t.traceBegin("StartTrickyStoreService");
             try {
                 android.security.trickystore.TrickyStoreService.getInstance().initialize();
             } catch (Throwable e) {
                 Slog.e(TAG, "Failed to initialize TrickyStoreService", e);
+            }
+            t.traceEnd();
+
+            t.traceBegin("InitVBMetaDigest");
+            try {
+                android.security.trickystore.AttestationUtils.initBootHash();
+            } catch (Throwable e) {
+                Slog.e(TAG, "Failed to init VBMeta digest", e);
             }
             t.traceEnd();
 
