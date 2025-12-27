@@ -28,7 +28,7 @@
         android:layout_height="24dp"
         android:layout_marginBottom="@dimen/global_actions_power_dialog_item_bottom_margin"
         android:scaleType="centerInside"
-        android:tint="@color/control_primary_text" />
+        android:tint="@color/materialColorOnSurface" />
     <TextView
         android:id="@*android:id/message"
         android:layout_width="match_parent"
@@ -39,7 +39,7 @@
         android:maxLines="1"
         android:textSize="12sp"
         android:gravity="center"
-        android:textColor="@color/control_primary_text"
+        android:textColor="@color/materialColorOnSurface"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 </com.android.systemui.globalactions.GlobalActionsItem>
 
