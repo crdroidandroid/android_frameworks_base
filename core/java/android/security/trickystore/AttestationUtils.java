@@ -2,10 +2,15 @@ package android.security.trickystore;
 
 import android.os.Build;
 import android.os.SystemProperties;
+import android.security.keystore.KeyGenParameterSpec;
+import android.security.keystore.KeyProperties;
 import android.util.Log;
 
-import java.security.MessageDigest;
-import java.security.SecureRandom;
+import com.android.internal.org.bouncycastle.asn1.*;
+
+import java.io.ByteArrayInputStream;
+import java.security.*;
+import java.security.cert.*;
 
 /**
  * @hide
@@ -29,10 +34,107 @@ public final class AttestationUtils {
         if (sBootHash == null) {
             sBootHash = getBootHashFromProp();
             if (sBootHash == null) {
+                sBootHash = extractBootHashFromTee();
+            }
+            if (sBootHash == null) {
+                Log.w(TAG, "Failed to get boot hash from prop and TEE, using random bytes");
                 sBootHash = generateRandomBytes(32);
             }
         }
         return sBootHash;
+    }
+
+    public static void initBootHash() {
+        Log.i(TAG, "initBootHash: Starting boot hash initialization");
+        byte[] hash = getBootHashFromProp();
+        if (hash != null) {
+            sBootHash = hash;
+            Log.i(TAG, "initBootHash: Boot hash already set from prop: " + bytesToHex(hash));
+            return;
+        }
+        Log.i(TAG, "initBootHash: No prop set, attempting TEE extraction");
+        hash = extractBootHashFromTee();
+        if (hash != null) {
+            sBootHash = hash;
+            Log.i(TAG, "initBootHash: TEE extraction successful, setting prop");
+            setVbmetaDigestProp(bytesToHex(hash));
+        } else {
+            Log.e(TAG, "initBootHash: Failed to extract boot hash from TEE");
+        }
+    }
+
+    private static void setVbmetaDigestProp(String digest) {
+        try {
+            SystemProperties.set("ro.boot.vbmeta.digest", digest);
+            Log.i(TAG, "Set ro.boot.vbmeta.digest property to TEE boot hash");
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to set vbmeta.digest property", e);
+        }
+    }
+
+    private static byte[] extractBootHashFromTee() {
+        try {
+            String alias = "trickystore_attestation_key";
+            
+            KeyPairGenerator kpg = KeyPairGenerator.getInstance(
+                KeyProperties.KEY_ALGORITHM_EC, "AndroidKeyStore");
+            KeyGenParameterSpec spec = new KeyGenParameterSpec.Builder(alias,
+                    KeyProperties.PURPOSE_SIGN | KeyProperties.PURPOSE_VERIFY)
+                    .setDigests(KeyProperties.DIGEST_SHA256)
+                    .setAttestationChallenge(new byte[32])
+                    .build();
+            kpg.initialize(spec);
+            kpg.generateKeyPair();
+            
+            KeyStore ks = KeyStore.getInstance("AndroidKeyStore");
+            ks.load(null);
+            java.security.cert.Certificate[] chain = ks.getCertificateChain(alias);
+            
+            if (chain == null || chain.length == 0) {
+                Log.e(TAG, "No certificate chain from AndroidKeyStore");
+                ks.deleteEntry(alias);
+                return null;
+            }
+            
+            X509Certificate leafCert = (X509Certificate) chain[0];
+            byte[] extValue = leafCert.getExtensionValue("1.3.6.1.4.1.11129.2.1.17");
+            
+            ks.deleteEntry(alias);
+            
+            if (extValue == null) {
+                Log.e(TAG, "No attestation extension in certificate");
+                return null;
+            }
+            
+            ASN1InputStream ais = new ASN1InputStream(extValue);
+            ASN1OctetString octet = (ASN1OctetString) ais.readObject();
+            ais.close();
+            
+            ASN1InputStream seqStream = new ASN1InputStream(octet.getOctets());
+            ASN1Sequence keyDesc = (ASN1Sequence) seqStream.readObject();
+            seqStream.close();
+            
+            ASN1Sequence teeEnforced = (ASN1Sequence) keyDesc.getObjectAt(7);
+            
+            for (int i = 0; i < teeEnforced.size(); i++) {
+                ASN1TaggedObject tagged = (ASN1TaggedObject) teeEnforced.getObjectAt(i);
+                if (tagged.getTagNo() == 704) {
+                    ASN1Sequence rootOfTrust = (ASN1Sequence) tagged.getBaseObject();
+                    if (rootOfTrust.size() >= 4) {
+                        ASN1OctetString bootHashOctet = (ASN1OctetString) rootOfTrust.getObjectAt(3);
+                        byte[] hash = bootHashOctet.getOctets();
+                        Log.i(TAG, "Extracted boot hash from TEE: " + bytesToHex(hash));
+                        return hash;
+                    }
+                }
+            }
+            
+            Log.e(TAG, "RootOfTrust not found in TEE enforced list");
+            return null;
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to extract boot hash from TEE", e);
+            return null;
+        }
     }
 
     public static byte[] getBootHashFromProp() {
