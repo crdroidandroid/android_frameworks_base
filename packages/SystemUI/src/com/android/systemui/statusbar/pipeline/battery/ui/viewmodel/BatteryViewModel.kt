@@ -24,6 +24,7 @@ import com.android.systemui.dagger.qualifiers.Application
 import com.android.systemui.lifecycle.ExclusiveActivatable
 import com.android.systemui.lifecycle.Hydrator
 import com.android.systemui.res.R
+import com.android.systemui.statusbar.pipeline.battery.data.repository.BatteryRepository
 import com.android.systemui.statusbar.pipeline.battery.domain.interactor.BatteryAttributionModel.Charging
 import com.android.systemui.statusbar.pipeline.battery.domain.interactor.BatteryAttributionModel.Defend
 import com.android.systemui.statusbar.pipeline.battery.domain.interactor.BatteryAttributionModel.PowerSave
@@ -76,6 +77,13 @@ sealed class BatteryViewModel(
             traceName = "isBatteryPercentSettingEnabled",
             initialValue = interactor.showPercentNextToIcon.value,
             source = interactor.showPercentNextToIcon,
+        )
+
+    val isBatteryPercentInsideIconSettingEnabled: Boolean by
+        hydrator.hydratedStateOf(
+            traceName = "isBatteryPercentInsideIconSettingEnabled",
+            initialValue = interactor.showPercentInsideIcon.value,
+            source = interactor.showPercentInsideIcon,
         )
 
     /** A [List<BatteryGlyph>] representation of the current [level] */
@@ -211,6 +219,13 @@ sealed class BatteryViewModel(
                         }
                     }
                 },
+        )
+
+    val batteryIconStyle: Int by
+        hydrator.hydratedStateOf(
+            traceName = "batteryIconStyle",
+            initialValue = BatteryRepository.ICON_STYLE_DEFAULT,
+            source = interactor.batteryIconStyle,
         )
 
     /** For use in the shade, where we might need to show an estimate */
