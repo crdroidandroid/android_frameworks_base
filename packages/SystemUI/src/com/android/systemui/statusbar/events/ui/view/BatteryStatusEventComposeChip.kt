@@ -41,6 +41,7 @@ import com.android.systemui.res.R
 import com.android.systemui.statusbar.core.NewStatusBarIcons
 import com.android.systemui.statusbar.core.RudimentaryBattery
 import com.android.systemui.statusbar.events.BackgroundAnimatableView
+import com.android.systemui.statusbar.pipeline.battery.data.repository.BatteryRepository
 import com.android.systemui.statusbar.pipeline.battery.domain.interactor.BatteryInteractor
 import com.android.systemui.statusbar.pipeline.battery.shared.ui.BatteryColors
 import com.android.systemui.statusbar.pipeline.battery.shared.ui.BatteryGlyph
@@ -106,7 +107,9 @@ private fun UnifiedBatteryChip(level: Int) {
     val height = with(LocalDensity.current) { BatteryViewModel.STATUS_BAR_BATTERY_HEIGHT.toDp() }
     BatteryLayout(
         attribution = BatteryGlyph.Bolt, // Always charging
+        iconStyleProvider = { BatteryRepository.ICON_STYLE_DEFAULT },
         levelProvider = { level },
+        showLevelProvider = { false },
         isFullProvider = { isFull },
         glyphsProvider = { level.glyphRepresentation() },
         colorsProvider = { BatteryColors.DarkTheme.Charging },
@@ -124,7 +127,9 @@ private fun BatteryAndPercentChip(level: Int) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         BatteryLayout(
             attribution = BatteryGlyph.Bolt, // Always charging
+            iconStyleProvider = { BatteryRepository.ICON_STYLE_DEFAULT },
             levelProvider = { level },
+            showLevelProvider = { false },
             isFullProvider = { isFull },
             glyphsProvider = { emptyList() },
             colorsProvider = { BatteryColors.DarkTheme.Charging },
