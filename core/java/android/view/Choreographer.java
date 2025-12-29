@@ -1075,7 +1075,9 @@ public final class Choreographer {
                 // Calculating jitter involves using the original frame time without
                 // adjustments from buffer stuffing
                 final long jitterNanos = startNanos - frameTimeNanos;
-                if (jitterNanos >= frameIntervalNanos) {
+                if (jitterNanos >= frameIntervalNanos
+                        && (timeline.mVsyncId != FrameInfo.INVALID_VSYNC_ID
+                        || vsyncEventData.frameInterval != -1)) {
                     frameTimeNanos = startNanos;
                     if (frameIntervalNanos == 0) {
                         Log.i(TAG, "Vsync data empty due to timeout");
