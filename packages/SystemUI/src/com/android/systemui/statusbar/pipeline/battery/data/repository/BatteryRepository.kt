@@ -175,8 +175,10 @@ constructor(
 
                 fun readMode(): Int {
                     return LineageSettings.System.getIntForUser(
-                        resolver, LineageSettings.System.STATUS_BAR_SHOW_BATTERY_PERCENT,
-                        BatteryRepository.SHOW_PERCENT_HIDDEN, UserHandle.USER_CURRENT
+                        resolver,
+                        LineageSettings.System.STATUS_BAR_SHOW_BATTERY_PERCENT,
+                        BatteryRepository.SHOW_PERCENT_HIDDEN,
+                        UserHandle.USER_CURRENT,
                     )
                 }
 
@@ -187,8 +189,12 @@ constructor(
                         }
                     }
 
-                resolver.registerContentObserver(uri, /* notifyForDescendants = */ false,
-                    observer, UserHandle.USER_ALL)
+                resolver.registerContentObserver(
+                    uri,
+                    /* notifyForDescendants = */ false,
+                    observer,
+                    UserHandle.USER_ALL,
+                )
 
                 // Emit current value immediately
                 trySend(readMode())
@@ -200,7 +206,7 @@ constructor(
             .stateIn(
                 scope = scope,
                 started = SharingStarted.Lazily,
-                initialValue = BatteryRepository.SHOW_PERCENT_HIDDEN
+                initialValue = BatteryRepository.SHOW_PERCENT_HIDDEN,
             )
 
     /** Get and re-fetch the estimate every 2 minutes while active */

@@ -82,7 +82,6 @@ fun BatteryWithPercent(
                 viewModel = viewModel,
                 isDarkProvider = isDarkProvider,
                 modifier = Modifier.height(batteryHeight).wrapContentWidth(),
-                suppressAttribution = showPercent,
             )
         }
 
