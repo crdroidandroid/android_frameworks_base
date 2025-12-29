@@ -24,6 +24,7 @@ import android.widget.Button
 import android.widget.FrameLayout
 import android.view.ContextThemeWrapper
 import android.view.Gravity
+import kotlin.math.roundToInt
 import androidx.annotation.MainThread
 import com.android.systemui.dagger.qualifiers.Background
 import com.android.systemui.dagger.qualifiers.Main
@@ -89,31 +90,32 @@ class FlashlightDialogDelegate @Inject constructor(
 
     override fun onCreate(dialog: SystemUIDialog, savedInstanceState: Bundle?) {
         val maxLevel = flashlightController.getMaxLevel()
+        val numLevels = maxLevel.coerceAtLeast(1)
         val currentPercent = flashlightController.getCurrentPercent()
 
         slider.isEnabled = flashlightController.isEnabled()
         slider.valueFrom = 1f
-        slider.valueTo = 100f
-        slider.value = (currentPercent * 100f).coerceAtLeast(1f)
-        slider.setLabelFormatter { value -> value.toInt().toString() }
+        slider.valueTo = numLevels.toFloat()
+        slider.stepSize = 1f
+        slider.value = ((currentPercent * numLevels).roundToInt()).coerceIn(1, numLevels).toFloat()
+        slider.setLabelFormatter { value ->
+            ((value / numLevels) * 100).roundToInt().coerceIn(0, 100).toString() + "%" }
 
-        var last = -1
+        var lastLevel = -1
         slider.addOnChangeListener { _, value, fromUser ->
             if (fromUser) {
-                val percent = value / 100f
-                val p = Math.round(percent * 100)
-                if (p != last) {
+                val level = value.toInt()
+                if (level != lastLevel) {
                     vibrator?.vibrate(flashlightMoveHaptic)
-                    last = p
+                    lastLevel = level
                 }
-                updateFlashlightStrength(percent, maxLevel)
+                updateFlashlightStrength(level, maxLevel)
             }
         }
     }
 
     @MainThread
-    private fun updateFlashlightStrength(percent: Float, maxLevel: Int) {
-        val level = (percent * maxLevel).toInt().coerceAtLeast(1)
+    private fun updateFlashlightStrength(level: Int, maxLevel: Int) {
         flashlightController.setFlashlightStrengthLevel(level)
     }
 }
