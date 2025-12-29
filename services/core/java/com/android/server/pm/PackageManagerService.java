@@ -3416,7 +3416,7 @@ public class PackageManagerService implements PackageSender, TestUtilityService 
                 // TODO Do we have to do it even if userId != UserHandle.USER_ALL?  Otherwise,
                 // this check is probably not needed, since DO should be registered as a device
                 // admin on some user too. (Original bug for this: b/17657954)
-                if (packageName.equals(deviceOwnerPackageName)) {
+                if (packageName != null && packageName.equals(deviceOwnerPackageName)) {
                     return true;
                 }
                 // Does it contain a device admin for any user?
