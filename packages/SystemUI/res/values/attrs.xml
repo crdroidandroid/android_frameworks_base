@@ -46,7 +46,6 @@
             <enum name="small" value="1" />
             <enum name="gone" value="2" />
         </attr>
-        <attr name="isStatusBar" format="boolean" />
         <attr name="showDark" format="boolean" />
     </declare-styleable>
     <attr name="orientation">

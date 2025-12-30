@@ -424,8 +424,6 @@ constructor(
                                 activeClock.setIsActiveClock(true)
                             }
 
-                            val showClock = finalVisibility.visibility == View.VISIBLE
-
                             // Hide all clocks first
                             leftClock.visibility = View.GONE
                             centerClock.visibility = View.GONE
@@ -433,16 +431,6 @@ constructor(
 
                             // Show only the active one
                             activeClock.adjustVisibility(finalVisibility)
-
-                            leftClock.setVisibleByModernization(
-                                showClock && activeClock === leftClock
-                            )
-                            centerClock.setVisibleByModernization(
-                                showClock && activeClock === centerClock
-                            )
-                            rightClock.setVisibleByModernization(
-                                showClock && activeClock === rightClock
-                            )
                         }
                     }
 
