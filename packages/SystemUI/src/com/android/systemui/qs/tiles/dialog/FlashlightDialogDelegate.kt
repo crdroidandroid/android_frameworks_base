@@ -106,7 +106,7 @@ class FlashlightDialogDelegate @Inject constructor(
             if (fromUser) {
                 val level = value.toInt()
                 if (level != lastLevel) {
-                    vibrator?.vibrate(flashlightMoveHaptic)
+                    vibrateForLevel(level, numLevels)
                     lastLevel = level
                 }
                 updateFlashlightStrength(level, maxLevel)
@@ -114,8 +114,33 @@ class FlashlightDialogDelegate @Inject constructor(
         }
     }
 
+    private fun vibrateForLevel(level: Int, maxLevel: Int) {
+        val v = vibrator ?: return
+        if (!v.hasVibrator()) return
+
+        val safeMax = maxLevel.coerceAtLeast(1)
+        val safeLevel = level.coerceIn(1, safeMax)
+        val denom = (safeMax - 1).coerceAtLeast(1)
+        val t = ((safeLevel - 1).toFloat() / denom).coerceIn(0f, 1f)
+        val minScale = 0.12f
+        val scale = (minScale + (1.0f - minScale) * t).coerceIn(0f, 1f)
+
+        val primitive = VibrationEffect.Composition.PRIMITIVE_LOW_TICK
+        if (v.areAllPrimitivesSupported(primitive)) {
+            val effect = VibrationEffect.startComposition()
+                .addPrimitive(primitive, scale)
+                .compose()
+            v.vibrate(effect)
+        } else {
+            // Fallback
+            v.vibrate(flashlightMoveHaptic)
+        }
+    }
+
     @MainThread
     private fun updateFlashlightStrength(level: Int, maxLevel: Int) {
-        flashlightController.setFlashlightStrengthLevel(level)
+        flashlightController.setFlashlightStrengthLevel(
+            level.coerceIn(1, maxLevel.coerceAtLeast(1))
+        )
     }
 }
