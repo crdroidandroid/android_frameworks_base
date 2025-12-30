@@ -1,12 +1,17 @@
 package android.security.trickystore;
 
 import android.os.FileObserver;
+import android.security.keystore.KeyGenParameterSpec;
+import android.security.keystore.KeyProperties;
 import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.security.KeyPairGenerator;
+import java.security.KeyStore;
+import java.security.spec.ECGenParameterSpec;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -204,22 +209,63 @@ public class TrickyStoreService {
         }
     }
 
+    private void ensureTeeStatus() {
+        if (mTeeBroken == null) {
+            synchronized (this) {
+                if (mTeeBroken == null) {
+                    mTeeBroken = checkTeeBroken();
+                    if (mTeeBroken) {
+                        AttestationUtils.setTeeBroken(true);
+                    }
+                }
+            }
+        }
+    }
+
+    private boolean checkTeeBroken() {
+        try {
+            String alias = "TrickyStoreTeeCheck";
+            KeyPairGenerator kpg = KeyPairGenerator.getInstance(
+                    KeyProperties.KEY_ALGORITHM_EC, "AndroidKeyStore");
+            KeyGenParameterSpec.Builder builder = new KeyGenParameterSpec.Builder(
+                    alias, KeyProperties.PURPOSE_SIGN)
+                    .setAlgorithmParameterSpec(new ECGenParameterSpec("secp256r1"))
+                    .setDigests(KeyProperties.DIGEST_SHA256)
+                    .setAttestationChallenge(new byte[16]);
+            
+            kpg.initialize(builder.build());
+            kpg.generateKeyPair();
+            
+            KeyStore ks = KeyStore.getInstance("AndroidKeyStore");
+            ks.load(null);
+            ks.deleteEntry(alias);
+            
+            Log.i(TAG, "TEE verification successful");
+            return false;
+        } catch (Exception e) {
+            Log.w(TAG, "TEE verification failed, TEE is broken", e);
+            return true;
+        }
+    }
+
     public boolean needHack(int callingUid, String[] packages) {
         if (packages == null) return false;
+        ensureTeeStatus();
         for (String pkg : packages) {
             Mode mode = mPackageModes.get(pkg);
             if (mode == Mode.LEAF_HACK) return true;
-            if (mode == Mode.AUTO && mTeeBroken != null && !mTeeBroken) return true;
+            if (mode == Mode.AUTO && !mTeeBroken) return true;
         }
         return false;
     }
 
     public boolean needGenerate(int callingUid, String[] packages) {
         if (packages == null) return false;
+        ensureTeeStatus();
         for (String pkg : packages) {
             Mode mode = mPackageModes.get(pkg);
             if (mode == Mode.GENERATE) return true;
-            if (mode == Mode.AUTO && mTeeBroken != null && mTeeBroken) return true;
+            if (mode == Mode.AUTO && mTeeBroken) return true;
         }
         return false;
     }
