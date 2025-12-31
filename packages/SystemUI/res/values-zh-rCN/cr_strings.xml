@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     SPDX-FileCopyrightText: 2016-2025 crDroid Android Project
+     SPDX-FileCopyrightText: 2016-2026 crDroid Android Project
      SPDX-License-Identifier: Apache-2.0
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
@@ -76,6 +76,11 @@
     <string name="tristate_rotation_0">纵向</string>
     <string name="tristate_rotation_90">横向 (90°)</string>
     <string name="tristate_rotation_270">横向 (270°)</string>
+    <!-- Data usage info in QS footer -->
+    <string name="usage_data">今日使用</string>
+    <string name="usage_data_weekly">本周使用</string>
+    <string name="usage_data_default_suffix">数据</string>
+    <string name="usage_wifi_default_suffix">Wi-Fi</string>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">要强行停止吗？</string>
     <string name="force_stop_dlg_text">强行停止某个应用可能会导致其出现异常。</string>
@@ -125,14 +130,13 @@
     <string name="quick_settings_locale_more_locales_toast">请先配置多语言设置</string>
     <!-- AI Assistant affordance [CHAR LIMIT=32] -->
     <string name="accessibility_assistant_button">AI 助手</string>
-    <!-- Text while recognizing face -->
-    <string name="face_unlock_recognizing">正在识别面部...</string>
     <!-- Preferred network tile -->
     <string name="qs_preferred_network_label">首选网络类型</string>
     <string name="qs_preferred_network_lte">4g / LTE</string>
     <string name="qs_preferred_network_nr">5g / NR</string>
-    <string name="qs_preferred_network_3g">3G</string>
     <string name="qs_preferred_network_unsupported">不支持</string>
+    <!-- Text while recognizing face -->
+    <string name="face_unlock_recognizing">正在识别面部...</string>
     <!-- Flashlight Strength -->
     <string name="flashlight_strength_title">手电筒强度</string>
     <string name="flashlight_strength_turn_off">关闭</string>
@@ -143,11 +147,6 @@
     </plurals>
     <!-- 5G toggle in Internet Dialog -->
     <string name="enable_fiveg">启用5G</string>
-    <!-- Data usage info in QS footer -->
-    <string name="usage_data">今日使用</string>
-    <string name="usage_data_weekly">本周使用</string>
-    <string name="usage_data_default_suffix">数据</string>
-    <string name="usage_wifi_default_suffix">Wi-Fi</string>
     <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
     <string name="screenrecord_delete_label">删除</string>
     <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
