@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     SPDX-FileCopyrightText: 2016-2025 crDroid Android Project
+     SPDX-FileCopyrightText: 2016-2026 crDroid Android Project
      SPDX-License-Identifier: Apache-2.0
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
@@ -76,6 +76,11 @@
     <string name="tristate_rotation_0">الوضع الرأسي</string>
     <string name="tristate_rotation_90">عرضي (90 درجة)</string>
     <string name="tristate_rotation_270">عرضي (270 درجة)</string>
+    <!-- Data usage info in QS footer -->
+    <string name="usage_data">المستخدم اليوم</string>
+    <string name="usage_data_weekly">used this week</string>
+    <string name="usage_data_default_suffix">البيانات</string>
+    <string name="usage_wifi_default_suffix">واي-فاي</string>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">فرض إيقاف؟</string>
     <string name="force_stop_dlg_text">في حالة فرض إيقاف التطبيق، ربما لا يعمل بشكل صحيح.</string>
@@ -125,14 +130,13 @@
     <string name="quick_settings_locale_more_locales_toast">قم بتهيئة عدة لغات اولآ</string>
     <!-- AI Assistant affordance [CHAR LIMIT=32] -->
     <string name="accessibility_assistant_button">مساعد AI</string>
-    <!-- Text while recognizing face -->
-    <string name="face_unlock_recognizing">يتم التعرف على الوجه...</string>
     <!-- Preferred network tile -->
     <string name="qs_preferred_network_label">Preferred network</string>
     <string name="qs_preferred_network_lte">4G / LTE</string>
     <string name="qs_preferred_network_nr">5G / NR</string>
-    <string name="qs_preferred_network_3g">3G</string>
     <string name="qs_preferred_network_unsupported">Unsupported</string>
+    <!-- Text while recognizing face -->
+    <string name="face_unlock_recognizing">يتم التعرف على الوجه...</string>
     <!-- Flashlight Strength -->
     <string name="flashlight_strength_title">Flashlight Strength</string>
     <string name="flashlight_strength_turn_off">Turn off</string>
@@ -148,11 +152,6 @@
     </plurals>
     <!-- 5G toggle in Internet Dialog -->
     <string name="enable_fiveg">تمكين 5G</string>
-    <!-- Data usage info in QS footer -->
-    <string name="usage_data">المستخدم اليوم</string>
-    <string name="usage_data_weekly">used this week</string>
-    <string name="usage_data_default_suffix">البيانات</string>
-    <string name="usage_wifi_default_suffix">واي-فاي</string>
     <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
     <string name="screenrecord_delete_label">حذف</string>
     <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
