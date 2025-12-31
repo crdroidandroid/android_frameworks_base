@@ -3318,7 +3318,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
         final boolean hasMenu = (activeHardwareKeys & KEY_MASK_MENU) != 0;
         final boolean hasAssist = (activeHardwareKeys & KEY_MASK_ASSIST) != 0;
-        final boolean hasAppSwitch = (activeHardwareKeys & KEY_MASK_APP_SWITCH) != 0;
 
         final ContentResolver resolver = mContext.getContentResolver();
         final Resources res = mContext.getResources();
@@ -3371,11 +3370,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     LineageSettings.System.KEY_ASSIST_LONG_PRESS_ACTION,
                     mAssistLongPressAction);
         }
-        if (hasAppSwitch) {
-            mAppSwitchPressAction = Action.fromSettings(resolver,
-                    LineageSettings.System.KEY_APP_SWITCH_ACTION,
-                    mAppSwitchPressAction);
-        }
+        mAppSwitchPressAction = Action.fromSettings(resolver,
+                LineageSettings.System.KEY_APP_SWITCH_ACTION,
+                mAppSwitchPressAction);
         mAppSwitchLongPressAction = Action.fromSettings(resolver,
                 LineageSettings.System.KEY_APP_SWITCH_LONG_PRESS_ACTION,
                 mAppSwitchLongPressAction);
