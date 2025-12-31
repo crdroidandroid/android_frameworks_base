@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     SPDX-FileCopyrightText: 2016-2025 crDroid Android Project
+     SPDX-FileCopyrightText: 2016-2026 crDroid Android Project
      SPDX-License-Identifier: Apache-2.0
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
@@ -76,6 +76,11 @@
     <string name="tristate_rotation_0">세로</string>
     <string name="tristate_rotation_90">가로(90°)</string>
     <string name="tristate_rotation_270">가로(270°)</string>
+    <!-- Data usage info in QS footer -->
+    <string name="usage_data">를 오늘 사용함</string>
+    <string name="usage_data_weekly">used this week</string>
+    <string name="usage_data_default_suffix">데이터</string>
+    <string name="usage_wifi_default_suffix">와이파이</string>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">강제 종료하시겠습니까?</string>
     <string name="force_stop_dlg_text">앱을 강제로 종료하면 문제가 발생할 수 있습니다.</string>
@@ -125,14 +130,13 @@
     <string name="quick_settings_locale_more_locales_toast">먼저 둘 이상의 언어를 사용 설정하세요.</string>
     <!-- AI Assistant affordance [CHAR LIMIT=32] -->
     <string name="accessibility_assistant_button">AI 어시스턴트</string>
-    <!-- Text while recognizing face -->
-    <string name="face_unlock_recognizing">얼굴 인식 중\u2026</string>
     <!-- Preferred network tile -->
     <string name="qs_preferred_network_label">Preferred network</string>
     <string name="qs_preferred_network_lte">4G / LTE</string>
     <string name="qs_preferred_network_nr">5G / NR</string>
-    <string name="qs_preferred_network_3g">3G</string>
     <string name="qs_preferred_network_unsupported">Unsupported</string>
+    <!-- Text while recognizing face -->
+    <string name="face_unlock_recognizing">얼굴 인식 중\u2026</string>
     <!-- Flashlight Strength -->
     <string name="flashlight_strength_title">Flashlight Strength</string>
     <string name="flashlight_strength_turn_off">Turn off</string>
@@ -143,11 +147,6 @@
     </plurals>
     <!-- 5G toggle in Internet Dialog -->
     <string name="enable_fiveg">5G 사용</string>
-    <!-- Data usage info in QS footer -->
-    <string name="usage_data">를 오늘 사용함</string>
-    <string name="usage_data_weekly">used this week</string>
-    <string name="usage_data_default_suffix">데이터</string>
-    <string name="usage_wifi_default_suffix">와이파이</string>
     <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
     <string name="screenrecord_delete_label">삭제</string>
     <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
