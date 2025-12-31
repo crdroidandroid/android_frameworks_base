@@ -35,7 +35,7 @@ public class FontController {
     private static FontController sInstance = null;
 
     private static final Set<String> OVERRIDE_FONTS = new HashSet<>(Arrays.asList(
-            "google", "sans-serif", "gsf-"
+            "google", "sans-serif", "gsf-", "variable"
     ));
 
     private static final Set<String> EXCLUDED_APPS = new HashSet<>(Arrays.asList(
@@ -56,6 +56,22 @@ public class FontController {
         WEIGHT_MAP.put("bold", 700);
         WEIGHT_MAP.put("extrabold", 800);
         WEIGHT_MAP.put("black", 900);
+        WEIGHT_MAP.put("emphasized", 700);
+        WEIGHT_MAP.put("display-large", 400);
+        WEIGHT_MAP.put("display-medium", 400);
+        WEIGHT_MAP.put("display-small", 400);
+        WEIGHT_MAP.put("headline-large", 400);
+        WEIGHT_MAP.put("headline-medium", 400);
+        WEIGHT_MAP.put("headline-small", 400);
+        WEIGHT_MAP.put("title-large", 500);
+        WEIGHT_MAP.put("title-medium", 500);
+        WEIGHT_MAP.put("title-small", 500);
+        WEIGHT_MAP.put("label-large", 500);
+        WEIGHT_MAP.put("label-medium", 500);
+        WEIGHT_MAP.put("label-small", 500);
+        WEIGHT_MAP.put("body-large", 400);
+        WEIGHT_MAP.put("body-medium", 400);
+        WEIGHT_MAP.put("body-small", 400);
     }
 
     public static FontController get() {
@@ -101,7 +117,7 @@ public class FontController {
         String pkgName = getCurrentPackageName();
         if (pkgName == null || EXCLUDED_APPS.contains(pkgName)) return;
         logger("handleOnConfiguration: Changing default font to: " + Typeface.getFontName());
-        Typeface.changeFont(res);
+        Typeface.changeFont();
     }
 
     private static String getCurrentPackageName() {
@@ -172,6 +188,9 @@ public class FontController {
         }
 
         private static int resolveWeightByName(String familyName) {
+            if (familyName.contains("emphasized")) {
+                return 700;
+            }
             for (Map.Entry<String, Integer> entry : WEIGHT_MAP.entrySet()) {
                 if (familyName.contains(entry.getKey())) {
                     return entry.getValue();

@@ -1503,16 +1503,20 @@ public class Typeface {
     }
 
     /** @hide */
-    public static void changeFont(Resources res) {
-        if (res == null) {
-            return;
-        }
-
+    public static void changeFont() {
         synchronized (sDynamicCacheLock) {
             sDynamicTypefaceCache.evictAll();
         }
 
-        int configId = res.getIdentifier("config_bodyFontFamily", "string", "android");
+        Resources res = Resources.getSystem();
+        int configId;
+
+        try {
+            configId = res.getIdentifier("config_bodyFontFamily", "string", "android");
+        } catch (Resources.NotFoundException e) {
+            return;
+        }
+
         String fontFamily = res.getString(configId);
 
         sFontName = fontFamily;
@@ -1574,6 +1578,8 @@ public class Typeface {
             for (String genericFamily : genericFamilies) {
                 registerGenericFamilyNative(genericFamily, systemFontMap.get(genericFamily));
             }
+
+            changeFont();
         }
     }
 
