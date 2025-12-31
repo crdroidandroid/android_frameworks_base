@@ -19,7 +19,7 @@
     <string name="pocket_mode_instruction_step1">1. Ujistěte se, že modrá plocha (senzor přiblížení) zobrazená výše je nepřekrytá a prostá nečistot nebo prachu.</string>
     <string name="pocket_mode_instruction_step2">2. Chcete-li ukončit režim v kapse, stiskněte a podržte tlačítko napájení.</string>
     <!-- Cycle through ringer modes -->
-    <string name="volume_dialog_ringer_guidance_normal">Volání a oznámení budou vyzvánět</string>
+    <string name="volume_dialog_ringer_guidance_normal">Volání a oznámení budou vyzvánět</string>
     <!-- GameSpace -->
     <string name="gamespace_new_game_added">Aplikace <xliff:g id="name" example="MyApp">%s</xliff:g> byla přidána do GameSpace</string>
 </resources>
