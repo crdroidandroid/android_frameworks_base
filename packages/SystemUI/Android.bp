@@ -593,6 +593,8 @@ android_library {
         "aconfig_settings_flags_lib",
         "vendor.lineage.powershare-V1-java",
         "FadingEdgeLayoutLib",
+        "smartspace-proto-java",
+        "smartspace-proto-lite-java",
     ],
     javacflags: [
         "-Aroom.schemaLocation=frameworks/base/packages/SystemUI/schemas",
