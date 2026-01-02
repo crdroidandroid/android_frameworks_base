@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr format="dimension" name="remoteViewsCardCornerRadius" />
+    <attr format="dimension" name="smartspaceSubtitleTextSize" />
+    <attr format="dimension" name="smartspaceTitleTextSize" />
+    <declare-styleable
+        name="WeatherSmartspaceView">
+        <attr format="dimension" name="iconInset" />
+        <attr format="dimension" name="iconSize" />
+        <attr format="boolean" name="removeTextDescent" />
+        <attr format="dimension" name="textDescentExtraPadding" />
+    </declare-styleable>
+</resources>

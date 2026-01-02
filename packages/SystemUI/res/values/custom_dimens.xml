@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Smartspace -->
+    <dimen name="ambient_text_shadow_radius">1.5dp</dimen>
+    <dimen name="date_weather_view_height">24.0dp</dimen>
+    <dimen name="enhanced_smartspace_base_action_icon_margin">8.0dp</dimen>
+    <dimen name="enhanced_smartspace_base_action_icon_padding">4.0dp</dimen>
+    <dimen name="enhanced_smartspace_card_height">76.0dp</dimen>
+    <dimen name="enhanced_smartspace_combination_sub_card_corner_radius">20.0dp</dimen>
+    <dimen name="enhanced_smartspace_height">104.0dp</dimen>
+    <dimen name="enhanced_smartspace_icon_inset">2.0dp</dimen>
+    <dimen name="enhanced_smartspace_icon_margin">4.0dp</dimen>
+    <dimen name="enhanced_smartspace_icon_size">20.0dp</dimen>
+    <dimen name="enhanced_smartspace_secondary_card_corner_radius">20.0dp</dimen>
+    <dimen name="enhanced_smartspace_secondary_card_padding_end">12.0dp</dimen>
+    <dimen name="enhanced_smartspace_secondary_card_start_margin">1.0dp</dimen>
+    <dimen name="enhanced_smartspace_subtitle_margin_top">5.0dp</dimen>
+    <dimen name="enhanced_smartspace_text_size_medium">16.0sp</dimen>
+    <dimen name="enhanced_smartspace_text_size_small">14.0sp</dimen>
+    <dimen name="enhanced_smartspace_text_size_title">18.0sp</dimen>
+    <dimen name="key_text_shadow_dx">0.5dp</dimen>
+    <dimen name="key_text_shadow_dy">0.5dp</dimen>
+    <dimen name="key_text_shadow_radius">0.5dp</dimen>
+    <dimen name="launcher_remoteviews_card_corner_radius">24.0dp</dimen>
+    <dimen name="lockscreen_remoteviews_card_corner_radius">28.0dp</dimen>
+    <dimen name="non_remoteviews_card_padding_start">16.0dp</dimen>
+    <dimen name="opa_dot_diam">10.0dp</dimen>
+    <dimen name="opa_lockscreen_padding_bottom">20.0dp</dimen>
+    <dimen name="page_indicator_dot_margin">3.0dp</dimen>
+    <dimen name="page_indicator_dot_size">6.0dp</dimen>
+    <dimen name="page_indicator_padding_top">10.0dp</dimen>
+    <dimen name="smartspaceLetterSpacing">0.01</dimen>
+    <dimen name="subtitle_hit_rect_height">48.0dp</dimen>
+    <dimen name="weather_dream_complication_icon_dimen">36.0dp</dimen>
+    <dimen name="weather_dream_complication_icon_inset">1.0dp</dimen>
+    <dimen name="weather_dream_complication_text_descent_extra_padding">1.0dp</dimen>
+    <dimen name="weather_dream_overlay_complication_line_height">52.0dp</dimen>
+    <dimen name="weather_dream_overlay_complication_text_size">45.0dp</dimen>
+</resources>
