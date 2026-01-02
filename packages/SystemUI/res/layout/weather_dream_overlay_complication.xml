@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.systemui.smartspace.WeatherSmartspaceView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/dream_weather_complication_view"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:drawableIconInsetSize="@dimen/weather_dream_complication_icon_inset"
+    app:drawableIconSize="@dimen/weather_dream_complication_icon_dimen"
+    app:removeTextDescent="true"
+    app:textDescentExtraPadding="@dimen/weather_dream_complication_text_descent_extra_padding">
+    <com.google.android.systemui.smartspace.DoubleShadowTextView
+        android:id="@+id/weather_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:textColor="@android:color/white"
+        style="@style/WeatherDreamOverlayComplication" />
+</com.google.android.systemui.smartspace.WeatherSmartspaceView>
