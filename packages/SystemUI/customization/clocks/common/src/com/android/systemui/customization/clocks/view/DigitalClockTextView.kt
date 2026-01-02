@@ -166,7 +166,7 @@ abstract class DigitalClockTextView(
     override fun onTouchEvent(evt: MotionEvent): Boolean {
         if (super.onTouchEvent(evt)) return true
 
-        if (clockFidgetAnimation() && evt.action == MotionEvent.ACTION_DOWN) {
+        if (evt.action == MotionEvent.ACTION_DOWN) {
             val pt = VPointF(evt.x, evt.y)
             return (parent as? DigitalClockTextViewParent)?.animateFidget(pt, enforceBounds = false)
                 ?: animateFidget(pt, enforceBounds = false)

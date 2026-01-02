@@ -217,9 +217,6 @@ constructor(
         }
 
     fun handleFidgetTap(x: Float, y: Float) {
-        if (!com.android.systemui.Flags.clockFidgetAnimation()) {
-            return
-        }
 
         if (wallpaperFocalAreaInteractor.hasFocalArea.value) {
             wallpaperFocalAreaInteractor.sendTapPosition(x, y)
