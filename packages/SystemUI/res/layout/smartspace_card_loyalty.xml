@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.systemui.smartspace.BcSmartspaceCardLoyalty
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:androidprv="http://schemas.android.com/apk/prv/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:clipChildren="false"
+    android:clipToPadding="false">
+    <ImageView
+        android:id="@+id/image_view"
+        android:layout_width="32.0dp"
+        android:layout_height="32.0dp"
+        android:layout_margin="4.0dp"
+        app:layout_constraintBottom_toTopOf="@+id/card_prompt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+    <TextView
+        android:id="@+id/card_prompt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="4.0dp"
+        android:gravity="center_horizontal"
+        android:lineHeight="20.0dp"
+        android:maxLines="2"
+        android:textSize="12.0sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/image_view"
+        style="@style/EnhancedSmartspaceTextSubtitle" />
+    <ImageView
+        android:id="@+id/loyalty_program_logo"
+        android:layout_width="32.0dp"
+        android:layout_height="32.0dp"
+        android:layout_margin="4.0dp"
+        app:layout_constraintBottom_toTopOf="@+id/loyalty_program_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+    <TextView
+        android:id="@+id/loyalty_program_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="4.0dp"
+        android:gravity="center_horizontal"
+        android:maxLines="1"
+        android:textSize="12.0sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loyalty_program_logo"
+        style="@style/EnhancedSmartspaceTextSubtitle" />
+</com.google.android.systemui.smartspace.BcSmartspaceCardLoyalty>
