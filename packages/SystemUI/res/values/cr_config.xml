@@ -10,4 +10,10 @@
 
     <!-- Charging info current divider, if needed -->
     <integer name="config_currentInfoDivider" translatable="false">1000</integer>
+
+    <!-- Whether to enable MediaTek-specific optical dimming for UDFPS -->
+    <bool name="config_udfpsMtkGhbmDimming">false</bool>
+
+    <!-- Name of the UDFPS HBM DimLayer for the HWComposer -->
+    <string name="config_udfpsHbmDimLayer" translatable="false">OnScreenFingerprintDimLayer</string>
 </resources>
