@@ -73,7 +73,8 @@ object ShadeColors {
 
     @JvmStatic
     private fun shadePanelFallback(context: Context): Int {
-        return context.getColor(R.color.shade_panel_fallback)
+        return ColorUtils.blendARGB(context.getColor(R.color.shade_panel_fallback_fg),
+            context.getColor(R.color.shade_panel_fallback_bg), 0.7f)
     }
 
     @JvmStatic
@@ -86,6 +87,7 @@ object ShadeColors {
 
     @JvmStatic
     private fun notificationScrimFallback(context: Context): Int {
-        return context.getColor(R.color.notification_scrim_fallback)
+        return ColorUtils.blendARGB(context.getColor(R.color.notification_scrim_base),
+            context.getColor(R.color.shade_panel_fallback_bg), 0.7f)
     }
 }
