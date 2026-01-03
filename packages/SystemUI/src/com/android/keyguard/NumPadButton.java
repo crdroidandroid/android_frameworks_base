@@ -134,17 +134,10 @@ public class NumPadButton extends AlphaOptimizedImageButton implements NumPadAni
             if (mDrawableForTransparentMode != 0) {
                 setImageResource(mDrawableForTransparentMode);
             }
-            setBackgroundColor(getResources().getColor(android.R.color.transparent));
         } else {
             if (mDefaultDrawable != 0) {
                 setImageResource(mDefaultDrawable);
             }
-            Drawable bgDrawable = getContext().getDrawable(R.drawable.num_pad_key_background);
-            if (Flags.bouncerUiRevamp2() && bgDrawable != null) {
-                int bgColor = BouncerColors.pinActionBg(getContext());
-                bgDrawable.setTint(bgColor);
-            }
-            setBackground(bgDrawable);
         }
         setupAnimator();
         reloadColors();
