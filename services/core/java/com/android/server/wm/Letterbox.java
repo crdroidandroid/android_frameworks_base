@@ -289,8 +289,11 @@ public class Letterbox {
                     ? WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
                     : WindowManager.LayoutParams.TYPE_INPUT_CONSUMER;
             mWindowHandle.dispatchingTimeoutMillis = DEFAULT_DISPATCHING_TIMEOUT_MILLIS;
-            mWindowHandle.ownerPid = WindowManagerService.MY_PID;
-            mWindowHandle.ownerUid = WindowManagerService.MY_UID;
+            // Set owner to the app's UID to prevent tapjacking. This ensures the letterbox is not
+            // treated as a trusted system window for input security checks, which could be used
+            // to bypass obscured touch logic.
+            mWindowHandle.ownerPid = win.mSession.mPid;
+            mWindowHandle.ownerUid = win.mSession.mUid;
             mWindowHandle.scaleFactor = 1.0f;
             mWindowHandle.inputConfig = InputConfig.NOT_FOCUSABLE
                     | (Flags.scrollingFromLetterbox() ? InputConfig.SPY : InputConfig.SLIPPERY);
