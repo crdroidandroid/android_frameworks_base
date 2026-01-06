@@ -12080,7 +12080,7 @@ public class CarrierConfigManager {
             if (loader == null) {
                 Rlog.w(TAG, "Error getting config for subId " + subId
                         + " ICarrierConfigLoader is null");
-                throw new IllegalStateException("Carrier config loader is not available.");
+                return new PersistableBundle();
             }
             return loader.getConfigSubsetForSubIdWithFeature(subId, mContext.getOpPackageName(),
                     mContext.getAttributionTag(), keys);
