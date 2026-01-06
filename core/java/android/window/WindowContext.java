@@ -23,6 +23,7 @@ import static java.util.Objects.requireNonNull;
 import android.annotation.NonNull;
 import android.annotation.Nullable;
 import android.annotation.UiContext;
+import android.app.ActivityThread;
 import android.content.ComponentCallbacks;
 import android.content.ComponentCallbacksController;
 import android.content.Context;
@@ -142,7 +143,7 @@ public class WindowContext extends ContextWrapper implements WindowProvider,
     @Override
     protected void finalize() throws Throwable {
         try {
-            release();
+            getMainThreadHandler().post(this::release);
         } finally {
             super.finalize();
         }
