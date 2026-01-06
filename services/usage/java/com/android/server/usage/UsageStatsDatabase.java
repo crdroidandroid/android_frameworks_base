@@ -1105,7 +1105,12 @@ public class UsageStatsDatabase {
             Slog.wtf(TAG, "Reading UsageStats as XML; current database version: "
                     + mCurrentVersion);
         }
-        readLocked(file, statsOut, mCurrentVersion, mPackagesTokenData, skipEvents);
+        try {
+            readLocked(file, statsOut, mCurrentVersion, mPackagesTokenData, skipEvents);
+        } catch (OutOfMemoryError e) {
+            file.delete();
+            Slog.e(TAG, "unable to parse " + file, e);
+        }
     }
 
     /**
