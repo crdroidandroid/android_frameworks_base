@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     SPDX-FileCopyrightText: 2016-2025 crDroid Android Project
+     SPDX-FileCopyrightText: 2016-2026 crDroid Android Project
      SPDX-License-Identifier: Apache-2.0
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
@@ -76,6 +76,11 @@
     <string name="tristate_rotation_0">Staand</string>
     <string name="tristate_rotation_90">Liggend (90°)</string>
     <string name="tristate_rotation_270">Liggend (270°)</string>
+    <!-- Data usage info in QS footer -->
+    <string name="usage_data">vandaag gebruikt</string>
+    <string name="usage_data_weekly">gebruikt deze week</string>
+    <string name="usage_data_default_suffix">Gegevens</string>
+    <string name="usage_wifi_default_suffix">Wifi</string>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">Gedwongen stoppen?</string>
     <string name="force_stop_dlg_text">Als je een app gedwongen stopt, kan deze onverwacht gedrag vertonen.</string>
@@ -85,7 +90,7 @@
     <string name="quick_settings_sound_label">Geluid</string>
     <string name="quick_settings_sound_ring">Beltoon</string>
     <string name="quick_settings_sound_vibrate">Trillen</string>
-    <string name="quick_settings_sound_silent">Silent</string>
+    <string name="quick_settings_sound_silent">Stil</string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">CPU-info</string>
     <!-- FPS Info tile -->
@@ -125,18 +130,17 @@
     <string name="quick_settings_locale_more_locales_toast">Eerst meerdere talen configureren</string>
     <!-- AI Assistant affordance [CHAR LIMIT=32] -->
     <string name="accessibility_assistant_button">AI Assistent</string>
-    <!-- Text while recognizing face -->
-    <string name="face_unlock_recognizing">Gezicht herkennen...</string>
     <!-- Preferred network tile -->
-    <string name="qs_preferred_network_label">Preferred network</string>
+    <string name="qs_preferred_network_label">Voorkeur netwerk</string>
     <string name="qs_preferred_network_lte">4G / LTE</string>
     <string name="qs_preferred_network_nr">5G / NR</string>
-    <string name="qs_preferred_network_3g">3G</string>
-    <string name="qs_preferred_network_unsupported">Unsupported</string>
+    <string name="qs_preferred_network_unsupported">Niet ondersteund</string>
+    <!-- Text while recognizing face -->
+    <string name="face_unlock_recognizing">Gezicht herkennen...</string>
     <!-- Flashlight Strength -->
-    <string name="flashlight_strength_title">Flashlight Strength</string>
-    <string name="flashlight_strength_turn_off">Turn off</string>
-    <string name="flashlight_strength_turn_on">Turn on</string>
+    <string name="flashlight_strength_title">Zaklamp Kracht</string>
+    <string name="flashlight_strength_turn_off">Zet uit</string>
+    <string name="flashlight_strength_turn_on">Zet aan</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="one">%d apparaat verbonden</item>
@@ -144,11 +148,6 @@
     </plurals>
     <!-- 5G toggle in Internet Dialog -->
     <string name="enable_fiveg">5G inschakelen</string>
-    <!-- Data usage info in QS footer -->
-    <string name="usage_data">vandaag gebruikt</string>
-    <string name="usage_data_weekly">used this week</string>
-    <string name="usage_data_default_suffix">Gegevens</string>
-    <string name="usage_wifi_default_suffix">Wifi</string>
     <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
     <string name="screenrecord_delete_label">Verwijderen</string>
     <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
