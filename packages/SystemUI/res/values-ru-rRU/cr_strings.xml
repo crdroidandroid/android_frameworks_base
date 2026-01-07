@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     SPDX-FileCopyrightText: 2016-2025 crDroid Android Project
+     SPDX-FileCopyrightText: 2016-2026 crDroid Android Project
      SPDX-License-Identifier: Apache-2.0
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
@@ -76,6 +76,11 @@
     <string name="tristate_rotation_0">Вертикально</string>
     <string name="tristate_rotation_90">Горизонтально (90°)</string>
     <string name="tristate_rotation_270">Горизонтально (270°)</string>
+    <!-- Data usage info in QS footer -->
+    <string name="usage_data">за сегодня</string>
+    <string name="usage_data_weekly">за неделю</string>
+    <string name="usage_data_default_suffix">Данные</string>
+    <string name="usage_wifi_default_suffix">Wi-Fi</string>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">Остановить принудительно?</string>
     <string name="force_stop_dlg_text">Принудительная остановка приложения может отразиться на его функциональности.</string>
@@ -125,14 +130,13 @@
     <string name="quick_settings_locale_more_locales_toast">Сначала настройте несколько языков</string>
     <!-- AI Assistant affordance [CHAR LIMIT=32] -->
     <string name="accessibility_assistant_button">ИИ ассистент</string>
-    <!-- Text while recognizing face -->
-    <string name="face_unlock_recognizing">Распознавание лица…</string>
     <!-- Preferred network tile -->
     <string name="qs_preferred_network_label">Предпочтительная сеть</string>
     <string name="qs_preferred_network_lte">4G / LTE</string>
     <string name="qs_preferred_network_nr">5G / NR</string>
-    <string name="qs_preferred_network_3g">3G</string>
     <string name="qs_preferred_network_unsupported">Не поддерживается</string>
+    <!-- Text while recognizing face -->
+    <string name="face_unlock_recognizing">Распознавание лица…</string>
     <!-- Flashlight Strength -->
     <string name="flashlight_strength_title">Яркость фонарика</string>
     <string name="flashlight_strength_turn_off">Отключить</string>
@@ -146,13 +150,18 @@
     </plurals>
     <!-- 5G toggle in Internet Dialog -->
     <string name="enable_fiveg">Включить 5G</string>
-    <!-- Data usage info in QS footer -->
-    <string name="usage_data">за сегодня</string>
-    <string name="usage_data_weekly">за неделю</string>
-    <string name="usage_data_default_suffix">Данные</string>
-    <string name="usage_wifi_default_suffix">Wi-Fi</string>
     <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
     <string name="screenrecord_delete_label">Удалить</string>
     <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
     <string name="screenrecord_delete_description">Запись экрана удалена</string>
+    <!-- Smartspace -->
+    <string name="accessibility_next_alarm">Next alarm at %s</string>
+    <string name="accessibility_smartspace_page">Page %1$d of %2$d</string>
+    <string name="active_mode_content_description">%1$s is on</string>
+    <string name="generic_smartspace_concatenated_desc">%1$s, %2$s</string>
+    <string name="music_controls_no_title">No title</string>
+    <string name="smartspace_content_desc">At a glance</string>
+    <string name="smartspace_flight_qr_code">QR code</string>
+    <string name="smartspace_icu_date_pattern">EEEMMMd</string>
+    <string name="smartspace_role_desc">View</string>
 </resources>
