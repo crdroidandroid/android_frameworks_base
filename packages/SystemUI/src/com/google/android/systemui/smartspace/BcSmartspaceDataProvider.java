@@ -1,129 +1,131 @@
 package com.google.android.systemui.smartspace;
 
 import android.app.smartspace.SmartspaceTarget;
-import android.content.Context;
 import android.os.Debug;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.android.systemui.res.R;
 
 import com.android.systemui.plugins.BcSmartspaceConfigPlugin;
 import com.android.systemui.plugins.BcSmartspaceDataPlugin;
+import com.android.systemui.res.R;
+
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.Collectors;
 
-public final class BcSmartspaceDataProvider implements BcSmartspaceDataPlugin {
-    public static final boolean DEBUG = Log.isLoggable("BcSmartspaceDataPlugin", 3);
+public final class BcSmartspaceDataProvider
+        implements BcSmartspaceDataPlugin {
 
-    public final View.OnAttachStateChangeListener mStateChangeListener;
-    public final Set<BcSmartspaceDataPlugin.SmartspaceTargetListener> mSmartspaceTargetListeners = new CopyOnWriteArraySet<>();
-    public List<SmartspaceTarget> mSmartspaceTargets = new ArrayList<>();
-    public final Set<View> mViews = new HashSet<>();
-    public final Set<View.OnAttachStateChangeListener> mAttachListeners = new HashSet<>();
-    public final EventNotifierProxy mEventNotifier = new EventNotifierProxy();
-    public BcSmartspaceConfigPlugin mConfigProvider = new DefaultBcSmartspaceConfigProvider();
+    private static final boolean DEBUG =
+            Log.isLoggable("BcSmartspaceDataPlugin", Log.DEBUG);
 
-    public final class StateChangeListener implements View.OnAttachStateChangeListener {
-        @Override
-        public void onViewAttachedToWindow(View view) {
-            mViews.add(view);
-            for (View.OnAttachStateChangeListener listener : mAttachListeners) {
-                listener.onViewAttachedToWindow(view);
-            }
-            if (view instanceof BcSmartspaceView) {
-                ((BcSmartspaceView) view).registerDataProvider(BcSmartspaceDataProvider.this);
-            }
-        }
+    private final Set<SmartspaceTargetListener> mListeners =
+            new CopyOnWriteArraySet<>();
+    private final Set<View> mViews = new HashSet<>();
+    private final Set<View.OnAttachStateChangeListener> mAttachListeners =
+            new HashSet<>();
 
-        @Override
-        public void onViewDetachedFromWindow(View view) {
-            mViews.remove(view);
-            for (View.OnAttachStateChangeListener listener : mAttachListeners) {
-                listener.onViewDetachedFromWindow(view);
-            }
-        }
-    }
+    private List<SmartspaceTarget> mTargets = new ArrayList<>();
+    private final EventNotifierProxy mEventNotifier =
+            new EventNotifierProxy();
 
-    public BcSmartspaceDataProvider() {
-        mStateChangeListener = new StateChangeListener();
-    }
+    private BcSmartspaceConfigPlugin mConfigProvider =
+            new DefaultBcSmartspaceConfigProvider();
+
+    private final View.OnAttachStateChangeListener mStateListener =
+            new View.OnAttachStateChangeListener() {
+                @Override
+                public void onViewAttachedToWindow(View v) {
+                    mViews.add(v);
+                    for (View.OnAttachStateChangeListener l : mAttachListeners) {
+                        l.onViewAttachedToWindow(v);
+                    }
+                    if (v instanceof SmartspaceView) {
+                        ((SmartspaceView) v).registerDataProvider(
+                                BcSmartspaceDataProvider.this);
+                    }
+                }
+
+                @Override
+                public void onViewDetachedFromWindow(View v) {
+                    mViews.remove(v);
+                    for (View.OnAttachStateChangeListener l : mAttachListeners) {
+                        l.onViewDetachedFromWindow(v);
+                    }
+                }
+            };
 
     @Override
-    public void addOnAttachStateChangeListener(View.OnAttachStateChangeListener listener) {
+    public void addOnAttachStateChangeListener(
+            View.OnAttachStateChangeListener listener) {
         mAttachListeners.add(listener);
-        for (View view : mViews) {
-            listener.onViewAttachedToWindow(view);
+        for (View v : mViews) {
+            listener.onViewAttachedToWindow(v);
         }
     }
 
     @Override
-    public BcSmartspaceDataPlugin.SmartspaceEventNotifier getEventNotifier() {
+    public SmartspaceEventNotifier getEventNotifier() {
         return mEventNotifier;
     }
 
     @Override
-    public BcSmartspaceDataPlugin.SmartspaceView getView(Context context) {
-        int layoutId = mConfigProvider.isViewPager2Enabled()
+    public SmartspaceView getView(ViewGroup parent) {
+        int layout = mConfigProvider.isViewPager2Enabled()
                 ? R.layout.smartspace_enhanced2
                 : R.layout.smartspace_enhanced;
 
-        View view = LayoutInflater.from(context).inflate(layoutId, (ViewGroup) null, false);
-        view.addOnAttachStateChangeListener(mStateChangeListener);
-
-        // Explicitly register data provider.
-        // Note: The StateChangeListener also attempts this on attach, but doing it here ensures immediate availability.
-        if (view instanceof BcSmartspaceView) {
-            ((BcSmartspaceView) view).registerDataProvider(this);
-        }
-
-        return (BcSmartspaceDataPlugin.SmartspaceView) view;
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(layout, parent, false);
+        view.addOnAttachStateChangeListener(mStateListener);
+        return (SmartspaceView) view;
     }
 
     @Override
-    public void onTargetsAvailable(List<SmartspaceTarget> list) {
+    public void onTargetsAvailable(List<SmartspaceTarget> targets) {
         if (DEBUG) {
-            Log.d("BcSmartspaceDataPlugin", this + " onTargetsAvailable called. Callers = " + Debug.getCallers(3));
-            Log.d("BcSmartspaceDataPlugin", "    targets.size() = " + list.size());
+            Log.d("BcSmartspaceDataPlugin",
+                    this + " onTargetsAvailable. Callers="
+                            + Debug.getCallers(3));
         }
 
-        // Filter out feature type 15 (MEDIA?) as seen in reference implementation
-        mSmartspaceTargets = list.stream()
-                .filter(target -> target.getFeatureType() != 15)
+        mTargets = targets.stream()
+                .filter(t -> t.getFeatureType() != 15)
                 .collect(Collectors.toList());
 
-        mSmartspaceTargetListeners.forEach(listener -> listener.onSmartspaceTargetsUpdated(mSmartspaceTargets));
+        mListeners.forEach(
+                l -> l.onSmartspaceTargetsUpdated(mTargets));
     }
 
     @Override
-    public void registerConfigProvider(BcSmartspaceConfigPlugin configPlugin) {
-        mConfigProvider = configPlugin;
+    public void registerListener(SmartspaceTargetListener listener) {
+        mListeners.add(listener);
+        listener.onSmartspaceTargetsUpdated(mTargets);
     }
 
     @Override
-    public void registerListener(BcSmartspaceDataPlugin.SmartspaceTargetListener listener) {
-        mSmartspaceTargetListeners.add(listener);
-        listener.onSmartspaceTargetsUpdated(mSmartspaceTargets);
+    public void unregisterListener(SmartspaceTargetListener listener) {
+        mListeners.remove(listener);
     }
 
     @Override
-    public void unregisterListener(BcSmartspaceDataPlugin.SmartspaceTargetListener listener) {
-        mSmartspaceTargetListeners.remove(listener);
+    public void registerConfigProvider(
+            BcSmartspaceConfigPlugin configProvider) {
+        mConfigProvider = configProvider;
     }
 
     @Override
-    public void setEventDispatcher(BcSmartspaceDataPlugin.SmartspaceEventDispatcher dispatcher) {
+    public void setEventDispatcher(SmartspaceEventDispatcher dispatcher) {
         mEventNotifier.eventDispatcher = dispatcher;
     }
 
     @Override
-    public void setIntentStarter(BcSmartspaceDataPlugin.IntentStarter intentStarter) {
+    public void setIntentStarter(IntentStarter intentStarter) {
         mEventNotifier.intentStarterRef = intentStarter;
     }
 }
