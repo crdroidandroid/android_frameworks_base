@@ -3067,6 +3067,16 @@ class WindowState extends WindowContainer<WindowState> implements WindowManagerP
             if (!mToken.okToAnimate()) {
                 doAnimation = false;
             }
+            if (mIsForceHiddenNonSystemOverlayWindow || mHiddenWhileSuspended
+                    || !mAppOpVisibility || mPermanentlyHidden) {
+                if (isAnimating()) {
+                    if (mAnimatingExit) {
+                        // Hide immediately if the window is playing an exit animation.
+                        doAnimation = false;
+                    }
+                    cancelAnimation();
+                }
+            }
         }
         boolean current =
                 doAnimation ? mLegacyPolicyVisibilityAfterAnim : isLegacyPolicyVisibility();
