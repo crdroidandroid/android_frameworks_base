@@ -57,9 +57,12 @@ constructor(
 
         val newTitle =
             metadata?.let {
-                it.getText(MediaMetadata.METADATA_KEY_DISPLAY_TITLE)
-                    ?: it.getText(MediaMetadata.METADATA_KEY_TITLE)
-                    ?: context.resources.getString(R.string.music_controls_no_title)
+                 val displayTitle = it.getText(MediaMetadata.METADATA_KEY_DISPLAY_TITLE)
+                 if (TextUtils.isEmpty(displayTitle)) {
+                     it.getText(MediaMetadata.METADATA_KEY_TITLE)
+                 } else {
+                     displayTitle
+                 } ?: context.resources.getString(R.string.music_controls_no_title)
             }
 
         val newArtist = metadata?.getText(MediaMetadata.METADATA_KEY_ARTIST)
@@ -78,7 +81,7 @@ constructor(
                         mediaComponent,
                         UserHandle.of(userTracker.userId),
                     )
-                    .setFeatureType(SmartspaceTarget.FEATURE_MEDIA)
+                    .setFeatureType(41)
                     .setHeaderAction(
                         SmartspaceAction.Builder("deviceMediaTitle", newTitle.toString())
                             .setSubtitle(artist)
