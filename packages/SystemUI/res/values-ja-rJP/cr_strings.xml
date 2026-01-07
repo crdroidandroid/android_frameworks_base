@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     SPDX-FileCopyrightText: 2016-2025 crDroid Android Project
+     SPDX-FileCopyrightText: 2016-2026 crDroid Android Project
      SPDX-License-Identifier: Apache-2.0
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
@@ -76,6 +76,11 @@
     <string name="tristate_rotation_0">縦向き</string>
     <string name="tristate_rotation_90">横向き (90°)</string>
     <string name="tristate_rotation_270">横向き (270°)</string>
+    <!-- Data usage info in QS footer -->
+    <string name="usage_data">今日の使用量</string>
+    <string name="usage_data_weekly">used this week</string>
+    <string name="usage_data_default_suffix">データ</string>
+    <string name="usage_wifi_default_suffix">Wi-Fi</string>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">強制停止しますか？</string>
     <string name="force_stop_dlg_text">アプリを強制停止すると、正常に機能しないことがあります。</string>
@@ -125,14 +130,13 @@
     <string name="quick_settings_locale_more_locales_toast">まず複数の言語を設定してください</string>
     <!-- AI Assistant affordance [CHAR LIMIT=32] -->
     <string name="accessibility_assistant_button">AI アシスタント</string>
-    <!-- Text while recognizing face -->
-    <string name="face_unlock_recognizing">顔を認識中...</string>
     <!-- Preferred network tile -->
     <string name="qs_preferred_network_label">Preferred network</string>
     <string name="qs_preferred_network_lte">4G / LTE</string>
     <string name="qs_preferred_network_nr">5G / NR</string>
-    <string name="qs_preferred_network_3g">3G</string>
     <string name="qs_preferred_network_unsupported">Unsupported</string>
+    <!-- Text while recognizing face -->
+    <string name="face_unlock_recognizing">顔を認識中...</string>
     <!-- Flashlight Strength -->
     <string name="flashlight_strength_title">Flashlight Strength</string>
     <string name="flashlight_strength_turn_off">Turn off</string>
@@ -143,13 +147,18 @@
     </plurals>
     <!-- 5G toggle in Internet Dialog -->
     <string name="enable_fiveg">5G通信を有効化</string>
-    <!-- Data usage info in QS footer -->
-    <string name="usage_data">今日の使用量</string>
-    <string name="usage_data_weekly">used this week</string>
-    <string name="usage_data_default_suffix">データ</string>
-    <string name="usage_wifi_default_suffix">Wi-Fi</string>
     <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
     <string name="screenrecord_delete_label">削除</string>
     <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
     <string name="screenrecord_delete_description">画面録画を削除しました</string>
+    <!-- Smartspace -->
+    <string name="accessibility_next_alarm">Next alarm at %s</string>
+    <string name="accessibility_smartspace_page">Page %1$d of %2$d</string>
+    <string name="active_mode_content_description">%1$s is on</string>
+    <string name="generic_smartspace_concatenated_desc">%1$s, %2$s</string>
+    <string name="music_controls_no_title">No title</string>
+    <string name="smartspace_content_desc">At a glance</string>
+    <string name="smartspace_flight_qr_code">QR code</string>
+    <string name="smartspace_icu_date_pattern">EEEMMMd</string>
+    <string name="smartspace_role_desc">View</string>
 </resources>
