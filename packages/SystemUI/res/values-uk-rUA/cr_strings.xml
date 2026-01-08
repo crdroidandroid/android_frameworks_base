@@ -155,13 +155,13 @@
     <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
     <string name="screenrecord_delete_description">Запис з екрана видалено</string>
     <!-- Smartspace -->
-    <string name="accessibility_next_alarm">Next alarm at %s</string>
-    <string name="accessibility_smartspace_page">Page %1$d of %2$d</string>
-    <string name="active_mode_content_description">%1$s is on</string>
+    <string name="accessibility_next_alarm">Наступний будильник спрацює о %s</string>
+    <string name="accessibility_smartspace_page">Сторінка %1$d із %2$d</string>
+    <string name="active_mode_content_description">%1$s увімкнено</string>
     <string name="generic_smartspace_concatenated_desc">%1$s, %2$s</string>
-    <string name="music_controls_no_title">No title</string>
-    <string name="smartspace_content_desc">At a glance</string>
-    <string name="smartspace_flight_qr_code">QR code</string>
-    <string name="smartspace_icu_date_pattern">EEEMMMd</string>
-    <string name="smartspace_role_desc">View</string>
+    <string name="music_controls_no_title">Немає заголовка</string>
+    <string name="smartspace_content_desc">Інформаційний віджет</string>
+    <string name="smartspace_flight_qr_code">QR-код</string>
+    <string name="smartspace_icu_date_pattern">ДЕНЕММН</string>
+    <string name="smartspace_role_desc">Переглянути</string>
 </resources>
