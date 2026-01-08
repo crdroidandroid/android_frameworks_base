@@ -135,6 +135,7 @@ import com.android.systemui.shade.ShadeDisplayAwareModule;
 import com.android.systemui.shade.transition.LargeScreenShadeInterpolator;
 import com.android.systemui.shade.transition.LargeScreenShadeInterpolatorImpl;
 import com.android.systemui.shared.condition.Monitor;
+import com.android.systemui.smartspace.config.BcSmartspaceConfigProvider;
 import com.android.systemui.smartspace.dagger.SmartspaceModule;
 import com.android.systemui.startable.Dependencies;
 import com.android.systemui.statusbar.CommandQueue;
@@ -420,7 +421,7 @@ public abstract class SystemUIModule {
 
     @BindsOptionalOf
     @Named(SmartspaceModule.GLANCEABLE_HUB_SMARTSPACE_DATA_PLUGIN)
-    abstract BcSmartspaceDataPlugin optionalGlanceableHubSmartspaceDataPlugin();
+    abstract BcSmartspaceDataPlugin optionalGlanceableHubBcSmartspaceDataPlugin();
 
     @BindsOptionalOf
     @Named(SmartspaceModule.WEATHER_SMARTSPACE_DATA_PLUGIN)
@@ -575,14 +576,21 @@ public abstract class SystemUIModule {
     static KeyguardMediaViewController provideKeyguardMediaViewController(
             Context context,
             NotificationMediaManager mediaManager,
-            @Named(SmartspaceModule.GLANCEABLE_HUB_SMARTSPACE_DATA_PLUGIN)
-                    BcSmartspaceDataPlugin plugin,
+            BcSmartspaceDataPlugin plugin,
             UserTracker userTracker,
             @Main DelayableExecutor uiExecutor) {
         KeyguardMediaViewController controller = new KeyguardMediaViewController(
                 context, mediaManager, plugin, userTracker, uiExecutor);
         controller.mediaComponent = new ComponentName(context, KeyguardMediaViewController.class);
         return controller;
+    }
+
+
+    @Provides
+    @SysUISingleton
+    static BcSmartspaceConfigProvider provideBcSmartspaceConfigPlugin(
+            FeatureFlags featureFlags) {
+        return new BcSmartspaceConfigProvider(featureFlags);
     }
 
     @Provides
@@ -609,18 +617,6 @@ public abstract class SystemUIModule {
     @SysUISingleton
     @Named(SmartspaceModule.WEATHER_SMARTSPACE_DATA_PLUGIN)
     static BcSmartspaceDataPlugin provideWeatherSmartspaceDataPlugin() {
-        return new WeatherSmartspaceDataProvider();
-    }
-
-    @Provides
-    @SysUISingleton
-    static DateSmartspaceDataProvider provideDateSmartspaceDataProvider() {
-        return new DateSmartspaceDataProvider();
-    }
-
-    @Provides
-    @SysUISingleton
-    static WeatherSmartspaceDataProvider provideWeatherSmartspaceDataProvider() {
         return new WeatherSmartspaceDataProvider();
     }
 }
