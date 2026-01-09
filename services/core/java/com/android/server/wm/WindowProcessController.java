@@ -375,7 +375,8 @@ public class WindowProcessController extends ConfigurationContainer<Configuratio
         mListener = listener;
         mAtm = atm;
         mBgLaunchController = new BackgroundLaunchProcessController(
-                atm::hasActiveVisibleWindow, atm.getBackgroundActivityStartCallback());
+                atm::hasActiveVisibleWindow, atm::hasActiveVisibleNotPinnedWindow,
+                atm.getBackgroundActivityStartCallback());
 
         boolean isSysUiPackage = info.packageName.equals(
                 mAtm.getSysUiServiceComponentLocked().getPackageName());
