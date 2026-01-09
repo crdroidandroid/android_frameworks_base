@@ -11,7 +11,7 @@
     <!-- Lock gesture -->
     <string name="gesture_locked_warning">Usap lagi untuk membuka kunci gestur</string>
     <!-- GameSpace -->
-    <string name="gamespace_new_game_added"><xliff:g id="name" example="MyApp">%s</xliff:g> added to GameSpace</string>
+    <string name="gamespace_new_game_added"><xliff:g id="name" example="MyApp">%s</xliff:g> ditambahkan ke Ruang Game</string>
     <!-- App lock -->
     <string name="unlock_application">Buka <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
     <!-- Pocket Lock -->
@@ -21,5 +21,5 @@
     <string name="pocket_mode_instruction_step1">1. Pastikan area hijau (sensor jarak) yang ditunjukkan di atas tidak terhalang dan bebas dari kotoran atau debu.</string>
     <string name="pocket_mode_instruction_step2">2. Tekan dan tahan tombol daya untuk keluar dari mode saku.</string>
     <!-- Cycle through ringer modes -->
-    <string name="volume_dialog_ringer_guidance_normal">Calls and notifications will ring</string>
+    <string name="volume_dialog_ringer_guidance_normal">Panggilan dan notifikasi akan berdering</string>
 </resources>
