@@ -163,5 +163,5 @@
     <string name="smartspace_content_desc">Přehled událostí</string>
     <string name="smartspace_flight_qr_code">QR kód</string>
     <string name="smartspace_icu_date_pattern">EEEdMMM</string>
-    <string name="smartspace_role_desc">Pohled</string>
+    <string name="smartspace_role_desc">Zobrazit</string>
 </resources>
