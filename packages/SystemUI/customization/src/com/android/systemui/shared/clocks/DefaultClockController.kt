@@ -175,7 +175,9 @@ class DefaultClockController(
                 override fun onSecondaryDisplayChanged(onSecondaryDisplay: Boolean) {}
             }
 
-        open fun recomputePadding(targetRegion: Rect?) {}
+        open fun recomputePadding(targetRegion: Rect?) {
+            view.setFontFeatureSettings("pnum")
+        }
 
         private fun getAodColor(): Int {
             return if (ambientAod()) {
@@ -200,7 +202,9 @@ class DefaultClockController(
             animations = LargeClockAnimations(view, 0f, 0f)
         }
 
-        override fun recomputePadding(targetRegion: Rect?) {}
+        override fun recomputePadding(targetRegion: Rect?) {
+            view.setFontFeatureSettings("tnum")
+        }
 
         /** See documentation at [AnimatableClockView.offsetGlyphsForStepClockAnimation]. */
         fun offsetGlyphsForStepClockAnimation(args: ClockPositionAnimationArgs) {
