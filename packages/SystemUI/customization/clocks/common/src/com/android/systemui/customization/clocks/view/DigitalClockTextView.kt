@@ -565,7 +565,7 @@ abstract class DigitalClockTextView(
         this.textStyle = textStyle
         lockScreenPaint.strokeJoin = Paint.Join.ROUND
         lockScreenPaint.typeface = typefaceCache.getTypefaceForVariant(fontVariations.lockscreen)
-        lockScreenPaint.fontFeatureSettings = if (isLargeClock) "" else "pnum"
+        lockScreenPaint.fontFeatureSettings = if (isLargeClock) "tnum" else "pnum"
         typeface = lockScreenPaint.typeface
         textStyle.lineHeight?.let { lineHeight = it.roundToInt() }
 
