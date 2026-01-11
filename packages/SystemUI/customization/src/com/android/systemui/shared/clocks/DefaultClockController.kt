@@ -21,7 +21,10 @@ import android.icu.text.NumberFormat
 import android.icu.util.TimeZone
 import android.util.TypedValue
 import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.TextView
 import androidx.annotation.VisibleForTesting
 import com.android.internal.util.crdroid.Utils.ambientAod
 import com.android.systemui.customization.R as customR
@@ -175,7 +178,9 @@ class DefaultClockController(
                 override fun onSecondaryDisplayChanged(onSecondaryDisplay: Boolean) {}
             }
 
-        open fun recomputePadding(targetRegion: Rect?) {}
+        open fun recomputePadding(targetRegion: Rect?) {
+            view.applyFontFeatureRecursively("pnum")
+        }
 
         private fun getAodColor(): Int {
             return if (ambientAod()) {
@@ -200,7 +205,9 @@ class DefaultClockController(
             animations = LargeClockAnimations(view, 0f, 0f)
         }
 
-        override fun recomputePadding(targetRegion: Rect?) {}
+        override fun recomputePadding(targetRegion: Rect?) {
+            view.applyFontFeatureRecursively("tnum")
+        }
 
         /** See documentation at [AnimatableClockView.offsetGlyphsForStepClockAnimation]. */
         fun offsetGlyphsForStepClockAnimation(args: ClockPositionAnimationArgs) {
@@ -321,6 +328,19 @@ class DefaultClockController(
 
         pw.print("largeClock=")
         largeClock.view.dump(pw)
+    }
+
+    private fun View.applyFontFeatureRecursively(feature: String) {
+        when (this) {
+            is TextView -> {
+                setFontFeatureSettings(feature)
+            }
+            is ViewGroup -> {
+                for (i in 0 until childCount) {
+                    getChildAt(i).applyFontFeatureRecursively(feature)
+                }
+            }
+        }
     }
 
     companion object {
