@@ -24,8 +24,6 @@ import android.widget.TextView
 
 import com.android.internal.util.crdroid.OmniJawsClient
 
-import com.android.systemui.Dependency
-import com.android.systemui.plugins.statusbar.StatusBarStateController
 import com.android.systemui.res.R
 
 import kotlinx.coroutines.*
@@ -40,29 +38,6 @@ class WeatherViewController(
 
     private var weatherInfo: OmniJawsClient.WeatherInfo? = null
     private val scope = CoroutineScope(Dispatchers.Main.immediate + SupervisorJob())
-
-    private var mDozing = false
-    private val statusBarStateController: StatusBarStateController = Dependency.get(StatusBarStateController::class.java)
-
-    private val statusBarStateListener = object : StatusBarStateController.StateListener {
-        override fun onStateChanged(newState: Int) {}
-
-        override fun onDozingChanged(dozing: Boolean) {
-            if (mDozing == dozing) return
-            mDozing = dozing
-
-            val weatherEnabled = weatherSettingsFlow.value.weatherEnabled
-
-            if (mDozing || !weatherEnabled) {
-                hideAllViews()
-                OmniJawsClient.get().removeObserver(context, this@WeatherViewController)
-            } else {
-                OmniJawsClient.get().addObserver(context, this@WeatherViewController)
-                updateWeather()
-                showAllViews()
-            }
-        }
-    }
 
     private val weatherSettingsFlow = flow {
         var previousSettings: WeatherSettings? = null
@@ -80,8 +55,6 @@ class WeatherViewController(
         scope.launch {
             weatherSettingsFlow.collectLatest { applyWeatherSettings(it) }
         }
-        statusBarStateController.addCallback(statusBarStateListener)
-        statusBarStateListener.onDozingChanged(statusBarStateController.isDozing())
     }
 
     private fun getConditionText(condition: String): String {
@@ -110,7 +83,7 @@ class WeatherViewController(
         Settings.System.getIntForUser(context.contentResolver, setting, defaultValue, UserHandle.USER_CURRENT) != 0
 
     private fun applyWeatherSettings(settings: WeatherSettings) {
-        if (mDozing || !settings.weatherEnabled) {
+        if (!settings.weatherEnabled) {
             hideAllViews()
             OmniJawsClient.get().removeObserver(context, this@WeatherViewController)
         } else {
@@ -181,7 +154,6 @@ class WeatherViewController(
     fun removeObserver() {
         scope.cancel()
         OmniJawsClient.get().removeObserver(context, this)
-        statusBarStateController.removeCallback(statusBarStateListener)
     }
 
     private suspend fun updateViewVisibility(view: View, visible: Boolean) {
