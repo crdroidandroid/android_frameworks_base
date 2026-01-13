@@ -4039,6 +4039,12 @@ public class WindowManagerService extends IWindowManager.Stub
                 switchUserInternal(newUserId);
                 moveUserToForeground(newUserId, uss, "startUserSwitchTransition");
             };
+            // Call ActivityIdle in case its already invoked, to ensure mStartingUsers is
+            //handled.
+            mRoot.mTaskSupervisor.activityIdleInternal(null /* idleActivity */,
+              false /* fromTimeout */,true /* processPausingActivities */,
+              null /* configuration */);
+
 
             final TransitionController controller = mAtmService.getTransitionController();
             if (!controller.isShellTransitionsEnabled()) {
