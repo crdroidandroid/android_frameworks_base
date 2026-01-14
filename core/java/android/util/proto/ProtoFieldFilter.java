@@ -307,7 +307,7 @@ public class ProtoFieldFilter {
             while (bytesRemaining > 0) {
                 int bytesToRead = (int) Math.min(bytesRemaining, mBuffer.length);
                 int bytesRead = in.read(mBuffer, 0, bytesToRead);
-                if (bytesRemaining < 0) {
+                if (bytesRead < 0) {
                     throw new IOException("EOF while skipping bytes");
                 }
                 bytesRemaining -= bytesRead;
