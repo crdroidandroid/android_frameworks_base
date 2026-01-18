@@ -565,8 +565,9 @@ public class MediaSessionService extends SystemService implements Monitor {
         int userId = targetUser.getUserIdentifier();
 
         if (DEBUG) Log.d(TAG, "onCleanupUser: " + userId);
+        FullUserRecord user;
         synchronized (mLock) {
-            FullUserRecord user = getFullUserRecordLocked(userId);
+            user = getFullUserRecordLocked(userId);
             if (user != null) {
                 if (user.mFullUserId == userId) {
                     user.destroySessionsForUserLocked(ALL.getIdentifier());
@@ -576,6 +577,9 @@ public class MediaSessionService extends SystemService implements Monitor {
                 }
             }
             updateUser();
+        }
+        if (user != null) {
+            user.destroy();
         }
     }
 
@@ -1283,16 +1287,16 @@ public class MediaSessionService extends SystemService implements Monitor {
         private IOnMediaKeyListener mOnMediaKeyListener;
         private int mOnMediaKeyListenerUid;
 
-        private boolean mAdaptivePlaybackEnabled;
+        private final SettingsObserver mSettingsObserver;
+        private volatile boolean mAdaptivePlaybackEnabled;
 
         FullUserRecord(int fullUserId) {
             mFullUserId = fullUserId;
             mContentResolver = mContext.createContextAsUser(UserHandle.of(mFullUserId), 0)
                     .getContentResolver();
-            SettingsObserver settingsObserver = new SettingsObserver();
-            settingsObserver.observe();
-            mAdaptivePlaybackEnabled = Settings.System.getIntForUser(mContentResolver,
-                    Settings.System.ADAPTIVE_PLAYBACK_ENABLED, 0, UserHandle.USER_CURRENT) == 1;
+            mSettingsObserver = new SettingsObserver(mHandler);
+            mSettingsObserver.observe();
+            mAdaptivePlaybackEnabled = readAdaptivePlaybackEnabled();
             mPriorityStack = new MediaSessionStack(mAudioPlayerStateMonitor, this);
             // Restore the remembered media button receiver before the boot.
             String mediaButtonReceiverInfo = Settings.Secure.getString(mContentResolver,
@@ -1300,6 +1304,15 @@ public class MediaSessionService extends SystemService implements Monitor {
             mLastMediaButtonReceiverHolder =
                     MediaButtonReceiverHolder.unflattenFromString(
                             mContext, mediaButtonReceiverInfo);
+        }
+
+        void destroy() {
+            mContentResolver.unregisterContentObserver(mSettingsObserver);
+        }
+
+        private boolean readAdaptivePlaybackEnabled() {
+            return Settings.System.getIntForUser(mContentResolver,
+                    Settings.System.ADAPTIVE_PLAYBACK_ENABLED, 0, mFullUserId) == 1;
         }
 
         public void destroySessionsForUserLocked(int userId) {
@@ -1496,20 +1509,19 @@ public class MediaSessionService extends SystemService implements Monitor {
             private final Uri ADAPTIVE_PLAYBACK_ENABLED_URI =
                     Settings.System.getUriFor(Settings.System.ADAPTIVE_PLAYBACK_ENABLED);
 
-            public SettingsObserver() {
-                super(null);
+            SettingsObserver(Handler handler) {
+                super(handler);
             }
 
-            private void observe() {
-                mContentResolver.registerContentObserver(ADAPTIVE_PLAYBACK_ENABLED_URI, false,
-                        this);
+            void observe() {
+                mContentResolver.registerContentObserver(
+                        ADAPTIVE_PLAYBACK_ENABLED_URI, false, this, mFullUserId);
             }
 
             @Override
             public void onChange(boolean selfChange, @Nullable Uri uri) {
                 if (ADAPTIVE_PLAYBACK_ENABLED_URI.equals(uri)) {
-                    mAdaptivePlaybackEnabled = Settings.System.getIntForUser(mContentResolver,
-                            Settings.System.ADAPTIVE_PLAYBACK_ENABLED, 0, UserHandle.USER_CURRENT) == 1;
+                    mAdaptivePlaybackEnabled = readAdaptivePlaybackEnabled();
                 }
             }
         }
