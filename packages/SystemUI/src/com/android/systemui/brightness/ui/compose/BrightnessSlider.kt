@@ -483,7 +483,7 @@ private fun readShowAutoBrightness(cr: ContentResolver): Boolean =
 
 private fun readEnableHaptics(cr: ContentResolver): Boolean =
     try {
-        Settings.Secure.getIntForUser(
+        Settings.System.getIntForUser(
             cr, Settings.System.QS_BRIGHTNESS_SLIDER_HAPTIC,
             1, UserHandle.USER_CURRENT
         ) != 0
