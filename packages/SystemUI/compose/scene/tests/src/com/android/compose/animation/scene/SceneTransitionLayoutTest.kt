@@ -29,6 +29,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.MaterialExpressiveTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MotionScheme
 import androidx.compose.material3.Text
@@ -565,7 +566,7 @@ class SceneTransitionLayoutTest {
                 }
             }
 
-            MaterialTheme(motionScheme = motionScheme2) {
+            MaterialExpressiveTheme(motionScheme = motionScheme2) {
                 // Important: we should read this state inside the MaterialTheme composable.
                 state2 = rememberMutableSceneTransitionLayoutState(initialScene = SceneA)
                 SceneTransitionLayout(state2) {
