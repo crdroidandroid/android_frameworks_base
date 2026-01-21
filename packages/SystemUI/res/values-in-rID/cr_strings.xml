@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     SPDX-FileCopyrightText: 2016-2025 crDroid Android Project
+     SPDX-FileCopyrightText: 2016-2026 crDroid Android Project
      SPDX-License-Identifier: Apache-2.0
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
@@ -16,9 +16,9 @@
     <!-- Name of the VoWiFi status bar icon. -->
     <string name="status_bar_vowifi">Panggilan Wi-Fi (VoWiFi)</string>
     <!-- Data disabled icon -->
-    <string name="data_disabled_icon_title">Data disabled icon</string>
+    <string name="data_disabled_icon_title">Ikon data dinonaktifkan</string>
     <!-- 4G icon instead LTE -->
-    <string name="fourg_icon_title">4G icon</string>
+    <string name="fourg_icon_title">Ikon 4G</string>
     <!-- Status bar network traffic monitor strings -->
     <string name="kilobitspersecond_short">kb/d</string>
     <string name="megabitspersecond_short">Mb/d</string>
@@ -29,7 +29,7 @@
     <!-- Weather -->
     <string name="weather_condition_clouds">Berawan</string>
     <string name="weather_condition_rain">Hujan</string>
-    <string name="weather_condition_clear">Clear Sky</string>
+    <string name="weather_condition_clear">Langit Cerah</string>
     <string name="weather_condition_storm">Badai</string>
     <string name="weather_condition_snow">Bersalju</string>
     <string name="weather_condition_wind">Berangin</string>
@@ -76,6 +76,11 @@
     <string name="tristate_rotation_0">Potret</string>
     <string name="tristate_rotation_90">Lanskap (90°)</string>
     <string name="tristate_rotation_270">Lanskap (270°)</string>
+    <!-- Data usage info in QS footer -->
+    <string name="usage_data">digunakan hari ini</string>
+    <string name="usage_data_weekly">digunakan minggu ini</string>
+    <string name="usage_data_default_suffix">Data</string>
+    <string name="usage_wifi_default_suffix">Wi-Fi</string>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">Paksa berhenti?</string>
     <string name="force_stop_dlg_text">Jika Anda menghentikan paksa aplikasi, kemungkinan akan terjadi gagal fungsi.</string>
@@ -85,7 +90,7 @@
     <string name="quick_settings_sound_label">Suara</string>
     <string name="quick_settings_sound_ring">Dering</string>
     <string name="quick_settings_sound_vibrate">Getar</string>
-    <string name="quick_settings_sound_silent">Silent</string>
+    <string name="quick_settings_sound_silent">Senyap</string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">Info CPU</string>
     <!-- FPS Info tile -->
@@ -125,31 +130,35 @@
     <string name="quick_settings_locale_more_locales_toast">Silakan konfigurasikan beberapa bahasa untuk mengaktifkan fungsi tombol</string>
     <!-- AI Assistant affordance [CHAR LIMIT=32] -->
     <string name="accessibility_assistant_button">Asisten AI</string>
-    <!-- Text while recognizing face -->
-    <string name="face_unlock_recognizing">Mengenali wajah...</string>
     <!-- Preferred network tile -->
-    <string name="qs_preferred_network_label">Preferred network</string>
+    <string name="qs_preferred_network_label">Jaringan pilihan</string>
     <string name="qs_preferred_network_lte">4G / LTE</string>
     <string name="qs_preferred_network_nr">5G / NR</string>
-    <string name="qs_preferred_network_3g">3G</string>
-    <string name="qs_preferred_network_unsupported">Unsupported</string>
+    <string name="qs_preferred_network_unsupported">Tidak didukung</string>
+    <!-- Text while recognizing face -->
+    <string name="face_unlock_recognizing">Mengenali wajah...</string>
     <!-- Flashlight Strength -->
-    <string name="flashlight_strength_title">Flashlight Strength</string>
-    <string name="flashlight_strength_turn_off">Turn off</string>
-    <string name="flashlight_strength_turn_on">Turn on</string>
+    <string name="flashlight_strength_title">Kekuatan Senter</string>
+    <string name="flashlight_strength_turn_off">Matikan</string>
+    <string name="flashlight_strength_turn_on">Nyalakan</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="other">%d perangkat terhubung</item>
     </plurals>
     <!-- 5G toggle in Internet Dialog -->
     <string name="enable_fiveg">Aktifkan 5G</string>
-    <!-- Data usage info in QS footer -->
-    <string name="usage_data">digunakan hari ini</string>
-    <string name="usage_data_weekly">used this week</string>
-    <string name="usage_data_default_suffix">Data</string>
-    <string name="usage_wifi_default_suffix">Wi-Fi</string>
     <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
     <string name="screenrecord_delete_label">Hapus</string>
     <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
     <string name="screenrecord_delete_description">Rekaman layar dihapus</string>
+    <!-- Smartspace -->
+    <string name="accessibility_next_alarm">Alarm berikutnya pukul %s</string>
+    <string name="accessibility_smartspace_page">Halaman %1$d dari %2$d</string>
+    <string name="active_mode_content_description">%1$s aktif</string>
+    <string name="generic_smartspace_concatenated_desc">%1$s, %2$s</string>
+    <string name="music_controls_no_title">Tanpa judul</string>
+    <string name="smartspace_content_desc">Sekilas</string>
+    <string name="smartspace_flight_qr_code">Kode QR</string>
+    <string name="smartspace_icu_date_pattern">EEEMMMd</string>
+    <string name="smartspace_role_desc">Lihat</string>
 </resources>
