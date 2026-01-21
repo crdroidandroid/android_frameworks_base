@@ -7,19 +7,19 @@
     <!-- Statusbar Icons -->
     <string name="status_bar_nfc">NFC</string>
     <string name="status_bar_data_saver">Икономия на данни</string>
-    <string name="status_bar_call_strength">Call strength</string>
+    <string name="status_bar_call_strength">Качество на обаждането</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
-        <item quantity="one">%d device connected</item>
-        <item quantity="other">%d devices connected</item>
+        <item quantity="one">%d устройство свързано</item>
+        <item quantity="other">%d устройства свързани</item>
     </plurals>
     <!-- Notification counter -->
     <!-- Name of the roaming status bar icon. -->
     <string name="status_bar_roaming">Индикатор за роуминг</string>
     <!-- Name of the HD calling status bar icon. -->
-    <string name="status_bar_hd_calling">HD calling (VoLTE/VoNR)</string>
+    <string name="status_bar_hd_calling">Обаждане в висока дефиниция (VoLTE/VoNR)</string>
     <!-- Name of the VoWiFi status bar icon. -->
-    <string name="status_bar_vowifi">Wi-Fi calling (VoWiFi)</string>
+    <string name="status_bar_vowifi">Обаждане чрез интернет (VoWiFi)</string>
     <!-- Status bar network traffic monitor strings -->
     <string name="kilobitspersecond_short">kб/с</string>
     <string name="megabitspersecond_short">Mб/с</string>
@@ -32,13 +32,13 @@
     <string name="usage_data_default_suffix">Данни</string>
     <string name="usage_wifi_default_suffix">Бесжична Мрежа</string>
     <!-- Weather -->
-    <string name="weather_condition_clouds">Cloudy</string>
-    <string name="weather_condition_rain">Rainy</string>
-    <string name="weather_condition_clear">Clear Sky</string>
-    <string name="weather_condition_storm">Stormy</string>
-    <string name="weather_condition_snow">Snowy</string>
-    <string name="weather_condition_wind">Windy</string>
-    <string name="weather_condition_mist">Misty</string>
+    <string name="weather_condition_clouds">Облачно</string>
+    <string name="weather_condition_rain">Дъждовно</string>
+    <string name="weather_condition_clear">Чисто небе</string>
+    <string name="weather_condition_storm">Бурно време</string>
+    <string name="weather_condition_snow">Снежно</string>
+    <string name="weather_condition_wind">Ветровито</string>
+    <string name="weather_condition_mist">Мъгливо</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Бързо зареждане (<xliff:g id="charging_time_left" example="4 часа и 2 минути">%1$s</xliff:g> до пълно зареждане)</string>
     <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Бързо зареждане</string>
@@ -49,8 +49,8 @@
     <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • VOOC зареждане (<xliff:g id="charging_time_left" example="4 часа и 2 минути">%1$s</xliff:g> до пълно зареждане)</string>
     <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • VOOC зареждане</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • Turbo Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
-    <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • Turbo Charging</string>
+    <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • Турбо зареждане (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> до пълно зареждане)</string>
+    <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • Турбо зареждане</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">On-The-Go активиран</string>
     <string name="onthego_notif_title">On-The-Go е активен</string>
@@ -90,7 +90,7 @@
     <string name="quick_settings_sound_label">Звук</string>
     <string name="quick_settings_sound_ring">Звънене</string>
     <string name="quick_settings_sound_vibrate">Вибрация</string>
-    <string name="quick_settings_sound_mute">Mute</string>
+    <string name="quick_settings_sound_mute">Заглуши</string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">Информация за CPU</string>
     <!-- FPS Info tile -->
@@ -99,7 +99,7 @@
     <string name="fps_text_placeholder">FPS: <xliff:g id="fps" example="90">%1$d</xliff:g></string>
     <!-- Compass QS Tile -->
     <string name="quick_settings_compass_label">Компас</string>
-    <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
+    <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0<xliff:g id="direction">%2$s</xliff:g></string>
     <string name="quick_settings_compass_init">Подготвяне\u2026</string>
     <string name="quick_settings_compass_N">Север</string>
     <string name="quick_settings_compass_NE">Североизток</string>
@@ -121,19 +121,19 @@
     <string name="omnijaws_service_unknown">Няма данни за времето</string>
     <string name="omnijaws_label_default">Времето</string>
     <!-- Refresh Rate Tile -->
-    <string name="refresh_rate_tile_label">Refresh rate</string>
+    <string name="refresh_rate_tile_label">Честота на опресняване</string>
     <string name="auto_mode_label">Автоматично</string>
     <!-- Screenshot Tile -->
-    <string name="screenshot_long_press">Long press - selected region</string>
+    <string name="screenshot_long_press">Дълъг натиск - избрана област</string>
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Език</string>
-    <string name="quick_settings_locale_more_locales_toast">Configure multiple languages first</string>
+    <string name="quick_settings_locale_more_locales_toast">Конфигурирай много езици първо</string>
     <!-- AI Assistant affordance [CHAR LIMIT=32] -->
-    <string name="accessibility_assistant_button">AI Assistant</string>
+    <string name="accessibility_assistant_button">AI асистент</string>
     <!-- Text while recognizing face -->
-    <string name="face_unlock_recognizing">Recognizing face...</string>
+    <string name="face_unlock_recognizing">Разпознаване на лице...</string>
     <!-- 5G toggle in Internet Dialog -->
-    <string name="enable_fiveg">Enable 5G</string>
+    <string name="enable_fiveg">Включи 5G</string>
     <!-- Toast for timer chips long press -->
-    <string name="chip_longpress_hint">Long press to directly stop</string>
+    <string name="chip_longpress_hint">Дълъг натиск за директен стоп</string>
 </resources>
