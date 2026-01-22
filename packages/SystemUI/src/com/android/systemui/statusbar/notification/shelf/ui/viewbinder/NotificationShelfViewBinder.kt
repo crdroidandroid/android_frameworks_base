@@ -18,7 +18,6 @@ package com.android.systemui.statusbar.notification.shelf.ui.viewbinder
 
 import com.android.app.tracing.coroutines.launchTraced as launch
 import com.android.app.tracing.traceSection
-import com.android.systemui.Flags
 import com.android.systemui.plugins.FalsingManager
 import com.android.systemui.scene.shared.flag.SceneContainerFlag
 import com.android.systemui.statusbar.NotificationShelf
@@ -48,9 +47,7 @@ object NotificationShelfViewBinder {
                 launch { viewModel.isAlignedToEnd.collect(::setAlignedToEnd) }
             }
 
-            if (Flags.notificationRowTransparency()) {
-                launch { viewModel.isBlurSupported.collect(shelf::setIsBlurSupported) }
-            }
+            launch { viewModel.isBlurSupported.collect(shelf::setIsBlurSupported) }
 
             registerViewListenersWhileAttached(shelf, viewModel)
         }
