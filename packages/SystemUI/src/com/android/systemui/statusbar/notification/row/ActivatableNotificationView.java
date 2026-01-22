@@ -131,6 +131,7 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
      */
     protected boolean mOnKeyguard;
     protected boolean mIsBlurSupported;
+    protected boolean mUseTransparent;
 
     public ActivatableNotificationView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -152,7 +153,7 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
     }
 
     protected void updateColors() {
-        if (mIsBlurSupported) {
+        if (usesTransparentBackground()) {
             mNormalColor = SurfaceEffectColors.surfaceEffect1(getContext());
             mOpaqueColor = mContext.getColor(
                     com.android.internal.R.color.materialColorSurfaceContainer);
@@ -361,13 +362,20 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
     }
 
     public void setIsBlurSupported(boolean isBlurSupported) {
-        boolean usedTransparentBackground = usesTransparentBackground();
         mIsBlurSupported = isBlurSupported;
-        mBackgroundNormal.setIsBlurSupported(isBlurSupported);
-        if (usedTransparentBackground != usesTransparentBackground()) {
-            updateColors();
-            updateBackgroundTint();
-            mBackgroundNormal.setBlurBackgroundEnabled(usesBlurredBackground());
+        updateIfNeeded();
+    }
+
+    /** Updates background blur/transparency when transparent state changes. */
+    public void updateIfNeeded() {
+        boolean transparent = usesTransparentBackground();
+        if (mUseTransparent != transparent) {
+            mUseTransparent = transparent;
+            if (mBackgroundNormal != null) {
+                mBackgroundNormal.setIsBlurSupported(transparent);
+                mBackgroundNormal.setBlurBackgroundEnabled(usesBlurredBackground());
+            }
+            updateBackgroundColors();
         }
     }
 

@@ -172,6 +172,7 @@ public class NotificationShelf extends ActivatableNotificationView {
         if (!mShowNotificationShelf) {
             setVisibility(GONE);
         }
+        updateIfNeeded();
     }
 
     @Override
@@ -297,6 +298,7 @@ public class NotificationShelf extends ActivatableNotificationView {
             }
             viewState.setYTranslation(yTranslation, "NotificationShelf.updateState.visible");
         }
+        updateIfNeeded();
     }
 
     /**
@@ -587,6 +589,7 @@ public class NotificationShelf extends ActivatableNotificationView {
         if (mNotGoneIndex == -1) {
             mNotGoneIndex = notGoneIndex;
         }
+        updateIfNeeded();
     }
 
     public int calcActualWidth(float numViewsInShelf) {
@@ -1160,5 +1163,12 @@ public class NotificationShelf extends ActivatableNotificationView {
             setHasItemsInStableShelf(hasItemsInStableShelf);
             mShelfIcons.setAnimationsEnabled(mAnimationsEnabled);
         }
+    }
+
+    @Override
+    protected boolean usesTransparentBackground() {
+        return super.usesTransparentBackground()
+                && mAmbientState != null
+                && !mAmbientState.isOnKeyguard();
     }
 }
