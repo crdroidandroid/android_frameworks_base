@@ -305,7 +305,8 @@ public class PhoneStatusBarView extends FrameLayout {
         // correctly updated and closed.
         if (DesktopExperienceFlags.ENABLE_REMOVE_STATUS_BAR_INPUT_LAYER.isTrue()
                 && event.getAction() == MotionEvent.ACTION_DOWN
-                && !mTouchableRegion.contains((int) event.getRawX(), (int) event.getRawY())) {
+                && !mTouchableRegion.contains((int) event.getRawX(), (int) event.getRawY())
+                && !mBrightnessControlEnabled) {
             return false;
         }
 

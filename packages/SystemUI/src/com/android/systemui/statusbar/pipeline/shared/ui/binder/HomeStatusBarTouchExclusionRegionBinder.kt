@@ -77,11 +77,21 @@ object HomeStatusBarTouchExclusionRegionBinder {
     ): Region {
         val outBounds = Rect()
         view.getBoundsOnScreen(outBounds)
+
+        if (view.getBrightnessControlEnabled()) {
+            return Region.obtain().apply { set(outBounds) }
+        }
+
         val touchableRegion =
             Region.obtain().apply {
                 set(outBounds)
                 op(touchExclusionRegion, Region.Op.DIFFERENCE)
             }
+
+        if (touchableRegion.isEmpty) {
+            touchableRegion.set(outBounds)
+        }
+
         return touchableRegion
     }
 }

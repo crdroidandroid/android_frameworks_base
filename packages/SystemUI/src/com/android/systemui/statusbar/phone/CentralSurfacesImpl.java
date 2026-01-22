@@ -658,7 +658,6 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
     private int mQuickQsOffsetHeight;
     private boolean mBrightnessChanged;
     private boolean mBrightnessControl;
-    private boolean mJustPeeked;
     private float mCurrentBrightness;
 
     /**
@@ -1858,13 +1857,12 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
                 mLinger = 0;
                 mInitialTouchX = x;
                 mInitialTouchY = y;
-                mJustPeeked = true;
                 mMessageRouter.cancelMessages(MSG_LONG_PRESS_BRIGHTNESS_CHANGE);
                 mMessageRouter.sendMessageDelayed(MSG_LONG_PRESS_BRIGHTNESS_CHANGE,
                         BRIGHTNESS_CONTROL_LONG_PRESS_TIMEOUT);
             }
         } else if (action == MotionEvent.ACTION_MOVE) {
-            if (y < mQuickQsOffsetHeight && mJustPeeked) {
+            if (y < mQuickQsOffsetHeight) {
                 if (mLinger > BRIGHTNESS_CONTROL_LINGER_THRESHOLD) {
                     adjustBrightness(x);
                 } else {
@@ -1879,9 +1877,6 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
                     }
                 }
             } else {
-                if (y > mQuickQsOffsetHeight) {
-                    mJustPeeked = false;
-                }
                 mMessageRouter.cancelMessages(MSG_LONG_PRESS_BRIGHTNESS_CHANGE);
             }
         } else if (action == MotionEvent.ACTION_UP
@@ -1894,7 +1889,7 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
     public void onBrightnessChanged(boolean upOrCancel) {
         if (mBrightnessChanged && upOrCancel) {
             mBrightnessChanged = false;
-            if (mJustPeeked && mShadeController.isExpandedVisible()) {
+            if (mShadeController.isExpandedVisible()) {
                 getNotificationShadeWindowViewController().fling(10, false, false);
             }
             mDisplayManager.setBrightness(mDisplayId, mCurrentBrightness);

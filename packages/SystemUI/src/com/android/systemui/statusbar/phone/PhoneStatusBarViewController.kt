@@ -16,6 +16,7 @@
 package com.android.systemui.statusbar.phone
 
 import android.app.StatusBarManager.WINDOW_STATUS_BAR
+import android.graphics.Region
 import android.provider.Settings
 import android.util.Log
 import android.view.Display.DEFAULT_DISPLAY
@@ -24,6 +25,7 @@ import android.view.InputDevice
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
+import android.window.DesktopExperienceFlags
 import androidx.annotation.VisibleForTesting
 import com.android.systemui.Gefingerpoken
 import com.android.systemui.battery.BatteryMeterView
@@ -307,6 +309,19 @@ private constructor(
 
     fun setBrightnessControlEnabled(enabled: Boolean) {
         mView.brightnessControlEnabled = enabled
+        if (enabled && DesktopExperienceFlags.ENABLE_REMOVE_STATUS_BAR_INPUT_LAYER.isTrue()) {
+            mView.post {
+                val loc = IntArray(2)
+                mView.getLocationOnScreen(loc)
+                val region = Region(
+                    loc[0],
+                    loc[1],
+                    loc[0] + mView.width,
+                    loc[1] + mView.height
+                )
+                mView.updateTouchableRegion(region)
+            }
+        }
     }
 
     /**
@@ -332,7 +347,6 @@ private constructor(
     fun onTouch(event: MotionEvent) {
         if (mView.brightnessControlEnabled) {
             centralSurfaces.brightnessControl(event)
-            if (!centralSurfaces.commandQueuePanelsEnabled) return
         }
 
         val upOrCancel =
