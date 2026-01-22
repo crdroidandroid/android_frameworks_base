@@ -71,6 +71,7 @@ import com.android.systemui.statusbar.phone.CentralSurfaces;
 import com.android.systemui.statusbar.phone.KeyguardBypassController;
 import com.android.systemui.statusbar.policy.SmartReplyConstants;
 import com.android.systemui.statusbar.policy.dagger.RemoteInputViewSubcomponent;
+import com.android.systemui.util.ScrimUtils;
 import com.android.systemui.util.time.SystemClock;
 import com.android.systemui.window.domain.interactor.WindowRootViewBlurInteractor;
 
@@ -447,7 +448,7 @@ public class ExpandableNotificationRowController implements NotifViewController 
                     mView.setOnKeyguard(mStatusBarStateController.getState() == KEYGUARD);
                     mStatusBarStateController.addCallback(mStatusBarStateListener);
                 }
-
+                ScrimUtils.get().addListener(mScrimListener);
             }
 
             @Override
@@ -457,6 +458,7 @@ public class ExpandableNotificationRowController implements NotifViewController 
                     mStatusBarStateController.removeCallback(mStatusBarStateListener);
                 }
                 mSettingsController.removeCallback(BUBBLES_SETTING_URI, mSettingsListener);
+                ScrimUtils.get().removeListener(mScrimListener);
             }
         });
 
@@ -471,6 +473,14 @@ public class ExpandableNotificationRowController implements NotifViewController 
                 @Override
                 public void onStateChanged(int newState) {
                     mView.setOnKeyguard(newState == KEYGUARD);
+                }
+            };
+
+    private final ScrimUtils.ScrimEventListener mScrimListener =
+            new ScrimUtils.ScrimEventListener() {
+                @Override
+                public void onNotificationPosted(StatusBarNotification sbn) {
+                    mView.updateIfNeeded();
                 }
             };
 
