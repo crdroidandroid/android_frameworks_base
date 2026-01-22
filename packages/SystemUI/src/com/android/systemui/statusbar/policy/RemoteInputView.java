@@ -33,6 +33,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Trace;
 import android.os.UserHandle;
+import android.provider.Settings;
 import android.service.notification.StatusBarNotification;
 import android.text.Editable;
 import android.text.SpannedString;
@@ -82,7 +83,6 @@ import com.android.internal.logging.UiEvent;
 import com.android.internal.logging.UiEventLogger;
 import com.android.internal.util.ContrastColorUtil;
 import com.android.systemui.Dependency;
-import com.android.systemui.Flags;
 import com.android.systemui.res.R;
 import com.android.systemui.statusbar.RemoteInputController;
 import com.android.systemui.statusbar.notification.collection.RemoteInputEntryAdapter;
@@ -253,7 +253,7 @@ public class RemoteInputView extends LinearLayout implements View.OnClickListene
         mProgressBar.setProgressTintList(accentColor);
         mProgressBar.setIndeterminateTintList(accentColor);
         mProgressBar.setSecondaryProgressTintList(accentColor);
-        if (!Flags.notificationRowTransparency()) {
+        if (!translucentEnabled()) {
             setBackgroundColor(backgroundColor);
         }
     }
@@ -481,7 +481,7 @@ public class RemoteInputView extends LinearLayout implements View.OnClickListene
                 if (mWrapper != null) {
                     mWrapper.setRemoteInputVisible(false);
                 }
-                if (Flags.notificationRowTransparency()) {
+                if (translucentEnabled()) {
                     if (actionsContainer != null) actionsContainer.setAlpha(1);
                 }
             }
@@ -852,7 +852,7 @@ public class RemoteInputView extends LinearLayout implements View.OnClickListene
                     ObjectAnimator.ofFloat(fadeOutView, View.ALPHA, 1f, 0f);
             fadeOutViewAlphaAnimator.setDuration(FOCUS_ANIMATION_CROSSFADE_DURATION);
             fadeOutViewAlphaAnimator.setInterpolator(InterpolatorsAndroidX.LINEAR);
-            if (!Flags.notificationRowTransparency()) {
+            if (!translucentEnabled()) {
                 animatorSet.addListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation, boolean isReverse) {
@@ -922,6 +922,15 @@ public class RemoteInputView extends LinearLayout implements View.OnClickListene
             mContentBackgroundBounds = contentBackgroundBounds;
         }
         setTranslationY(verticalBoundOffset);
+    }
+
+    private boolean translucentEnabled() {
+        return Settings.Secure.getIntForUser(
+                mContext.getContentResolver(),
+                Settings.Secure.NOTIFICATION_ROW_TRANSPARENCY,
+                1,
+                UserHandle.USER_CURRENT)
+                != 0;
     }
 
     /** Handler for button click on send action in IME. */
