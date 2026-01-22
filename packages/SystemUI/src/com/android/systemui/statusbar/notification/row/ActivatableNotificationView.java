@@ -19,7 +19,6 @@ package com.android.systemui.statusbar.notification.row;
 import static com.android.systemui.Flags.lockscreenBlurForNotifications;
 import static com.android.systemui.Flags.notificationAppearNonlinear;
 import static com.android.systemui.Flags.notificationBackgroundTintOptimization;
-import static com.android.systemui.Flags.notificationRowTransparency;
 import static com.android.systemui.Flags.physicalNotificationMovement;
 import static com.android.systemui.statusbar.notification.row.ExpandableView.ClipSide.BOTTOM;
 import static com.android.systemui.statusbar.notification.row.ExpandableView.ClipSide.TOP;
@@ -153,13 +152,15 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
     }
 
     protected void updateColors() {
-        if (notificationRowTransparency()) {
+        if (mIsBlurSupported) {
             mNormalColor = SurfaceEffectColors.surfaceEffect1(getContext());
             mOpaqueColor = mContext.getColor(
                     com.android.internal.R.color.materialColorSurfaceContainer);
         } else {
             mNormalColor = mContext.getColor(
                     com.android.internal.R.color.materialColorSurfaceContainerHigh);
+            mOpaqueColor = mContext.getColor(
+                    com.android.internal.R.color.materialColorSurfaceContainer);
         }
         mTintedRippleColor = mContext.getColor(
                 R.color.notification_ripple_tinted_color);
@@ -360,12 +361,11 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
     }
 
     public void setIsBlurSupported(boolean isBlurSupported) {
-        if (!notificationRowTransparency()) {
-            return;
-        }
         boolean usedTransparentBackground = usesTransparentBackground();
         mIsBlurSupported = isBlurSupported;
+        mBackgroundNormal.setIsBlurSupported(isBlurSupported);
         if (usedTransparentBackground != usesTransparentBackground()) {
+            updateColors();
             updateBackgroundTint();
             mBackgroundNormal.setBlurBackgroundEnabled(usesBlurredBackground());
         }
@@ -376,7 +376,7 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
     }
 
     protected boolean usesTransparentBackground() {
-        return mIsBlurSupported && notificationRowTransparency()
+        return mIsBlurSupported
                 && (!mOnKeyguard || lockscreenBlurForNotifications());
     }
 
@@ -767,11 +767,7 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
         if (withTint && mBgTint != NO_COLOR) {
             return mBgTint;
         } else {
-            if (Flags.notificationRowTransparency()) {
-                return usesTransparentBackground() ? mNormalColor : mOpaqueColor;
-            } else {
-                return mNormalColor;
-            }
+            return usesTransparentBackground() ? mNormalColor : mOpaqueColor;
         }
     }
 
@@ -883,7 +879,7 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
         }
         mOnKeyguard = onKeyguard;
         mBackgroundNormal.setOnKeyguard(mOnKeyguard);
-        if (notificationRowTransparency()) {
+        if (mIsBlurSupported) {
             updateBackgroundTint();
         }
     }
