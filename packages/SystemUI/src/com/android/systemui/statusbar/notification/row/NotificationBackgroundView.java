@@ -16,7 +16,6 @@
 
 package com.android.systemui.statusbar.notification.row;
 
-import static com.android.systemui.Flags.notificationRowTransparency;
 import static com.android.systemui.util.ColorUtilKt.hexColorString;
 
 import android.content.Context;
@@ -81,6 +80,8 @@ public class NotificationBackgroundView extends View implements Dumpable,
     // True only if the dismiss button is visible.
     private boolean mDrawDismissButtonCutout = false;
 
+    private boolean mIsBlurSupported = false;
+
     public NotificationBackgroundView(Context context, AttributeSet attrs) {
         super(context, attrs);
         mDontModifyCorners = getResources().getBoolean(R.bool.config_clipNotificationsToOutline);
@@ -88,13 +89,18 @@ public class NotificationBackgroundView extends View implements Dumpable,
                 R.color.notification_state_color_light);
         mDarkColoredStatefulColors = getResources().getColorStateList(
                 R.color.notification_state_color_dark);
-        if (notificationRowTransparency()) {
+        if (mIsBlurSupported) {
             mNormalColor = SurfaceEffectColors.surfaceEffect1(getContext());
-        } else  {
+        } else {
             mNormalColor = mContext.getColor(
                     com.android.internal.R.color.materialColorSurfaceContainerHigh);
         }
         mFocusOverlayStroke = getResources().getDimension(R.dimen.notification_focus_stroke_width);
+    }
+
+    /** Sets whether blur/translucency is supported for notification rows. */
+    public void setIsBlurSupported(boolean isBlurSupported) {
+        mIsBlurSupported = isBlurSupported;
     }
 
     @Override
@@ -302,9 +308,8 @@ public class NotificationBackgroundView extends View implements Dumpable,
 
     public void setTint(int tintColor) {
         Drawable baseLayer = getBaseBackgroundLayer();
-        if (notificationRowTransparency()) {
+        if (mIsBlurSupported) {
             ((GradientDrawable) baseLayer.mutate()).setColor(tintColor);
-
         } else {
             baseLayer.mutate().setTintMode(PorterDuff.Mode.SRC_ATOP);
             baseLayer.setTint(tintColor);
