@@ -108,7 +108,7 @@ class UdfpsHelper(
         override fun onDisplayAdded(displayId: Int) {}
 
         override fun onDisplayChanged(displayId: Int) {
-            if (displayId == Display.DEFAULT_DISPLAY) {
+            if (displayId == Display.DEFAULT_DISPLAY && view.isAttachedToWindow) {
                 brightnessToAlpha()
                 windowManager.updateViewLayout(view, dimLayoutParams)
             }
