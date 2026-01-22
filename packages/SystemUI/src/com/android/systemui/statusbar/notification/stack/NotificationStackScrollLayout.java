@@ -813,6 +813,16 @@ public class NotificationStackScrollLayout
         }
     }
 
+    /** Refreshes translucency state of all notification rows (e.g. after shade expand/collapse). */
+    public void updateIfNeeded() {
+        for (int i = 0; i < getChildCount(); i++) {
+            View child = getChildAt(i);
+            if (child instanceof ActivatableNotificationView activatableView) {
+                activatableView.updateIfNeeded();
+            }
+        }
+    }
+
     private void onJustBeforeDraw() {
         if (SceneContainerFlag.isEnabled()) {
             if (mChildrenUpdateRequested) {
