@@ -101,6 +101,10 @@ public class NotificationBackgroundView extends View implements Dumpable,
     /** Sets whether blur/translucency is supported for notification rows. */
     public void setIsBlurSupported(boolean isBlurSupported) {
         mIsBlurSupported = isBlurSupported;
+        // Re-apply PorterDuff on blur changes.
+        if (mBackground != null) {
+            setTint(mTintColor);
+        }
     }
 
     @Override
