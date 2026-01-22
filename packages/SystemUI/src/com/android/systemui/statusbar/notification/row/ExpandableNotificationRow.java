@@ -22,7 +22,6 @@ import static android.service.notification.NotificationListenerService.REASON_CA
 import static android.view.accessibility.AccessibilityEvent.CONTENT_CHANGE_TYPE_EXPANDED;
 import static android.view.accessibility.AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED;
 
-import static com.android.systemui.Flags.notificationRowTransparency;
 import static com.android.systemui.flags.Flags.ENABLE_NOTIFICATIONS_SIMULATE_SLOW_MEASURE;
 import static com.android.systemui.statusbar.NotificationLockscreenUserManager.REDACTION_TYPE_NONE;
 import static com.android.systemui.statusbar.notification.NotificationUtils.logKey;
@@ -1015,8 +1014,8 @@ public class ExpandableNotificationRow extends ActivatableNotificationView
         } else if (isAboveShelf() != wasAboveShelf) {
             mAboveShelfChangedListener.onAboveShelfStateChanged(!wasAboveShelf);
         }
-        if (notificationRowTransparency()) {
-            updateBackgroundTint();
+        if (mIsBlurSupported) {
+            updateColors();
         }
     }
 
@@ -1099,8 +1098,8 @@ public class ExpandableNotificationRow extends ActivatableNotificationView
     public void markHeadsUpSeen() {
         super.markHeadsUpSeen();
         mMustStayOnScreen = false;
-        if (notificationRowTransparency()) {
-            updateBackgroundTint();
+        if (mIsBlurSupported) {
+            updateColors();
         }
     }
 
@@ -1360,8 +1359,8 @@ public class ExpandableNotificationRow extends ActivatableNotificationView
             setUserExpanded(true);
         }
 
-        if (notificationRowTransparency()) {
-            updateBackgroundTint();
+        if (mIsBlurSupported) {
+            updateColors();
         }
         setChronometerRunning(mLastChronometerRunning);
         if (isAboveShelf() != wasAboveShelf) {
@@ -1755,7 +1754,7 @@ public class ExpandableNotificationRow extends ActivatableNotificationView
 
     @Override
     protected void setBackgroundTintColor(int color) {
-        if (notificationRowTransparency()) {
+        if (mIsBlurSupported) {
             boolean isColorized = false;
             if (NotificationBundleUi.isEnabled()) {
                 if (mEntryAdapter != null) {
@@ -1784,6 +1783,13 @@ public class ExpandableNotificationRow extends ActivatableNotificationView
         NotificationContentView view = getShowingLayout();
         if (view != null) {
             view.setBackgroundTintColor(color);
+        }
+    }
+
+    /** Refreshes row colors when translucency setting changes. */
+    public void updateIfNeeded() {
+        if (mIsBlurSupported) {
+            updateColors();
         }
     }
 
@@ -1952,8 +1958,8 @@ public class ExpandableNotificationRow extends ActivatableNotificationView
         if (isAboveShelf() != wasAboveShelf) {
             mAboveShelfChangedListener.onAboveShelfStateChanged(!wasAboveShelf);
         }
-        if (notificationRowTransparency()) {
-            updateBackgroundTint();
+        if (mIsBlurSupported) {
+            updateColors();
         }
     }
 
@@ -4172,7 +4178,7 @@ public class ExpandableNotificationRow extends ActivatableNotificationView
                     mChildrenContainer.getAttachedChildren();
             for (int i = 0; i < notificationChildren.size(); i++) {
                 ExpandableNotificationRow child = notificationChildren.get(i);
-                if (notificationRowTransparency()) {
+                if (mIsBlurSupported) {
                     child.updateBackgroundTint();
                 }
                 child.updateBackgroundForGroupState();
@@ -4196,7 +4202,7 @@ public class ExpandableNotificationRow extends ActivatableNotificationView
             // For Bundles we let the BundleHeader show its background permanently. This is
             // possible because collapsed Bundles don't preview their children unlike summaries.
             // It is important that backgrounds don't overlap during expansion since
-            // notificationRowTransparency() introduced transparency.
+            // Translucency toggle enables transparent backgrounds.
             mShowNoBackground = true;
             mChildrenContainer.updateHeaderForExpansion(mShowNoBackground);
         } else if (mIsSummaryWithChildren) {
@@ -4209,7 +4215,7 @@ public class ExpandableNotificationRow extends ActivatableNotificationView
             }
         } else if (isChildInGroup()) {
             final int childColor = getShowingLayout().getBackgroundColorForExpansionState();
-            if ((Flags.notificationRowTransparency() || notificationsRedesignTemplates())
+            if ((mIsBlurSupported || notificationsRedesignTemplates())
                     && childColor == Color.TRANSPARENT) {
                 // If child is not customizing its background color, switch from the parent to
                 // the child background when the expansion finishes.
