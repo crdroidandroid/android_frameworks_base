@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     SPDX-FileCopyrightText: 2016-2025 crDroid Android Project
+     SPDX-FileCopyrightText: 2016-2026 crDroid Android Project
      SPDX-License-Identifier: Apache-2.0
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
@@ -16,9 +16,9 @@
     <!-- Name of the VoWiFi status bar icon. -->
     <string name="status_bar_vowifi">اتصال عبر الـ Wi-Fi (VoWiFi)</string>
     <!-- Data disabled icon -->
-    <string name="data_disabled_icon_title">Data disabled icon</string>
+    <string name="data_disabled_icon_title">إظهار أيقونة البيانات معطّلة</string>
     <!-- 4G icon instead LTE -->
-    <string name="fourg_icon_title">4G icon</string>
+    <string name="fourg_icon_title">أيقونة 4G</string>
     <!-- Status bar network traffic monitor strings -->
     <string name="kilobitspersecond_short">ك. ب/ث</string>
     <string name="megabitspersecond_short">م. ب/ث</string>
@@ -76,6 +76,11 @@
     <string name="tristate_rotation_0">الوضع الرأسي</string>
     <string name="tristate_rotation_90">عرضي (90 درجة)</string>
     <string name="tristate_rotation_270">عرضي (270 درجة)</string>
+    <!-- Data usage info in QS footer -->
+    <string name="usage_data">المستخدم اليوم</string>
+    <string name="usage_data_weekly">مستخدم هذا الأسبوع</string>
+    <string name="usage_data_default_suffix">البيانات</string>
+    <string name="usage_wifi_default_suffix">واي-فاي</string>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">فرض إيقاف؟</string>
     <string name="force_stop_dlg_text">في حالة فرض إيقاف التطبيق، ربما لا يعمل بشكل صحيح.</string>
@@ -85,7 +90,7 @@
     <string name="quick_settings_sound_label">الصوت</string>
     <string name="quick_settings_sound_ring">نغمة الرنين</string>
     <string name="quick_settings_sound_vibrate">الاهتزاز</string>
-    <string name="quick_settings_sound_silent">Silent</string>
+    <string name="quick_settings_sound_silent">صامت</string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">معلومات المعالج</string>
     <!-- FPS Info tile -->
@@ -116,7 +121,7 @@
     <string name="omnijaws_service_unknown">لا يوجد بيانات للطقس</string>
     <string name="omnijaws_label_default">الطقس</string>
     <!-- Refresh Rate Tile -->
-    <string name="refresh_rate_tile_label"> معدل التحديث</string>
+    <string name="refresh_rate_tile_label"> معدل التحديث</string>
     <string name="auto_mode_label">تلقائي</string>
     <!-- Screenshot Tile -->
     <string name="screenshot_long_press">الضغط المطول - المنطقة المحددة</string>
@@ -125,18 +130,17 @@
     <string name="quick_settings_locale_more_locales_toast">قم بتهيئة عدة لغات اولآ</string>
     <!-- AI Assistant affordance [CHAR LIMIT=32] -->
     <string name="accessibility_assistant_button">مساعد AI</string>
-    <!-- Text while recognizing face -->
-    <string name="face_unlock_recognizing">يتم التعرف على الوجه...</string>
     <!-- Preferred network tile -->
-    <string name="qs_preferred_network_label">Preferred network</string>
+    <string name="qs_preferred_network_label">الشبكة المفضلة</string>
     <string name="qs_preferred_network_lte">4G / LTE</string>
     <string name="qs_preferred_network_nr">5G / NR</string>
-    <string name="qs_preferred_network_3g">3G</string>
-    <string name="qs_preferred_network_unsupported">Unsupported</string>
+    <string name="qs_preferred_network_unsupported">غير مدعوم</string>
+    <!-- Text while recognizing face -->
+    <string name="face_unlock_recognizing">يتم التعرف على الوجه...</string>
     <!-- Flashlight Strength -->
-    <string name="flashlight_strength_title">Flashlight Strength</string>
-    <string name="flashlight_strength_turn_off">Turn off</string>
-    <string name="flashlight_strength_turn_on">Turn on</string>
+    <string name="flashlight_strength_title">قوة ضوء الفلاش</string>
+    <string name="flashlight_strength_turn_off">إيقاف التشغيل</string>
+    <string name="flashlight_strength_turn_on">تشغيل</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="zero">‏عدد الأجهزة المتصلة ‎%d</item>
@@ -148,13 +152,18 @@
     </plurals>
     <!-- 5G toggle in Internet Dialog -->
     <string name="enable_fiveg">تمكين 5G</string>
-    <!-- Data usage info in QS footer -->
-    <string name="usage_data">المستخدم اليوم</string>
-    <string name="usage_data_weekly">used this week</string>
-    <string name="usage_data_default_suffix">البيانات</string>
-    <string name="usage_wifi_default_suffix">واي-فاي</string>
     <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
     <string name="screenrecord_delete_label">حذف</string>
     <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
     <string name="screenrecord_delete_description">تم حذف تسجيل الشاشة</string>
+    <!-- Smartspace -->
+    <string name="accessibility_next_alarm">المنبّه التالي في %s</string>
+    <string name="accessibility_smartspace_page">الصفحة d$١% من d$٢%</string>
+    <string name="active_mode_content_description">%1$s مفعل</string>
+    <string name="generic_smartspace_concatenated_desc">%1$s، %2$s</string>
+    <string name="music_controls_no_title">بدون عنوان</string>
+    <string name="smartspace_content_desc">النظرة السريعة</string>
+    <string name="smartspace_flight_qr_code">رمز الاستجابة السريعة</string>
+    <string name="smartspace_icu_date_pattern">EEEMMMd</string>
+    <string name="smartspace_role_desc">عرض</string>
 </resources>
