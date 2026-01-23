@@ -43,7 +43,9 @@ import android.content.pm.PackageManager;
 import android.content.pm.UserInfo;
 import android.database.ContentObserver;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Binder;
+import android.os.Handler;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -85,6 +87,7 @@ import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.infra.AbstractRemoteService;
 import com.android.internal.infra.GlobalWhitelistState;
 import com.android.internal.infra.WhitelistHelper;
+import com.android.internal.os.BackgroundThread;
 import com.android.internal.os.IResultReceiver;
 import com.android.internal.util.DumpUtils;
 import com.android.internal.util.Preconditions;
@@ -171,6 +174,7 @@ public final class AutofillManagerService
 
     private final LocalService mLocalService = new LocalService();
     private final ActivityManagerInternal mAm;
+    private boolean mDeviceProvisioned;
 
     private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -234,6 +238,9 @@ public final class AutofillManagerService
 
     @GuardedBy("mFlagLock")
     private boolean mIsFillFieldsFromCurrentSessionOnly;
+
+    @GuardedBy("mFlagLock")
+    private boolean mResetInvalidServiceOnDeviceProvisioned;
 
     // Default flag values for Autofill PCC
 
@@ -322,6 +329,13 @@ public final class AutofillManagerService
         resolver.registerContentObserver(Settings.Secure.getUriFor(
                 Settings.Secure.SELECTED_INPUT_METHOD_SUBTYPE), false, observer,
                 UserHandle.USER_ALL);
+        mDeviceProvisioned = Settings.Global.getInt(getContext().getContentResolver(),
+                Settings.Global.DEVICE_PROVISIONED, 0) == 1;
+        if (!mDeviceProvisioned && isResetInvalidServiceOnDeviceProvisioned()) {
+            resolver.registerContentObserver(Settings.Global.getUriFor(
+                Settings.Global.DEVICE_PROVISIONED), false, observer,
+                UserHandle.USER_ALL);
+        }
     }
 
     @Override // from AbstractMasterSystemService
@@ -339,11 +353,55 @@ public final class AutofillManagerService
             case Settings.Secure.SELECTED_INPUT_METHOD_SUBTYPE:
                 handleInputMethodSwitch(userId);
                 break;
+            case Settings.Global.DEVICE_PROVISIONED:
+                handleDeviceProvisioned();
+                break;
             default:
                 Slog.w(TAG, "Unexpected property (" + property + "); updating cache instead");
                 synchronized (mLock) {
                     updateCachedServiceLocked(userId);
                 }
+        }
+    }
+
+    @GuardedBy("mLock")
+    protected void handleDeviceProvisioned() {
+        synchronized (mLock) {
+            if (mDeviceProvisioned) {
+                return;
+            }
+            final int isProvisioned = Settings.Global.getInt(
+                getContext().getContentResolver(),
+                Settings.Global.DEVICE_PROVISIONED, 0);
+            if (isProvisioned != 1) {
+                return;
+            }
+            mDeviceProvisioned = true;
+            onDeviceProvisionedLocked();
+        }
+    }
+
+    @GuardedBy("mLock")
+    private void onDeviceProvisionedLocked() {
+        if (!isResetInvalidServiceOnDeviceProvisioned()) {
+            return;
+        }
+        final List<UserInfo> users = getSupportedUsers();
+        final String defaultService = getContext().getString(
+                        com.android.internal.R.string.config_defaultAutofillService);
+        for (int i = 0; i < users.size(); i++) {
+            final int userId = users.get(i).id;
+            final String componentName = mServiceNameResolver.getServiceName(userId);
+            if (TextUtils.isEmpty(componentName)) {
+                continue;
+            }
+            final AutofillManagerServiceImpl service = getServiceForUserLocked(userId);
+            if (service.getServiceInfo() == null) {
+                Slog.i(TAG, "Invalid autofill service setting " + componentName + " for user "
+                        + userId + "; resetting to default");
+                Settings.Secure.putStringForUser(getContext().getContentResolver(),
+                        getServiceSettingsProperty(), defaultService, userId);
+            }
         }
     }
 
@@ -719,6 +777,10 @@ public final class AutofillManagerService
             mAutofillCredmanIntegrationEnabled = Flags.autofillCredmanIntegration();
             mIsFillFieldsFromCurrentSessionOnly = AutofillFeatureFlags
                     .shouldFillFieldsFromCurrentSessionOnly();
+            mResetInvalidServiceOnDeviceProvisioned = DeviceConfig.getBoolean(
+                    DeviceConfig.NAMESPACE_AUTOFILL,
+                    "autofill_reset_invalid_service_on_device_provisioned",
+                    false);
             if (verbose) {
                 Slog.v(mTag, "setDeviceConfigProperties() for PCC: "
                         + "mPccClassificationEnabled=" + mPccClassificationEnabled
@@ -728,7 +790,9 @@ public final class AutofillManagerService
                         + ", mAutofillCredmanIntegrationEnabled="
                         + mAutofillCredmanIntegrationEnabled
                         + ", mIsFillFieldsFromCurrentSessionOnly="
-                        + mIsFillFieldsFromCurrentSessionOnly);
+                        + mIsFillFieldsFromCurrentSessionOnly
+                        + ", mResetInvalidServiceOnDeviceProvisioned="
+                        + mResetInvalidServiceOnDeviceProvisioned);
             }
         }
     }
@@ -1041,6 +1105,15 @@ public final class AutofillManagerService
     public boolean getIsFillFieldsFromCurrentSessionOnly() {
         synchronized (mFlagLock) {
             return mIsFillFieldsFromCurrentSessionOnly;
+        }
+    }
+
+    /**
+     * Whether the feature to reset invalid autofill service on device provisioned is enabled.
+     */
+    public boolean isResetInvalidServiceOnDeviceProvisioned() {
+        synchronized (mFlagLock) {
+            return mResetInvalidServiceOnDeviceProvisioned;
         }
     }
 
