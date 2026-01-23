@@ -1978,6 +1978,11 @@ class UserController implements Handler.Callback {
     }
 
     boolean startUserInBackgroundTemporarily(@UserIdInt int userId, int durationSecs) {
+        synchronized (mLock) {
+            if (!mReady) {
+                return false;
+            }
+        }
         return startUserNoChecks(userId, Display.DEFAULT_DISPLAY, USER_START_MODE_BACKGROUND,
                 durationSecs, /* unlockListener= */ null);
     }
