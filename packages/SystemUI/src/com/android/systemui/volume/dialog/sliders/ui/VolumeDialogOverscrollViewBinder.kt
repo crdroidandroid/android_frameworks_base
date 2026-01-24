@@ -37,8 +37,8 @@ constructor(
     expandedAudioTileDetailsFeatureInteractor: ExpandedAudioTileDetailsFeatureInteractor,
 ) {
 
-    // Use horizontal volume dialog if the audio tile details view is enabled
-    private val isVolumeDialogVertical = !expandedAudioTileDetailsFeatureInteractor.isEnabled()
+    private val isVolumeDialogVertical =
+        expandedAudioTileDetailsFeatureInteractor.isVolumeDialogVertical()
 
     /**
      * [viewsToAnimate] is an array of [View] to be affected by the overscroll animation. [view] is
