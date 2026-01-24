@@ -978,14 +978,18 @@ public class EdgeBackGestureHandler implements TunerService.Tunable {
     }
 
     private void updateBackArrowVisibility() {
-        if (mIsEnabled && mEdgeBackPlugin != null) {
-            mEdgeBackPlugin.setBackArrowVisibility(mIsBackGestureArrowEnabled);
+        if (!mIsEnabled) return;
+        for (DisplayBackGestureHandler displayBackGestureHandler :
+                mDisplayBackGestureHandlers.values()) {
+            displayBackGestureHandler.setBackArrowVisibility(mIsBackGestureArrowEnabled);
         }
     }
 
     private void updateEdgeHaptic() {
-        if (mIsEnabled && mEdgeBackPlugin != null) {
-            mEdgeBackPlugin.setEdgeHapticEnabled(mIsEdgeHapticEnabled);
+        if (!mIsEnabled) return;
+        for (DisplayBackGestureHandler displayBackGestureHandler :
+                mDisplayBackGestureHandlers.values()) {
+            displayBackGestureHandler.setEdgeHapticEnabled(mIsEdgeHapticEnabled);
         }
     }
 
