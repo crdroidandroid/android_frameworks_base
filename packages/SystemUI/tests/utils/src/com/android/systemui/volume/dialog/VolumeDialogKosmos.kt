@@ -39,6 +39,7 @@ val Kosmos.volumeDialogFactory by
 val Kosmos.volumeDialog by
     Kosmos.Fixture {
         volumeDialogFactory.create(
-            isVolumeDialogVertical = !expandedAudioTileDetailsFeatureInteractor.isEnabled()
+            isVolumeDialogVertical =
+                expandedAudioTileDetailsFeatureInteractor.isVolumeDialogVertical()
         )
     }
