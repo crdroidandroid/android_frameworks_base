@@ -28,4 +28,12 @@ class ExpandedAudioTileDetailsFeatureInteractor @Inject constructor() {
     fun isEnabled(): Boolean {
         return isEnabled
     }
+
+    /**
+     * Whether the hardware volume dialog uses the side vertical layout.
+     *
+     * [isEnabled] only adds the QS volume slider. It must not switch the volume dialog to the top
+     * horizontal bar.
+     */
+    fun isVolumeDialogVertical(): Boolean = true
 }

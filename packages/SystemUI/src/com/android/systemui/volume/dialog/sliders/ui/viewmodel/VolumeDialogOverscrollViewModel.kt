@@ -46,8 +46,8 @@ constructor(
     expandedAudioTileDetailsFeatureInteractor: ExpandedAudioTileDetailsFeatureInteractor,
 ) {
 
-    // Use horizontal volume dialog if the audio tile details view is enabled
-    private val isVolumeDialogVertical = !expandedAudioTileDetailsFeatureInteractor.isEnabled()
+    private val isVolumeDialogVertical =
+        expandedAudioTileDetailsFeatureInteractor.isVolumeDialogVertical()
 
     /**
      * This is the ratio between the pointer distance and the dialog offset. The pointer has to
