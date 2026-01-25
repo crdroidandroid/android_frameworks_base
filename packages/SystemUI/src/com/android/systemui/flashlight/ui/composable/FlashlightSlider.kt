@@ -23,10 +23,10 @@ import androidx.compose.material3.SliderDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.android.systemui.compose.modifiers.sysuiResTag
-import com.android.systemui.flashlight.ui.viewmodel.FlashlightSliderViewModel
+import com.android.systemui.flashlight.ui.viewmodel.FlashlightSliderViewModelInterface
 
 @Composable
-fun FlashlightSliderContainer(viewModel: FlashlightSliderViewModel, modifier: Modifier = Modifier) {
+fun FlashlightSliderContainer(viewModel: FlashlightSliderViewModelInterface, modifier: Modifier = Modifier) {
     val currentState = viewModel.currentFlashlightLevel ?: return
     val levelValue =
         if (currentState.enabled) {
