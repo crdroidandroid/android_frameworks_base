@@ -44,20 +44,29 @@ constructor(
             when (action) {
                 is QSTileUserAction.Click -> {
                     if (FlashlightStrength.isEnabled) {
-                        if (!ActivityManager.isUserAMonkey()) {
-                            when (input.data) {
-                                is FlashlightModel.Available.Level -> {
-                                    // Note: no Click response for Binary state. See ToggleClick.
-                                    flashlightInteractor.get().setEnabled(true)
-                                    // the ui code runs on the main thread
-                                    flashlightDialogDelegate.get()
-                                        .showDialog(input.action.expandable)
-                                }
-                                is FlashlightModel.Available.Binary -> {
-                                    flashlightInteractor.get().setEnabled(!input.data.enabled)
-                                }
-                                else -> {}
-                            }
+                        if (
+                            !ActivityManager.isUserAMonkey() &&
+                                input.data is FlashlightModel.Available.Level
+                        ) {
+                            // Show dialog with vertical slider for devices with adjustable levels
+                            flashlightInteractor.get().setEnabled(true)
+                            // the ui code runs on the main thread
+                            flashlightDialogDelegate.get().showDialog(input.action.expandable)
+                        } else if (
+                            !ActivityManager.isUserAMonkey() &&
+                                input.data is FlashlightModel.Available.Binary &&
+                                flashlightController.isStrengthControlSupported()
+                        ) {
+                            // Backward compatibility: use old controller with new vertical slider UI
+                            // when new repository doesn't support levels but old controller does
+                            flashlightController.setFlashlight(true)
+                            flashlightDialogDelegate.get().showDialog(input.action.expandable)
+                        } else if (
+                            !ActivityManager.isUserAMonkey() &&
+                                input.data is FlashlightModel.Available.Binary
+                        ) {
+                            // Fall back to toggle behavior for Binary state without strength support
+                            flashlightInteractor.get().setEnabled(!input.data.enabled)
                         }
                     } else { // preserve old behavior at the cost of some redundancy
                         if (

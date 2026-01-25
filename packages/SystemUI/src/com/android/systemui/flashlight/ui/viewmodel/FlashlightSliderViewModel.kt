@@ -37,26 +37,36 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.map
 
+/** Common interface for flashlight slider view models */
+interface FlashlightSliderViewModelInterface {
+    val currentFlashlightLevel: FlashlightModel.Available.Level?
+    val isFlashlightAdjustable: Boolean
+    val hapticsViewModelFactory: SliderHapticsViewModel.Factory
+    fun setFlashlightLevel(value: Int)
+    fun setFlashlightLevelTemporary(value: Int)
+    suspend fun loadImage(@DrawableRes resId: Int, context: Context): Icon.Loaded
+}
+
 /** View Model for a flashlight slider. Only used when flashlight supports levels. */
 class FlashlightSliderViewModel
 @AssistedInject
 constructor(
-    val hapticsViewModelFactory: SliderHapticsViewModel.Factory,
+    override val hapticsViewModelFactory: SliderHapticsViewModel.Factory,
     private val flashlightInteractor: FlashlightInteractor,
     private val logger: FlashlightLogger,
     private val uiEventLogger: UiEventLogger,
     private val imageLoader: ImageLoader,
-) : ExclusiveActivatable() {
+) : ExclusiveActivatable(), FlashlightSliderViewModelInterface {
     private val hydrator = Hydrator("FlashlightSliderViewModel.hydrator")
 
-    val currentFlashlightLevel: FlashlightModel.Available.Level? by
+    override val currentFlashlightLevel: FlashlightModel.Available.Level? by
         hydrator.hydratedStateOf(
             "currentFlashlightLevel",
             flashlightInteractor.state.value as? FlashlightModel.Available.Level,
             flashlightInteractor.state.filterIsInstance(FlashlightModel.Available.Level::class),
         )
 
-    val isFlashlightAdjustable: Boolean by
+    override val isFlashlightAdjustable: Boolean by
         hydrator.hydratedStateOf(
             "isFlashlightAdjustable",
             flashlightInteractor.state.value is FlashlightModel.Available.Level,
@@ -67,11 +77,11 @@ constructor(
         hydrator.activate()
     }
 
-    fun setFlashlightLevel(value: Int) {
+    override fun setFlashlightLevel(value: Int) {
         setFlashlightLevel(value, false)
     }
 
-    fun setFlashlightLevelTemporary(value: Int) {
+    override fun setFlashlightLevelTemporary(value: Int) {
         setFlashlightLevel(value, true)
     }
 
@@ -97,7 +107,7 @@ constructor(
         }
     }
 
-    suspend fun loadImage(@DrawableRes resId: Int, context: Context): Icon.Loaded {
+    override suspend fun loadImage(@DrawableRes resId: Int, context: Context): Icon.Loaded {
         return imageLoader
             .loadDrawable(
                 android.graphics.drawable.Icon.createWithResource(context, resId),
