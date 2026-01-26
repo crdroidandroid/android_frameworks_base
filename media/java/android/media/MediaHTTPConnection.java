@@ -362,7 +362,7 @@ public class MediaHTTPConnection extends IMediaHTTPConnection.Stub {
             } else if (response != HttpURLConnection.HTTP_OK) {
                 throw new IOException();
             } else {
-                mTotalSize = mConnection.getContentLength();
+                mTotalSize = Long.parseLong(mConnection.getHeaderField("Content-Length"));
             }
 
             if (offset > 0 && response != HttpURLConnection.HTTP_PARTIAL) {
