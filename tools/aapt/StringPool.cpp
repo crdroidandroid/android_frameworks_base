@@ -194,8 +194,8 @@ ssize_t StringPool::add(const String16& value,
     }
 
     if (kIsDebug) {
-        printf("Adding string %s to pool: pos=%zd eidx=%zd vidx=%zd\n",
-                String8(value).c_str(), pos, eidx, vidx);
+        printf("Adding string %s to pool: pos=%zd eidx=%zd\n",
+                String8(value).c_str(), pos, eidx);
     }
 
     return pos;
