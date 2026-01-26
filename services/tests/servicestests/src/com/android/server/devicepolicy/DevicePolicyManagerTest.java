@@ -8476,6 +8476,25 @@ public class DevicePolicyManagerTest extends DpmTestBase {
     }
 
     @Test
+    public void testSetGlobalProxy_tooLongStrings() throws Exception {
+        setDeviceOwner();
+        // PolicySizeVerifier uses ModifiedUtf8.countBytes() to check the length of strings
+        // which is max 65535 UTF bytes.
+        final String tooLong = new String(new char[65536]).replace('\0', 'A');
+
+        // Test long proxy spec
+        Proxy proxy = new Proxy(Proxy.Type.HTTP, InetSocketAddress.createUnresolved(tooLong, 8080));
+        assertThrows(IllegalArgumentException.class,
+                () -> dpm.setGlobalProxy(admin1, proxy, Collections.emptyList()));
+
+        // Test long exclusion list
+        Proxy validProxy = new Proxy(Proxy.Type.HTTP,
+                InetSocketAddress.createUnresolved("example.com", 8080));
+        assertThrows(IllegalArgumentException.class,
+                () -> dpm.setGlobalProxy(admin1, validProxy, Collections.singletonList(tooLong)));
+    }
+
+    @Test
     public void testSetAlwaysOnVpnPackage_clearsAdminVpn() throws Exception {
         setDeviceOwner();
 

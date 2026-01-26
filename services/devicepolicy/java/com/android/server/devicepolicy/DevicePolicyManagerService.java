@@ -8807,7 +8807,10 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
                 admin.globalProxySpec = null;
                 admin.globalProxyExclusionList = null;
             } else {
-
+                PolicySizeVerifier.enforceMaxStringLength(proxySpec, "proxySpec");
+                if (exclusionList != null) {
+                    PolicySizeVerifier.enforceMaxStringLength(exclusionList, "exclusionList");
+                }
                 admin.specifiesGlobalProxy = true;
                 admin.globalProxySpec = proxySpec;
                 admin.globalProxyExclusionList = exclusionList;
