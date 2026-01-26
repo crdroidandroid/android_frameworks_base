@@ -541,6 +541,8 @@ public class WallpaperCropActivity extends Activity {
                     }
                 } catch (FileNotFoundException e) {
                     Log.w(LOGTAG, "cannot read file: " + mInUri.toString(), e);
+                } catch (SecurityException e) {
+                    Log.w(LOGTAG, "cannot read file: " + mInUri.toString(), e);
                 }
             }
             return null;
