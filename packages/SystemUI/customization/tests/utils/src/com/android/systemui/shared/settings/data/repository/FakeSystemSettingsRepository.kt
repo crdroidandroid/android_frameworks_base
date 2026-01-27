@@ -22,10 +22,16 @@ import kotlinx.coroutines.flow.map
 
 class FakeSystemSettingsRepository : SystemSettingsRepository {
 
-    private val settings = MutableStateFlow<Map<String, String>>(mutableMapOf())
+    private val settings = MutableStateFlow<Map<String, String?>>(mutableMapOf())
 
     override fun intSetting(name: String, defaultValue: Int): Flow<Int> {
-        return settings.map { it.getOrDefault(name, defaultValue.toString()) }.map { it.toInt() }
+        return settings
+            .map { it.getOrDefault(name, defaultValue.toString()) }
+            .map { it?.toInt() ?: defaultValue }
+    }
+
+    override fun stringSetting(name: String, defaultValue: String?): Flow<String?> {
+        return settings.map { it.getOrDefault(name, defaultValue) }
     }
 
     override fun boolSetting(name: String, defaultValue: Boolean): Flow<Boolean> {
