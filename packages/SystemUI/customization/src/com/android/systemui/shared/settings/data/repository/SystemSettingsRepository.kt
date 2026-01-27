@@ -28,6 +28,16 @@ interface SystemSettingsRepository {
     /** Returns a [Flow] tracking the value of a setting as a [Boolean]. */
     fun boolSetting(name: String, defaultValue: Boolean = false): Flow<Boolean>
 
+    /**
+     * Returns a [Flow] tracking the value of a setting as a [String].
+     *
+     * @param name The name of the setting to observe.
+     * @param defaultValue The value to emit if the setting is not currently set. If this is `null`,
+     *   the flow will emit `null` when the setting is not found.
+     * @return [Flow] that emits the setting's value or [defaultValue], whenever it changes.
+     */
+    fun stringSetting(name: String, defaultValue: String? = null): Flow<String?>
+
     /** Updates the value of the setting with the given name. */
     suspend fun setInt(name: String, value: Int)
 
