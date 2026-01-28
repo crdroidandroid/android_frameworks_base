@@ -136,6 +136,7 @@ class DeviceEntryFaceAuthRepositoryTest : SysuiTestCase() {
     @Mock private lateinit var sessionTracker: SessionTracker
     @Mock private lateinit var uiEventLogger: UiEventLogger
     @Mock private lateinit var dumpManager: DumpManager
+    @Mock private lateinit var authenticationResult: FaceManager.AuthenticationResult
 
     @Captor
     private lateinit var authenticationCallback: ArgumentCaptor<FaceManager.AuthenticationCallback>
@@ -186,6 +187,7 @@ class DeviceEntryFaceAuthRepositoryTest : SysuiTestCase() {
     fun setup() {
         MockitoAnnotations.initMocks(this)
         fakeUserRepository.setUserInfos(listOf(primaryUser, secondaryUser))
+        whenever(authenticationResult.userId).thenReturn(primaryUserId)
         featureFlags = FakeFeatureFlags()
 
         bypassStateChangedListener =
@@ -897,9 +899,7 @@ class DeviceEntryFaceAuthRepositoryTest : SysuiTestCase() {
 
             triggerFaceAuth(false)
 
-            authenticationCallback.value.onAuthenticationSucceeded(
-                mock(FaceManager.AuthenticationResult::class.java)
-            )
+            authenticationCallback.value.onAuthenticationSucceeded(authenticationResult)
 
             assertThat(authenticated()).isTrue()
 
@@ -916,9 +916,7 @@ class DeviceEntryFaceAuthRepositoryTest : SysuiTestCase() {
 
             triggerFaceAuth(false)
 
-            authenticationCallback.value.onAuthenticationSucceeded(
-                mock(FaceManager.AuthenticationResult::class.java)
-            )
+            authenticationCallback.value.onAuthenticationSucceeded(authenticationResult)
 
             assertThat(authenticated()).isTrue()
 
@@ -935,9 +933,7 @@ class DeviceEntryFaceAuthRepositoryTest : SysuiTestCase() {
 
             triggerFaceAuth(false)
 
-            authenticationCallback.value.onAuthenticationSucceeded(
-                mock(FaceManager.AuthenticationResult::class.java)
-            )
+            authenticationCallback.value.onAuthenticationSucceeded(authenticationResult)
 
             assertThat(authenticated()).isTrue()
 
@@ -959,9 +955,7 @@ class DeviceEntryFaceAuthRepositoryTest : SysuiTestCase() {
             triggerFaceAuth(false)
 
             keyguardRepository.setStatusBarState(StatusBarState.KEYGUARD)
-            authenticationCallback.value.onAuthenticationSucceeded(
-                mock(FaceManager.AuthenticationResult::class.java)
-            )
+            authenticationCallback.value.onAuthenticationSucceeded(authenticationResult)
 
             assertThat(authenticated()).isTrue()
 
@@ -1000,9 +994,7 @@ class DeviceEntryFaceAuthRepositoryTest : SysuiTestCase() {
             triggerFaceAuth(false)
 
             keyguardRepository.setStatusBarState(StatusBarState.KEYGUARD)
-            authenticationCallback.value.onAuthenticationSucceeded(
-                mock(FaceManager.AuthenticationResult::class.java)
-            )
+            authenticationCallback.value.onAuthenticationSucceeded(authenticationResult)
             assertThat(authenticated()).isTrue()
             kosmos.fakeDeviceEntryRepository.deviceUnlockStatus.value =
                 DeviceUnlockStatus(

@@ -539,7 +539,7 @@ constructor(
                 // boolean is updated to new value before the event is propagated.
                 // TODO (b/310592822): once all consumers can use the new system directly, we don't
                 //  have to worry about this ordering.
-                _isAuthenticated.value = true
+                _isAuthenticated.value = result.userId == currentUserId
                 _authenticationStatus.value = SuccessFaceAuthenticationStatus(result)
                 faceAuthLogger.faceAuthSuccess(result)
                 onFaceAuthRequestCompleted()
