@@ -124,10 +124,8 @@ public class BluetoothTile extends QSTileImpl<BooleanState> {
 
     @Override
     public BooleanState newTileState() {
-        boolean showDialog = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.QS_BT_SHOW_DIALOG, 1, UserHandle.USER_CURRENT) != 0;
         BooleanState s = new BooleanState();
-        s.handlesSecondaryClick = showDialog;
+        s.handlesSecondaryClick = true;
         return s;
     }
 
