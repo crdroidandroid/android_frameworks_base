@@ -97,6 +97,10 @@ constructor(
         lifecycle.coroutineScope.launch { userActionInteractor.handleClick(expandable) }
     }
 
+    override fun handleSecondaryClick(expandable: Expandable?) {
+        userActionInteractor.handleSecondaryClick(expandable)
+    }
+
     override fun getLongClickIntent(): Intent = userActionInteractor.longClickIntent
 
     override fun handleUpdateState(state: QSTile.State?, arg: Any?) {
@@ -117,6 +121,10 @@ constructor(
             label = tileState.label
             contentDescription = tileState.contentDescription
             expandedAccessibilityClassName = tileState.expandedAccessibilityClassName
+            handlesSecondaryClick =
+                tileState.supportedActions.contains(QSTileState.UserAction.TOGGLE_CLICK)
+            handlesLongClick =
+                tileState.supportedActions.contains(QSTileState.UserAction.LONG_CLICK)
         }
     }
 
