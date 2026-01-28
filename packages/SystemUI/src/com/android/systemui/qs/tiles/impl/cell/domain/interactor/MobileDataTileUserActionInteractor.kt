@@ -55,6 +55,9 @@ constructor(
             is QSTileUserAction.LongClick -> {
                 qsTileIntentUserActionHandler.handle(input.action.expandable, longClickIntent)
             }
+            is QSTileUserAction.ToggleClick -> {
+                handleSecondaryClick(input.action.expandable)
+            }
             else -> {}
         }
     }
@@ -66,6 +69,17 @@ constructor(
             withContext(mainDispatcher) { showEnableConfirmationDialog(expandable) }
         } else {
             // Otherwise, just turn it off without a dialog.
+            activeRepo.setDataEnabled(false)
+        }
+    }
+
+    fun handleSecondaryClick(expandable: Expandable?) {
+        val activeRepo = mobileConnectionsRepository.activeMobileDataRepository.value ?: return
+        // If mobile data is disabled, turn it on.
+        if (!activeRepo.dataEnabled.value) {
+            activeRepo.setDataEnabled(true)
+        } else {
+            // Otherwise, just turn it off.
             activeRepo.setDataEnabled(false)
         }
     }
