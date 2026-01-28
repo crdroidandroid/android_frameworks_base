@@ -730,8 +730,12 @@ constructor(
                 chipTopBottomPadding
             )
             clock.setTextAlignment(View.TEXT_ALIGNMENT_CENTER)
-            // Set text color to white for visibility on colored chip backgrounds
-            clock.setTextColor(Color.WHITE)
+            // Set text color to white for visibility on filled chip backgrounds
+            // Styles 2 and 8 are outline-only (transparent background), so use normal color
+            if (style != 2 && style != 8) {
+                clock.setTextColor(Color.WHITE)
+            }
+            // For outline styles (2, 8), let Clock's DarkIconDispatcher handle the color
         }
 
         // Always reset first so the previous active clock loses chip when position changes
