@@ -226,6 +226,7 @@ cc_test {
         "tests/LocaleDataLookup_test.cpp",
         "tests/NinePatch_test.cpp",
         "tests/ResourceTimer_test.cpp",
+        "tests/ResourceTypes_test.cpp",
         "tests/ResourceUtils_test.cpp",
         "tests/ResTable_test.cpp",
         "tests/sorted_vector_set_test.cpp",
