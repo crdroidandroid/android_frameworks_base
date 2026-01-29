@@ -671,6 +671,20 @@ status_t ResStringPool::setTo(incfs::map_ptr<void> data, size_t size, bool copyD
                     (int)mHeader->stylesStart, (int)mHeader->header.size);
             return (mError=BAD_TYPE);
         }
+
+        if (mHeader->styleCount >
+            std::numeric_limits<decltype(mHeader->styleCount)>::max() / sizeof(uint32_t)) {
+          ALOGW("Bad string block: potential integer overflow when finding style entries\n");
+          return (mError = BAD_TYPE);
+        }
+
+        const size_t styleOffsetsStart =
+            mEntryStyles.convert<uint8_t>() - mHeader.convert<uint8_t>();
+        if (mHeader->styleCount * sizeof(uint32_t) > (mHeader->stringsStart - styleOffsetsStart)) {
+          ALOGW("Bad string block: style offsets extend past style data start\n");
+          return (mError = BAD_TYPE);
+        }
+
         mStylePoolSize =
             (mHeader->header.size-mHeader->stylesStart)/sizeof(uint32_t);
 
