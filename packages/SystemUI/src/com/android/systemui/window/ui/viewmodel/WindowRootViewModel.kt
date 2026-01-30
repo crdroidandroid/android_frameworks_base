@@ -104,6 +104,7 @@ constructor(
                 flowOf(0f)
             }
         }
+        .distinctUntilChanged()
 
     val blurScale: Flow<Float> =
         blurInteractor.isBlurCurrentlySupported.flatMapLatest { blurSupported ->
@@ -113,6 +114,7 @@ constructor(
                 flowOf(1f)
             }
         }
+        .distinctUntilChanged()
 
     val isPersistentEarlyWakeupRequired =
         blurInteractor.isBlurCurrentlySupported
