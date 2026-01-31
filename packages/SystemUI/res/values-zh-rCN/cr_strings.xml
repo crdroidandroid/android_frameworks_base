@@ -46,6 +46,14 @@
     <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • 快速充电中 (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> 后充满)</string>
     <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • 快速充电中</string>
+    <!-- Smartspace -->
+    <string name="accessibility_next_alarm">下一个闹钟时间：%s</string>
+    <string name="accessibility_smartspace_page">第%1$d页，共%2$d页</string>
+    <string name="active_mode_content_description">%1$s 已开启</string>
+    <string name="music_controls_no_title">无标题</string>
+    <string name="smartspace_content_desc">速览</string>
+    <string name="smartspace_flight_qr_code">二维码</string>
+    <string name="smartspace_role_desc">视图</string>
     <!-- Button to restart SystemUI, within the Restart Options dialog -->
     <string name="global_action_restart_systemui">系统界面</string>
     <!-- On The Go -->
@@ -151,14 +159,4 @@
     <string name="screenrecord_delete_label">删除</string>
     <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
     <string name="screenrecord_delete_description">屏幕录制已删除</string>
-    <!-- Smartspace -->
-    <string name="accessibility_next_alarm">下一个闹钟时间：%s</string>
-    <string name="accessibility_smartspace_page">第%1$d页，共%2$d页</string>
-    <string name="active_mode_content_description">%1$s 已开启</string>
-    <string name="generic_smartspace_concatenated_desc">%1$s, %2$s</string>
-    <string name="music_controls_no_title">无标题</string>
-    <string name="smartspace_content_desc">速览</string>
-    <string name="smartspace_flight_qr_code">二维码</string>
-    <string name="smartspace_icu_date_pattern">EEEMMMd</string>
-    <string name="smartspace_role_desc">视图</string>
 </resources>
