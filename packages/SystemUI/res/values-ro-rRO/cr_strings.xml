@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     SPDX-FileCopyrightText: 2016-2025 crDroid Android Project
+     SPDX-FileCopyrightText: 2016-2026 crDroid Android Project
      SPDX-License-Identifier: Apache-2.0
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
@@ -46,6 +46,14 @@
     <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • Încărcare Turbo (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> până la finalizare)</string>
     <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • Încărcare Turbo</string>
+    <!-- Smartspace -->
+    <string name="accessibility_next_alarm">Următoarea alarmă la %s</string>
+    <string name="accessibility_smartspace_page">Pagina %1$d din %2$d</string>
+    <string name="active_mode_content_description">%1$s este pornit</string>
+    <string name="music_controls_no_title">Nici un titlu</string>
+    <string name="smartspace_content_desc">Din perspectivă</string>
+    <string name="smartspace_flight_qr_code">Cod QR</string>
+    <string name="smartspace_role_desc">View</string>
     <!-- Button to restart SystemUI, within the Restart Options dialog -->
     <string name="global_action_restart_systemui">Interfață sistem</string>
     <!-- On The Go -->
@@ -76,6 +84,11 @@
     <string name="tristate_rotation_0">Portret</string>
     <string name="tristate_rotation_90">Peisaj (90°)</string>
     <string name="tristate_rotation_270">Peisaj (270°)</string>
+    <!-- Data usage info in QS footer -->
+    <string name="usage_data">utilizat azi</string>
+    <string name="usage_data_weekly">utilizat în această săptămână</string>
+    <string name="usage_data_default_suffix">Date</string>
+    <string name="usage_wifi_default_suffix">Wi-Fi</string>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">Oprire forțată?</string>
     <string name="force_stop_dlg_text">Dacă forțați oprirea unei aplicații, aceasta se poate comporta necorespunzător.</string>
@@ -125,14 +138,13 @@
     <string name="quick_settings_locale_more_locales_toast">Configurați mai întâi limbi multiple</string>
     <!-- AI Assistant affordance [CHAR LIMIT=32] -->
     <string name="accessibility_assistant_button">Asistent IA</string>
-    <!-- Text while recognizing face -->
-    <string name="face_unlock_recognizing">Recunoașterea feței...</string>
     <!-- Preferred network tile -->
     <string name="qs_preferred_network_label">Rețea preferată</string>
     <string name="qs_preferred_network_lte">4G / LTE</string>
     <string name="qs_preferred_network_nr">5G / NR</string>
-    <string name="qs_preferred_network_3g">3G</string>
     <string name="qs_preferred_network_unsupported">Neacceptat</string>
+    <!-- Text while recognizing face -->
+    <string name="face_unlock_recognizing">Recunoașterea feței...</string>
     <!-- Flashlight Strength -->
     <string name="flashlight_strength_title">Putere lanternă</string>
     <string name="flashlight_strength_turn_off">Opriți</string>
@@ -145,11 +157,6 @@
     </plurals>
     <!-- 5G toggle in Internet Dialog -->
     <string name="enable_fiveg">Activează 5G</string>
-    <!-- Data usage info in QS footer -->
-    <string name="usage_data">utilizat azi</string>
-    <string name="usage_data_weekly">utilizat în această săptămână</string>
-    <string name="usage_data_default_suffix">Date</string>
-    <string name="usage_wifi_default_suffix">Wi-Fi</string>
     <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
     <string name="screenrecord_delete_label">Șterge</string>
     <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
