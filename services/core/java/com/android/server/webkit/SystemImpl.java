@@ -144,7 +144,7 @@ public class SystemImpl implements SystemInterface {
     @Override
     public WebViewProviderInfo[] getWebViewPackages() {
         return Arrays.stream(mWebViewProviderPackages)
-                .filter(x -> isProviderAvailable(x.packageName))
+                .filter(this::isProviderAvailable)
                 .toArray(WebViewProviderInfo[]::new);
     }
 
@@ -154,9 +154,9 @@ public class SystemImpl implements SystemInterface {
                 .getLongVersionCode();
     }
 
-    private boolean isProviderAvailable(String packageName) {
+    private boolean isProviderAvailable(WebViewProviderInfo configInfo) {
         try {
-            getFactoryPackageVersion(packageName);
+            getPackageInfoForProvider(configInfo);
             return true;
         } catch (NameNotFoundException e) {
             return false;
