@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     SPDX-FileCopyrightText: 2016-2025 crDroid Android Project
+     SPDX-FileCopyrightText: 2016-2026 crDroid Android Project
      SPDX-License-Identifier: Apache-2.0
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
@@ -46,6 +46,14 @@
     <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • Turbo-laadimine (täitumiseni <xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g>)</string>
     <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • Turbo-laadimine</string>
+    <!-- Smartspace -->
+    <string name="accessibility_next_alarm">Next alarm at %s</string>
+    <string name="accessibility_smartspace_page">Page %1$d of %2$d</string>
+    <string name="active_mode_content_description">%1$s is on</string>
+    <string name="music_controls_no_title">No title</string>
+    <string name="smartspace_content_desc">At a glance</string>
+    <string name="smartspace_flight_qr_code">QR code</string>
+    <string name="smartspace_role_desc">View</string>
     <!-- Button to restart SystemUI, within the Restart Options dialog -->
     <string name="global_action_restart_systemui">Süsteemiliides</string>
     <!-- On The Go -->
@@ -76,6 +84,11 @@
     <string name="tristate_rotation_0">Püstasend</string>
     <string name="tristate_rotation_90">Maastik (90°)</string>
     <string name="tristate_rotation_270">Maastik (270°)</string>
+    <!-- Data usage info in QS footer -->
+    <string name="usage_data">täna kasutatud</string>
+    <string name="usage_data_weekly">used this week</string>
+    <string name="usage_data_default_suffix">Andmeside</string>
+    <string name="usage_wifi_default_suffix">Wi-Fi</string>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">Sundpeatad?</string>
     <string name="force_stop_dlg_text">Kui sunnite rakenduse peatuma, võib see valesti käituda.</string>
@@ -125,14 +138,13 @@
     <string name="quick_settings_locale_more_locales_toast">Seadista kõigepealt mitu keelt</string>
     <!-- AI Assistant affordance [CHAR LIMIT=32] -->
     <string name="accessibility_assistant_button">AI assistent</string>
-    <!-- Text while recognizing face -->
-    <string name="face_unlock_recognizing">Näotuvastus...</string>
     <!-- Preferred network tile -->
     <string name="qs_preferred_network_label">Preferred network</string>
     <string name="qs_preferred_network_lte">4G / LTE</string>
     <string name="qs_preferred_network_nr">5G / NR</string>
-    <string name="qs_preferred_network_3g">3G</string>
     <string name="qs_preferred_network_unsupported">Unsupported</string>
+    <!-- Text while recognizing face -->
+    <string name="face_unlock_recognizing">Näotuvastus...</string>
     <!-- Flashlight Strength -->
     <string name="flashlight_strength_title">Flashlight Strength</string>
     <string name="flashlight_strength_turn_off">Turn off</string>
@@ -144,11 +156,6 @@
     </plurals>
     <!-- 5G toggle in Internet Dialog -->
     <string name="enable_fiveg">Luba 5G</string>
-    <!-- Data usage info in QS footer -->
-    <string name="usage_data">täna kasutatud</string>
-    <string name="usage_data_weekly">used this week</string>
-    <string name="usage_data_default_suffix">Andmeside</string>
-    <string name="usage_wifi_default_suffix">Wi-Fi</string>
     <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
     <string name="screenrecord_delete_label">Kustuta</string>
     <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
