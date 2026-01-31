@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     SPDX-FileCopyrightText: 2016-2025 crDroid Android Project
+     SPDX-FileCopyrightText: 2016-2026 crDroid Android Project
      SPDX-License-Identifier: Apache-2.0
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
@@ -46,6 +46,14 @@
     <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • Schnellladen (Voll in <xliff:g id="charging_time_left" example="4 Stunden und 2 Minuten">%1$s</xliff:g>)</string>
     <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • Schnellladen</string>
+    <!-- Smartspace -->
+    <string name="accessibility_next_alarm">Nächster Wecker um %s</string>
+    <string name="accessibility_smartspace_page">Seite %1$d von %2$d</string>
+    <string name="active_mode_content_description">%1$s ist an</string>
+    <string name="music_controls_no_title">Unbenannt</string>
+    <string name="smartspace_content_desc">Auf einen Blick</string>
+    <string name="smartspace_flight_qr_code">QR-Code</string>
+    <string name="smartspace_role_desc">Anzeigen</string>
     <!-- Button to restart SystemUI, within the Restart Options dialog -->
     <string name="global_action_restart_systemui">System-UI</string>
     <!-- On The Go -->
@@ -76,6 +84,11 @@
     <string name="tristate_rotation_0">Hochformat</string>
     <string name="tristate_rotation_90">Querformat (90°)</string>
     <string name="tristate_rotation_270">Querformat (270°)</string>
+    <!-- Data usage info in QS footer -->
+    <string name="usage_data">heute verbraucht</string>
+    <string name="usage_data_weekly">in dieser Woche verwendet</string>
+    <string name="usage_data_default_suffix">Daten</string>
+    <string name="usage_wifi_default_suffix">WLAN</string>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">Beenden erzwingen?</string>
     <string name="force_stop_dlg_text">Das Beenden einer App zu erzwingen, kann zu unerwünschtem Verhalten führen.</string>
@@ -125,14 +138,13 @@
     <string name="quick_settings_locale_more_locales_toast">Bitte zunächst mehr als eine Sprache hinzufügen</string>
     <!-- AI Assistant affordance [CHAR LIMIT=32] -->
     <string name="accessibility_assistant_button">KI-Assistent</string>
-    <!-- Text while recognizing face -->
-    <string name="face_unlock_recognizing">Gesichtserkennung …</string>
     <!-- Preferred network tile -->
     <string name="qs_preferred_network_label">Bevorzugtes Netzwerk</string>
     <string name="qs_preferred_network_lte">4G/LTE</string>
     <string name="qs_preferred_network_nr">5G/NR</string>
-    <string name="qs_preferred_network_3g">3G</string>
     <string name="qs_preferred_network_unsupported">Nicht unterstützt</string>
+    <!-- Text while recognizing face -->
+    <string name="face_unlock_recognizing">Gesichtserkennung …</string>
     <!-- Flashlight Strength -->
     <string name="flashlight_strength_title">Taschenlampenstärke</string>
     <string name="flashlight_strength_turn_off">Ausschalten</string>
@@ -144,11 +156,6 @@
     </plurals>
     <!-- 5G toggle in Internet Dialog -->
     <string name="enable_fiveg">5G aktivieren</string>
-    <!-- Data usage info in QS footer -->
-    <string name="usage_data">heute verbraucht</string>
-    <string name="usage_data_weekly">in dieser Woche verwendet</string>
-    <string name="usage_data_default_suffix">Daten</string>
-    <string name="usage_wifi_default_suffix">WLAN</string>
     <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
     <string name="screenrecord_delete_label">Löschen</string>
     <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
