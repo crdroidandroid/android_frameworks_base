@@ -46,6 +46,14 @@
     <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • Турбо зареждане (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> до пълно зареждане)</string>
     <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • Турбо зареждане</string>
+    <!-- Smartspace -->
+    <string name="accessibility_next_alarm">Следваща аларма в %s</string>
+    <string name="accessibility_smartspace_page">Страница %1$d от %2$d</string>
+    <string name="active_mode_content_description">%1$s е включено</string>
+    <string name="music_controls_no_title">Без титла</string>
+    <string name="smartspace_content_desc">От поглед</string>
+    <string name="smartspace_flight_qr_code">QR код</string>
+    <string name="smartspace_role_desc">Погледни</string>
     <!-- Button to restart SystemUI, within the Restart Options dialog -->
     <string name="global_action_restart_systemui">Системен UI</string>
     <!-- On The Go -->
@@ -152,14 +160,4 @@
     <string name="screenrecord_delete_label">Изтриване</string>
     <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
     <string name="screenrecord_delete_description">Запис на екрана е изтрит</string>
-    <!-- Smartspace -->
-    <string name="accessibility_next_alarm">Следваща аларма в %s</string>
-    <string name="accessibility_smartspace_page">Страница %1$d от %2$d</string>
-    <string name="active_mode_content_description">%1$s е включено</string>
-    <string name="generic_smartspace_concatenated_desc">%1$s, %2$s</string>
-    <string name="music_controls_no_title">Без титла</string>
-    <string name="smartspace_content_desc">От поглед</string>
-    <string name="smartspace_flight_qr_code">QR код</string>
-    <string name="smartspace_icu_date_pattern">EEEMMMd</string>
-    <string name="smartspace_role_desc">Погледни</string>
 </resources>
