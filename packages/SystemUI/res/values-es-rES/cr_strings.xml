@@ -46,6 +46,14 @@
     <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • Carga rápida (<xliff:g id="charging_time_left" example="4 horas y 2 minutos">%1$s</xliff:g> para carga completa)</string>
     <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • Carga rápida</string>
+    <!-- Smartspace -->
+    <string name="accessibility_next_alarm">Siguiente alarma en %s</string>
+    <string name="accessibility_smartspace_page">Página %1$d de %2$d</string>
+    <string name="active_mode_content_description">%1$s está activado</string>
+    <string name="music_controls_no_title">Sin título</string>
+    <string name="smartspace_content_desc">De un vistazo</string>
+    <string name="smartspace_flight_qr_code">Código QR</string>
+    <string name="smartspace_role_desc">Ver</string>
     <!-- Button to restart SystemUI, within the Restart Options dialog -->
     <string name="global_action_restart_systemui">Interfaz del Sistema</string>
     <!-- On The Go -->
@@ -152,14 +160,4 @@
     <string name="screenrecord_delete_label">Eliminar</string>
     <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
     <string name="screenrecord_delete_description">Grabación de pantalla eliminada</string>
-    <!-- Smartspace -->
-    <string name="accessibility_next_alarm">Siguiente alarma en %s</string>
-    <string name="accessibility_smartspace_page">Página %1$d de %2$d</string>
-    <string name="active_mode_content_description">%1$s está activado</string>
-    <string name="generic_smartspace_concatenated_desc">%1$s, %2$s</string>
-    <string name="music_controls_no_title">Sin título</string>
-    <string name="smartspace_content_desc">De un vistazo</string>
-    <string name="smartspace_flight_qr_code">Código QR</string>
-    <string name="smartspace_icu_date_pattern">EEEMMMd</string>
-    <string name="smartspace_role_desc">Ver</string>
 </resources>
