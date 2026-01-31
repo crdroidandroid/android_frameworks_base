@@ -65,11 +65,11 @@
     <string name="accessibility_next_alarm">Next alarm at %s</string>
     <string name="accessibility_smartspace_page">Page %1$d of %2$d</string>
     <string name="active_mode_content_description">%1$s is on</string>
-    <string name="generic_smartspace_concatenated_desc">%1$s, %2$s</string>
+    <string name="generic_smartspace_concatenated_desc" translatable="false">%1$s, %2$s</string>
     <string name="music_controls_no_title">No title</string>
     <string name="smartspace_content_desc">At a glance</string>
     <string name="smartspace_flight_qr_code">QR code</string>
-    <string name="smartspace_icu_date_pattern">EEEMMMd</string>
+    <string name="smartspace_icu_date_pattern" translatable="false">EEEMMMd</string>
     <string name="smartspace_role_desc">View</string>
 
     <!-- Button to restart SystemUI, within the Restart Options dialog -->
