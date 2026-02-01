@@ -16,10 +16,13 @@
 
 package com.android.systemui.statusbar.pipeline.shared.ui.viewmodel
 
+import android.provider.Settings
 import com.android.systemui.dagger.SysUISingleton
+import com.android.systemui.shared.settings.data.repository.SystemSettingsRepository
 import com.android.systemui.statusbar.pipeline.mobile.domain.interactor.MobileIconsInteractor
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 
@@ -30,13 +33,24 @@ import kotlinx.coroutines.flow.flowOf
 @SysUISingleton
 class StatusBarOperatorNameViewModel
 @Inject
-constructor(mobileIconsInteractor: MobileIconsInteractor) {
-    val operatorName: Flow<String?> =
+constructor(
+    mobileIconsInteractor: MobileIconsInteractor,
+    settingsRepository: SystemSettingsRepository,
+) {
+    private val carrierNameFromPipeline: Flow<String?> =
         mobileIconsInteractor.defaultDataSubId.flatMapLatest {
             if (it == null) {
                 flowOf(null)
             } else {
                 mobileIconsInteractor.getMobileConnectionInteractorForSubId(it).carrierName
             }
+        }
+
+    private val customCarrierText: Flow<String?> =
+        settingsRepository.stringSetting(Settings.System.LOCKSCREEN_SHOW_CUSTOM_CARRIER_TEXT)
+
+    val operatorName: Flow<String?> =
+        combine(carrierNameFromPipeline, customCarrierText) { carrierName, customText ->
+            if (!customText.isNullOrEmpty()) customText else carrierName
         }
 }
