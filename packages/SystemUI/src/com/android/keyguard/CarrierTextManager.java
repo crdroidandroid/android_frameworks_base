@@ -101,6 +101,8 @@ public class CarrierTextManager {
     @Nullable private String mSatelliteCarrierText;
 
     private boolean mShowCarrierText = true;
+    private String mShowCustomCarrierText = "";
+    private boolean mCustomCarrierText = false;
 
     private final Context mContext;
     private final TelephonyManager mTelephonyManager;
@@ -468,9 +470,11 @@ public class CarrierTextManager {
 
         boolean isInSatelliteMode = mSatelliteCarrierText != null;
 
-        // Hide the carrier text if the user requests
+        // Hide the carrier text if the user requests, otherwise allow a custom override
         if (!mShowCarrierText) {
             displayText = "";
+        } else if (mCustomCarrierText) {
+            displayText = mShowCustomCarrierText;
         }
 
         final CarrierTextCallbackInfo info = new CarrierTextCallbackInfo(
@@ -696,17 +700,30 @@ public class CarrierTextManager {
             mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(
                     Settings.System.LOCKSCREEN_SHOW_CARRIER), false, this,
                     UserHandle.USER_ALL);
+            mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.LOCKSCREEN_SHOW_CUSTOM_CARRIER_TEXT), false, this,
+                    UserHandle.USER_ALL);
             updateSettings();
         }
 
         void updateSettings() {
             mShowCarrierText = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.LOCKSCREEN_SHOW_CARRIER, 1, UserHandle.USER_CURRENT) != 0;
+
+            String customText = Settings.System.getStringForUser(mContext.getContentResolver(),
+                    Settings.System.LOCKSCREEN_SHOW_CUSTOM_CARRIER_TEXT, UserHandle.USER_CURRENT);
+            mShowCustomCarrierText = customText != null ? customText : "";
+            mCustomCarrierText = !TextUtils.isEmpty(mShowCustomCarrierText);
         }
 
         @Override
         public void onChange(boolean selfChange, Uri uri) {
             if (Settings.System.getUriFor(Settings.System.LOCKSCREEN_SHOW_CARRIER).equals(uri)) {
+                mLogger.logUpdateCarrierTextForReason(REASON_CARRIER_ON_LOCKSCREEN_CHANGED);
+                updateSettings();
+                updateCarrierText();
+            } else if (Settings.System.getUriFor(
+                    Settings.System.LOCKSCREEN_SHOW_CUSTOM_CARRIER_TEXT).equals(uri)) {
                 mLogger.logUpdateCarrierTextForReason(REASON_CARRIER_ON_LOCKSCREEN_CHANGED);
                 updateSettings();
                 updateCarrierText();
