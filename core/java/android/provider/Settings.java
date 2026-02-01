@@ -7184,6 +7184,12 @@ public final class Settings {
         public static final String LOCKSCREEN_SHOW_CARRIER = "lockscreen_show_carrier";
 
         /**
+         * Whether to override carrier text with custom text
+         * @hide
+         */
+        public static final String LOCKSCREEN_SHOW_CUSTOM_CARRIER_TEXT = "lockscreen_show_custom_carrier_text";
+
+        /**
          * Disable hw buttons
          * @hide
          */
