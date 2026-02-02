@@ -1,5 +1,5 @@
 <!--
-    Copyright (C) 2017-2025 crDroid Android Project
+    Copyright (C) 2017-2026 crDroid Android Project
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -21,5 +21,5 @@
 
     <path
         android:fillColor="?android:attr/colorControlNormal"
-        android:pathData="M22,16.5V10.5H17.5V13.5H19V16.5H16V7.5H22V4.5H16A3,3 0 0,0 13,7.5V16.5A3,3 0 0,0 16,19.5H19A3,3 0 0,0 22,16.5M8,19.5H11V4.5H8V10.5H5V4.5H2V13.5H8V19.5Z" />
+        android:pathData="M7,17L7,14L3,14L3,7L5,7L5,12L7,12L7,7L9,7L9,12L11,12L11,14L9,14L9,17L7,17ZM21,11L21,15Q21,15.825 20.4125,16.4125Q19.825,17 19,17L14,17Q13.175,17 12.5875,16.4125Q12,15.825 12,15L12,9Q12,8.175 12.5875,7.5875Q13.175,7 14,7L19,7Q19.825,7 20.4125,7.5875Q21,8.175 21,9L14,9Q14,9 14,9Q14,9 14,9L14,15Q14,15 14,15Q14,15 14,15L19,15Q19,15 19,15Q19,15 19,15L19,13L16.5,13L16.5,11L21,11Z" />
 </vector>
