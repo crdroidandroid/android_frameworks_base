@@ -17,6 +17,7 @@ package com.android.systemui.tuner;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.telephony.TelephonyManager;
 
 import androidx.annotation.Nullable;
@@ -38,12 +39,26 @@ public class StatusBarTuner extends SettingsBasePreferenceFragment {
         if (!isVoiceCapable(requireContext())) {
             removeMobilePreferences();
         }
+        if (!hasVibrator(requireContext())) {
+            Preference pref = findPreference("volume");
+            if (pref != null) {
+                getPreferenceScreen().removePreference(pref);
+            }
+        }
     }
 
-    public static boolean isVoiceCapable(Context context) {
+    private static boolean isVoiceCapable(Context context) {
         TelephonyManager telephony =
                 (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         return telephony != null && telephony.isVoiceCapable();
+    }
+
+    private static boolean hasVibrator(Context context) {
+        Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        if (vibrator == null || !vibrator.hasVibrator()) {
+            return false;
+        }
+        return true;
     }
 
     private void removeMobilePreferences() {
