@@ -50,6 +50,7 @@ interface MobileIconViewModelKairosCommon {
     val icon: KairosState<SignalIconModel>
     val contentDescription: KairosState<MobileContentDescription?>
     val roaming: KairosState<Boolean>
+    val isRoamingVisible: KairosState<Boolean>
     /** The RAT icon (LTE, 3G, 5G, etc) to be displayed. Null if we shouldn't show anything */
     val networkTypeIcon: KairosState<Icon.Resource?>
     /** The slice attribution. Drawn as a background layer */
@@ -117,6 +118,8 @@ class MobileIconViewModelKairos(
 
     override val roaming: KairosState<Boolean> = vmProvider.flatMap { it.roaming }
 
+    override val isRoamingVisible: KairosState<Boolean> = vmProvider.flatMap { it.isRoamingVisible }
+
     override val networkTypeIcon: KairosState<Icon.Resource?> =
         vmProvider.flatMap { it.networkTypeIcon }
 
@@ -148,6 +151,7 @@ private class CarrierBasedSatelliteViewModelKairosImpl(
 
     /** These fields are not used for satellite icons currently */
     override val roaming: KairosState<Boolean> = stateOf(false)
+    override val isRoamingVisible: KairosState<Boolean> = stateOf(false)
     override val networkTypeIcon: KairosState<Icon.Resource?> = stateOf(null)
     override val networkTypeBackground: KairosState<Icon.Resource?> = stateOf(null)
     override val activityInVisible: KairosState<Boolean> = stateOf(false)
@@ -300,6 +304,23 @@ private class CellularIconViewModelKairos(
                     it,
                     iconInteractor.tableLogBuffer,
                     columnName = "roaming",
+                )
+            }
+        }
+
+    override val isRoamingVisible: KairosState<Boolean> =
+        combine(
+            iconInteractor.isRoaming,
+            iconInteractor.isRoamingForceHidden
+        ) { isRoaming, isHidden ->
+            isRoaming && !isHidden
+        }.also {
+            onActivated {
+                logDiffsForTable(
+                    name = nameTag { "CellularIconViewModelKairos(subId=$subscriptionId).isRoamingVisible" },
+                    it,
+                    iconInteractor.tableLogBuffer,
+                    columnName = "roamingVisible",
                 )
             }
         }
