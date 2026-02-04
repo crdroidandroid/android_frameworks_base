@@ -49,7 +49,7 @@ interface StackedMobileIconViewModel : Activatable {
     val activityContainerVisible: Boolean
     /** [Context] to use when loading the [networkTypeIcon] */
     val mobileContext: Context?
-    val roaming: Boolean
+    val isRoamingVisible: Boolean
     val isIconVisible: Boolean
 
     fun interface Factory {
@@ -171,7 +171,7 @@ constructor(
             )
             .hydratedStateOf(initialValue = null)
 
-    override val roaming: Boolean by
+    private val roaming: Boolean by
         _isIconVisible
             .flatMapLatest { isVisible ->
                 if (isVisible) {
@@ -187,6 +187,24 @@ constructor(
                         initialValue = false,
                     )
             }
+            .hydratedStateOf(initialValue = false)
+
+    override val isRoamingVisible: Boolean by
+        _isIconVisible
+            .flatMapLatest { isVisible ->
+                if (isVisible) {
+                    iconViewModelFlow.flatMapLatest { viewModels ->
+                        viewModels.firstOrNull()?.isRoamingVisible ?: flowOf(false)
+                    }
+                } else {
+                    flowOf(false)
+                }
+            }
+            .logDiffsForTable(
+                tableLogBuffer = tableLogger,
+                columnName = COL_ROAMING_VISIBLE,
+                initialValue = false,
+            )
             .hydratedStateOf(initialValue = false)
 
     override val isIconVisible: Boolean by
@@ -212,5 +230,6 @@ constructor(
     private companion object {
         const val COL_IS_ICON_VISIBLE = "isIconVisible"
         const val COL_ROAMING = "roam"
+        const val COL_ROAMING_VISIBLE = "roamVisible"
     }
 }
