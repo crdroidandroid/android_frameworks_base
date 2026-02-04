@@ -132,10 +132,19 @@ constructor(
             initialValue = null,
         )
 
-    override val roaming: Boolean by
+    private val roaming: Boolean by
         hydratedComposeStateOf(
             name = "roaming",
             source = iconList.flatMap { icons -> icons.firstOrNull()?.roaming ?: stateOf(false) },
+            initialValue = false,
+        )
+
+    override val isRoamingVisible: Boolean by
+        hydratedComposeStateOf(
+            name = "isRoamingVisible",
+            source = iconList.flatMap { icons -> 
+                icons.firstOrNull()?.isRoamingVisible ?: stateOf(false) 
+            },
             initialValue = false,
         )
 
