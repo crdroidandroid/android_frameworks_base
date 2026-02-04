@@ -193,6 +193,7 @@ constructor(
             override val contentDescription: State<MobileContentDescription?> =
                 latest(null) { contentDescription }
             override val roaming: State<Boolean> = latest(false) { roaming }
+            override val isRoamingVisible: KairosState<Boolean> = stateOf(false)
             override val networkTypeIcon: State<Icon.Resource?> = latest(null) { networkTypeIcon }
             override val networkTypeBackground: State<Icon.Resource?> =
                 latest(null) { networkTypeBackground }
