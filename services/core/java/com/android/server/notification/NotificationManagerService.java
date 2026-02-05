@@ -580,6 +580,7 @@ public class NotificationManagerService extends SystemService {
     private static final String EXTRA_KEY = "key";
 
     private static final int NOTIFICATION_INSTANCE_ID_MAX = (1 << 13);
+    private boolean mPendingAllowDefaultApprovedServices;
 
     // States for the review permissions notification
     static final int REVIEW_NOTIF_STATE_UNKNOWN = -1;
@@ -1297,7 +1298,12 @@ public class NotificationManagerService extends SystemService {
                 // No data yet
                 // Load default managed services approvals
                 loadDefaultApprovedServices(USER_SYSTEM);
-                allowDefaultApprovedServices(USER_SYSTEM);
+                // Defer binding to notification listeners until PHASE_THIRD_PARTY_APPS_CAN_START.
+                // Binding during onStart() causes a boot ordering race: the bind attempt triggers
+                // process creation, which calls StorageManagerService.getMountModeInternal(),
+                // but StorageManagerService.mIPackageManager is null until servicesReady() runs
+                // in PHASE_SYSTEM_SERVICES_READY.
+                mPendingAllowDefaultApprovedServices = true;
             } catch (IOException e) {
                 Log.wtf(TAG, "Unable to read notification policy", e);
             } catch (NumberFormatException e) {
@@ -3521,6 +3527,11 @@ public class NotificationManagerService extends SystemService {
             mLockUtils.registerStrongAuthTracker(mStrongAuthTracker);
             mAttentionHelper.onSystemReady();
         } else if (phase == SystemService.PHASE_THIRD_PARTY_APPS_CAN_START) {
+            // Handle deferred default approved services binding (from loadPolicyFile)
+            if (mPendingAllowDefaultApprovedServices) {
+                mPendingAllowDefaultApprovedServices = false;
+                allowDefaultApprovedServices(USER_SYSTEM);
+            }
             // This observer will force an update when observe is called, causing us to
             // bind to listener services.
             mSettingsObserver.observe();
