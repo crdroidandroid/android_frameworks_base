@@ -18,9 +18,9 @@ package com.android.server.pm;
 
 import static android.app.AppOpsManager.MODE_ALLOWED;
 import static android.app.AppOpsManager.MODE_IGNORED;
-import static android.app.AppOpsManager.OP_CAMERA;
 import static android.app.AppOpsManager.OP_PLAY_AUDIO;
-import static android.app.AppOpsManager.OP_RECORD_AUDIO;
+import static android.app.AppOpsManager.OP_RESERVED_FOR_TESTING;
+import static android.app.AppOpsManager.OP_VIBRATE;
 import static android.app.AppOpsManager.opToName;
 
 import static org.junit.Assert.assertEquals;
@@ -30,12 +30,14 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import android.app.AppGlobals;
+import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.pm.IPackageManager;
 import android.content.pm.LauncherApps;
 import android.content.pm.PackageManager;
 import android.content.pm.SuspendDialogInfo;
 import android.os.BaseBundle;
+import android.os.Binder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -253,18 +255,18 @@ public class SuspendPackagesTest {
     }
 
     @Test
-    public void testCameraBlockedOnSuspend() throws Exception {
-        assertOpBlockedOnSuspend(OP_CAMERA);
+    public void testReservedForTestingOpBlockedOnSuspend() throws Exception {
+        assertOpBlockedOnSuspend(OP_RESERVED_FOR_TESTING);
     }
 
     @Test
-    public void testPlayAudioBlockedOnSuspend() throws Exception {
+    public void testVibrateOpBlockedOnSuspend() throws Exception {
+        assertOpBlockedOnSuspend(OP_VIBRATE);
+    }
+
+    @Test
+    public void testPlayAudioOpBlockedOnSuspend() throws Exception {
         assertOpBlockedOnSuspend(OP_PLAY_AUDIO);
-    }
-
-    @Test
-    public void testRecordAudioBlockedOnSuspend() throws Exception {
-        assertOpBlockedOnSuspend(OP_RECORD_AUDIO);
     }
 
     private void assertOpBlockedOnSuspend(int code) throws Exception {
@@ -282,13 +284,27 @@ public class SuspendPackagesTest {
         iAppOps.startWatchingMode(code, TEST_APP_PACKAGE_NAME, watcher);
         final int testPackageUid = mPackageManager.getPackageUid(TEST_APP_PACKAGE_NAME, 0);
         int opMode = iAppOps.checkOperation(code, testPackageUid, TEST_APP_PACKAGE_NAME);
-        assertEquals("Op " + opToName(code) + " disallowed for unsuspended package", MODE_ALLOWED,
-                opMode);
+        assertEquals("checkOperation: Op " + opToName(code) + " disallowed for unsuspended package",
+                MODE_ALLOWED, opMode);
         suspendTestPackage(null, null, null);
         assertTrue("AppOpsWatcher did not callback", latch.await(5, TimeUnit.SECONDS));
+
         opMode = iAppOps.checkOperation(code, testPackageUid, TEST_APP_PACKAGE_NAME);
-        assertEquals("Op " + opToName(code) + " allowed for suspended package", MODE_IGNORED,
-                opMode);
+        assertEquals("checkOperation: Op " + opToName(code) + " allowed for suspended package",
+                MODE_IGNORED, opMode);
+
+        opMode = iAppOps.noteOperation(code, testPackageUid, TEST_APP_PACKAGE_NAME, null, false,
+                "test", false).getOpMode();
+        assertEquals("noteOperation: Op " + opToName(code) + " allowed for suspended package",
+                MODE_IGNORED, opMode);
+
+        opMode = iAppOps.startOperation(new Binder(), code, testPackageUid,
+                TEST_APP_PACKAGE_NAME, null, false, false, "test", false,
+                AppOpsManager.ATTRIBUTION_FLAGS_NONE, AppOpsManager.ATTRIBUTION_CHAIN_ID_NONE)
+                .getOpMode();
+        assertEquals("startOperation: Op " + opToName(code) + " allowed for suspended package",
+                MODE_IGNORED, opMode);
+
         iAppOps.stopWatchingMode(watcher);
     }
 
