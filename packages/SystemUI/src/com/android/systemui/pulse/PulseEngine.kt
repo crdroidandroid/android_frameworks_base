@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2025 The AxionAOSP Project
+ *           (C) 2026 Lunaris AOSP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,6 +37,7 @@ class PulseEngine(
             if (fftAverage == null || fftAverage!!.size != barCount) {
                 fftAverage = Array(barCount) { FFTAverage() }
             }
+            val heightMultiplier = settingsRepo.getHeightMultiplier()
             val output = FloatArray(barCount)
             for (i in 0 until barCount) {
                 val realIndex = i * 2 + 2
@@ -46,7 +48,7 @@ class PulseEngine(
                 val magnitude = (rfk * rfk + ifk * ifk).toFloat()
                 var dbValue = if (magnitude > 0) (10 * log10(magnitude.toDouble())).toInt() else 0
                 dbValue = fftAverage!![i].average(dbValue)
-                output[i] = dbValue * fudgeFactor.toFloat()
+                output[i] = dbValue * fudgeFactor.toFloat() * heightMultiplier
             }
             withContext(Dispatchers.Main) {
                 onDataProcessed(output)
