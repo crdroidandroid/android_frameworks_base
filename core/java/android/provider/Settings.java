@@ -14645,12 +14645,22 @@ public final class Settings {
         /**
          * @hide
          */
+        public static final String PULSE_CUSTOM_COLOR = "pulse_custom_color";
+
+        /**
+         * @hide
+         */
         public static final String PULSE_RENDERER = "pulse_renderer";
 
         /**
          * @hide
          */
         public static final String PULSE_BASS_HAPTICS = "pulse_bass_haptics";
+
+        /**
+         * @hide
+         */
+        public static final String PULSE_HEIGHT_MULTIPLIER = "pulse_height_multiplier";
 
         /**
          * Whether to show or hide the arrow for back gesture
