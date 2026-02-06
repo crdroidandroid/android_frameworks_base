@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2025 The AxionAOSP Project
  *           (C) 2025 crDroid Android Project
+ *           (C) 2024-2026 Lunaris AOSP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -76,7 +77,7 @@ class PulseRenderer(
             "waveform" -> style !is WaveformStyleRenderer
             else -> false
         }
-
+        
         if (needsSwap) {
             val prevW = lastViewW
             val prevH = lastViewH
@@ -107,6 +108,7 @@ class PulseRenderer(
         val mode = settingsRepo.getColorMode()
         val color = when (mode) {
             "album" -> mediaColor
+            "custom" -> settingsRepo.getCustomColor()
             "lavalamp" -> {
                 val time = System.currentTimeMillis()
                 val hue = (time / 50) % 360

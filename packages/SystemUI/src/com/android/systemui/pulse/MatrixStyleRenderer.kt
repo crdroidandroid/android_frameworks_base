@@ -23,38 +23,33 @@ internal class MatrixStyleRenderer(
     private val settings: PulseSettingsRepository
 ) : PulseStyleRenderer {
 
-    private val brightGreen = Color.argb(255, 0, 255, 65)
-    private val mediumGreen = Color.argb(200, 0, 220, 55)
-    private val darkGreen = Color.argb(120, 0, 160, 40)
-
+    private var baseColor = Color.argb(255, 0, 255, 65)
+    private var currentColorMode = "accent"
+    
     private val glowPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
         maskFilter = BlurMaskFilter(18f, BlurMaskFilter.Blur.NORMAL)
     }
 
     private val brightTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = brightGreen
         textAlign = Paint.Align.CENTER
         typeface = Typeface.MONOSPACE
         style = Paint.Style.FILL
     }
 
     private val mediumTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = mediumGreen
         textAlign = Paint.Align.CENTER
         typeface = Typeface.MONOSPACE
         style = Paint.Style.FILL
     }
 
     private val darkTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = darkGreen
         textAlign = Paint.Align.CENTER
         typeface = Typeface.MONOSPACE
         style = Paint.Style.FILL
     }
 
     private val textGlowPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.argb(150, 0, 255, 65)
         textAlign = Paint.Align.CENTER
         typeface = Typeface.MONOSPACE
         style = Paint.Style.FILL
@@ -108,7 +103,23 @@ internal class MatrixStyleRenderer(
     }
 
     override fun onColor(color: Int) {
-        // ignore always green
+        baseColor = color
+        currentColorMode = settings.getColorMode()
+
+        if (currentColorMode != "lavalamp") {
+            updatePaintColors(color)
+        }
+    }
+    
+    private fun updatePaintColors(color: Int) {
+        val r = Color.red(color)
+        val g = Color.green(color)
+        val b = Color.blue(color)
+        
+        brightTextPaint.color = Color.argb(255, r, g, b)
+        mediumTextPaint.color = Color.argb(200, (r * 0.86f).toInt(), (g * 0.86f).toInt(), (b * 0.86f).toInt())
+        darkTextPaint.color = Color.argb(120, (r * 0.63f).toInt(), (g * 0.63f).toInt(), (b * 0.63f).toInt())
+        textGlowPaint.color = Color.argb(150, r, g, b)
     }
 
     override fun onData(heights: FloatArray) {
@@ -144,6 +155,13 @@ internal class MatrixStyleRenderer(
         val gap = settings.getBarGapPx()
         val fullBarWidth = columnWidth + gap
 
+        if (currentColorMode == "lavalamp") {
+            val time = System.currentTimeMillis()
+            val hue = (time / 50) % 360
+            val lavaColor = Color.HSVToColor(255, floatArrayOf(hue.toFloat(), 1f, 1f))
+            updatePaintColors(lavaColor)
+        }
+
         for (i in 0 until count) {
             val column = barColumns[i]
             val height = currentHeights[i]
@@ -165,7 +183,12 @@ internal class MatrixStyleRenderer(
             val glowWidth = columnWidth * 0.85f
             val heightRatio = height / viewHeight.toFloat()
             val glowAlpha = (160 * heightRatio).toInt().coerceIn(0, 160)
-            glowPaint.color = Color.argb(glowAlpha, 0, 200, 50)
+            
+            val r = Color.red(brightTextPaint.color)
+            val g = Color.green(brightTextPaint.color)
+            val b = Color.blue(brightTextPaint.color)
+            glowPaint.color = Color.argb(glowAlpha, (r * 0.78f).toInt(), (g * 0.78f).toInt(), (b * 0.78f).toInt())
+            
             canvas.drawRect(
                 x - glowWidth / 2f,
                 baseY - height,
@@ -188,7 +211,7 @@ internal class MatrixStyleRenderer(
 
                 if (fadeRatio < 0.4f) {
                     val glowStrength = ((1f - fadeRatio * 2.5f) * 200).toInt().coerceIn(0, 200)
-                    textGlowPaint.color = Color.argb(glowStrength, 0, 255, 65)
+                    textGlowPaint.color = Color.argb(glowStrength, r, g, b)
                     canvas.drawText(char, x, y, textGlowPaint)
                 }
                 
