@@ -115,7 +115,11 @@ constructor(
                     maybeLoadResourceIcon(resId)
                 } ?: SignalIcon(SignalDrawable.getState(0, 4, false))
             label = tileState.label
-            secondaryLabel = tileState.secondaryLabel
+            secondaryLabel = if (this.state == Tile.STATE_ACTIVE) {
+                tileState.secondaryLabel
+            } else {
+                null
+            }
             contentDescription = tileState.contentDescription
             expandedAccessibilityClassName = tileState.expandedAccessibilityClassName
             handlesSecondaryClick =
