@@ -53,7 +53,7 @@
     <string name="music_controls_no_title">無標題</string>
     <string name="smartspace_content_desc">資訊一覽</string>
     <string name="smartspace_flight_qr_code">QR Code</string>
-    <string name="smartspace_role_desc">视图</string>
+    <string name="smartspace_role_desc">檢視</string>
     <!-- Button to restart SystemUI, within the Restart Options dialog -->
     <string name="global_action_restart_systemui">系統使用者介面</string>
     <!-- On The Go -->
