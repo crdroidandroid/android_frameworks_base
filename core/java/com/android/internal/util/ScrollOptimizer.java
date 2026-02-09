@@ -123,7 +123,7 @@ public class ScrollOptimizer {
     private static void initIfNeeded() {
         try {
             sFeatureEnabled = SystemProperties.getBoolean(PROP_SCROLL_OPT, true);
-            int prop = SystemProperties.getInt(PROP_SCROLL_OPT_HEAVY_APP, 2);
+            int prop = SystemProperties.getInt(PROP_SCROLL_OPT_HEAVY_APP, 1);
             sHeavyAppProp = prop;
             sHeavyApp = prop;
             sDebugEnabled = SystemProperties.getBoolean(PROP_DEBUG, false);
