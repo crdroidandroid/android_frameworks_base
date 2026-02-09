@@ -2503,9 +2503,7 @@ public class AudioDeviceBroker {
             return false;
         }
         // Do not mute on bluetooth event if music is playing on a wired headset.
-        if ((message == MSG_L_SET_BT_ACTIVE_DEVICE
-                || message == MSG_L_BLUETOOTH_DEVICE_CONFIG_CHANGE)
-                && AudioSystem.isStreamActive(AudioSystem.STREAM_MUSIC, 0)
+        if (AudioSystem.isStreamActive(AudioSystem.STREAM_MUSIC, 0)
                 && hasIntersection(mDeviceInventory.DEVICE_OVERRIDE_A2DP_ROUTE_ON_PLUG_SET,
                 mAudioService.getDeviceSetForStream(AudioSystem.STREAM_MUSIC).stream().map(
                         AudioDeviceAttributes::getInternalType).collect(
