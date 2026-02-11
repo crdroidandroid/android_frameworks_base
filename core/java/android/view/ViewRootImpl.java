@@ -1553,8 +1553,12 @@ public final class ViewRootImpl implements ViewParent,
                     attrs.setSurfaceInsets(view, false /*manual*/, true /*preservePrevious*/);
                 }
 
-                CompatibilityInfo compatibilityInfo =
-                        mDisplay.getDisplayAdjustments().getCompatibilityInfo();
+                CompatibilityInfo compatibilityInfo;
+                if (mDisplay != null) {
+                    compatibilityInfo = mDisplay.getDisplayAdjustments().getCompatibilityInfo();
+                } else {
+                    compatibilityInfo = CompatibilityInfo.DEFAULT_COMPATIBILITY_INFO;
+                }
                 mTranslator = compatibilityInfo.getTranslator();
 
                 // If the application owns the surface, don't enable hardware acceleration
@@ -6760,7 +6764,9 @@ public final class ViewRootImpl implements ViewParent,
                         + ", globalConfig: " + globalConfig
                         + ", overrideConfig: " + overrideConfig);
 
-        final CompatibilityInfo ci = mDisplay.getDisplayAdjustments().getCompatibilityInfo();
+        final CompatibilityInfo ci = mDisplay != null
+                ? mDisplay.getDisplayAdjustments().getCompatibilityInfo()
+                : CompatibilityInfo.DEFAULT_COMPATIBILITY_INFO;
         if (!ci.equals(CompatibilityInfo.DEFAULT_COMPATIBILITY_INFO)) {
             globalConfig = new Configuration(globalConfig);
             overrideConfig = new Configuration(overrideConfig);
