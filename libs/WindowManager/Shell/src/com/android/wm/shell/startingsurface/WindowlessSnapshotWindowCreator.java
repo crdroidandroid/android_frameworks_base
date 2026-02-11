@@ -72,6 +72,9 @@ class WindowlessSnapshotWindowCreator {
             return;
         }
         final Display display = mDisplayManager.getDisplay(runningTaskInfo.displayId);
+        if (display == null) {
+            return;
+        }
         final StartingSurfaceDrawer.WindowlessStartingWindow wlw =
                 new StartingSurfaceDrawer.WindowlessStartingWindow(
                         mContext.getResources().getConfiguration(), rootSurface);
