@@ -889,4 +889,100 @@ TEST_F(AssetManager2Test, GetFlaggedAssets) {
   EXPECT_TRUE(value->entry_flags & ResTable_entry::FLAG_USES_FEATURE_FLAGS);
 }
 
+TEST_F(AssetManager2Test, FindsBagThroughConcreteStringArray) {
+  AssetManager2 assetmanager;
+  assetmanager.SetApkAssets({basic_assets_});
+
+  auto bag = assetmanager.GetBag(basic::R::array::concrete_string_array);
+  ASSERT_TRUE(bag.has_value());
+
+  ASSERT_EQ(3u, (*bag)->entry_count);
+
+  EXPECT_EQ(static_cast<uint8_t>(Res_value::TYPE_STRING), (*bag)->entries[0].value.dataType);
+  EXPECT_EQ(std::string("a"),
+        GetStringFromPool(assetmanager.GetStringPoolForCookie((*bag)->entries[0].cookie), (*bag)->entries[0].value.data));
+  EXPECT_EQ(0, (*bag)->entries[0].cookie);
+
+  EXPECT_EQ(static_cast<uint8_t>(Res_value::TYPE_STRING), (*bag)->entries[1].value.dataType);
+  EXPECT_EQ(std::string("b"),
+        GetStringFromPool(assetmanager.GetStringPoolForCookie((*bag)->entries[1].cookie), (*bag)->entries[1].value.data));
+  EXPECT_EQ(0, (*bag)->entries[1].cookie);
+
+  EXPECT_EQ(static_cast<uint8_t>(Res_value::TYPE_STRING), (*bag)->entries[2].value.dataType);
+  EXPECT_EQ(std::string("c"),
+        GetStringFromPool(assetmanager.GetStringPoolForCookie((*bag)->entries[2].cookie), (*bag)->entries[2].value.data));
+  EXPECT_EQ(0, (*bag)->entries[2].cookie);
+}
+
+TEST_F(AssetManager2Test, FindsBagThroughSingleReference) {
+  AssetManager2 assetmanager;
+  assetmanager.SetApkAssets({basic_assets_});
+
+  auto bag = assetmanager.GetBag(basic::R::array::aliased_string_array);
+  ASSERT_TRUE(bag.has_value());
+
+  ASSERT_EQ(3u, (*bag)->entry_count);
+
+  EXPECT_EQ(static_cast<uint8_t>(Res_value::TYPE_STRING), (*bag)->entries[0].value.dataType);
+  EXPECT_EQ(std::string("a"),
+          GetStringFromPool(assetmanager.GetStringPoolForCookie((*bag)->entries[0].cookie), (*bag)->entries[0].value.data));
+  EXPECT_EQ(0, (*bag)->entries[0].cookie);
+
+  EXPECT_EQ(static_cast<uint8_t>(Res_value::TYPE_STRING), (*bag)->entries[1].value.dataType);
+  EXPECT_EQ(std::string("b"),
+          GetStringFromPool(assetmanager.GetStringPoolForCookie((*bag)->entries[1].cookie), (*bag)->entries[1].value.data));
+  EXPECT_EQ(0, (*bag)->entries[1].cookie);
+
+  EXPECT_EQ(static_cast<uint8_t>(Res_value::TYPE_STRING), (*bag)->entries[2].value.dataType);
+  EXPECT_EQ(std::string("c"),
+          GetStringFromPool(assetmanager.GetStringPoolForCookie((*bag)->entries[2].cookie), (*bag)->entries[2].value.data));
+  EXPECT_EQ(0, (*bag)->entries[2].cookie);
+}
+
+TEST_F(AssetManager2Test, FindsBagThroughDoubleReference) {
+  AssetManager2 assetmanager;
+  assetmanager.SetApkAssets({basic_assets_});
+
+  auto bag = assetmanager.GetBag(basic::R::array::double_aliased_string_array);
+  ASSERT_TRUE(bag.has_value());
+
+  ASSERT_EQ(3u, (*bag)->entry_count);
+
+  EXPECT_EQ(static_cast<uint8_t>(Res_value::TYPE_STRING), (*bag)->entries[0].value.dataType);
+  EXPECT_EQ(std::string("a"),
+          GetStringFromPool(assetmanager.GetStringPoolForCookie((*bag)->entries[0].cookie), (*bag)->entries[0].value.data));
+  EXPECT_EQ(0, (*bag)->entries[0].cookie);
+
+  EXPECT_EQ(static_cast<uint8_t>(Res_value::TYPE_STRING), (*bag)->entries[1].value.dataType);
+  EXPECT_EQ(std::string("b"),
+          GetStringFromPool(assetmanager.GetStringPoolForCookie((*bag)->entries[1].cookie), (*bag)->entries[1].value.data));
+  EXPECT_EQ(0, (*bag)->entries[1].cookie);
+
+  EXPECT_EQ(static_cast<uint8_t>(Res_value::TYPE_STRING), (*bag)->entries[2].value.dataType);
+  EXPECT_EQ(std::string("c"),
+          GetStringFromPool(assetmanager.GetStringPoolForCookie((*bag)->entries[2].cookie), (*bag)->entries[2].value.data));
+  EXPECT_EQ(0, (*bag)->entries[2].cookie);
+}
+
+TEST_F(AssetManager2Test, DetectsCircularBag) {
+  // If the test fails because it is hung you will see the following:
+  //         Result: died but not with expected exit code:
+  //                 Terminated by signal 14
+  // caused by the alarm(1) timeout.
+  EXPECT_EXIT({
+    alarm(1);
+    AssetManager2 assetmanager;
+    assetmanager.SetApkAssets({basic_assets_});
+
+    auto bag = assetmanager.GetBag(basic::R::array::circular_aliased_string_array1);
+    if (!bag.has_value()) {
+      // Success, a circular reference should not return a bag
+      exit(0);
+    }
+    // Fail, we returned a bag
+    fprintf(stderr, "GetBag returned a bag from a circular reference!");
+    exit(1);
+  }, ::testing::ExitedWithCode(0), "");
+}
+
 }  // namespace android
