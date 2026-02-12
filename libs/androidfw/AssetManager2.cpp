@@ -1256,6 +1256,33 @@ base::expected<const ResolvedBag*, NullOrIOError> AssetManager2::GetBag(
     return base::unexpected(entry.error());
   }
 
+  // Resolve reference resources recursively
+  auto final_resid = resid;
+  std::vector<uint32_t> referenced_ids;
+  while (!(entry->entry_flags & ResTable_entry::FLAG_COMPLEX)) {
+    if (final_resid == 0U ||
+        std::find(referenced_ids.begin(), referenced_ids.end(),
+                  final_resid) != referenced_ids.end()) {
+      return base::unexpected(std::nullopt);
+    }
+    referenced_ids.push_back(final_resid);
+    auto value = GetResource(final_resid, false, 0);
+    if (value.has_value() && value->type == Res_value::TYPE_REFERENCE) {
+      // Follow the reference
+      final_resid = value->data;
+      // Re-fetch the entry for the target of the reference
+      entry = FindEntry(final_resid, 0u, false, false);
+
+      if (!entry.has_value()) {
+        // Target is still not a bag, can't resolve as a bag
+        return base::unexpected(std::nullopt);
+      }
+    } else {
+      // Not a bag and not a reference to one
+      return base::unexpected(std::nullopt);
+    }
+  }
+
   auto entry_map = std::get_if<incfs::verified_map_ptr<ResTable_map_entry>>(&entry->entry);
   if (entry_map == nullptr) {
     // Not a bag, nothing to do.
