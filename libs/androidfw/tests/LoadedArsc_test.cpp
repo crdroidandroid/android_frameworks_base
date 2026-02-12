@@ -288,6 +288,12 @@ TEST(LoadedArscTest, ResourceIdentifierIterator) {
   ASSERT_EQ(0x7f050000u, *iter++);
   ASSERT_EQ(0x7f050001u, *iter++);
   ASSERT_EQ(0x7f060000u, *iter++);
+  ASSERT_EQ(0x7f060001u, *iter++);
+  ASSERT_EQ(0x7f060002u, *iter++);
+  ASSERT_EQ(0x7f060003u, *iter++);
+  ASSERT_EQ(0x7f060004u, *iter++);
+  ASSERT_EQ(0x7f060005u, *iter++);
+  ASSERT_EQ(0x7f060006u, *iter++);
   ASSERT_EQ(0x7f070000u, *iter++);
   ASSERT_EQ(0x7f070001u, *iter++);
   ASSERT_EQ(0x7f070002u, *iter++);
