@@ -73,6 +73,10 @@ struct R {
   struct array {
     enum : uint32_t {
       integerArray1 = 0x7f060000,
+      concrete_string_array = 0x7f060001,
+      aliased_string_array = 0x7f060002,
+      double_aliased_string_array = 0x7f060003,
+      circular_aliased_string_array1 = 0x7f060004,
     };
   };
 };
