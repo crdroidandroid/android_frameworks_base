@@ -272,6 +272,14 @@ cc_test {
         ":FrameworkResourcesNotSparseTestApp",
     ],
     test_suites: ["device-tests"],
+    test_options: {
+        test_runner_options: [
+            {
+                name: "native-test-timeout",
+                value: "1m",
+            }
+        ]
+    },
 }
 
 cc_benchmark {
