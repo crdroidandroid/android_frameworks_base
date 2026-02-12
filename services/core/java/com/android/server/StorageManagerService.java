@@ -3765,9 +3765,14 @@ class StorageManagerService extends IStorageManager.Stub
         final int userId = UserHandle.getUserId(callingUid);
         final String propertyName = "sys.user." + userId + ".ce_available";
 
-        // Ignore requests to create directories while CE storage is locked
         if (!isCeStorageUnlocked(userId)) {
-            throw new IllegalStateException("Failed to prepare " + appPath);
+            // If the directory already exists, the hardware is clearly unlocked.
+            // We log a warning but allow the code to continue to the vold call.
+            if (new File(appPath).exists()) {
+                Slog.w(TAG, "Storage reported locked, but path exists. Proceeding for: " + appPath);
+            } else {
+                throw new IllegalStateException("Failed to prepare " + appPath);
+            }
         }
 
         // Ignore requests to create directories if CE storage is not available
