@@ -314,4 +314,7 @@
 
     <!-- Identifier for the phishing animated smart action. -->
     <item type="id" name="is_phishing_animated_action" />
+
+    <!-- Custom overlay on lockscreen/doze -->
+    <item type="id" name="custom_overlay_container" />
 </resources>
