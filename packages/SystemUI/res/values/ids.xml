@@ -308,4 +308,7 @@
     <item type="id" name="screen_off_animation_guard_set" />
     <item type="id" name="screen_off_animation_guard_reported_wtf" />
     <item type="id" name="screen_off_animation_guard_screen_off_updates" />
+
+    <!-- Custom overlay on lockscreen/doze -->
+    <item type="id" name="custom_overlay_container" />
 </resources>
