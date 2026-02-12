@@ -103,13 +103,16 @@ public class MediaFocusControl implements PlayerFocusEnforcer {
     private final @NonNull PlayerFocusEnforcer mFocusEnforcer;
     private boolean mMultiAudioFocusEnabled = false;
 
+    private final boolean mMultiAudioFocusEnabledDefault;
+
     private final ContentObserver mMultiAudioFocusObserver = new ContentObserver(
             new Handler(Looper.getMainLooper())) {
         @Override
         public void onChange(boolean selfChange) {
             final ContentResolver cr = mContext.getContentResolver();
             mMultiAudioFocusEnabled = Settings.System.getIntForUser(cr,
-                    Settings.System.MULTI_AUDIO_FOCUS_ENABLED, 0, cr.getUserId()) != 0;
+                    Settings.System.MULTI_AUDIO_FOCUS_ENABLED,
+                    mMultiAudioFocusEnabledDefault ? 1 : 0, cr.getUserId()) != 0;
             Log.i(TAG, "Multi audio focus " + (mMultiAudioFocusEnabled ? "enabled" : "disabled"));
         }
     };
@@ -130,7 +133,7 @@ public class MediaFocusControl implements PlayerFocusEnforcer {
         mFocusEnforcer = pfe;
         final ContentResolver cr = mContext.getContentResolver();
 
-        boolean multiAudioFocusEnabledDefault =
+        mMultiAudioFocusEnabledDefault =
                 audioFocusDesktop()
                         && mContext.getResources()
                                 .getBoolean(
@@ -138,7 +141,7 @@ public class MediaFocusControl implements PlayerFocusEnforcer {
                                                 .config_multi_audio_focus_enabled_default);
         mMultiAudioFocusEnabled = Settings.System.getIntForUser(cr,
                 Settings.System.MULTI_AUDIO_FOCUS_ENABLED,
-                multiAudioFocusEnabledDefault ? 1 : 0, cr.getUserId()) != 0;
+                mMultiAudioFocusEnabledDefault ? 1 : 0, cr.getUserId()) != 0;
         cr.registerContentObserver(
                 Settings.System.getUriFor(Settings.System.MULTI_AUDIO_FOCUS_ENABLED),
                 false, mMultiAudioFocusObserver, UserHandle.USER_ALL);
