@@ -19,6 +19,7 @@ package com.android.systemui.statusbar.pipeline.battery.ui.composable
 import android.graphics.Rect
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -427,6 +428,7 @@ fun CircleBatteryBody(
     modifier: Modifier = Modifier,
     contentDescription: String = "",
 ) {
+    val colorError = MaterialTheme.colorScheme.error
     val textMeasurer = rememberTextMeasurer()
 
     Canvas(modifier = modifier, contentDescription = contentDescription) {
@@ -445,7 +447,11 @@ fun CircleBatteryBody(
         // Draw colored arc representing charge level
         if (level != null && level > 0) {
             drawArc(
-                colors.attribution,
+                if (level <= 20 && attr !is BatteryGlyph.Bolt && attr !is BatteryGlyph.Plus) {
+                    colorError
+                } else {
+                    colors.attribution
+                },
                 270f,
                 3.6f * level,
                 useCenter = false,
