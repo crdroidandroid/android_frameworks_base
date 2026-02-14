@@ -47,12 +47,12 @@
     <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • Đang sạc siêu nhanh (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> nữa sẽ đầy)</string>
     <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • Sạc siêu nhanh</string>
     <!-- Smartspace -->
-    <string name="accessibility_next_alarm">Next alarm at %s</string>
-    <string name="accessibility_smartspace_page">Page %1$d of %2$d</string>
-    <string name="active_mode_content_description">%1$s is on</string>
-    <string name="music_controls_no_title">No title</string>
+    <string name="accessibility_next_alarm">Báo thức tiếp theo lúc %s</string>
+    <string name="accessibility_smartspace_page">Trang %1$d trên %2$d</string>
+    <string name="active_mode_content_description">%1$s đang bật</string>
+    <string name="music_controls_no_title">Không có tiêu đề</string>
     <string name="smartspace_content_desc">At a glance</string>
-    <string name="smartspace_flight_qr_code">QR code</string>
+    <string name="smartspace_flight_qr_code">Mã QR</string>
     <string name="smartspace_role_desc">Xem</string>
     <!-- Button to restart SystemUI, within the Restart Options dialog -->
     <string name="global_action_restart_systemui">Giao diện người dùng hệ thống</string>
