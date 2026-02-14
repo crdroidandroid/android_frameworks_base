@@ -4538,40 +4538,51 @@ public final class NotificationPanelViewController implements
                     (mShadeHeaderExpansion * (255 - mHeaderImageShadow)));
             }
 
-            // Handle Animation (GIF/WebP) playback
-            Drawable currentDrawable = mQsHeaderImageView.getDrawable();
-            if (currentDrawable instanceof Animatable) {
-                Animatable anim = (Animatable) currentDrawable;
-                if (!anim.isRunning()) {
-                    anim.start();
-                }
-            }
-
+            startHeaderAnimIfPossible();
         } else {
             mQsHeaderLayout.setVisibility(View.GONE);
+            stopHeaderAnimIfRunning();
+        }
+    }
 
-            // Stop animation if hidden to save battery
-            Drawable currentDrawable = mQsHeaderImageView.getDrawable();
-            if (currentDrawable instanceof Animatable) {
-                Animatable anim = (Animatable) currentDrawable;
-                if (anim.isRunning()) {
-                    anim.stop();
-                }
-            }
+    private void stopHeaderAnimIfRunning() {
+        Drawable drawable = mQsHeaderImageView.getDrawable();
+        if (drawable instanceof Animatable anim && anim.isRunning()) {
+            anim.stop();
+        }
+        if (drawable != null) {
+            drawable.setVisible(false, false);
+        }
+    }
 
+    private void startHeaderAnimIfPossible() {
+        Drawable drawable = mQsHeaderImageView.getDrawable();
+        if (drawable == null) return;
+
+        // Only animate when we are actually showing it
+        if (mQsHeaderLayout.getVisibility() != View.VISIBLE || mQsHeaderImageView.getVisibility() != View.VISIBLE) {
+            return;
+        }
+
+        drawable.setVisible(true, true);
+        if (drawable instanceof Animatable anim && !anim.isRunning()) {
+            anim.start();
         }
     }
 
     private void setNotificationPanelHeaderBackground(Drawable dw, boolean force) {
-        // If the new drawable is an animation, set it directly.
+        // Stop previous anim, if any, before swapping
+        stopHeaderAnimIfRunning();
+
+        // Avoid TransitionDrawable if new is animatable, but do not start here
         if (dw instanceof Animatable) {
             mQsHeaderImageView.setImageDrawable(dw);
-            ((Animatable) dw).start();
             return;
         }
 
-        if (mQsHeaderImageView.getDrawable() != null && !force && !(mQsHeaderImageView.getDrawable() instanceof Animatable)) {
-            Drawable[] layers = new Drawable[]{mQsHeaderImageView.getDrawable(), dw};
+        Drawable current = mQsHeaderImageView.getDrawable();
+        if (current != null && !force && !(current instanceof Animatable)) {
+            Drawable[] layers = new Drawable[]{current, dw};
             TransitionDrawable transitionDrawable = new TransitionDrawable(layers);
             transitionDrawable.setCrossFadeEnabled(true);
             mQsHeaderImageView.setImageDrawable(transitionDrawable);
