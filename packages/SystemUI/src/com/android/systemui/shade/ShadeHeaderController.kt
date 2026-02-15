@@ -345,8 +345,6 @@ constructor(
             fgColor  // single tone (default)
         )
 
-        clock.setTextColor(fgColor)
-        date.setTextColor(fgColor)
         mShadeCarrierGroup.updateColors(fgColor, colorStateList)
     }
 
