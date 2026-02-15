@@ -77,6 +77,6 @@
     <string name="battery_notification_channel_tv">மின்கல எச்சரிக்கை</string>
     <string name="screenshot_delete_label">நீக்குக</string>
     <string name="screenshot_delete_description">திரைப்பிடிப்பை நீக்குக</string>
-    <string name="screen_pinning_description_no_navbar">நீங்கள் செருகியதை அகற்றும் வரை இது பார்வையில் வைத்திருக்கும். செருகியதை அகற்ற, செருகு என்பதைத் தொட்டுப் பிடிக்கவும்.</string>
-    <string name="screen_pinning_toast_no_navbar">இந்தத் திரையை அகற்ற, பின்செல் பொத்தானைத் தொட்டுப் பிடிக்கவும்</string>
+    <string name="screen_pinning_description_no_navbar">இதனை விடுவிக்கும் வரை இது திரையிலேயே நிலைத்திருக்கும். விடுவிக்க, பின்செல்லும் பொத்தானை அழுத்திப் பிடிக்கவும்.</string>
+    <string name="screen_pinning_toast_no_navbar">இத்திரையை விடுவிக்க, பின்செல்லும் பொத்தானை அழுத்திப் பிடிக்கவும்</string>
 </resources>
