@@ -65,12 +65,12 @@ constructor(@Assisted private val context: Context) :
         // Avoid concurrent modification exception
         val listeners = synchronized(this.listeners) { ArrayList(this.listeners) }
 
-        listeners.filterForEach({ this.listeners.filterNotNull().contains(it) }) { it.onThemeChanged() }
+        listeners.filterForEach({ this.listeners.contains(it) }) { it.onThemeChanged() }
     }
 
     override fun dispatchOnMovedToDisplay(newDisplayId: Int, newConfiguration: Configuration) {
         val listeners = synchronized(this.listeners) { ArrayList(this.listeners) }
-        listeners.filterForEach({ this.listeners.filterNotNull().contains(it) }) {
+        listeners.filterForEach({ this.listeners.contains(it) }) {
             it.onMovedToDisplay(newDisplayId, newConfiguration)
         }
     }
@@ -78,7 +78,7 @@ constructor(@Assisted private val context: Context) :
     override fun onConfigurationChanged(newConfig: Configuration) {
         // Avoid concurrent modification exception
         val listeners = synchronized(this.listeners) { ArrayList(this.listeners) }
-        listeners.filterForEach({ this.listeners.filterNotNull().contains(it) }) { it.onConfigChanged(newConfig) }
+        listeners.filterForEach({ this.listeners.contains(it) }) { it.onConfigChanged(newConfig) }
         val fontScale = newConfig.fontScale
         val density = newConfig.densityDpi
         val uiMode = newConfig.uiMode and Configuration.UI_MODE_NIGHT_MASK
@@ -86,7 +86,7 @@ constructor(@Assisted private val context: Context) :
         val uiModeChanged = uiMode != this.uiMode
         if (density != this.density || fontScale != this.fontScale || inCarMode && uiModeChanged
             || fontWeightAdjustment != this.fontWeightAdjustment) {
-            listeners.filterForEach({ this.listeners.filterNotNull().contains(it) }) {
+            listeners.filterForEach({ this.listeners.contains(it) }) {
                 it.onDensityOrFontScaleChanged()
             }
             this.density = density
@@ -97,7 +97,7 @@ constructor(@Assisted private val context: Context) :
         val smallestScreenWidth = newConfig.smallestScreenWidthDp
         if (smallestScreenWidth != this.smallestScreenWidth) {
             this.smallestScreenWidth = smallestScreenWidth
-            listeners.filterForEach({ this.listeners.filterNotNull().contains(it) }) {
+            listeners.filterForEach({ this.listeners.contains(it) }) {
                 it.onSmallestScreenWidthChanged()
             }
         }
@@ -109,13 +109,13 @@ constructor(@Assisted private val context: Context) :
             // would be a direct reference to windowConfiguration.maxBounds, so the if statement
             // above would always fail. See b/245799099 for more information.
             this.maxBounds.set(maxBounds)
-            listeners.filterForEach({ this.listeners.filterNotNull().contains(it) }) { it.onMaxBoundsChanged() }
+            listeners.filterForEach({ this.listeners.contains(it) }) { it.onMaxBoundsChanged() }
         }
 
         val localeList = newConfig.locales
         if (localeList != this.localeList) {
             this.localeList = localeList
-            listeners.filterForEach({ this.listeners.filterNotNull().contains(it) }) { it.onLocaleListChanged() }
+            listeners.filterForEach({ this.listeners.contains(it) }) { it.onLocaleListChanged() }
         }
 
         if (uiModeChanged) {
@@ -124,24 +124,24 @@ constructor(@Assisted private val context: Context) :
             context.theme.applyStyle(context.themeResId, true)
 
             this.uiMode = uiMode
-            listeners.filterForEach({ this.listeners.filterNotNull().contains(it) }) { it.onUiModeChanged() }
+            listeners.filterForEach({ this.listeners.contains(it) }) { it.onUiModeChanged() }
         }
 
         if (layoutDirection != newConfig.layoutDirection) {
             layoutDirection = newConfig.layoutDirection
-            listeners.filterForEach({ this.listeners.filterNotNull().contains(it) }) {
+            listeners.filterForEach({ this.listeners.contains(it) }) {
                 it.onLayoutDirectionChanged(layoutDirection == LAYOUT_DIRECTION_RTL)
             }
         }
 
         if (lastConfig.updateFrom(newConfig) and ActivityInfo.CONFIG_ASSETS_PATHS != 0) {
-            listeners.filterForEach({ this.listeners.filterNotNull().contains(it) }) { it.onThemeChanged() }
+            listeners.filterForEach({ this.listeners.contains(it) }) { it.onThemeChanged() }
         }
 
         val newOrientation = newConfig.orientation
         if (orientation != newOrientation) {
             orientation = newOrientation
-            listeners.filterForEach({ this.listeners.filterNotNull().contains(it) }) {
+            listeners.filterForEach({ this.listeners.contains(it) }) {
                 it.onOrientationChanged(orientation)
             }
         }
