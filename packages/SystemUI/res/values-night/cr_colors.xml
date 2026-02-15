@@ -8,4 +8,7 @@
     <!-- QS Panel Style -->
     <color name="qs_translucent_bg">#0FFFFFFF</color>
     <color name="qs_white_bg">@android:color/system_neutral1_0</color>
+
+    <!-- The main FG tint for shade header items -->
+    <color name="shade_header_text_color">#FFFFFFFF</color>
 </resources>

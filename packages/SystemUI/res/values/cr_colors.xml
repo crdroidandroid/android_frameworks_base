@@ -14,4 +14,7 @@
 
     <!-- Sliding QS Tile -->
     <color name="tile_percentage_color">@*android:color/system_accent1_200</color>
+
+    <!-- The main FG tint for shade header items -->
+    <color name="shade_header_text_color">#FF000000</color>
 </resources>
