@@ -574,6 +574,7 @@ android_library {
         "personalcontext_ace_visualizer",
         "vendor.lineage.powershare-V1-java",
         "ax_compose",
+        "axquicklook-client",
     ],
     enable_ksp: true,
     annotation_processor_flags: [
