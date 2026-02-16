@@ -159,7 +159,9 @@ private fun BatteryAndPercentChip(
         }
         if (isText || showPercentNextToIcon) {
             Text(
-                text = NumberFormat.getPercentInstance().format(level / 100f),
+                text =
+                    NumberFormat.getPercentInstance().format(level / 100f) +
+                        if (isText) BatteryViewModel.TEXT_MODE_BOLT else "",
                 color = BatteryColors.DarkTheme.Default.fill,
                 style = MaterialTheme.typography.labelLargeEmphasized,
             )
