@@ -575,6 +575,7 @@ android_library {
         "vendor.lineage.powershare-V1-java",
         "ax_compose",
         "axquicklook-client",
+        "ax_platform_hooks",
     ],
     enable_ksp: true,
     annotation_processor_flags: [
