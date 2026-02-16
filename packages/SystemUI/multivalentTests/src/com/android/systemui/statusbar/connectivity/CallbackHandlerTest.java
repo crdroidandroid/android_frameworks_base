@@ -128,7 +128,7 @@ public class CallbackHandlerTest extends SysuiTestCase {
                         description,
                         subId,
                         roaming,
-                        true);
+                        true, false, 0);
         mHandler.setMobileDataIndicators(indicators);
         waitForCallbacks();
 
