@@ -65,6 +65,12 @@ sealed class BatteryViewModel(
     val isBatteryPercentInsideIconSettingEnabled: Boolean by
         interactor.showPercentInsideIcon.hydratedStateOf(initialValue = false)
 
+    val shouldShowBoltInTextMode: Boolean by
+        combine(interactor.batteryIconStyle, interactor.batteryAttributionType) { style, attr ->
+                style == BatteryRepository.ICON_STYLE_TEXT && attr == Charging
+            }
+            .hydratedStateOf(traceName = "shouldShowBoltInTextMode", initialValue = false)
+
     /** A [List<BatteryGlyph>] representation of the current [level] */
     private val levelGlyphs: Flow<List<BatteryGlyph>> =
         interactor.level.map { it?.glyphRepresentation() ?: emptyList() }
@@ -293,6 +299,11 @@ sealed class BatteryViewModel(
 
         /** Resource id used to identify battery composable view in SysUI tests */
         const val TEST_TAG = "battery"
+
+        /**
+         * Bolt drawn next to the percentage when the text-only battery style is selected.
+         */
+        const val TEXT_MODE_BOLT = "\u26A1"
 
         fun Int.glyphRepresentation(): List<BatteryGlyph> = toString().map { it.toGlyph() }
 
