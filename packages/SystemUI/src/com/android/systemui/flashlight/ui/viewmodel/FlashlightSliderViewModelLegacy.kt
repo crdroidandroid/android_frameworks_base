@@ -145,6 +145,9 @@ constructor(
         } else {
             val maxLevel = flashlightController.getMaxLevel().coerceAtLeast(1)
             val clampedLevel = value.coerceIn(1, maxLevel)
+            if (!flashlightController.isEnabled()) {
+                flashlightController.setFlashlight(true)
+            }
             flashlightController.setFlashlightStrengthLevel(clampedLevel)
             // For temporary changes, we don't persist - the old controller handles persistence
             // automatically via Settings.System
