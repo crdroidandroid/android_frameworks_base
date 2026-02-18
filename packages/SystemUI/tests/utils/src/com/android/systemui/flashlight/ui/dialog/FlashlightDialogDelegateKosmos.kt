@@ -19,6 +19,7 @@ package com.android.systemui.flashlight.ui.dialog
 import com.android.systemui.animation.dialogTransitionAnimator
 import com.android.systemui.animation.mockDialogTransitionAnimator
 import com.android.systemui.flashlight.shared.logger.flashlightLogger
+import com.android.systemui.flashlight.ui.viewmodel.flashlightSliderViewModelLegacyFactory
 import com.android.systemui.flashlight.ui.viewmodel.flashlightSlicerViewModelFactory
 import com.android.systemui.kosmos.Kosmos
 import com.android.systemui.kosmos.mainCoroutineContext
@@ -34,6 +35,7 @@ val Kosmos.flashlightDialogDelegate: FlashlightDialogDelegate by
             shadeDialogContextInteractor,
             dialogTransitionAnimator,
             flashlightSlicerViewModelFactory,
+            flashlightSliderViewModelLegacyFactory,
             flashlightLogger,
         )
     }
@@ -46,6 +48,7 @@ val Kosmos.flashlightDialogDelegateWithMockAnimator: FlashlightDialogDelegate by
             shadeDialogContextInteractor,
             mockDialogTransitionAnimator,
             flashlightSlicerViewModelFactory,
+            flashlightSliderViewModelLegacyFactory,
             flashlightLogger,
         )
     }
