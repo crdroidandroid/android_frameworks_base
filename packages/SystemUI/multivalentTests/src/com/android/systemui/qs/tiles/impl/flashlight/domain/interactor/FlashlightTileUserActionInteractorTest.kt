@@ -27,6 +27,7 @@ import com.android.systemui.camera.injectCameraCharacteristics
 import com.android.systemui.flashlight.data.repository.startFlashlightRepository
 import com.android.systemui.flashlight.domain.interactor.flashlightInteractor
 import com.android.systemui.flashlight.shared.model.FlashlightModel
+import com.android.systemui.flashlight.ui.dialog.FlashlightDialogDelegate
 import com.android.systemui.flashlight.ui.dialog.mockFlashlightDialogDelegate
 import com.android.systemui.kosmos.collectLastValue
 import com.android.systemui.kosmos.runTest
@@ -43,6 +44,7 @@ import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.anyBoolean
 import org.mockito.Mockito.never
 import org.mockito.Mockito.verify
+import org.mockito.kotlin.whenever
 
 @SmallTest
 @RunWith(AndroidJUnit4::class)
@@ -94,6 +96,30 @@ class FlashlightTileUserActionInteractorTest : SysuiTestCase() {
 
     @EnableFlags(com.android.systemui.Flags.FLAG_FLASHLIGHT_STRENGTH)
     @Test
+    fun flagOn_handleClickToEnable_whenBinaryCompatLegacy_opensLegacyDialog() =
+        kosmos.runTest {
+            assumeFalse(ActivityManager.isUserAMonkey())
+            val state by collectLastValue(flashlightInteractor.state)
+            injectCameraCharacteristics(
+                true,
+                CameraCharacteristics.LENS_FACING_BACK,
+                DEFAULT_LEVEL,
+                null,
+            )
+            startFlashlightRepository(true)
+            whenever(flashlightController.isStrengthControlSupported()).thenReturn(true)
+
+            assertThat(state).isEqualTo(FlashlightModel.Available.Binary(false))
+
+            underTest.handleInput(click(FlashlightModel.Available.Binary(false)))
+
+            verify(flashlightController).setFlashlight(true)
+            verify(mockFlashlightDialogDelegate)
+                .showDialog(null, FlashlightDialogDelegate.SliderBackend.LEGACY)
+        }
+
+    @EnableFlags(com.android.systemui.Flags.FLAG_FLASHLIGHT_STRENGTH)
+    @Test
     fun flagOn_handleClickToEnable_whenLevel_enablesAndOpensDialog() =
         kosmos.runTest {
             assumeFalse(ActivityManager.isUserAMonkey())
@@ -113,7 +139,8 @@ class FlashlightTileUserActionInteractorTest : SysuiTestCase() {
 
             assertThat(state)
                 .isEqualTo(FlashlightModel.Available.Level(true, DEFAULT_LEVEL, MAX_LEVEL))
-            verify(mockFlashlightDialogDelegate).showDialog()
+            verify(mockFlashlightDialogDelegate)
+                .showDialog(null, FlashlightDialogDelegate.SliderBackend.REPOSITORY)
         }
 
     @DisableFlags(com.android.systemui.Flags.FLAG_FLASHLIGHT_STRENGTH)
@@ -179,7 +206,8 @@ class FlashlightTileUserActionInteractorTest : SysuiTestCase() {
             underTest.handleInput(click(enabledLevelFlashlight))
 
             assertThat(state).isEqualTo(enabledLevelFlashlight)
-            verify(mockFlashlightDialogDelegate).showDialog()
+            verify(mockFlashlightDialogDelegate)
+                .showDialog(null, FlashlightDialogDelegate.SliderBackend.REPOSITORY)
         }
 
     @DisableFlags(com.android.systemui.Flags.FLAG_FLASHLIGHT_STRENGTH)
