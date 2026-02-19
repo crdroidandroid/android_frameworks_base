@@ -10,7 +10,7 @@
     <color name="shade_panel_fallback_bg">@android:color/system_neutral1_100</color>
 
     <!-- Statusbar clock chip colors -->
-    <color name="rippleDark">#1F000000</color>
-    <color name="neumorph_outline_start">#FFFFFFFF</color>
-    <color name="neumorph_outline_end">#00FFFFFF</color>
+    <color name="rippleDark">#14000000</color>
+    <color name="neumorph_outline_start">#FFBDBDBD</color>
+    <color name="neumorph_outline_end">#FFF0F0F0</color>
 </resources>
