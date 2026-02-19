@@ -118,23 +118,6 @@
                         android:orientation="horizontal"
                         android:clipChildren="false"/>
 
-                    <com.android.systemui.statusbar.LineageStatusBarItemHolder
-                        android:id="@+id/network_traffic_holder_start"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layoutDirection="ltr"
-                        android:gravity="center"
-                        android:paddingStart="4dp">
-
-                        <org.lineageos.internal.statusbar.NetworkTraffic
-                            android:id="@+id/network_traffic_start"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:maxLines="2"
-                            android:gravity="center" />
-
-                    </com.android.systemui.statusbar.LineageStatusBarItemHolder>
-
                 </LinearLayout>
             </FrameLayout>
         </FrameLayout>
@@ -169,23 +152,6 @@
                 android:gravity="center_vertical|end"
                 android:clipChildren="false">
 
-                <com.android.systemui.statusbar.LineageStatusBarItemHolder
-                    android:id="@+id/network_traffic_holder_end"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layoutDirection="ltr"
-                    android:gravity="center"
-                    android:paddingLeft="2dp">
-
-                    <org.lineageos.internal.statusbar.NetworkTraffic
-                        android:id="@+id/network_traffic_end"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:maxLines="2"
-                        android:gravity="center" />
-
-                </com.android.systemui.statusbar.LineageStatusBarItemHolder>
-
                 <include
                     android:id="@+id/user_switcher_container"
                     android:layout_width="wrap_content"
@@ -218,23 +184,6 @@
             android:gravity="center"
             android:visibility="gone"
         />
-
-        <com.android.systemui.statusbar.LineageStatusBarItemHolder
-            android:id="@+id/network_traffic_holder_center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layoutDirection="ltr"
-            android:gravity="center">
-
-            <org.lineageos.internal.statusbar.NetworkTraffic
-                android:id="@+id/network_traffic_center"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:maxLines="2"
-                android:gravity="center" />
-
-        </com.android.systemui.statusbar.LineageStatusBarItemHolder>
-
     </com.android.keyguard.AlphaOptimizedLinearLayout>
 
 </com.android.systemui.statusbar.phone.PhoneStatusBarView>
