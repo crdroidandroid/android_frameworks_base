@@ -140,6 +140,8 @@ public class Clock extends TextView implements
     private String mClockDateFormat = null;
 
     private boolean mIsStatusBar;
+    private boolean useStaticColor = false;
+    private int lastDynamicColor = -1;
 
     // Tracks config changes that will make the clock change dimensions
     private final InterestingConfigChanges mInterestingConfigChanges;
@@ -432,14 +434,25 @@ public class Clock extends TextView implements
     @Override
     public void onDarkChanged(ArrayList<Rect> areas, float darkIntensity, int tint) {
         mNonAdaptedColor = DarkIconDispatcher.getTint(areas, this, tint);
-        setTextColor(mNonAdaptedColor);
+        lastDynamicColor = mNonAdaptedColor;
+        if (useStaticColor) return;
+        setTextColor(lastDynamicColor);
     }
 
     // Update text color based when shade scrim changes color.
     public void onColorsChanged(boolean lightTheme) {
         final Context context = new ContextThemeWrapper(mContext,
                 lightTheme ? R.style.Theme_SystemUI_LightWallpaper : R.style.Theme_SystemUI);
-        setTextColor(Utils.getColorAttrDefaultColor(context, R.attr.wallpaperTextColor));
+        lastDynamicColor = Utils.getColorAttrDefaultColor(context, R.attr.wallpaperTextColor);
+        if (useStaticColor) return;
+        setTextColor(lastDynamicColor);
+    }
+
+    public void setStaticColor(boolean enable) {
+        useStaticColor = enable;
+        if (!useStaticColor && lastDynamicColor != -1) {
+            setTextColor(lastDynamicColor);
+        }
     }
 
     public void onDensityOrFontScaleChanged() {
