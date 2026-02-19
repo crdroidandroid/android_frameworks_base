@@ -723,6 +723,9 @@ public final class ViewRootImpl implements ViewParent,
     public boolean mTraversalScheduled;
     int mTraversalBarrier;
     boolean mWillDrawSoon;
+    private boolean mIsNeedDrawLast = false;
+    private boolean mResident = false;
+    private boolean mHideByCache = false;
     /** Set to true while in performTraversals for detecting when die(true) is called from internal
      * callbacks such as onMeasure, onPreDraw, onDraw and deferring doDie() until later. */
     boolean mIsInTraversal;
@@ -815,7 +818,6 @@ public final class ViewRootImpl implements ViewParent,
      * The combined transactions passed in from {@link #applyTransactionOnDraw}
      */
     private Transaction mPendingTransaction = new Transaction();
-
 
     boolean mIsDrawing;
     int mLastSystemUiVisibility;
@@ -1073,7 +1075,6 @@ public final class ViewRootImpl implements ViewParent,
      * created after that point when something wants to sync VRI again.
      */
     private SurfaceSyncGroup mActiveSurfaceSyncGroup;
-
 
     private final Object mPreviousSyncSafeguardLock = new Object();
 
@@ -1822,7 +1823,6 @@ public final class ViewRootImpl implements ViewParent,
         mAccessibilityManager.addHighContrastTextStateChangeListener(
                 mExecutor, mHighContrastTextManager);
 
-
         long eventsToBeRegistered =
                 (mIsSubscribeGranularDisplayEventsEnabled)
                 ? DisplayManagerGlobal.INTERNAL_EVENT_FLAG_DISPLAY_ADDED
@@ -2372,6 +2372,20 @@ public final class ViewRootImpl implements ViewParent,
             return;
         }
 
+        if (reportDraw && forceLayout && seqId > mSyncSeqId) {
+            final boolean noSizeChange = !frameChanged && !attachedFrameChanged
+                    && !dragResizingChanged && !compatScaleChanged;
+            final boolean noConfigOrDisplayChange = !configChanged && !displayChanged;
+            if (noSizeChange && noConfigOrDisplayChange
+                    && mBasePackageName != null
+                    && mBasePackageName.startsWith("com.android.launcher")) {
+                mSyncSeqId = seqId;
+                mLastSyncSeqId = mSyncSeqId;
+                reportNextDraw("resized");
+                requestLayout();
+                return;
+            }
+        }
         mPendingDragResizing = dragResizing;
         mTmpFrames.compatScale = compatScale;
         mInvCompatScale = 1f / compatScale;
@@ -2773,7 +2787,6 @@ public final class ViewRootImpl implements ViewParent,
         logColorMode(mCurrentColorMode, true);
     }
 
-
     /** Register callbacks to be notified when the ViewRootImpl surface changes. */
     public interface SurfaceChangedCallback {
         void surfaceCreated(Transaction t);
@@ -3108,8 +3121,13 @@ public final class ViewRootImpl implements ViewParent,
             // the scheduled traversals have occurred unless the message is
             // specifically "asynchronous" - see Message#setAsynchronous
             mTraversalBarrier = mQueue.postSyncBarrier();
-            mChoreographer.postCallback(
-                    Choreographer.CALLBACK_TRAVERSAL, mTraversalRunnable, null);
+            if (mIsNeedDrawLast && mChoreographer.isEnableTraversalLast()) {
+                mChoreographer.postCallback(
+                        Choreographer.CALLBACK_TRAVERSAL_LAST, mTraversalRunnable, null);
+            } else {
+                mChoreographer.postCallback(
+                        Choreographer.CALLBACK_TRAVERSAL, mTraversalRunnable, null);
+            }
             notifyRendererOfFramePending();
             pokeDrawLockIfNeeded();
         }
@@ -3119,8 +3137,13 @@ public final class ViewRootImpl implements ViewParent,
         if (mTraversalScheduled) {
             mTraversalScheduled = false;
             mQueue.removeSyncBarrier(mTraversalBarrier);
-            mChoreographer.removeCallbacks(
-                    Choreographer.CALLBACK_TRAVERSAL, mTraversalRunnable, null);
+            if (mIsNeedDrawLast && mChoreographer.isEnableTraversalLast()) {
+                mChoreographer.removeCallbacks(
+                        Choreographer.CALLBACK_TRAVERSAL_LAST, mTraversalRunnable, null);
+            } else {
+                mChoreographer.removeCallbacks(
+                        Choreographer.CALLBACK_TRAVERSAL, mTraversalRunnable, null);
+            }
         }
     }
 
@@ -3132,6 +3155,47 @@ public final class ViewRootImpl implements ViewParent,
         }
     }
 
+    public void setIsNeedDrawLast(boolean isNeed) {
+        mIsNeedDrawLast = isNeed;
+    }
+    public boolean isNeedDrawLast() {
+        return mIsNeedDrawLast;
+    }
+    public void setResident(boolean resident) {
+        mResident = resident;
+    }
+    public boolean isResident() {
+        return mResident;
+    }
+    public boolean setHideByCache(boolean hideByCache) {
+        if (!mResident) {
+            return false;
+        }
+        if (hideByCache && mView != null && mView.getContext() instanceof android.app.Activity
+                && ((android.app.Activity) mView.getContext()).isFinishing()) {
+            return false;
+        }
+        if (mHideByCache == hideByCache) {
+            return hideByCache;
+        }
+        mHideByCache = hideByCache;
+        final ThreadedRenderer renderer = mAttachInfo.mThreadedRenderer;
+        if (!hideByCache) {
+            mForceNextWindowRelayout = true;
+            mReportNextDraw = true;
+            mLastReportNextDrawReason = "rebuiltByCache";
+            scheduleTraversals();
+        } else if (renderer != null) {
+            renderer.setStopped(true);
+        }
+        if (!hideByCache && renderer != null) {
+            renderer.allocateBuffers();
+        }
+        return hideByCache;
+    }
+    public boolean isHideByCache() {
+        return mHideByCache;
+    }
     private void applyKeepScreenOnFlag(WindowManager.LayoutParams params) {
         // Update window's global keep screen on flag: if a view has requested
         // that the screen be kept on, then it is always set; otherwise, it is
@@ -8483,7 +8547,6 @@ public final class ViewRootImpl implements ViewParent,
         return mAttachInfo.mHandlingPointerEvent;
     }
 
-
     /**
      * If there is pointer that is showing a PointerIcon in this window, refresh the icon for that
      * pointer. This will resolve the PointerIcon through the view hierarchy.
@@ -11307,7 +11370,6 @@ public final class ViewRootImpl implements ViewParent,
                 }
             } break;
 
-
             case AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED: {
                 handleWindowContentChangedEvent(event);
             } break;
@@ -13276,7 +13338,6 @@ public final class ViewRootImpl implements ViewParent,
         scheduleTraversals();
     }
 
-
     private void logAndTrace(String msg) {
         if (Trace.isTagEnabled(Trace.TRACE_TAG_VIEW)) {
             Trace.instant(Trace.TRACE_TAG_VIEW, mTag + "-" + msg);
@@ -13324,7 +13385,6 @@ public final class ViewRootImpl implements ViewParent,
             case FRAME_RATE_CATEGORY_HIGH ->
                     mFrameRateCategoryHighCount = FRAME_RATE_CATEGORY_COUNT;
         }
-
 
         if (mFrameRateCategoryHighCount > 0) {
             mPreferredFrameRateCategory = FRAME_RATE_CATEGORY_HIGH;
