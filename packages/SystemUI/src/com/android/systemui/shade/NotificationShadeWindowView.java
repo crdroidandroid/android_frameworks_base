@@ -35,8 +35,15 @@ import android.graphics.drawable.Drawable;
 import android.media.permission.SafeCloseable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Debug;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
+import android.os.MessageQueue;
+import android.os.Process;
 import android.os.Trace;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.InputQueue;
 import android.view.KeyEvent;
@@ -81,6 +88,13 @@ public class NotificationShadeWindowView extends WindowRootView {
 
     private boolean mAnimatingContentLaunch = false;
 
+    private static final long GC_DELAY_MS = 5000;
+    private static final long GC_PSS_THRESHOLD_KB = 350 * 1024;
+    private boolean mIsFirstPendingGcOnBoot = true;
+    private boolean mGcScheduled = false;
+    private Handler mGcHandler;
+    private final Handler mMainHandler = new Handler(Looper.getMainLooper());
+    private final Runnable mGcTask = this::scheduleGcOnIdle;
     public NotificationShadeWindowView(Context context, AttributeSet attrs) {
         super(context, attrs);
         setMotionEventSplittingEnabled(false);
@@ -104,6 +118,45 @@ public class NotificationShadeWindowView extends WindowRootView {
         }
     }
 
+    @Override
+    protected void onWindowVisibilityChanged(int visibility) {
+        super.onWindowVisibilityChanged(visibility);
+        if (visibility == VISIBLE) {
+            mMainHandler.removeCallbacks(mGcTask);
+            mGcScheduled = false;
+        } else if (!mGcScheduled) {
+            mGcScheduled = true;
+            mMainHandler.removeCallbacks(mGcTask);
+            mMainHandler.postDelayed(mGcTask, GC_DELAY_MS);
+        }
+    }
+    private void scheduleGcOnIdle() {
+        mGcScheduled = false;
+        Looper.getMainLooper().getQueue().addIdleHandler(() -> {
+            if (isShown()) {
+                return false;
+            }
+            ensureGcHandler();
+            mGcHandler.post(this::performGcIfNeeded);
+            return false;
+        });
+    }
+    private void performGcIfNeeded() {
+        long pssKb = Debug.getPss();
+        if (mIsFirstPendingGcOnBoot || pssKb > GC_PSS_THRESHOLD_KB) {
+            Runtime.getRuntime().gc();
+            mIsFirstPendingGcOnBoot = false;
+            Log.d(TAG, "GC after shade gone, pss was: " + (pssKb / 1024) + "M");
+        }
+    }
+    private void ensureGcHandler() {
+        if (mGcHandler == null) {
+            HandlerThread thread = new HandlerThread("ShadeGC",
+                    Process.THREAD_PRIORITY_BACKGROUND);
+            thread.start();
+            mGcHandler = new Handler(thread.getLooper());
+        }
+    }
     protected void setInteractionEventHandler(InteractionEventHandler listener) {
         mInteractionEventHandler = listener;
     }
