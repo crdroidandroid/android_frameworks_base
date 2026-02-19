@@ -35,6 +35,12 @@ import android.graphics.drawable.Drawable;
 import android.media.permission.SafeCloseable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Debug;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
+import android.os.MessageQueue;
+import android.os.Process;
 import android.os.Trace;
 import android.util.AttributeSet;
 import android.view.ActionMode;
@@ -45,6 +51,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -81,6 +88,11 @@ public class NotificationShadeWindowView extends WindowRootView {
 
     private boolean mAnimatingContentLaunch = false;
 
+    private static final long GC_DELAY_MS = 5000;
+    private static final long GC_PSS_THRESHOLD_KB = 350 * 1024;
+    private boolean mIsFirstPendingGcOnBoot = true;
+    private Handler mGcHandler;
+    private final Runnable mGcTask = this::scheduleGcOnIdle;
     public NotificationShadeWindowView(Context context, AttributeSet attrs) {
         super(context, attrs);
         setMotionEventSplittingEnabled(false);
@@ -94,16 +106,60 @@ public class NotificationShadeWindowView extends WindowRootView {
             mViewCaptureCloseable = ViewCaptureFactory.getInstance(getContext())
                 .startCapture(getRootView(), ".NotificationShadeWindowView");
         }
+        android.view.Choreographer.getInstance().setEnableTraversalLast(true);
+        if (getViewRootImpl() != null) {
+            getViewRootImpl().setIsNeedDrawLast(true);
+        }
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        android.view.Choreographer.getInstance().setEnableTraversalLast(false);
+        if (getViewRootImpl() != null) {
+            getViewRootImpl().setIsNeedDrawLast(false);
+        }
         if (mViewCaptureCloseable != null) {
             mViewCaptureCloseable.close();
         }
     }
 
+    @Override
+    protected void onWindowVisibilityChanged(int visibility) {
+        super.onWindowVisibilityChanged(visibility);
+        if (visibility != VISIBLE) {
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.removeCallbacks(mGcTask);
+            handler.post(mGcTask);
+        }
+    }
+    private void scheduleGcOnIdle() {
+        Looper.getMainLooper().getQueue().addIdleHandler(() -> {
+            if (isShown()) {
+                new Handler(Looper.getMainLooper()).postDelayed(mGcTask, GC_DELAY_MS);
+                return false;
+            }
+            ensureGcHandler();
+            mGcHandler.post(this::performGcIfNeeded);
+            return false;
+        });
+    }
+    private void performGcIfNeeded() {
+        long pssKb = Debug.getPss();
+        if (mIsFirstPendingGcOnBoot || pssKb > GC_PSS_THRESHOLD_KB) {
+            Runtime.getRuntime().gc();
+            mIsFirstPendingGcOnBoot = false;
+            Log.d(TAG, "GC after shade gone, pss was: " + (pssKb / 1024) + "M");
+        }
+    }
+    private void ensureGcHandler() {
+        if (mGcHandler == null) {
+            HandlerThread thread = new HandlerThread("ShadeGC",
+                    Process.THREAD_PRIORITY_BACKGROUND);
+            thread.start();
+            mGcHandler = new Handler(thread.getLooper());
+        }
+    }
     protected void setInteractionEventHandler(InteractionEventHandler listener) {
         mInteractionEventHandler = listener;
     }
