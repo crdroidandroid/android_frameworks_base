@@ -96,6 +96,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
+                        android:paddingStart="@dimen/status_bar_left_clock_starting_padding"
+                        android:paddingEnd="@dimen/status_bar_left_clock_end_padding"
                         android:scaleType="centerInside"
                         android:visibility="gone" />
 
@@ -177,6 +179,8 @@
                     android:id="@+id/statusbar_logo_right"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/status_bar_system_icons_height"
+                    android:paddingStart="@dimen/status_bar_left_clock_end_padding"
+                    android:paddingEnd="@dimen/status_bar_left_clock_starting_padding"
                     android:scaleType="centerInside"
                     android:visibility="gone" />
             </com.android.keyguard.AlphaOptimizedLinearLayout>
