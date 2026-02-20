@@ -73,4 +73,43 @@ TEST(ResourceTypesTest, ResStringPool_HeaderStyleCountExceedsStyleOffsetCount) {
   ASSERT_THAT(modified.setTo(test.data(), test.bytes()), Eq(BAD_TYPE));
 }
 
+TEST(ResourceTypesTest, ResXMLTree_ValidateNode_SmallAttributeSize) {
+  struct MockResXMLTree {
+    ResXMLTree_header header;
+    ResStringPool_header pool_header;
+    ResXMLTree_node node;
+    ResXMLTree_attrExt attr_ext;
+    char padding[32];
+  };
+
+  MockResXMLTree mock;
+  memset(&mock, 0, sizeof(mock));
+
+  // XML Tree Header
+  mock.header.header.type = util::HostToDevice16(RES_XML_TYPE);
+  mock.header.header.headerSize = util::HostToDevice16(sizeof(ResXMLTree_header));
+  mock.header.header.size = util::HostToDevice32(sizeof(mock));
+
+  // String Pool Header (empty)
+  mock.pool_header.header.type = util::HostToDevice16(RES_STRING_POOL_TYPE);
+  mock.pool_header.header.headerSize = util::HostToDevice16(sizeof(ResStringPool_header));
+  mock.pool_header.header.size = util::HostToDevice32(sizeof(ResStringPool_header));
+
+  // XML Node
+  mock.node.header.type = util::HostToDevice16(RES_XML_START_ELEMENT_TYPE);
+  mock.node.header.headerSize = util::HostToDevice16(sizeof(ResXMLTree_node));
+  // Set size large enough to pass the existing bounds check even with an invalid attribute size.
+  mock.node.header.size = util::HostToDevice32(
+      sizeof(ResXMLTree_node) + sizeof(ResXMLTree_attrExt) + 20);
+
+  // Attr Ext
+  mock.attr_ext.attributeStart = util::HostToDevice16(sizeof(ResXMLTree_attrExt));
+  mock.attr_ext.attributeSize =
+      util::HostToDevice16(sizeof(ResXMLTree_attribute) - 1); // Too small
+  mock.attr_ext.attributeCount = util::HostToDevice16(1);
+
+  ResXMLTree tree;
+  ASSERT_THAT(tree.setTo(&mock, sizeof(mock)), Eq(BAD_TYPE));
+}
+
 }  // namespace android
