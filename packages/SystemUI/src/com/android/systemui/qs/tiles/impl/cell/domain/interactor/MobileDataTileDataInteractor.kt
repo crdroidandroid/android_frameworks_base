@@ -18,6 +18,7 @@ package com.android.systemui.qs.tiles.impl.cell.domain.interactor
 
 import android.content.Context
 import android.os.UserHandle
+import android.telephony.TelephonyManager
 import com.android.settingslib.graph.SignalDrawable
 import com.android.systemui.Flags as AconfigFlags
 import com.android.systemui.common.shared.model.ContentDescription
@@ -126,7 +127,12 @@ constructor(
 
     override fun availability(user: UserHandle): Flow<Boolean> = flowOf(isAvailable())
 
+    fun isVoiceCapable(): Boolean {
+        val telephony = context.getSystemService(Context.TELEPHONY_SERVICE) as? TelephonyManager
+        return telephony?.isVoiceCapable == true
+    }
+
     fun isAvailable(): Boolean {
-        return AconfigFlags.qsSplitInternetTile()
+        return isVoiceCapable() && AconfigFlags.qsSplitInternetTile()
     }
 }
