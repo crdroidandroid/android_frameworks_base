@@ -305,12 +305,20 @@ constructor(
     val isDateWeatherDecoupled: Boolean
         get() = datePlugin != null && weatherPlugin != null
 
+    val isCustomClockEnabled: Boolean
+        get() {
+            val customClock =
+                secureSettings.getIntForUser("clock_style", 0, userTracker.userId) !=
+                    0
+            return customClock
+        }
+
     val isWeatherEnabled: Boolean
         get() {
             val showWeather =
                 secureSettings.getIntForUser(LOCKSCREEN_SMARTSPACE_ENABLED, 1, userTracker.userId) ==
                     1
-            return showWeather
+            return showWeather && !isCustomClockEnabled
         }
 
     val isOmniWeatherEnabled: Boolean
@@ -321,7 +329,7 @@ constructor(
                     0,
                     userTracker.userId,
                 ) == 1
-            return showCustomWeather && !isWeatherEnabled
+            return showCustomWeather && !isWeatherEnabled && !isCustomClockEnabled
         }
 
     val isEnabled: Boolean

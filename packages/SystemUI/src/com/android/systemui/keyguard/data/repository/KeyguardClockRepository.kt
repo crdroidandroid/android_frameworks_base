@@ -100,7 +100,15 @@ constructor(
     override val forcedClockSize: Flow<ClockSize?> =
         if (featureFlags.isEnabled(Flags.LOCKSCREEN_ENABLE_LANDSCAPE)) {
             configurationRepository.onAnyConfigurationChange.map {
-                if (context.resources.getBoolean(R.bool.force_small_clock_on_lockscreen)) {
+                if (
+                    context.resources.getBoolean(R.bool.force_small_clock_on_lockscreen) ||
+                    secureSettings.getIntForUser(
+                        "clock_style",
+                        0, // Default value
+                        UserHandle.USER_CURRENT
+                    ) != 0 ||
+                    hasLockscreenWidgets()
+                ) {
                     ClockSize.SMALL
                 } else {
                     null
@@ -162,6 +170,28 @@ constructor(
                 initialValue = null,
             )
 
+    private fun hasLockscreenWidgets(): Boolean {
+        val enabled = systemSettings.getIntForUser(
+            "lockscreen_widgets_enabled",
+            0,
+            UserHandle.USER_CURRENT
+        ) != 0
+        if (!enabled) return false
+        val widgets = systemSettings.getStringForUser(
+            "lockscreen_widgets",
+            UserHandle.USER_CURRENT
+        )
+        val extras = systemSettings.getStringForUser(
+            "lockscreen_widgets_extras",
+            UserHandle.USER_CURRENT
+        )
+        val hasWidgets = !widgets.isNullOrBlank() &&
+            widgets.split(",").any { it.isNotBlank() }
+        val hasExtras = !extras.isNullOrBlank() &&
+            extras.split(",").any { it.isNotBlank() }
+        return hasWidgets || hasExtras
+    }
+
     private fun getClockSize(): ClockSizeSetting {
         val isDoubleLineClock = secureSettings.getIntForUser(
             Settings.Secure.LOCKSCREEN_USE_DOUBLE_LINE_CLOCK,
@@ -175,11 +205,7 @@ constructor(
             0, // Default value
             UserHandle.USER_CURRENT
         ) != 0
-        val lockscreenWidgetsEnabled = systemSettings.getIntForUser(
-            "lockscreen_widgets_enabled",
-            0, // Default value
-            UserHandle.USER_CURRENT
-        ) != 0
+        val lockscreenWidgetsEnabled = hasLockscreenWidgets()
         val clockSettingValue = if (clockStyleEnabled || lockscreenWidgetsEnabled) {
             0 
         } else {

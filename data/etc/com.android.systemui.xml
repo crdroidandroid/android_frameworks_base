@@ -100,5 +100,6 @@
         <permission name="android.permission.SUBSCRIBE_TO_KEYGUARD_LOCKED_STATE" />
         <permission name="android.permission.SET_UNRESTRICTED_GESTURE_EXCLUSION" />
         <permission name="android.permission.WRITE_APN_SETTINGS" />
+        <permission name="android.permission.ACCESS_NOTIFICATIONS"/>
     </privapp-permissions>
 </permissions>
