@@ -31,6 +31,7 @@ import android.graphics.Rect
 import android.net.Uri
 import android.os.Handler
 import android.os.UserHandle
+import android.provider.Settings
 import android.provider.Settings.Secure.LOCK_SCREEN_ALLOW_PRIVATE_NOTIFICATIONS
 import android.provider.Settings.Secure.LOCK_SCREEN_SHOW_NOTIFICATIONS
 import android.provider.Settings.Secure.LOCKSCREEN_SMARTSPACE_ENABLED
@@ -305,12 +306,20 @@ constructor(
     val isDateWeatherDecoupled: Boolean
         get() = datePlugin != null && weatherPlugin != null
 
+    val isCustomClockEnabled: Boolean
+        get() {
+            val customClock =
+                secureSettings.getIntForUser(Settings.Secure.LOCK_SCREEN_CUSTOM_CLOCK_STYLE, 0, userTracker.userId) !=
+                    0
+            return customClock
+        }
+
     val isWeatherEnabled: Boolean
         get() {
             val showWeather =
                 secureSettings.getIntForUser(LOCKSCREEN_SMARTSPACE_ENABLED, 1, userTracker.userId) ==
                     1
-            return showWeather
+            return showWeather && !isCustomClockEnabled
         }
 
     val isOmniWeatherEnabled: Boolean
@@ -321,7 +330,7 @@ constructor(
                     0,
                     userTracker.userId,
                 ) == 1
-            return showCustomWeather && !isWeatherEnabled
+            return showCustomWeather && !isWeatherEnabled && !isCustomClockEnabled
         }
 
     val isEnabled: Boolean
