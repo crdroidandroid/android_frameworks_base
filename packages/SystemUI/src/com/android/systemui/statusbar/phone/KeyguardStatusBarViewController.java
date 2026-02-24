@@ -36,6 +36,7 @@ import android.util.MathUtils;
 import android.view.DisplayCutout;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -53,6 +54,7 @@ import com.android.keyguard.KeyguardUpdateMonitor;
 import com.android.keyguard.KeyguardUpdateMonitorCallback;
 import com.android.keyguard.logging.KeyguardLogger;
 import com.android.systemui.Flags;
+import com.android.systemui.axdynamicbar.ui.AxDynamicBarChipViewModel;
 import com.android.systemui.communal.domain.interactor.CommunalSceneInteractor;
 import com.android.systemui.dagger.qualifiers.Background;
 import com.android.systemui.dagger.qualifiers.Main;
@@ -170,6 +172,7 @@ public class KeyguardStatusBarViewController extends ViewController<KeyguardStat
     private final DreamViewModel mDreamViewModel;
     private final KeyguardInteractor mKeyguardInteractor;
     private final TunerService mTunerService;
+    private final AxDynamicBarChipViewModel mAxDynamicBarChipViewModel;
 
     @Nullable private ComposeView mBatteryComposeView;
     private ViewGroup mSystemIconsContainer;
@@ -390,7 +393,8 @@ public class KeyguardStatusBarViewController extends ViewController<KeyguardStat
             OccludedToLockscreenTransitionViewModel occludedToLockscreenTransitionViewModel,
             DreamViewModel dreamViewModel,
             KeyguardInteractor keyguardInteractor,
-            TunerService tunerService) {
+            TunerService tunerService,
+            AxDynamicBarChipViewModel axDynamicBarChipViewModel) {
         super(view);
         mCoroutineDispatcher = dispatcher;
         mContext = context;
@@ -422,6 +426,7 @@ public class KeyguardStatusBarViewController extends ViewController<KeyguardStat
         mDreamViewModel = dreamViewModel;
         mKeyguardInteractor = keyguardInteractor;
         mTunerService = tunerService;
+        mAxDynamicBarChipViewModel = axDynamicBarChipViewModel;
 
         mFirstBypassAttempt = mKeyguardBypassController.getBypassEnabled();
         if (!SceneContainerFlag.isEnabled()) {
@@ -534,6 +539,18 @@ public class KeyguardStatusBarViewController extends ViewController<KeyguardStat
                     (alpha) -> setAlpha(alpha), mCoroutineDispatcher);
         if (Flags.bouncerUiRevamp()) {
             collectFlow(mView, mKeyguardInteractor.primaryBouncerShowing, x -> updateViewState());
+        }
+        TextView carrierLabel = mView.findViewById(R.id.keyguard_carrier_text);
+        if (carrierLabel != null) {
+            carrierLabel.addTextChangedListener(new android.text.TextWatcher() {
+                @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+                @Override public void afterTextChanged(android.text.Editable s) {
+                    mAxDynamicBarChipViewModel.updateKeyguardCarrierText(s.toString());
+                }
+            });
+            mAxDynamicBarChipViewModel.updateKeyguardCarrierText(
+                    carrierLabel.getText().toString());
         }
         if (NewStatusBarIcons.isEnabled() && !SystemStatusIconsInCompose.isEnabled()) {
             if (!SceneContainerFlag.isEnabled()) {
