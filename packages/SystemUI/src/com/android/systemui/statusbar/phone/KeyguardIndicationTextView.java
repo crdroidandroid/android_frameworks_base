@@ -54,11 +54,27 @@ public class KeyguardIndicationTextView extends DoubleShadowTextView {
     private static int sButtonStyleId = R.style.TextAppearance_Keyguard_BottomArea_Button;
 
     private boolean mAnimationsEnabled = true;
+    private boolean mSuppressVisibility = false;
     private CharSequence mMessage;
     private KeyguardIndication mKeyguardIndicationInfo;
 
     private Animator mLastAnimator;
 
+    public void setSuppressVisibility(boolean suppress) {
+        mSuppressVisibility = suppress;
+        if (suppress) {
+            super.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    @Override
+    public void setVisibility(int visibility) {
+        if (mSuppressVisibility && visibility == View.VISIBLE) {
+            super.setVisibility(View.INVISIBLE);
+            return;
+        }
+        super.setVisibility(visibility);
+    }
     public KeyguardIndicationTextView(Context context) {
         super(context);
     }

@@ -39,6 +39,7 @@ import androidx.annotation.NonNull;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.logging.UiEvent;
 import com.android.internal.logging.UiEventLogger;
+import com.android.systemui.axdynamicbar.domain.AxDynamicBarSettings;
 import com.android.systemui.dagger.SysUISingleton;
 import com.android.systemui.dagger.qualifiers.Main;
 import com.android.systemui.plugins.statusbar.StatusBarStateController;
@@ -87,6 +88,7 @@ public class NotificationInterruptStateProviderImpl implements NotificationInter
     private final GlobalSettings mGlobalSettings;
     private final EventLog mEventLog;
     private final Optional<Bubbles> mBubbles;
+    private final AxDynamicBarSettings mAxDynamicBarSettings;
 
     @VisibleForTesting
     protected boolean mUseHeadsUp = false;
@@ -137,7 +139,9 @@ public class NotificationInterruptStateProviderImpl implements NotificationInter
             SystemClock systemClock,
             GlobalSettings globalSettings,
             EventLog eventLog,
-            Optional<Bubbles> bubbles) {
+            Optional<Bubbles> bubbles,
+            AxDynamicBarSettings axDynamicBarSettings) {
+        mAxDynamicBarSettings = axDynamicBarSettings;
         mPowerManager = powerManager;
         mBatteryController = batteryController;
         mAmbientDisplayConfiguration = ambientDisplayConfiguration;
@@ -427,6 +431,11 @@ public class NotificationInterruptStateProviderImpl implements NotificationInter
         StatusBarNotification sbn = entry.getSbn();
 
         if (!mUseHeadsUp) {
+            if (log) mLogger.logNoHeadsUpFeatureDisabled();
+            return false;
+        }
+
+        if (mAxDynamicBarSettings.isNotificationEventsActive()) {
             if (log) mLogger.logNoHeadsUpFeatureDisabled();
             return false;
         }
