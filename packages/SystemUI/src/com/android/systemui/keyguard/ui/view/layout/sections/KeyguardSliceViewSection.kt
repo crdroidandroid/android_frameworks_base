@@ -68,7 +68,9 @@ constructor(
     private var disposableHandle: DisposableHandle? = null
 
     override fun addViews(constraintLayout: ConstraintLayout) {
-        shouldShowSliceView = !smartspaceController.isEnabled
+        // Custom clock styles draw their own date, so the slice would only overlap them.
+        shouldShowSliceView =
+            !smartspaceController.isEnabled && !smartspaceController.isCustomClockEnabled
         if (!shouldShowSliceView) return
         sliceView =
             layoutInflater.inflate(R.layout.keyguard_slice_view, null, false) as KeyguardSliceView
