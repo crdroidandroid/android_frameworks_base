@@ -15,4 +15,8 @@
         <attr name="removeTextDescent" format="boolean" />
         <attr name="textDescentExtraPadding" format="dimension" />
     </declare-styleable>
+
+    <declare-styleable name="WeatherTextView">
+        <attr name="weatherText" format="string" />
+    </declare-styleable>
 </resources>
