@@ -34,6 +34,7 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableIntState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -77,6 +78,8 @@ import com.android.systemui.res.R
 import com.android.systemui.scene.shared.flag.SceneContainerFlag
 import com.android.systemui.shade.ui.composable.VariableDayDate
 import com.android.systemui.statusbar.StatusBarAlwaysUseRegionSampling
+import com.android.systemui.axdynamicbar.ui.AxDynamicBarChipViewModel
+import com.android.systemui.axdynamicbar.ui.compose.AxDynamicBarChip
 import com.android.systemui.statusbar.chips.ui.compose.OngoingActivityChips
 import com.android.systemui.statusbar.core.NewStatusBarIcons
 import com.android.systemui.statusbar.core.RudimentaryBattery
@@ -143,6 +146,7 @@ constructor(
     @DisplayAware private val homeStatusBarViewBinder: HomeStatusBarViewBinder,
     @DisplayAware private val homeStatusBarViewModelFactory: HomeStatusBarViewModelFactory,
     private val statusBarRegionSamplingViewModelFactory: StatusBarRegionSamplingViewModel.Factory,
+    private val axDynamicBarChipViewModel: AxDynamicBarChipViewModel,
 ) {
     fun create(root: ViewGroup, andThen: (ViewGroup) -> Unit): ComposeView {
         val composeView = ComposeView(root.context)
@@ -167,6 +171,7 @@ constructor(
                         mediaViewModelFactory = mediaViewModelFactory,
                         statusBarRegionSamplingViewModelFactory =
                             statusBarRegionSamplingViewModelFactory,
+                        axDynamicBarChipViewModel = axDynamicBarChipViewModel,
                         onViewCreated = andThen,
                         modifier = Modifier.sysUiResTagContainer(),
                     )
@@ -206,6 +211,7 @@ fun StatusBarRoot(
     mediaHost: MediaHost,
     mediaViewModelFactory: MediaViewModel.Factory,
     statusBarRegionSamplingViewModelFactory: StatusBarRegionSamplingViewModel.Factory,
+    axDynamicBarChipViewModel: AxDynamicBarChipViewModel,
     onViewCreated: (ViewGroup) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -266,6 +272,7 @@ fun StatusBarRoot(
                         statusBarViewModel = statusBarViewModel,
                         iconViewStore = iconViewStore,
                         appHandlesViewModel = appHandlesViewModel,
+                        axDynamicBarChipViewModel = axDynamicBarChipViewModel,
                         context = context,
                     )
                 }
@@ -407,6 +414,7 @@ private fun addStartSideComposable(
     statusBarViewModel: HomeStatusBarViewModel,
     iconViewStore: NotificationIconContainerViewBinder.IconViewStore?,
     appHandlesViewModel: AppHandlesViewModel,
+    axDynamicBarChipViewModel: AxDynamicBarChipViewModel,
     context: Context,
 ) {
     val startSideExceptHeadsUp =
@@ -425,9 +433,7 @@ private fun addStartSideComposable(
                         LinearLayout.LayoutParams.WRAP_CONTENT,
                     )
                     .apply {
-                        if (showDate) {
-                            gravity = android.view.Gravity.CENTER_VERTICAL
-                        }
+                        gravity = android.view.Gravity.CENTER_VERTICAL
                     }
 
             setContent {
@@ -488,15 +494,19 @@ private fun addStartSideComposable(
                         )
                     }
 
+                val axEnabled by axDynamicBarChipViewModel.interactor.settings.isEnabled.collectAsState()
+                if (axEnabled) {
+                    AxDynamicBarChip(
+                        viewModel = axDynamicBarChipViewModel,
+                        modifier = Modifier.widthIn(max = chipsMaxWidth),
+                    )
+                }
                 val chipsVisibilityModel = statusBarViewModel.ongoingActivityChips
                 if (chipsVisibilityModel.areChipsAllowed) {
                     OngoingActivityChips(
                         chips = chipsVisibilityModel.chips,
                         iconViewStore = iconViewStore,
                         onChipBoundsChanged = statusBarViewModel::onChipBoundsChanged,
-                        // TODO(b/393581408): Now that we always enforce a max width on the chips,
-                        //  we should be able to convert the chips to a LazyRow and get some
-                        //  animations for free.
                         modifier = Modifier.sysUiResTagContainer().widthIn(max = chipsMaxWidth),
                     )
                 }
