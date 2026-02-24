@@ -27,6 +27,7 @@ import androidx.constraintlayout.widget.ConstraintSet
 import com.android.systemui.customization.clocks.R as clocksR
 import com.android.systemui.keyguard.shared.model.KeyguardSection
 import com.android.systemui.res.R
+import com.android.systemui.shared.R as sharedR
 import com.android.systemui.statusbar.lockscreen.LockscreenSmartspaceController
 import javax.inject.Inject
 
@@ -82,11 +83,25 @@ constructor(
                 ConstraintSet.BOTTOM
             )
 
+            // UNIFIED BARRIER - Include ALL status area elements
+            createUnifiedBarrierAndNotificationConstraints(constraintSet)
+        }
+    }
+
+    private fun createUnifiedBarrierAndNotificationConstraints(constraintSet: ConstraintSet) {
+        constraintSet.apply {
+            // UNIFIED BARRIER - Include ALL status area elements
             createBarrier(
                 R.id.smart_space_barrier_bottom,
                 Barrier.BOTTOM,
                 0,
-                *intArrayOf(R.id.keyguard_weather_area)
+                *intArrayOf(
+                    R.id.keyguard_slice_view,
+                    R.id.keyguard_weather_area,
+                    R.id.clock_ls,
+                    sharedR.id.bc_smartspace_view,
+                    sharedR.id.date_smartspace_view,
+                )
             )
         }
     }
