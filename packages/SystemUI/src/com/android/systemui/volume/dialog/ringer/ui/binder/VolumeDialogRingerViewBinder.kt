@@ -17,6 +17,7 @@
 package com.android.systemui.volume.dialog.ringer.ui.binder
 
 import android.animation.ArgbEvaluator
+import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
@@ -24,6 +25,7 @@ import android.graphics.drawable.InsetDrawable
 import android.graphics.drawable.LayerDrawable
 import android.gui.EarlyWakeupInfo
 import android.os.Binder
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.SurfaceControl
 import android.view.View
@@ -39,6 +41,7 @@ import com.android.app.tracing.coroutines.launchInTraced
 import com.android.app.tracing.coroutines.launchTraced
 import com.android.internal.R as internalR
 import com.android.internal.graphics.drawable.BackgroundBlurDrawable
+import com.android.systemui.gradient.GradientSettings
 import com.android.systemui.res.R
 import com.android.systemui.volume.dialog.dagger.scope.VolumeDialogScope
 import com.android.systemui.volume.dialog.ringer.ui.util.VolumeDialogRingerDrawerTransitionListener
@@ -58,9 +61,12 @@ import javax.inject.Inject
 import kotlin.properties.Delegates
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.job
+import kotlinx.coroutines.joinAll
 
 private const val CLOSE_DRAWER_DELAY = 300L
 // Ensure roundness and color of button is updated when progress is changed by a minimum fraction.
@@ -156,6 +162,22 @@ constructor(
             dialogViewModel.addTouchableBounds(ringerBackgroundView)
         }
 
+        var gradientEnabled =
+            GradientSettings.isEnabled(view.context, Settings.System.VOLUME_SLIDER_GRADIENT)
+        var gradientColors = GradientSettings.argbColors(view.context)
+        val gradientObserver =
+            GradientSettings.registerObserver(
+                view.context,
+                Settings.System.VOLUME_SLIDER_GRADIENT,
+            ) {
+                gradientEnabled =
+                    GradientSettings.isEnabled(view.context, Settings.System.VOLUME_SLIDER_GRADIENT)
+                gradientColors = GradientSettings.argbColors(view.context)
+            }
+        coroutineContext.job.invokeOnCompletion {
+            GradientSettings.unregisterObserver(view.context, gradientObserver)
+        }
+
         if (viewModel.showBlur) {
             launchTraced("VDRVB#isBlurCurrentlySupported") {
                 windowRootViewBlurInteractor.isBlurCurrentlySupported.collect { supported ->
@@ -215,6 +237,8 @@ constructor(
                                     uiModel,
                                     selectedButtonUiModel,
                                     unselectedButtonUiModel,
+                                    gradientEnabled,
+                                    gradientColors,
                                 )
                                 ringerDrawerTransitionListener.setProgressChangeEnabled(true)
                                 drawerContainer.closeDrawer(
@@ -233,6 +257,8 @@ constructor(
                                         uiModel,
                                         selectedButtonUiModel,
                                         unselectedButtonUiModel,
+                                        gradientEnabled,
+                                        gradientColors,
                                         onProgressChanged = { progress, isReverse ->
                                             // Let's make button progress when switching matches
                                             // motionLayout transition progress. When full
@@ -273,6 +299,8 @@ constructor(
                                     uiModel,
                                     selectedButtonUiModel,
                                     unselectedButtonUiModel,
+                                    gradientEnabled,
+                                    gradientColors,
                                 )
                                 // Open drawer
                                 if (
@@ -365,6 +393,8 @@ constructor(
         uiModel: RingerViewModel,
         selectedButtonUiModel: RingerButtonUiModel,
         unselectedButtonUiModel: RingerButtonUiModel,
+        gradientEnabled: Boolean,
+        gradientColors: Pair<Int, Int>,
         onProgressChanged: (Float, Boolean) -> Unit = { _, _ -> },
         onAnimationEnd: Runnable? = null,
     ) {
@@ -383,49 +413,77 @@ constructor(
             // progress update once because these changes should be applied once on volume dialog
             // background and ringer drawer views.
             coroutineScope {
+                val animations = ArrayList<Job>(2)
+
                 val selectedCornerRadius = selectedButton.backgroundShape().cornerRadius
                 if (selectedCornerRadius.toInt() != selectedButtonUiModel.cornerRadius) {
-                    launchTraced("VDRVB#selectedButtonAnimation") {
-                        selectedButton.animateTo(
-                            selectedButtonUiModel,
-                            if (uiModel.currentButtonIndex == count - 1) {
-                                onProgressChanged
-                            } else {
-                                { _, _ -> }
-                            },
-                        )
-                    }
-                }
-                if (previousIndex >= 0) {
-                    val unselectedButton = getChildAt(count - previousIndex) as ImageButton
-
-                    val unselectedCornerRadius = unselectedButton.backgroundShape().cornerRadius
-                    if (unselectedCornerRadius.toInt() != unselectedButtonUiModel.cornerRadius) {
-                        launchTraced("VDRVB#unselectedButtonAnimation") {
-                            unselectedButton.animateTo(
-                                unselectedButtonUiModel,
-                                if (previousIndex == count - 1) {
+                    animations +=
+                        launchTraced("VDRVB#selectedButtonAnimation") {
+                            selectedButton.animateTo(
+                                selectedButtonUiModel,
+                                if (uiModel.currentButtonIndex == count - 1) {
                                     onProgressChanged
                                 } else {
                                     { _, _ -> }
                                 },
                             )
                         }
+                }
+                if (previousIndex >= 0) {
+                    val unselectedButton = getChildAt(count - previousIndex) as ImageButton
+
+                    val unselectedCornerRadius = unselectedButton.backgroundShape().cornerRadius
+                    if (unselectedCornerRadius.toInt() != unselectedButtonUiModel.cornerRadius) {
+                        animations +=
+                            launchTraced("VDRVB#unselectedButtonAnimation") {
+                                unselectedButton.animateTo(
+                                    unselectedButtonUiModel,
+                                    if (previousIndex == count - 1) {
+                                        onProgressChanged
+                                    } else {
+                                        { _, _ -> }
+                                    },
+                                )
+                            }
                     }
                 }
-                launchTraced("VDRVB#bindButtons") {
-                    delay(CLOSE_DRAWER_DELAY)
-                    bindButtons(viewModel, uiModel, onAnimationEnd, isAnimated = true)
+
+                val animatedBind =
+                    launchTraced("VDRVB#bindButtons") {
+                        delay(CLOSE_DRAWER_DELAY)
+                        bindButtons(
+                            viewModel,
+                            uiModel,
+                            gradientEnabled,
+                            gradientColors,
+                            onAnimationEnd = null,
+                            isAnimated = true,
+                        )
+                    }
+
+                launchTraced("VDRVB#bindButtonsFinal") {
+                    animations.joinAll()
+                    animatedBind.join()
+                    bindButtons(
+                        viewModel,
+                        uiModel,
+                        gradientEnabled,
+                        gradientColors,
+                        onAnimationEnd,
+                        isAnimated = false,
+                    )
                 }
             }
         } else {
-            bindButtons(viewModel, uiModel, onAnimationEnd)
+            bindButtons(viewModel, uiModel, gradientEnabled, gradientColors, onAnimationEnd)
         }
     }
 
     private fun MotionLayout.bindButtons(
         viewModel: VolumeDialogRingerDrawerViewModel,
         uiModel: RingerViewModel,
+        gradientEnabled: Boolean,
+        gradientColors: Pair<Int, Int>,
         onAnimationEnd: Runnable? = null,
         isAnimated: Boolean = false,
     ) {
@@ -438,11 +496,20 @@ constructor(
                     if (isOpen) ringerButton else uiModel.selectedButton,
                     viewModel,
                     isOpen,
+                    gradientEnabled,
+                    gradientColors,
                     isSelected = true,
                     isAnimated = isAnimated,
                 )
             } else {
-                view.bindDrawerButton(ringerButton, viewModel, isOpen, isAnimated = isAnimated)
+                view.bindDrawerButton(
+                    ringerButton,
+                    viewModel,
+                    isOpen,
+                    gradientEnabled,
+                    gradientColors,
+                    isAnimated = isAnimated,
+                )
             }
         }
         onAnimationEnd?.run()
@@ -452,6 +519,8 @@ constructor(
         buttonViewModel: RingerButtonViewModel,
         viewModel: VolumeDialogRingerDrawerViewModel,
         isOpen: Boolean,
+        gradientEnabled: Boolean,
+        gradientColors: Pair<Int, Int>,
         isSelected: Boolean = false,
         isAnimated: Boolean = false,
     ) {
@@ -470,11 +539,16 @@ constructor(
             }
         if (isSelected && !isAnimated) {
             setBackgroundResource(R.drawable.volume_drawer_selection_bg)
-            setColorFilter(context.getColor(internalR.color.materialColorOnPrimary))
+            imageTintList =
+                ColorStateList.valueOf(context.getColor(internalR.color.materialColorOnPrimary))
             background = background.mutate()
+            if (gradientEnabled) {
+                applyGradientSelectionBackground(this, gradientColors)
+            }
         } else if (!isAnimated) {
             setBackgroundResource(R.drawable.volume_ringer_item_bg)
-            setColorFilter(context.getColor(internalR.color.materialColorOnSurface))
+            imageTintList =
+                ColorStateList.valueOf(context.getColor(internalR.color.materialColorOnSurface))
             background = background.mutate()
         }
         setOnClickListener {
@@ -529,22 +603,30 @@ constructor(
         coroutineScope {
             launchTraced("VDRVB#colorAnimation") {
                 colorAnimation.suspendAnimate { value ->
+                    val fraction = value.coerceIn(0F, 1F)
+
+                    val startIconColor =
+                        imageTintList?.defaultColor ?: ringerButtonUiModel.tintColor
+                    val startBgColor =
+                        backgroundShape().firstColorOrNull()
+                            ?: ringerButtonUiModel.backgroundColor
+
                     val currentIconColor =
                         rgbEvaluator.evaluate(
-                            value.coerceIn(0F, 1F),
-                            imageTintList?.colors?.first(),
+                            fraction,
+                            startIconColor,
                             ringerButtonUiModel.tintColor,
                         ) as Int
                     val currentBgColor =
                         rgbEvaluator.evaluate(
-                            value.coerceIn(0F, 1F),
-                            backgroundShape().color?.colors?.get(0),
+                            fraction,
+                            startBgColor,
                             ringerButtonUiModel.backgroundColor,
                         ) as Int
 
                     backgroundShape().setColor(currentBgColor)
                     background.invalidateSelf()
-                    setColorFilter(currentIconColor)
+                    imageTintList = ColorStateList.valueOf(currentIconColor)
                 }
             }
             roundnessAnimation.suspendAnimate { value ->
@@ -553,6 +635,17 @@ constructor(
                 background.invalidateSelf()
             }
         }
+    }
+
+    private fun applyGradientSelectionBackground(
+        button: ImageButton,
+        gradientColors: Pair<Int, Int>,
+    ) {
+        val (startColor, endColor) = gradientColors
+        val shape = button.backgroundShape()
+        shape.orientation = GradientDrawable.Orientation.TOP_BOTTOM
+        shape.colors = intArrayOf(startColor, endColor)
+        button.background.invalidateSelf()
     }
 
     private fun View.applyCorners(fullRadius: Int, diff: Int, progress: Float) {
@@ -593,3 +686,8 @@ constructor(
 
 private fun ImageButton.backgroundShape(): GradientDrawable =
     (background as InsetDrawable).drawable as GradientDrawable
+
+private fun GradientDrawable.firstColorOrNull(): Int? {
+    colors?.let { if (it.isNotEmpty()) return it[0] }
+    return color?.defaultColor
+}
