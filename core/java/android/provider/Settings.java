@@ -7516,6 +7516,12 @@ public final class Settings {
         public static final String QS_TILE_GRADIENT = "qs_tile_gradient";
 
         /**
+         * Gradient on QS brightness slider
+         * @hide
+         */
+        public static final String QS_BRIGHTNESS_SLIDER_GRADIENT = "qs_brightness_slider_gradient";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
