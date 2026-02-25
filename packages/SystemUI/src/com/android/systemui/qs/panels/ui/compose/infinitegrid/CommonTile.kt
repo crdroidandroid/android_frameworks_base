@@ -170,7 +170,12 @@ fun ClassicTileContent(
                     Modifier
                         .clip(iconShape)
                         .drawBehind {
-                            drawRect(color = animatedColor)
+                            val brush: Brush? = colors.backgroundGradient
+                            if (brush != null) {
+                                drawRect(brush = brush)
+                            } else {
+                                drawRect(color = animatedColor)
+                            }
                         }
                 }
                 .thenIf(overlayPath != null) {
@@ -262,7 +267,14 @@ fun LargeTileContent(
                 Modifier.size(CommonTileDefaults.ToggleTargetSize).thenIf(isDualTarget) {
                     Modifier.borderOnFocus(color = focusBorderColor, iconShape.topEnd)
                         .clip(iconShape)
-                        .drawBehind { drawRect(animatedBackgroundColor) }
+                        .drawBehind {
+                            val brush: Brush? = colors.backgroundGradient
+                            if (brush != null) {
+                                drawRect(brush = brush)
+                            } else {
+                                drawRect(animatedBackgroundColor)
+                            }
+                        }
                         // apply the squish effect after the bg is drawn
                         .verticalSquish(squishiness)
                         .combinedClickable(

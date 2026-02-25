@@ -16,13 +16,18 @@
 
 package com.android.systemui.volume.dialog.captions.ui.binder
 
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.InsetDrawable
 import android.graphics.drawable.TransitionDrawable
 import android.os.Handler
+import android.provider.Settings
 import android.view.View
 import com.android.app.tracing.coroutines.launchInTraced
 import com.android.app.tracing.coroutines.launchTraced
 import com.android.systemui.Flags
 import com.android.systemui.dagger.qualifiers.Background
+import com.android.systemui.gradient.GradientSettings
 import com.android.systemui.res.R
 import com.android.systemui.volume.CaptionsToggleImageButton
 import com.android.systemui.volume.Events
@@ -34,6 +39,7 @@ import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.withIndex
+import kotlinx.coroutines.job
 
 /** Binds the captions button view. */
 @VolumeDialogScope
@@ -53,6 +59,20 @@ constructor(
 
         launchTraced("VDCBVB#addTouchableBounds") {
             dialogViewModel.addTouchableBounds(captionsButton)
+        }
+
+        val context = captionsButton.context
+        var gradientEnabled =
+            GradientSettings.isEnabled(context, Settings.System.VOLUME_SLIDER_GRADIENT)
+        var gradientColors = GradientSettings.argbColors(context)
+        val gradientObserver =
+            GradientSettings.registerObserver(context, Settings.System.VOLUME_SLIDER_GRADIENT) {
+                gradientEnabled =
+                    GradientSettings.isEnabled(context, Settings.System.VOLUME_SLIDER_GRADIENT)
+                gradientColors = GradientSettings.argbColors(context)
+            }
+        coroutineContext.job.invokeOnCompletion {
+            GradientSettings.unregisterObserver(context, gradientObserver)
         }
 
         viewModel.isVisible
@@ -88,6 +108,10 @@ constructor(
                         )
                     )
 
+                    if (isEnabled && gradientEnabled) {
+                        applyGradientSelectionBackground(this, gradientColors)
+                    }
+
                     val transition = background as TransitionDrawable
                     transition.isCrossFadeEnabled = true
                     if (index == 0) {
@@ -116,7 +140,32 @@ constructor(
         )
     }
 
+    private fun applyGradientSelectionBackground(
+        button: CaptionsToggleImageButton,
+        gradientColors: Pair<Int, Int>,
+    ) {
+        button.background = button.background.mutate()
+        val shape = button.selectionShape() ?: return
+        val (startColor, endColor) = gradientColors
+        shape.orientation = GradientDrawable.Orientation.TOP_BOTTOM
+        shape.colors = intArrayOf(startColor, endColor)
+        button.background.invalidateSelf()
+    }
+
     private companion object {
         const val DURATION_MILLIS = 500
     }
+}
+
+private fun CaptionsToggleImageButton.selectionShape(): GradientDrawable? {
+    val transition = background as? TransitionDrawable ?: return null
+
+    fun unwrap(drawable: Drawable?): GradientDrawable? =
+        when (drawable) {
+            is GradientDrawable -> drawable
+            is InsetDrawable -> drawable.drawable as? GradientDrawable
+            else -> null
+        }
+
+    return unwrap(transition.getDrawable(1)) ?: unwrap(transition.getDrawable(0))
 }
