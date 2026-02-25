@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.LocalContentColor
@@ -33,6 +34,11 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.MeasurePolicy
@@ -45,6 +51,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastFirst
+import com.android.compose.modifiers.thenIf
+import com.android.systemui.gradient.GradientColors
+import com.android.systemui.gradient.horizontal
+import com.android.systemui.gradient.toPath
+import com.android.systemui.gradient.vertical
 import kotlin.math.min
 
 @Composable
@@ -63,6 +74,7 @@ fun SliderTrack(
     activeTrackEndIcon: (@Composable BoxScope.(iconsState: SliderIconsState) -> Unit)? = null,
     inactiveTrackStartIcon: (@Composable BoxScope.(iconsState: SliderIconsState) -> Unit)? = null,
     inactiveTrackEndIcon: (@Composable BoxScope.(iconsState: SliderIconsState) -> Unit)? = null,
+    gradient: GradientColors? = null,
 ) {
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     val measurePolicy =
@@ -73,6 +85,12 @@ fun SliderTrack(
                 isVertical = isVertical,
                 gapSize = thumbTrackGapSize,
             )
+        }
+    val gradientBrush: Brush? =
+        remember(gradient, isVertical, isRtl) {
+            gradient?.let {
+                if (isVertical) it.vertical(bottomUp = true) else it.horizontal(reversed = isRtl)
+            }
         }
     Layout(
         measurePolicy = measurePolicy,
@@ -94,6 +112,54 @@ fun SliderTrack(
                                 Modifier.height(trackSize)
                             }
                         )
+                        .thenIf(gradientBrush != null) {
+                            Modifier.drawWithCache {
+                                val trackPath =
+                                    RoundedCornerShape(trackCornerSize)
+                                        .createOutline(size, layoutDirection, this)
+                                        .toPath()
+
+                                onDrawWithContent {
+                                    drawContent()
+
+                                    val gapPx = thumbTrackGapSize.toPx()
+                                    val fraction = sliderState.coercedValueAsFraction
+                                    if (isVertical) {
+                                        val activeHeight =
+                                            (size.height * fraction - gapPx)
+                                                .coerceIn(0f, size.height)
+                                        if (activeHeight > 0f) {
+                                            clipPath(trackPath) {
+                                                drawRect(
+                                                    brush = gradientBrush!!,
+                                                    topLeft =
+                                                        Offset(0f, size.height - activeHeight),
+                                                    size = Size(size.width, activeHeight),
+                                                )
+                                            }
+                                        }
+                                    } else {
+                                        val activeWidth =
+                                            (size.width * fraction - gapPx)
+                                                .coerceIn(0f, size.width)
+                                        if (activeWidth > 0f) {
+                                            clipPath(trackPath) {
+                                                drawRect(
+                                                    brush = gradientBrush!!,
+                                                    topLeft =
+                                                        if (isRtl) {
+                                                            Offset(size.width - activeWidth, 0f)
+                                                        } else {
+                                                            Offset.Zero
+                                                        },
+                                                    size = Size(activeWidth, size.height),
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                         .layoutId(Contents.Track),
             )
 
