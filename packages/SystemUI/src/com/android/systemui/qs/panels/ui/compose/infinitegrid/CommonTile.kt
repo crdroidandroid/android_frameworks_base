@@ -148,7 +148,14 @@ fun LargeTileContent(
                     Modifier.borderOnFocus(color = focusBorderColor, iconShape.topEnd)
                         .clip(iconShape)
                         .verticalSquish(squishiness)
-                        .drawBehind { drawRect(animatedBackgroundColor) }
+                        .drawBehind {
+                            val brush = colors.iconBackgroundGradient
+                            if (brush != null) {
+                                drawRect(brush = brush)
+                            } else {
+                                drawRect(color = animatedBackgroundColor)
+                            }
+                        }
                         .combinedClickable(
                             onClick = toggleClick!!,
                             onLongClick = onLongClick,
