@@ -32,6 +32,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
@@ -41,6 +42,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.android.compose.theme.PlatformTheme
 import com.android.systemui.common.ui.compose.Icon
+import com.android.systemui.gradient.GradientColors
+import com.android.systemui.gradient.rememberGradientColors
+import com.android.systemui.gradient.rememberGradientEnabled
 import com.android.systemui.haptics.slider.SliderHapticFeedbackFilter
 import com.android.systemui.haptics.slider.compose.ui.SliderHapticsViewModel
 import com.android.systemui.res.R
@@ -119,7 +123,10 @@ private fun VolumeDialogSlider(
             VolumeSliderDimensions.Horizontal
         },
 ) {
-    val colors =
+    val isGradientEnabled = rememberGradientEnabled(Settings.System.VOLUME_SLIDER_GRADIENT)
+    val gradient: GradientColors? = rememberGradientColors().takeIf { isGradientEnabled }
+
+    val baseColors =
         if (isVolumeDialogVertical) {
             SliderDefaults.colors(
                 activeTickColor = MaterialTheme.colorScheme.surfaceContainerHighest,
@@ -136,6 +143,19 @@ private fun VolumeDialogSlider(
                 disabledInactiveTrackColor = MaterialTheme.colorScheme.surfaceContainerHighest,
             )
         }
+    val colors =
+        if (gradient != null) {
+            baseColors.copy(activeTrackColor = Color.Transparent)
+        } else {
+            baseColors
+        }
+    val thumbColors =
+        if (gradient != null) {
+            colors.copy(thumbColor = gradient.startColor)
+        } else {
+            colors
+        }
+
     val collectedSliderStateModel by viewModel.state.collectAsStateWithLifecycle(null)
     val sliderStateModel = collectedSliderStateModel ?: return
     val interactionSource = remember { MutableInteractionSource() }
@@ -215,6 +235,7 @@ private fun VolumeDialogSlider(
                     )
                 },
                 trackSize = dimensions.trackSize,
+                gradient = gradient,
             )
         },
         thumb = { sliderState, interactions ->
@@ -222,7 +243,7 @@ private fun VolumeDialogSlider(
                 sliderState = sliderState,
                 interactionSource = interactions,
                 enabled = !sliderStateModel.isDisabled,
-                colors = colors,
+                colors = thumbColors,
                 thumbSize = DpSize(dimensions.thumbWidth, dimensions.thumbHeight),
             )
         },
