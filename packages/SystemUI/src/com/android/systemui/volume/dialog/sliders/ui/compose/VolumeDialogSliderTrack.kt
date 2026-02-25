@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.LocalContentColor
@@ -33,6 +34,8 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.MeasurePolicy
@@ -45,6 +48,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastFirst
+import com.android.compose.modifiers.thenIf
+import com.android.systemui.gradient.GradientColors
+import com.android.systemui.gradient.brush
+import com.android.systemui.gradient.drawActiveTrackGradient
+import com.android.systemui.gradient.toPath
 import kotlin.math.min
 
 @Composable
@@ -63,6 +71,7 @@ fun SliderTrack(
     activeTrackEndIcon: (@Composable BoxScope.(iconsState: SliderIconsState) -> Unit)? = null,
     inactiveTrackStartIcon: (@Composable BoxScope.(iconsState: SliderIconsState) -> Unit)? = null,
     inactiveTrackEndIcon: (@Composable BoxScope.(iconsState: SliderIconsState) -> Unit)? = null,
+    gradient: GradientColors? = null,
 ) {
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     val measurePolicy =
@@ -73,6 +82,14 @@ fun SliderTrack(
                 isVertical = isVertical,
                 gapSize = thumbTrackGapSize,
             )
+        }
+    val gradientBrush: Brush? =
+        remember(gradient, isVertical, isRtl) {
+            if (isVertical) {
+                gradient?.brush(baseAngle = 90f)
+            } else {
+                gradient?.brush(mirrored = isRtl)
+            }
         }
     Layout(
         measurePolicy = measurePolicy,
@@ -94,6 +111,28 @@ fun SliderTrack(
                                 Modifier.height(trackSize)
                             }
                         )
+                        .thenIf(gradientBrush != null) {
+                            Modifier.drawWithCache {
+                                val trackPath =
+                                    RoundedCornerShape(trackCornerSize)
+                                        .createOutline(size, layoutDirection, this)
+                                        .toPath()
+
+                                val gapPx = thumbTrackGapSize.toPx()
+
+                                onDrawWithContent {
+                                    drawContent()
+                                    drawActiveTrackGradient(
+                                        brush = gradientBrush!!,
+                                        trackPath = trackPath,
+                                        fraction = sliderState.coercedValueAsFraction,
+                                        gapPx = gapPx,
+                                        isVertical = isVertical,
+                                        isRtl = isRtl,
+                                    )
+                                }
+                            }
+                        }
                         .layoutId(Contents.Track),
             )
 

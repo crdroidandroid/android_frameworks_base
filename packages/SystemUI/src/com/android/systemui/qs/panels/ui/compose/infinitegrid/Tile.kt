@@ -63,12 +63,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
@@ -78,6 +81,7 @@ import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.semantics.toggleableState
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.trace
 import com.android.app.tracing.coroutines.launchTraced as launch
@@ -95,6 +99,8 @@ import com.android.systemui.animation.Expandable
 import com.android.systemui.animation.TransitionAnimator.Companion.dynamicTargetResolutionEnabled
 import com.android.systemui.common.shared.model.Icon
 import com.android.systemui.compose.modifiers.sysuiResTag
+import com.android.systemui.gradient.brush
+import com.android.systemui.gradient.rememberGradient
 import com.android.systemui.haptics.msdl.qs.TileHapticsViewModel
 import com.android.systemui.lifecycle.rememberViewModel
 import com.android.systemui.qs.flags.QsDetailedView
@@ -183,7 +189,8 @@ fun ContentScope.Tile(
                 tile.state.collect { value = it.toIconProvider() }
             }
 
-        val colors = TileDefaults.getColorForState(uiState, iconOnly)
+        val tileGradient = rememberQSTileGradient()
+        val colors = TileDefaults.getColorForState(uiState, iconOnly, tileGradient)
         val hapticsViewModel: TileHapticsViewModel? =
             if (rememberTileHaptic()) {
                 rememberViewModel(traceName = "TileHapticsViewModel") {
@@ -355,7 +362,11 @@ fun ContentScope.Tile(
                                         .size(tileHeight)
                                         .align(Alignment.Center)
                                         .clip(CircleShape)
-                                        .background(animatedColor)
+                                        .then(
+                                            colors.backgroundGradient?.let {
+                                                Modifier.background(it)
+                                            } ?: Modifier.background(animatedColor)
+                                        )
                                 }
                                 .indication(interaction, LocalIndication.current)
                                 .tileCombinedClickable(
@@ -403,6 +414,7 @@ fun ContentScope.Tile(
                         iconOnly = iconOnly,
                         isDualTarget = isDualTarget,
                         modifier = contentRevealModifier,
+                        gradient = colors.backgroundGradient,
                     ) {
                         val iconProvider: Context.() -> Icon = { getTileIcon(icon = icon) }
                         if (iconOnly) {
@@ -487,6 +499,7 @@ fun TileContainer(
     isDualTarget: Boolean,
     interactionSource: MutableInteractionSource?,
     modifier: Modifier = Modifier,
+    gradient: Brush? = null,
     content: @Composable BoxScope.() -> Unit,
 ) {
     Box(
@@ -494,6 +507,9 @@ fun TileContainer(
             modifier
                 .height(TileHeight)
                 .fillMaxWidth()
+                .thenIf(gradient != null && (!isDualTarget || iconOnly)) {
+                    Modifier.drawBehind { drawRect(brush = gradient!!) }
+                }
                 .tileCombinedClickable(
                     onClick = onClick ?: {},
                     onLongClick = onLongClick,
@@ -516,12 +532,20 @@ fun SmallStaticTile(
 ) {
     val shapeMode = rememberTileShapeMode()
 
-    val colors = TileDefaults.getColorForState(uiState = uiState, iconOnly = true)
+    val colors =
+        TileDefaults.getColorForState(
+            uiState = uiState,
+            iconOnly = true,
+            gradient = rememberQSTileGradient(),
+        )
 
     Box(
         modifier
             .clip(TileDefaults.animateTileShapeAsState(uiState, shapeMode).value)
-            .background(colors.background)
+            .then(
+                colors.backgroundGradient?.let { Modifier.background(it) }
+                    ?: Modifier.background(colors.background)
+            )
             .size(TileHeight)
             .clickable(onClick = onClick)
     ) {
@@ -542,12 +566,20 @@ fun LargeStaticTile(
 ) {
     val shapeMode = rememberTileShapeMode()
 
-    val colors = TileDefaults.getColorForState(uiState = uiState, iconOnly = false)
+    val colors =
+        TileDefaults.getColorForState(
+            uiState = uiState,
+            iconOnly = false,
+            gradient = rememberQSTileGradient(),
+        )
 
     Box(
         modifier
             .clip(TileDefaults.animateTileShapeAsState(uiState, shapeMode).value)
-            .background(colors.background)
+            .then(
+                colors.backgroundGradient?.let { Modifier.background(it) }
+                    ?: Modifier.background(colors.background)
+            )
             .height(TileHeight)
             .clickable(onClick = onClick)
             .largeTilePadding()
@@ -695,6 +727,13 @@ fun rememberTileHaptic(): Boolean {
 }
 
 @Composable
+fun rememberQSTileGradient(): Brush? {
+    val gradient = rememberGradient(Settings.System.QS_TILE_GRADIENT)
+    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+    return remember(gradient, isRtl) { gradient?.brush(mirrored = isRtl) }
+}
+
+@Composable
 fun rememberQSPanelStyle(): Boolean {
     val context = LocalContext.current
     val contentResolver = context.contentResolver
@@ -823,6 +862,7 @@ data class TileColors(
     val outline: Color,
     val classicLabel: Color,
     val classicSecondaryLabel: Color,
+    val backgroundGradient: Brush? = null,
 )
 
 @VisibleForTesting
@@ -834,7 +874,7 @@ private object TileDefaults {
     /** An active tile uses the active color as background */
     @Composable
     @ReadOnlyComposable
-    fun activeTileColors(): TileColors =
+    fun activeTileColors(gradient: Brush?): TileColors =
         TileColors(
             background = MaterialTheme.colorScheme.primary,
             iconBackground = MaterialTheme.colorScheme.primary,
@@ -844,12 +884,13 @@ private object TileDefaults {
             outline = MaterialTheme.colorScheme.primary,
             classicLabel = MaterialTheme.colorScheme.onSurface,
             classicSecondaryLabel = MaterialTheme.colorScheme.onSurface,
+            backgroundGradient = gradient,
         )
 
     /** An active tile with dual target only show the active color on the icon */
     @Composable
     @ReadOnlyComposable
-    fun activeDualTargetTileColors(): TileColors =
+    fun activeDualTargetTileColors(gradient: Brush?): TileColors =
         TileColors(
             background = LocalAndroidColorScheme.current.surfaceEffect1,
             iconBackground = MaterialTheme.colorScheme.primary,
@@ -859,6 +900,7 @@ private object TileDefaults {
             outline = MaterialTheme.colorScheme.primary,
             classicLabel = MaterialTheme.colorScheme.onSurface.copy(alpha = .9f),
             classicSecondaryLabel = MaterialTheme.colorScheme.onSurface.copy(alpha = .8f),
+            backgroundGradient = gradient,
         )
 
     @Composable
@@ -908,13 +950,17 @@ private object TileDefaults {
 
     @Composable
     @ReadOnlyComposable
-    fun getColorForState(uiState: TileUiState, iconOnly: Boolean): TileColors {
+    fun getColorForState(
+        uiState: TileUiState,
+        iconOnly: Boolean,
+        gradient: Brush? = null,
+    ): TileColors {
         return when (uiState.visualState) {
             STATE_ACTIVE -> {
                 if (uiState.handlesToggleClick && !iconOnly) {
-                    activeDualTargetTileColors()
+                    activeDualTargetTileColors(gradient)
                 } else {
-                    activeTileColors()
+                    activeTileColors(gradient)
                 }
             }
 
