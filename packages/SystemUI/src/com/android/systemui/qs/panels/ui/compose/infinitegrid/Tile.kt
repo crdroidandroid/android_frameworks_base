@@ -68,9 +68,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -333,7 +337,14 @@ fun ContentScope.Tile(
                             .size(CommonTileDefaults.TileHeight)
                             .align(Alignment.Center)
                             .clip(CircleShape)
-                            .background(animatedColor)
+                            .drawBehind {
+                                val brush = colors.iconBackgroundGradient
+                                if (brush != null) {
+                                    drawRect(brush = brush)
+                                } else {
+                                    drawRect(color = animatedColor)
+                                }
+                            }
                             .indication(interaction, LocalIndication.current)
                             .tileCombinedClickable(
                                 onClick = { click?.invoke() ?: Unit },
@@ -365,6 +376,7 @@ fun ContentScope.Tile(
                     iconOnly = iconOnly,
                     isDualTarget = isDualTarget,
                     modifier = contentRevealModifier,
+                    colors = colors,
                 ) {
                     val iconProvider: Context.() -> Icon = { getTileIcon(icon = icon) }
                     if (iconOnly) {
@@ -436,6 +448,7 @@ fun TileContainer(
     isDualTarget: Boolean,
     interactionSource: MutableInteractionSource?,
     modifier: Modifier = Modifier,
+    colors: TileColors,
     content: @Composable BoxScope.() -> Unit,
 ) {
     Box(
@@ -451,7 +464,16 @@ fun TileContainer(
                     isDualTarget = isDualTarget,
                     interactionSource = interactionSource,
                 )
-                .tileTestTag(iconOnly),
+                .tileTestTag(iconOnly)
+                .thenIf(!isDualTarget || iconOnly) {
+                    Modifier
+                        .drawBehind {
+                            val brush = colors.iconBackgroundGradient
+                            if (brush != null) {
+                                drawRect(brush = brush)
+                            }
+                        }
+                },
         content = content,
     )
 }
@@ -469,7 +491,14 @@ fun LargeStaticTile(
     Box(
         modifier
             .clip(TileDefaults.animateTileShapeAsState(state = uiState.state, shapeMode = shapeMode).value)
-            .background(colors.background)
+            .drawBehind {
+                val brush = colors.iconBackgroundGradient
+                if (brush != null) {
+                    drawRect(brush = brush)
+                } else {
+                    drawRect(color = colors.background)
+                }
+            }
             .height(TileHeight)
             .largeTilePadding()
     ) {
@@ -541,6 +570,7 @@ data class TileColors(
     val label: Color,
     val secondaryLabel: Color,
     val icon: Color,
+    val iconBackgroundGradient: Brush? = null,
 )
 
 @Composable
@@ -623,32 +653,74 @@ fun rememberTileHaptic(): Boolean {
     return hapticEnabled
 }
 
+@Composable
+fun rememberQsGradient(): Boolean {
+    val context = LocalContext.current
+    val contentResolver = context.contentResolver
+
+    fun readEnabled(): Boolean {
+        return try {
+            Settings.System.getIntForUser(
+                contentResolver, Settings.System.QS_TILE_GRADIENT, 0,
+                UserHandle.USER_CURRENT
+            ) != 0
+        } catch (_: Throwable) {
+            false
+        }
+    }
+
+    var enabled by remember { mutableStateOf(readEnabled()) }
+
+    DisposableEffect(contentResolver) {
+        val observer = object : ContentObserver(null) {
+            override fun onChange(selfChange: Boolean) {
+                enabled = readEnabled()
+            }
+        }
+        contentResolver.registerContentObserver(
+            Settings.System.getUriFor(Settings.System.QS_TILE_GRADIENT),
+            false, observer, UserHandle.USER_ALL
+        )
+        onDispose { contentResolver.unregisterContentObserver(observer) }
+    }
+
+    return enabled
+}
+
 private object TileDefaults {
     val ActiveIconCornerRadius = 16.dp
 
     /** An active tile uses the active color as background */
     @Composable
-    @ReadOnlyComposable
-    fun activeTileColors(): TileColors =
-        TileColors(
+    fun activeTileColors(): TileColors {
+        val gradientEnabled = rememberQsGradient()
+        val gradient = qsTileBackgroundBrush(gradientEnabled)
+
+        return TileColors(
             background = MaterialTheme.colorScheme.primary,
             iconBackground = MaterialTheme.colorScheme.primary,
             label = MaterialTheme.colorScheme.onPrimary,
             secondaryLabel = MaterialTheme.colorScheme.onPrimary,
             icon = MaterialTheme.colorScheme.onPrimary,
+            iconBackgroundGradient = gradient,
         )
+    }
 
     /** An active tile with dual target only show the active color on the icon */
     @Composable
-    @ReadOnlyComposable
-    fun activeDualTargetTileColors(): TileColors =
-        TileColors(
+    fun activeDualTargetTileColors(): TileColors {
+        val gradientEnabled = rememberQsGradient()
+        val gradient = qsTileBackgroundBrush(gradientEnabled)
+
+        return TileColors(
             background = LocalAndroidColorScheme.current.surfaceEffect1,
             iconBackground = MaterialTheme.colorScheme.primary,
             label = MaterialTheme.colorScheme.onSurface,
             secondaryLabel = MaterialTheme.colorScheme.onSurface,
             icon = MaterialTheme.colorScheme.onPrimary,
+            iconBackgroundGradient = gradient,
         )
+    }
 
     @Composable
     @ReadOnlyComposable
@@ -687,7 +759,6 @@ private object TileDefaults {
     }
 
     @Composable
-    @ReadOnlyComposable
     fun getColorForState(uiState: TileUiState, iconOnly: Boolean): TileColors {
         return when (uiState.state) {
             STATE_ACTIVE -> {
@@ -758,6 +829,20 @@ private object TileDefaults {
                 }
             mutableStateOf(RoundedCornerShape(corner))
         }
+    }
+
+    @Composable
+    fun qsTileBackgroundBrush(enabled: Boolean): Brush? {
+        if (!enabled) return null
+
+        return Brush.linearGradient(
+            colors = listOf(
+                MaterialTheme.colorScheme.primary,
+                MaterialTheme.colorScheme.secondary
+            ),
+            start = Offset(0f, 0f),
+            end = Offset.Infinite
+        )
     }
 }
 
