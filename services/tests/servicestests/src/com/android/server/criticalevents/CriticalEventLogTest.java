@@ -577,6 +577,22 @@ public class CriticalEventLogTest {
     }
 
     @Test
+    public void saveLogToFileNow_withMalformedEvent_doesNotThrow() {
+        CriticalEventProto malformedEvent = new CriticalEventProto();
+        malformedEvent.timestampMs = START_TIME_MS + 1000;
+        // Set a JavaCrash with null exceptionClass - this was causing NPE in computeSerializedSize()
+        JavaCrash javaCrash = new JavaCrash();
+        javaCrash.exceptionClass = null;
+        javaCrash.process = null;
+        malformedEvent.setJavaCrash(javaCrash);
+
+        mCriticalEventLog.appendAndSave(malformedEvent);
+
+        mCriticalEventLog.saveLogToFileNow();
+        // should not throw
+    }
+
+    @Test
     public void simulateReboot_saveAndLoadCycle() {
         TestableCriticalEventLog log1 = setLogInstance();
 
