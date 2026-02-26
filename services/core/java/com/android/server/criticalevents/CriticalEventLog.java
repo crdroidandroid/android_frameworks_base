@@ -397,10 +397,10 @@ public class CriticalEventLog {
         CriticalEventLogStorageProto logProto = new CriticalEventLogStorageProto();
         logProto.events = mEvents.toArray();
 
-        final byte[] bytes = CriticalEventLogStorageProto.toByteArray(logProto);
         try (FileOutputStream stream = new FileOutputStream(mLogFile, false)) {
+            final byte[] bytes = CriticalEventLogStorageProto.toByteArray(logProto);
             stream.write(bytes);
-        } catch (IOException e) {
+        } catch (Exception e) {
             Slog.e(TAG, "Error saving log to disk.", e);
         }
     }
