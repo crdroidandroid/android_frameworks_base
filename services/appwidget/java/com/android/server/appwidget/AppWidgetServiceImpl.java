@@ -3949,8 +3949,13 @@ class AppWidgetServiceImpl extends IAppWidgetService.Stub implements WidgetBacku
             String className = sa
                     .getString(com.android.internal.R.styleable.AppWidgetProviderInfo_configure);
             if (className != null) {
-                info.configure = new ComponentName(providerId.componentName.getPackageName(),
+                var cn = new ComponentName(providerId.componentName.getPackageName(),
                         className);
+                if (pm.resolveActivity(new Intent(AppWidgetManager.ACTION_APPWIDGET_CONFIGURE).setComponent(cn), 0) != null) {
+                    info.configure = cn;
+                } else {
+                    Slog.d(TAG, "ignoring invalid configuration activity: " + cn.toShortString());
+                }
             }
             info.label = activityInfo.loadLabel(pm).toString();
             info.icon = activityInfo.getIconResource();
