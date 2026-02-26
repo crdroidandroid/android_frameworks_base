@@ -7528,6 +7528,24 @@ public final class Settings {
         public static final String VOLUME_SLIDER_GRADIENT = "volume_slider_gradient";
 
         /**
+         * Gradient color mode
+         * @hide
+         */
+        public static final String CUSTOM_GRADIENT_COLOR_MODE = "custom_gradient_color_mode";
+
+        /**
+         * Gradient start color
+         * @hide
+         */
+        public static final String CUSTOM_GRADIENT_START_COLOR = "custom_gradient_start_color";
+
+        /**
+         * Gradient end color
+         * @hide
+         */
+        public static final String CUSTOM_GRADIENT_END_COLOR = "custom_gradient_end_color";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
