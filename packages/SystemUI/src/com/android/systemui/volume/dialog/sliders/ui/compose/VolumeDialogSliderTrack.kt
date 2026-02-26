@@ -16,29 +16,47 @@
 
 package com.android.systemui.volume.dialog.sliders.ui.compose
 
+import android.database.ContentObserver
+import android.os.UserHandle
+import android.provider.Settings
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SliderColors
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.SliderState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.geometry.RoundRect
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.MeasurePolicy
 import androidx.compose.ui.layout.MeasureResult
 import androidx.compose.ui.layout.MeasureScope
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
@@ -77,21 +95,35 @@ fun SliderTrack(
     Layout(
         measurePolicy = measurePolicy,
         content = {
-            SliderDefaults.Track(
+
+            val gradientEnabled = rememberVolumeGradientEnabled()
+
+            val gStart = MaterialTheme.colorScheme.primary
+            val gEnd = MaterialTheme.colorScheme.secondary
+
+            val activeBrush =
+                if (gradientEnabled && gStart != Color(0) && gEnd != Color(0)) {
+                    listOf(gStart, gEnd)
+                } else {
+                    null
+                }
+
+            GradientSliderTrack(
                 sliderState = sliderState,
+                isEnabled = isEnabled,
                 colors = colors,
-                enabled = isEnabled,
                 trackCornerSize = trackCornerSize,
                 trackInsideCornerSize = trackInsideCornerSize,
-                drawStopIndicator = null,
                 thumbTrackGapSize = thumbTrackGapSize,
-                drawTick = { _, _ -> },
+                isVertical = isVertical,
+                gradientColors = activeBrush,
                 modifier =
-                    Modifier.then(
+                    Modifier
+                        .then(
                             if (isVertical) {
-                                Modifier.width(trackSize)
+                                Modifier.width(trackSize).fillMaxHeight()
                             } else {
-                                Modifier.height(trackSize)
+                                Modifier.height(trackSize).fillMaxWidth()
                             }
                         )
                         .layoutId(Contents.Track),
@@ -127,6 +159,182 @@ fun SliderTrack(
             )
         },
         modifier = modifier,
+    )
+}
+
+private data class TrackGradient(
+    val brush: Brush,
+)
+
+@Composable
+private fun rememberVolumeGradientEnabled(): Boolean {
+    val context = LocalContext.current
+    val contentResolver = context.contentResolver
+
+    fun readEnabled(): Boolean {
+        return try {
+            Settings.System.getIntForUser(
+                contentResolver, Settings.System.VOLUME_SLIDER_GRADIENT, 0,
+                UserHandle.USER_CURRENT
+            ) != 0
+        } catch (_: Throwable) {
+            false
+        }
+    }
+
+    var enabled by remember { mutableStateOf(readEnabled()) }
+
+    DisposableEffect(contentResolver) {
+        val observer = object : ContentObserver(null) {
+                override fun onChange(selfChange: Boolean) {
+                    enabled = readEnabled()
+                }
+            }
+
+        contentResolver.registerContentObserver(
+            Settings.System.getUriFor(Settings.System.VOLUME_SLIDER_GRADIENT),
+            false, observer, UserHandle.USER_ALL
+        )
+
+        onDispose {
+            contentResolver.unregisterContentObserver(observer)
+        }
+    }
+
+    return enabled
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+private fun GradientSliderTrack(
+    sliderState: SliderState,
+    isEnabled: Boolean,
+    colors: SliderColors,
+    trackCornerSize: Dp,
+    trackInsideCornerSize: Dp,
+    thumbTrackGapSize: Dp,
+    isVertical: Boolean,
+    gradientColors: List<Color>?,
+    modifier: Modifier = Modifier,
+) {
+    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+
+    val inactiveColor =
+        if (isEnabled) colors.inactiveTrackColor else colors.disabledInactiveTrackColor
+    val activeSolidColor =
+        if (isEnabled) colors.activeTrackColor else colors.disabledActiveTrackColor
+
+    Box(
+        modifier =
+            modifier.drawBehind {
+                val w = size.width
+                val h = size.height
+                if (w <= 0f || h <= 0f) return@drawBehind
+
+                val frac = sliderState.coercedValueAsFraction.coerceIn(0f, 1f)
+                val outerR = trackCornerSize.toPx().coerceAtMost(minOf(w, h) / 2f)
+                val innerR = trackInsideCornerSize.toPx().coerceAtMost(minOf(w, h) / 2f)
+                val halfGap = (thumbTrackGapSize.toPx() / 2f).coerceAtLeast(0f)
+
+                drawRoundRect(
+                    color = inactiveColor,
+                    size = size,
+                    cornerRadius = CornerRadius(outerR, outerR)
+                )
+
+                if (!isVertical) {
+                    val splitX = if (isRtl) w * (1f - frac) else w * frac
+
+                    val gapEff =
+                        if (isRtl) {
+                            minOf(halfGap, splitX)
+                        } else {
+                            minOf(halfGap, w - splitX)
+                        }
+
+                    val activeStart = if (isRtl) splitX + gapEff else 0f
+                    val activeEnd = if (isRtl) w else splitX - gapEff
+
+                    if (activeEnd <= activeStart) return@drawBehind
+
+                    val eps = 0.5f
+
+                    val hitsStart = activeStart <= eps
+                    val hitsEnd = activeEnd >= (w - eps)
+
+                    val leftR =
+                        if (isRtl) {
+                            if (hitsStart) outerR else innerR   // rounded only at max (when it reaches start)
+                        } else {
+                            outerR                              // far end always rounded
+                        }
+
+                    val rightR =
+                        if (isRtl) {
+                            outerR                              // far end always rounded
+                        } else {
+                            if (hitsEnd) outerR else innerR     // rounded only at max (when it reaches end)
+                        }
+
+                    val path = Path().apply {
+                        addRoundRect(
+                            RoundRect(
+                                rect = Rect(activeStart, 0f, activeEnd, h),
+                                topLeft = CornerRadius(leftR, leftR),
+                                bottomLeft = CornerRadius(leftR, leftR),
+                                topRight = CornerRadius(rightR, rightR),
+                                bottomRight = CornerRadius(rightR, rightR),
+                            )
+                        )
+                    }
+
+                    val brush =
+                        if (gradientColors != null) Brush.horizontalGradient(gradientColors)
+                        else Brush.linearGradient(listOf(activeSolidColor, activeSolidColor))
+
+                    drawPath(path = path, brush = brush)
+                } else {
+                    val frac = sliderState.coercedValueAsFraction.coerceIn(0f, 1f)
+                    val splitY = h * (1f - frac)
+
+                    val gapEff = minOf(halfGap, splitY)
+
+                    val activeTop = splitY + gapEff
+                    val activeBottom = h
+                    if (activeBottom <= activeTop) return@drawBehind
+
+                    val eps = 0.5f
+                    val hitsTop = activeTop <= eps 
+
+                    val topR = if (hitsTop) outerR else innerR
+                    val bottomR = outerR
+
+                    val path = Path().apply {
+                        addRoundRect(
+                            RoundRect(
+                                rect = Rect(0f, activeTop, w, activeBottom),
+                                topLeft = CornerRadius(topR, topR),
+                                bottomLeft = CornerRadius(bottomR, bottomR),
+                                topRight = CornerRadius(topR, topR),
+                                bottomRight = CornerRadius(bottomR, bottomR),
+                            )
+                        )
+                    }
+
+                    val brush =
+                        if (gradientColors != null) {
+                            Brush.verticalGradient(
+                                colors = gradientColors,
+                                startY = activeBottom,
+                                endY = activeTop
+                            )
+                        } else {
+                            Brush.linearGradient(listOf(activeSolidColor, activeSolidColor))
+                        }
+
+                    drawPath(path = path, brush = brush)
+                }
+            }
     )
 }
 
