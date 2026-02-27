@@ -14442,6 +14442,12 @@ public final class Settings {
         public static final String LOCK_SCREEN_CUSTOM_CLOCK_OPACITY = "lock_screen_custom_clock_opacity";
 
         /**
+         * Adjust top margin for custom clock
+         * @hide
+         */
+        public static final String LOCK_SCREEN_CUSTOM_CLOCK_MARGIN_TOP = "lock_screen_custom_clock_margin_top";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
