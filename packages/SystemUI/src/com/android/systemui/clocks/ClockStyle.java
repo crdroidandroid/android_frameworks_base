@@ -20,6 +20,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.UserHandle;
 import android.provider.Settings;
@@ -67,14 +68,20 @@ public class ClockStyle extends RelativeLayout implements TunerService.Tunable {
 
     private static final int[] mCenterClocks = {2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22};
 
-    private static final int DEFAULT_STYLE = 0; // Disabled
     public static final String CLOCK_STYLE_KEY = Settings.Secure.LOCK_SCREEN_CUSTOM_CLOCK_STYLE;
-    public static final String CLOCK_TEXT_COLOR_KEY = Settings.Secure.LOCK_SCREEN_CUSTOM_CLOCK_ACCENT_COLOR;
+    public static final String CLOCK_COLOR_MODE_KEY = Settings.Secure.LOCK_SCREEN_CUSTOM_CLOCK_COLOR_MODE;
+    public static final String CLOCK_CUSTOM_COLOR_KEY = Settings.Secure.LOCK_SCREEN_CUSTOM_CLOCK_CUSTOM_COLOR;
     public static final String CLOCK_TEXT_OPACITY_KEY = Settings.Secure.LOCK_SCREEN_CUSTOM_CLOCK_OPACITY;
     public static final String CLOCK_FRAME_MARGIN_TOP_KEY = Settings.Secure.LOCK_SCREEN_CUSTOM_CLOCK_MARGIN_TOP;
 
+    public static final String COLOR_MODE_DEFAULT = "default";
+    public static final String COLOR_MODE_ACCENT = "accent";
+    public static final String COLOR_MODE_CUSTOM = "custom";
+
+    private static final int DEFAULT_STYLE = 0; // Disabled
     private static final int DEFAULT_OPACITY = 100;
     private static final int DEFAULT_MARGIN_TOP = 15;
+    private static final int DEFAULT_CUSTOM_COLOR = Color.WHITE;
 
     private final Context mContext;
     private final KeyguardManager mKeyguardManager;
@@ -82,7 +89,8 @@ public class ClockStyle extends RelativeLayout implements TunerService.Tunable {
 
     private View currentClockView;
     private int mClockStyle;
-    private boolean mUseAccentColor = false;
+    private String mColorMode = COLOR_MODE_DEFAULT;
+    private int mCustomColor = DEFAULT_CUSTOM_COLOR;
     private int mClockOpacity = DEFAULT_OPACITY;
     private int mClockFrameMarginTop = DEFAULT_MARGIN_TOP;
 
@@ -150,8 +158,12 @@ public class ClockStyle extends RelativeLayout implements TunerService.Tunable {
         mContext = context;
         mKeyguardManager = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
         mTunerService = Dependency.get(TunerService.class);
-        mTunerService.addTunable(this, CLOCK_STYLE_KEY, CLOCK_TEXT_COLOR_KEY,
-                CLOCK_TEXT_OPACITY_KEY, CLOCK_FRAME_MARGIN_TOP_KEY);
+        mTunerService.addTunable(this,
+                CLOCK_STYLE_KEY,
+                CLOCK_COLOR_MODE_KEY,
+                CLOCK_CUSTOM_COLOR_KEY,
+                CLOCK_TEXT_OPACITY_KEY,
+                CLOCK_FRAME_MARGIN_TOP_KEY);
         mStatusBarStateController = Dependency.get(StatusBarStateController.class);
         mStatusBarStateController.addCallback(mStatusBarStateListener);
         mStatusBarStateListener.onDozingChanged(mStatusBarStateController.isDozing());
@@ -215,19 +227,23 @@ public class ClockStyle extends RelativeLayout implements TunerService.Tunable {
         }
     }
 
-    private void updateClockTextColor() {
-        if (currentClockView != null) {
-            updateTextClockColor(currentClockView);
+    private int resolveClockColor() {
+        switch (mColorMode) {
+            case COLOR_MODE_ACCENT:
+                return mContext.getColor(
+                        mContext.getResources().getIdentifier(
+                                "system_accent1_100", "color", "android"));
+            case COLOR_MODE_CUSTOM:
+                return mCustomColor;
+            case COLOR_MODE_DEFAULT:
+            default:
+                return mContext.getColor(android.R.color.white);
         }
     }
 
-    private void updateClockFrameMargin() {
-        RelativeLayout clockFrame = findViewById(R.id.clock_frame);
-        if (clockFrame != null) {
-            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) clockFrame.getLayoutParams();
-            int marginPx = (int) (mClockFrameMarginTop * mContext.getResources().getDisplayMetrics().density);
-            params.topMargin = marginPx;
-            clockFrame.setLayoutParams(params);
+    private void updateClockTextColor() {
+        if (currentClockView != null) {
+            updateTextClockColor(currentClockView);
         }
     }
 
@@ -235,35 +251,37 @@ public class ClockStyle extends RelativeLayout implements TunerService.Tunable {
         if (view instanceof ViewGroup) {
             ViewGroup viewGroup = (ViewGroup) view;
             for (int i = 0; i < viewGroup.getChildCount(); i++) {
-                View childView = viewGroup.getChildAt(i);
-                updateTextClockColor(childView);
+                updateTextClockColor(viewGroup.getChildAt(i));
             }
         }
 
-        if (view instanceof TextClock) {
-            TextClock textClock = (TextClock) view;
+        if (!(view instanceof TextClock)) return;
+        TextClock textClock = (TextClock) view;
 
-            if (textClock.getTag(R.id.original_text_color) == null) {
-                int currentColor = textClock.getCurrentTextColor();
-                textClock.setTag(R.id.original_text_color, currentColor);
-            }
+        if (textClock.getTag(R.id.original_text_color) == null) {
+            textClock.setTag(R.id.original_text_color, textClock.getCurrentTextColor());
+        }
 
-            int originalColor = (Integer) textClock.getTag(R.id.original_text_color);
-            int whiteColor = mContext.getColor(android.R.color.white);
+        int originalColor = (Integer) textClock.getTag(R.id.original_text_color);
+        int whiteColor    = mContext.getColor(android.R.color.white);
 
-            if ((originalColor & 0x00FFFFFF) == (whiteColor & 0x00FFFFFF)) {
-                int color;
-                if (mUseAccentColor) {
-                    color = mContext.getColor(
-                        mContext.getResources().getIdentifier(
-                            "system_accent1_100", "color", "android"));
-                } else {
-                    color = mContext.getColor(android.R.color.white);
-                }
-                int alpha = Math.round((mClockOpacity / 100f) * 255);
-                color = (color & 0x00FFFFFF) | (alpha << 24);
-                textClock.setTextColor(color);
-            }
+        if ((originalColor & 0x00FFFFFF) != (whiteColor & 0x00FFFFFF)) return;
+
+        int color = resolveClockColor();
+        int alpha = Math.round((mClockOpacity / 100f) * 255);
+        color = (color & 0x00FFFFFF) | (alpha << 24);
+        textClock.setTextColor(color);
+    }
+
+    private void updateClockFrameMargin() {
+        View clockFrame = findViewById(R.id.clock_frame);
+        if (clockFrame != null) {
+            ViewGroup.MarginLayoutParams params =
+                    (ViewGroup.MarginLayoutParams) clockFrame.getLayoutParams();
+            int marginPx = (int) (mClockFrameMarginTop
+                    * mContext.getResources().getDisplayMetrics().density);
+            params.topMargin = marginPx;
+            clockFrame.setLayoutParams(params);
         }
     }
 
@@ -295,14 +313,21 @@ public class ClockStyle extends RelativeLayout implements TunerService.Tunable {
             case CLOCK_STYLE_KEY:
                 mClockStyle = TunerService.parseInteger(newValue, DEFAULT_STYLE);
                 if (mClockStyle != 0) {
-                    Settings.Secure.putIntForUser(mContext.getContentResolver(), 
-                        Settings.Secure.LOCK_SCREEN_CUSTOM_CLOCK_FACE, 0, UserHandle.USER_CURRENT);
+                    Settings.Secure.putIntForUser(mContext.getContentResolver(),
+                            Settings.Secure.LOCK_SCREEN_CUSTOM_CLOCK_FACE, 0,
+                            UserHandle.USER_CURRENT);
                 }
                 updateClockView();
                 break;
-            case CLOCK_TEXT_COLOR_KEY:
-                mUseAccentColor = TunerService.parseIntegerSwitch(newValue, false);
+            case CLOCK_COLOR_MODE_KEY:
+                mColorMode = (newValue != null) ? newValue : COLOR_MODE_DEFAULT;
                 updateClockTextColor();
+                break;
+            case CLOCK_CUSTOM_COLOR_KEY:
+                mCustomColor = TunerService.parseInteger(newValue, DEFAULT_CUSTOM_COLOR);
+                if (COLOR_MODE_CUSTOM.equals(mColorMode)) {
+                    updateClockTextColor();
+                }
                 break;
             case CLOCK_TEXT_OPACITY_KEY:
                 mClockOpacity = TunerService.parseInteger(newValue, DEFAULT_OPACITY);
