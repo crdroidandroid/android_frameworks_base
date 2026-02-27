@@ -22,6 +22,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -36,6 +37,8 @@ public class AODStyle extends RelativeLayout implements TunerService.Tunable {
 
     private static final String CUSTOM_AOD_IMAGE_URI_KEY = "system:custom_aod_image_uri";
     private static final String CUSTOM_AOD_IMAGE_ENABLED_KEY = "system:custom_aod_image_enabled";
+    
+    private static final int DEFAULT_MARGIN_TOP = 15;
 
     private final Context mContext;
     private final TunerService mTunerService;
@@ -50,6 +53,7 @@ public class AODStyle extends RelativeLayout implements TunerService.Tunable {
     private boolean mAodImageEnabled;
     private boolean mImageLoaded = false;
     private boolean mCustomClockEnabled;
+    private int mClockFrameMarginTop = DEFAULT_MARGIN_TOP;
 
     // Burn-in protection
     private static final int BURN_IN_PROTECTION_INTERVAL = 10000; // 10 seconds
@@ -98,7 +102,7 @@ public class AODStyle extends RelativeLayout implements TunerService.Tunable {
         super(context, attrs);
         mContext = context;
         mTunerService = Dependency.get(TunerService.class);
-        mTunerService.addTunable(this, ClockStyle.CLOCK_STYLE_KEY, CUSTOM_AOD_IMAGE_URI_KEY, CUSTOM_AOD_IMAGE_ENABLED_KEY);
+        mTunerService.addTunable(this, ClockStyle.CLOCK_STYLE_KEY, ClockStyle.CLOCK_FRAME_MARGIN_TOP_KEY, CUSTOM_AOD_IMAGE_URI_KEY, CUSTOM_AOD_IMAGE_ENABLED_KEY);
         mStatusBarStateController = Dependency.get(StatusBarStateController.class);
         mStatusBarStateController.addCallback(mStatusBarStateListener);
         mStatusBarStateListener.onDozingChanged(mStatusBarStateController.isDozing());
@@ -109,6 +113,7 @@ public class AODStyle extends RelativeLayout implements TunerService.Tunable {
         super.onFinishInflate();
         mAodImageView = findViewById(R.id.custom_aod_image_view);
         loadAodImage();
+        updateAodFrameMargin();
     }
     
     @Override
@@ -155,6 +160,11 @@ public class AODStyle extends RelativeLayout implements TunerService.Tunable {
                 mAodImageEnabled = TunerService.parseIntegerSwitch(
                     newValue, false) && mCustomClockEnabled;
                 break;
+            case ClockStyle.CLOCK_FRAME_MARGIN_TOP_KEY:
+                mClockFrameMarginTop = TunerService.parseInteger(newValue, DEFAULT_MARGIN_TOP);
+                mClockFrameMarginTop = Math.max(0, Math.min(100, mClockFrameMarginTop));
+                updateAodFrameMargin();
+                break;
         }
     }
 
@@ -184,6 +194,16 @@ public class AODStyle extends RelativeLayout implements TunerService.Tunable {
                     stopBurnInProtection();
                 })
                 .start();
+        }
+    }
+
+    private void updateAodFrameMargin() {
+        RelativeLayout aodFrame = findViewById(R.id.aod_style_frame);
+        if (aodFrame != null) {
+            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) aodFrame.getLayoutParams();
+            int marginPx = (int) (mClockFrameMarginTop * mContext.getResources().getDisplayMetrics().density);
+            params.topMargin = marginPx;
+            aodFrame.setLayoutParams(params);
         }
     }
 
