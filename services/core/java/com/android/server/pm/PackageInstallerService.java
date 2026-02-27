@@ -2145,6 +2145,10 @@ public class PackageInstallerService extends IPackageInstaller.Stub implements
     @Override
     public void addDeveloperVerificationExperiment(String packageName, int verificationPolicy,
             int[] results) {
+        final int callerUid = Binder.getCallingUid();
+        if (!PackageManagerServiceUtils.isRootOrShell(callerUid)) {
+            throw new SecurityException("Not allowed to add developer verification experiment");
+        }
         List<Integer> resultsList = new ArrayList<>(results.length);
         for (int i = 0; i < results.length; i++) {
             resultsList.add(results[i]);
