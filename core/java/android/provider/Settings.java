@@ -14450,10 +14450,16 @@ public final class Settings {
         public static final String LOCK_SCREEN_CUSTOM_CLOCK_STYLE = "lock_screen_custom_clock_style";
 
         /**
-         * Whether to use system accent color for lock screen clock text
+         * Whether to use default, system accent or custom color for lock screen clock text
          * @hide
          */
-        public static final String LOCK_SCREEN_CUSTOM_CLOCK_ACCENT_COLOR = "lock_screen_custom_clock_accent_color";
+        public static final String LOCK_SCREEN_CUSTOM_CLOCK_COLOR_MODE = "lock_screen_custom_clock_color_mode";
+
+        /**
+         * Custom color for lock screen clock text
+         * @hide
+         */
+        public static final String LOCK_SCREEN_CUSTOM_CLOCK_CUSTOM_COLOR = "lock_screen_custom_clock_custom_color";
 
         /**
          * Lock screen clock text opacity (0-100)
