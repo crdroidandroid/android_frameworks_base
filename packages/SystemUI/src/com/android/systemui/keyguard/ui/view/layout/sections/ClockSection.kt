@@ -18,6 +18,8 @@
 package com.android.systemui.keyguard.ui.view.layout.sections
 
 import android.content.Context
+import android.os.UserHandle
+import android.provider.Settings
 import android.view.View
 import androidx.constraintlayout.widget.Barrier
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -120,6 +122,19 @@ constructor(
             setVisibility(getNonTargetClockFace(clock).views, GONE)
             setAlpha(getTargetClockFace(clock).views, 1F)
             setAlpha(getNonTargetClockFace(clock).views, 0F)
+
+            // Hide small clock when custom clock is enabled by setting alpha to 0
+            val isCustomClockEnabled = Settings.Secure.getIntForUser(
+                    context.contentResolver,
+                    Settings.Secure.LOCK_SCREEN_CUSTOM_CLOCK_STYLE,
+                    0,
+                    UserHandle.USER_CURRENT
+            ) != 0
+
+            if (isCustomClockEnabled) {
+                setAlpha(ClockViewIds.LOCKSCREEN_CLOCK_VIEW_SMALL, 0F)
+                setAlpha(ClockViewIds.LOCKSCREEN_CLOCK_VIEW_LARGE, 0F)
+            }
 
             if (!keyguardClockViewModel.isLargeClockVisible.value) {
                 if (keyguardClockViewModel.shouldDateWeatherBeBelowSmallClock.value) {
