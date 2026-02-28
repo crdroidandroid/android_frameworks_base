@@ -465,7 +465,7 @@ fun TileContainer(
                     interactionSource = interactionSource,
                 )
                 .tileTestTag(iconOnly)
-                .thenIf(!isDualTarget) {
+                .thenIf(!isDualTarget || iconOnly) {
                     Modifier
                         .drawBehind {
                             val brush = colors.iconBackgroundGradient
