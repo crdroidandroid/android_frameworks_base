@@ -1,6 +1,7 @@
 /*
  * SPDX-FileCopyrightText: VoltageOS
  * SPDX-FileCopyrightText: crDroid Android Project
+ * SPDX-FileCopyrightText: Lunaris AOSP
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -12,6 +13,7 @@ import android.content.Context
 import android.content.Intent
 import android.database.ContentObserver
 import android.graphics.Bitmap
+import android.media.MediaMetadata
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
@@ -37,7 +39,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.async
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -69,7 +70,6 @@ class OnGoingActionProgressController(
     private val inFlightIconLoads = ConcurrentHashMap<String, Job>()
 
     private var showMediaProgress = true
-    private var pauseStale = false
     private var isTrackingProgress = false
     private var isForceHidden = false
     private var headsUpPinned = false
@@ -81,6 +81,8 @@ class OnGoingActionProgressController(
     private var currentProgressMax = 0
     private var currentIcon: Drawable? = null
 
+    private var currentTrackTitle: String? = null
+
     private var isMenuVisible = false
     private var isSystemChipVisible = false
 
@@ -91,6 +93,9 @@ class OnGoingActionProgressController(
     private var isViewAttached = false
     private var isExpanded = false
 
+    private var pauseStale = false
+    private var pausedStaleJob: Job? = null
+
     private var lastUpdateTime = 0L
     private var uiUpdateJob: Job? = null
 
@@ -98,7 +103,6 @@ class OnGoingActionProgressController(
     private var staleCheckerJob: Job? = null
     private var compactCollapseJob: Job? = null
     private var menuCollapseJob: Job? = null
-    private var pausedStaleJob: Job? = null
 
     private val _state = MutableStateFlow(ProgressState())
     val state: StateFlow<ProgressState> = _state.asStateFlow()
@@ -148,6 +152,7 @@ class OnGoingActionProgressController(
         override fun onMediaMetadataChanged() {
             needsFullUiUpdate = true
             pauseStale = false
+            updateTrackTitle()
             requestUiUpdate()
         }
 
@@ -163,6 +168,7 @@ class OnGoingActionProgressController(
                     requestUiUpdate()
                 }
             }
+            updateTrackTitle()
             requestUiUpdate()
         }
     }
@@ -186,6 +192,13 @@ class OnGoingActionProgressController(
                 checkForStaleProgress()
             }
         }
+    }
+
+    private fun updateTrackTitle() {
+        val metadata: MediaMetadata? = mediaSessionHelper.getCurrentMediaMetadata()
+        currentTrackTitle = metadata
+            ?.getString(MediaMetadata.METADATA_KEY_TITLE)
+            ?.takeIf { it.isNotBlank() }
     }
 
     private fun publish(state: ProgressState) {
@@ -237,7 +250,8 @@ class OnGoingActionProgressController(
                     packageName = null,
                     isCompactMode = false,
                     showMediaControls = false,
-                    isMediaPlaying = false
+                    isMediaPlaying = false,
+                    trackTitle = null,
                 )
             )
             return
@@ -266,6 +280,8 @@ class OnGoingActionProgressController(
 
         val isMediaPlaying = showMediaProgress && mediaSessionHelper.isMediaPlaying()
 
+        val trackTitle = if (!isCompact && hasMediaSession) currentTrackTitle else null
+
         publish(
             ProgressState(
                 isVisible = true,
@@ -275,7 +291,8 @@ class OnGoingActionProgressController(
                 packageName = trackedPackageName,
                 isCompactMode = isCompact,
                 showMediaControls = isMenuVisible,
-                isMediaPlaying = isMediaPlaying
+                isMediaPlaying = isMediaPlaying,
+                trackTitle = trackTitle,
             )
         )
     }
@@ -363,6 +380,7 @@ class OnGoingActionProgressController(
 
     private fun updateMediaProgressFull() {
         if (mediaSessionHelper.isMediaPlaying()) ensureMediaLoopRunning() else stopMediaLoop()
+        updateTrackTitle()
 
         val mediaAppIcon = mediaSessionHelper.getMediaAppIcon()
         if (mediaAppIcon != null) {
@@ -629,6 +647,7 @@ class OnGoingActionProgressController(
     fun setSystemChipVisible(visible: Boolean) {
         if (isSystemChipVisible == visible) return
         isSystemChipVisible = visible
+        updateProgressState()
         requestUiUpdate()
     }
 
@@ -801,6 +820,7 @@ class OnGoingActionProgressController(
         inFlightIconLoads.clear()
 
         currentIcon = null
+        currentTrackTitle = null
         mainScope.cancel()
     }
 
@@ -838,4 +858,5 @@ data class ProgressState(
     val isCompactMode: Boolean = false,
     val showMediaControls: Boolean = false,
     val isMediaPlaying: Boolean = false,
+    val trackTitle: String? = null,
 )
