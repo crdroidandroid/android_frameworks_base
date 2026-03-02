@@ -47,8 +47,10 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
+import com.android.systemui.res.R
 import com.android.systemui.statusbar.VibratorHelper;
 import com.android.systemui.statusbar.notification.headsup.HeadsUpManager
 import com.android.systemui.statusbar.policy.KeyguardStateController
@@ -74,6 +76,7 @@ fun OngoingActionProgress(
     val state by controller.state.collectAsState()
 
     val accentColor = MaterialTheme.colorScheme.primary
+    val surfaceColor = MaterialTheme.colorScheme.surface
 
     AnimatedVisibility(
         visible = state.isVisible,
@@ -206,46 +209,54 @@ fun OngoingActionProgress(
                             .width(140.dp)
                             .height(48.dp)
                             .shadow(8.dp, RoundedCornerShape(24.dp))
-                            .background(Color(0xFF202020), RoundedCornerShape(24.dp))
+                            .background(surfaceColor, RoundedCornerShape(24.dp))
                             .padding(horizontal = 16.dp),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Box(modifier = Modifier.size(32.dp).clickable { controller.onMediaAction(0) }, contentAlignment = Alignment.Center) {
-                            Canvas(modifier = Modifier.size(12.dp)) {
-                                val path = Path().apply {
-                                    moveTo(size.width, 0f)
-                                    lineTo(0f, size.height / 2)
-                                    lineTo(size.width, size.height)
-                                    close()
-                                }
-                                drawPath(path, Color.White, style = Fill)
-                                drawRect(Color.White, topLeft = Offset(0f, 0f), size = Size(2.dp.toPx(), size.height))
-                            }
-                        }
+                        MediaControlButton(
+                            iconRes = R.drawable.ic_media_control_skip_previous,
+                            contentDescription = "Previous",
+                            onClick = { controller.onMediaAction(0) }
+                        )
 
-                        Box(modifier = Modifier.size(32.dp).clickable { controller.onMediaAction(1) }, contentAlignment = Alignment.Center) {
-                            Canvas(modifier = Modifier.size(14.dp)) {
-                                drawCircle(Color.White)
-                            }
-                        }
+                        MediaControlButton(
+                            iconRes = R.drawable.ic_media_control_pause,
+                            contentDescription = "Pause",
+                            onClick = { controller.onMediaAction(1) }
+                        )
 
-                        Box(modifier = Modifier.size(32.dp).clickable { controller.onMediaAction(2) }, contentAlignment = Alignment.Center) {
-                            Canvas(modifier = Modifier.size(12.dp)) {
-                                val path = Path().apply {
-                                    moveTo(0f, 0f)
-                                    lineTo(size.width, size.height / 2)
-                                    lineTo(0f, size.height)
-                                    close()
-                                }
-                                drawPath(path, Color.White, style = Fill)
-                                drawRect(Color.White, topLeft = Offset(size.width - 2.dp.toPx(), 0f), size = Size(2.dp.toPx(), size.height))
-                            }
-                        }
+                        MediaControlButton(
+                            iconRes = R.drawable.ic_media_control_skip_next,
+                            contentDescription = "Next",
+                            onClick = { controller.onMediaAction(2) }
+                        )
                     }
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun MediaControlButton(
+    iconRes: Int,
+    contentDescription: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .size(32.dp)
+            .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center
+    ) {
+        Image(
+            painter = painterResource(id = iconRes),
+            contentDescription = contentDescription,
+            modifier = Modifier.size(24.dp),
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
+        )
     }
 }
 
