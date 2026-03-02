@@ -1,6 +1,7 @@
 /*
  * SPDX-FileCopyrightText: VoltageOS
  * SPDX-FileCopyrightText: crDroid Android Project
+ * SPDX-FileCopyrightText: Lunaris AOSP
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -11,12 +12,14 @@ import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -28,30 +31,38 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import com.android.systemui.res.R
-import com.android.systemui.statusbar.VibratorHelper;
+import com.android.systemui.statusbar.VibratorHelper
 import com.android.systemui.statusbar.notification.headsup.HeadsUpManager
 import com.android.systemui.statusbar.policy.KeyguardStateController
 import kotlinx.coroutines.CoroutineScope
@@ -75,8 +86,8 @@ fun OngoingActionProgress(
 ) {
     val state by controller.state.collectAsState()
 
-    val accentColor = MaterialTheme.colorScheme.primary
-    val surfaceColor = MaterialTheme.colorScheme.surface
+    val accent = MaterialTheme.colorScheme.primary
+    val chipShape = RoundedCornerShape(24.dp)
 
     AnimatedVisibility(
         visible = state.isVisible,
@@ -84,121 +95,125 @@ fun OngoingActionProgress(
         exit = fadeOut(),
         modifier = modifier
     ) {
-        Box(
-            contentAlignment = Alignment.Center
-        ) {
-            val progressValue = if (state.maxProgress > 0) {
-                (state.progress.toFloat() / state.maxProgress.toFloat()).coerceIn(0f, 1f)
-            } else {
-                0f
-            }
-
+        Box(contentAlignment = Alignment.Center) {
             var dragOffset = 0f
-            val gestureModifier = Modifier.pointerInput(Unit) {
-                detectHorizontalDragGestures(
-                    onDragStart = { dragOffset = 0f },
-                    onDragEnd = {
-                        if (dragOffset < -50) controller.onSwipe(true) 
-                        else if (dragOffset > 50) controller.onSwipe(false) 
-                    }
-                ) { _, dragAmount ->
-                    dragOffset += dragAmount
+            val gestureModifier = Modifier
+                .pointerInput(Unit) {
+                    detectHorizontalDragGestures(
+                        onDragStart = { dragOffset = 0f },
+                        onDragEnd = {
+                            if (dragOffset < -50) controller.onSwipe(true)
+                            else if (dragOffset > 50) controller.onSwipe(false)
+                        }
+                    ) { _, dragAmount -> dragOffset += dragAmount }
                 }
-            }.pointerInput(Unit) {
-                detectTapGestures(
-                    onDoubleTap = { controller.onDoubleTap() },
-                    onLongPress = { controller.onLongPress() },
-                    onTap = { controller.onInteraction() }
-                )
-            }
-
-            if (state.isCompactMode) {
-                Box(
-                    modifier = Modifier
-                        .size(26.dp)
-                        .then(gestureModifier),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Canvas(modifier = Modifier.fillMaxSize()) {
-                        val strokeWidthPx = 3.dp.toPx()
-                        val diameter = size.minDimension - strokeWidthPx
-                        val radius = diameter / 2
-                        val topLeftOffset = center - Offset(radius, radius)
-                        val arcSize = Size(diameter, diameter)
-
-                        drawArc(
-                            color = Color(0x33FFFFFF),
-                            startAngle = 0f,
-                            sweepAngle = 360f,
-                            useCenter = false,
-                            topLeft = topLeftOffset,
-                            size = arcSize,
-                            style = Stroke(width = strokeWidthPx)
-                        )
-
-                        drawArc(
-                            color = accentColor,
-                            startAngle = -90f,
-                            sweepAngle = 360f * progressValue,
-                            useCenter = false,
-                            topLeft = topLeftOffset,
-                            size = arcSize,
-                            style = Stroke(width = strokeWidthPx, cap = StrokeCap.Round)
-                        )
-                    }
-
-                    state.iconBitmap?.let { iconBitmap ->
-                        Image(
-                            bitmap = iconBitmap,
-                            contentDescription = "App icon",
-                            modifier = Modifier.size(14.dp)
-                                .clip(RoundedCornerShape(14.dp)),
-                            colorFilter = null 
-                        )
-                    }
+                .pointerInput(Unit) {
+                    detectTapGestures(
+                        onDoubleTap = { controller.onDoubleTap() },
+                        onLongPress = { controller.onLongPress() },
+                        onTap = { controller.onInteraction() }
+                    )
                 }
-            } else {
-                Row(
-                    modifier = Modifier
-                        .width(86.dp)
-                        .height(26.dp)
-                        .padding(horizontal = 6.dp, vertical = 4.dp)
-                        .then(gestureModifier),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    state.iconBitmap?.let { iconBitmap ->
-                        Image(
-                            bitmap = iconBitmap,
-                            contentDescription = "App icon",
-                            modifier = Modifier
-                                .size(16.dp)
-                                .clip(RoundedCornerShape(16.dp)) // Clip to prevent rendering artifacts
-                                .padding(start = 1.dp),
-                            colorFilter = null 
-                        )
 
-                        Spacer(modifier = Modifier.width(5.dp))
-                    }
-
+            when {
+                state.isCompactMode -> {
+                    val progressValue = progressFraction(state)
                     Box(
                         modifier = Modifier
-                            .weight(1f)
-                            .height(6.dp)
-                            .padding(end = 3.dp)
-                            .clip(RoundedCornerShape(3.dp))
-                            .background(Color(0x33FFFFFF))
+                            .size(26.dp)
+                            .then(gestureModifier),
+                        contentAlignment = Alignment.Center
                     ) {
+                        Canvas(modifier = Modifier.fillMaxSize()) {
+                            val strokePx = 3.dp.toPx()
+                            val diam = size.minDimension - strokePx
+                            val r = diam / 2
+                            val tl = center - Offset(r, r)
+                            val arcSz = Size(diam, diam)
+
+                            drawArc(
+                                color = Color(0x33FFFFFF),
+                                startAngle = 0f,
+                                sweepAngle = 360f,
+                                useCenter = false,
+                                topLeft = tl,
+                                size = arcSz,
+                                style = Stroke(width = strokePx)
+                            )
+                            drawArc(
+                                color = accent,
+                                startAngle = -90f,
+                                sweepAngle = 360f * progressValue,
+                                useCenter = false,
+                                topLeft = tl,
+                                size = arcSz,
+                                style = Stroke(width = strokePx, cap = StrokeCap.Round)
+                            )
+                        }
+
+                        state.iconBitmap?.let { bmp ->
+                            Image(
+                                bitmap = bmp,
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(14.dp)
+                                    .clip(RoundedCornerShape(14.dp))
+                            )
+                        }
+                    }
+                }
+
+                state.trackTitle != null -> {
+                    MusicChip(
+                        state = state,
+                        chipShape = chipShape,
+                        gestureModifier = gestureModifier
+                    )
+                }
+
+                else -> {
+                    val progressValue = progressFraction(state)
+                    Row(
+                        modifier = Modifier
+                            .width(86.dp)
+                            .height(26.dp)
+                            .padding(horizontal = 6.dp, vertical = 4.dp)
+                            .then(gestureModifier),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        state.iconBitmap?.let { bmp ->
+                            Image(
+                                bitmap = bmp,
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(16.dp)
+                                    .clip(RoundedCornerShape(16.dp))
+                                    .padding(start = 1.dp)
+                            )
+                            Spacer(modifier = Modifier.width(5.dp))
+                        }
+
                         Box(
                             modifier = Modifier
-                                .fillMaxHeight()
-                                .fillMaxWidth(progressValue)
-                                .background(accentColor) 
-                        )
+                                .weight(1f)
+                                .height(6.dp)
+                                .padding(end = 3.dp)
+                                .clip(RoundedCornerShape(3.dp))
+                                .background(Color(0x33FFFFFF))
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxHeight()
+                                    .fillMaxWidth(progressValue)
+                                    .background(accent)
+                            )
+                        }
                     }
                 }
             }
 
             if (state.showMediaControls) {
+                val surfaceColor = MaterialTheme.colorScheme.surface
                 Popup(
                     alignment = Alignment.BottomCenter,
                     onDismissRequest = { controller.onMediaMenuDismiss() }
@@ -241,6 +256,79 @@ fun OngoingActionProgress(
         }
     }
 }
+
+@Composable
+private fun MusicChip(
+    state: ProgressState,
+    chipShape: RoundedCornerShape,
+    gestureModifier: Modifier,
+) {
+    val musicChipBg = colorResource(android.R.color.system_accent1_500)
+    val musicChipText = colorResource(android.R.color.system_accent1_100)
+
+    Row(
+        modifier = Modifier
+            .widthIn(min = 55.dp, max = 85.dp)
+            .padding(start = 4.dp)
+            .clip(chipShape)
+            .background(musicChipBg)
+            .padding(horizontal = 5.dp, vertical = 3.dp)
+            .then(gestureModifier),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Start
+    ) {
+        state.iconBitmap?.let { bmp ->
+            Image(
+                bitmap = bmp,
+                contentDescription = null,
+                modifier = Modifier
+                    .size(15.dp)
+                    .clip(RoundedCornerShape(4.dp)),
+                colorFilter = null
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+        }
+
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .fadingEdge(
+                    brush = Brush.horizontalGradient(
+                        0.85f to Color.White,
+                        1.00f to Color.Transparent
+                    )
+                )
+        ) {
+            Text(
+                text = state.trackTitle ?: "",
+                style = TextStyle(
+                    color = musicChipText,
+                    fontSize = 10.sp,
+                    fontWeight = FontWeight.Normal
+                ),
+                maxLines = 1,
+                modifier = Modifier
+                    .basicMarquee(
+                        initialDelayMillis = 15_000,
+                        repeatDelayMillis = 15_000
+                    )
+                    .padding(start = 1.dp)
+            )
+        }
+    }
+}
+
+private fun Modifier.fadingEdge(brush: Brush) = this
+    .graphicsLayer(compositingStrategy = CompositingStrategy.Offscreen)
+    .drawWithContent {
+        drawContent()
+        drawRect(brush = brush, blendMode = BlendMode.DstIn)
+    }
+
+private fun progressFraction(state: ProgressState): Float =
+    if (state.maxProgress > 0)
+        (state.progress.toFloat() / state.maxProgress.toFloat()).coerceIn(0f, 1f)
+    else 0f
 
 @Composable
 private fun MediaControlButton(
@@ -303,7 +391,8 @@ class OnGoingActionProgressComposeController(
                     packageName = state.packageName,
                     isCompactMode = state.isCompactMode,
                     showMediaControls = state.showMediaControls,
-                    isMediaPlaying = state.isMediaPlaying
+                    isMediaPlaying = state.isMediaPlaying,
+                    trackTitle = state.trackTitle,
                 )
             }
         }
