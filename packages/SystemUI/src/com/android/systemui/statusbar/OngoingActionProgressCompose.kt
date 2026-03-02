@@ -1,23 +1,12 @@
 /*
- * Copyright (C) 2025 VoltageOS
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-FileCopyrightText: VoltageOS
+ * SPDX-FileCopyrightText: crDroid Android Project
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package com.android.systemui.statusbar
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -55,18 +44,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
-import androidx.core.graphics.drawable.toBitmap
 import com.android.systemui.statusbar.VibratorHelper;
 import com.android.systemui.statusbar.notification.headsup.HeadsUpManager
 import com.android.systemui.statusbar.policy.KeyguardStateController
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
 private const val TAG = "OngoingActionProgressCompose"
 
@@ -152,7 +144,7 @@ fun OngoingActionProgress(
                         )
                     }
 
-                    state.icon?.let { iconBitmap ->
+                    state.iconBitmap?.let { iconBitmap ->
                         Image(
                             bitmap = iconBitmap,
                             contentDescription = "App icon",
@@ -171,7 +163,7 @@ fun OngoingActionProgress(
                         .then(gestureModifier),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    state.icon?.let { iconBitmap ->
+                    state.iconBitmap?.let { iconBitmap ->
                         Image(
                             bitmap = iconBitmap,
                             contentDescription = "App icon",
@@ -258,117 +250,61 @@ fun OngoingActionProgress(
 }
 
 /**
- * State data for the progress indicator
- */
-data class ProgressState(
-    val isVisible: Boolean = false,
-    val progress: Int = 0,
-    val maxProgress: Int = 100,
-    val icon: androidx.compose.ui.graphics.ImageBitmap? = null,
-    val packageName: String? = null,
-    val isIconAdaptive: Boolean = false,
-    val isCompactMode: Boolean = false,
-    val showMediaControls: Boolean = false
-)
-
-/**
- * Compose-friendly controller that bridges the Java OnGoingActionProgressController
- * to Compose state.
+ * Compose-facing controller that adapts OnGoingActionProgressController state
+ * into Compose-friendly ProgressState.
  */
 class OnGoingActionProgressComposeController(
-    context: Context,
+    private val context: Context,
     notificationListener: NotificationListener,
     keyguardStateController: KeyguardStateController,
     headsUpManager: HeadsUpManager,
     vibrator: VibratorHelper
 ) {
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+
     private val _state = MutableStateFlow(ProgressState())
     val state: StateFlow<ProgressState> = _state
 
-    private val javaController: OnGoingActionProgressController
+    private val controller: OnGoingActionProgressController
 
     init {
         Log.d(TAG, "Initializing OnGoingActionProgressComposeController")
 
-        try {
-            javaController = OnGoingActionProgressController(
-                context,
-                notificationListener,
-                keyguardStateController,
-                headsUpManager,
-                vibrator
-            )
+        controller = OnGoingActionProgressController(
+            context,
+            notificationListener,
+            keyguardStateController,
+            headsUpManager,
+            vibrator
+        )
 
-            javaController.setStateCallback { isVisible, progress, maxProgress, icon, isAdaptive, packageName, isCompact, showMenu ->
-                Log.d(TAG, "State callback: isVisible=$isVisible, compact=$isCompact, showMenu=$showMenu")
-
-                val iconSizePx = if (isCompact) {
-                    (14 * context.resources.displayMetrics.density).toInt() * 2 
-                } else {
-                    (16 * context.resources.displayMetrics.density).toInt() * 2 
-                }
-
-                val iconBitmap = try {
-                    icon?.let { drawable ->
-                        drawable.toBitmap(
-                            width = iconSizePx,
-                            height = iconSizePx,
-                            config = Bitmap.Config.ARGB_8888
-                        ).asImageBitmap()
-                    }
-                } catch (e: Exception) {
-                    Log.e(TAG, "Failed to convert icon to bitmap", e)
-                    null
-                }
-
+        scope.launch {
+            controller.state.collect { state ->
                 _state.value = ProgressState(
-                    isVisible = isVisible,
-                    progress = progress,
-                    maxProgress = maxProgress,
-                    icon = iconBitmap,
-                    packageName = packageName,
-                    isIconAdaptive = isAdaptive,
-                    isCompactMode = isCompact,
-                    showMediaControls = showMenu
+                    isVisible = state.isVisible,
+                    progress = state.progress,
+                    maxProgress = state.maxProgress,
+                    iconBitmap = state.iconBitmap,
+                    packageName = state.packageName,
+                    isCompactMode = state.isCompactMode,
+                    showMediaControls = state.showMediaControls
                 )
             }
-
-            Log.d(TAG, "OnGoingActionProgressComposeController initialized successfully")
-        } catch (e: Exception) {
-            Log.e(TAG, "Failed to initialize OnGoingActionProgressController", e)
-            throw e
         }
+
+        Log.d(TAG, "OnGoingActionProgressComposeController initialized successfully")
     }
 
     fun destroy() {
-        javaController.destroy()
+        scope.cancel()
+        controller.destroy()
     }
 
-    fun onInteraction() {
-        javaController.onInteraction()
-    }
-
-    fun onMediaAction(action: Int) {
-        javaController.onMediaAction(action)
-    }
-
-    fun onMediaMenuDismiss() {
-        javaController.onMediaMenuDismiss()
-    }
-
-    fun onDoubleTap() {
-        javaController.onDoubleTap()
-    }
-
-    fun onSwipe(isNext: Boolean) {
-        javaController.onSwipe(isNext)
-    }
-
-    fun onLongPress() {
-        javaController.onLongPress()
-    }
-
-    fun setSystemChipVisible(visible: Boolean) {
-        javaController.setSystemChipVisible(visible)
-    }
+    fun onInteraction() = controller.onInteraction()
+    fun onMediaAction(action: Int) = controller.onMediaAction(action)
+    fun onMediaMenuDismiss() = controller.onMediaMenuDismiss()
+    fun onDoubleTap() = controller.onDoubleTap()
+    fun onSwipe(isNext: Boolean) = controller.onSwipe(isNext)
+    fun onLongPress() = controller.onLongPress()
+    fun setSystemChipVisible(visible: Boolean) = controller.setSystemChipVisible(visible)
 }
