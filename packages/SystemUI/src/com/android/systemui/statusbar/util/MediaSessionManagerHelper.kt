@@ -1,19 +1,10 @@
 /*
-* Copyright (C) 2023-2024 The risingOS Android Project
-* Copyright (C) 2025 The AxionAOSP Project
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*      http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
+ * SPDX-FileCopyrightText: The risingOS Android Project
+ * SPDX-FileCopyrightText: The AxionAOSP Project
+ * SPDX-FileCopyrightText: crDroid Android Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 package com.android.systemui.statusbar.util
 
 import android.content.Context
@@ -94,15 +85,30 @@ class MediaSessionManagerHelper private constructor(private val context: Context
         }
     }
 
+    private fun isEligibleState(state: Int?): Boolean {
+        return when (state) {
+            null,
+            PlaybackState.STATE_NONE,
+            PlaybackState.STATE_STOPPED,
+            PlaybackState.STATE_ERROR -> false
+            else -> true
+        }
+    }
+
     private suspend fun fetchActiveController(): MediaController? = withContext(Dispatchers.IO) {
         var localController: MediaController? = null
         val remoteSessions = mutableSetOf<String>()
 
         mediaSessionManager.getActiveSessions(null)
             .filter { controller ->
-                controller.playbackState?.state == PlaybackState.STATE_PLAYING &&
-                controller.playbackInfo != null
+                isEligibleState(controller.playbackState?.state) &&
+                    controller.playbackInfo != null
             }
+            .sortedWith(
+                compareByDescending<MediaController> { it.playbackState?.state == PlaybackState.STATE_PLAYING }
+                    .thenByDescending { it.playbackState?.state == PlaybackState.STATE_BUFFERING }
+                    .thenByDescending { it.playbackState?.state == PlaybackState.STATE_PAUSED }
+            )
             .forEach { controller ->
                 when (controller.playbackInfo?.playbackType) {
                     MediaController.PlaybackInfo.PLAYBACK_TYPE_REMOTE -> {
@@ -118,6 +124,7 @@ class MediaSessionManagerHelper private constructor(private val context: Context
                     }
                 }
             }
+
         localController
     }
 
@@ -194,7 +201,18 @@ class MediaSessionManagerHelper private constructor(private val context: Context
 
     fun isMediaControllerAvailable() = activeController?.packageName?.isNotEmpty() ?: false
 
-    fun isMediaPlaying() = playbackState.value?.state == PlaybackState.STATE_PLAYING
+    fun isMediaSessionActive(): Boolean {
+        val controller = activeController ?: return false
+        val st = controller.playbackState?.state
+        return st != null &&
+            st != PlaybackState.STATE_NONE &&
+            st != PlaybackState.STATE_STOPPED &&
+            st != PlaybackState.STATE_ERROR
+    }
+
+    fun isMediaPaused(): Boolean = playbackState.value?.state == PlaybackState.STATE_PAUSED
+
+    fun isMediaPlaying(): Boolean = playbackState.value?.state == PlaybackState.STATE_PLAYING
 
     fun getMediaControllerPlaybackState(): PlaybackState? {
         return activeController?.playbackState ?: null
