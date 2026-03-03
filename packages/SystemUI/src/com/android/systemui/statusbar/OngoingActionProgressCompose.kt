@@ -221,8 +221,12 @@ fun OngoingActionProgress(
                         )
 
                         MediaControlButton(
-                            iconRes = R.drawable.ic_media_control_pause,
-                            contentDescription = "Pause",
+                            iconRes = if (state.isMediaPlaying) {
+                                R.drawable.ic_media_control_pause
+                            } else {
+                                R.drawable.ic_media_control_play
+                            },
+                            contentDescription = if (state.isMediaPlaying) "Pause" else "Play",
                             onClick = { controller.onMediaAction(1) }
                         )
 
@@ -298,7 +302,8 @@ class OnGoingActionProgressComposeController(
                     iconBitmap = state.iconBitmap,
                     packageName = state.packageName,
                     isCompactMode = state.isCompactMode,
-                    showMediaControls = state.showMediaControls
+                    showMediaControls = state.showMediaControls,
+                    isMediaPlaying = state.isMediaPlaying
                 )
             }
         }
