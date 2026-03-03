@@ -899,6 +899,31 @@ class DomainVerificationPackageTest {
         }
     }
 
+    @Test
+    fun testWildcardDomain() {
+        val wildcardDomain = "*.xyz.com"
+        val pkg = mockPkgState(
+            PKG_ONE, UUID_ONE, SIGNATURE_ONE,
+            autoVerifyDomains = listOf(wildcardDomain)
+        )
+
+        val service = makeService(pkg)
+        service.addPackage(pkg, null)
+        service.setStatus(pkg.domainSetId, setOf(wildcardDomain), STATE_SUCCESS)
+
+        // Only "xyz.com" exactly or subdomains should match. "abcxyz.com" should not match.
+        assertThat(
+            service.getOwnersForDomain("abcxyz.com", USER_ID))
+            .isEmpty()
+        assertThat(
+            service.getOwnersForDomain("abc.xyz.com", USER_ID))
+            .containsExactly(DomainOwner(PKG_ONE, false))
+        assertThat(
+            service.getOwnersForDomain("xyz.com", USER_ID))
+            .containsExactly(DomainOwner(PKG_ONE, false))
+    }
+
+
     private fun verifiedUnapproved_unverifiedSelected_approvalCausesUnselect(
             setStatusBlock: DomainVerificationService.(PackageStateInternal) -> Unit
     ) {
