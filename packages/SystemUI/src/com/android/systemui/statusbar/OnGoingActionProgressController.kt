@@ -69,6 +69,7 @@ class OnGoingActionProgressController(
     private val inFlightIconLoads = ConcurrentHashMap<String, Job>()
 
     private var showMediaProgress = true
+    private var pauseStale = false
     private var isTrackingProgress = false
     private var isForceHidden = false
     private var headsUpPinned = false
@@ -97,6 +98,7 @@ class OnGoingActionProgressController(
     private var staleCheckerJob: Job? = null
     private var compactCollapseJob: Job? = null
     private var menuCollapseJob: Job? = null
+    private var pausedStaleJob: Job? = null
 
     private val _state = MutableStateFlow(ProgressState())
     val state: StateFlow<ProgressState> = _state.asStateFlow()
@@ -145,11 +147,22 @@ class OnGoingActionProgressController(
     private val mediaMetadataListener = object : MediaSessionManagerHelper.MediaMetadataListener {
         override fun onMediaMetadataChanged() {
             needsFullUiUpdate = true
+            pauseStale = false
             requestUiUpdate()
         }
 
         override fun onPlaybackStateChanged() {
             needsFullUiUpdate = true
+            pauseStale = false
+            pausedStaleJob?.cancel()
+            if (mediaSessionHelper.isMediaSessionActive() &&
+                    !mediaSessionHelper.isMediaPlaying()) {
+                pausedStaleJob = mainScope.launch {
+                    delay(PAUSED_STALE_GRACE_MS)
+                    pauseStale = true
+                    requestUiUpdate()
+                }
+            }
             requestUiUpdate()
         }
     }
@@ -180,16 +193,17 @@ class OnGoingActionProgressController(
     }
 
     fun expandCompactView() {
+        val wasExpanded = isExpanded
         isExpanded = true
         compactCollapseJob?.cancel()
         compactCollapseJob = mainScope.launch {
-            delay(5000L)
+            delay(COMPACT_COLLAPSE_TIMEOUT_MS)
             if (isCompactModeEnabled && isExpanded) {
                 isExpanded = false
                 requestUiUpdate()
             }
         }
-        updateProgressState()
+        if (wasExpanded != isExpanded) requestUiUpdate()
     }
 
     private fun requestUiUpdate() {
@@ -208,22 +222,24 @@ class OnGoingActionProgressController(
 
     private fun updateProgressState() {
         var isVisible = !isForceHidden && !headsUpPinned && !isSystemChipVisible
-        val isMediaPlaying = showMediaProgress && mediaSessionHelper.isMediaPlaying()
+        val hasMediaSession = isMediaSessionActiveForChip()
         val hasNotificationProgress = isEnabled && isTrackingProgress
 
-        isVisible = isVisible && (isMediaPlaying || hasNotificationProgress)
+        isVisible = isVisible && (hasMediaSession || hasNotificationProgress)
 
         if (!isVisible) {
-            val update = ProgressState(
-                isVisible = false,
-                progress = 0,
-                maxProgress = 0,
-                iconBitmap = null,
-                packageName = null,
-                isCompactMode = false,
-                showMediaControls = false
+            publish(
+                ProgressState(
+                    isVisible = false,
+                    progress = 0,
+                    maxProgress = 0,
+                    iconBitmap = null,
+                    packageName = null,
+                    isCompactMode = false,
+                    showMediaControls = false,
+                    isMediaPlaying = false
+                )
             )
-            publish(update)
             return
         }
 
@@ -248,16 +264,20 @@ class OnGoingActionProgressController(
             null
         }
 
-        val update = ProgressState(
-            isVisible = true,
-            progress = currentProgress,
-            maxProgress = currentProgressMax,
-            iconBitmap = currentIconBitmap,
-            packageName = trackedPackageName,
-            isCompactMode = isCompact,
-            showMediaControls = isMenuVisible
+        val isMediaPlaying = showMediaProgress && mediaSessionHelper.isMediaPlaying()
+
+        publish(
+            ProgressState(
+                isVisible = true,
+                progress = currentProgress,
+                maxProgress = currentProgressMax,
+                iconBitmap = currentIconBitmap,
+                packageName = trackedPackageName,
+                isCompactMode = isCompact,
+                showMediaControls = isMenuVisible,
+                isMediaPlaying = isMediaPlaying
+            )
         )
-        publish(update)
     }
 
     private fun updateViews() {
@@ -271,22 +291,40 @@ class OnGoingActionProgressController(
             return
         }
 
-        val isMediaPlaying = showMediaProgress && mediaSessionHelper.isMediaPlaying()
+        val hasMediaSession = isMediaSessionActiveForChip()
 
         if (isCompactModeEnabled && !isExpanded) {
-            if (!isEnabled && !isMediaPlaying) {
+            if (!isEnabled && !hasMediaSession) {
                 stopMediaLoop()
                 updateProgressState()
                 return
             }
-            if (isMediaPlaying) updateMediaProgressCompact() else updateNotificationProgressCompact()
+            if (hasMediaSession) {
+                updateMediaProgressCompact()
+            } else {
+                updateNotificationProgress()
+            }
         } else {
-            if (isMediaPlaying) {
+            val isMediaPlaying = showMediaProgress && mediaSessionHelper.isMediaPlaying()
+            if (isTrackingProgress && !isMediaPlaying) {
+                stopMediaLoop()
+                updateNotificationProgress()
+                if (hasMediaSession) {
+                    pauseStale = true
+                    needsFullUiUpdate = true
+                }
+            } else if (hasMediaSession) {
                 if (needsFullUiUpdate) {
                     updateMediaProgressFull()
                     needsFullUiUpdate = false
                 } else {
                     updateMediaProgressOnly()
+                }
+
+                if (isMediaPlaying) {
+                    ensureMediaLoopRunning()
+                } else {
+                    stopMediaLoop()
                 }
             } else {
                 stopMediaLoop()
@@ -324,7 +362,7 @@ class OnGoingActionProgressController(
     }
 
     private fun updateMediaProgressFull() {
-        ensureMediaLoopRunning()
+        if (mediaSessionHelper.isMediaPlaying()) ensureMediaLoopRunning() else stopMediaLoop()
 
         val mediaAppIcon = mediaSessionHelper.getMediaAppIcon()
         if (mediaAppIcon != null) {
@@ -355,7 +393,7 @@ class OnGoingActionProgressController(
     }
 
     private fun updateMediaProgressCompact() {
-        ensureMediaLoopRunning()
+        if (mediaSessionHelper.isMediaPlaying()) ensureMediaLoopRunning() else stopMediaLoop()
 
         val totalDuration = mediaSessionHelper.getTotalDuration()
         val playbackState = mediaSessionHelper.getMediaControllerPlaybackState()
@@ -410,10 +448,6 @@ class OnGoingActionProgressController(
             currentIcon = drawable
             updateProgressState()
         }
-    }
-
-    private fun updateNotificationProgressCompact() {
-        updateNotificationProgress()
     }
 
     private fun fetchPackageIcon(packageName: String): Drawable {
@@ -529,33 +563,37 @@ class OnGoingActionProgressController(
             !indeterminate && maxValid
     }
 
+    private fun isMediaSessionActiveForChip(): Boolean {
+        if (!showMediaProgress) return false
+        if (!mediaSessionHelper.isMediaSessionActive()) return false
+        if (mediaSessionHelper.isMediaPlaying()) return true
+        if (isMenuVisible) return true
+        return !pauseStale
+    }
+
     fun onInteraction() {
-        if (showMediaProgress && mediaSessionHelper.isMediaPlaying()) {
+        vibrator.vibrate(HAPTIC_CLICK)
+        if (isCompactModeEnabled) {
+            expandCompactView()
+        }
+        if (isMediaSessionActiveForChip()) {
             isMenuVisible = !isMenuVisible
-            updateProgressState()
-            if (isMenuVisible) {
-                menuCollapseJob?.cancel()
-                menuCollapseJob = mainScope.launch {
-                    delay(5000L)
-                    isMenuVisible = false
-                    updateProgressState()
-                }
-            }
+            collapseMediaControlsWithDelay()
         } else {
             openTrackedApp()
         }
-        vibrator.vibrate(VIBRATION_EFFECT)
+        updateProgressState()
     }
 
     fun onLongPress() {
-        if (showMediaProgress && mediaSessionHelper.isMediaPlaying()) openMediaApp() else openTrackedApp()
-        vibrator.vibrate(VIBRATION_EFFECT)
+        vibrator.vibrate(HAPTIC_LONG)
+        if (isMediaSessionActiveForChip()) openMediaApp() else openTrackedApp()
     }
 
     fun onDoubleTap() {
-        if (showMediaProgress && mediaSessionHelper.isMediaPlaying()) {
+        if (isMediaSessionActiveForChip()) {
+            vibrator.vibrate(HAPTIC_DOUBLE)
             toggleMediaPlaybackState()
-            vibrator.vibrate(VIBRATION_EFFECT)
         }
     }
 
@@ -564,17 +602,22 @@ class OnGoingActionProgressController(
     }
 
     fun onMediaAction(action: Int) {
+        vibrator.vibrate(HAPTIC_CLICK)
+
         when (action) {
             0 -> skipToPreviousTrack()
             1 -> toggleMediaPlaybackState()
             2 -> skipToNextTrack()
         }
+        collapseMediaControlsWithDelay()
+    }
 
+    fun collapseMediaControlsWithDelay() {
+        if (!isMenuVisible) return
         menuCollapseJob?.cancel()
         menuCollapseJob = mainScope.launch {
-            delay(5000L)
-            isMenuVisible = false
-            updateProgressState()
+            delay(MENU_COLLAPSE_TIMEOUT_MS)
+            onMediaMenuDismiss()
         }
     }
 
@@ -586,7 +629,6 @@ class OnGoingActionProgressController(
     fun setSystemChipVisible(visible: Boolean) {
         if (isSystemChipVisible == visible) return
         isSystemChipVisible = visible
-        updateProgressState()
         requestUiUpdate()
     }
 
@@ -752,6 +794,7 @@ class OnGoingActionProgressController(
         staleCheckerJob?.cancel()
         compactCollapseJob?.cancel()
         menuCollapseJob?.cancel()
+        pausedStaleJob?.cancel()
 
         iconCache.clear()
         inFlightIconLoads.values.forEach { it.cancel() }
@@ -772,9 +815,16 @@ class OnGoingActionProgressController(
         private const val DEBOUNCE_DELAY_MS = 150L
         private const val STALE_PROGRESS_CHECK_INTERVAL_MS = 5000L
         private const val PROGRESS_TIMEOUT_MS = 30000L
+        private const val COMPACT_COLLAPSE_TIMEOUT_MS = 10000L
+        private const val MENU_COLLAPSE_TIMEOUT_MS = 5000L
+        private const val PAUSED_STALE_GRACE_MS = 20000L
 
-        private val VIBRATION_EFFECT: VibrationEffect =
-            VibrationEffect.get(VibrationEffect.EFFECT_CLICK)
+        private val HAPTIC_CLICK =
+            VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK)
+        private val HAPTIC_DOUBLE =
+            VibrationEffect.createPredefined(VibrationEffect.EFFECT_DOUBLE_CLICK)
+        private val HAPTIC_LONG =
+            VibrationEffect.createPredefined(VibrationEffect.EFFECT_HEAVY_CLICK)
     }
 }
 
@@ -787,4 +837,5 @@ data class ProgressState(
     val packageName: String? = null,
     val isCompactMode: Boolean = false,
     val showMediaControls: Boolean = false,
+    val isMediaPlaying: Boolean = false,
 )
