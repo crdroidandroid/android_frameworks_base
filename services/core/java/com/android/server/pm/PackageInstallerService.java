@@ -2158,6 +2158,10 @@ public class PackageInstallerService extends IPackageInstaller.Stub implements
 
     @Override
     public void clearDeveloperVerificationExperiment(String packageName) {
+        final int callerUid = Binder.getCallingUid();
+        if (!PackageManagerServiceUtils.isRootOrShell(callerUid)) {
+            throw new SecurityException("Not allowed to clear developer verification experiment");
+        }
         mDeveloperVerifierController.clearExperiment(packageName);
     }
 
