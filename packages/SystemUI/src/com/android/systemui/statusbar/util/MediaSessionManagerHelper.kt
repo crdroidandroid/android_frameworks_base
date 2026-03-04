@@ -8,7 +8,6 @@
 package com.android.systemui.statusbar.util
 
 import android.content.Context
-import android.content.res.Configuration
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
@@ -17,21 +16,30 @@ import android.media.session.MediaController
 import android.media.session.MediaSessionLegacyHelper
 import android.media.session.MediaSessionManager
 import android.media.session.PlaybackState
+import android.os.Handler
+import android.os.Looper
 import android.os.SystemClock
 import android.provider.Settings
-import android.text.TextUtils
 import android.view.KeyEvent
-import android.view.View
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-
-class MediaSessionManagerHelper private constructor(private val context: Context) {
+class MediaSessionManagerHelper private constructor(ctx: Context) {
 
     interface MediaMetadataListener {
         fun onMediaMetadataChanged() {}
         fun onPlaybackStateChanged() {}
     }
+
+    private val context: Context = ctx.applicationContext
 
     private val _mediaMetadata = MutableStateFlow<MediaMetadata?>(null)
     val mediaMetadata: StateFlow<MediaMetadata?> = _mediaMetadata
@@ -39,13 +47,22 @@ class MediaSessionManagerHelper private constructor(private val context: Context
     private val _playbackState = MutableStateFlow<PlaybackState?>(null)
     val playbackState: StateFlow<PlaybackState?> = _playbackState
 
-    private val scope = CoroutineScope(Dispatchers.Main)
+    private val job = SupervisorJob()
+    private val scope = CoroutineScope(job + Dispatchers.Main.immediate)
+
     private var collectJob: Job? = null
+    private var sessionsUpdateJob: Job? = null
 
     private var lastSavedPackageName: String? = null
-    private val mediaSessionManager: MediaSessionManager = context.getSystemService(MediaSessionManager::class.java)!!
+
+    private val mediaSessionManager: MediaSessionManager =
+        context.getSystemService(MediaSessionManager::class.java)!!
+
     private var activeController: MediaController? = null
-    private val listeners = mutableSetOf<MediaMetadataListener>()
+    private val listeners = LinkedHashSet<MediaMetadataListener>()
+
+    private val mainHandler = Handler(Looper.getMainLooper())
+    private var sessionsListening = false
 
     private val mediaControllerCallback = object : MediaController.Callback() {
         override fun onMetadataChanged(metadata: MediaMetadata?) {
@@ -57,32 +74,103 @@ class MediaSessionManagerHelper private constructor(private val context: Context
         }
     }
 
-    private val tickerFlow = flow {
-        while (true) {
-            emit(Unit)
-            delay(1000)
+    private val sessionsChangedListener =
+        MediaSessionManager.OnActiveSessionsChangedListener { controllers ->
+            // Avoid doing any work if nobody is listening.
+            if (listeners.isEmpty()) return@OnActiveSessionsChangedListener
+
+            val safeControllers = controllers.orEmpty()
+
+            sessionsUpdateJob?.cancel()
+            sessionsUpdateJob = scope.launch {
+                val picked = withContext(Dispatchers.IO) { pickBestController(safeControllers) }
+                if (sameSessions(activeController, picked)) return@launch
+
+                activeController?.unregisterCallback(mediaControllerCallback)
+                activeController = picked
+                picked?.registerCallback(mediaControllerCallback)
+
+                _mediaMetadata.value = picked?.metadata
+                _playbackState.value = picked?.playbackState
+                saveLastNonNullPackageName()
+            }
         }
-    }.flowOn(Dispatchers.Default)
 
     init {
         lastSavedPackageName = Settings.System.getString(
             context.contentResolver,
             "media_session_last_package_name"
         )
+    }
 
-        scope.launch {
-            tickerFlow
-                .map { fetchActiveController() }
-                .distinctUntilChanged { old, new -> sameSessions(old, new) }
-                .collect { controller ->
-                    activeController?.unregisterCallback(mediaControllerCallback)
-                    activeController = controller
-                    controller?.registerCallback(mediaControllerCallback)
-                    _mediaMetadata.value = controller?.metadata
-                    _playbackState.value = controller?.playbackState
-                    saveLastNonNullPackageName()
-                }
+    fun addMediaMetadataListener(listener: MediaMetadataListener) {
+        val wasEmpty = listeners.isEmpty()
+        listeners.add(listener)
+
+        if (wasEmpty) {
+            startTracking()
         }
+
+        // Push current state immediately.
+        listener.onMediaMetadataChanged()
+        listener.onPlaybackStateChanged()
+    }
+
+    fun removeMediaMetadataListener(listener: MediaMetadataListener) {
+        listeners.remove(listener)
+        if (listeners.isEmpty()) {
+            stopTracking()
+        }
+    }
+
+    private fun startTracking() {
+        if (!sessionsListening) {
+            mediaSessionManager.addOnActiveSessionsChangedListener(
+                sessionsChangedListener,
+                null,
+                mainHandler
+            )
+            sessionsListening = true
+
+            // Force an initial refresh.
+            sessionsChangedListener.onActiveSessionsChanged(
+                mediaSessionManager.getActiveSessions(null)
+            )
+        }
+
+        if (collectJob == null) {
+            collectJob = scope.launch {
+                launch {
+                    mediaMetadata.collect { notifyListeners { onMediaMetadataChanged() } }
+                }
+                launch {
+                    playbackState.collect { notifyListeners { onPlaybackStateChanged() } }
+                }
+            }
+        }
+    }
+
+    private fun stopTracking() {
+        collectJob?.cancel()
+        collectJob = null
+
+        sessionsUpdateJob?.cancel()
+        sessionsUpdateJob = null
+
+        if (sessionsListening) {
+            mediaSessionManager.removeOnActiveSessionsChangedListener(sessionsChangedListener)
+            sessionsListening = false
+        }
+
+        activeController?.unregisterCallback(mediaControllerCallback)
+        activeController = null
+
+        _mediaMetadata.value = null
+        _playbackState.value = null
+    }
+
+    private fun notifyListeners(action: MediaMetadataListener.() -> Unit) {
+        listeners.forEach { it.action() }
     }
 
     private fun isEligibleState(state: Int?): Boolean {
@@ -95,14 +183,14 @@ class MediaSessionManagerHelper private constructor(private val context: Context
         }
     }
 
-    private suspend fun fetchActiveController(): MediaController? = withContext(Dispatchers.IO) {
+    private fun pickBestController(controllers: List<MediaController>): MediaController? {
         var localController: MediaController? = null
-        val remoteSessions = mutableSetOf<String>()
+        val remoteSessions = HashSet<String>()
 
-        mediaSessionManager.getActiveSessions(null)
+        controllers
+            .asSequence()
             .filter { controller ->
-                isEligibleState(controller.playbackState?.state) &&
-                    controller.playbackInfo != null
+                isEligibleState(controller.playbackState?.state) && controller.playbackInfo != null
             }
             .sortedWith(
                 compareByDescending<MediaController> { it.playbackState?.state == PlaybackState.STATE_PLAYING }
@@ -125,46 +213,15 @@ class MediaSessionManagerHelper private constructor(private val context: Context
                 }
             }
 
-        localController
-    }
-
-    fun addMediaMetadataListener(listener: MediaMetadataListener) {
-        listeners.add(listener)
-        if (listeners.size == 1) {
-            startCollecting()
-        }
-        listener.onMediaMetadataChanged()
-        listener.onPlaybackStateChanged()
-    }
-
-    fun removeMediaMetadataListener(listener: MediaMetadataListener) {
-        listeners.remove(listener)
-        if (listeners.isEmpty()) {
-            stopCollecting()
-        }
-    }
-
-    private fun startCollecting() {
-        collectJob = scope.launch {
-            launch { mediaMetadata.collect { notifyListeners { onMediaMetadataChanged() } } }
-            launch { playbackState.collect { notifyListeners { onPlaybackStateChanged() } } }
-        }
-    }
-
-    private fun stopCollecting() {
-        collectJob?.cancel()
-        collectJob = null
-    }
-
-    private fun notifyListeners(action: MediaMetadataListener.() -> Unit) {
-        listeners.forEach { it.action() }
+        return localController
     }
 
     fun seekTo(time: Long) {
         activeController?.transportControls?.seekTo(time)
     }
 
-    fun getTotalDuration() = mediaMetadata.value?.getLong(MediaMetadata.METADATA_KEY_DURATION) ?: 0L
+    fun getTotalDuration(): Long =
+        mediaMetadata.value?.getLong(MediaMetadata.METADATA_KEY_DURATION) ?: 0L
 
     private fun saveLastNonNullPackageName() {
         activeController?.packageName?.takeIf { it.isNotEmpty() }?.let { pkg ->
@@ -180,26 +237,24 @@ class MediaSessionManagerHelper private constructor(private val context: Context
     }
 
     fun getMediaBitmap(): Bitmap? = mediaMetadata.value?.let {
-        it.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART) ?: 
-        it.getBitmap(MediaMetadata.METADATA_KEY_ART) ?: 
-        it.getBitmap(MediaMetadata.METADATA_KEY_DISPLAY_ICON)
+        it.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART)
+            ?: it.getBitmap(MediaMetadata.METADATA_KEY_ART)
+            ?: it.getBitmap(MediaMetadata.METADATA_KEY_DISPLAY_ICON)
     }
 
-    fun getCurrentMediaMetadata(): MediaMetadata? {
-        return mediaMetadata.value
-    }
+    fun getCurrentMediaMetadata(): MediaMetadata? = mediaMetadata.value
 
     fun getMediaAppIcon(): Drawable? {
         val packageName = activeController?.packageName ?: return null
         return try {
-            val pm = context.packageManager
-            pm.getApplicationIcon(packageName)
-        } catch (e: PackageManager.NameNotFoundException) {
+            context.packageManager.getApplicationIcon(packageName)
+        } catch (_: PackageManager.NameNotFoundException) {
             null
         }
     }
 
-    fun isMediaControllerAvailable() = activeController?.packageName?.isNotEmpty() ?: false
+    fun isMediaControllerAvailable(): Boolean =
+        activeController?.packageName?.isNotEmpty() ?: false
 
     fun isMediaSessionActive(): Boolean {
         val controller = activeController ?: return false
@@ -214,9 +269,7 @@ class MediaSessionManagerHelper private constructor(private val context: Context
 
     fun isMediaPlaying(): Boolean = playbackState.value?.state == PlaybackState.STATE_PLAYING
 
-    fun getMediaControllerPlaybackState(): PlaybackState? {
-        return activeController?.playbackState ?: null
-    }
+    fun getMediaControllerPlaybackState(): PlaybackState? = activeController?.playbackState
 
     private fun sameSessions(a: MediaController?, b: MediaController?): Boolean {
         if (a == b) return true
@@ -261,12 +314,9 @@ class MediaSessionManagerHelper private constructor(private val context: Context
     }
 
     fun launchMediaPlayerApp(packageName: String) {
-        if (packageName.isNotEmpty()) {
-            val launchIntent = context.packageManager.getLaunchIntentForPackage(packageName)
-            launchIntent?.let { intent ->
-                context.startActivity(intent)
-            }
-        }
+        if (packageName.isEmpty()) return
+        val launchIntent = context.packageManager.getLaunchIntentForPackage(packageName) ?: return
+        context.startActivity(launchIntent)
     }
 
     companion object {
