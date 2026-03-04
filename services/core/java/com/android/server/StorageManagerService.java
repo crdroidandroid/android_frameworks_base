@@ -4861,13 +4861,22 @@ class StorageManagerService extends IStorageManager.Stub
                     final String packageDataDir =
                             String.format(Locale.US, "/storage/emulated/%d/Android/data/%s/",
                                     userId, pkg);
+                    final String packageMediaDir =
+                            String.format(Locale.US, "/storage/emulated/%d/Android/media/%s/",
+                                    userId, pkg);
 
-                    // Create package obb and data dir if it doesn't exist.
+                    // Create package obb, data and media dir if it doesn't exist.
                     int appUid = UserHandle.getUid(userId, mPmInternal.getPackage(pkg).getUid());
-                    vold.ensureAppDirsCreated(new String[] {packageObbDir, packageDataDir}, appUid);
+                    vold.ensureAppDirsCreated(
+                            new String[] {
+                                    packageObbDir,
+                                    packageDataDir,
+                                    packageMediaDir
+                            },
+                            appUid);
                 }
             } catch (ServiceManager.ServiceNotFoundException | RemoteException e) {
-                Slog.e(TAG, "Unable to create obb and data directories for " + processName,e);
+                Slog.e(TAG, "Unable to create app external storage directories for " + processName, e);
                 return false;
             }
             return true;
