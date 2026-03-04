@@ -74,7 +74,6 @@ class OnGoingActionProgressController(
     private var isTrackingProgress = false
     private var isForceHidden = false
     private var headsUpPinned = false
-    private var lastProgressUpdateTime = 0L
     private var isEnabled = false
     private var isCompactModeEnabled = false
 
@@ -113,7 +112,7 @@ class OnGoingActionProgressController(
     private var uiUpdateJob: Job? = null
 
     private var mediaProgressJob: Job? = null
-    private var staleCheckerJob: Job? = null
+    private var finishedProgressTimeoutJob: Job? = null
     private var compactCollapseJob: Job? = null
     private var menuCollapseJob: Job? = null
     private var albumArtRetryJob: Job? = null
@@ -288,13 +287,6 @@ class OnGoingActionProgressController(
 
         isViewAttached = true
         updateSettings()
-
-        staleCheckerJob = mainScope.launch {
-            while (isActive && isViewAttached) {
-                delay(STALE_PROGRESS_CHECK_INTERVAL_MS)
-                checkForStaleProgress()
-            }
-        }
     }
 
     private fun updateTrackMetadata() {
@@ -616,13 +608,54 @@ class OnGoingActionProgressController(
         currentProgress = extras.getInt(Notification.EXTRA_PROGRESS, 0)
     }
 
+    private fun cancelFinishedProgressTimeout() {
+        finishedProgressTimeoutJob?.cancel()
+        finishedProgressTimeoutJob = null
+    }
+
+    private fun scheduleFinishedProgressTimeoutIfNeeded() {
+        if (!isTrackingProgress) {
+            cancelFinishedProgressTimeout()
+            return
+        }
+        val keyAtSchedule = trackedNotificationKey ?: run {
+            cancelFinishedProgressTimeout()
+            return
+        }
+
+        val finished = currentProgressMax > 0 && currentProgress >= currentProgressMax
+        if (!finished) {
+            cancelFinishedProgressTimeout()
+            return
+        }
+
+        cancelFinishedProgressTimeout()
+        finishedProgressTimeoutJob = mainScope.launch {
+            delay(PROGRESS_TIMEOUT_MS)
+
+            if (!isTrackingProgress) return@launch
+            if (trackedNotificationKey != keyAtSchedule) return@launch
+
+            val stillFinished = currentProgressMax > 0 && currentProgress >= currentProgressMax
+            if (!stillFinished) return@launch
+
+            val sbn = findNotificationByKey(keyAtSchedule)
+            if (sbn == null || !hasProgress(sbn.notification)) {
+                clearProgressTracking()
+                return@launch
+            }
+
+            clearProgressTracking()
+        }
+    }
+
     private fun trackProgress(sbn: StatusBarNotification) {
         isTrackingProgress = true
         trackedNotificationKey = sbn.key
         trackedPackageName = sbn.packageName
-        lastProgressUpdateTime = System.currentTimeMillis()
         extractProgress(sbn.notification)
         requestUiUpdate()
+        scheduleFinishedProgressTimeoutIfNeeded()
     }
 
     private fun clearProgressTracking() {
@@ -631,31 +664,8 @@ class OnGoingActionProgressController(
         trackedPackageName = null
         currentProgress = 0
         currentProgressMax = 0
-        lastProgressUpdateTime = 0L
+        cancelFinishedProgressTimeout()
         requestUiUpdate()
-    }
-
-    private fun checkForStaleProgress() {
-        if (!isTrackingProgress) return
-        val key = trackedNotificationKey ?: return
-
-        val sbn = findNotificationByKey(key)
-        if (sbn == null || !hasProgress(sbn.notification)) {
-            clearProgressTracking()
-            return
-        }
-
-        if (lastProgressUpdateTime == 0L) {
-            lastProgressUpdateTime = System.currentTimeMillis()
-            return
-        }
-
-        val timedOut = System.currentTimeMillis() - lastProgressUpdateTime > PROGRESS_TIMEOUT_MS
-        val finished = currentProgressMax > 0 && currentProgress >= currentProgressMax
-
-        if (timedOut && finished) {
-            clearProgressTracking()
-        }
     }
 
     private fun updateProgressIfNeeded(sbn: StatusBarNotification) {
@@ -667,9 +677,9 @@ class OnGoingActionProgressController(
             return
         }
 
-        lastProgressUpdateTime = System.currentTimeMillis()
         extractProgress(sbn.notification)
         requestUiUpdate()
+        scheduleFinishedProgressTimeoutIfNeeded()
     }
 
     private fun findNotificationByKey(key: String): StatusBarNotification? {
@@ -924,7 +934,7 @@ class OnGoingActionProgressController(
 
         uiUpdateJob?.cancel()
         mediaProgressJob?.cancel()
-        staleCheckerJob?.cancel()
+        finishedProgressTimeoutJob?.cancel()
         compactCollapseJob?.cancel()
         menuCollapseJob?.cancel()
         pausedStaleJob?.cancel()
@@ -951,7 +961,6 @@ class OnGoingActionProgressController(
 
         private const val MEDIA_UPDATE_INTERVAL_MS = 1000L
         private const val DEBOUNCE_DELAY_MS = 150L
-        private const val STALE_PROGRESS_CHECK_INTERVAL_MS = 5000L
         private const val PROGRESS_TIMEOUT_MS = 30000L
         private const val COMPACT_COLLAPSE_TIMEOUT_MS = 10000L
         private const val MENU_COLLAPSE_TIMEOUT_MS = 5000L
