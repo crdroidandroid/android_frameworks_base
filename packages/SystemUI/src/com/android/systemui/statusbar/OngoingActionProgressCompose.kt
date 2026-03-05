@@ -8,7 +8,10 @@
 package com.android.systemui.statusbar
 
 import android.content.Context
+import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.LayerDrawable
 import android.util.Log
+import android.util.TypedValue
 import android.widget.SeekBar
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Animatable
@@ -80,6 +83,9 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
+import com.android.internal.graphics.ColorUtils
+import com.android.systemui.media.controls.ui.binder.SeekBarObserver
+import com.android.systemui.media.controls.ui.drawable.SquigglyProgress
 import com.android.systemui.res.R
 import com.android.systemui.statusbar.VibratorHelper
 import com.android.systemui.statusbar.notification.headsup.HeadsUpManager
@@ -428,37 +434,98 @@ private fun SeekBarCompose(
                 max = 10_000
                 splitTrack = false
 
-                thumb?.mutate()?.setTint(android.graphics.Color.WHITE)
-                progressDrawable?.mutate()?.setTint(android.graphics.Color.WHITE)
+                val pillThumb = ctx.createQsPillThumb()
+                thumb = pillThumb
+                thumbOffset = pillThumb.intrinsicWidth / 2
 
-                setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                    override fun onProgressChanged(
-                        sb: SeekBar?,
-                        v: Int,
-                        fromUser: Boolean
-                    ) {
-                        if (fromUser) onSeek(v / 10_000f)
+                val layer = (progressDrawable?.mutate() as? LayerDrawable)
+
+                if (layer != null) {
+                    val bg = layer.findDrawableByLayerId(android.R.id.background)
+                    bg?.mutate()?.setTint(
+                        ColorUtils.setAlphaComponent(android.graphics.Color.WHITE, 90)
+                    )
+
+                    val secondary = layer.findDrawableByLayerId(android.R.id.secondaryProgress)
+                    secondary?.mutate()?.setTint(
+                        ColorUtils.setAlphaComponent(android.graphics.Color.WHITE, 60)
+                    )
+
+                    // Replace ONLY the progress layer with SquigglyProgress.
+                    val squiggle = SquigglyProgress().apply {
+                        waveLength =
+                            ctx.resources.getDimensionPixelSize(
+                                R.dimen.qs_media_seekbar_progress_wavelength
+                            ).toFloat()
+                        lineAmplitude =
+                            ctx.resources.getDimensionPixelSize(
+                                R.dimen.qs_media_seekbar_progress_amplitude
+                            ).toFloat()
+                        phaseSpeed =
+                            ctx.resources.getDimensionPixelSize(
+                                R.dimen.qs_media_seekbar_progress_phase
+                            ).toFloat()
+                        strokeWidth =
+                            ctx.resources.getDimensionPixelSize(
+                                R.dimen.qs_media_seekbar_progress_stroke_width
+                            ).toFloat()
+
+                        setTint(android.graphics.Color.WHITE)
+                        drawRemainingLine = false
+                        transitionEnabled = false
+                        animate = false
                     }
 
-                    override fun onStartTrackingTouch(sb: SeekBar?) {
-                        isScrubbing = true
-                    }
+                    layer.setDrawableByLayerId(android.R.id.progress, squiggle)
+                    progressDrawable = layer
+                }
 
-                    override fun onStopTrackingTouch(sb: SeekBar?) {
-                        isScrubbing = false
+                setOnSeekBarChangeListener(
+                    object : SeekBar.OnSeekBarChangeListener {
+                        override fun onProgressChanged(sb: SeekBar?, v: Int, fromUser: Boolean) {
+                            if (fromUser) onSeek(v / 10_000f)
+                        }
+
+                        override fun onStartTrackingTouch(sb: SeekBar?) {
+                            isScrubbing = true
+                        }
+
+                        override fun onStopTrackingTouch(sb: SeekBar?) {
+                            isScrubbing = false
+                        }
                     }
-                })
+                )
             }
         },
         update = { bar ->
+            val target = (progressFraction * 10_000f).toInt().coerceIn(0, 10_000)
+
             if (!isScrubbing) {
-                val target = (progressFraction * 10_000f).toInt().coerceIn(0, 10_000)
-                if (bar.progress != target) bar.progress = target
+                // Keep QS reset behavior if you want it
+                if (
+                    target <= SeekBarObserver.RESET_ANIMATION_THRESHOLD_MS &&
+                        bar.progress > SeekBarObserver.RESET_ANIMATION_THRESHOLD_MS
+                ) {
+                    bar.progress = target
+                } else if (bar.progress != target) {
+                    bar.progress = target
+                }
             }
 
             val alpha = if (isPlaying) 255 else (255 * 0.55f).toInt()
             bar.thumb?.alpha = alpha
-            bar.progressDrawable?.alpha = alpha
+
+            val squiggle =
+                (bar.progressDrawable as? LayerDrawable)
+                    ?.findDrawableByLayerId(android.R.id.progress) as? SquigglyProgress
+
+            squiggle?.apply {
+                setTint(android.graphics.Color.WHITE)
+                setAlpha(alpha)
+                animate = isPlaying && !isScrubbing
+            }
+
+            (bar.progressDrawable as? LayerDrawable)?.alpha = alpha
         },
         modifier = modifier
     )
@@ -518,6 +585,39 @@ private fun MusicChip(
                     .padding(start = 1.dp)
             )
         }
+    }
+}
+
+private fun Context.createQsPillThumb(): GradientDrawable {
+    val wPx =
+        TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            4f,
+            resources.displayMetrics
+        )
+        .toInt()
+        .coerceAtLeast(1)
+    val hPx =
+        TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                16f,
+                resources.displayMetrics
+            )
+            .toInt()
+            .coerceAtLeast(1)
+
+    val radiusPx =
+        TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            16f,
+            resources.displayMetrics
+        )
+
+    return GradientDrawable().apply {
+        shape = GradientDrawable.RECTANGLE
+        setSize(wPx, hPx)
+        cornerRadius = radiusPx
+        setColor(android.graphics.Color.WHITE)
     }
 }
 
