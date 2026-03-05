@@ -7067,6 +7067,24 @@ public final class Settings {
         public static final String STATUSBAR_CLOCK_CHIP = "statusbar_clock_chip";
 
         /**
+         * Clock chip custom gradient – start
+         * @hide
+         */
+        public static final String STATUSBAR_CLOCK_CHIP_GRADIENT_START_COLOR = "statusbar_clock_chip_gradient_start_color";
+
+        /**
+         * Clock chip custom gradient – end
+         * @hide
+         */
+        public static final String STATUSBAR_CLOCK_CHIP_GRADIENT_END_COLOR = "statusbar_clock_chip_gradient_end_color";
+
+        /**
+         * Clock chip custom gradient – angle
+         * @hide
+         */
+        public static final String STATUSBAR_CLOCK_CHIP_GRADIENT_ANGLE = "statusbar_clock_chip_gradient_angle";
+
+        /**
          * Double tap on lockscreen to sleep
          * @hide
          */
