@@ -73,6 +73,8 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -561,6 +563,12 @@ private fun MusicChip(
     else
         colorResource(android.R.color.system_accent1_100)
 
+    val shadeHeaderTextSize = with(LocalDensity.current) {
+        LocalContext.current.resources
+            .getDimension(R.dimen.status_bar_shade_header_text_size_sp)
+            .toSp()
+    }
+
     Row(
         modifier = Modifier
             .animateContentSize(animationSpec = tween(durationMillis = 300, easing = FastOutSlowInEasing))
@@ -588,12 +596,15 @@ private fun MusicChip(
         ) {
             Text(
                 text = state.trackTitle ?: "",
-                style = TextStyle(color = text, fontSize = 10.sp,
-                    fontWeight = FontWeight.Normal),
+                style = TextStyle(
+                    color = text,
+                    fontSize = shadeHeaderTextSize,
+                    fontWeight = FontWeight.Normal
+                ),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier
-                    .basicMarquee(initialDelayMillis = 15_000, repeatDelayMillis = 15_000)
+                    .basicMarquee(initialDelayMillis = 2_000, repeatDelayMillis = 10_000)
                     .padding(start = 1.dp)
                     .onSizeChanged { size -> chipAtMaxWidth = size.width >= chipMaxWidthPx }
             )
