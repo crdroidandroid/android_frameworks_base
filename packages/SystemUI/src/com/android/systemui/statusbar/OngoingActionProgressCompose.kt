@@ -83,7 +83,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
-import com.android.internal.graphics.ColorUtils
+import androidx.core.graphics.ColorUtils
 import com.android.systemui.media.controls.ui.binder.SeekBarObserver
 import com.android.systemui.media.controls.ui.drawable.SquigglyProgress
 import com.android.systemui.res.R
@@ -102,6 +102,8 @@ private const val TAG = "OngoingActionProgressCompose"
 
 private const val EXPAND_DURATION_MS = 350
 private const val COLLAPSE_DURATION_MS = 250
+
+private const val CHIP_TEXT_LUMINANCE_THRESHOLD = 0.6
 
 /**
  * Composable that displays an ongoing action progress indicator in the status bar.
@@ -437,12 +439,12 @@ private fun SeekBarCompose(
                 if (layer != null) {
                     val bg = layer.findDrawableByLayerId(android.R.id.background)
                     bg?.mutate()?.setTint(
-                        ColorUtils.setAlphaComponent(android.graphics.Color.WHITE, 90)
+                        com.android.internal.graphics.ColorUtils.setAlphaComponent(android.graphics.Color.WHITE, 90)
                     )
 
                     val secondary = layer.findDrawableByLayerId(android.R.id.secondaryProgress)
                     secondary?.mutate()?.setTint(
-                        ColorUtils.setAlphaComponent(android.graphics.Color.WHITE, 60)
+                        com.android.internal.graphics.ColorUtils.setAlphaComponent(android.graphics.Color.WHITE, 60)
                     )
 
                     // Replace ONLY the progress layer with SquigglyProgress.
@@ -545,8 +547,16 @@ private fun MusicChip(
     chipShape: RoundedCornerShape,
     gestureModifier: Modifier,
 ) {
-    val bg = colorResource(android.R.color.system_accent1_500)
-    val text = colorResource(android.R.color.system_accent1_100)
+    val bg = if (state.chipBgColor != null)
+        Color(state.chipBgColor)
+    else
+        colorResource(android.R.color.system_accent1_500)
+
+    val text = if (state.chipBgColor != null &&
+            ColorUtils.calculateLuminance(state.chipBgColor) >= CHIP_TEXT_LUMINANCE_THRESHOLD)
+        Color.Black
+    else
+        colorResource(android.R.color.system_accent1_100)
 
     Row(
         modifier = Modifier
@@ -673,6 +683,7 @@ class OnGoingActionProgressComposeController(
                     isMediaPlaying = state.isMediaPlaying,
                     trackTitle = state.trackTitle,
                     artistName = state.artistName,
+                    chipBgColor = state.chipBgColor,
                 )
             }
         }
