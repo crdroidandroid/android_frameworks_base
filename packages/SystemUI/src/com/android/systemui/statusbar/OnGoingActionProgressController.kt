@@ -312,15 +312,7 @@ class OnGoingActionProgressController(
             try {
                 if (bitmap.isRecycled || bitmap.width <= 0 || bitmap.height <= 0) return@withContext null
 
-                val safeBitmap = if (bitmap.config == Bitmap.Config.HARDWARE) {
-                    bitmap.copy(Bitmap.Config.ARGB_8888, false)
-                } else bitmap
-
-                val palette = try {
-                    Palette.from(safeBitmap).generate()
-                } finally {
-                    if (safeBitmap !== bitmap) safeBitmap.recycle()
-                }
+                val palette = Palette.from(bitmap).generate()
 
                 val candidates = listOfNotNull(
                     palette.vibrantSwatch,
