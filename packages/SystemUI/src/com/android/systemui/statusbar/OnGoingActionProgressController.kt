@@ -92,6 +92,8 @@ class OnGoingActionProgressController(
     private var currentChipBgColor: Int? = null
     private var lastColorExtractedIcon: Drawable? = null
     private var lastColorExtractedAlbumArt: Bitmap? = null
+    private var chipIconColor: Int? = null
+    private var chipAlbumColor: Int? = null
 
     private var lastObservedTitle: String? = null
 
@@ -210,7 +212,6 @@ class OnGoingActionProgressController(
     private fun onTrackChanged() {
         needsFullUiUpdate = true
         currentAlbumArt = null
-        invalidateChipBgColor()
         scheduleAlbumArtRetry()
     }
 
@@ -226,7 +227,10 @@ class OnGoingActionProgressController(
 
                 if (art != null) {
                     currentAlbumArt = art
-                    if (chipColorMode == CHIP_COLOR_MODE_ALBUM_ART) invalidateChipBgColor()
+                    if (chipColorMode == CHIP_COLOR_MODE_ALBUM_ART) {
+                        invalidateChipBgColor()
+                        currentAlbumArt?.let { extractAndApplyChipBgColorFromAlbumArt(it) }
+                    }
                     requestUiUpdate()
                     return@launch
                 }
@@ -340,7 +344,8 @@ class OnGoingActionProgressController(
         }
 
     private fun extractAndApplyChipBgColorFromIcon(icon: Drawable) {
-        if (icon === lastColorExtractedIcon) return
+        if (!isMediaSessionActiveForChip()) return
+        if (icon === lastColorExtractedIcon && chipIconColor != null) return
 
         mainScope.launch {
             val size = (48f * context.resources.displayMetrics.density).toInt().coerceAtLeast(1)
@@ -354,45 +359,18 @@ class OnGoingActionProgressController(
             } ?: return@launch
 
             lastColorExtractedIcon = icon
-            currentChipBgColor = extractDominantColorFromBitmap(bitmap)
+            chipIconColor = extractDominantColorFromBitmap(bitmap)
             updateProgressState()
         }
     }
 
-    private fun extractAndApplyChipBgColorFromAlbumArt(albumArt: Bitmap, iconFallback: Drawable?) {
-        if (albumArt === lastColorExtractedAlbumArt) return
+    private fun extractAndApplyChipBgColorFromAlbumArt(albumArt: Bitmap) {
+        if (!isMediaSessionActiveForChip()) return
+        if (albumArt === lastColorExtractedAlbumArt && chipAlbumColor != null) return
 
         mainScope.launch {
-            val color = extractDominantColorFromBitmap(albumArt)
-
-            if (color != null) {
-                lastColorExtractedAlbumArt = albumArt
-                currentChipBgColor = color
-                updateProgressState()
-                return@launch
-            }
-
-            Log.d(TAG, "Album art color extraction failed, falling back to icon color")
-            if (iconFallback == null) {
-                lastColorExtractedAlbumArt = albumArt
-                currentChipBgColor = null
-                updateProgressState()
-                return@launch
-            }
-
-            val size = (48f * context.resources.displayMetrics.density).toInt().coerceAtLeast(1)
-            val iconBitmap = try {
-                withContext(bgDispatcher) {
-                    iconFallback.toBitmap(width = size, height = size,
-                        config = Bitmap.Config.ARGB_8888)
-                }
-            } catch (e: Exception) {
-                Log.w(TAG, "Failed to rasterize icon fallback for chip color extraction", e)
-                null
-            }
-
             lastColorExtractedAlbumArt = albumArt
-            currentChipBgColor = iconBitmap?.let { extractDominantColorFromBitmap(it) }
+            chipAlbumColor = extractDominantColorFromBitmap(albumArt)
             updateProgressState()
         }
     }
@@ -457,23 +435,14 @@ class OnGoingActionProgressController(
         val artistName = if (hasMediaSession) currentArtistName else null
 
         if (hasMediaSession) {
-            when (chipColorMode) {
-                CHIP_COLOR_MODE_ICON -> {
-                    currentIcon?.let { extractAndApplyChipBgColorFromIcon(it) }
-                }
-                CHIP_COLOR_MODE_ALBUM_ART -> {
-                    val art = currentAlbumArt
-                    if (art != null) {
-                        extractAndApplyChipBgColorFromAlbumArt(art, currentIcon)
-                    } else {
-                        currentIcon?.let { extractAndApplyChipBgColorFromIcon(it) }
-                    }
-                }
+            if (chipColorMode == CHIP_COLOR_MODE_ICON &&
+                    chipIconColor != null) {
+                currentChipBgColor = chipIconColor
+            } else if (chipColorMode == CHIP_COLOR_MODE_ALBUM_ART &&
+                    chipAlbumColor != null) {
+                currentChipBgColor = chipAlbumColor
             }
         }
-
-        val resolvedChipBgColor = if (chipColorMode != CHIP_COLOR_MODE_DEFAULT) currentChipBgColor
-                                  else null
 
         publish(
             ProgressState(
@@ -488,7 +457,7 @@ class OnGoingActionProgressController(
                 isMediaPlaying = isMediaPlaying,
                 trackTitle = trackTitle,
                 artistName = artistName,
-                chipBgColor = resolvedChipBgColor,
+                chipBgColor = currentChipBgColor,
             )
         )
     }
@@ -594,20 +563,22 @@ class OnGoingActionProgressController(
         val mediaAppIcon = mediaSessionHelper.getMediaAppIcon()
         if (mediaAppIcon != null) {
             currentIcon = mediaAppIcon
+            updateChipIconColor()
             return
         }
 
         val pkg = playbackState?.extras?.getString("package")
         if (pkg.isNullOrEmpty()) {
-            setDefaultMediaIconCompact()
+            setDefaultMediaIcon()
             return
         }
 
         loadIcon(pkg) { drawable ->
             if (drawable != null) {
                 currentIcon = drawable
+                updateChipIconColor()
             } else {
-                setDefaultMediaIconCompact()
+                setDefaultMediaIcon()
             }
             updateProgressState()
         }
@@ -615,10 +586,14 @@ class OnGoingActionProgressController(
 
     private fun setDefaultMediaIcon() {
         currentIcon = context.resources.getDrawable(R.drawable.ic_default_music_icon, context.theme)
+        updateChipIconColor()
     }
 
-    private fun setDefaultMediaIconCompact() {
-        currentIcon = context.resources.getDrawable(R.drawable.ic_default_music_icon, context.theme)
+    private fun updateChipIconColor() {
+        if (chipColorMode == CHIP_COLOR_MODE_ICON && currentIcon != null) {
+            invalidateChipBgColor()
+            currentIcon?.let { extractAndApplyChipBgColorFromIcon(it) }
+        }
     }
 
     private fun updateNotificationProgress() {
@@ -1000,6 +975,11 @@ class OnGoingActionProgressController(
 
         if (wasChipColorMode != chipColorMode) {
             invalidateChipBgColor()
+            if (chipColorMode == CHIP_COLOR_MODE_ALBUM_ART && currentAlbumArt != null) {
+                currentAlbumArt?.let { extractAndApplyChipBgColorFromAlbumArt(it) }
+            } else if (chipColorMode == CHIP_COLOR_MODE_ICON && currentIcon != null) {
+                currentIcon?.let { extractAndApplyChipBgColorFromIcon(it) }
+            }
             needsFullUiUpdate = true
         }
 

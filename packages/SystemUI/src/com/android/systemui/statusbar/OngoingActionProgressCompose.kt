@@ -555,6 +555,8 @@ private fun MusicChip(
     val text = if (state.chipBgColor != null &&
             ColorUtils.calculateLuminance(state.chipBgColor) >= CHIP_TEXT_LUMINANCE_THRESHOLD)
         Color.Black
+    else if (state.chipBgColor != null)
+        Color.White
     else
         colorResource(android.R.color.system_accent1_100)
 
