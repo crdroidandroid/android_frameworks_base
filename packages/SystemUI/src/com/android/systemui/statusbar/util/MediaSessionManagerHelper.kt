@@ -236,12 +236,6 @@ class MediaSessionManagerHelper private constructor(ctx: Context) {
         }
     }
 
-    fun getMediaBitmap(): Bitmap? = mediaMetadata.value?.let {
-        it.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART)
-            ?: it.getBitmap(MediaMetadata.METADATA_KEY_ART)
-            ?: it.getBitmap(MediaMetadata.METADATA_KEY_DISPLAY_ICON)
-    }
-
     fun getCurrentMediaMetadata(): MediaMetadata? = mediaMetadata.value
 
     fun getMediaAppIcon(): Drawable? {
