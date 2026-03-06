@@ -669,6 +669,9 @@ class OnGoingActionProgressController(
         }
         if (isMediaSessionActiveForChip()) {
             isMenuVisible = !isMenuVisible
+            if (isMenuVisible && currentAlbumArt == null) {
+                scheduleAlbumArtRetry()
+            }
             collapseMediaControlsWithDelay()
         } else {
             openTrackedApp()
