@@ -9,7 +9,6 @@ package com.android.systemui.statusbar.util
 
 import android.content.Context
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.media.MediaMetadata
 import android.media.session.MediaController
@@ -19,7 +18,6 @@ import android.media.session.PlaybackState
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
-import android.provider.Settings
 import android.view.KeyEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -95,13 +93,6 @@ class MediaSessionManagerHelper private constructor(ctx: Context) {
                 saveLastNonNullPackageName()
             }
         }
-
-    init {
-        lastSavedPackageName = Settings.System.getString(
-            context.contentResolver,
-            "media_session_last_package_name"
-        )
-    }
 
     fun addMediaMetadataListener(listener: MediaMetadataListener) {
         val wasEmpty = listeners.isEmpty()
@@ -226,11 +217,6 @@ class MediaSessionManagerHelper private constructor(ctx: Context) {
     private fun saveLastNonNullPackageName() {
         activeController?.packageName?.takeIf { it.isNotEmpty() }?.let { pkg ->
             if (pkg != lastSavedPackageName) {
-                Settings.System.putString(
-                    context.contentResolver,
-                    "media_session_last_package_name",
-                    pkg
-                )
                 lastSavedPackageName = pkg
             }
         }
