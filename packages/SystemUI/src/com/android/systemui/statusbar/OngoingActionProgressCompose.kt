@@ -275,8 +275,6 @@ private fun MiniMediaPlayer(
     val progressMs = state.progress.toLong()
     val durationMs = state.maxProgress.toLong()
 
-    val artKey = state.trackChangeId
-
     val hasRealArt = state.albumArtBitmap != null
 
     val blurEffect = remember {
@@ -293,17 +291,15 @@ private fun MiniMediaPlayer(
             .shadow(20.dp, cardShape)
             .clip(cardShape)
     ) {
-        key(artKey) {
-            if (hasRealArt) {
-                Image(state.albumArtBitmap!!, null,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.matchParentSize().graphicsLayer {
-                        renderEffect = blurEffect; scaleX = 1.15f; scaleY = 1.15f
-                    })
-            } else {
-                Box(Modifier.matchParentSize()
-                    .background(MaterialTheme.colorScheme.surfaceVariant))
-            }
+        if (hasRealArt) {
+            Image(state.albumArtBitmap!!, null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.matchParentSize().graphicsLayer {
+                    renderEffect = blurEffect; scaleX = 1.15f; scaleY = 1.15f
+                })
+        } else {
+            Box(Modifier.matchParentSize()
+                .background(MaterialTheme.colorScheme.surfaceVariant))
         }
 
         Box(Modifier.matchParentSize()
@@ -317,34 +313,32 @@ private fun MiniMediaPlayer(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            key(artKey) {
-                Box(
-                    modifier = Modifier
-                        .size(58.dp)
-                        .clip(RoundedCornerShape(10.dp))
-                        .background(Color.White.copy(alpha = 0.10f)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    when {
-                        state.albumArtBitmap != null -> Image(
-                            state.albumArtBitmap,
-                            contentDescription = null,
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(10.dp))
-                        )
-                        state.iconBitmap != null -> Image(
-                            state.iconBitmap,
-                            contentDescription = null,
-                            contentScale = ContentScale.Fit,
-                            modifier = Modifier.size(36.dp).clip(RoundedCornerShape(8.dp))
-                        )
-                        else -> Image(
-                            painterResource(R.drawable.ic_default_music_icon),
-                            contentDescription = null,
-                            modifier = Modifier.size(26.dp),
-                            colorFilter = ColorFilter.tint(Color.White.copy(alpha = 0.55f))
-                        )
-                    }
+            Box(
+                modifier = Modifier
+                    .size(58.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(Color.White.copy(alpha = 0.10f)),
+                contentAlignment = Alignment.Center
+            ) {
+                when {
+                    state.albumArtBitmap != null -> Image(
+                        state.albumArtBitmap,
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(10.dp))
+                    )
+                    state.iconBitmap != null -> Image(
+                        state.iconBitmap,
+                        contentDescription = null,
+                        contentScale = ContentScale.Fit,
+                        modifier = Modifier.size(36.dp).clip(RoundedCornerShape(8.dp))
+                    )
+                    else -> Image(
+                        painterResource(R.drawable.ic_default_music_icon),
+                        contentDescription = null,
+                        modifier = Modifier.size(26.dp),
+                        colorFilter = ColorFilter.tint(Color.White.copy(alpha = 0.55f))
+                    )
                 }
             }
 
