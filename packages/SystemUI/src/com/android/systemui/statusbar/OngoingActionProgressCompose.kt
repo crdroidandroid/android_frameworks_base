@@ -674,7 +674,6 @@ class OnGoingActionProgressComposeController(
                     trackTitle = state.trackTitle,
                     artistName = state.artistName,
                     appLabel = state.appLabel,
-                    trackChangeId = state.trackChangeId,
                 )
             }
         }
