@@ -269,6 +269,11 @@ class OnGoingActionProgressController(
     fun expandCompactView() {
         val wasExpanded = isExpanded
         isExpanded = true
+        if (wasExpanded != isExpanded) requestUiUpdate()
+    }
+
+    fun collapseExpandViewWithDelay() {
+        if (!isExpanded) return
         compactCollapseJob?.cancel()
         compactCollapseJob = mainScope.launch {
             delay(COMPACT_COLLAPSE_TIMEOUT_MS)
@@ -277,7 +282,6 @@ class OnGoingActionProgressController(
                 requestUiUpdate()
             }
         }
-        if (wasExpanded != isExpanded) requestUiUpdate()
     }
 
     private fun requestUiUpdate() {
@@ -341,7 +345,7 @@ class OnGoingActionProgressController(
             null
         }
 
-        val albumArtSnapshot: Bitmap? = if (!isCompact && hasMediaSession) currentAlbumArt else null
+        val albumArtSnapshot: Bitmap? = if (hasMediaSession) currentAlbumArt else null
         val albumArtBitmap: ImageBitmap? = albumArtSnapshot?.let {
             try {
                 val size = (56f * context.resources.displayMetrics.density).toInt()
@@ -350,9 +354,9 @@ class OnGoingActionProgressController(
         }
 
         val isMediaPlaying = showMediaProgress && mediaSessionHelper.isMediaPlaying()
-        val trackTitle = if (!isCompact && hasMediaSession) currentTrackTitle else null
-        val artistName = if (!isCompact && hasMediaSession) currentArtistName else null
-        val appLabel = if (!isCompact && hasMediaSession) currentAppLabel else null
+        val trackTitle = if (hasMediaSession) currentTrackTitle else null
+        val artistName = if (hasMediaSession) currentArtistName else null
+        val appLabel = if (hasMediaSession) currentAppLabel else null
 
         publish(
             ProgressState(
@@ -661,6 +665,7 @@ class OnGoingActionProgressController(
         vibrator.vibrate(HAPTIC_CLICK)
         if (isCompactModeEnabled) {
             expandCompactView()
+            collapseExpandViewWithDelay()
         }
         if (isMediaSessionActiveForChip()) {
             isMenuVisible = !isMenuVisible
@@ -695,6 +700,7 @@ class OnGoingActionProgressController(
             1 -> toggleMediaPlaybackState()
             2 -> skipToNextTrack()
         }
+        collapseExpandViewWithDelay()
         collapseMediaControlsWithDelay()
     }
 
