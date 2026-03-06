@@ -556,12 +556,6 @@ class OnGoingActionProgressController(
             return
         }
 
-        val finished = currentProgressMax > 0 && currentProgress >= currentProgressMax
-        if (!finished) {
-            cancelFinishedProgressTimeout()
-            return
-        }
-
         cancelFinishedProgressTimeout()
         finishedProgressTimeoutJob = mainScope.launch {
             delay(PROGRESS_TIMEOUT_MS)
@@ -569,14 +563,14 @@ class OnGoingActionProgressController(
             if (!isTrackingProgress) return@launch
             if (trackedNotificationKey != keyAtSchedule) return@launch
 
-            val stillFinished = currentProgressMax > 0 && currentProgress >= currentProgressMax
-            if (!stillFinished) return@launch
-
             val sbn = findNotificationByKey(keyAtSchedule)
             if (sbn == null || !hasProgress(sbn.notification)) {
                 clearProgressTracking()
                 return@launch
             }
+
+            val stillFinished = currentProgressMax > 0 && currentProgress >= currentProgressMax
+            if (!stillFinished) return@launch
 
             clearProgressTracking()
         }
