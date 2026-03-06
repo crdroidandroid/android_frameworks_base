@@ -466,9 +466,13 @@ public class ExitTransitionCoordinator extends ActivityTransitionCoordinator {
     }
 
     private void finishIfNecessary() {
-        if (mIsReturning && mExitNotified && mExitCallbacks != null && (mSharedElements.isEmpty()
-                || mSharedElementsHidden)) {
-            finish();
+        if (!mExitNotified || mExitCallbacks == null || (!mSharedElements.isEmpty() && !mSharedElementsHidden)) {
+            return;
+        }
+        if (mIsReturning) {
+             finish();
+        } else {
+            mExitCallbacks = null;
         }
     }
 
