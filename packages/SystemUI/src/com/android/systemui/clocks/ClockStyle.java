@@ -68,6 +68,8 @@ public class ClockStyle extends RelativeLayout implements TunerService.Tunable {
 
     private static final int[] mCenterClocks = {2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22};
 
+    private static final int[] mNoColorClocks = {18, 19};
+
     public static final String CLOCK_STYLE_KEY = Settings.Secure.LOCK_SCREEN_CUSTOM_CLOCK_STYLE;
     public static final String CLOCK_COLOR_MODE_KEY = Settings.Secure.LOCK_SCREEN_CUSTOM_CLOCK_COLOR_MODE;
     public static final String CLOCK_CUSTOM_COLOR_KEY = Settings.Secure.LOCK_SCREEN_CUSTOM_CLOCK_CUSTOM_COLOR;
@@ -248,6 +250,8 @@ public class ClockStyle extends RelativeLayout implements TunerService.Tunable {
     }
 
     private void updateTextClockColor(View view) {
+        if (isNoColorClock(mClockStyle)) return;
+
         if (view instanceof ViewGroup) {
             ViewGroup viewGroup = (ViewGroup) view;
             for (int i = 0; i < viewGroup.getChildCount(); i++) {
@@ -346,6 +350,15 @@ public class ClockStyle extends RelativeLayout implements TunerService.Tunable {
     private boolean isCenterClock(int clockStyle) {
         for (int centerClock : mCenterClocks) {
             if (centerClock == clockStyle) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isNoColorClock(int clockStyle) {
+        for (int noColorClock : mNoColorClocks) {
+            if (noColorClock == clockStyle) {
                 return true;
             }
         }
