@@ -24,6 +24,10 @@ import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.icu.lang.UCharacter;
@@ -137,6 +141,10 @@ public class Clock extends TextView implements
     private boolean mIsStatusBar;
     private boolean useStaticColor = false;
     private int lastDynamicColor = -1;
+
+    private boolean mMaskTextMode = false;
+    private final PorterDuffXfermode mMaskXfermode =
+            new PorterDuffXfermode(PorterDuff.Mode.DST_OUT);
 
     // Tracks config changes that will make the clock change dimensions
     private final InterestingConfigChanges mInterestingConfigChanges;
@@ -414,6 +422,35 @@ public class Clock extends TextView implements
         }
     }
 
+    /**
+     * Punches the clock text out of the view's background (e.g. a clock chip) so whatever is
+     * behind the status bar shows through the glyphs. The cut follows the text colour's alpha,
+     * so callers should use an opaque static colour while this is enabled.
+     */
+    public void setMaskTextMode(boolean enabled) {
+        if (mMaskTextMode == enabled) return;
+        mMaskTextMode = enabled;
+        // DST_OUT must only erase this view's own pixels, not the rest of the status bar.
+        setLayerType(enabled ? LAYER_TYPE_HARDWARE : LAYER_TYPE_NONE, null);
+        invalidate();
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        // Without a background there is nothing to cut into and the clock would vanish.
+        if (!mMaskTextMode || getBackground() == null) {
+            super.onDraw(canvas);
+            return;
+        }
+        final Paint paint = getPaint();
+        paint.setXfermode(mMaskXfermode);
+        try {
+            super.onDraw(canvas);
+        } finally {
+            paint.setXfermode(null);
+        }
+    }
+
     public void onDensityOrFontScaleChanged() {
         // Note that this class is not being registered as configuration listener when used
         // from compose. It will instead receive a normal "View#onConfigurationChanged".
@@ -677,4 +714,3 @@ public class Clock extends TextView implements
         }
     };
 }
-
