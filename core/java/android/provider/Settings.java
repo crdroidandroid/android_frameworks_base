@@ -7085,6 +7085,12 @@ public final class Settings {
         public static final String STATUSBAR_CLOCK_CHIP_GRADIENT_ANGLE = "statusbar_clock_chip_gradient_angle";
 
         /**
+         * Clock chip custom gradient – mask text
+         * @hide
+         */
+        public static final String STATUSBAR_CLOCK_CHIP_GRADIENT_MASK_TEXT = "statusbar_clock_chip_gradient_mask_text";
+
+        /**
          * Double tap on lockscreen to sleep
          * @hide
          */
