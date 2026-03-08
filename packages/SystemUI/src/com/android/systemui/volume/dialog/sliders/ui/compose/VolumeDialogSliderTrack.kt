@@ -21,12 +21,11 @@ import android.os.UserHandle
 import android.provider.Settings
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.LocalContentColor
@@ -45,11 +44,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.geometry.RoundRect
+import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.graphics.drawscope.clipPath
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Measurable
@@ -64,6 +65,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastFirst
+import com.android.compose.modifiers.thenIf
 import kotlin.math.min
 
 @Composable
@@ -94,45 +96,73 @@ fun SliderTrack(
                 gapSize = thumbTrackGapSize,
             )
         }
+    val gradient = if (rememberGradientColorMode() == 1) {
+            rememberGradientCustomColors()
+        } else {
+            VolumeGradient(
+                MaterialTheme.colorScheme.primary,
+                MaterialTheme.colorScheme.secondary
+            )
+        }
+    val gradientEnabled = rememberVolumeGradientEnabled()
+    val gradientBrush = remember(ignoreGradient, gradient, gradientEnabled) {
+        if (!ignoreGradient && gradientEnabled) createGradientBrush(gradient) else null
+    }
     Layout(
         measurePolicy = measurePolicy,
         content = {
-
-            val gradientColors = if (rememberGradientColorMode() == 1) {
-                val (start, end) = rememberGradientCustomColors()
-                listOf(start, end)
-            } else {
-                listOf(
-                    MaterialTheme.colorScheme.primary,
-                    MaterialTheme.colorScheme.secondary
-                )
-            }
-
-            val activeBrush =
-                if (!ignoreGradient && rememberVolumeGradientEnabled())
-                    gradientColors
-                else
-                    null
-
-            GradientSliderTrack(
+            SliderDefaults.Track(
                 sliderState = sliderState,
-                isEnabled = isEnabled,
                 colors = colors,
+                enabled = isEnabled,
                 trackCornerSize = trackCornerSize,
                 trackInsideCornerSize = trackInsideCornerSize,
+                drawStopIndicator = null,
                 thumbTrackGapSize = thumbTrackGapSize,
-                isVertical = isVertical,
-                gradientColors = activeBrush,
+                drawTick = { _, _ -> },
                 modifier =
-                    Modifier
-                        .then(
-                            if (isVertical) {
-                                Modifier.width(trackSize).fillMaxHeight()
-                            } else {
-                                Modifier.height(trackSize).fillMaxWidth()
+                    Modifier.then(
+                        if (isVertical) {
+                            Modifier.width(trackSize)
+                        } else {
+                            Modifier.height(trackSize)
+                        }
+                    ).thenIf(gradientBrush != null) {
+                        Modifier.drawWithCache {
+                            val trackShape = RoundedCornerShape(trackCornerSize)
+                            val outline = trackShape.createOutline(size, layoutDirection, this)
+                            val clipPath = outline.asPath()
+
+                            onDrawWithContent {
+                                val progress = sliderState.coercedValueAsFraction
+                                val gapPx = thumbTrackGapSize.toPx()
+                                val activeSize = if (isVertical) {
+                                    Size(size.width, size.height * progress - gapPx)
+                                } else {
+                                    Size(size.width * progress - gapPx, size.height)
+                                }
+                                val activeOffset = if (isVertical) {
+                                    Offset(0f, size.height - activeSize.height)
+                                } else {
+                                    Offset.Zero
+                                }
+                                clipPath(clipPath) {
+                                    // Inactive track
+                                    drawRect(
+                                        color = colors.inactiveTrackColor,
+                                        topLeft = Offset.Zero,
+                                        size = size
+                                    )
+                                    // Active track
+                                    drawRect(
+                                        brush = gradientBrush!!,
+                                        topLeft = activeOffset,
+                                        size = activeSize
+                                    )
+                                }
                             }
-                        )
-                        .layoutId(Contents.Track),
+                        }
+                    }.layoutId(Contents.Track),
             )
 
             TrackIcon(
@@ -168,8 +198,9 @@ fun SliderTrack(
     )
 }
 
-private data class TrackGradient(
-    val brush: Brush,
+data class VolumeGradient(
+    val startColor: Color,
+    val endColor: Color,
 )
 
 @Composable
@@ -246,7 +277,7 @@ fun rememberGradientColorMode(): Int {
 }
 
 @Composable
-fun rememberGradientCustomColors(): Pair<Color, Color> {
+fun rememberGradientCustomColors(): VolumeGradient {
     val contentResolver = LocalContext.current.contentResolver
 
     fun readStart(): Int = try {
@@ -294,141 +325,27 @@ fun rememberGradientCustomColors(): Pair<Color, Color> {
 
     val start = if (startInt != 0) Color(startInt) else MaterialTheme.colorScheme.primary
     val end = if (endInt != 0) Color(endInt) else MaterialTheme.colorScheme.secondary
-    return start to end
+
+    return VolumeGradient(startColor = start, endColor = end)
 }
 
-@Composable
-@OptIn(ExperimentalMaterial3Api::class)
-private fun GradientSliderTrack(
-    sliderState: SliderState,
-    isEnabled: Boolean,
-    colors: SliderColors,
-    trackCornerSize: Dp,
-    trackInsideCornerSize: Dp,
-    thumbTrackGapSize: Dp,
-    isVertical: Boolean,
-    gradientColors: List<Color>?,
-    modifier: Modifier = Modifier,
-) {
-    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
-
-    val inactiveColor =
-        if (isEnabled) colors.inactiveTrackColor else colors.disabledInactiveTrackColor
-    val activeSolidColor =
-        if (isEnabled) colors.activeTrackColor else colors.disabledActiveTrackColor
-
-    Box(
-        modifier =
-            modifier.drawBehind {
-                val w = size.width
-                val h = size.height
-                if (w <= 0f || h <= 0f) return@drawBehind
-
-                val frac = sliderState.coercedValueAsFraction.coerceIn(0f, 1f)
-                val outerR = trackCornerSize.toPx().coerceAtMost(minOf(w, h) / 2f)
-                val innerR = trackInsideCornerSize.toPx().coerceAtMost(minOf(w, h) / 2f)
-                val halfGap = (thumbTrackGapSize.toPx() / 2f).coerceAtLeast(0f)
-
-                drawRoundRect(
-                    color = inactiveColor,
-                    size = size,
-                    cornerRadius = CornerRadius(outerR, outerR)
-                )
-
-                if (!isVertical) {
-                    val splitX = if (isRtl) w * (1f - frac) else w * frac
-
-                    val gapEff =
-                        if (isRtl) {
-                            minOf(halfGap, splitX)
-                        } else {
-                            minOf(halfGap, w - splitX)
-                        }
-
-                    val activeStart = if (isRtl) splitX + gapEff else 0f
-                    val activeEnd = if (isRtl) w else splitX - gapEff
-
-                    if (activeEnd <= activeStart) return@drawBehind
-
-                    val eps = 0.5f
-
-                    val hitsStart = activeStart <= eps
-                    val hitsEnd = activeEnd >= (w - eps)
-
-                    val leftR =
-                        if (isRtl) {
-                            if (hitsStart) outerR else innerR   // rounded only at max (when it reaches start)
-                        } else {
-                            outerR                              // far end always rounded
-                        }
-
-                    val rightR =
-                        if (isRtl) {
-                            outerR                              // far end always rounded
-                        } else {
-                            if (hitsEnd) outerR else innerR     // rounded only at max (when it reaches end)
-                        }
-
-                    val path = Path().apply {
-                        addRoundRect(
-                            RoundRect(
-                                rect = Rect(activeStart, 0f, activeEnd, h),
-                                topLeft = CornerRadius(leftR, leftR),
-                                bottomLeft = CornerRadius(leftR, leftR),
-                                topRight = CornerRadius(rightR, rightR),
-                                bottomRight = CornerRadius(rightR, rightR),
-                            )
-                        )
-                    }
-
-                    val brush =
-                        if (gradientColors != null) Brush.horizontalGradient(gradientColors)
-                        else Brush.linearGradient(listOf(activeSolidColor, activeSolidColor))
-
-                    drawPath(path = path, brush = brush)
-                } else {
-                    val frac = sliderState.coercedValueAsFraction.coerceIn(0f, 1f)
-                    val splitY = h * (1f - frac)
-
-                    val gapEff = minOf(halfGap, splitY)
-
-                    val activeTop = splitY + gapEff
-                    val activeBottom = h
-                    if (activeBottom <= activeTop) return@drawBehind
-
-                    val eps = 0.5f
-                    val hitsTop = activeTop <= eps 
-
-                    val topR = if (hitsTop) outerR else innerR
-                    val bottomR = outerR
-
-                    val path = Path().apply {
-                        addRoundRect(
-                            RoundRect(
-                                rect = Rect(0f, activeTop, w, activeBottom),
-                                topLeft = CornerRadius(topR, topR),
-                                bottomLeft = CornerRadius(bottomR, bottomR),
-                                topRight = CornerRadius(topR, topR),
-                                bottomRight = CornerRadius(bottomR, bottomR),
-                            )
-                        )
-                    }
-
-                    val brush =
-                        if (gradientColors != null) {
-                            Brush.verticalGradient(
-                                colors = gradientColors,
-                                startY = activeBottom,
-                                endY = activeTop
-                            )
-                        } else {
-                            Brush.linearGradient(listOf(activeSolidColor, activeSolidColor))
-                        }
-
-                    drawPath(path = path, brush = brush)
-                }
-            }
+fun createGradientBrush(gradient: VolumeGradient?): Brush? {
+    if (gradient == null) return null
+    
+    return Brush.verticalGradient(
+        colors = listOf(
+            gradient.endColor,
+            gradient.startColor
+        )
     )
+}
+
+fun Outline.asPath(): Path {
+    return when (this) {
+        is Outline.Generic -> path
+        is Outline.Rounded -> Path().apply { addRoundRect(roundRect) }
+        is Outline.Rectangle -> Path().apply { addRect(rect) }
+    }
 }
 
 @Composable
