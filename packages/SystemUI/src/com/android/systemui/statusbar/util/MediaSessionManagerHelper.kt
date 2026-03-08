@@ -18,12 +18,14 @@ import android.media.session.PlaybackState
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
+import android.util.Log
 import android.view.KeyEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
@@ -50,6 +52,7 @@ class MediaSessionManagerHelper private constructor(ctx: Context) {
 
     private var collectJob: Job? = null
     private var sessionsUpdateJob: Job? = null
+    private var metadataRefreshJob: Job? = null
 
     private var lastSavedPackageName: String? = null
 
@@ -148,6 +151,9 @@ class MediaSessionManagerHelper private constructor(ctx: Context) {
         sessionsUpdateJob?.cancel()
         sessionsUpdateJob = null
 
+        metadataRefreshJob?.cancel()
+        metadataRefreshJob = null
+
         if (sessionsListening) {
             mediaSessionManager.removeOnActiveSessionsChangedListener(sessionsChangedListener)
             sessionsListening = false
@@ -205,6 +211,24 @@ class MediaSessionManagerHelper private constructor(ctx: Context) {
             }
 
         return localController
+    }
+
+    fun refreshActiveControllerMetadata() {
+        metadataRefreshJob?.cancel()
+        metadataRefreshJob = scope.launch {
+            repeat(METADATA_REFRESH_RETRY_COUNT) { attempt ->
+                val freshMetadata = activeController?.metadata
+                if (freshMetadata != null && _mediaMetadata.value != freshMetadata) {
+                    _mediaMetadata.value = freshMetadata
+                    Log.d(TAG, "Metadata refreshed successfully on attempt ${attempt + 1}")
+                    return@launch
+                }
+                if (attempt < METADATA_REFRESH_RETRY_COUNT - 1) {
+                    delay(METADATA_REFRESH_RETRY_DELAY_MS)
+                }
+            }
+            Log.w(TAG, "Failed to refresh metadata after $METADATA_REFRESH_RETRY_COUNT attempts")
+        }
     }
 
     fun seekTo(time: Long) {
@@ -300,6 +324,11 @@ class MediaSessionManagerHelper private constructor(ctx: Context) {
     }
 
     companion object {
+        private const val TAG = "MediaSessionManagerHelper"
+
+        private const val METADATA_REFRESH_RETRY_COUNT = 5
+        private const val METADATA_REFRESH_RETRY_DELAY_MS = 300L
+
         @Volatile
         private var instance: MediaSessionManagerHelper? = null
 
