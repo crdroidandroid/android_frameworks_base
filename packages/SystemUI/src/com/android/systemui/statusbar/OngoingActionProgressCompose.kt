@@ -8,10 +8,13 @@
 package com.android.systemui.statusbar
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
 import android.util.Log
 import android.util.TypedValue
+import android.widget.ImageView
 import android.widget.SeekBar
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Animatable
@@ -50,7 +53,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -64,11 +66,13 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.CompositingStrategy
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.asComposeRenderEffect
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
@@ -87,6 +91,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import androidx.core.graphics.ColorUtils
+import androidx.core.graphics.drawable.toBitmap
 import com.android.systemui.media.controls.ui.binder.SeekBarObserver
 import com.android.systemui.media.controls.ui.drawable.SquigglyProgress
 import com.android.systemui.res.R
@@ -159,7 +164,10 @@ fun OngoingActionProgress(
             state.isCompactMode -> {
                 val pv = progressFraction(state)
                 Box(
-                    modifier = Modifier.size(26.dp).then(gestureModifier),
+                    modifier = Modifier
+                        .size(26.dp)
+                        .padding(start = 2.dp)
+                        .then(gestureModifier),
                     contentAlignment = Alignment.Center
                 ) {
                     Canvas(Modifier.fillMaxSize()) {
@@ -173,8 +181,14 @@ fun OngoingActionProgress(
                         drawArc(accent, -90f, 360f * pv, false, tl, sz,
                             style = Stroke(strokePx, cap = StrokeCap.Round))
                     }
-                    state.iconBitmap?.let { bmp ->
-                        Image(bmp, null, Modifier.size(14.dp).clip(RoundedCornerShape(14.dp)))
+                    state.icon?.let { drawable ->
+                        Image(
+                            painter = drawable.toPainter(),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(14.dp)
+                                .clip(RoundedCornerShape(14.dp))
+                        )
                     }
                 }
             }
@@ -193,9 +207,15 @@ fun OngoingActionProgress(
                         .then(gestureModifier),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    state.iconBitmap?.let { bmp ->
-                        Image(bmp, null, Modifier.size(16.dp)
-                            .clip(RoundedCornerShape(16.dp)).padding(start = 1.dp))
+                    state.icon?.let { drawable ->
+                        Image(
+                            painter = drawable.toPainter(),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(16.dp)
+                                .clip(RoundedCornerShape(16.dp))
+                                .padding(start = 1.dp)
+                        )
                         Spacer(Modifier.width(5.dp))
                     }
                     Box(
@@ -226,6 +246,28 @@ fun OngoingActionProgress(
             }
         }
     }
+}
+
+@Composable
+fun Drawable.toPainter(): Painter {
+    return BitmapPainter(this.toBitmap().asImageBitmap())
+}
+
+@Composable
+private fun BitmapImage(
+    bitmap: Bitmap?,
+    contentDescription: String?,
+    contentScale: ContentScale = ContentScale.Crop,
+    modifier: Modifier = Modifier
+) {
+    if (bitmap == null) return
+    val imageBitmap = remember(bitmap) { bitmap.asImageBitmap() }
+    Image(
+        bitmap = imageBitmap,
+        contentDescription,
+        contentScale = contentScale,
+        modifier = modifier
+    )
 }
 
 @Composable
@@ -280,7 +322,7 @@ private fun MiniMediaPlayer(
     val progressMs = state.progress.toLong()
     val durationMs = state.maxProgress.toLong()
 
-    val hasRealArt = state.albumArtBitmap != null
+    val hasRealArt = state.albumArt != null
 
     val blurEffect = remember {
         android.graphics.RenderEffect
@@ -297,7 +339,7 @@ private fun MiniMediaPlayer(
             .clip(cardShape)
     ) {
         if (hasRealArt) {
-            Image(state.albumArtBitmap!!, null,
+            BitmapImage(state.albumArt!!, null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.matchParentSize().graphicsLayer {
                     renderEffect = blurEffect; scaleX = 1.15f; scaleY = 1.15f
@@ -326,16 +368,15 @@ private fun MiniMediaPlayer(
                 contentAlignment = Alignment.Center
             ) {
                 when {
-                    state.albumArtBitmap != null -> Image(
-                        state.albumArtBitmap,
+                    state.albumArt != null -> BitmapImage(
+                        state.albumArt,
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(10.dp))
                     )
-                    state.iconBitmap != null -> Image(
-                        state.iconBitmap,
+                    state.icon != null -> Image(
+                        painter = state.icon.toPainter(),
                         contentDescription = null,
-                        contentScale = ContentScale.Fit,
                         modifier = Modifier.size(36.dp).clip(RoundedCornerShape(8.dp))
                     )
                     else -> Image(
@@ -581,12 +622,16 @@ private fun MusicChip(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start
     ) {
-        state.iconBitmap?.let { bmp ->
-            Image(bmp, null, Modifier.size(15.dp).clip(RoundedCornerShape(4.dp)))
+        state.icon?.let { drawable ->
+            Image(
+                painter = drawable.toPainter(),
+                contentDescription = null,
+                modifier = Modifier.size(15.dp).clip(RoundedCornerShape(4.dp))
+            )
             Spacer(Modifier.width(4.dp))
         }
         var chipAtMaxWidth by remember { mutableStateOf(false) }
-        val chipMaxWidthPx = with(androidx.compose.ui.platform.LocalDensity.current) { 90.dp.roundToPx() }
+        val chipMaxWidthPx = with(LocalDensity.current) { 90.dp.roundToPx() }
         Box(
             if (chipAtMaxWidth)
                 Modifier.fadingEdge(
@@ -695,8 +740,8 @@ class OnGoingActionProgressComposeController(
                     isVisible = state.isVisible,
                     progress = state.progress,
                     maxProgress = state.maxProgress,
-                    iconBitmap = state.iconBitmap,
-                    albumArtBitmap = state.albumArtBitmap,
+                    icon = state.icon,
+                    albumArt = state.albumArt,
                     packageName = state.packageName,
                     isCompactMode = state.isCompactMode,
                     showMediaControls = state.showMediaControls,
