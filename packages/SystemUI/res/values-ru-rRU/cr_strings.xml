@@ -69,21 +69,6 @@
     <string name="onthego_service_toggle">Автоматически перезапускать службу</string>
     <string name="onthego_channel_name">Основной</string>
     <string name="global_action_onthego">Режим «На ходу»</string>
-    <!-- Alert slide extras -->
-    <string name="volume_ringer_priority_only">Приоритетные</string>
-    <string name="volume_ringer_alarms_only">Будильники</string>
-    <string name="volume_ringer_dnd">Не беспокоить</string>
-    <string name="tristate_flashlight">Фонарик</string>
-    <string name="tristate_flashlight_on">Фонарик включен</string>
-    <string name="tristate_flashlight_off">Фонарик отключен</string>
-    <string name="tristate_flashlight_blink">Мигание фонарика</string>
-    <string name="tristate_brightness_bright">Максимальная яркость</string>
-    <string name="tristate_brightness_dark">Минимальная яркость</string>
-    <string name="tristate_brightness_auto">Автоматическая яркость</string>
-    <string name="tristate_rotation_auto">Автоповорот</string>
-    <string name="tristate_rotation_0">Вертикально</string>
-    <string name="tristate_rotation_90">Горизонтально (90°)</string>
-    <string name="tristate_rotation_270">Горизонтально (270°)</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">за сегодня</string>
     <string name="usage_data_weekly">за неделю</string>
@@ -143,6 +128,8 @@
     <string name="qs_preferred_network_lte">4G / LTE</string>
     <string name="qs_preferred_network_nr">5G / NR</string>
     <string name="qs_preferred_network_unsupported">Не поддерживается</string>
+    <!-- VPN tethering QS tile -->
+    <string name="vpn_tethering_label">VPN-модем</string>
     <!-- Text while recognizing face -->
     <string name="face_unlock_recognizing">Распознавание лица…</string>
     <!-- Flashlight Strength -->
