@@ -69,21 +69,6 @@
     <string name="onthego_service_toggle">Автоматично перезапустити службу</string>
     <string name="onthego_channel_name">Основний</string>
     <string name="global_action_onthego">Режим \"На ходу\"</string>
-    <!-- Alert slide extras -->
-    <string name="volume_ringer_priority_only">Пріоритет</string>
-    <string name="volume_ringer_alarms_only">Будильники</string>
-    <string name="volume_ringer_dnd">Не турбувати</string>
-    <string name="tristate_flashlight">Ліхтарик</string>
-    <string name="tristate_flashlight_on">Ліхтарик увімкнено</string>
-    <string name="tristate_flashlight_off">Ліхтарик вимк</string>
-    <string name="tristate_flashlight_blink">Ліхтарик</string>
-    <string name="tristate_brightness_bright">Максимальна яскравість</string>
-    <string name="tristate_brightness_dark">Мінімальна яскравість</string>
-    <string name="tristate_brightness_auto">Автояскравість</string>
-    <string name="tristate_rotation_auto">Автоматичне обертання</string>
-    <string name="tristate_rotation_0">Портретна</string>
-    <string name="tristate_rotation_90">Ландшафт (90°)</string>
-    <string name="tristate_rotation_270">Ландшафт (270°)</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">використане сьогодні</string>
     <string name="usage_data_weekly">використано цього тижня</string>
@@ -143,6 +128,8 @@
     <string name="qs_preferred_network_lte">4G / LTE</string>
     <string name="qs_preferred_network_nr">5G / NR</string>
     <string name="qs_preferred_network_unsupported">Не підтримується</string>
+    <!-- VPN tethering QS tile -->
+    <string name="vpn_tethering_label">VPN-модем</string>
     <!-- Text while recognizing face -->
     <string name="face_unlock_recognizing">Розпізнавання обличчя...</string>
     <!-- Flashlight Strength -->
