@@ -69,21 +69,6 @@
     <string name="onthego_service_toggle">Dienst automatisch neu starten</string>
     <string name="onthego_channel_name">Primär</string>
     <string name="global_action_onthego">On-The-Go</string>
-    <!-- Alert slide extras -->
-    <string name="volume_ringer_priority_only">Wichtig</string>
-    <string name="volume_ringer_alarms_only">Wecker</string>
-    <string name="volume_ringer_dnd">Bitte nicht stören</string>
-    <string name="tristate_flashlight">Taschenlampe</string>
-    <string name="tristate_flashlight_on">Taschenlampe ein</string>
-    <string name="tristate_flashlight_off">Taschenlampe aus</string>
-    <string name="tristate_flashlight_blink">Taschenlampe blinken</string>
-    <string name="tristate_brightness_bright">Maximale Helligkeit</string>
-    <string name="tristate_brightness_dark">Minimale Helligkeit</string>
-    <string name="tristate_brightness_auto">Automatische Helligkeit</string>
-    <string name="tristate_rotation_auto">Automatisch drehen</string>
-    <string name="tristate_rotation_0">Hochformat</string>
-    <string name="tristate_rotation_90">Querformat (90°)</string>
-    <string name="tristate_rotation_270">Querformat (270°)</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">heute verbraucht</string>
     <string name="usage_data_weekly">in dieser Woche verwendet</string>
@@ -143,6 +128,8 @@
     <string name="qs_preferred_network_lte">4G/LTE</string>
     <string name="qs_preferred_network_nr">5G/NR</string>
     <string name="qs_preferred_network_unsupported">Nicht unterstützt</string>
+    <!-- VPN tethering QS tile -->
+    <string name="vpn_tethering_label">VPN-Tethering</string>
     <!-- Text while recognizing face -->
     <string name="face_unlock_recognizing">Gesichtserkennung …</string>
     <!-- Flashlight Strength -->
