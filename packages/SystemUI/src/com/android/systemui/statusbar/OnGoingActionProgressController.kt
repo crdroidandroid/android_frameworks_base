@@ -673,6 +673,8 @@ class OnGoingActionProgressController(
         val duration = mediaSessionHelper.getTotalDuration()
         if (duration <= 0) return
         mediaSessionHelper.seekTo((fraction * duration).toLong().coerceIn(0L, duration))
+        collapseExpandViewWithDelay()
+        collapseMediaControlsWithDelay()
     }
 
     fun collapseMediaControlsWithDelay() {
