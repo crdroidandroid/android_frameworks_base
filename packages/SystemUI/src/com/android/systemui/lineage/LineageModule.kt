@@ -40,6 +40,7 @@ import com.android.systemui.qs.tiles.VpnTile
 import com.android.systemui.qs.tiles.base.shared.model.QSTileConfig
 import com.android.systemui.qs.tiles.base.shared.model.QSTileUIConfig
 import com.android.systemui.res.R
+import com.android.systemui.smartpixel.ui.SmartPixelTile
 
 import dagger.Binds
 import dagger.Module
@@ -120,6 +121,12 @@ interface LineageModule {
     @IntoMap
     @StringKey(ReadingModeTile.TILE_SPEC)
     fun bindReadingModeTile(readingModeTile: ReadingModeTile): QSTileImpl<*>
+
+    /** Inject SmartPixelTile into tileMap in QSModule */
+    @Binds
+    @IntoMap
+    @StringKey(SmartPixelTile.TILE_SPEC)
+    abstract fun bindSmartPixelTile(tile: SmartPixelTile): QSTileImpl<*>
 
     /** Inject SoundTile into tileMap in QSModule */
     @Binds
@@ -338,6 +345,21 @@ interface LineageModule {
                     QSTileUIConfig.Resource(
                         iconRes = R.drawable.ic_qs_reader,
                         labelRes = R.string.quick_settings_reading_mode
+                    ),
+                instanceId = uiEventLogger.getNewInstanceId(),
+                category = TileCategory.DISPLAY,
+            )
+
+        @Provides
+        @IntoMap
+        @StringKey(SmartPixelTile.TILE_SPEC)
+        fun provideSmartPixelsTileConfig(uiEventLogger: QsEventLogger): QSTileConfig =
+            QSTileConfig(
+                tileSpec = TileSpec.create(SmartPixelTile.TILE_SPEC),
+                uiConfig =
+                    QSTileUIConfig.Resource(
+                        iconRes = R.drawable.qs_smart_pixels_icon_off,
+                        labelRes = R.string.quick_settings_smart_pixels_label,
                     ),
                 instanceId = uiEventLogger.getNewInstanceId(),
                 category = TileCategory.DISPLAY,
