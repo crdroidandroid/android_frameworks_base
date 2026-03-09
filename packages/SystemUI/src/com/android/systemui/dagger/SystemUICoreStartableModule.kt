@@ -50,6 +50,7 @@ import com.android.systemui.media.taptotransfer.receiver.MediaTttChipControllerR
 import com.android.systemui.media.taptotransfer.sender.MediaTttSenderCoordinator
 import com.android.systemui.mediaprojection.taskswitcher.MediaProjectionTaskSwitcherCoreStartable
 import com.android.systemui.shortcut.ShortcutKeyDispatcher
+import com.android.systemui.smartpixel.ui.SmartPixelManager
 import com.android.systemui.statusbar.ImmersiveModeConfirmation
 import com.android.systemui.statusbar.gesture.GesturePointerEventListener
 import com.android.systemui.statusbar.notification.InstantAppNotifier
@@ -328,5 +329,12 @@ abstract class SystemUICoreStartableModule {
     @ClassKey(SysUIKeyGestureEventInitializer::class)
     abstract fun bindSysUIKeyGestureEventInitializer(
         keyGestureEventInitializer: SysUIKeyGestureEventInitializer
+    ): CoreStartable
+
+    @Binds
+    @IntoMap
+    @ClassKey(SmartPixelManager::class)
+    abstract fun bindSmartPixelManager(
+        impl: SmartPixelManager
     ): CoreStartable
 }
