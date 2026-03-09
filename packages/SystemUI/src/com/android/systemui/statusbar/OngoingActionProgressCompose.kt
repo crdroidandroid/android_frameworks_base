@@ -330,28 +330,63 @@ private fun MiniMediaPlayer(
             .asComposeRenderEffect()
     }
 
+    val cardBgBase = MaterialTheme.colorScheme.surfaceVariant
+
+    val onCardColor = Color.White
+
+    val onCardSubColor = onCardColor.copy(alpha = 0.55f)
+
     Box(
         modifier = Modifier
-            .padding(bottom = 12.dp, start = 12.dp, end = 12.dp)
+            .padding(bottom = 12.dp, start = 10.dp, end = 10.dp)
             .width(cardWidth)
             .wrapContentHeight()
             .shadow(20.dp, cardShape)
             .clip(cardShape)
     ) {
         if (hasRealArt) {
-            BitmapImage(state.albumArt!!, null,
+            BitmapImage(
+                state.albumArt!!,
+                null,
                 contentScale = ContentScale.Crop,
-                modifier = Modifier.matchParentSize().graphicsLayer {
-                    renderEffect = blurEffect; scaleX = 1.15f; scaleY = 1.15f
-                })
+                modifier = Modifier
+                    .matchParentSize()
+                    .graphicsLayer {
+                        renderEffect = blurEffect
+                        scaleX = 1.15f
+                        scaleY = 1.15f
+                    }
+            )
+            Box(
+                Modifier
+                    .matchParentSize()
+                    .background(Color.Black.copy(alpha = 0.52f))
+            )
         } else {
-            Box(Modifier.matchParentSize()
-                .background(MaterialTheme.colorScheme.surfaceVariant))
+            Box(
+                Modifier
+                    .matchParentSize()
+                    .background(
+                        Brush.linearGradient(
+                            colors = listOf(
+                                cardBgBase,
+                                cardBgBase.copy(alpha = 0.80f)
+                            )
+                        )
+                    )
+            )
         }
 
-        Box(Modifier.matchParentSize()
-            .background(Color.Black.copy(alpha = if (hasRealArt) 0.45f else 0f)))
-        Box(Modifier.matchParentSize().background(accent.copy(alpha = 0.07f)))
+        Box(
+            Modifier
+                .matchParentSize()
+                .background(
+                    Brush.verticalGradient(
+                        0f to onCardColor.copy(alpha = 0.06f),
+                        0.35f to Color.Transparent
+                    )
+                )
+        )
 
         Row(
             modifier = Modifier
@@ -383,7 +418,7 @@ private fun MiniMediaPlayer(
                         painterResource(R.drawable.ic_default_music_icon),
                         contentDescription = null,
                         modifier = Modifier.size(26.dp),
-                        colorFilter = ColorFilter.tint(Color.White.copy(alpha = 0.55f))
+                        colorFilter = ColorFilter.tint(onCardColor.copy(alpha = 0.50f))
                     )
                 }
             }
@@ -394,15 +429,22 @@ private fun MiniMediaPlayer(
             ) {
                 Text(
                     text = state.trackTitle ?: "",
-                    style = TextStyle(color = Color.White, fontSize = 13.sp,
-                        fontWeight = FontWeight.SemiBold),
+                    style = TextStyle(
+                        color = onCardColor,
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = (-0.2).sp,
+                    ),
                     maxLines = 1, overflow = TextOverflow.Ellipsis
                 )
                 if (!state.artistName.isNullOrBlank()) {
                     Text(
                         text = state.artistName,
-                        style = TextStyle(color = Color.White.copy(alpha = 0.72f),
-                            fontSize = 11.sp),
+                        style = TextStyle(
+                            color = onCardSubColor,
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Medium
+                        ),
                         maxLines = 1, overflow = TextOverflow.Ellipsis
                     )
                 }
@@ -415,8 +457,12 @@ private fun MiniMediaPlayer(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(formatMs(progressMs),
-                        style = TextStyle(color = Color.White.copy(alpha = 0.55f),
-                            fontSize = 9.sp, fontWeight = FontWeight.Medium))
+                        style = TextStyle(
+                            color = onCardSubColor,
+                            fontSize = 9.sp,
+                            fontWeight = FontWeight.Medium
+                        )
+                    )
                     if (durationMs > 0)
                         Text("-${formatMs(durationMs - progressMs)}",
                             style = TextStyle(color = Color.White.copy(alpha = 0.55f),
@@ -435,27 +481,89 @@ private fun MiniMediaPlayer(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(2.dp)
             ) {
-                PlayerButton(R.drawable.ic_media_control_skip_previous, "Previous",
-                    36.dp, 20.dp, Color.White.copy(alpha = 0.88f), onPrev)
-                Box(
-                    modifier = Modifier.size(44.dp).clip(CircleShape)
-                        .background(Color.White.copy(alpha = 0.20f))
-                        .clickable(onClick = onPlayPause),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Image(
-                        painter = painterResource(
-                            if (state.isMediaPlaying) R.drawable.ic_media_control_pause
-                            else R.drawable.ic_media_control_play),
-                        contentDescription = if (state.isMediaPlaying) "Pause" else "Play",
-                        modifier = Modifier.size(22.dp),
-                        colorFilter = ColorFilter.tint(Color.White)
-                    )
-                }
-                PlayerButton(R.drawable.ic_media_control_skip_next, "Next",
-                    36.dp, 20.dp, Color.White.copy(alpha = 0.88f), onNext)
+                ControlButton(
+                    iconRes = R.drawable.ic_media_control_skip_previous,
+                    contentDescription = "Previous",
+                    tint = onCardColor,
+                    size = 36.dp,
+                    iconSize = 20.dp,
+                    onClick = onPrev,
+                    hasSurface = false
+                )
+                PlayPauseButton(
+                    isPlaying = state.isMediaPlaying,
+                    tint = onCardColor,
+                    surfaceColor = onCardColor.copy(alpha = 0.15f),
+                    onClick = onPlayPause,
+                )
+                ControlButton(
+                    iconRes = R.drawable.ic_media_control_skip_next,
+                    contentDescription = "Next",
+                    tint = onCardColor,
+                    size = 36.dp,
+                    iconSize = 20.dp,
+                    onClick = onNext,
+                    hasSurface = false
+                )
             }
         }
+    }
+}
+
+@Composable
+private fun PlayPauseButton(
+    isPlaying: Boolean,
+    tint: Color,
+    surfaceColor: Color,
+    onClick: () -> Unit,
+) {
+    Box(
+        modifier = Modifier
+            .width(64.dp)
+            .height(40.dp)
+            .clip(RoundedCornerShape(44.dp))
+            .background(surfaceColor)
+            .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center
+    ) {
+        Image(
+            painter = painterResource(
+                if (isPlaying) R.drawable.ic_media_control_pause
+                else R.drawable.ic_media_control_play
+            ),
+            contentDescription = if (isPlaying) "Pause" else "Play",
+            modifier = Modifier.size(22.dp),
+            colorFilter = ColorFilter.tint(tint)
+        )
+    }
+}
+
+@Composable
+private fun ControlButton(
+    iconRes: Int,
+    contentDescription: String,
+    tint: Color,
+    size: Dp,
+    iconSize: Dp,
+    onClick: () -> Unit,
+    hasSurface: Boolean = false,
+) {
+    Box(
+        modifier = Modifier
+            .size(size)
+            .clip(CircleShape)
+            .then(
+                if (hasSurface) Modifier.background(tint.copy(alpha = 0.12f)) else Modifier
+            )
+            .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center
+    ) {
+        Image(
+            painter = painterResource(iconRes),
+            contentDescription = contentDescription,
+            modifier = Modifier.size(iconSize),
+            colorFilter = ColorFilter.tint(tint)
+        )
     }
 }
 
@@ -569,20 +677,6 @@ private fun SeekBarCompose(
         },
         modifier = modifier
     )
-}
-
-@Composable
-private fun PlayerButton(
-    iconRes: Int, contentDescription: String,
-    size: Dp, iconSize: Dp, tint: Color, onClick: () -> Unit,
-) {
-    Box(
-        modifier = Modifier.size(size).clip(CircleShape).clickable(onClick = onClick),
-        contentAlignment = Alignment.Center
-    ) {
-        Image(painterResource(iconRes), contentDescription,
-            modifier = Modifier.size(iconSize), colorFilter = ColorFilter.tint(tint))
-    }
 }
 
 @Composable
