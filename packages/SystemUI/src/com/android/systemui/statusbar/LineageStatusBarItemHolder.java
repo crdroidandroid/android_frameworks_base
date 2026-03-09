@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2018-2026 The LineageOS project
+ * Copyright (C) 2018 The LineageOS project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -144,14 +144,5 @@ public class LineageStatusBarItemHolder extends RelativeLayout
     public void addVisibilityReceiver(LineageStatusBarItem.VisibilityReceiver visibilityReceiver) {
         mVisibilityReceivers.add(visibilityReceiver);
         visibilityReceiver.onVisibilityChanged(mItemHolderIsVisible);
-    }
-
-    public void removeDarkReceiver(LineageStatusBarItem.DarkReceiver darkReceiver) {
-        mDarkReceivers.remove(darkReceiver);
-    }
-
-    public void removeVisibilityReceiver(
-            LineageStatusBarItem.VisibilityReceiver visibilityReceiver) {
-        mVisibilityReceivers.remove(visibilityReceiver);
     }
 }
