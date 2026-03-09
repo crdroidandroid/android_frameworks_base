@@ -144,7 +144,7 @@ class AudioRepositoryImpl(
 
     override val ringerMode: StateFlow<RingerMode> =
         audioManagerEventsReceiver.events
-            .filterIsInstance(AudioManagerEvent.InternalRingerModeChanged::class)
+            .filterIsInstance<AudioManagerEvent.InternalRingerModeChanged>()
             .map { RingerMode(audioManager.ringerModeInternal) }
             .onStart { emit(RingerMode(audioManager.ringerModeInternal)) }
             .flowOn(backgroundCoroutineContext)
