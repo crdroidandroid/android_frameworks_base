@@ -69,21 +69,6 @@
     <string name="onthego_service_toggle">Tự khởi động lại dịch vụ</string>
     <string name="onthego_channel_name">Điều khiển chính</string>
     <string name="global_action_onthego">Trên đường đi</string>
-    <!-- Alert slide extras -->
-    <string name="volume_ringer_priority_only">Ưu tiên</string>
-    <string name="volume_ringer_alarms_only">Báo thức</string>
-    <string name="volume_ringer_dnd">Không làm phiền</string>
-    <string name="tristate_flashlight">Đèn pin</string>
-    <string name="tristate_flashlight_on">Bật đèn pin</string>
-    <string name="tristate_flashlight_off">Tắt đèn pin</string>
-    <string name="tristate_flashlight_blink">Đèn pin nhấp nháy</string>
-    <string name="tristate_brightness_bright">Độ sáng tối đa</string>
-    <string name="tristate_brightness_dark">Độ sáng tối thiểu</string>
-    <string name="tristate_brightness_auto">Độ sáng tự động</string>
-    <string name="tristate_rotation_auto">Tự động xoay</string>
-    <string name="tristate_rotation_0">Màn hình dọc</string>
-    <string name="tristate_rotation_90">Ngang (90°)</string>
-    <string name="tristate_rotation_270">Ngang (270°)</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">hôm nay dùng</string>
     <string name="usage_data_weekly">đã dùng trong tuần</string>
@@ -143,6 +128,8 @@
     <string name="qs_preferred_network_lte">4G/LTE</string>
     <string name="qs_preferred_network_nr">5G/NR</string>
     <string name="qs_preferred_network_unsupported">Không hỗ trợ</string>
+    <!-- VPN tethering QS tile -->
+    <string name="vpn_tethering_label">Chia sẻ kết nối VPN</string>
     <!-- Text while recognizing face -->
     <string name="face_unlock_recognizing">Đang nhận diện khuôn mặt...</string>
     <!-- Flashlight Strength -->
