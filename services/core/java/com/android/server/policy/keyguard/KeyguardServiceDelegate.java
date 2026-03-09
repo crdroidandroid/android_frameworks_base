@@ -240,7 +240,10 @@ public class KeyguardServiceDelegate {
         public void onServiceDisconnected(ComponentName name) {
             if (DEBUG) Log.v(TAG, "*** Keyguard disconnected (boo!)");
             mKeyguardService = null;
+            // Remember the keyguard enabled state when the service is disconnected.
+            boolean wasEnabled = mKeyguardState.enabled;
             mKeyguardState.reset();
+            mKeyguardState.enabled = wasEnabled;
             mHandler.post(() -> {
                 try {
                     ActivityTaskManager.getService().setLockScreenShown(true /* keyguardShowing */,

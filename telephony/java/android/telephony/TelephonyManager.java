@@ -18221,6 +18221,23 @@ public class TelephonyManager {
     }
 
     /**
+     * Get the modem service name.
+     * @return the service name of the modem service which bind to.
+     * @hide
+     */
+    public String getModemService() {
+        try {
+            ITelephony telephony = getITelephony();
+            if (telephony != null) {
+                return telephony.getModemService();
+            }
+        } catch (RemoteException ex) {
+            Rlog.e(TAG, "getModemService RemoteException", ex);
+        }
+        return null;
+    }
+
+    /**
      * The unattended reboot was prepared successfully.
      * @hide
      */

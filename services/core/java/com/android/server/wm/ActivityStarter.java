@@ -1131,14 +1131,24 @@ class ActivityStarter {
                 // in the flow, and asking to forward its result back to the previous.  In this
                 // case the activity is serving as a trampoline between the two, so we also want
                 // to update its launchedFromPackage to be the same as the previous activity.
-                // Note that this is safe, since we know these two packages come from the same
-                // uid; the caller could just as well have supplied that same package name itself
-                // . This specifially deals with the case of an intent picker/chooser being
+                // This specifically deals with the case of an intent picker/chooser being
                 // launched in the app flow to redirect to an activity picked by the user, where
                 // we want the final activity to consider it to have been launched by the
                 // previous app activity.
-                callingPackage = sourceRecord.launchedFromPackage;
-                callingFeatureId = sourceRecord.launchedFromFeatureId;
+                final String launchedFromPackage = sourceRecord.launchedFromPackage;
+                if (launchedFromPackage != null) {
+                    final PackageManagerInternal pmInternal =
+                            mService.getPackageManagerInternalLocked();
+                    final int packageUid = pmInternal.getPackageUid(
+                            launchedFromPackage, 0 /* flags */,
+                            UserHandle.getUserId(callingUid));
+                    // Only override callingPackage and callingFeatureId based on package UID check.
+                    // This is to prevent spoofing. See b/457742426.
+                    if (UserHandle.isSameApp(packageUid, callingUid)) {
+                        callingPackage = launchedFromPackage;
+                        callingFeatureId = sourceRecord.launchedFromFeatureId;
+                    }
+                }
             }
         }
 

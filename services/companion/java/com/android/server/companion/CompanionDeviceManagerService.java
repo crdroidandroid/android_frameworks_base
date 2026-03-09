@@ -34,6 +34,7 @@ import static com.android.internal.util.CollectionUtils.any;
 import static com.android.internal.util.Preconditions.checkState;
 import static com.android.server.companion.association.DisassociationProcessor.REASON_API;
 import static com.android.server.companion.association.DisassociationProcessor.REASON_PKG_DATA_CLEARED;
+import static com.android.server.companion.association.DisassociationProcessor.REASON_REVOKED;
 import static com.android.server.companion.utils.PackageUtils.enforceUsesCompanionDeviceFeature;
 import static com.android.server.companion.utils.PackageUtils.isRestrictedSettingsAllowed;
 import static com.android.server.companion.utils.PermissionsUtils.enforceCallerCanManageAssociationsForPackage;
@@ -218,6 +219,11 @@ public class CompanionDeviceManagerService extends SystemService {
     public void onStart() {
         // Init association stores
         mAssociationStore.refreshCache();
+
+        // Remove any revoked associations after reboot.
+        for (AssociationInfo ai : mAssociationStore.getRevokedAssociations()) {
+            mDisassociationProcessor.disassociate(ai.getId(), REASON_REVOKED);
+        }
 
         // Init UUID store
         mObservableUuidStore.getObservableUuidsForUser(getContext().getUserId());

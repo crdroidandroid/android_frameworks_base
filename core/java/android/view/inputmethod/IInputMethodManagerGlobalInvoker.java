@@ -44,6 +44,7 @@ import com.android.internal.inputmethod.IRemoteAccessibilityInputConnection;
 import com.android.internal.inputmethod.IRemoteComputerControlInputConnection;
 import com.android.internal.inputmethod.IRemoteInputConnection;
 import com.android.internal.inputmethod.InputMethodInfoSafeList;
+import com.android.internal.inputmethod.InputMethodSubtypeSafeList;
 import com.android.internal.inputmethod.SoftInputShowHideReason;
 import com.android.internal.inputmethod.StartInputFlags;
 import com.android.internal.inputmethod.StartInputReason;
@@ -250,8 +251,9 @@ final class IInputMethodManagerGlobalInvoker {
             return new ArrayList<>();
         }
         try {
-            return service.getEnabledInputMethodSubtypeList(imiId,
-                    allowsImplicitlyEnabledSubtypes, userId);
+            return InputMethodSubtypeSafeList.extractFrom(
+                    service.getEnabledInputMethodSubtypeList(imiId,
+                            allowsImplicitlyEnabledSubtypes, userId));
         } catch (RemoteException e) {
             throw e.rethrowFromSystemServer();
         }

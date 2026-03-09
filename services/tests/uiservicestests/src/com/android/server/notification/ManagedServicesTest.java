@@ -2586,7 +2586,6 @@ public class ManagedServicesTest extends UiServiceTestCase {
     }
 
     @Test
-    @EnableFlags(Flags.FLAG_LIMIT_MANAGED_SERVICES_COUNT)
     public void setPackageOrComponentEnabled_tooManyPackages_stopsAdding() {
         ManagedServices service = new TestManagedServices(getContext(), mLock, mUserProfiles,
                 mIpm, APPROVAL_BY_PACKAGE);
@@ -2614,7 +2613,6 @@ public class ManagedServicesTest extends UiServiceTestCase {
     }
 
     @Test
-    @EnableFlags(Flags.FLAG_LIMIT_MANAGED_SERVICES_COUNT)
     public void setPackageOrComponentEnabled_tooManyChanges_stopsAddingToUserSet() {
         ManagedServices service = new TestManagedServices(getContext(), mLock, mUserProfiles,
                 mIpm, APPROVAL_BY_PACKAGE);

@@ -19,24 +19,24 @@ package com.android.internal.inputmethod;
 import android.annotation.NonNull;
 import android.annotation.Nullable;
 import android.os.Parcel;
-import android.os.Parcelable;
 import android.view.inputmethod.InputMethodInfo;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
- * A {@link Parcelable} container that can holds an arbitrary number of {@link InputMethodInfo}
- * without worrying about {@link android.os.TransactionTooLargeException} when passing across
- * process boundary.
- *
- * @see Parcel#readBlob()
- * @see Parcel#writeBlob(byte[])
+ * A {@link android.os.Parcelable} container that can hold an arbitrary number of
+ * {@link InputMethodInfo} without worrying about
+ * {@link android.os.TransactionTooLargeException} when passing across process boundary.
  */
-public final class InputMethodInfoSafeList implements Parcelable {
-    @Nullable
-    private byte[] mBuffer;
+public final class InputMethodInfoSafeList extends AbstractSafeList<InputMethodInfo> {
+
+    private InputMethodInfoSafeList(@Nullable byte[] buffer) {
+        super(buffer);
+    }
+
+    private InputMethodInfoSafeList(@Nullable List<InputMethodInfo> list) {
+        super(list);
+    }
 
     /**
      * Instantiates a list of {@link InputMethodInfo} from the given {@link InputMethodInfoSafeList}
@@ -53,81 +53,20 @@ public final class InputMethodInfoSafeList implements Parcelable {
      */
     @NonNull
     public static List<InputMethodInfo> extractFrom(@Nullable InputMethodInfoSafeList from) {
-        final byte[] buf = from.mBuffer;
-        from.mBuffer = null;
-        if (buf != null) {
-            final InputMethodInfo[] array = unmarshall(buf);
-            if (array != null) {
-                return new ArrayList<>(Arrays.asList(array));
-            }
-        }
-        return new ArrayList<>();
-    }
-
-    @NonNull
-    private static InputMethodInfo[] toArray(@Nullable List<InputMethodInfo> original) {
-        if (original == null) {
-            return new InputMethodInfo[0];
-        }
-        return original.toArray(new InputMethodInfo[0]);
-    }
-
-    @Nullable
-    private static byte[] marshall(@NonNull InputMethodInfo[] array) {
-        Parcel parcel = null;
-        try {
-            parcel = Parcel.obtain();
-            parcel.writeTypedArray(array, 0);
-            return parcel.marshall();
-        } finally {
-            if (parcel != null) {
-                parcel.recycle();
-            }
-        }
-    }
-
-    @Nullable
-    private static InputMethodInfo[] unmarshall(byte[] data) {
-        Parcel parcel = null;
-        try {
-            parcel = Parcel.obtain();
-            parcel.unmarshall(data, 0, data.length);
-            parcel.setDataPosition(0);
-            return parcel.createTypedArray(InputMethodInfo.CREATOR);
-        } finally {
-            if (parcel != null) {
-                parcel.recycle();
-            }
-        }
-    }
-
-    private InputMethodInfoSafeList(@Nullable byte[] blob) {
-        mBuffer = blob;
+        return AbstractSafeList.extractFrom(from, InputMethodInfo.CREATOR);
     }
 
     /**
      * Instantiates {@link InputMethodInfoSafeList} from the given list of {@link InputMethodInfo}.
      *
      * @param list list of {@link InputMethodInfo} from which {@link InputMethodInfoSafeList} will
-     *             be created
+     *             be created. Giving {@code null} will result in an empty
+     *             {@link InputMethodInfoSafeList}.
      * @return {@link InputMethodInfoSafeList} that stores the given list of {@link InputMethodInfo}
      */
     @NonNull
     public static InputMethodInfoSafeList create(@Nullable List<InputMethodInfo> list) {
-        if (list == null || list.isEmpty()) {
-            return empty();
-        }
-        return new InputMethodInfoSafeList(marshall(toArray(list)));
-    }
-
-    /**
-     * Creates an empty {@link InputMethodInfoSafeList}.
-     *
-     * @return {@link InputMethodInfoSafeList} that is empty
-     */
-    @NonNull
-    public static InputMethodInfoSafeList empty() {
-        return new InputMethodInfoSafeList(null);
+        return new InputMethodInfoSafeList(list);
     }
 
     public static final Creator<InputMethodInfoSafeList> CREATOR = new Creator<>() {
@@ -141,16 +80,4 @@ public final class InputMethodInfoSafeList implements Parcelable {
             return new InputMethodInfoSafeList[size];
         }
     };
-
-    @Override
-    public int describeContents() {
-        // As long as InputMethodInfo#describeContents() is guaranteed to return 0, we can always
-        // return 0 here.
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeBlob(mBuffer);
-    }
 }

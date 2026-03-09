@@ -16,18 +16,27 @@
 
 package android.view.inputmethod;
 
+import static android.view.inputmethod.InputMethodInfo.COMPONENT_NAME_MAX_LENGTH;
+
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertThrows;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import android.annotation.XmlRes;
 import android.content.Context;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.platform.test.flag.junit.DeviceFlagsValueProvider;
 import android.platform.test.flag.junit.SetFlagsRule;
+import android.view.inputmethod.InputMethodInfo.MetadataReadBytesTracker;
+import android.view.inputmethod.InputMethodInfo.TypedArrayWrapper;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.SmallTest;
@@ -38,6 +47,7 @@ import com.android.frameworks.inputmethodcoretests.R;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.xmlpull.v1.XmlPullParserException;
 
 @SmallTest
 @RunWith(AndroidJUnit4.class)
@@ -129,6 +139,94 @@ public class InputMethodInfoTest {
         final InputMethodInfo clone = cloneViaParcel(imi);
 
         assertThat(clone.isVirtualDeviceOnly(), is(true));
+    }
+
+    @Test
+    public void testTypedArrayWrapper() throws Exception {
+        final TypedArray mockTypedArray = mock(TypedArray.class);
+        when(mockTypedArray.hasValue(0)).thenReturn(true);
+        when(mockTypedArray.getInt(0, 0)).thenReturn(123);
+        when(mockTypedArray.getString(1)).thenReturn("hello");
+        when(mockTypedArray.hasValue(2)).thenReturn(true);
+        when(mockTypedArray.getBoolean(2, false)).thenReturn(true);
+        when(mockTypedArray.hasValue(3)).thenReturn(true);
+        when(mockTypedArray.getResourceId(3, 0)).thenReturn(456);
+
+        try (TypedArrayWrapper wrapper = TypedArrayWrapper.createForMethod(mockTypedArray,
+                new MetadataReadBytesTracker())) {
+            assertThat(wrapper.getInt(0, 0), is(123));
+            assertThat(wrapper.getString(1), is("hello"));
+            assertThat(wrapper.getBoolean(2, false), is(true));
+            assertThat(wrapper.getResourceId(3, 0), is(456));
+        }
+    }
+
+    @Test
+    public void testTypedArrayWrapper_getString_throwsExceptionWhenStringTooLong()
+            throws Exception {
+        final TypedArray mockTypedArray = mock(TypedArray.class);
+        final String longStringA = "a".repeat(COMPONENT_NAME_MAX_LENGTH + 1);
+        final String longStringB = "b".repeat(COMPONENT_NAME_MAX_LENGTH + 1);
+        when(mockTypedArray.getString(
+                com.android.internal.R.styleable.InputMethod_settingsActivity))
+                .thenReturn(longStringA);
+        when(mockTypedArray.getString(
+                com.android.internal.R.styleable.InputMethod_languageSettingsActivity))
+                .thenReturn(longStringB);
+
+        try (TypedArrayWrapper wrapper = TypedArrayWrapper.createForMethod(mockTypedArray,
+                new MetadataReadBytesTracker())) {
+            assertThrows(
+                    XmlPullParserException.class,
+                    () -> wrapper.getString(
+                            com.android.internal.R.styleable.InputMethod_settingsActivity));
+            assertThrows(
+                    XmlPullParserException.class,
+                    () -> wrapper.getString(
+                            com.android.internal.R.styleable.InputMethod_languageSettingsActivity));
+        }
+
+        // The same index can be used for method and subtype for different attributes.
+        // This verifies the same index returns the correct string for subtypes.
+        try (TypedArrayWrapper wrapper = TypedArrayWrapper.createForSubtype(mockTypedArray,
+                new MetadataReadBytesTracker())) {
+            assertThat(wrapper.getString(
+                            com.android.internal.R.styleable.InputMethod_settingsActivity),
+                    is(longStringA));
+            assertThat(wrapper.getString(
+                            com.android.internal.R.styleable.InputMethod_languageSettingsActivity),
+                    is(longStringB));
+        }
+    }
+
+    @Test
+    public void testTypedArrayWrapper_closeRecyclesTypedArray() {
+        final TypedArray mockTypedArray = mock(TypedArray.class);
+        final TypedArrayWrapper wrapper = TypedArrayWrapper.createForMethod(mockTypedArray,
+                new MetadataReadBytesTracker());
+
+        wrapper.close();
+
+        verify(mockTypedArray).recycle();
+    }
+
+    @Test
+    public void testTypedArrayWrapper_metadataReadBytesTracker_throwsExceptionWhenLimitExceeded() {
+        final TypedArray mockTypedArray = mock(TypedArray.class);
+        final String longString = "a".repeat(1000);
+        when(mockTypedArray.getString(0)).thenReturn(longString);
+
+        try (TypedArrayWrapper wrapper = TypedArrayWrapper.createForMethod(mockTypedArray,
+                new MetadataReadBytesTracker())) {
+            assertThrows(XmlPullParserException.class, () -> {
+                // Each character is 2 bytes. 1000 chars * 2 = 2000 bytes per call.
+                // Limit is 200 * 1024 = 204800 bytes.
+                // 204800 / 2000 = 102.4. So 103 calls will exceed the limit.
+                for (int i = 0; i < 103; ++i) {
+                    wrapper.getString(0);
+                }
+            });
+        }
     }
 
     private InputMethodInfo buildInputMethodForTest(final @XmlRes int metaDataRes)

@@ -689,6 +689,41 @@ public class LockTaskController {
     }
 
     /**
+     * Method to rebuild Lock Task Pinned Mode. This uses the existing locked tasks.
+     */
+    void rebuildSystemLockTaskPinnedMode() {
+        int lockTaskModeState = mLockTaskModeState;
+        if (lockTaskModeState != LOCK_TASK_MODE_PINNED) {
+            Slog.e(TAG_LOCKTASK,
+                    "rebuildSystemLockTaskPinnedMode: Attempt to rebuild pinned mode but not in "
+                            + "pinned mode.");
+            return;
+        }
+        if (mLockTaskModeTasks.isEmpty()) {
+            Slog.i(TAG_LOCKTASK,
+                    "rebuildSystemLockTaskPinnedMode: mLockTaskModeTasks empty, nothing to "
+                            + "rebuild.");
+            return;
+        }
+        Task task = mLockTaskModeTasks.getFirst();
+        mSupervisor.mRecentTasks.onLockTaskModeStateChanged(LOCK_TASK_MODE_PINNED, task.mUserId);
+        // rebuild pinned mode on the handler thread
+        mHandler.post(() -> {
+            try {
+                final IStatusBarService statusBarService = getStatusBarService();
+                if (statusBarService != null) {
+                    statusBarService.showPinningEnterExitToast(true /* entering */);
+                }
+                mTaskChangeNotificationController.notifyLockTaskModeChanged(lockTaskModeState);
+                setStatusBarState(lockTaskModeState, task.mUserId);
+                setKeyguardState(lockTaskModeState, task.mUserId);
+            } catch (RemoteException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+    }
+
+    /**
      * Start lock task mode on the given task.
      * @param lockTaskModeState whether fully locked or pinned mode.
      * @param andResume whether the task should be brought to foreground as part of the operation.

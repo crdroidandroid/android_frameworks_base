@@ -538,7 +538,7 @@ public class AccessibilityUserStateTest {
         when(mMockServiceInfo.getTileServiceName()).thenReturn(tileComponent.getClassName());
         when(mMockServiceInfo.getResolveInfo()).thenReturn(resolveInfo);
         mUserState.mInstalledServices.add(mMockServiceInfo);
-        mUserState.updateTileServiceMapForAccessibilityServiceLocked();
+        mUserState.updateTileServiceMapForAccessibilityServiceLocked(Set.of(tileComponent));
 
         Map<ComponentName, AccessibilityServiceInfo> actual =
                 mUserState.getTileServiceToA11yServiceInfoMapLocked();

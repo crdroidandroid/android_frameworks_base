@@ -434,20 +434,39 @@ public class BiometricService extends SystemService {
                     notifyEnabledOnKeyguardCallbacks(userId, TYPE_ANY_BIOMETRIC);
                 }
             } else if (FACE_KEYGUARD_ENABLED.equals(uri)) {
+                final int biometricKeyguardEnabled = Settings.Secure.getIntForUser(
+                        mContentResolver,
+                        Settings.Secure.BIOMETRIC_KEYGUARD_ENABLED,
+                        -1 /* default */,
+                        userId);
+                // For OTA case: if FACE_KEYGUARD_ENABLED is not set and BIOMETRIC_APP_ENABLED is
+                // set, set the default value of the former to that of the latter.
+                final boolean defaultValue = biometricKeyguardEnabled == -1
+                        ? DEFAULT_KEYGUARD_ENABLED : biometricKeyguardEnabled == 1;
                 mFaceEnabledOnKeyguard.put(userId, Settings.Secure.getIntForUser(
                         mContentResolver,
                         Settings.Secure.FACE_KEYGUARD_ENABLED,
-                        DEFAULT_KEYGUARD_ENABLED ? 1 : 0 /* default */,
+                        defaultValue ? 1 : 0 /* default */,
                         userId) != 0);
 
                 if (userId == ActivityManager.getCurrentUser() && !selfChange) {
                     notifyEnabledOnKeyguardCallbacks(userId, TYPE_FACE);
                 }
             }  else if (FINGERPRINT_KEYGUARD_ENABLED.equals(uri)) {
+                final int biometricKeyguardEnabled = Settings.Secure.getIntForUser(
+                        mContentResolver,
+                        Settings.Secure.BIOMETRIC_KEYGUARD_ENABLED,
+                        -1 /* default */,
+                        userId);
+                // For OTA case: if FINGERPRINT_KEYGUARD_ENABLED is not set and
+                // BIOMETRIC_APP_ENABLED is set, set the default value of the former to that of the
+                // latter.
+                final boolean defaultValue = biometricKeyguardEnabled == -1
+                        ? DEFAULT_KEYGUARD_ENABLED : biometricKeyguardEnabled == 1;
                 mFingerprintEnabledOnKeyguard.put(userId, Settings.Secure.getIntForUser(
                         mContentResolver,
                         Settings.Secure.FINGERPRINT_KEYGUARD_ENABLED,
-                        DEFAULT_KEYGUARD_ENABLED ? 1 : 0 /* default */,
+                        defaultValue ? 1 : 0 /* default */,
                         userId) != 0);
 
                 if (userId == ActivityManager.getCurrentUser() && !selfChange) {
@@ -460,16 +479,34 @@ public class BiometricService extends SystemService {
                         DEFAULT_APP_ENABLED ? 1 : 0 /* default */,
                         userId) != 0);
             } else if (FACE_APP_ENABLED.equals(uri)) {
+                final int biometricAppEnabled = Settings.Secure.getIntForUser(
+                        mContentResolver,
+                        Settings.Secure.BIOMETRIC_APP_ENABLED,
+                        -1 /* default */,
+                        userId);
+                // For OTA case: if FACE_APP_ENABLED is not set and BIOMETRIC_APP_ENABLED is set,
+                // set the default value of the former to that of the latter.
+                final boolean defaultValue = biometricAppEnabled == -1
+                        ? DEFAULT_APP_ENABLED : biometricAppEnabled == 1;
                 mFaceEnabledForApps.put(userId, Settings.Secure.getIntForUser(
                         mContentResolver,
                         Settings.Secure.FACE_APP_ENABLED,
-                        DEFAULT_APP_ENABLED ? 1 : 0 /* default */,
+                        defaultValue ? 1 : 0 /* default */,
                         userId) != 0);
             } else if (FINGERPRINT_APP_ENABLED.equals(uri)) {
+                final int biometricAppEnabled = Settings.Secure.getIntForUser(
+                        mContentResolver,
+                        Settings.Secure.BIOMETRIC_APP_ENABLED,
+                        -1 /* default */,
+                        userId);
+                // For OTA case: if FINGERPRINT_APP_ENABLED is not set and BIOMETRIC_APP_ENABLED is
+                // set, set the default value of the former to that of the latter.
+                final boolean defaultValue = biometricAppEnabled == -1
+                        ? DEFAULT_APP_ENABLED : biometricAppEnabled == 1;
                 mFingerprintEnabledForApps.put(userId, Settings.Secure.getIntForUser(
                         mContentResolver,
                         Settings.Secure.FINGERPRINT_APP_ENABLED,
-                        DEFAULT_APP_ENABLED ? 1 : 0 /* default */,
+                        defaultValue ? 1 : 0 /* default */,
                         userId) != 0);
             } else if (MANDATORY_BIOMETRICS_ENABLED.equals(uri)) {
                 updateMandatoryBiometricsForAllProfiles(userId);

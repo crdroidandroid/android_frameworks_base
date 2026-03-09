@@ -146,6 +146,7 @@ import com.android.server.accessibility.magnification.FullScreenMagnificationCon
 import com.android.server.accessibility.magnification.MagnificationConnectionManager;
 import com.android.server.accessibility.magnification.MagnificationController;
 import com.android.server.accessibility.magnification.MagnificationProcessor;
+import com.android.server.accessibility.utils.TileServiceUtil;
 import com.android.server.pm.UserManagerInternal;
 import com.android.server.statusbar.StatusBarManagerInternal;
 import com.android.server.wm.ActivityTaskManagerInternal;
@@ -2659,7 +2660,17 @@ public class AccessibilityManagerServiceTest {
                 /* isAlwaysOnService= */ false);
         userState.mInstalledServices.addAll(
                 List.of(alwaysOnServiceInfo, standardServiceInfo));
-        userState.updateTileServiceMapForAccessibilityServiceLocked();
+        ComponentName alwaysOnA11yServiceTile =
+                new ComponentName(TARGET_ALWAYS_ON_A11Y_SERVICE.getPackageName(),
+                        alwaysOnServiceInfo.getTileServiceName());
+        TileServiceUtil.setupPackageManagerForValidTileService(
+                mMockPackageManagerInternal,
+                userState.mUserId,
+                alwaysOnA11yServiceTile
+        );
+        userState.updateTileServiceMapForAccessibilityServiceLocked(
+                Set.of(alwaysOnA11yServiceTile)
+        );
     }
 
     private void sendBroadcastToAccessibilityManagerService(Intent intent, @UserIdInt int userId) {

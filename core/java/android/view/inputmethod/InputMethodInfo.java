@@ -50,6 +50,8 @@ import android.util.Slog;
 import android.util.Xml;
 import android.view.inputmethod.InputMethodSubtype.InputMethodSubtypeBuilder;
 
+import com.android.internal.annotations.VisibleForTesting;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -313,68 +315,70 @@ public final class InputMethodInfo implements Parcelable {
                         "Meta-data does not start with input-method tag");
             }
 
-            TypedArray sa = res.obtainAttributes(attrs,
-                    com.android.internal.R.styleable.InputMethod);
-            settingsActivityComponent = sa.getString(
-                    com.android.internal.R.styleable.InputMethod_settingsActivity);
-            languageSettingsActivityComponent = sa.getString(
-                    com.android.internal.R.styleable.InputMethod_languageSettingsActivity);
-            if ((si.name != null && si.name.length() > COMPONENT_NAME_MAX_LENGTH)
-                    || (settingsActivityComponent != null
-                            && settingsActivityComponent.length()
-                                > COMPONENT_NAME_MAX_LENGTH)
-                    || (languageSettingsActivityComponent != null
-                            && languageSettingsActivityComponent.length()
-                                > COMPONENT_NAME_MAX_LENGTH)) {
-                throw new XmlPullParserException(
-                        "Activity name exceeds maximum of 1000 characters");
+            final MetadataReadBytesTracker readTracker = new MetadataReadBytesTracker();
+            try (TypedArrayWrapper sa = TypedArrayWrapper.createForMethod(
+                    res.obtainAttributes(attrs, com.android.internal.R.styleable.InputMethod),
+                    readTracker)) {
+                settingsActivityComponent = sa.getString(
+                        com.android.internal.R.styleable.InputMethod_settingsActivity);
+                languageSettingsActivityComponent = sa.getString(
+                        com.android.internal.R.styleable.InputMethod_languageSettingsActivity);
+                isVrOnly = sa.getBoolean(com.android.internal.R.styleable.InputMethod_isVrOnly,
+                        false);
+                isVirtualDeviceOnly = sa.getBoolean(
+                        com.android.internal.R.styleable.InputMethod_isVirtualDeviceOnly, false);
+                isDefaultResId = sa.getResourceId(
+                        com.android.internal.R.styleable.InputMethod_isDefault, 0);
+                supportsSwitchingToNextInputMethod = sa.getBoolean(
+                        com.android.internal.R.styleable
+                                .InputMethod_supportsSwitchingToNextInputMethod,
+                        false);
+                inlineSuggestionsEnabled = sa.getBoolean(
+                        com.android.internal.R.styleable.InputMethod_supportsInlineSuggestions,
+                        false);
+                supportsInlineSuggestionsWithTouchExploration = sa.getBoolean(
+                        com.android.internal.R.styleable
+                                .InputMethod_supportsInlineSuggestionsWithTouchExploration, false);
+                suppressesSpellChecker = sa.getBoolean(
+                        com.android.internal.R.styleable.InputMethod_suppressesSpellChecker, false);
+                showInInputMethodPicker = sa.getBoolean(
+                        com.android.internal.R.styleable.InputMethod_showInInputMethodPicker, true);
+                mHandledConfigChanges = sa.getInt(
+                        com.android.internal.R.styleable.InputMethod_configChanges, 0);
+                mSupportsStylusHandwriting = sa.getBoolean(
+                        com.android.internal.R.styleable.InputMethod_supportsStylusHandwriting,
+                        false);
+                mSupportsConnectionlessStylusHandwriting = sa.getBoolean(
+                        com.android.internal.R.styleable
+                                .InputMethod_supportsConnectionlessStylusHandwriting, false);
+                stylusHandwritingSettingsActivity = sa.getString(
+                        com.android.internal.R.styleable
+                                .InputMethod_stylusHandwritingSettingsActivity);
             }
-
-            isVrOnly = sa.getBoolean(com.android.internal.R.styleable.InputMethod_isVrOnly, false);
-            isVirtualDeviceOnly = sa.getBoolean(
-                    com.android.internal.R.styleable.InputMethod_isVirtualDeviceOnly, false);
-            isDefaultResId = sa.getResourceId(
-                    com.android.internal.R.styleable.InputMethod_isDefault, 0);
-            supportsSwitchingToNextInputMethod = sa.getBoolean(
-                    com.android.internal.R.styleable.InputMethod_supportsSwitchingToNextInputMethod,
-                    false);
-            inlineSuggestionsEnabled = sa.getBoolean(
-                    com.android.internal.R.styleable.InputMethod_supportsInlineSuggestions, false);
-            supportsInlineSuggestionsWithTouchExploration = sa.getBoolean(
-                    com.android.internal.R.styleable
-                            .InputMethod_supportsInlineSuggestionsWithTouchExploration, false);
-            suppressesSpellChecker = sa.getBoolean(
-                    com.android.internal.R.styleable.InputMethod_suppressesSpellChecker, false);
-            showInInputMethodPicker = sa.getBoolean(
-                    com.android.internal.R.styleable.InputMethod_showInInputMethodPicker, true);
-            mHandledConfigChanges = sa.getInt(
-                    com.android.internal.R.styleable.InputMethod_configChanges, 0);
-            mSupportsStylusHandwriting = sa.getBoolean(
-                    com.android.internal.R.styleable.InputMethod_supportsStylusHandwriting, false);
-            mSupportsConnectionlessStylusHandwriting = sa.getBoolean(
-                    com.android.internal.R.styleable
-                            .InputMethod_supportsConnectionlessStylusHandwriting, false);
-            stylusHandwritingSettingsActivity = sa.getString(
-                    com.android.internal.R.styleable.InputMethod_stylusHandwritingSettingsActivity);
-            sa.recycle();
 
             final int depth = parser.getDepth();
             // Parse all subtypes
             while (((type = parser.next()) != XmlPullParser.END_TAG || parser.getDepth() > depth)
                     && type != XmlPullParser.END_DOCUMENT) {
-                if (type == XmlPullParser.START_TAG) {
-                    nodeName = parser.getName();
-                    if (!"subtype".equals(nodeName)) {
-                        throw new XmlPullParserException(
-                                "Meta-data in input-method does not start with subtype tag");
-                    }
-                    final TypedArray a = res.obtainAttributes(
-                            attrs, com.android.internal.R.styleable.InputMethod_Subtype);
+                if (type != XmlPullParser.START_TAG) {
+                    continue;
+                }
+                nodeName = parser.getName();
+                if (!"subtype".equals(nodeName)) {
+                    throw new XmlPullParserException(
+                            "Meta-data in input-method does not start with subtype tag");
+                }
+
+                final InputMethodSubtype subtype;
+                try (TypedArrayWrapper a = TypedArrayWrapper.createForSubtype(
+                        res.obtainAttributes(attrs,
+                                com.android.internal.R.styleable.InputMethod_Subtype),
+                        readTracker)) {
                     String pkLanguageTag = a.getString(com.android.internal.R.styleable
                             .InputMethod_Subtype_physicalKeyboardHintLanguageTag);
                     String pkLayoutType = a.getString(com.android.internal.R.styleable
                             .InputMethod_Subtype_physicalKeyboardHintLayoutType);
-                    final InputMethodSubtype subtype = new InputMethodSubtypeBuilder()
+                    subtype = new InputMethodSubtypeBuilder()
                             .setSubtypeNameResId(a.getResourceId(com.android.internal.R.styleable
                                     .InputMethod_Subtype_label, 0))
                             .setSubtypeIconResId(a.getResourceId(com.android.internal.R.styleable
@@ -399,12 +403,11 @@ public final class InputMethodInfo implements Parcelable {
                                     .InputMethod_Subtype_subtypeId, 0 /* use Arrays.hashCode */))
                             .setIsAsciiCapable(a.getBoolean(com.android.internal.R.styleable
                                     .InputMethod_Subtype_isAsciiCapable, false)).build();
-                    a.recycle();
-                    if (!subtype.isAuxiliary()) {
-                        isAuxIme = false;
-                    }
-                    subtypes.add(subtype);
                 }
+                if (!subtype.isAuxiliary()) {
+                    isAuxIme = false;
+                }
+                subtypes.add(subtype);
             }
         } catch (NameNotFoundException | IndexOutOfBoundsException | NumberFormatException e) {
             throw new XmlPullParserException(
@@ -466,6 +469,11 @@ public final class InputMethodInfo implements Parcelable {
         if (resourceId == 0) {
             // No metadata, skip validation.
             return;
+        }
+
+        if (si.name != null && si.name.length() > COMPONENT_NAME_MAX_LENGTH) {
+            throw new XmlPullParserException(
+                    "Input method name exceeds " + COMPONENT_NAME_MAX_LENGTH + " characters");
         }
 
         // Validate file size using InputStream.skip()
@@ -1127,5 +1135,163 @@ public final class InputMethodInfo implements Parcelable {
     @Override
     public int describeContents() {
         return 0;
+    }
+
+    /**
+     * A wrapper class for {@link TypedArray} that enforces limits on the size of the metadata
+     * read from the XML. Methods throw an {@link XmlPullParserException} if the limit is surpassed.
+     *
+     * <p>This class works in conjunction with {@link MetadataReadBytesTracker} to:
+     * <ul>
+     *     <li>Limit the length of individual string attributes. For
+     *     {@code settingsActivity} and {@code languageSettingsActivity}, the maximum length is
+     *     {@link #COMPONENT_NAME_MAX_LENGTH}. For other string attributes, the maximum length is
+     *     {@link #STRING_ATTRIBUTES_MAX_CHAR_LENGTH}.</li>
+     *     <li>Track the total amount of data read from the metadata XML. The
+     *     {@link MetadataReadBytesTracker} ensures that the cumulative size of all attributes
+     *     does not exceed {@link #MAX_METADATA_SIZE_BYTES}.
+     * </ul>
+     *
+     * @hide
+     */
+    @VisibleForTesting
+    public static final class TypedArrayWrapper implements AutoCloseable {
+        /** The underlying {@link TypedArray} to read from. */
+        @NonNull
+        private final TypedArray mTypedArray;
+        /** Tracker for enforcing metadata size limits. */
+        @NonNull
+        private final MetadataReadBytesTracker mReadTracker;
+        /** {@code true} if parsing a {@code <subtype>} tag, {@code false} otherwise. */
+        private final boolean mIsReadingSubtype;
+
+        /**
+         * Creates a {@link TypedArrayWrapper} for parsing attributes of the main
+         * {@code <input-method>} tag.
+         *
+         * @param wrapped The {@link TypedArray} obtained for the {@code <input-method>} tag.
+         * @param readTracker The tracker for monitoring data size.
+         * @return A new {@link TypedArrayWrapper} instance.
+         */
+        @NonNull
+        @VisibleForTesting
+        public static TypedArrayWrapper createForMethod(
+                @NonNull TypedArray wrapped, @NonNull MetadataReadBytesTracker readTracker) {
+            return new TypedArrayWrapper(wrapped, readTracker, false);
+        }
+
+        /**
+         * Creates a {@link TypedArrayWrapper} for parsing attributes of a {@code <subtype>} tag.
+         *
+         * @param wrapped The {@link TypedArray} obtained for the {@code <subtype>} tag.
+         * @param readTracker The tracker for monitoring data size.
+         * @return A new {@link TypedArrayWrapper} instance.
+         */
+        @NonNull
+        @VisibleForTesting
+        public static TypedArrayWrapper createForSubtype(
+                @NonNull TypedArray wrapped, @NonNull MetadataReadBytesTracker readTracker) {
+            return new TypedArrayWrapper(wrapped, readTracker, true);
+        }
+
+        /**
+         * Constructs a new wrapper.
+         */
+        private TypedArrayWrapper(@NonNull TypedArray wrapped,
+                @NonNull MetadataReadBytesTracker readTracker, boolean isReadingSubtype) {
+            mTypedArray = wrapped;
+            mReadTracker = readTracker;
+            mIsReadingSubtype = isReadingSubtype;
+        }
+
+        /** Retrieves an integer value for the attribute at {@code index}. */
+        @VisibleForTesting
+        public int getInt(int index, int defaultValue) throws XmlPullParserException {
+            if (!mTypedArray.hasValue(index)) {
+                return defaultValue;
+            }
+            final int ret = mTypedArray.getInt(index, defaultValue);
+            mReadTracker.onReadBytes(Integer.BYTES);
+            return ret;
+        }
+
+        /** Retrieves the string value for the attribute at {@code index}. */
+        @VisibleForTesting
+        public String getString(int index) throws XmlPullParserException {
+            final String ret = mTypedArray.getString(index);
+            final int maxLen = getMaxLength(index);
+            if (ret != null && ret.length() > maxLen) {
+                throw new XmlPullParserException(
+                        "String resources in input method exceed the length limit of "
+                                + maxLen + " characters");
+            }
+            mReadTracker.onReadBytes(ret == null ? 0 : ret.length() * Character.BYTES);
+            return ret;
+        }
+
+        /** Retrieves a boolean value for the attribute at {@code index}. */
+        @VisibleForTesting
+        public boolean getBoolean(int index, boolean defaultValue) throws XmlPullParserException {
+            if (!mTypedArray.hasValue(index)) {
+                return defaultValue;
+            }
+            final boolean ret = mTypedArray.getBoolean(index, defaultValue);
+            mReadTracker.onReadBytes(1);
+            return ret;
+        }
+
+        /** Retrieves a resource identifier for the attribute at {@code index}. */
+        @VisibleForTesting
+        public int getResourceId(int index, int defaultValue) throws XmlPullParserException {
+            if (!mTypedArray.hasValue(index)) {
+                return defaultValue;
+            }
+            final int ret = mTypedArray.getResourceId(index, defaultValue);
+            mReadTracker.onReadBytes(Integer.BYTES);
+            return ret;
+        }
+
+        @Override
+        public void close() {
+            mTypedArray.recycle();
+        }
+
+        private int getMaxLength(int index) {
+            // Note that the Android resource has limit DEFAULT_MAX_STRING_ATTR_LENGTH = 32_768.
+            if (mIsReadingSubtype) {
+                // No limits for strings in subtype for now.
+                return Integer.MAX_VALUE;
+            } else {
+                return switch (index) {
+                    // TODO(b/456008595): Consider to add
+                    //  InputMethod_stylusHandwritingSettingsActivity
+                    case com.android.internal.R.styleable.InputMethod_settingsActivity,
+                         com.android.internal.R.styleable.InputMethod_languageSettingsActivity ->
+                            COMPONENT_NAME_MAX_LENGTH;
+                    default ->
+                        // TODO(b/456008595): Consider to introduce limits.
+                            Integer.MAX_VALUE;
+                };
+            }
+        }
+    }
+
+    /** @hide */
+    @VisibleForTesting
+    public static final class MetadataReadBytesTracker {
+        private int mRemainingBytes = MAX_METADATA_SIZE_BYTES;
+
+        @VisibleForTesting
+        public MetadataReadBytesTracker() {
+        }
+
+        private void onReadBytes(int bytes) throws XmlPullParserException {
+            mRemainingBytes -= bytes;
+            if (mRemainingBytes < 0) {
+                throw new XmlPullParserException(
+                        "The input method service has metadata exceeds the  "
+                        + MAX_METADATA_SIZE_BYTES + " byte limit");
+            }
+        }
     }
 }

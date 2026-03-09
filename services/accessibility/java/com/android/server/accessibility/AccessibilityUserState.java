@@ -1175,8 +1175,18 @@ public class AccessibilityUserState {
         return false;
     }
 
-    public void updateTileServiceMapForAccessibilityServiceLocked() {
+    /**
+     * Updates the internal map of accessibility services to their corresponding tile services.
+     *
+     * @param validA11yTileServices A set of valid {@link ComponentName}s for accessibility tile
+     *                              services.
+     */
+    public void updateTileServiceMapForAccessibilityServiceLocked(
+            @NonNull Set<ComponentName> validA11yTileServices) {
         mA11yServiceToTileService.clear();
+        if (validA11yTileServices.isEmpty()) {
+            return;
+        }
         mInstalledServices.forEach(
                 a11yServiceInfo -> {
                     String tileServiceName = a11yServiceInfo.getTileServiceName();
@@ -1190,14 +1200,26 @@ public class AccessibilityUserState {
                                 a11yFeature.getPackageName(),
                                 tileServiceName
                         );
-                        mA11yServiceToTileService.put(a11yFeature, tileService);
+                        if (validA11yTileServices.contains(tileService)) {
+                            mA11yServiceToTileService.put(a11yFeature, tileService);
+                        }
                     }
                 }
         );
     }
 
-    public void updateTileServiceMapForAccessibilityActivityLocked() {
+    /**
+     * Updates the internal map of accessibility activities to their corresponding tile services.
+     *
+     * @param validA11yTileServices A set of valid {@link ComponentName}s for accessibility tile
+     *                              services.
+     */
+    public void updateTileServiceMapForAccessibilityActivityLocked(
+            @NonNull Set<ComponentName> validA11yTileServices) {
         mA11yActivityToTileService.clear();
+        if (validA11yTileServices.isEmpty()) {
+            return;
+        }
         mInstalledShortcuts.forEach(
                 a11yShortcutInfo -> {
                     String tileServiceName = a11yShortcutInfo.getTileServiceName();
@@ -1206,7 +1228,9 @@ public class AccessibilityUserState {
                         ComponentName tileService = new ComponentName(
                                 a11yFeature.getPackageName(),
                                 tileServiceName);
-                        mA11yActivityToTileService.put(a11yFeature, tileService);
+                        if (validA11yTileServices.contains(tileService)) {
+                            mA11yActivityToTileService.put(a11yFeature, tileService);
+                        }
                     }
                 }
         );

@@ -32,6 +32,7 @@ import com.android.internal.inputmethod.IRemoteComputerControlInputConnection;
 import com.android.internal.inputmethod.IRemoteInputConnection;
 import com.android.internal.inputmethod.InputBindResult;
 import com.android.internal.inputmethod.InputMethodInfoSafeList;
+import com.android.internal.inputmethod.InputMethodSubtypeSafeList;
 
 /**
  * Public interface to the global input method manager, used by all client applications.
@@ -67,7 +68,7 @@ interface IInputMethodManager {
 
     @JavaPassthrough(annotation="@android.annotation.RequiresPermission(value = "
             + "android.Manifest.permission.INTERACT_ACROSS_USERS_FULL, conditional = true)")
-    List<InputMethodSubtype> getEnabledInputMethodSubtypeList(in @nullable String imiId,
+    InputMethodSubtypeSafeList getEnabledInputMethodSubtypeList(in @nullable String imiId,
             boolean allowsImplicitlyEnabledSubtypes, int userId);
 
     @JavaPassthrough(annotation="@android.annotation.RequiresPermission(value = "

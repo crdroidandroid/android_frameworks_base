@@ -2752,6 +2752,20 @@ public class ActivityTaskManagerService extends IActivityTaskManager.Stub {
         stopLockTaskModeInternal(null, true /* isSystemCaller */);
     }
 
+    @Override
+    public void rebuildSystemLockTaskPinnedMode() {
+        enforceTaskPermission("rebuildSystemLockTaskPinnedMode");
+        // This makes inner call to look as if it was initiated by system.
+        final long ident = Binder.clearCallingIdentity();
+        try {
+            synchronized (mGlobalLock) {
+                getLockTaskController().rebuildSystemLockTaskPinnedMode();
+            }
+        } finally {
+            Binder.restoreCallingIdentity(ident);
+        }
+    }
+
     void startLockTaskMode(@Nullable Task task, boolean isSystemCaller) {
         ProtoLog.w(WM_DEBUG_LOCKTASK, "startLockTaskMode: %s", task);
         if (task == null || task.mLockTaskAuth == LOCK_TASK_AUTH_DONT_LOCK) {

@@ -1997,6 +1997,88 @@ public class ActivityStarterTests extends WindowTestsBase {
                 .build();
     }
 
+    /**
+     * This test simulates the following scenario:
+     * 1. Privileged app (P) starts malicious app's activity (M1).
+     * 2. M1 starts M2 (also in malicious app) using startNextMatchingActivity().
+     *     This causes M2's launchedFromPackage to be P.
+     * 3. M2 starts an activity in P (P2) using startActivity() with
+     *     FLAG_ACTIVITY_FORWARD_RESULT.
+     * The test verifies that P2's launchedFromPackage is M, not P.
+     * See b/457742426 for details.
+     */
+    @Test
+    public void testLaunchedFromPackage_nextMatchingActivity_forwardResult() {
+        final String privilegedPackage = "com.test.privileged";
+        final int privilegedUid = 10001;
+        final String maliciousPackage = "com.test.malicious";
+        final int maliciousUid = 10002;
+
+        // Setup P1 activity
+        final ActivityRecord p1 = new ActivityBuilder(mAtm)
+                .setComponent(new ComponentName(privilegedPackage, "P1Activity"))
+                .setUid(privilegedUid)
+                .setCreateTask(true)
+                .build();
+
+        // Setup M1 activity, launched by P1
+        final ActivityRecord m1 = new ActivityBuilder(mAtm)
+                .setComponent(new ComponentName(maliciousPackage, "M1Activity"))
+                .setUid(maliciousUid)
+                .setCreateTask(true)
+                .setLaunchedFromPackage(privilegedPackage)
+                .setLaunchedFromUid(privilegedUid)
+                .build();
+        m1.resultTo = p1;
+
+        // Setup M2 activity, as if launched from M1 via startNextMatchingActivity()
+        final ActivityRecord m2 = new ActivityBuilder(mAtm)
+                .setComponent(new ComponentName(maliciousPackage, "M2Activity"))
+                .setUid(maliciousUid)
+                .setCreateTask(true)
+                .setLaunchedFromPackage(privilegedPackage) // Spoofed package name
+                .setLaunchedFromUid(maliciousUid)
+                .build();
+        m2.resultTo = p1; // result is forwarded
+
+        // M2 starts P2
+        final ActivityStarter starter = prepareStarter(0);
+        doReturn(privilegedUid).when(mMockPackageManager).getPackageUid(
+                eq(privilegedPackage), anyLong(), anyInt());
+        doReturn(maliciousUid).when(mMockPackageManager).getPackageUid(
+                eq(maliciousPackage), anyLong(), anyInt());
+        starter.setCallingPackage(maliciousPackage);
+        starter.setCallingUid(maliciousUid);
+
+        final Intent p2Intent = new Intent();
+        p2Intent.setComponent(new ComponentName(privilegedPackage, "P2Activity"));
+        p2Intent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
+
+        final ActivityInfo p2ActivityInfo = new ActivityInfo();
+        p2ActivityInfo.applicationInfo = new ApplicationInfo();
+        p2ActivityInfo.applicationInfo.packageName = privilegedPackage;
+        p2ActivityInfo.applicationInfo.uid = privilegedUid;
+        p2ActivityInfo.name = "P2Activity";
+
+        final ActivityRecord[] outActivity = new ActivityRecord[1];
+
+        // The request simulates M2 starting P2
+        starter.setIntent(p2Intent)
+                .setActivityInfo(p2ActivityInfo)
+                .setResultTo(m2.token) // sourceRecord is m2
+                .setRequestCode(-1) // for startActivity()
+                .setOutActivity(outActivity)
+                .execute();
+
+        final ActivityRecord p2 = outActivity[0];
+
+        assertNotNull(p2);
+        assertEquals("launchedFromPackage should be the immediate caller",
+                maliciousPackage, p2.launchedFromPackage);
+        assertEquals("launchedFromUid should be the immediate caller",
+                maliciousUid, p2.launchedFromUid);
+    }
+
     private static void startActivityInner(ActivityStarter starter, ActivityRecord target,
             ActivityRecord source, ActivityOptions options, Task inTask,
             TaskFragment inTaskFragment) {

@@ -945,8 +945,8 @@ public final class Settings implements Watchable, Snappable, ResilientAtomicFile
         p.getPkgState().setUpdatedSystemApp(false);
         final AndroidPackageInternal pkg = p.getPkg();
         PackageSetting ret = addPackageLPw(name, p.getRealName(), p.getPath(), p.getAppId(),
-                p.getFlags(), p.getPrivateFlags(), mDomainVerificationManager.generateNewId(),
-                pkg == null ? false : pkg.isSdkLibrary());
+                    p.getFlags(), p.getPrivateFlags(), mDomainVerificationManager.generateNewId(),
+                    pkg == null ? false : pkg.isSdkLibrary(), p.hasSharedUser());
         if (ret != null) {
             ret.setLegacyNativeLibraryPath(p.getLegacyNativeLibraryPath());
             ret.setPrimaryCpuAbi(p.getPrimaryCpuAbiLegacy());
@@ -966,6 +966,7 @@ public final class Settings implements Watchable, Snappable, ResilientAtomicFile
             ret.setRestrictUpdateHash(p.getRestrictUpdateHash());
             ret.setScannedAsStoppedSystemApp(p.isScannedAsStoppedSystemApp());
             ret.setInstallSource(p.getInstallSource());
+            ret.setSharedUserAppId(p.getSharedUserAppId());
         }
         mDisabledSysPackages.remove(name);
         return ret;
@@ -987,7 +988,8 @@ public final class Settings implements Watchable, Snappable, ResilientAtomicFile
     }
 
     PackageSetting addPackageLPw(String name, String realName, File codePath, int uid,
-            int pkgFlags, int pkgPrivateFlags, @NonNull UUID domainSetId, boolean isSdkLibrary) {
+            int pkgFlags, int pkgPrivateFlags, @NonNull UUID domainSetId, boolean isSdkLibrary,
+            boolean hasSharedUser) {
         PackageSetting p = mPackages.get(name);
         if (p != null) {
             if (p.getAppId() == uid) {
@@ -1000,7 +1002,8 @@ public final class Settings implements Watchable, Snappable, ResilientAtomicFile
         p = new PackageSetting(name, realName, codePath, pkgFlags, pkgPrivateFlags, domainSetId)
                 .setAppId(uid);
         if ((uid == Process.INVALID_UID && isSdkLibrary && Flags.disallowSdkLibsToBeApps())
-                || mAppIds.registerExistingAppId(uid, p, name)) {
+                || mAppIds.registerExistingAppId(uid, p, name)
+                || hasSharedUser) {
             mPackages.put(name, p);
             return p;
         }
@@ -4332,7 +4335,8 @@ public final class Settings implements Watchable, Snappable, ResilientAtomicFile
             } else if (appId > 0 || (appId == Process.INVALID_UID && isSdkLibrary
                     && Flags.disallowSdkLibsToBeApps())) {
                 packageSetting = addPackageLPw(name.intern(), realName, new File(codePathStr),
-                        appId, pkgFlags, pkgPrivateFlags, domainSetId, isSdkLibrary);
+                        appId, pkgFlags, pkgPrivateFlags, domainSetId, isSdkLibrary,
+                        /* hasSharedUser= */ false);
                 if (PackageManagerService.DEBUG_SETTINGS)
                     Log.i(PackageManagerService.TAG, "Reading package " + name + ": appId="
                             + appId + " pkg=" + packageSetting);

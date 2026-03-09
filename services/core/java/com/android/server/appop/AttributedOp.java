@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 final class AttributedOp {
     private final @NonNull AppOpsService mAppOpsService;
@@ -624,6 +625,19 @@ final class AttributedOp {
         return mPausedInProgressEvents != null && !mPausedInProgressEvents.isEmpty();
     }
 
+    public boolean hasInProgressEvent(Predicate<InProgressStartOpEvent> predicate) {
+        ArrayMap<IBinder, InProgressStartOpEvent> events =
+                isPaused() ? mPausedInProgressEvents : mInProgressEvents;
+        if (events == null || events.isEmpty()) {
+            return false;
+        }
+        for (int i = 0; i < events.size(); i++) {
+            if (predicate.test(events.valueAt(i))) {
+                return true;
+            }
+        }
+        return false;
+    }
     boolean hasAnyTime() {
         return (mAccessEvents != null && mAccessEvents.size() > 0)
                 || (mRejectEvents != null && mRejectEvents.size() > 0);

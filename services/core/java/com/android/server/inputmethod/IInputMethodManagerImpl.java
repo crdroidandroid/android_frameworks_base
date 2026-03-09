@@ -45,6 +45,7 @@ import com.android.internal.inputmethod.IRemoteAccessibilityInputConnection;
 import com.android.internal.inputmethod.IRemoteComputerControlInputConnection;
 import com.android.internal.inputmethod.IRemoteInputConnection;
 import com.android.internal.inputmethod.InputMethodInfoSafeList;
+import com.android.internal.inputmethod.InputMethodSubtypeSafeList;
 import com.android.internal.inputmethod.StartInputFlags;
 import com.android.internal.inputmethod.StartInputReason;
 import com.android.internal.view.IInputMethodManager;
@@ -104,7 +105,8 @@ final class IInputMethodManagerImpl extends IInputMethodManager.Stub {
         @NonNull
         List<InputMethodInfo> getEnabledInputMethodListLegacy(@UserIdInt int userId);
 
-        List<InputMethodSubtype> getEnabledInputMethodSubtypeList(String imiId,
+        @NonNull
+        InputMethodSubtypeSafeList getEnabledInputMethodSubtypeList(String imiId,
                 boolean allowsImplicitlyEnabledSubtypes, @UserIdInt int userId);
 
         InputMethodSubtype getLastInputMethodSubtype(@UserIdInt int userId);
@@ -255,8 +257,9 @@ final class IInputMethodManagerImpl extends IInputMethodManager.Stub {
         return mCallback.getEnabledInputMethodListLegacy(userId);
     }
 
+    @NonNull
     @Override
-    public List<InputMethodSubtype> getEnabledInputMethodSubtypeList(String imiId,
+    public InputMethodSubtypeSafeList getEnabledInputMethodSubtypeList(String imiId,
             boolean allowsImplicitlyEnabledSubtypes, @UserIdInt int userId) {
         return mCallback.getEnabledInputMethodSubtypeList(imiId, allowsImplicitlyEnabledSubtypes,
                 userId);
