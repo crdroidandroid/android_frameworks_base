@@ -69,21 +69,6 @@
     <string name="onthego_service_toggle">自動重新啟動服務</string>
     <string name="onthego_channel_name">主要</string>
     <string name="global_action_onthego">OTG 模式</string>
-    <!-- Alert slide extras -->
-    <string name="volume_ringer_priority_only">優先</string>
-    <string name="volume_ringer_alarms_only">鬧鐘</string>
-    <string name="volume_ringer_dnd">請勿打擾</string>
-    <string name="tristate_flashlight">手電筒</string>
-    <string name="tristate_flashlight_on">手電筒已開啟</string>
-    <string name="tristate_flashlight_off">手電筒已關閉</string>
-    <string name="tristate_flashlight_blink">手電筒閃爍</string>
-    <string name="tristate_brightness_bright">最大亮度</string>
-    <string name="tristate_brightness_dark">最低亮度</string>
-    <string name="tristate_brightness_auto">自動調整亮度</string>
-    <string name="tristate_rotation_auto">自動旋轉</string>
-    <string name="tristate_rotation_0">縱向顯示</string>
-    <string name="tristate_rotation_90">橫向 (90°)</string>
-    <string name="tristate_rotation_270">橫向 (270°)</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">今日已用</string>
     <string name="usage_data_weekly">本週已使用</string>
@@ -143,6 +128,8 @@
     <string name="qs_preferred_network_lte">4G / LTE</string>
     <string name="qs_preferred_network_nr">5G / NR</string>
     <string name="qs_preferred_network_unsupported">不支援</string>
+    <!-- VPN tethering QS tile -->
+    <string name="vpn_tethering_label">VPN tethering</string>
     <!-- Text while recognizing face -->
     <string name="face_unlock_recognizing">臉部辨識中...</string>
     <!-- Flashlight Strength -->
