@@ -20,6 +20,8 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.Canvas
@@ -108,10 +110,13 @@ import kotlinx.coroutines.launch
 
 private const val TAG = "OngoingActionProgressCompose"
 
-private const val EXPAND_DURATION_MS = 350
-private const val COLLAPSE_DURATION_MS = 250
+private const val EXPAND_DURATION_MS = 400
+private const val COLLAPSE_DURATION_MS = 280
 
 private const val CHIP_TEXT_LUMINANCE_THRESHOLD = 0.6
+
+private val CTRL_ICON_ALPHA_ACTIVE = 1.0f
+private val CTRL_ICON_ALPHA_INACTIVE = 0.45f
 
 /**
  * Composable that displays an ongoing action progress indicator in the status bar.
@@ -280,26 +285,32 @@ private fun AnimatedMiniMediaPlayer(
     onNext: () -> Unit,
     onSeek: (Float) -> Unit,
 ) {
-    val anim = remember { Animatable(0f) }
+    val scaleAnim = remember { Animatable(0.92f) }
+    val alphaAnim = remember { Animatable(0f) }
+    val translateAnim = remember { Animatable(24f) }
 
     LaunchedEffect(isOpening) {
         if (isOpening) {
-            anim.animateTo(1f, tween(EXPAND_DURATION_MS, easing = FastOutSlowInEasing))
+            scaleAnim.animateTo(1f,
+                spring(dampingRatio = Spring.DampingRatioMediumBouncy,
+                    stiffness = Spring.StiffnessMedium))
+            alphaAnim.animateTo(1f, tween(EXPAND_DURATION_MS, easing = FastOutSlowInEasing))
+            translateAnim.animateTo(0f,
+                tween(EXPAND_DURATION_MS, easing = FastOutSlowInEasing))
         } else {
-            anim.animateTo(0f, tween(COLLAPSE_DURATION_MS, easing = LinearOutSlowInEasing))
+            scaleAnim.animateTo(0.94f, tween(COLLAPSE_DURATION_MS, easing = LinearOutSlowInEasing))
+            alphaAnim.animateTo(0f, tween(COLLAPSE_DURATION_MS, easing = LinearOutSlowInEasing))
+            translateAnim.animateTo(16f, tween(COLLAPSE_DURATION_MS, easing = LinearOutSlowInEasing))
             onAnimationEnd()
         }
     }
 
-    val p = anim.value
-    val scale = 0.88f + p * 0.12f
-    val alpha = p
-
     Box(
         modifier = Modifier.graphicsLayer {
-            scaleX = scale
-            scaleY = scale
-            this.alpha = alpha
+            scaleX = scaleAnim.value
+            scaleY = scaleAnim.value
+            alpha = alphaAnim.value
+            translationY = translateAnim.value
         }
     ) {
         MiniMediaPlayer(state, onPrev, onPlayPause, onNext, onSeek)
@@ -315,147 +326,290 @@ private fun MiniMediaPlayer(
     onSeek: (Float) -> Unit,
 ) {
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp
-    val cardWidth = screenWidth - 24.dp
-    val cardShape = RoundedCornerShape(24.dp)
+    val cardWidth = screenWidth - 20.dp
+    val cardShape = RoundedCornerShape(28.dp)
     val accent = MaterialTheme.colorScheme.primary
 
     val progressMs = state.progress.toLong()
     val durationMs = state.maxProgress.toLong()
-
     val hasRealArt = state.albumArt != null
 
     val blurEffect = remember {
         android.graphics.RenderEffect
-            .createBlurEffect(28f, 28f, android.graphics.Shader.TileMode.MIRROR)
+            .createBlurEffect(32f, 32f, android.graphics.Shader.TileMode.MIRROR)
             .asComposeRenderEffect()
     }
 
+    val cardBgBase = if (state.chipBgColor != null)
+        Color(state.chipBgColor)
+    else
+        MaterialTheme.colorScheme.surfaceVariant
+
+    val onCardColor = if (state.chipBgColor != null &&
+            ColorUtils.calculateLuminance(state.chipBgColor) >= CHIP_TEXT_LUMINANCE_THRESHOLD)
+        Color(0xDD000000)
+    else
+        Color.White
+
+    val onCardSubColor = onCardColor.copy(alpha = 0.55f)
+    val onCardMutedColor = onCardColor.copy(alpha = 0.30f)
+
     Box(
         modifier = Modifier
-            .padding(bottom = 12.dp, start = 12.dp, end = 12.dp)
+            .padding(bottom = 14.dp, start = 10.dp, end = 10.dp)
             .width(cardWidth)
             .wrapContentHeight()
-            .shadow(20.dp, cardShape)
+            .shadow(elevation = 28.dp, shape = cardShape, ambientColor = Color.Black.copy(0.35f),
+                spotColor = Color.Black.copy(0.45f))
             .clip(cardShape)
     ) {
         if (hasRealArt) {
-            BitmapImage(state.albumArt!!, null,
+            BitmapImage(
+                state.albumArt!!,
+                null,
                 contentScale = ContentScale.Crop,
-                modifier = Modifier.matchParentSize().graphicsLayer {
-                    renderEffect = blurEffect; scaleX = 1.15f; scaleY = 1.15f
-                })
+                modifier = Modifier
+                    .matchParentSize()
+                    .graphicsLayer {
+                        renderEffect = blurEffect
+                        scaleX = 1.2f
+                        scaleY = 1.2f
+                    }
+            )
+            Box(
+                Modifier
+                    .matchParentSize()
+                    .background(Color.Black.copy(alpha = 0.52f))
+            )
         } else {
-            Box(Modifier.matchParentSize()
-                .background(MaterialTheme.colorScheme.surfaceVariant))
+            Box(
+                Modifier
+                    .matchParentSize()
+                    .background(
+                        Brush.linearGradient(
+                            colors = listOf(
+                                cardBgBase,
+                                cardBgBase.copy(alpha = 0.80f)
+                            )
+                        )
+                    )
+            )
         }
 
-        Box(Modifier.matchParentSize()
-            .background(Color.Black.copy(alpha = if (hasRealArt) 0.45f else 0f)))
-        Box(Modifier.matchParentSize().background(accent.copy(alpha = 0.07f)))
+        Box(
+            Modifier
+                .matchParentSize()
+                .background(
+                    Brush.verticalGradient(
+                        0f to onCardColor.copy(alpha = 0.06f),
+                        0.35f to Color.Transparent
+                    )
+                )
+        )
 
-        Row(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 14.dp, vertical = 16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                .padding(horizontal = 16.dp, vertical = 18.dp),
         ) {
-            Box(
-                modifier = Modifier
-                    .size(58.dp)
-                    .clip(RoundedCornerShape(10.dp))
-                    .background(Color.White.copy(alpha = 0.10f)),
-                contentAlignment = Alignment.Center
-            ) {
-                when {
-                    state.albumArt != null -> BitmapImage(
-                        state.albumArt,
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(10.dp))
-                    )
-                    state.icon != null -> Image(
-                        painter = state.icon.toPainter(),
-                        contentDescription = null,
-                        modifier = Modifier.size(36.dp).clip(RoundedCornerShape(8.dp))
-                    )
-                    else -> Image(
-                        painterResource(R.drawable.ic_default_music_icon),
-                        contentDescription = null,
-                        modifier = Modifier.size(26.dp),
-                        colorFilter = ColorFilter.tint(Color.White.copy(alpha = 0.55f))
-                    )
-                }
-            }
-
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(2.dp)
-            ) {
-                Text(
-                    text = state.trackTitle ?: "",
-                    style = TextStyle(color = Color.White, fontSize = 13.sp,
-                        fontWeight = FontWeight.SemiBold),
-                    maxLines = 1, overflow = TextOverflow.Ellipsis
-                )
-                if (!state.artistName.isNullOrBlank()) {
-                    Text(
-                        text = state.artistName,
-                        style = TextStyle(color = Color.White.copy(alpha = 0.72f),
-                            fontSize = 11.sp),
-                        maxLines = 1, overflow = TextOverflow.Ellipsis
-                    )
-                }
-
-                Spacer(Modifier.height(6.dp))
-
-                Row(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 4.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(formatMs(progressMs),
-                        style = TextStyle(color = Color.White.copy(alpha = 0.55f),
-                            fontSize = 9.sp, fontWeight = FontWeight.Medium))
-                    if (durationMs > 0)
-                        Text("-${formatMs(durationMs - progressMs)}",
-                            style = TextStyle(color = Color.White.copy(alpha = 0.55f),
-                                fontSize = 9.sp, fontWeight = FontWeight.Medium))
-                }
-
-                SeekBarCompose(
-                    progressFraction = progressFraction(state),
-                    isPlaying = state.isMediaPlaying,
-                    onSeek = onSeek,
-                    modifier = Modifier.fillMaxWidth().height(28.dp)
-                )
-            }
-
             Row(
+                modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(2.dp)
+                horizontalArrangement = Arrangement.spacedBy(13.dp)
             ) {
-                PlayerButton(R.drawable.ic_media_control_skip_previous, "Previous",
-                    36.dp, 20.dp, Color.White.copy(alpha = 0.88f), onPrev)
                 Box(
-                    modifier = Modifier.size(44.dp).clip(CircleShape)
-                        .background(Color.White.copy(alpha = 0.20f))
-                        .clickable(onClick = onPlayPause),
+                    modifier = Modifier
+                        .size(80.dp)
+                        .shadow(
+                            elevation = 10.dp,
+                            shape = RoundedCornerShape(14.dp),
+                            ambientColor = Color.Black.copy(0.4f),
+                            spotColor = Color.Black.copy(0.5f)
+                        )
+                        .clip(RoundedCornerShape(14.dp))
+                        .background(Color.White.copy(alpha = 0.08f)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Image(
-                        painter = painterResource(
-                            if (state.isMediaPlaying) R.drawable.ic_media_control_pause
-                            else R.drawable.ic_media_control_play),
-                        contentDescription = if (state.isMediaPlaying) "Pause" else "Play",
-                        modifier = Modifier.size(22.dp),
-                        colorFilter = ColorFilter.tint(Color.White)
+                    when {
+                        state.albumArt != null -> BitmapImage(
+                            state.albumArt,
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.fillMaxSize()
+                        )
+                        state.icon != null -> Image(
+                            painter = state.icon.toPainter(),
+                            contentDescription = null,
+                            modifier = Modifier.size(36.dp).clip(RoundedCornerShape(8.dp))
+                        )
+                        else -> Image(
+                            painterResource(R.drawable.ic_default_music_icon),
+                            contentDescription = null,
+                            modifier = Modifier.size(28.dp),
+                            colorFilter = ColorFilter.tint(onCardColor.copy(alpha = 0.50f))
+                        )
+                    }
+                }
+
+                Column(
+                    modifier = Modifier.weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Text(
+                        text = state.trackTitle ?: "",
+                        style = TextStyle(
+                            color = onCardColor,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                            letterSpacing = (-0.2).sp,
+                            textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                        ),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.basicMarquee(
+                            initialDelayMillis = 3000,
+                            repeatDelayMillis = 5000
+                        )
+                    )
+
+                    Spacer(Modifier.height(2.dp))
+
+                    if (!state.artistName.isNullOrBlank()) {
+                        Text(
+                            text = state.artistName,
+                            style = TextStyle(
+                                color = onCardSubColor,
+                                fontSize = 13.sp,
+                                fontWeight = FontWeight.Medium,
+                                textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                            ),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
+
+                    Spacer(Modifier.height(17.dp))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        ControlButton(
+                            iconRes = R.drawable.ic_media_control_skip_previous,
+                            contentDescription = "Previous",
+                            tint = onCardColor,
+                            size = 40.dp,
+                            iconSize = 22.dp,
+                            onClick = onPrev,
+                            hasSurface = false
+                        )
+                        Spacer(Modifier.width(4.dp))
+                        PlayPauseButton(
+                            isPlaying = state.isMediaPlaying,
+                            tint = onCardColor,
+                            surfaceColor = onCardColor.copy(alpha = 0.15f),
+                            onClick = onPlayPause,
+                        )
+                        Spacer(Modifier.width(4.dp))
+                        ControlButton(
+                            iconRes = R.drawable.ic_media_control_skip_next,
+                            contentDescription = "Next",
+                            tint = onCardColor,
+                            size = 40.dp,
+                            iconSize = 22.dp,
+                            onClick = onNext,
+                            hasSurface = false
+                        )
+                    }
+                }
+            }
+
+            Spacer(Modifier.height(17.dp))
+
+            val timeStyle = TextStyle(
+                color = onCardSubColor,
+                fontSize = 10.sp,
+                fontWeight = FontWeight.Medium
+            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(6.dp)
+            ) {
+                Text(formatMs(progressMs), style = timeStyle)
+                Box(modifier = Modifier.weight(1f)) {
+                    SeekBarCompose(
+                        progressFraction = progressFraction(state),
+                        isPlaying = state.isMediaPlaying,
+                        onSeek = onSeek,
+                        modifier = Modifier.fillMaxWidth().height(26.dp)
                     )
                 }
-                PlayerButton(R.drawable.ic_media_control_skip_next, "Next",
-                    36.dp, 20.dp, Color.White.copy(alpha = 0.88f), onNext)
+                if (durationMs > 0) {
+                    Text("-${formatMs(durationMs - progressMs)}", style = timeStyle)
+                }
             }
         }
+    }
+}
+
+@Composable
+private fun PlayPauseButton(
+    isPlaying: Boolean,
+    tint: Color,
+    surfaceColor: Color,
+    onClick: () -> Unit,
+) {
+    Box(
+        modifier = Modifier
+            .width(64.dp)
+            .height(40.dp)
+            .clip(RoundedCornerShape(50))
+            .background(surfaceColor)
+            .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center
+    ) {
+        Image(
+            painter = painterResource(
+                if (isPlaying) R.drawable.ic_media_control_pause
+                else R.drawable.ic_media_control_play
+            ),
+            contentDescription = if (isPlaying) "Pause" else "Play",
+            modifier = Modifier.size(24.dp),
+            colorFilter = ColorFilter.tint(tint)
+        )
+    }
+}
+
+/**
+ * OxygenOS-style control button — clean icon, optional translucent surface.
+ */
+@Composable
+private fun ControlButton(
+    iconRes: Int,
+    contentDescription: String,
+    tint: Color,
+    size: Dp,
+    iconSize: Dp,
+    onClick: () -> Unit,
+    hasSurface: Boolean = false,
+) {
+    Box(
+        modifier = Modifier
+            .size(size)
+            .clip(CircleShape)
+            .then(
+                if (hasSurface) Modifier.background(tint.copy(alpha = 0.12f)) else Modifier
+            )
+            .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center
+    ) {
+        Image(
+            painter = painterResource(iconRes),
+            contentDescription = contentDescription,
+            modifier = Modifier.size(iconSize),
+            colorFilter = ColorFilter.tint(tint)
+        )
     }
 }
 
@@ -479,73 +633,50 @@ private fun SeekBarCompose(
                 thumbOffset = pillThumb.intrinsicWidth / 2
 
                 val layer = (progressDrawable?.mutate() as? LayerDrawable)
-
                 if (layer != null) {
-                    val bg = layer.findDrawableByLayerId(android.R.id.background)
-                    bg?.mutate()?.setTint(
-                        com.android.internal.graphics.ColorUtils.setAlphaComponent(android.graphics.Color.WHITE, 90)
-                    )
+                    layer.findDrawableByLayerId(android.R.id.background)
+                        ?.mutate()
+                        ?.setTint(com.android.internal.graphics.ColorUtils
+                            .setAlphaComponent(android.graphics.Color.WHITE, 70))
 
-                    val secondary = layer.findDrawableByLayerId(android.R.id.secondaryProgress)
-                    secondary?.mutate()?.setTint(
-                        com.android.internal.graphics.ColorUtils.setAlphaComponent(android.graphics.Color.WHITE, 60)
-                    )
+                    layer.findDrawableByLayerId(android.R.id.secondaryProgress)
+                        ?.mutate()
+                        ?.setTint(com.android.internal.graphics.ColorUtils
+                            .setAlphaComponent(android.graphics.Color.WHITE, 50))
 
                     // Replace ONLY the progress layer with SquigglyProgress.
                     val squiggle = SquigglyProgress().apply {
-                        waveLength =
-                            ctx.resources.getDimensionPixelSize(
-                                R.dimen.qs_media_seekbar_progress_wavelength
-                            ).toFloat()
-                        lineAmplitude =
-                            ctx.resources.getDimensionPixelSize(
-                                R.dimen.qs_media_seekbar_progress_amplitude
-                            ).toFloat()
-                        phaseSpeed =
-                            ctx.resources.getDimensionPixelSize(
-                                R.dimen.qs_media_seekbar_progress_phase
-                            ).toFloat()
-                        strokeWidth =
-                            ctx.resources.getDimensionPixelSize(
-                                R.dimen.qs_media_seekbar_progress_stroke_width
-                            ).toFloat()
-
+                        waveLength = ctx.resources.getDimensionPixelSize(
+                            R.dimen.qs_media_seekbar_progress_wavelength).toFloat()
+                        lineAmplitude = ctx.resources.getDimensionPixelSize(
+                            R.dimen.qs_media_seekbar_progress_amplitude).toFloat()
+                        phaseSpeed = ctx.resources.getDimensionPixelSize(
+                            R.dimen.qs_media_seekbar_progress_phase).toFloat()
+                        strokeWidth = ctx.resources.getDimensionPixelSize(
+                            R.dimen.qs_media_seekbar_progress_stroke_width).toFloat()
                         setTint(android.graphics.Color.WHITE)
                         drawRemainingLine = false
                         transitionEnabled = false
                         animate = false
                     }
-
                     layer.setDrawableByLayerId(android.R.id.progress, squiggle)
                     progressDrawable = layer
                 }
 
-                setOnSeekBarChangeListener(
-                    object : SeekBar.OnSeekBarChangeListener {
-                        override fun onProgressChanged(sb: SeekBar?, v: Int, fromUser: Boolean) {
-                            if (fromUser) onSeek(v / 10_000f)
-                        }
-
-                        override fun onStartTrackingTouch(sb: SeekBar?) {
-                            isScrubbing = true
-                        }
-
-                        override fun onStopTrackingTouch(sb: SeekBar?) {
-                            isScrubbing = false
-                        }
+                setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                    override fun onProgressChanged(sb: SeekBar?, v: Int, fromUser: Boolean) {
+                        if (fromUser) onSeek(v / 10_000f)
                     }
-                )
+                    override fun onStartTrackingTouch(sb: SeekBar?) { isScrubbing = true }
+                    override fun onStopTrackingTouch(sb: SeekBar?) { isScrubbing = false }
+                })
             }
         },
         update = { bar ->
             val target = (progressFraction * 10_000f).toInt().coerceIn(0, 10_000)
-
             if (!isScrubbing) {
-                // Keep QS reset behavior if you want it
-                if (
-                    target <= SeekBarObserver.RESET_ANIMATION_THRESHOLD_MS &&
-                        bar.progress > SeekBarObserver.RESET_ANIMATION_THRESHOLD_MS
-                ) {
+                if (target <= SeekBarObserver.RESET_ANIMATION_THRESHOLD_MS &&
+                        bar.progress > SeekBarObserver.RESET_ANIMATION_THRESHOLD_MS) {
                     bar.progress = target
                 } else if (bar.progress != target) {
                     bar.progress = target
@@ -555,34 +686,17 @@ private fun SeekBarCompose(
             val alpha = if (isPlaying) 255 else (255 * 0.55f).toInt()
             bar.thumb?.alpha = alpha
 
-            val squiggle =
-                (bar.progressDrawable as? LayerDrawable)
-                    ?.findDrawableByLayerId(android.R.id.progress) as? SquigglyProgress
-
+            val squiggle = (bar.progressDrawable as? LayerDrawable)
+                ?.findDrawableByLayerId(android.R.id.progress) as? SquigglyProgress
             squiggle?.apply {
                 setTint(android.graphics.Color.WHITE)
                 setAlpha(alpha)
                 animate = isPlaying && !isScrubbing
             }
-
             (bar.progressDrawable as? LayerDrawable)?.alpha = alpha
         },
         modifier = modifier
     )
-}
-
-@Composable
-private fun PlayerButton(
-    iconRes: Int, contentDescription: String,
-    size: Dp, iconSize: Dp, tint: Color, onClick: () -> Unit,
-) {
-    Box(
-        modifier = Modifier.size(size).clip(CircleShape).clickable(onClick = onClick),
-        contentAlignment = Alignment.Center
-    ) {
-        Image(painterResource(iconRes), contentDescription,
-            modifier = Modifier.size(iconSize), colorFilter = ColorFilter.tint(tint))
-    }
 }
 
 @Composable
