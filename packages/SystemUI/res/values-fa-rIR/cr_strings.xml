@@ -69,21 +69,6 @@
     <string name="onthego_service_toggle">راه‌اندازی مجدد سرویس به طور خودکار</string>
     <string name="onthego_channel_name">اصلی</string>
     <string name="global_action_onthego">در حرکت</string>
-    <!-- Alert slide extras -->
-    <string name="volume_ringer_priority_only">اولویت</string>
-    <string name="volume_ringer_alarms_only">زنگ هشدار</string>
-    <string name="volume_ringer_dnd">مزاحم نشو</string>
-    <string name="tristate_flashlight">چراغ قوه</string>
-    <string name="tristate_flashlight_on">روشن کردن چراغ‌قوه</string>
-    <string name="tristate_flashlight_off">خاموش کردن چراغ‌قوه</string>
-    <string name="tristate_flashlight_blink">چشمک زدن چراغ قوه</string>
-    <string name="tristate_brightness_bright">حداکثر روشنایی</string>
-    <string name="tristate_brightness_dark">حداقل روشنایی</string>
-    <string name="tristate_brightness_auto">روشنایی خودکار</string>
-    <string name="tristate_rotation_auto">چرخش خودکار</string>
-    <string name="tristate_rotation_0">عمودی</string>
-    <string name="tristate_rotation_90">افقی(90 درجه)</string>
-    <string name="tristate_rotation_270">افقی(270 درجه)</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">مصرف امروز</string>
     <string name="usage_data_weekly">مصرفی این هفته</string>
@@ -143,6 +128,8 @@
     <string name="qs_preferred_network_lte">نسل چهارم / LTE</string>
     <string name="qs_preferred_network_nr">نسل پنجم / NR</string>
     <string name="qs_preferred_network_unsupported">پشتیبانی نشده</string>
+    <!-- VPN tethering QS tile -->
+    <string name="vpn_tethering_label">VPN tethering</string>
     <!-- Text while recognizing face -->
     <string name="face_unlock_recognizing">درحال شناسایی چهره...</string>
     <!-- Flashlight Strength -->
