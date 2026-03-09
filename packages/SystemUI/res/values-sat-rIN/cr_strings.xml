@@ -69,21 +69,6 @@
     <string name="onthego_service_toggle">Automatically restart service</string>
     <string name="onthego_channel_name">Main</string>
     <string name="global_action_onthego">On-The-Go</string>
-    <!-- Alert slide extras -->
-    <string name="volume_ringer_priority_only">ᱯᱨᱟᱭᱚᱨᱤᱴᱭ</string>
-    <string name="volume_ringer_alarms_only">ᱟᱠᱟᱨᱟᱢᱠᱚ</string>
-    <string name="volume_ringer_dnd">DnD</string>
-    <string name="tristate_flashlight">Torch</string>
-    <string name="tristate_flashlight_on">ᱴᱚᱨᱪ ᱮᱢ ᱪᱷᱚ</string>
-    <string name="tristate_flashlight_off">ᱴᱚᱨᱪ ᱵᱚᱸᱫ</string>
-    <string name="tristate_flashlight_blink">ᱴᱚᱨᱪ ᱡᱤᱲᱤᱵ</string>
-    <string name="tristate_brightness_bright">ᱡᱟᱹᱥᱼᱡᱷᱟᱞᱠᱟᱣᱠᱚ</string>
-    <string name="tristate_brightness_dark">ᱢᱤᱱᱼᱡᱷᱟᱞᱠᱟᱣᱠᱚ</string>
-    <string name="tristate_brightness_auto">ᱟᱡᱼᱛᱮᱡᱷᱟᱞᱠᱟᱣ</string>
-    <string name="tristate_rotation_auto">ᱟᱡ ᱛᱮ ᱟᱹᱪᱩᱨ</string>
-    <string name="tristate_rotation_0">ᱯᱚᱴᱨᱮᱴ</string>
-    <string name="tristate_rotation_90">ᱞᱮᱸᱰᱥᱠᱮᱯ (᱙᱐°)</string>
-    <string name="tristate_rotation_270">ᱞᱮᱸᱰᱥᱠᱮᱯ (᱒᱗᱐°)</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">used today</string>
     <string name="usage_data_weekly">used this week</string>
@@ -143,6 +128,8 @@
     <string name="qs_preferred_network_lte">4G / LTE</string>
     <string name="qs_preferred_network_nr">5G / NR</string>
     <string name="qs_preferred_network_unsupported">Unsupported</string>
+    <!-- VPN tethering QS tile -->
+    <string name="vpn_tethering_label">VPN tethering</string>
     <!-- Text while recognizing face -->
     <string name="face_unlock_recognizing">Recognizing face...</string>
     <!-- Flashlight Strength -->
