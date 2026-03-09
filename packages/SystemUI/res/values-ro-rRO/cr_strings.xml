@@ -69,21 +69,6 @@
     <string name="onthego_service_toggle">Repornire automată a serviciului</string>
     <string name="onthego_channel_name">Principal</string>
     <string name="global_action_onthego">On-The-Go</string>
-    <!-- Alert slide extras -->
-    <string name="volume_ringer_priority_only">Prioritate</string>
-    <string name="volume_ringer_alarms_only">Alarme</string>
-    <string name="volume_ringer_dnd">Nu deranjați</string>
-    <string name="tristate_flashlight">Lanternă</string>
-    <string name="tristate_flashlight_on">Lanternă activată</string>
-    <string name="tristate_flashlight_off">Lanternă oprită</string>
-    <string name="tristate_flashlight_blink">Lanternă clipire</string>
-    <string name="tristate_brightness_bright">Luminozitate maximă</string>
-    <string name="tristate_brightness_dark">Luminozitate minimă</string>
-    <string name="tristate_brightness_auto">Luminozitate minimă</string>
-    <string name="tristate_rotation_auto">Auto-rotire</string>
-    <string name="tristate_rotation_0">Portret</string>
-    <string name="tristate_rotation_90">Peisaj (90°)</string>
-    <string name="tristate_rotation_270">Peisaj (270°)</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">utilizat azi</string>
     <string name="usage_data_weekly">utilizat în această săptămână</string>
