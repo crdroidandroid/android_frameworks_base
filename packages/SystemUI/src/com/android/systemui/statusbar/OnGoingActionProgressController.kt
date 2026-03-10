@@ -672,7 +672,10 @@ class OnGoingActionProgressController(
     fun onSeek(fraction: Float) {
         val duration = mediaSessionHelper.getTotalDuration()
         if (duration <= 0) return
-        mediaSessionHelper.seekTo((fraction * duration).toLong().coerceIn(0L, duration))
+        val seekPos = (fraction * duration).toLong().coerceIn(0L, duration)
+        mediaSessionHelper.seekTo(seekPos)
+        currentProgress = seekPos.toInt()
+        updateProgressState()
         collapseExpandViewWithDelay()
         collapseMediaControlsWithDelay()
     }
