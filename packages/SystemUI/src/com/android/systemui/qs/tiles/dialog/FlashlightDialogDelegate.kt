@@ -95,6 +95,7 @@ class FlashlightDialogDelegate @Inject constructor(
         slider.valueFrom = 1f
         slider.valueTo = numLevels.toFloat()
         slider.stepSize = 1f
+        slider.setTickVisible(numLevels <= 10)
         slider.value = ((currentPercent * numLevels).roundToInt()).coerceIn(1, numLevels).toFloat()
         slider.setLabelFormatter { value ->
             ((value / numLevels) * 100).roundToInt().coerceIn(0, 100).toString() + "%" }
