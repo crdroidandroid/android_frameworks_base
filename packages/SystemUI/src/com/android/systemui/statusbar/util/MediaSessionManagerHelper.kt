@@ -29,6 +29,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -53,6 +54,7 @@ class MediaSessionManagerHelper private constructor(ctx: Context) {
     private var collectJob: Job? = null
     private var sessionsUpdateJob: Job? = null
     private var metadataRefreshJob: Job? = null
+    private var heartbeatJob: Job? = null
 
     private var lastSavedPackageName: String? = null
 
@@ -73,18 +75,32 @@ class MediaSessionManagerHelper private constructor(ctx: Context) {
         override fun onPlaybackStateChanged(state: PlaybackState?) {
             _playbackState.value = state
         }
+
+        override fun onSessionDestroyed() {
+            Log.d(TAG, "Active session destroyed, forcing refresh")
+            refreshActiveSessions()
+        }
     }
 
     private val sessionsChangedListener =
         MediaSessionManager.OnActiveSessionsChangedListener { controllers ->
             // Avoid doing any work if nobody is listening.
-            if (listeners.isEmpty()) return@OnActiveSessionsChangedListener
+            if (!sessionsListening || listeners.isEmpty()) return@OnActiveSessionsChangedListener
 
-            val safeControllers = controllers.orEmpty()
+            var safeControllers = controllers.orEmpty()
 
             sessionsUpdateJob?.cancel()
             sessionsUpdateJob = scope.launch {
+                if (safeControllers.isEmpty()) {
+                    safeControllers = try {
+                        mediaSessionManager.getActiveSessions(null)
+                    } catch (e: Exception) {
+                        Log.w(TAG, "Failed to get active sessions for re-evaluation", e)
+                        return@launch
+                    }
+                }
                 val picked = withContext(Dispatchers.IO) { pickBestController(safeControllers) }
+
                 if (sameSessions(activeController, picked)) return@launch
 
                 activeController?.unregisterCallback(mediaControllerCallback)
@@ -103,6 +119,8 @@ class MediaSessionManagerHelper private constructor(ctx: Context) {
 
         if (wasEmpty) {
             startTracking()
+        } else {
+            refreshActiveSessions()
         }
 
         // Push current state immediately.
@@ -142,9 +160,14 @@ class MediaSessionManagerHelper private constructor(ctx: Context) {
                 }
             }
         }
+
+        startHeartbeat()
     }
 
     private fun stopTracking() {
+        heartbeatJob?.cancel()
+        heartbeatJob = null
+
         collectJob?.cancel()
         collectJob = null
 
@@ -164,6 +187,23 @@ class MediaSessionManagerHelper private constructor(ctx: Context) {
 
         _mediaMetadata.value = null
         _playbackState.value = null
+    }
+
+    private fun startHeartbeat() {
+        heartbeatJob?.cancel()
+        heartbeatJob = scope.launch {
+            while (isActive) {
+                delay(HEARTBEAT_INTERVAL_MS)
+                refreshActiveSessions()
+            }
+        }
+    }
+
+    fun refreshActiveSessions() {
+        if (listeners.isEmpty() || !sessionsListening) return
+        sessionsChangedListener.onActiveSessionsChanged(
+            mediaSessionManager.getActiveSessions(null)
+        )
     }
 
     private fun notifyListeners(action: MediaMetadataListener.() -> Unit) {
@@ -277,7 +317,7 @@ class MediaSessionManagerHelper private constructor(ctx: Context) {
 
     private fun sameSessions(a: MediaController?, b: MediaController?): Boolean {
         if (a == b) return true
-        if (a == null) return false
+        if (a == null || b == null) return false
         return a.controlsSameSession(b)
     }
 
@@ -328,6 +368,9 @@ class MediaSessionManagerHelper private constructor(ctx: Context) {
 
         private const val METADATA_REFRESH_RETRY_COUNT = 5
         private const val METADATA_REFRESH_RETRY_DELAY_MS = 300L
+
+        /** Periodic re-evaluation interval to catch stale sessions. */
+        private const val HEARTBEAT_INTERVAL_MS = 30_000L
 
         @Volatile
         private var instance: MediaSessionManagerHelper? = null
