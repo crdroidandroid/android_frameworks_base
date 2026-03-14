@@ -301,7 +301,10 @@ class OnGoingActionProgressController(
             val size = (48f * context.resources.displayMetrics.density).toInt().coerceAtLeast(1)
             val bitmap = try {
                 withContext(bgDispatcher) {
-                    icon.toBitmap(width = size, height = size, config = Bitmap.Config.ARGB_8888)
+                    val safeIcon = icon.mutate().apply {
+                        setBounds(0, 0, size, size)
+                    }
+                    safeIcon.toBitmap(width = size, height = size, config = Bitmap.Config.ARGB_8888)
                 }
             } catch (e: Exception) {
                 Log.w(TAG, "Failed to rasterize icon for chip color extraction", e)
@@ -509,12 +512,17 @@ class OnGoingActionProgressController(
         if (inFlightIconLoads.containsKey(packageName)) return
 
         val job = mainScope.launch {
+            val sizePx = (24f * context.resources.displayMetrics.density).toInt().coerceAtLeast(1)
             val drawable = withContext(bgDispatcher) {
-                fetchPackageIcon(packageName)
-            }
-
-            val sizePx = (24f * context.resources.displayMetrics.density).toInt()
-            drawable.setBounds(0, 0, sizePx, sizePx)
+                try {
+                    fetchPackageIcon(packageName).mutate().apply {
+                        setBounds(0, 0, sizePx, sizePx)
+                    }
+                } catch (e: Exception) {
+                    Log.w(TAG, "Failed to load/prepare icon for $packageName", e)
+                    null
+                }
+            } ?: return@launch
 
             iconCache[packageName] = drawable
             onLoaded(drawable)
