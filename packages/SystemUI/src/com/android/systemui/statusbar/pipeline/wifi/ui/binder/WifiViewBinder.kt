@@ -29,6 +29,7 @@ import com.android.systemui.common.ui.binder.IconViewBinder
 import com.android.systemui.lifecycle.repeatWhenAttached
 import com.android.systemui.res.R
 import com.android.systemui.statusbar.StatusBarIconView
+import com.android.systemui.statusbar.connectivity.ThemeIconController
 import com.android.systemui.statusbar.StatusBarIconView.STATE_HIDDEN
 import com.android.systemui.statusbar.core.NewStatusBarIcons
 import com.android.systemui.statusbar.pipeline.shared.ui.binder.ModernStatusBarViewBinding
@@ -102,11 +103,37 @@ object WifiViewBinder {
                 }
 
                 launch {
-                    viewModel.wifiIcon.collect { wifiIcon ->
-                        view.isVisible = wifiIcon is WifiIcon.Visible
-                        if (wifiIcon is WifiIcon.Visible) {
-                            IconViewBinder.bind(wifiIcon.icon, iconView)
+                    var lastWifiRes = 0
+
+                    val refreshCallback = Runnable {
+                        if (lastWifiRes == 0) return@Runnable
+                        val themed = ThemeIconController
+                            .getThemedWifiIcon(view.context, lastWifiRes)
+                        if (themed != null) {
+                            iconView.setImageDrawable(themed)
+                        } else {
+                            iconView.setImageResource(lastWifiRes)
                         }
+                        groupView.invalidate()
+                    }
+                    ThemeIconController.registerRefreshCallback(refreshCallback)
+
+                    try {
+                        viewModel.wifiIcon.collect { wifiIcon ->
+                            view.isVisible = wifiIcon is WifiIcon.Visible
+                            if (wifiIcon is WifiIcon.Visible) {
+                                lastWifiRes = wifiIcon.res
+                                val themedDrawable = ThemeIconController
+                                    .getThemedWifiIcon(view.context, wifiIcon.res)
+                                if (themedDrawable != null) {
+                                    iconView.setImageDrawable(themedDrawable)
+                                } else {
+                                    IconViewBinder.bind(wifiIcon.icon, iconView)
+                                }
+                            }
+                        }
+                    } finally {
+                        ThemeIconController.unregisterRefreshCallback(refreshCallback)
                     }
                 }
 
