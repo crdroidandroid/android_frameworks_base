@@ -39,6 +39,7 @@ import com.android.systemui.kairos.util.nameTag
 import com.android.systemui.plugins.DarkIconDispatcher
 import com.android.systemui.res.R
 import com.android.systemui.statusbar.StatusBarIconView
+import com.android.systemui.statusbar.connectivity.ThemeIconController
 import com.android.systemui.statusbar.pipeline.mobile.domain.model.SignalIconModel
 import com.android.systemui.statusbar.pipeline.mobile.ui.MobileViewLogger
 import com.android.systemui.statusbar.pipeline.mobile.ui.viewmodel.LocationBasedMobileViewModelKairos
@@ -160,6 +161,22 @@ object MobileIconBinderKairos {
         val dotView = view.requireViewById<StatusBarIconView>(R.id.status_bar_dot)
 
         val isVisible = viewModel.isVisible.sample()
+
+        var lastCellularIconKairos: SignalIconModel.Cellular? = null
+        val refreshCallbackKairos = Runnable {
+            val icon = lastCellularIconKairos ?: return@Runnable
+            val themed = ThemeIconController
+                .getThemedSignalIcon(view.context, icon.level, icon.numberOfLevels)
+            if (themed != null) {
+                iconView.setImageDrawable(themed)
+            } else {
+                iconView.setImageDrawable(mobileDrawable)
+                mobileDrawable.level = icon.toSignalDrawableState()
+            }
+            mobileGroupView.invalidate()
+        }
+        ThemeIconController.registerRefreshCallback(refreshCallbackKairos)
+
         effect(name = nameTag("MobileIconBinderKairos.viewIsVisibleInitEffect")) {
             view.isVisible = isVisible
             iconView.isVisible = true
@@ -198,6 +215,8 @@ object MobileIconBinderKairos {
                 } finally {
                     binding.isCollecting = false
                     logger.logCollectionStopped(view, viewModel)
+                    ThemeIconController.unregisterRefreshCallback(
+                        refreshCallbackKairos)
                 }
             }
 
@@ -226,6 +245,7 @@ object MobileIconBinderKairos {
                         else -> false
                     }
                 if (newIcon is SignalIconModel.Cellular) {
+                    lastCellularIconKairos = newIcon
                     val packedSignalDrawableState = newIcon.toSignalDrawableState()
                     viewModel.verboseLogger?.logBinderReceivedSignalCellularIcon(
                         parentView = view,
@@ -234,8 +254,18 @@ object MobileIconBinderKairos {
                         packedSignalDrawableState = packedSignalDrawableState,
                         shouldRequestLayout = shouldRequestLayout,
                     )
-                    iconView.setImageDrawable(mobileDrawable)
-                    mobileDrawable.level = packedSignalDrawableState
+                    val themedDrawable = ThemeIconController
+                        .getThemedSignalIcon(
+                            view.context,
+                            newIcon.level,
+                            newIcon.numberOfLevels
+                        )
+                    if (themedDrawable != null) {
+                        iconView.setImageDrawable(themedDrawable)
+                    } else {
+                        iconView.setImageDrawable(mobileDrawable)
+                        mobileDrawable.level = packedSignalDrawableState
+                    }
                     viewModel.verboseLogger?.logBinderSignalIconResult(
                         parentView = view,
                         subId = viewModel.subscriptionId,

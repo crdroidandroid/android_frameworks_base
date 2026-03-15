@@ -525,6 +525,7 @@
     <protected-broadcast android:name="android.intent.action.USER_INFO_CHANGED" />
     <protected-broadcast android:name="android.intent.action.USER_UNLOCKED" />
     <protected-broadcast android:name="android.intent.action.WALLPAPER_CHANGED" />
+    <protected-broadcast android:name="android.intent.action.THEME_ENGINE_CHANGED" />
 
     <protected-broadcast android:name="android.app.action.DEVICE_POLICY_MANAGER_STATE_CHANGED" />
     <protected-broadcast android:name="android.app.action.CHOOSE_PRIVATE_KEY_ALIAS" />
