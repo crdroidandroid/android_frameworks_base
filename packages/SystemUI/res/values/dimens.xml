@@ -208,6 +208,10 @@
         match the core/status_bar_system_icon_size and change to sp unit -->
     <dimen name="status_bar_mobile_signal_size">15sp</dimen>
     <dimen name="status_bar_mobile_signal_size_updated">12sp</dimen>
+    <dimen name="status_bar_signal_overlay_width">17dp</dimen>
+    <dimen name="status_bar_signal_overlay_height">12dp</dimen>
+    <dimen name="status_bar_wifi_overlay_width">17dp</dimen>
+    <dimen name="status_bar_wifi_overlay_height">12.58dp</dimen>
 
     <!-- Size of the view displaying the mobile signal icon in the status bar. This value should
         match the viewport height of mobile signal drawables such as ic_lte_mobiledata
