@@ -725,10 +725,12 @@ public abstract class QSTileImpl<TState extends State> implements QSTile, Lifecy
 
     public static class DrawableIconWithRes extends DrawableIcon {
         private final int mId;
+        private final int mGeneration;
 
         public DrawableIconWithRes(Drawable drawable, int id) {
             super(drawable);
             mId = id;
+            mGeneration = ResourceIcon.sGeneration;
         }
 
         public int getResourceId() {
@@ -750,7 +752,9 @@ public abstract class QSTileImpl<TState extends State> implements QSTile, Lifecy
 
         @Override
         public boolean equals(Object o) {
-            return o instanceof DrawableIconWithRes && ((DrawableIconWithRes) o).mId == mId;
+            return o instanceof DrawableIconWithRes
+                    && ((DrawableIconWithRes) o).mId == mId
+                    && ((DrawableIconWithRes) o).mGeneration == mGeneration;
         }
 
         @Override
@@ -762,11 +766,14 @@ public abstract class QSTileImpl<TState extends State> implements QSTile, Lifecy
 
     public static class ResourceIcon extends Icon {
         private static final SparseArray<Icon> ICONS = new SparseArray<Icon>();
+        private static int sGeneration;
 
         protected final int mResId;
+        private final int mGeneration;
 
         private ResourceIcon(int resId) {
             mResId = resId;
+            mGeneration = sGeneration;
         }
 
         public static synchronized Icon get(int resId) {
@@ -776,6 +783,11 @@ public abstract class QSTileImpl<TState extends State> implements QSTile, Lifecy
                 ICONS.put(resId, icon);
             }
             return icon;
+        }
+
+        public static synchronized void clearCache() {
+            ICONS.clear();
+            sGeneration++;
         }
 
         @Override
@@ -794,7 +806,9 @@ public abstract class QSTileImpl<TState extends State> implements QSTile, Lifecy
 
         @Override
         public boolean equals(Object o) {
-            return o instanceof ResourceIcon && ((ResourceIcon) o).mResId == mResId;
+            return o instanceof ResourceIcon
+                    && ((ResourceIcon) o).mResId == mResId
+                    && ((ResourceIcon) o).mGeneration == mGeneration;
         }
 
         @Override
