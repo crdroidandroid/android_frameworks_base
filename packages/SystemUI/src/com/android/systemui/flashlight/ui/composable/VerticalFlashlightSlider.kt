@@ -19,9 +19,7 @@ package com.android.systemui.flashlight.ui.composable
 import androidx.annotation.VisibleForTesting
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.graphics.res.animatedVectorResource
-import androidx.compose.animation.graphics.res.rememberAnimatedVectorPainter
-import androidx.compose.animation.graphics.vector.AnimatedImageVector
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
@@ -70,6 +68,9 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.platform.testTag
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.FlashlightOff
+import androidx.compose.material.icons.rounded.FlashlightOn
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
@@ -305,13 +306,14 @@ private fun AnimatedVectorFlashlightDrawable(
     color: Color,
     modifier: Modifier = Modifier,
 ) {
-    val image = AnimatedImageVector.animatedVectorResource(R.drawable.qs_flashlight_icon_on)
-    Icon(
-        modifier = modifier.semantics { hideFromAccessibility() },
-        painter = rememberAnimatedVectorPainter(image, atEnd),
-        contentDescription = null,
-        tint = color,
-    )
+    Crossfade(targetState = atEnd, label = "FlashlightIcon") { on ->
+        Icon(
+            modifier = modifier.semantics { hideFromAccessibility() },
+            imageVector = if (on) Icons.Rounded.FlashlightOn else Icons.Rounded.FlashlightOff,
+            contentDescription = null,
+            tint = color,
+        )
+    }
 }
 
 @Composable

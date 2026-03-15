@@ -37,6 +37,7 @@ import com.android.systemui.lifecycle.repeatWhenAttached
 import com.android.systemui.plugins.DarkIconDispatcher
 import com.android.systemui.res.R
 import com.android.systemui.statusbar.StatusBarIconView
+import com.android.systemui.statusbar.connectivity.ThemeIconController
 import com.android.systemui.statusbar.StatusBarIconView.STATE_HIDDEN
 import com.android.systemui.statusbar.core.NewStatusBarIcons
 import com.android.systemui.statusbar.pipeline.mobile.domain.model.SignalIconModel
@@ -134,6 +135,23 @@ object MobileIconBinder {
 
                     // Set the icon for the triangle
                     launch {
+                        var lastCellularIcon: SignalIconModel.Cellular? = null
+
+                        val refreshCallback = Runnable {
+                            val icon = lastCellularIcon ?: return@Runnable
+                            val themed = ThemeIconController
+                                .getThemedSignalIcon(view.context, icon.level, icon.numberOfLevels)
+                            if (themed != null) {
+                                iconView.setImageDrawable(themed)
+                            } else {
+                                iconView.setImageDrawable(mobileDrawable)
+                                mobileDrawable.level = icon.toSignalDrawableState()
+                            }
+                            mobileGroupView.invalidate()
+                        }
+                        ThemeIconController.registerRefreshCallback(refreshCallback)
+
+                        try {
                         viewModel.icon
                             .pairwiseBy(initialValue = null) { oldIcon, newIcon ->
                                 // Make sure we requestLayout if the number of levels changes
@@ -150,6 +168,7 @@ object MobileIconBinder {
                             }
                             .collect { (shouldRequestLayout, newIcon) ->
                                 if (newIcon is SignalIconModel.Cellular) {
+                                    lastCellularIcon = newIcon
                                     val packedSignalDrawableState = newIcon.toSignalDrawableState()
                                     viewModel.verboseLogger?.logBinderReceivedSignalCellularIcon(
                                         parentView = view,
@@ -158,8 +177,18 @@ object MobileIconBinder {
                                         packedSignalDrawableState = packedSignalDrawableState,
                                         shouldRequestLayout = shouldRequestLayout,
                                     )
-                                    iconView.setImageDrawable(mobileDrawable)
-                                    mobileDrawable.level = packedSignalDrawableState
+                                    val themedDrawable = ThemeIconController
+                                        .getThemedSignalIcon(
+                                            view.context,
+                                            newIcon.level,
+                                            newIcon.numberOfLevels
+                                        )
+                                    if (themedDrawable != null) {
+                                        iconView.setImageDrawable(themedDrawable)
+                                    } else {
+                                        iconView.setImageDrawable(mobileDrawable)
+                                        mobileDrawable.level = packedSignalDrawableState
+                                    }
                                     viewModel.verboseLogger?.logBinderSignalIconResult(
                                         parentView = view,
                                         subId = viewModel.subscriptionId,
@@ -178,6 +207,9 @@ object MobileIconBinder {
                                     iconView.requestLayout()
                                 }
                             }
+                        } finally {
+                            ThemeIconController.unregisterRefreshCallback(refreshCallback)
+                        }
                     }
 
                     launch {
