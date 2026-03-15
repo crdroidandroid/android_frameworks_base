@@ -6616,6 +6616,11 @@ public abstract class Context {
     public static final String RESOURCES_SERVICE = "resources";
 
     /**
+     * @hide
+     */
+    public static final String THEME_ENGINE_SERVICE = "theme_engine";
+
+    /**
      * Use with {@link #getSystemService(String)} to retrieve a
      * {android.os.IIdmap2} for managing idmap files (used by overlay
      * packages).
