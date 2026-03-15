@@ -5182,7 +5182,8 @@ final class InstallPackageHelper {
             // If the target is already installed or 'overlay-config-signature' tag in
             // SystemConfig is set, check this here to augment the last line of defense
             // which is OMS.
-            if (pkg.getOverlayTargetOverlayableName() == null) {
+            if (pkg.getOverlayTargetOverlayableName() == null
+                    && !isThemeOverlay(pkg.getOverlayCategory())) {
                 final PackageSetting targetPkgSetting;
                 synchronized (mPm.mLock) {
                     targetPkgSetting = mPm.mSettings.getPackageLPr(pkg.getOverlayTarget());
@@ -5245,6 +5246,11 @@ final class InstallPackageHelper {
                 }
             }
         }
+    }
+
+    private static boolean isThemeOverlay(@Nullable String category) {
+        if (category == null) return false;
+        return category.startsWith("android.theme.customization.");
     }
 
     private @PackageManagerService.ScanFlags int adjustScanFlags(
