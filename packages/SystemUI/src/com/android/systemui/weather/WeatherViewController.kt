@@ -1,21 +1,16 @@
 /*
- * Copyright (C) 2025 the AxionAOSP Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-FileCopyrightText: The AxionAOSP Project
+ * SPDX-FileCopyrightText: crDroid Android Project
+ * SPDX-License-Identifier: Apache-2.0
  */
+
 package com.android.systemui.weather
 
 import android.content.Context
+import android.database.ContentObserver
+import android.net.Uri
+import android.os.Handler
+import android.os.Looper
 import android.os.UserHandle
 import android.provider.Settings
 import android.view.View
@@ -26,8 +21,14 @@ import com.android.internal.util.crdroid.OmniJawsClient
 
 import com.android.systemui.res.R
 
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
 
 class WeatherViewController(
     private val context: Context,
@@ -39,22 +40,35 @@ class WeatherViewController(
     private var weatherInfo: OmniJawsClient.WeatherInfo? = null
     private val scope = CoroutineScope(Dispatchers.Main.immediate + SupervisorJob())
 
-    private val weatherSettingsFlow = flow {
-        var previousSettings: WeatherSettings? = null
-        while (true) {
-            val currentSettings = getWeatherSettings()
-            if (currentSettings != previousSettings) {
-                emit(currentSettings)
-                previousSettings = currentSettings
-            }
-            delay(5000)
+    private val weatherSettingsFlow = MutableStateFlow(getWeatherSettings())
+
+    private val settingsObserver = object : ContentObserver(Handler(Looper.getMainLooper())) {
+        override fun onChange(selfChange: Boolean, uri: Uri?) {
+            weatherSettingsFlow.value = getWeatherSettings()
         }
-    }.stateIn(scope, SharingStarted.Eagerly, getWeatherSettings())
+    }
 
     fun init() {
+        registerSettingsObservers()
         scope.launch {
             weatherSettingsFlow.collectLatest { applyWeatherSettings(it) }
         }
+    }
+
+    private fun registerSettingsObservers() {
+        val resolver = context.contentResolver
+        WEATHER_SETTING_KEYS.forEach { key ->
+            resolver.registerContentObserver(
+                Settings.System.getUriFor(key),
+                false,
+                settingsObserver,
+                UserHandle.USER_ALL
+            )
+        }
+    }
+
+    private fun unregisterSettingsObservers() {
+        context.contentResolver.unregisterContentObserver(settingsObserver)
     }
 
     private fun getConditionText(condition: String): String {
@@ -106,7 +120,7 @@ class WeatherViewController(
             weatherInfo = OmniJawsClient.get().weatherInfo
             weatherInfo?.let { info ->
                 weatherIcon.setImageDrawable(
-                    OmniJawsClient.get().getWeatherConditionImage(context, 
+                    OmniJawsClient.get().getWeatherConditionImage(context,
                     info.conditionCode))
                 weatherTemp.text = buildWeatherText(info)
                 weatherTemp.isSelected = true
@@ -152,6 +166,7 @@ class WeatherViewController(
     }
 
     fun removeObserver() {
+        unregisterSettingsObservers()
         scope.cancel()
         OmniJawsClient.get().removeObserver(context, this)
     }
@@ -176,6 +191,14 @@ class WeatherViewController(
         private const val LOCKSCREEN_WEATHER_TEXT = "lockscreen_weather_text"
         private const val LOCKSCREEN_WEATHER_WIND_INFO = "lockscreen_weather_wind_info"
         private const val LOCKSCREEN_WEATHER_HUMIDITY_INFO = "lockscreen_weather_humidity_info"
+
+        private val WEATHER_SETTING_KEYS = listOf(
+            LOCKSCREEN_WEATHER_ENABLED,
+            LOCKSCREEN_WEATHER_LOCATION,
+            LOCKSCREEN_WEATHER_TEXT,
+            LOCKSCREEN_WEATHER_WIND_INFO,
+            LOCKSCREEN_WEATHER_HUMIDITY_INFO
+        )
 
         private val WEATHER_CONDITIONS = mapOf(
             "clouds" to R.string.weather_condition_clouds,
