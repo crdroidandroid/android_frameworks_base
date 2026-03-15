@@ -27,6 +27,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.remember
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
@@ -50,12 +52,14 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import com.android.systemui.common.ui.compose.load
+import com.android.compose.ui.graphics.painter.rememberDrawablePainter
 import com.android.systemui.res.R
 import com.android.systemui.statusbar.pipeline.mobile.ui.compose.ActivityIndicators
 import com.android.systemui.statusbar.pipeline.mobile.ui.model.DualSim
 import com.android.systemui.statusbar.pipeline.mobile.ui.viewmodel.StackedMobileIconViewModel
 import com.android.systemui.statusbar.pipeline.shared.ui.composable.StackedMobileIconDimensions.BarBaseHeightFiveBarsSp
 import com.android.systemui.statusbar.pipeline.shared.ui.composable.StackedMobileIconDimensions.BarBaseHeightFourBarsSp
+import com.android.systemui.statusbar.connectivity.ThemeIconController
 import com.android.systemui.statusbar.pipeline.shared.ui.composable.StackedMobileIconDimensions.BarsLevelIncrementSp
 import com.android.systemui.statusbar.pipeline.shared.ui.composable.StackedMobileIconDimensions.BarsVerticalPaddingSp
 import com.android.systemui.statusbar.pipeline.shared.ui.composable.StackedMobileIconDimensions.ExclamationCutoutRadiusSp
@@ -139,6 +143,78 @@ fun StackedMobileIcon(viewModel: StackedMobileIconViewModel, modifier: Modifier 
 
 @Composable
 private fun StackedMobileIcon(
+    viewModel: DualSim,
+    color: Color,
+    contentDescription: String?,
+    modifier: Modifier = Modifier,
+) {
+    val context = LocalContext.current
+    val themeVer = ThemeIconController.themeVersion.collectAsStateWithLifecycle()
+    val hasThemedSignal = remember(themeVer.value) {
+        ThemeIconController.hasThemedSignalIcons(context)
+    }
+    if (hasThemedSignal) {
+        StackedMobileIconOverlay(viewModel, color, contentDescription, themeVer.value, modifier)
+    } else {
+        StackedMobileIconCanvas(viewModel, color, contentDescription, modifier)
+    }
+}
+
+@Composable
+private fun StackedMobileIconOverlay(
+    viewModel: DualSim,
+    color: Color,
+    contentDescription: String?,
+    themeVersion: Long,
+    modifier: Modifier = Modifier,
+) {
+    val context = LocalContext.current
+    val density = LocalDensity.current
+    val iconHeight = with(density) { IconHeightSp.toDp() }
+    val paddingTop = with(density) { RoamingIconPaddingTopSp.toDp() }
+
+    val primaryDrawable = remember(viewModel.primary.level, viewModel.primary.numberOfLevels, themeVersion) {
+        ThemeIconController.getThemedSignalIcon(
+            context, viewModel.primary.level, viewModel.primary.numberOfLevels
+        )
+    }
+    val secondaryDrawable = remember(viewModel.secondary.level, viewModel.secondary.numberOfLevels, themeVersion) {
+        ThemeIconController.getThemedSignalIcon(
+            context, viewModel.secondary.level, viewModel.secondary.numberOfLevels
+        )
+    }
+
+    if (primaryDrawable == null) {
+        StackedMobileIconCanvas(viewModel, color, contentDescription, modifier)
+        return
+    }
+
+    val spacing = with(density) { spacedBy(IconSpacingSp.toDp()) }
+
+    Row(
+        horizontalArrangement = spacing,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier.padding(top = paddingTop),
+    ) {
+        Image(
+            painter = rememberDrawablePainter(primaryDrawable),
+            contentDescription = contentDescription,
+            modifier = Modifier.height(iconHeight),
+            colorFilter = ColorFilter.tint(color, BlendMode.SrcIn),
+            contentScale = ContentScale.FillHeight,
+        )
+        Image(
+            painter = rememberDrawablePainter(secondaryDrawable),
+            contentDescription = null,
+            modifier = Modifier.height(iconHeight),
+            colorFilter = ColorFilter.tint(color, BlendMode.SrcIn),
+            contentScale = ContentScale.FillHeight,
+        )
+    }
+}
+
+@Composable
+private fun StackedMobileIconCanvas(
     viewModel: DualSim,
     color: Color,
     contentDescription: String?,
