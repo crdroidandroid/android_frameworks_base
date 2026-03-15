@@ -18,6 +18,7 @@ package com.android.systemui.qs
 
 import android.content.ComponentName
 import android.content.Context
+import android.content.res.ThemeEngine
 import androidx.annotation.GuardedBy
 import com.android.app.tracing.coroutines.launchTraced as launch
 import com.android.systemui.dagger.SysUISingleton
@@ -25,6 +26,7 @@ import com.android.systemui.dagger.qualifiers.Application
 import com.android.systemui.dump.DumpManager
 import com.android.systemui.plugins.qs.QSTile
 import com.android.systemui.qs.external.TileServiceRequestController
+import com.android.systemui.statusbar.connectivity.ThemeIconController
 import com.android.systemui.qs.flags.QsInCompose
 import com.android.systemui.qs.pipeline.data.repository.TileSpecRepository.Companion.POSITION_AT_END
 import com.android.systemui.qs.pipeline.domain.interactor.CurrentTilesInteractor
@@ -54,7 +56,7 @@ constructor(
     private val tileServiceRequestControllerBuilder: TileServiceRequestController.Builder,
     @Application private val scope: CoroutineScope,
     dumpManager: DumpManager,
-) : QSHost {
+) : QSHost, ThemeEngine.ThemeChangeListener {
 
     companion object {
         private const val TAG = "QSTileHost"
@@ -66,6 +68,11 @@ constructor(
         scope.launch { tileServiceRequestControllerBuilder.create(this@QSHostAdapter).init() }
         // Redirect dump to the correct host (needed for CTS tests)
         dumpManager.registerCriticalDumpable(TAG, interactor)
+        ThemeEngine.getInstance(context)?.addThemeChangeListener(this)
+    }
+
+    override fun onThemeChanged(category: String?) {
+        ThemeIconController.onThemeChanged(interactor.currentQSTiles)
     }
 
     override fun getTiles(): Collection<QSTile> {
