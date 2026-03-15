@@ -1179,8 +1179,7 @@ public final class OverlayManagerService extends SystemService {
             OverlayInfo overlayInfo = mImpl.getOverlayInfo(overlay, realUserId);
 
             if (overlayInfo == null) {
-                throw new IllegalArgumentException("Unable to retrieve overlay information for "
-                        + overlay);
+                return;
             }
 
             int callingUid = Binder.getCallingUid();
