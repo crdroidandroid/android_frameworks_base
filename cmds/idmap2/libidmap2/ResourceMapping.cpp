@@ -53,9 +53,9 @@ Result<Unit> CheckOverlayable(const TargetResourceContainer& target,
                               const PolicyBitmask& fulfilled_policies,
                               const ResourceId& target_resource) {
   constexpr const PolicyBitmask kDefaultPolicies =
-      PolicyFlags::ODM_PARTITION | PolicyFlags::OEM_PARTITION | PolicyFlags::SYSTEM_PARTITION |
-      PolicyFlags::VENDOR_PARTITION | PolicyFlags::PRODUCT_PARTITION | PolicyFlags::SIGNATURE |
-      PolicyFlags::CONFIG_SIGNATURE;
+      PolicyFlags::PUBLIC | PolicyFlags::ODM_PARTITION | PolicyFlags::OEM_PARTITION |
+      PolicyFlags::SYSTEM_PARTITION | PolicyFlags::VENDOR_PARTITION |
+      PolicyFlags::PRODUCT_PARTITION | PolicyFlags::SIGNATURE | PolicyFlags::CONFIG_SIGNATURE;
 
   // If the resource does not have an overlayable definition, allow the resource to be overlaid if
   // the overlay is preinstalled, signed with the same signature as the target or signed with the
@@ -131,7 +131,6 @@ Result<ResourceMapping> ResourceMapping::FromContainers(const TargetResourceCont
     }
 
     if (enforce_overlayable) {
-      // Filter out resources the overlay is not allowed to override.
       auto overlayable = CheckOverlayable(target, overlay_info, fulfilled_policies, *target_resid);
       if (!overlayable) {
         log_info.Warning(LogMessage() << "overlay '" << overlay.GetPath()
