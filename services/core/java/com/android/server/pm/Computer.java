@@ -158,6 +158,9 @@ public interface Computer extends PackageDataSnapshot {
     ApplicationInfo getApplicationInfoInternal(String packageName, long flags,
             int filterCallingUid, int userId);
 
+    @Nullable
+    String getDefaultHome(@UserIdInt int userId);
+
     /**
      * Report the 'Home' activity which is currently set as "always use this one". If non is set
      * then reports the most likely home activity or null if there are more than one.
