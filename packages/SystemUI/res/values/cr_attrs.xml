@@ -6,7 +6,7 @@
 <resources>
 
     <!-- Smartspace -->
-    <attr name="remoteViewsCardCornerRadius" format="dimension" />
+    <attr name="backgroundCornerRadius" format="dimension" />
     <attr name="smartspaceSubtitleTextSize" format="dimension" />
     <attr name="smartspaceTitleTextSize" format="dimension" />
     <declare-styleable name="WeatherSmartspaceView">
