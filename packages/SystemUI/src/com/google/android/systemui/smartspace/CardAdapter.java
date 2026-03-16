@@ -35,6 +35,8 @@ public interface CardAdapter {
 
     String getUiSurface();
 
+    void onBackgroundToggled(boolean z);
+
     void setBgHandler(Handler handler);
 
     void setConfigProvider(BcSmartspaceConfigPlugin bcSmartspaceConfigPlugin);
