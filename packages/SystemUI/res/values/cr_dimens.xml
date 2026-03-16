@@ -26,8 +26,11 @@
     <dimen name="udfps_animation_offset">0dp</dimen>
 
     <!-- Smartspace -->
+    <dimen name="air_quality_chip_corner_radius">7.0dip</dimen>
     <dimen name="ambient_text_shadow_radius">1.5dip</dimen>
-    <dimen name="date_weather_view_height">24.0dip</dimen>
+    <dimen name="background_bottom_padding">14.0dip</dimen>
+    <dimen name="background_top_padding">10.0dip</dimen>
+    <dimen name="bg_non_remoteviews_card_padding_horizontal">16.0dip</dimen>
     <dimen name="enhanced_smartspace_base_action_icon_margin">8.0dip</dimen>
     <dimen name="enhanced_smartspace_base_action_icon_padding">4.0dip</dimen>
     <dimen name="enhanced_smartspace_card_height">76.0dip</dimen>
