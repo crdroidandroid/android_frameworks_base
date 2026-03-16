@@ -107,18 +107,19 @@ constructor(
             smartspaceViews.forEach { view ->
                 if (alarmString != null) {
                     view.setNextAlarm(alarmImage, alarmString)
+                    //StateFlowImpl stateFlowImpl = this.this$0.zenModeInteractor.zenModeRepository.hasNextAlarm;
+                    //Boolean bool = Boolean.TRUE;
+                    //stateFlowImpl.getClass();
+                    //stateFlowImpl.updateState(null, bool);
                 } else {
                     view.setNextAlarm(null, null)
+                    //StateFlowImpl stateFlowImpl2 = this.this$0.zenModeInteractor.zenModeRepository.hasNextAlarm;
+                    //Boolean bool2 = Boolean.FALSE;
+                    //stateFlowImpl2.getClass();
+                    //stateFlowImpl2.updateState(null, bool2);
                 }
             }
         }
-
-    // private suspend fun getNextAlarmTime(): Long = withContext(bgDispatcher) {
-    //    val zenControllerImpl = zenModeController as? ZenModeControllerImpl ?: return@withContext
-    // 0L
-    //    zenControllerImpl.mAlarmManager.getNextAlarmClock(zenControllerImpl.mUserId)?.triggerTime
-    // ?: 0L
-    // }
 
     private suspend fun getNextAlarmTime(): Long =
         withContext(bgDispatcher) {
