@@ -208,6 +208,8 @@ public class Notifier {
     private int mBroadcastedInteractiveState;
     private boolean mBroadcastInProgress;
     private long mBroadcastStartTime;
+    private static final long USER_ACTIVITY_MIN_INTERVAL_MS = 500;
+    private long mLastUserActivityTimeMs;
 
     // True if a user activity message should be sent.
     private boolean mUserActivityPending;
@@ -879,22 +881,25 @@ public class Notifier {
             Slog.d(TAG, "onUserActivity: event=" + event + ", uid=" + uid);
         }
 
-        try {
-            mBatteryStats.noteUserActivity(uid, event);
-            mWakefulnessSessionObserver.notifyUserActivity(
-                    SystemClock.uptimeMillis(), displayGroupId, event);
-        } catch (RemoteException ex) {
-            // Ignore
-        }
+        final long now = SystemClock.uptimeMillis();
+        if (now - mLastUserActivityTimeMs >= USER_ACTIVITY_MIN_INTERVAL_MS) {
+            mLastUserActivityTimeMs = now;
+            try {
+                mBatteryStats.noteUserActivity(uid, event);
+                mWakefulnessSessionObserver.notifyUserActivity(now, displayGroupId, event);
+            } catch (RemoteException ex) {
+                // Ignore
+            }
 
-        synchronized (mLock) {
-            if (!mUserActivityPending) {
-                mUserActivityPending = true;
-                Message msg = mHandler.obtainMessage(MSG_USER_ACTIVITY);
-                msg.arg1 = displayGroupId;
-                msg.arg2 = event;
-                msg.setAsynchronous(true);
-                mHandler.sendMessage(msg);
+            synchronized (mLock) {
+                if (!mUserActivityPending) {
+                    mUserActivityPending = true;
+                    Message msg = mHandler.obtainMessage(MSG_USER_ACTIVITY);
+                    msg.arg1 = displayGroupId;
+                    msg.arg2 = event;
+                    msg.setAsynchronous(true);
+                    mHandler.sendMessage(msg);
+                }
             }
         }
     }
