@@ -249,6 +249,35 @@ public class DateSmartspaceView extends LinearLayout
     }
 
     @Override
+    public final void setOrientation(int orientation) {
+        super.setOrientation(orientation);
+        WeatherSmartspaceView weatherSmartspaceView =
+                (WeatherSmartspaceView) findViewById(R.id.weather_smartspace_view);
+        if (orientation != 0 && weatherSmartspaceView != null) {
+            if (orientation == 1) {
+                mDateView.setOnClickListener(null);
+                mDateView.setClickable(false);
+                setClickable(true);
+                setFocusable(true);
+                setOnClickListener(weatherSmartspaceView.mOnClickListener);
+                return;
+            }
+            return;
+        }
+        BcSmartSpaceUtil.setOnClickListener(
+                mDateView,
+                mDateTarget,
+                mDateAction,
+                mDataProvider == null ? null : mDataProvider.getEventNotifier(),
+                "DateSmartspaceView",
+                mLoggingInfo,
+                0);
+        setClickable(false);
+        setFocusable(false);
+        setOnClickListener(null);
+    }
+
+    @Override
     public final void setPrimaryTextColor(int color) {
         mPrimaryTextColor = color;
         mCurrentTextColor = ColorUtils.blendARGB(color, -1, mDozeAmount);
@@ -269,8 +298,9 @@ public class DateSmartspaceView extends LinearLayout
         if (mDateView != null) {
             if (mDateView.isAttachedToWindow()) {
                 throw new IllegalStateException("Must call before attaching view to window.");
+            } else {
+                mDateView.mTimeChangedDelegate = delegate;
             }
-            mDateView.mTimeChangedDelegate = delegate;
         }
     }
 
@@ -283,8 +313,9 @@ public class DateSmartspaceView extends LinearLayout
         if (TextUtils.equals(uiSurface, BcSmartspaceDataPlugin.UI_SURFACE_LOCK_SCREEN_AOD)) {
             if (mDateView.isAttachedToWindow()) {
                 throw new IllegalStateException("Must call before attaching view to window.");
+            } else {
+                mDateView.mUpdatesOnAod = true;
             }
-            mDateView.mUpdatesOnAod = true;
         }
     }
 

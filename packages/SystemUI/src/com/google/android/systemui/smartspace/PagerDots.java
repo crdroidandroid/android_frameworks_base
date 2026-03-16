@@ -6,7 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 import com.android.systemui.res.R;
@@ -69,10 +68,8 @@ public final class PagerDots extends View {
                 canvas.drawRoundRect(tempRectF, dotRadius, dotRadius, paint);
                 tempRectF.left = tempRectF.right + dotMargin;
             }
+        } finally {
             canvas.restoreToCount(save);
-        } catch (Throwable th) {
-            canvas.restoreToCount(save);
-            throw th;
         }
     }
 
@@ -96,7 +93,6 @@ public final class PagerDots extends View {
             return;
         }
         if (i <= 0) {
-            Log.w("SsPagerDots", "Total number of pages invalid: " + i + ". Assuming 1 page.");
             numPages = 1;
         } else {
             numPages = i;

@@ -6,13 +6,29 @@
     android:layout_height="@dimen/date_weather_view_height"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <com.google.android.systemui.smartspace.IcuDateTextView
-        android:id="@+id/date"
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
         android:focusable="true"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/enhanced_smartspace_base_action_icon_margin"
-        style="@style/DateWeatherText" />
+        android:layout_height="fill_parent">
+
+        <ImageView
+            android:id="@+id/dnd_icon"
+            android:focusable="true"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/enhanced_smartspace_base_action_icon_margin" />
+
+        <com.google.android.systemui.smartspace.IcuDateTextView
+            android:id="@+id/date"
+            android:focusable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/enhanced_smartspace_base_action_icon_margin"
+            style="@style/DateWeatherText" />
+    </LinearLayout>
 
     <com.google.android.systemui.smartspace.DoubleShadowTextView
         android:id="@+id/alarm_text_view"
@@ -20,13 +36,5 @@
         android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/enhanced_smartspace_base_action_icon_margin"
         style="@style/DateWeatherText" />
-
-    <ImageView
-        android:id="@+id/dnd_icon"
-        android:focusable="true"
-        android:visibility="gone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 </com.google.android.systemui.smartspace.DateSmartspaceView>
