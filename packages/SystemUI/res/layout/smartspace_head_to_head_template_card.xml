@@ -29,7 +29,7 @@
         app:layout_constraintEnd_toStartOf="@+id/first_competitor_text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/head_to_head_title"
-        app:tint="?android:textColorPrimary" />
+        app:tint="@androidprv:color/materialColorOnSurface" />
 
     <ImageView
         android:id="@+id/second_competitor_icon"
@@ -41,7 +41,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/second_competitor_text"
         app:layout_constraintTop_toTopOf="@+id/first_competitor_icon"
-        app:tint="?android:textColorPrimary" />
+        app:tint="@androidprv:color/materialColorOnSurface" />
 
     <TextView
         android:id="@+id/first_competitor_text"
