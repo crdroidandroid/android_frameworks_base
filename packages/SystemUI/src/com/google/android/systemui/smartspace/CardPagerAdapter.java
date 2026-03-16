@@ -787,4 +787,7 @@ public final class CardPagerAdapter extends PagerAdapter implements CardAdapter 
                     root, smartspaceTargets.isEmpty() ? View.GONE : View.VISIBLE);
         }
     }
+
+    @Override
+    public final void onBackgroundToggled(boolean z) {}
 }
