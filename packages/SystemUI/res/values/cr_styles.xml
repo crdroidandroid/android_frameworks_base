@@ -3,14 +3,15 @@
      SPDX-FileCopyrightText: 2016-2026 crDroid Android Project
      SPDX-License-Identifier: Apache-2.0
 -->
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:androidprv="http://schemas.android.com/apk/prv/res/android">
 
     <!-- Smartspace -->
     <style name="DateWeatherText" parent="@style/EnhancedSmartspaceTextTitle">
         <item name="android:textSize">@dimen/enhanced_smartspace_text_size_medium</item>
     </style>
     <style name="DefaultSmartspaceView">
-        <item name="remoteViewsCardCornerRadius">@dimen/lockscreen_remoteviews_card_corner_radius</item>
+        <item name="backgroundCornerRadius">@dimen/lockscreen_remoteviews_card_corner_radius</item>
     </style>
     <style name="DotStyle">
         <item name="android:layout_width">wrap_content</item>
@@ -26,7 +27,7 @@
     </style>
     <style name="EnhancedSmartspaceTextTitle" parent="@android:style/Theme.DeviceDefault.DayNight">
         <item name="android:textSize">?smartspaceTitleTextSize</item>
-        <item name="android:textColor">?android:textColorPrimary</item>
+        <item name="android:textColor">@androidprv:color/materialColorOnSurface</item>
         <item name="android:ellipsize">end</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:maxLines">1</item>
@@ -36,7 +37,7 @@
         <item name="android:lineHeight">24.0sp</item>
     </style>
     <style name="LauncherSmartspaceView">
-        <item name="remoteViewsCardCornerRadius">@dimen/launcher_remoteviews_card_corner_radius</item>
+        <item name="backgroundCornerRadius">@dimen/launcher_remoteviews_card_corner_radius</item>
     </style>
     <style name="LockscreenDotStyle" parent="@style/DotStyle">
         <item name="android:alpha">0.0</item>
