@@ -33,6 +33,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title_text">
 
+            <include layout="@layout/smartspace_subtitle_aqi_chip" />
+
             <include layout="@layout/smartspace_subtitle_text" />
 
             <include layout="@layout/smartspace_subtitle_supplemental" />
