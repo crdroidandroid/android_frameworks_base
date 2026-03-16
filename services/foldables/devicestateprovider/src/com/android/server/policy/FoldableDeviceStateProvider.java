@@ -17,6 +17,7 @@
 package com.android.server.policy;
 
 import static android.hardware.SensorManager.SENSOR_DELAY_FASTEST;
+import static android.hardware.SensorManager.SENSOR_DELAY_NORMAL;
 import static android.hardware.devicestate.DeviceState.PROPERTY_POLICY_UNSUPPORTED_WHEN_POWER_SAVE_MODE;
 import static android.hardware.devicestate.DeviceState.PROPERTY_POLICY_UNSUPPORTED_WHEN_THERMAL_STATUS_CRITICAL;
 import static android.hardware.devicestate.DeviceStateManager.INVALID_DEVICE_STATE_IDENTIFIER;
@@ -150,9 +151,9 @@ public final class FoldableDeviceStateProvider implements DeviceStateProvider,
         mConfigurations = deviceStatePredicateWrappers;
         mIsDualDisplayBlockingEnabled = featureFlags.enableDualDisplayBlocking();
 
-        sensorManager.registerListener(this, mHingeAngleSensor, SENSOR_DELAY_FASTEST);
+        sensorManager.registerListener(this, mHingeAngleSensor, SENSOR_DELAY_NORMAL);
         if (hallSensor != null) {
-            sensorManager.registerListener(this, mHallSensor, SENSOR_DELAY_FASTEST);
+            sensorManager.registerListener(this, mHallSensor, SENSOR_DELAY_NORMAL);
         }
 
         mOrderedStates = new DeviceState[deviceStatePredicateWrappers.length];
