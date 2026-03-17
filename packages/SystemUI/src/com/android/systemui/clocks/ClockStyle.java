@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.UserHandle;
 import android.provider.Settings;
@@ -29,10 +30,13 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextClock;
+import android.widget.TextView;
 
+import com.android.systemui.clocks.UserProfileUtils;
 import com.android.systemui.res.R;
 import com.android.systemui.Dependency;
 import com.android.systemui.plugins.statusbar.StatusBarStateController;
@@ -42,33 +46,46 @@ public class ClockStyle extends RelativeLayout implements TunerService.Tunable {
 
     private static final int[] CLOCK_LAYOUTS = {
             0,
-            R.layout.keyguard_clock_oos,
-            R.layout.keyguard_clock_center,
-            R.layout.keyguard_clock_simple,
-            R.layout.keyguard_clock_miui,
-            R.layout.keyguard_clock_ide,
-            R.layout.keyguard_clock_moto,
-            R.layout.keyguard_clock_label,
-            R.layout.keyguard_clock_ios, 
-            R.layout.keyguard_clock_num,
-            R.layout.keyguard_clock_taden,
-            R.layout.keyguard_clock_mont,
-            R.layout.keyguard_clock_accent,
-            R.layout.keyguard_clock_nos1,
-            R.layout.keyguard_clock_nos2,
-            R.layout.keyguard_clock_life,
-            R.layout.keyguard_clock_word,
-            R.layout.keyguard_clock_encode,
-            R.layout.keyguard_clock_block,
-            R.layout.keyguard_clock_bubble,
-            R.layout.keyguard_clock_nos3,
-            R.layout.keyguard_clock_analog,
-            R.layout.keyguard_clock_a9
+            R.layout.keyguard_clock_oos, // 1
+            R.layout.keyguard_clock_center, // 2
+            R.layout.keyguard_clock_simple, // 3
+            R.layout.keyguard_clock_miui, // 4
+            R.layout.keyguard_clock_ide,  // 5
+            R.layout.keyguard_clock_moto, // 6
+            R.layout.keyguard_clock_stylish, // 7
+            R.layout.keyguard_clock_stylish2, //8
+            R.layout.keyguard_clock_stylish3, // 9
+            R.layout.keyguard_clock_stylish4, // 10
+            R.layout.keyguard_clock_stylish5, // 11
+            R.layout.keyguard_clock_stylish6, // 12
+            R.layout.keyguard_clock_stylish7, // 13
+            R.layout.keyguard_clock_stylish8, // 14
+            R.layout.keyguard_clock_stylish9, // 15
+            R.layout.keyguard_clock_stylish10, // 16
+            R.layout.keyguard_clock_word, // 17
+            R.layout.keyguard_clock_life, // 18
+            R.layout.keyguard_clock_a9, // 19
+            R.layout.keyguard_clock_nos1, // 20
+            R.layout.keyguard_clock_nos2, // 21
+            R.layout.keyguard_clock_num, // 22
+            R.layout.keyguard_clock_accent, // 23
+            R.layout.keyguard_clock_analog, // 24
+            R.layout.keyguard_clock_block, // 25
+            R.layout.keyguard_clock_bubble, // 26
+
+
+            R.layout.keyguard_clock_label, // 27
+            R.layout.keyguard_clock_ios, // 28
+            R.layout.keyguard_clock_taden, // 29
+            R.layout.keyguard_clock_mont, // 30
+            R.layout.keyguard_clock_encode, // 31
+            R.layout.keyguard_clock_nos3 // 32
     };
 
-    private static final int[] mCenterClocks = {2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22};
+    private final static int[] mCenterClocks = {2, 3, 5, 6, 7, 9, 10, 11, 12, 13,
+        14, 15, 16, 18, 19, 20, 21, 22, 23, 24, 25, 26 , 27, 28, 29, 30, 31, 32};
 
-    private static final int[] mNoColorClocks = {18, 19};
+    private static final int[] mNoColorClocks = {25, 26};
 
     public static final String CLOCK_STYLE_KEY = Settings.Secure.LOCK_SCREEN_CUSTOM_CLOCK_STYLE;
     public static final String CLOCK_COLOR_MODE_KEY = Settings.Secure.LOCK_SCREEN_CUSTOM_CLOCK_COLOR_MODE;
@@ -299,6 +316,25 @@ public class ClockStyle extends RelativeLayout implements TunerService.Tunable {
             if (stub != null) {
                 stub.setLayoutResource(CLOCK_LAYOUTS[mClockStyle]);
                 currentClockView = stub.inflate();
+                
+                ImageView userProfileIcon = currentClockView.findViewById(R.id.user_profile_icon);
+                if (userProfileIcon != null) {
+                    Drawable profileDrawable = UserProfileUtils.getUserProfileIcon(mContext);
+                    userProfileIcon.setImageDrawable(profileDrawable);
+                }
+                
+                TextView userNameView = currentClockView.findViewById(R.id.user_name);
+                if (userNameView != null) {
+                    String username = UserProfileUtils.getUsername(mContext);
+                    userNameView.setText(username);
+                }
+                
+                TextView deviceNameView = currentClockView.findViewById(R.id.device_name);
+                if (deviceNameView != null) {
+                    String deviceName = UserProfileUtils.getDeviceName();
+                    deviceNameView.setText(deviceName);
+                }
+            
                 int gravity = isCenterClock(mClockStyle) ? Gravity.CENTER : Gravity.START;
                 if (currentClockView instanceof LinearLayout) {
                     ((LinearLayout) currentClockView).setGravity(gravity);
