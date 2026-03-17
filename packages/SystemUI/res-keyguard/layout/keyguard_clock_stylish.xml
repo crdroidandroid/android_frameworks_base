@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal|top">
+
+    <LinearLayout
+        android:id="@+id/overlap_layer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:foregroundGravity="center"
+        android:layout_marginTop="-40dp"
+        android:orientation="vertical">
+
+        <TextClock
+            android:id="@+id/text_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:fontFamily="@font/BR_SC"
+            android:textColor="@android:color/white"
+            android:textSize="200sp"
+            android:format12Hour="dd"/>
+
+        <TextClock
+            android:id="@+id/text_day"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/FontsFree-Net-Carthart"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:textSize="140sp"
+            android:textColor="#FFFD1540"
+            android:layout_marginTop="-120dp"
+            android:layout_marginRight="30dp"
+            android:format12Hour="EEE"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-10dp"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+            <TextClock
+                android:id="@+id/text_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/Sans_Bold"
+                android:textSize="27sp"
+                android:textAllCaps="true"
+                android:layout_gravity="center_horizontal"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:format12Hour="hh:mm a"/>
+
+            <View
+                android:id="@+id/bottom_bar"
+                android:layout_width="140dp"
+                android:layout_height="6dp"
+                android:layout_gravity="center_horizontal"
+                android:background="#FFFD1540"
+                android:layout_marginTop="5dp"/>
+                
+            <LinearLayout
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_gravity="center"
+		    android:layout_marginTop="10dp"
+		    android:orientation="horizontal">
+
+		    <com.android.systemui.weather.WeatherImageView
+			    android:id="@+id/weather_image"
+			    android:layout_width="20dp"
+			    android:layout_height="20dp"
+			    android:layout_marginEnd="4dp"
+		            android:adjustViewBounds="true" />
+			    
+		    <com.android.systemui.weather.WeatherTextView
+			    android:id="@+id/weather_text"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_marginStart="4dp"
+			    android:layout_marginEnd="8dp"
+			    android:fontFamily="@font/Sans_Bold"
+			    android:textColor="@android:color/white"
+			    android:textSize="20sp" />            
+		</LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
