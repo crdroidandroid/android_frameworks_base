@@ -239,7 +239,7 @@ private:
     int         mTargetInset;
     bool        mUseNpotTextures = false;
     EGLDisplay  mEgl;
-    EGLDisplay  mEglContext;
+    EGLContext  mEglContext;
     // Per-Display Attributes (to support multi-display)
     std::vector<Display> mDisplays;
     bool        mClockEnabled;
