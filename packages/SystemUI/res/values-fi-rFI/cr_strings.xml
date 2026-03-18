@@ -69,21 +69,6 @@
     <string name="onthego_service_toggle">Käynnistä palvelu automaattisesti uudelleen</string>
     <string name="onthego_channel_name">Ensisijainen</string>
     <string name="global_action_onthego">Liikkeellä</string>
-    <!-- Alert slide extras -->
-    <string name="volume_ringer_priority_only">Tärkeys</string>
-    <string name="volume_ringer_alarms_only">Hälytykset</string>
-    <string name="volume_ringer_dnd">Älä häiritse</string>
-    <string name="tristate_flashlight">Taskulamppu</string>
-    <string name="tristate_flashlight_on">Taskulamppu päällä</string>
-    <string name="tristate_flashlight_off">Taskulamppu pois</string>
-    <string name="tristate_flashlight_blink">Taskulamppu vilkkuu</string>
-    <string name="tristate_brightness_bright">Täysi kirkkaus</string>
-    <string name="tristate_brightness_dark">Minimikirkkaus</string>
-    <string name="tristate_brightness_auto">Automaattinen kirkkaus</string>
-    <string name="tristate_rotation_auto">Automaattinen kääntö</string>
-    <string name="tristate_rotation_0">Pysty</string>
-    <string name="tristate_rotation_90">Vaaka (90°)</string>
-    <string name="tristate_rotation_270">Vaaka (270°)</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">käytetty tänään</string>
     <string name="usage_data_weekly">used this week</string>
@@ -143,6 +128,8 @@
     <string name="qs_preferred_network_lte">4G / LTE</string>
     <string name="qs_preferred_network_nr">5G / NR</string>
     <string name="qs_preferred_network_unsupported">Unsupported</string>
+    <!-- VPN tethering QS tile -->
+    <string name="vpn_tethering_label">VPN tethering</string>
     <!-- Text while recognizing face -->
     <string name="face_unlock_recognizing">Tunnistetaan kasvoja...</string>
     <!-- Flashlight Strength -->
