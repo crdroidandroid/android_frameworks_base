@@ -69,21 +69,6 @@
     <string name="onthego_service_toggle">Automatikusan indítsa újra a szolgáltatást</string>
     <string name="onthego_channel_name">Elsődleges</string>
     <string name="global_action_onthego">Menet közben (On-The-Go)</string>
-    <!-- Alert slide extras -->
-    <string name="volume_ringer_priority_only">Fontosak</string>
-    <string name="volume_ringer_alarms_only">Ébresztők</string>
-    <string name="volume_ringer_dnd">Ne zavarjanak</string>
-    <string name="tristate_flashlight">Zseblámpa</string>
-    <string name="tristate_flashlight_on">Zseblámpa be</string>
-    <string name="tristate_flashlight_off">Zseblámpa ki</string>
-    <string name="tristate_flashlight_blink">Zseblámpa-villogás</string>
-    <string name="tristate_brightness_bright">Teljes fényerő</string>
-    <string name="tristate_brightness_dark">Alacsony fényerő</string>
-    <string name="tristate_brightness_auto">Automatikus fényerő</string>
-    <string name="tristate_rotation_auto">Automatikus elforgatás</string>
-    <string name="tristate_rotation_0">Állókép-mód</string>
-    <string name="tristate_rotation_90">Fekvőkép-mód</string>
-    <string name="tristate_rotation_270">Fejreállított fekvőkép-mód</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">ma elhasználva</string>
     <string name="usage_data_weekly">felhasználva ezen a héten</string>
@@ -143,6 +128,8 @@
     <string name="qs_preferred_network_lte">4G / LTE</string>
     <string name="qs_preferred_network_nr">5G / NR</string>
     <string name="qs_preferred_network_unsupported">Nem támogatott</string>
+    <!-- VPN tethering QS tile -->
+    <string name="vpn_tethering_label">VPN-megosztás</string>
     <!-- Text while recognizing face -->
     <string name="face_unlock_recognizing">Arcfelismerés...</string>
     <!-- Flashlight Strength -->
