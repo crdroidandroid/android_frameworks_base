@@ -18,7 +18,7 @@
     <!-- Data disabled icon -->
     <string name="data_disabled_icon_title">Ícone de dados desativado</string>
     <!-- 4G icon instead LTE -->
-    <string name="fourg_icon_title">4G icon</string>
+    <string name="fourg_icon_title">Ícone 4G</string>
     <!-- Status bar network traffic monitor strings -->
     <string name="kilobitspersecond_short">kb/s</string>
     <string name="megabitspersecond_short">Mb/s</string>
@@ -47,12 +47,12 @@
     <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • Carregamento Turbo (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> até concluir)</string>
     <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • Carregamento Turbo</string>
     <!-- Smartspace -->
-    <string name="accessibility_next_alarm">Next alarm at %s</string>
-    <string name="accessibility_smartspace_page">Page %1$d of %2$d</string>
+    <string name="accessibility_next_alarm">Próximo alarme às %s</string>
+    <string name="accessibility_smartspace_page">Página %1$d de %2$d</string>
     <string name="active_mode_content_description">%1$s is on</string>
-    <string name="music_controls_no_title">No title</string>
+    <string name="music_controls_no_title">Sem título</string>
     <string name="smartspace_content_desc">At a glance</string>
-    <string name="smartspace_flight_qr_code">QR code</string>
+    <string name="smartspace_flight_qr_code">Código QR</string>
     <string name="smartspace_role_desc">View</string>
     <!-- Button to restart SystemUI, within the Restart Options dialog -->
     <string name="global_action_restart_systemui">Interface do sistema</string>
@@ -69,24 +69,9 @@
     <string name="onthego_service_toggle">Reiniciar automaticamente o serviço</string>
     <string name="onthego_channel_name">Principal</string>
     <string name="global_action_onthego">OTG</string>
-    <!-- Alert slide extras -->
-    <string name="volume_ringer_priority_only">Prioridade</string>
-    <string name="volume_ringer_alarms_only">Alarmes</string>
-    <string name="volume_ringer_dnd">Não Perturbe</string>
-    <string name="tristate_flashlight">Lanterna</string>
-    <string name="tristate_flashlight_on">Lanterna ligada</string>
-    <string name="tristate_flashlight_off">Lanterna desligada</string>
-    <string name="tristate_flashlight_blink">Piscar lanterna</string>
-    <string name="tristate_brightness_bright">Brilho máximo</string>
-    <string name="tristate_brightness_dark">Brilho mínimo</string>
-    <string name="tristate_brightness_auto">Brilho automático</string>
-    <string name="tristate_rotation_auto">Girar automaticamente</string>
-    <string name="tristate_rotation_0">Retrato</string>
-    <string name="tristate_rotation_90">Paisagem (90°)</string>
-    <string name="tristate_rotation_270">Paisagem (270°)</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">usado hoje</string>
-    <string name="usage_data_weekly">used this week</string>
+    <string name="usage_data_weekly">usado essa semana</string>
     <string name="usage_data_default_suffix">Dados</string>
     <string name="usage_wifi_default_suffix">Wi-Fi</string>
     <!-- Kill button in notification guts -->
@@ -139,16 +124,18 @@
     <!-- AI Assistant affordance [CHAR LIMIT=32] -->
     <string name="accessibility_assistant_button">Assistente de IA</string>
     <!-- Preferred network tile -->
-    <string name="qs_preferred_network_label">Preferred network</string>
+    <string name="qs_preferred_network_label">Rede preferida</string>
     <string name="qs_preferred_network_lte">4G / LTE</string>
     <string name="qs_preferred_network_nr">5G / NR</string>
-    <string name="qs_preferred_network_unsupported">Unsupported</string>
+    <string name="qs_preferred_network_unsupported">Não suportado</string>
+    <!-- VPN tethering QS tile -->
+    <string name="vpn_tethering_label">VPN tethering</string>
     <!-- Text while recognizing face -->
     <string name="face_unlock_recognizing">Reconhecendo...</string>
     <!-- Flashlight Strength -->
-    <string name="flashlight_strength_title">Flashlight Strength</string>
-    <string name="flashlight_strength_turn_off">Turn off</string>
-    <string name="flashlight_strength_turn_on">Turn on</string>
+    <string name="flashlight_strength_title">Potência da Lanterna</string>
+    <string name="flashlight_strength_turn_off">Desligar</string>
+    <string name="flashlight_strength_turn_on">Ligar</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="one">%d dispositivo conectado</item>
