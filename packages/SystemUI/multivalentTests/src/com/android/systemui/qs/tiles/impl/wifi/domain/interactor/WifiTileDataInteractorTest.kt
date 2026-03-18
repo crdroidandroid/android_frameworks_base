@@ -179,7 +179,7 @@ class WifiTileDataInteractorTest(flags: FlagsParameterization) : SysuiTestCase()
         }
 
     @Test
-    fun tileData_mobileIsDefault_showsMobileNetworkName() =
+    fun tileData_mobileIsDefault_showsWifiSpecificFallbackSubtitle() =
         kosmos.runTest {
             val tileData by collectLastValue(underTest.tileData())
 
@@ -202,11 +202,11 @@ class WifiTileDataInteractorTest(flags: FlagsParameterization) : SysuiTestCase()
             val expectedModel =
                 WifiTileModel.Inactive(
                     icon = WifiTileIconModel(WifiIcons.WIFI_NO_SIGNAL),
-                    secondaryLabel = "Test Mobile",
+                    secondaryLabel = context.getString(R.string.quick_settings_networks_unavailable),
                 )
 
             assertThat(tileData?.icon).isEqualTo(expectedModel.icon)
-            assertThat(tileData?.secondaryLabel.toString()).contains("Test Mobile")
+            assertThat(tileData?.secondaryLabel).isEqualTo(expectedModel.secondaryLabel)
         }
 
     @Test
