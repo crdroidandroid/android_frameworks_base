@@ -69,21 +69,6 @@
     <string name="onthego_service_toggle">הפעלה מחדש אוטומטית של השירות</string>
     <string name="onthego_channel_name">ראשי</string>
     <string name="global_action_onthego">\"על-הדרך\"</string>
-    <!-- Alert slide extras -->
-    <string name="volume_ringer_priority_only">עדיפות</string>
-    <string name="volume_ringer_alarms_only">התרעות</string>
-    <string name="volume_ringer_dnd">נא לא להפריע</string>
-    <string name="tristate_flashlight">פנס</string>
-    <string name="tristate_flashlight_on">הפנס מופעל</string>
-    <string name="tristate_flashlight_off">הפנס כבוי</string>
-    <string name="tristate_flashlight_blink">פנס מהבהב</string>
-    <string name="tristate_brightness_bright">בהירות מירבית</string>
-    <string name="tristate_brightness_dark">בהירות מזערית</string>
-    <string name="tristate_brightness_auto">בהירות אוטומטית</string>
-    <string name="tristate_rotation_auto">סיבוב אוטומטי</string>
-    <string name="tristate_rotation_0">דיוקן (אנכי)</string>
-    <string name="tristate_rotation_90">אופקי (90°)</string>
-    <string name="tristate_rotation_270">אופקי (270°)</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">נוצלו היום</string>
     <string name="usage_data_weekly">שימוש השבוע</string>
@@ -143,6 +128,8 @@
     <string name="qs_preferred_network_lte">4G / LTE</string>
     <string name="qs_preferred_network_nr">5G / NR</string>
     <string name="qs_preferred_network_unsupported">לא נתמך</string>
+    <!-- VPN tethering QS tile -->
+    <string name="vpn_tethering_label">VPN tethering</string>
     <!-- Text while recognizing face -->
     <string name="face_unlock_recognizing">מזהה הפנים...</string>
     <!-- Flashlight Strength -->
