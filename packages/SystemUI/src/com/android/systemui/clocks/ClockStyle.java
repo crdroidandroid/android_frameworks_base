@@ -108,7 +108,7 @@ public class ClockStyle extends RelativeLayout implements TunerService.Tunable {
     public static final String CLOCK_CUSTOM_COLOR_KEY = Settings.Secure.LOCK_SCREEN_CUSTOM_CLOCK_CUSTOM_COLOR;
     public static final String CLOCK_TEXT_OPACITY_KEY = Settings.Secure.LOCK_SCREEN_CUSTOM_CLOCK_OPACITY;
     public static final String CLOCK_FRAME_MARGIN_TOP_KEY = Settings.Secure.LOCK_SCREEN_CUSTOM_CLOCK_MARGIN_TOP;
-    public static final String CLOCK_SIZE_KEY = "clock_size_scale";
+    public static final String CLOCK_SIZE_KEY = Settings.Secure.LOCK_SCREEN_CUSTOM_CLOCK_SIZE;
 
     public static final String COLOR_MODE_DEFAULT = "default";
     public static final String COLOR_MODE_ACCENT = "accent";
