@@ -69,21 +69,6 @@
     <string name="onthego_service_toggle">Xidməti avtomatik olaraq yenidən başladın</string>
     <string name="onthego_channel_name">Əsas</string>
     <string name="global_action_onthego">On-The-Go</string>
-    <!-- Alert slide extras -->
-    <string name="volume_ringer_priority_only">Öncəlik</string>
-    <string name="volume_ringer_alarms_only">Alarmlar</string>
-    <string name="volume_ringer_dnd">DnD</string>
-    <string name="tristate_flashlight">Fənər</string>
-    <string name="tristate_flashlight_on">Fənər açıq</string>
-    <string name="tristate_flashlight_off">Fənər bağlı</string>
-    <string name="tristate_flashlight_blink">Fənər titrəməsi</string>
-    <string name="tristate_brightness_bright">Tam parlaqlıq</string>
-    <string name="tristate_brightness_dark">Ən aşağı parlaqlıq</string>
-    <string name="tristate_brightness_auto">Avtomatik parlaqlıq</string>
-    <string name="tristate_rotation_auto">Avto döndərmə</string>
-    <string name="tristate_rotation_0">Şaquli</string>
-    <string name="tristate_rotation_90">Üfüqi (90°)</string>
-    <string name="tristate_rotation_270">Üfüqi (270°)</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">used today</string>
     <string name="usage_data_weekly">used this week</string>
@@ -143,6 +128,8 @@
     <string name="qs_preferred_network_lte">4G / LTE</string>
     <string name="qs_preferred_network_nr">5G / NR</string>
     <string name="qs_preferred_network_unsupported">Unsupported</string>
+    <!-- VPN tethering QS tile -->
+    <string name="vpn_tethering_label">VPN tethering</string>
     <!-- Text while recognizing face -->
     <string name="face_unlock_recognizing">Recognizing face...</string>
     <!-- Flashlight Strength -->
