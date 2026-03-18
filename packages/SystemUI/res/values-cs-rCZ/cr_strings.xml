@@ -69,21 +69,6 @@
     <string name="onthego_service_toggle">Automaticky restartovat službu</string>
     <string name="onthego_channel_name">Hlavní</string>
     <string name="global_action_onthego">On‑The‑Go</string>
-    <!-- Alert slide extras -->
-    <string name="volume_ringer_priority_only">Prioritní</string>
-    <string name="volume_ringer_alarms_only">Budíky</string>
-    <string name="volume_ringer_dnd">Nerušit</string>
-    <string name="tristate_flashlight">Svítilna</string>
-    <string name="tristate_flashlight_on">Svítilna zapnuta</string>
-    <string name="tristate_flashlight_off">Svítilna vypnuta</string>
-    <string name="tristate_flashlight_blink">Blikání svítilny</string>
-    <string name="tristate_brightness_bright">Maximální jas</string>
-    <string name="tristate_brightness_dark">Minimální jas</string>
-    <string name="tristate_brightness_auto">Automatický jas</string>
-    <string name="tristate_rotation_auto">Automatické otáčení</string>
-    <string name="tristate_rotation_0">Na výšku</string>
-    <string name="tristate_rotation_90">Na šířku (90°)</string>
-    <string name="tristate_rotation_270">Na šířku (270°)</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">využito dnes</string>
     <string name="usage_data_weekly">využito tento týden</string>
@@ -143,6 +128,8 @@
     <string name="qs_preferred_network_lte">4G / LTE</string>
     <string name="qs_preferred_network_nr">5G / NR</string>
     <string name="qs_preferred_network_unsupported">Nepodporována</string>
+    <!-- VPN tethering QS tile -->
+    <string name="vpn_tethering_label">VPN tethering</string>
     <!-- Text while recognizing face -->
     <string name="face_unlock_recognizing">Rozpoznávání obličeje…</string>
     <!-- Flashlight Strength -->
