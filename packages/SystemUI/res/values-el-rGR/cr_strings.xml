@@ -69,21 +69,6 @@
     <string name="onthego_service_toggle">Αυτόματη επανεκκίνηση υπηρεσίας</string>
     <string name="onthego_channel_name">Κύρια</string>
     <string name="global_action_onthego">On-The-Go</string>
-    <!-- Alert slide extras -->
-    <string name="volume_ringer_priority_only">Προτεραιότητα</string>
-    <string name="volume_ringer_alarms_only">Ξυπνητήρια</string>
-    <string name="volume_ringer_dnd">\"Μην Ενοχλείτε\"</string>
-    <string name="tristate_flashlight">Φακός</string>
-    <string name="tristate_flashlight_on">Φακός ενεργός</string>
-    <string name="tristate_flashlight_off">Φακός ανενεργός</string>
-    <string name="tristate_flashlight_blink">Φακός αναβοσβήνει</string>
-    <string name="tristate_brightness_bright">Μέγιστη φωτεινότητα</string>
-    <string name="tristate_brightness_dark">Ελάχιστη φωτεινότητα</string>
-    <string name="tristate_brightness_auto">Αυτόματη φωτεινότητα</string>
-    <string name="tristate_rotation_auto">Αυτόματη περιστροφή</string>
-    <string name="tristate_rotation_0">Κατακόρυφα</string>
-    <string name="tristate_rotation_90">Οριζόντια (90°)</string>
-    <string name="tristate_rotation_270">Οριζόντια (270°)</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">χρησιμοποιήθηκαν σήμερα</string>
     <string name="usage_data_weekly">χρησιμοποιήθηκαν αυτήν την εβδομάδα</string>
@@ -143,6 +128,8 @@
     <string name="qs_preferred_network_lte">4G / LTE</string>
     <string name="qs_preferred_network_nr">5G / NR</string>
     <string name="qs_preferred_network_unsupported">Δεν υποστηρίζεται</string>
+    <!-- VPN tethering QS tile -->
+    <string name="vpn_tethering_label">VPN tethering</string>
     <!-- Text while recognizing face -->
     <string name="face_unlock_recognizing">Αναγνώριση προσώπου...</string>
     <!-- Flashlight Strength -->
