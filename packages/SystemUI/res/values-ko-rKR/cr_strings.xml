@@ -69,21 +69,6 @@
     <string name="onthego_service_toggle">자동으로 서비스 다시 시작</string>
     <string name="onthego_channel_name">주요 채널</string>
     <string name="global_action_onthego">On-The-Go</string>
-    <!-- Alert slide extras -->
-    <string name="volume_ringer_priority_only">우선도</string>
-    <string name="volume_ringer_alarms_only">알람</string>
-    <string name="volume_ringer_dnd">방해 금지</string>
-    <string name="tristate_flashlight">손전등</string>
-    <string name="tristate_flashlight_on">손전등 켜기</string>
-    <string name="tristate_flashlight_off">손전등 끄기</string>
-    <string name="tristate_flashlight_blink">손전등 깜빡이기</string>
-    <string name="tristate_brightness_bright">최대 밝기</string>
-    <string name="tristate_brightness_dark">최소 밝기</string>
-    <string name="tristate_brightness_auto">자동 밝기</string>
-    <string name="tristate_rotation_auto">자동 회전</string>
-    <string name="tristate_rotation_0">세로</string>
-    <string name="tristate_rotation_90">가로(90°)</string>
-    <string name="tristate_rotation_270">가로(270°)</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">를 오늘 사용함</string>
     <string name="usage_data_weekly">used this week</string>
@@ -143,6 +128,8 @@
     <string name="qs_preferred_network_lte">4G / LTE</string>
     <string name="qs_preferred_network_nr">5G / NR</string>
     <string name="qs_preferred_network_unsupported">Unsupported</string>
+    <!-- VPN tethering QS tile -->
+    <string name="vpn_tethering_label">VPN tethering</string>
     <!-- Text while recognizing face -->
     <string name="face_unlock_recognizing">얼굴 인식 중\u2026</string>
     <!-- Flashlight Strength -->
