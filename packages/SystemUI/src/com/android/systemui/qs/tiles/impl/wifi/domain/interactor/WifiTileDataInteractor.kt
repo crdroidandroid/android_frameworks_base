@@ -211,8 +211,8 @@ constructor(
             wifiInteractor.wifiToggleState,
             wifiInteractor.isEnabled,
             wifiIconFlow,
-            mobileDescriptionFlow,
-        ) { defaultConnections, toggleState, isEnabled, wifiModel, mobileDescription ->
+            notConnectedDescriptionFlow,
+        ) { defaultConnections, toggleState, isEnabled, wifiModel, notConnectedDescription ->
             if (defaultConnections.ethernet.isDefault) {
                 return@combine if (defaultConnections.isValidated) {
                     WifiTileModel.Active(
@@ -236,7 +236,7 @@ constructor(
             if (toggleState == WifiToggleState.Pausing) {
                 return@combine WifiTileModel.Inactive(
                     icon = WifiTileIconModel(WifiIcons.WIFI_NO_SIGNAL),
-                    secondaryLabel = mobileDescription,
+                    secondaryLabel = notConnectedDescription,
                 )
             } else if (toggleState == WifiToggleState.Scanning) {
                 return@combine WifiTileModel.Active(
@@ -261,7 +261,7 @@ constructor(
                             R.drawable.ic_signal_wifi_off
                         }
                     ),
-                secondaryLabel = mobileDescription,
+                secondaryLabel = notConnectedDescription,
             )
         }
 
