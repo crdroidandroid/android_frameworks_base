@@ -53,7 +53,7 @@
     <string name="music_controls_no_title">Başlık yok</string>
     <string name="smartspace_content_desc">Bir bakışta</string>
     <string name="smartspace_flight_qr_code">QR kod</string>
-    <string name="smartspace_role_desc">View</string>
+    <string name="smartspace_role_desc">Görünüm</string>
     <!-- Button to restart SystemUI, within the Restart Options dialog -->
     <string name="global_action_restart_systemui">Sistem arayüzü</string>
     <!-- On The Go -->
@@ -69,21 +69,6 @@
     <string name="onthego_service_toggle">Servisi otomatik yeniden başlat</string>
     <string name="onthego_channel_name">Ana menü</string>
     <string name="global_action_onthego">Yürüme modu</string>
-    <!-- Alert slide extras -->
-    <string name="volume_ringer_priority_only">Öncelik</string>
-    <string name="volume_ringer_alarms_only">Alarmlar</string>
-    <string name="volume_ringer_dnd">Rahatsız etmeyin</string>
-    <string name="tristate_flashlight">Fener</string>
-    <string name="tristate_flashlight_on">Fener açık</string>
-    <string name="tristate_flashlight_off">Fener kapalı</string>
-    <string name="tristate_flashlight_blink">Feneri yakıp söndür</string>
-    <string name="tristate_brightness_bright">Maksimum parlaklık</string>
-    <string name="tristate_brightness_dark">Minimum parlaklık</string>
-    <string name="tristate_brightness_auto">Otomatik parlaklık</string>
-    <string name="tristate_rotation_auto">Otomatik döndürme</string>
-    <string name="tristate_rotation_0">Dikey</string>
-    <string name="tristate_rotation_90">Yatay (90°)</string>
-    <string name="tristate_rotation_270">Yatay (270°)</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">bugün kullanılan</string>
     <string name="usage_data_weekly">bu hafta kullanıldı</string>
@@ -143,6 +128,8 @@
     <string name="qs_preferred_network_lte">4G / LTE</string>
     <string name="qs_preferred_network_nr">5G / NR</string>
     <string name="qs_preferred_network_unsupported">Desteklenmiyor</string>
+    <!-- VPN tethering QS tile -->
+    <string name="vpn_tethering_label">VPN Tetheri</string>
     <!-- Text while recognizing face -->
     <string name="face_unlock_recognizing">Yüz tanınıyor...</string>
     <!-- Flashlight Strength -->
