@@ -66,29 +66,31 @@
                 android:layout_marginTop="5dp"/>
                 
             <LinearLayout
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:layout_gravity="center"
-		    android:layout_marginTop="10dp"
-		    android:orientation="horizontal">
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="center"
+		        android:layout_marginTop="10dp"
+		        android:orientation="horizontal">
 
-		    <com.android.systemui.weather.WeatherImageView
-			    android:id="@+id/weather_image"
-			    android:layout_width="20dp"
-			    android:layout_height="20dp"
-			    android:layout_marginEnd="4dp"
-		            android:adjustViewBounds="true" />
-			    
-		    <com.android.systemui.weather.WeatherTextView
-			    android:id="@+id/weather_text"
-			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content"
-			    android:layout_marginStart="4dp"
-			    android:layout_marginEnd="8dp"
-			    android:fontFamily="@font/Sans_Bold"
-			    android:textColor="@android:color/white"
-			    android:textSize="20sp" />            
-		</LinearLayout>
+		        <com.android.systemui.weather.WeatherImageView
+			        android:id="@+id/weather_image"
+			        android:layout_width="18sp"
+			        android:layout_height="18sp"
+                    android:layout_gravity="center_vertical"
+			        android:layout_marginEnd="4dp"
+	                android:adjustViewBounds="true" />
+			        
+		        <com.android.systemui.weather.WeatherTextView
+			        android:id="@+id/weather_text"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+			        android:layout_marginStart="4dp"
+			        android:layout_marginEnd="8dp"
+			        android:fontFamily="@font/Sans_Bold"
+			        android:textColor="@android:color/white"
+			        android:textSize="20sp" />            
+		    </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
