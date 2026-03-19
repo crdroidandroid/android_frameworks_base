@@ -7,71 +7,67 @@
     android:gravity="center|top"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <FrameLayout
+        android:layout_width="165dp"
+        android:layout_height="165dp"
         android:layout_gravity="top|center"
-        android:orientation="vertical"
-        tools:ignore="UselessParent">
-
-        <FrameLayout
-            android:layout_width="165dp"
-            android:layout_height="165dp"
-            android:layout_gravity="top|center"
-            android:background="@drawable/lockscreen_clock_49_bg"
-            android:tag="text1">
-
-            <TextClock
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:format12Hour="hh • mm"
-                android:format24Hour="HH • mm"
-                android:includeFontPadding="false"
-                android:tag="text1|nolineheight"
-                android:textColor="#FFFFFF"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-        </FrameLayout>
+        android:background="@drawable/lockscreen_clock_49_bg"
+        android:tag="text1">
 
         <TextClock
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="top|center"
-            android:format12Hour="MMM dd | EEE"
-            android:format24Hour="dd MMM | EEE"
+            android:layout_gravity="center"
+            android:format12Hour="hh • mm"
+            android:format24Hour="HH • mm"
             android:includeFontPadding="false"
-            android:letterSpacing="0.1"
-            android:tag="text1"
-            android:textAllCaps="true"
+            android:tag="text1|nolineheight"
             android:textColor="#FFFFFF"
-            android:textSize="14sp"
+            android:textSize="18sp"
             android:textStyle="bold" />
-            
-        <LinearLayout
+
+    </FrameLayout>
+
+    <TextClock
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center"
+        android:format12Hour="MMM dd | EEE"
+        android:format24Hour="dd MMM | EEE"
+        android:includeFontPadding="false"
+        android:letterSpacing="0.1"
+        android:tag="text1"
+        android:textAllCaps="true"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+        
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_gravity="center">
+
+        <com.android.systemui.weather.WeatherImageView
+            android:id="@+id/weather_image"
+            android:layout_width="14sp"
+            android:layout_height="14sp"
+            android:layout_gravity="center_vertical"
+            android:visibility="gone"
+            android:layout_marginEnd="4dp" />
+
+        <com.android.systemui.weather.WeatherTextView
+            android:id="@+id/weather_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_gravity="center">
-                
-            <com.android.systemui.weather.WeatherImageView
-                android:id="@+id/weather_image"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:visibility="gone"
-                android:layout_marginEnd="2dp" />
-
-            <com.android.systemui.weather.WeatherTextView
-                android:id="@+id/weather_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:letterSpacing="0.1"
-                android:textColor="@android:color/white"
-                android:visibility="gone"
-                android:textSize="14sp" />
-        </LinearLayout>
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="4dp"
+            android:textStyle="bold"
+            android:letterSpacing="0.1"
+            android:textAllCaps="true"
+            android:textColor="@android:color/white"
+            android:visibility="gone"
+            android:textSize="14sp" />
     </LinearLayout>
 </LinearLayout>

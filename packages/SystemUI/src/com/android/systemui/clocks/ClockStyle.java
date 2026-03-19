@@ -47,7 +47,7 @@ public class ClockStyle extends RelativeLayout implements TunerService.Tunable {
     private static final int[] CLOCK_LAYOUTS = {
             0,
             R.layout.keyguard_clock_oos, // 1
-            R.layout.keyguard_clock_center, // 2
+            R.layout.keyguard_clock_ios, // 2
             R.layout.keyguard_clock_simple, // 3
             R.layout.keyguard_clock_miui, // 4
             R.layout.keyguard_clock_ide,  // 5
@@ -72,18 +72,12 @@ public class ClockStyle extends RelativeLayout implements TunerService.Tunable {
             R.layout.keyguard_clock_analog, // 24
             R.layout.keyguard_clock_block, // 25
             R.layout.keyguard_clock_bubble, // 26
-
-
             R.layout.keyguard_clock_label, // 27
-            R.layout.keyguard_clock_ios, // 28
-            R.layout.keyguard_clock_taden, // 29
-            R.layout.keyguard_clock_mont, // 30
-            R.layout.keyguard_clock_encode, // 31
-            R.layout.keyguard_clock_nos3 // 32
+            R.layout.keyguard_clock_taden, // 28
+            R.layout.keyguard_clock_mont, // 29
+            R.layout.keyguard_clock_encode, // 30
+            R.layout.keyguard_clock_nos3 // 31
     };
-
-    private final static int[] mCenterClocks = {2, 3, 5, 6, 7, 9, 10, 11, 12, 13,
-        14, 15, 16, 18, 19, 20, 21, 22, 23, 24, 25, 26 , 27, 28, 29, 30, 31, 32};
 
     private static final int[] mNoColorClocks = {25, 26};
 
@@ -335,10 +329,6 @@ public class ClockStyle extends RelativeLayout implements TunerService.Tunable {
                     deviceNameView.setText(deviceName);
                 }
             
-                int gravity = isCenterClock(mClockStyle) ? Gravity.CENTER : Gravity.START;
-                if (currentClockView instanceof LinearLayout) {
-                    ((LinearLayout) currentClockView).setGravity(gravity);
-                }
                 updateClockTextColor();
                 updateClockFrameMargin();
             }
@@ -381,15 +371,6 @@ public class ClockStyle extends RelativeLayout implements TunerService.Tunable {
                 updateClockFrameMargin();
                 break;
         }
-    }
-
-    private boolean isCenterClock(int clockStyle) {
-        for (int centerClock : mCenterClocks) {
-            if (centerClock == clockStyle) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private boolean isNoColorClock(int clockStyle) {
