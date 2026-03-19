@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/clock_frame"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="start|center"
-    android:layout_gravity="start|center"
+    android:layout_gravity="center_horizontal|top"
+    android:gravity="center_horizontal|top"
     android:orientation="vertical">
 
     <LinearLayout
@@ -38,13 +39,15 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:orientation="horizontal"
             android:gravity="center_vertical">
-                
+
             <com.android.systemui.weather.WeatherImageView
                 android:id="@+id/weather_image"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
+                android:layout_width="16sp"
+                android:layout_height="16sp"
+                android:layout_gravity="center_vertical"
                 android:visibility="gone"
                 android:layout_marginEnd="4dp" />
 
@@ -52,7 +55,7 @@
                 android:id="@+id/weather_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@*android:string/config_clockFontFamily"
+                android:layout_gravity="center_vertical"
                 android:textColor="@android:color/white"
                 android:visibility="gone"
                 android:textSize="18sp" />
