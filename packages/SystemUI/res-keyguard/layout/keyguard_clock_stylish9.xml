@@ -55,15 +55,18 @@
 
                     <com.android.systemui.weather.WeatherImageView
                         android:id="@+id/weather_image"
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"
-                        android:visibility="gone"
-                        android:layout_marginEnd="2dp" />
+                        android:layout_width="14sp"
+                        android:layout_height="14sp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginEnd="2dp"
+                        android:scaleType="fitCenter"
+                        android:visibility="gone" />
 
                     <com.android.systemui.weather.WeatherTextView
                         android:id="@+id/weather_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
                         android:textStyle="bold"
                         android:fontFamily="@font/japanese3017"
                         android:textColor="@android:color/white"
