@@ -12,7 +12,7 @@
         android:id="@+id/hour_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="100dp"
+        android:textSize="100sp"
         android:textColor="@android:color/white"
         android:fontFamily="@font/EncodeSansBold"
         android:layout_gravity="center"
@@ -24,10 +24,9 @@
         android:id="@+id/minute_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="101dp"
+        android:textSize="101sp"
         android:textColor="@android:color/white"
         android:fontFamily="@font/EncodeSansLight"
-        android:layout_marginTop="2dp"
         android:layout_gravity="center"
         android:format12Hour="mm"
         android:format24Hour="mm"/>
@@ -44,5 +43,35 @@
         android:layout_gravity="center"
         android:format12Hour="a - EEE, MMM d"
         android:format24Hour="a - EEE, MMM d"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="4dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <com.android.systemui.weather.WeatherImageView
+            android:id="@+id/weather_image"
+            android:layout_width="20sp"
+            android:layout_height="20sp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="4dp"
+            android:scaleType="fitCenter"
+            android:visibility="gone" />
+
+        <com.android.systemui.weather.WeatherTextView
+            android:id="@+id/weather_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_gravity="center_vertical"
+            android:fontFamily="@font/EncodeSansLight"
+            android:textColor="@android:color/white"
+            android:visibility="gone"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
 </LinearLayout>
