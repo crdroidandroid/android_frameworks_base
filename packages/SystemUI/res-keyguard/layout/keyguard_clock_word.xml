@@ -1,34 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_gravity="start|center_vertical">
 
-    <LinearLayout
+    <!-- "It's" Text -->
+    <TextView
+        android:id="@+id/its_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="start|center_vertical" >
+        android:text="It's"
+        android:fontFamily="@*android:string/config_clockFontFamily"
+        android:textSize="62sp"
+        android:textColor="@android:color/system_accent1_300"
+        android:layout_marginStart="4dp"
+        android:layout_marginBottom="8dp" />
 
-        <!-- "It's" Text -->
-        <TextView
-            android:id="@+id/its_text"
+    <!-- Custom Word Clock -->
+    <TextView
+        android:id="@+id/word_clock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Eight"
+        android:lineSpacingExtra="8dp"
+        android:textSize="64sp"
+        android:fontFamily="@*android:string/config_clockFontFamily"
+        android:textColor="@android:color/white" 
+        android:layout_marginStart="4dp"
+        android:layout_marginBottom="8dp"/>
+
+    <TextView
+        android:id="@+id/word_min"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Seventeen"
+        android:lineSpacingExtra="8dp"
+        android:textSize="64sp"
+        android:fontFamily="@*android:string/config_clockFontFamily"
+        android:layout_marginStart="4dp"
+        android:textColor="@android:color/white" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="4dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <com.android.systemui.weather.WeatherImageView
+            android:id="@+id/weather_image"
+            android:layout_width="22sp"
+            android:layout_height="22sp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="4dp"
+            android:scaleType="fitCenter"
+            android:visibility="gone" />
+
+        <com.android.systemui.weather.WeatherTextView
+            android:id="@+id/weather_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="It's"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="4dp"
             android:fontFamily="@*android:string/config_clockFontFamily"
-            android:textSize="62sp"
-            android:textColor="@android:color/system_accent1_300" />
-
-        <!-- Custom Word Clock -->
-        <com.android.systemui.clocks.WordClockView
-            android:id="@+id/word_clock"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:lineSpacingExtra="8dp"
-            android:textSize="64sp"
-            android:fontFamily="@*android:string/config_clockFontFamily"
-            android:textAlignment="viewStart"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"
+            android:visibility="gone"
+            android:textSize="22sp" />
     </LinearLayout>
-</FrameLayout>
+</LinearLayout>
