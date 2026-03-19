@@ -8,46 +8,57 @@
     android:gravity="center|top"
     android:orientation="vertical">
 
-    <LinearLayout
+    <TextClock
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:orientation="vertical"
-        tools:ignore="UselessParent">
+        android:layout_marginBottom="4dp"
+        android:fontFamily="@font/astthillabeltaden"
+        android:format12Hour=" EEEE "
+        android:format24Hour=" EEEE "
+        android:includeFontPadding="false"
+        android:tag="text1|nolineheight"
+        android:textColor="#FFFFFF"
+        android:textSize="100sp" />
 
-        <TextClock
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:fontFamily="@font/astthillabeltaden"
-            android:format12Hour=" EEEE "
-            android:format24Hour=" EEEE "
-            android:includeFontPadding="false"
-            android:tag="text1|nolineheight"
-            android:textColor="#FFFFFF"
-            android:textSize="100sp" />
+    <TextClock
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:format12Hour="hh : mm  |  MMM dd"
+        android:format24Hour="HH : mm  |  dd MMM"
+        android:includeFontPadding="false"
+        android:fontFamily="@*android:string/config_clockFontFamily"
+        android:tag="text1"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="5.0dip"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
 
-        <TextClock
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:format12Hour="hh : mm | MMM dd"
-            android:format24Hour="HH : mm | dd MMM"
-            android:includeFontPadding="false"
-            android:fontFamily="@*android:string/config_clockFontFamily"
-            android:tag="text1"
-            android:textColor="#FFFFFF"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-        
+        <com.android.systemui.weather.WeatherImageView
+            android:id="@+id/weather_image"
+            android:layout_width="18sp"
+            android:layout_height="18sp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="4dp"
+            android:scaleType="fitCenter"
+            android:visibility="gone" />
+
         <com.android.systemui.weather.WeatherTextView
             android:id="@+id/weather_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="4dp"
             android:fontFamily="@*android:string/config_clockFontFamily"
+            android:textColor="@android:color/white"
             android:visibility="gone"
             android:textSize="18sp" />
-
     </LinearLayout>
+
 </LinearLayout>
