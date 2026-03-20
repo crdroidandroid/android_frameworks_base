@@ -139,6 +139,7 @@ import android.os.UserHandle;
 import android.permission.PermissionManager;
 import android.permission.flags.Flags;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.ArrayMap;
 import android.util.ArraySet;
 import android.util.AtomicFile;
@@ -5125,7 +5126,7 @@ public class AppOpsService extends IAppOpsService.Stub {
             @Nullable String attributionTag) {
         if (pkg == null) {
             return false;
-        } else if (attributionTag == null) {
+        } else if (TextUtils.isEmpty(attributionTag)) {
             return true;
         }
         if (pkg.getAttributions() != null) {
