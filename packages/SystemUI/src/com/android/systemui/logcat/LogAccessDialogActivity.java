@@ -138,6 +138,12 @@ public class LogAccessDialogActivity extends Activity implements
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        mHandler.removeMessages(MSG_DISMISS_DIALOG);
+        super.onDestroy();
+    }
+
     private boolean readIntentInfo(Intent intent) {
         if (intent == null) {
             Slog.e(TAG, "Intent is null");
@@ -246,7 +252,9 @@ public class LogAccessDialogActivity extends Activity implements
         } catch (RemoteException ignored) {
             // Do nothing.
         } finally {
-            mAlert.dismiss();
+            if (mAlert != null && mAlert.isShowing()) {
+                mAlert.dismiss();
+            }
         }
     }
 
