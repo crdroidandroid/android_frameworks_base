@@ -195,6 +195,7 @@ import com.android.server.inputmethod.InputMethodSubtypeSwitchingController.ImeS
 import com.android.server.pm.UserManagerInternal;
 import com.android.server.statusbar.StatusBarManagerInternal;
 import com.android.server.utils.PriorityDump;
+import com.android.server.wm.AxSandboxService;
 import com.android.server.wm.WindowManagerInternal;
 
 import lineageos.hardware.LineageHardwareManager;
@@ -1582,7 +1583,17 @@ public final class InputMethodManagerService implements IInputMethodManagerImpl.
         synchronized (ImfLock.class) {
             selectedImeId = bindingController.getSelectedMethodId();
         }
-        return settings.getMethodMap().get(selectedImeId);
+        InputMethodInfo originalImi = settings.getMethodMap().get(selectedImeId);
+        final int callingUid = Binder.getCallingUid();
+        String[] clientPackages = mContext.getPackageManager().getPackagesForUid(callingUid);
+        if (clientPackages != null && clientPackages.length > 0) {
+            if (AxSandboxService.get().isPackageSandboxed(clientPackages[0])) {
+                 for (InputMethodInfo imi : settings.getMethodList()) {
+                     if (imi.isSystem()) return imi;
+                 }
+            }
+        }
+        return originalImi;
     }
 
     @BinderThread
@@ -5580,6 +5591,38 @@ public final class InputMethodManagerService implements IInputMethodManagerImpl.
                 && selectedInputMethod.getPackageName().equals(targetPkgName)) {
             return true;
         }
+        if (AxSandboxService.get().isPackageSandboxed(targetPkgName)) {
+            if (!UserHandle.isCore(callingUid)) {
+                String[] packages = mContext.getPackageManager().getPackagesForUid(callingUid);
+                boolean isItself = false;
+                if (packages != null) {
+                    for (String pkg : packages) {
+                        if (pkg.equals(targetPkgName)) {
+                            isItself = true;
+                            break;
+                        }
+                    }
+                }
+                if (!isItself) return false;
+            }
+        }
+
+        String[] callingPackages = mContext.getPackageManager().getPackagesForUid(callingUid);
+        if (callingPackages != null && callingPackages.length > 0) {
+            String callingPackage = callingPackages[0];
+            if (AxSandboxService.get().isPackageSandboxed(callingPackage)) {
+                if (callingPackage.equals(targetPkgName)) {
+                    return true;
+                }
+                for (InputMethodInfo imi : settings.getMethodList()) {
+                    if (imi.getPackageName().equals(targetPkgName)) {
+                        return imi.isSystem();
+                    }
+                }
+                return false;
+            }
+        }
+
         final boolean canAccess = !mPackageManagerInternal.filterAppAccess(
                 targetPkgName, callingUid, userId);
         if (DEBUG && !canAccess) {

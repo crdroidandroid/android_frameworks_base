@@ -16,6 +16,7 @@
 
 package com.android.systemui.statusbar.notification.collection.coordinator
 
+import android.app.AxSandboxManager
 import android.app.Notification
 import android.os.UserHandle
 import com.android.app.tracing.coroutines.launchTraced as launch
@@ -44,6 +45,7 @@ import com.android.systemui.statusbar.notification.collection.listbuilder.plugga
 import com.android.systemui.statusbar.policy.KeyguardStateController
 import com.android.systemui.statusbar.policy.SensitiveNotificationProtectionController
 import com.android.systemui.user.domain.interactor.SelectedUserInteractor
+import com.android.systemui.applocker.AxAppLockerHelper
 import dagger.Binds
 import dagger.Module
 import javax.inject.Inject
@@ -76,6 +78,7 @@ constructor(
         SensitiveNotificationProtectionController,
     private val deviceEntryInteractor: DeviceEntryInteractor,
     private val sceneInteractor: SceneInteractor,
+    private val axAppLockerHelper: AxAppLockerHelper,
     @Application private val scope: CoroutineScope,
 ) :
     Invalidator("SensitiveContentInvalidator"),
@@ -211,10 +214,19 @@ constructor(
                 screenshareNotificationHiding() &&
                     sensitiveNotificationProtectionController.shouldProtectNotification(entry)
 
+            val isAppLocked =
+                entry.sbn.notification.extras.getBoolean(
+                    AxSandboxManager.EXTRA_NOTIFICATION_APP_LOCKED,
+                    false,
+                ) && axAppLockerHelper.needsAuth(entry.sbn.packageName, entry.sbn.user.identifier)
             val needsRedaction =
-                lockscreenUserManager.getRedactionType(entry) != REDACTION_TYPE_NONE
+                isAppLocked ||
+                    lockscreenUserManager.getRedactionType(entry) != REDACTION_TYPE_NONE
             val isSensitive = userPublic && needsRedaction
-            entry.setSensitive(isSensitive || shouldProtectNotification, deviceSensitive)
+            entry.setSensitive(
+                isSensitive || shouldProtectNotification,
+                isAppLocked || deviceSensitive,
+            )
             if (screenshareNotificationHiding()) {
                 entry.row?.setPublicExpanderVisible(!shouldProtectNotification)
             }
