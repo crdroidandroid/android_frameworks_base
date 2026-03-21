@@ -22,6 +22,7 @@ import android.app.ActivityManager;
 import android.app.ActivityTaskManager;
 import android.app.AlarmManager;
 import android.app.AppOpsManager;
+import android.app.AxSandboxManager;
 import android.app.IActivityManager;
 import android.app.IActivityTaskManager;
 import android.app.INotificationManager;
@@ -859,5 +860,12 @@ public class FrameworkServicesModule {
     @Singleton
     static ImsManager provideImsManager(Context context) {
         return context.getSystemService(ImsManager.class);
+    }
+
+    @Provides
+    @Singleton
+    @Nullable
+    static AxSandboxManager provideAxSandboxManager(Context context) {
+        return context.getSystemService(AxSandboxManager.class);
     }
 }
