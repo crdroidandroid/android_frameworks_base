@@ -48,6 +48,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.os.SystemClock;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.service.notification.NotificationListenerService.Ranking;
 import android.service.notification.SnoozeCriterion;
 import android.service.notification.StatusBarNotification;
@@ -886,6 +888,14 @@ public final class NotificationEntry extends ListEntry {
     }
 
     private boolean shouldSuppressVisualEffect(int effect) {
+        if (effect == SUPPRESSED_EFFECT_FULL_SCREEN_INTENT
+                && row != null
+                && Settings.Secure.getIntForUser(
+                        row.getContext().getContentResolver(),
+                        "ax_gaming_mode_active", 0,
+                        UserHandle.USER_CURRENT) == 1) {
+            return true;
+        }
         if (isExemptFromDndVisualSuppression()) {
             return false;
         }
