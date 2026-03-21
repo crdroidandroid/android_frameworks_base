@@ -548,7 +548,10 @@ public class AnimationUtils {
         private ActivityAnimations() {}
 
         /** @hide */
-        public static void preload() {
+        public static synchronized void preload() {
+            if (sOpenEnter != null) {
+                return;
+            }
             sSpatialSpec = new SpringInterpolator(0.8f, 380f);
             sEffectsSpec = new SpringInterpolator(1.0f, 3800f);
             sOpenEnter = new ActivityAnimFactory()
@@ -607,26 +610,41 @@ public class AnimationUtils {
 
         /** @hide */
         public static Animation getOpenEnter() {
+            if (sOpenEnter == null) {
+                preload();
+            }
             return sOpenEnter;
         }
 
         /** @hide */
         public static Animation getOpenExit() {
+            if (sOpenExit == null) {
+                preload();
+            }
             return sOpenExit;
         }
 
         /** @hide */
         public static Animation getCloseEnter() {
+            if (sCloseEnter == null) {
+                preload();
+            }
             return sCloseEnter;
         }
 
         /** @hide */
         public static Animation getCloseExit() {
+            if (sCloseExit == null) {
+                preload();
+            }
             return sCloseExit;
         }
 
         /** @hide */
         public static Animation getAppStartingExit() {
+            if (sAppStartingExit == null) {
+                preload();
+            }
             return sAppStartingExit;
         }
     }
