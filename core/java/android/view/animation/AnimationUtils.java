@@ -26,11 +26,14 @@ import android.content.res.Resources.NotFoundException;
 import android.content.res.Resources.Theme;
 import android.content.res.XmlResourceParser;
 import android.os.SystemClock;
+import android.os.SystemProperties;
 import android.ravenwood.annotation.RavenwoodIgnore;
 import android.ravenwood.annotation.RavenwoodKeepPartialClass;
 import android.util.AttributeSet;
 import android.util.Xml;
 import android.view.InflateException;
+
+import com.android.internal.R;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -51,6 +54,32 @@ public class AnimationUtils {
      */
     private static final int TOGETHER = 0;
     private static final int SEQUENTIALLY = 1;
+
+    /** @hide **/
+    public static final String PROPERTY_PERF_ANIM_OVERRIDE =
+            "persist.sys.activity_anim_perf_override";
+
+    private static final class PerfAnimConfig {
+        static final boolean ENABLED;
+
+        static {
+            boolean enabled = false;
+            try {
+                enabled = SystemProperties.getBoolean(PROPERTY_PERF_ANIM_OVERRIDE, false);
+            } catch (Throwable t) {
+                // SystemProperties is not available in every environment (host side tests).
+                // Fall back to the stock, resource backed animations.
+            }
+            ENABLED = enabled;
+        }
+
+        private PerfAnimConfig() {}
+    }
+
+    /** @hide **/
+    public static boolean isPerfAnimEnabled() {
+        return PerfAnimConfig.ENABLED;
+    }
 
     private static class AnimationState {
         boolean animationClockLocked;
@@ -144,6 +173,13 @@ public class AnimationUtils {
      */
     public static Animation loadAnimation(Context context, @AnimRes int id)
             throws NotFoundException {
+
+        if (isPerfAnimEnabled()) {
+            final Animation perfAnim = ActivityAnimations.create(id);
+            if (perfAnim != null) {
+                return perfAnim;
+            }
+        }
 
         XmlResourceParser parser = null;
         try {
@@ -424,5 +460,150 @@ public class AnimationUtils {
             }
         }
         return interpolator;
+    }
+
+    /** @hide **/
+    public static final class ActivityAnimations {
+
+        /** Fraction of its own width the outgoing/incoming activity parallaxes by. */
+        private static final float DISTANCE = 0.333f;
+        private static final long APP_STARTING_EXIT_DURATION_MS = 150L;
+
+        private static final float SPATIAL_DAMPING_RATIO = 0.8f;
+        private static final float SPATIAL_STIFFNESS = 380f;
+
+        /** Written by {@link #preload()} so the warm up cannot be optimized away. */
+        private static volatile boolean sPreloaded;
+
+        private ActivityAnimations() {}
+
+        private static final class Specs {
+            static final SpringInterpolator SPATIAL =
+                    new SpringInterpolator(SPATIAL_DAMPING_RATIO, SPATIAL_STIFFNESS);
+            static final LinearInterpolator LINEAR = new LinearInterpolator();
+
+            private Specs() {}
+        }
+
+        /** @hide **/
+        public static void preload() {
+            // Touching any member of Specs initializes the whole holder, including LINEAR.
+            // The volatile write keeps the call from being optimized away.
+            sPreloaded = Specs.SPATIAL.getDurationMs() > 0;
+        }
+
+        /** @hide **/
+        public static Animation create(@AnimRes int id) {
+            if (id == 0) {
+                return null;
+            }
+            // Deliberately an if/else chain rather than a switch: it does not require the R
+            // constants to be compile time constants, so this keeps building if framework
+            // resources are ever emitted as a non-final R.
+            if (id == R.anim.activity_open_enter) {
+                return createSlide(1.0f, 0.0f);
+            } else if (id == R.anim.activity_open_exit) {
+                return createSlide(0.0f, -DISTANCE);
+            } else if (id == R.anim.activity_close_enter) {
+                return createSlide(-DISTANCE, 0.0f);
+            } else if (id == R.anim.activity_close_exit) {
+                return createSlide(0.0f, 1.0f);
+            } else if (id == R.anim.app_starting_exit) {
+                return createAppStartingExit();
+            }
+            return null;
+        }
+
+        private static Animation createSlide(float fromXRatio, float toXRatio) {
+            final SpringInterpolator spatial = Specs.SPATIAL;
+            final TranslateAnimation slide = new TranslateAnimation(
+                    Animation.RELATIVE_TO_SELF, fromXRatio,
+                    Animation.RELATIVE_TO_SELF, toXRatio,
+                    Animation.RELATIVE_TO_SELF, 0f,
+                    Animation.RELATIVE_TO_SELF, 0f);
+            slide.setDuration(spatial.getDurationMs());
+            slide.setInterpolator(spatial);
+
+            final AnimationSet set = new AnimationSet(false /* shareInterpolator */);
+            set.addAnimation(slide);
+            return set;
+        }
+
+        private static Animation createAppStartingExit() {
+            final Animation animation = new AlphaAnimation(1.0f, 0.0f);
+            animation.setDuration(APP_STARTING_EXIT_DURATION_MS);
+            animation.setInterpolator(Specs.LINEAR);
+            return animation;
+        }
+    }
+
+    /** @hide **/
+    public static final class SpringInterpolator implements Interpolator {
+
+        private static final long MIN_DURATION_MS = 50L;
+        private static final long MAX_DURATION_MS = 1000L;
+
+        /** Sample count - 1, a power of two so the index math stays exact. */
+        private static final int LAST_SAMPLE = 256;
+
+        private final long mDurationMs;
+        private final float[] mSamples = new float[LAST_SAMPLE + 1];
+
+        public SpringInterpolator(float dampingRatio, float stiffness) {
+            final float zeta = Math.max(0f, dampingRatio);
+            final float omega0 = (float) Math.sqrt(Math.max(1f, stiffness));
+
+            final float settleSec = zeta >= 1.0f
+                    ? 9.23f / omega0
+                    : 6.91f / (Math.max(0.05f, zeta) * omega0);
+            mDurationMs = Math.min(MAX_DURATION_MS,
+                    Math.max(MIN_DURATION_MS, (long) (settleSec * 1000f)));
+
+            final float durationSec = mDurationMs / 1000f;
+            final float endGap = 1.0f - rawSpring(zeta, omega0, durationSec);
+            for (int i = 0; i < LAST_SAMPLE; i++) {
+                final float fraction = (float) i / LAST_SAMPLE;
+                mSamples[i] = rawSpring(zeta, omega0, fraction * durationSec) + endGap * fraction;
+            }
+            mSamples[LAST_SAMPLE] = 1.0f;
+        }
+
+        /** @hide **/
+        public long getDurationMs() {
+            return mDurationMs;
+        }
+
+        /** Unit step response of the spring at time {@code t} seconds. */
+        private static float rawSpring(float zeta, float omega0, float t) {
+            if (zeta < 1.0f) {
+                final float wd = omega0 * (float) Math.sqrt(1.0f - zeta * zeta);
+                final float env = (float) Math.exp(-zeta * omega0 * t);
+                return 1.0f - env * ((float) Math.cos(wd * t)
+                        + (zeta * omega0 / wd) * (float) Math.sin(wd * t));
+            } else if (zeta > 1.0f) {
+                final float d = (float) Math.sqrt(zeta * zeta - 1.0f);
+                final float r1 = -omega0 * (zeta - d);
+                final float r2 = -omega0 * (zeta + d);
+                return 1.0f - (r2 * (float) Math.exp(r1 * t)
+                        - r1 * (float) Math.exp(r2 * t)) / (r2 - r1);
+            } else {
+                final float env = (float) Math.exp(-omega0 * t);
+                return 1.0f - env * (1.0f + omega0 * t);
+            }
+        }
+
+        @Override
+        public float getInterpolation(float input) {
+            if (input <= 0f) {
+                return 0f;
+            }
+            if (input >= 1f) {
+                return 1f;
+            }
+            final float position = input * LAST_SAMPLE;
+            final int index = (int) position;
+            final float start = mSamples[index];
+            return start + (position - index) * (mSamples[index + 1] - start);
+        }
     }
 }
