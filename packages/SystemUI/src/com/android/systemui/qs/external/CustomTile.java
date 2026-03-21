@@ -65,6 +65,7 @@ import com.android.systemui.qs.external.TileLifecycleManager.TileChangeListener;
 import com.android.systemui.qs.logging.QSLogger;
 import com.android.systemui.qs.tileimpl.QSTileImpl;
 import com.android.systemui.settings.DisplayTracker;
+import com.android.systemui.applocker.AxAppLockerHelper;
 
 import dagger.Lazy;
 import dagger.assisted.Assisted;
@@ -116,6 +117,7 @@ public class CustomTile extends QSTileImpl<State> implements TileChangeListener,
     private int mServiceUid = Process.INVALID_UID;
 
     private final IUriGrantsManager mIUriGrantsManager;
+    private final AxAppLockerHelper mAxAppLockerHelper;
 
     @AssistedInject
     CustomTile(
@@ -133,7 +135,8 @@ public class CustomTile extends QSTileImpl<State> implements TileChangeListener,
             CustomTileStatePersister customTileStatePersister,
             TileServices tileServices,
             DisplayTracker displayTracker,
-            IUriGrantsManager uriGrantsManager
+            IUriGrantsManager uriGrantsManager,
+            AxAppLockerHelper axAppLockerHelper
     ) {
         super(host.get(), uiEventLogger, backgroundLooper, mainHandler, falsingManager,
                 metricsLogger, statusBarStateController, activityStarter, qsLogger);
@@ -150,6 +153,7 @@ public class CustomTile extends QSTileImpl<State> implements TileChangeListener,
         mCustomTileStatePersister = customTileStatePersister;
         mDisplayTracker = displayTracker;
         mIUriGrantsManager = uriGrantsManager;
+        mAxAppLockerHelper = axAppLockerHelper;
     }
 
     @Override
@@ -414,6 +418,12 @@ public class CustomTile extends QSTileImpl<State> implements TileChangeListener,
         if (mTile.getState() == Tile.STATE_UNAVAILABLE) {
             return;
         }
+
+        if (mAxAppLockerHelper.getState(mComponent.getPackageName()).needsAuth()) {
+            mAxAppLockerHelper.promptUnlock(mComponent.getPackageName(), mUser);
+            return;
+        }
+
         mExpandableClicked = expandable;
         try {
             if (DEBUG) Log.d(TAG, "Adding token");
