@@ -30,12 +30,16 @@ import android.content.res.Resources.NotFoundException;
 import android.content.res.Resources.Theme;
 import android.content.res.XmlResourceParser;
 import android.os.SystemClock;
+import android.os.SystemProperties;
 import android.ravenwood.annotation.RavenwoodIgnore;
 import android.ravenwood.annotation.RavenwoodKeepPartialClass;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.TimeUtils;
 import android.util.Xml;
 import android.view.InflateException;
+
+import com.android.internal.R;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -56,6 +60,10 @@ public class AnimationUtils {
      */
     private static final int TOGETHER = 0;
     private static final int SEQUENTIALLY = 1;
+    
+    /** @hide **/
+    public static final boolean sPerfAnimEnabled = SystemProperties.getBoolean(
+            "persist.sys.activity_anim_perf_override", false);
 
     private static boolean sExpectedPresentationTimeFlagValue;
     static {
@@ -225,6 +233,21 @@ public class AnimationUtils {
      */
     public static Animation loadAnimation(Context context, @AnimRes int id)
             throws NotFoundException {
+
+        if (sPerfAnimEnabled) {
+            switch (id) {
+                case R.anim.activity_open_enter:
+                    return ActivityAnimations.getOpenEnter();
+                case R.anim.activity_open_exit:
+                    return ActivityAnimations.getOpenExit();
+                case R.anim.activity_close_enter:
+                    return ActivityAnimations.getCloseEnter();
+                case R.anim.activity_close_exit:
+                    return ActivityAnimations.getCloseExit();
+                case R.anim.app_starting_exit:
+                    return ActivityAnimations.getAppStartingExit();
+            }
+        }
 
         XmlResourceParser parser = null;
         try {
@@ -505,5 +528,178 @@ public class AnimationUtils {
             }
         }
         return interpolator;
+    }
+
+    /** @hide */
+    public final class ActivityAnimations {
+
+        private static Animation sOpenEnter;
+        private static Animation sOpenExit;
+        private static Animation sCloseEnter;
+        private static Animation sCloseExit;
+        private static Animation sAppStartingExit;
+
+        private static SpringInterpolator sSpatialSpec;
+        private static SpringInterpolator sEffectsSpec;
+
+        private static final float DISTANCE = 0.333f;
+        private static final long APP_STARTING_EXIT_DURATION_MS = 150L;
+
+        private ActivityAnimations() {}
+
+        /** @hide */
+        public static synchronized void preload() {
+            if (sOpenEnter != null) {
+                return;
+            }
+            sSpatialSpec = new SpringInterpolator(0.8f, 380f);
+            sEffectsSpec = new SpringInterpolator(1.0f, 3800f);
+            sOpenEnter = new ActivityAnimFactory()
+                    .fromX(1.0f)
+                    .toX(0.0f)
+                    .build();
+            sOpenExit = new ActivityAnimFactory()
+                    .fromX(0.0f)
+                    .toX(-DISTANCE)
+                    .build();
+            sCloseEnter = new ActivityAnimFactory()
+                        .fromX(-DISTANCE)
+                        .toX(0.0f)
+                        .build();
+            sCloseExit = new ActivityAnimFactory()
+                        .fromX(0.0f)
+                        .toX(1.0f)
+                        .build();
+            sAppStartingExit = buildAppStartingExit();
+        }
+
+        private static Animation buildAppStartingExit() {
+            Animation animation = new AlphaAnimation(1.0f, 0.0f);
+            animation.setDuration(APP_STARTING_EXIT_DURATION_MS);
+            animation.setInterpolator(new LinearInterpolator());
+            return animation;
+        }
+
+        private static class ActivityAnimFactory {
+            private float fromX = 0f, toX = 0f;
+
+            public ActivityAnimFactory fromX(float ratio) {
+                this.fromX = ratio;
+                return this;
+            }
+
+            public ActivityAnimFactory toX(float ratio) {
+                this.toX = ratio;
+                return this;
+            }
+
+            public Animation build() {
+                AnimationSet animationSet = new AnimationSet(false);
+                TranslateAnimation slide = new TranslateAnimation(
+                        Animation.RELATIVE_TO_SELF, fromX,
+                        Animation.RELATIVE_TO_SELF, toX,
+                        Animation.RELATIVE_TO_SELF, 0f,
+                        Animation.RELATIVE_TO_SELF, 0f
+                );
+                slide.setDuration(sSpatialSpec.getDurationMs());
+                slide.setInterpolator(sSpatialSpec);
+                animationSet.addAnimation(slide);
+                return animationSet;
+            }
+        }
+
+        /** @hide */
+        public static Animation getOpenEnter() {
+            if (sOpenEnter == null) {
+                preload();
+            }
+            return sOpenEnter;
+        }
+
+        /** @hide */
+        public static Animation getOpenExit() {
+            if (sOpenExit == null) {
+                preload();
+            }
+            return sOpenExit;
+        }
+
+        /** @hide */
+        public static Animation getCloseEnter() {
+            if (sCloseEnter == null) {
+                preload();
+            }
+            return sCloseEnter;
+        }
+
+        /** @hide */
+        public static Animation getCloseExit() {
+            if (sCloseExit == null) {
+                preload();
+            }
+            return sCloseExit;
+        }
+
+        /** @hide */
+        public static Animation getAppStartingExit() {
+            if (sAppStartingExit == null) {
+                preload();
+            }
+            return sAppStartingExit;
+        }
+    }
+
+    /** @hide */
+    public static final class SpringInterpolator implements Interpolator {
+        private final float mDampingRatio;
+        private final float mOmega0;
+        private final long mDurationMs;
+        private final float mDurationSec;
+        private final float mEndOutput;
+        private final float mEndGap;
+
+        public SpringInterpolator(float dampingRatio, float stiffness) {
+            mDampingRatio = dampingRatio;
+            mOmega0 = (float) Math.sqrt(stiffness);
+            final float settleSec;
+            if (dampingRatio >= 1.0f) {
+                settleSec = 9.23f / mOmega0;
+            } else {
+                settleSec = 6.91f / (dampingRatio * mOmega0);
+            }
+            mDurationMs = Math.max(50L, (long) (settleSec * 1000f));
+            mDurationSec = mDurationMs / 1000f;
+            mEndOutput = rawSpring(mDurationSec);
+            mEndGap = 1.0f - mEndOutput;
+        }
+
+        public long getDurationMs() {
+            return mDurationMs;
+        }
+
+        private float rawSpring(float t) {
+            final float zeta = mDampingRatio;
+            final float w0 = mOmega0;
+            if (zeta < 1.0f) {
+                final float wd = w0 * (float) Math.sqrt(1.0f - zeta * zeta);
+                final float env = (float) Math.exp(-zeta * w0 * t);
+                return 1.0f - env * ((float) Math.cos(wd * t)
+                        + (zeta * w0 / wd) * (float) Math.sin(wd * t));
+            } else if (zeta > 1.0f) {
+                final float d = (float) Math.sqrt(zeta * zeta - 1.0f);
+                final float r1 = -w0 * (zeta - d);
+                final float r2 = -w0 * (zeta + d);
+                return 1.0f - (r2 * (float) Math.exp(r1 * t)
+                        - r1 * (float) Math.exp(r2 * t)) / (r2 - r1);
+            } else {
+                final float env = (float) Math.exp(-w0 * t);
+                return 1.0f - env * (1.0f + w0 * t);
+            }
+        }
+
+        @Override
+        public float getInterpolation(float input) {
+            return rawSpring(input * mDurationSec) + mEndGap * input;
+        }
     }
 }
