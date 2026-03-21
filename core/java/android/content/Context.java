@@ -6259,6 +6259,11 @@ public abstract class Context {
     public static final String APP_OPS_SERVICE = "appops";
 
     /**
+     * @hide
+     */
+    public static final String AX_SANDBOX_SERVICE = "ax_sandbox";
+
+    /**
      * Use with {@link #getSystemService(String)} to retrieve a {@link android.app.role.RoleManager}
      * for managing roles.
      *
