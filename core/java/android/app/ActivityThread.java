@@ -225,6 +225,7 @@ import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.WindowManagerGlobal;
+import android.view.animation.AnimationUtils;
 import android.view.autofill.AutofillId;
 import android.view.autofill.AutofillManager;
 import android.view.autofill.AutofillValue;
@@ -8396,6 +8397,15 @@ public final class ActivityThread extends ClientTransactionHandler
                 }
             } catch (RemoteException e) {
                 throw e.rethrowFromSystemServer();
+            }
+        }
+
+        if (!Process.isIsolated() && AnimationUtils.isPerfAnimEnabled()) {
+            try {
+                AnimationUtils.ActivityAnimations.preload();
+            } catch (Throwable t) {
+                // Preloading is purely an optimization - never let it take down the app.
+                Slog.w(TAG, "Failed to preload activity animations", t);
             }
         }
 
