@@ -1946,6 +1946,29 @@ public final class ProcessList implements ProcessStateController.ProcessLruUpdat
 
                 gids = computeGidsForProcess(mountExternal, uid, permGids, externalStorageAccess);
             }
+            if (gids != null) {
+                try {
+                    int[] restrictedGids = com.android.server.wm.AxSandboxService.get()
+                            .getRestrictedGids(app.info.packageName);
+                    if (restrictedGids != null && restrictedGids.length > 0) {
+                        java.util.ArrayList<Integer> filtered = new java.util.ArrayList<>();
+                        for (int gid : gids) {
+                            boolean restricted = false;
+                            for (int rg : restrictedGids) {
+                                if (gid == rg) { restricted = true; break; }
+                            }
+                            if (!restricted) filtered.add(gid);
+                        }
+                        if (filtered.size() != gids.length) {
+                            gids = new int[filtered.size()];
+                            for (int i = 0; i < filtered.size(); i++) gids[i] = filtered.get(i);
+                        }
+                    }
+                } catch (Exception e) {
+                    Slog.w(TAG_PROCESSES, "Failed to apply GID restrictions for "
+                            + app.info.packageName, e);
+                }
+            }
             app.setMountMode(mountExternal);
             checkSlow(startUptime, "startProcess: building args");
             if (app.getWindowProcessController().isFactoryTestProcess()) {
@@ -2439,8 +2462,15 @@ public final class ProcessList implements ProcessStateController.ProcessLruUpdat
 
     private boolean needsStorageDataIsolation(StorageManagerInternal storageManagerInternal,
             ProcessRecord app) {
+        boolean sandboxIsolation = false;
+        try {
+            sandboxIsolation = com.android.server.wm.AxSandboxService.get()
+                    .isSandboxDataIsolationEnabled(app.info.packageName);
+        } catch (Exception e) {
+            // ignore
+        }
         final int mountMode = app.getMountMode();
-        return mVoldAppDataIsolationEnabled && UserHandle.isApp(app.uid)
+        return (mVoldAppDataIsolationEnabled || sandboxIsolation) && UserHandle.isApp(app.uid)
                 && !storageManagerInternal.isExternalStorageService(app.uid)
                 // Special mounting mode doesn't need to have data isolation as they won't
                 // access /mnt/user anyway.
@@ -2469,10 +2499,18 @@ public final class ProcessList implements ProcessStateController.ProcessLruUpdat
             Map<String, Pair<String, Long>> pkgDataInfoMap;
             Map<String, Pair<String, Long>> allowlistedAppDataInfoMap;
             boolean bindMountAppStorageDirs = false;
-            boolean bindMountAppsData = mAppDataIsolationEnabled
+            boolean sandboxDataIsolation = false;
+            try {
+                sandboxDataIsolation = com.android.server.wm.AxSandboxService.get()
+                        .isSandboxDataIsolationEnabled(app.info.packageName);
+            } catch (Exception e) {
+                // ignore
+            }
+            boolean bindMountAppsData = (mAppDataIsolationEnabled || sandboxDataIsolation)
                     && (UserHandle.isApp(app.uid) || UserHandle.isIsolated(app.uid)
                         || app.isSdkSandbox)
-                    && mPlatformCompat.isChangeEnabled(APP_DATA_DIRECTORY_ISOLATION, app.info);
+                    && (sandboxDataIsolation
+                        || mPlatformCompat.isChangeEnabled(APP_DATA_DIRECTORY_ISOLATION, app.info));
 
             // Get all packages belongs to the same shared uid. sharedPackages is empty array
             // if it doesn't have shared uid.
