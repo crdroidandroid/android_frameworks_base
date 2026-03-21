@@ -21,6 +21,7 @@ import com.android.server.am.*;
 import com.android.server.pm.*;
 import com.android.server.spoof.AxSpoofManager;
 import com.android.server.spoof.IAxSpoofManager;
+import com.android.server.wm.AxSandboxService;
 import com.android.server.wm.WindowManagerService;
 
 public class AxExtServiceFactory {
@@ -83,6 +84,7 @@ public class AxExtServiceFactory {
     }
 
     public static void systemReady() {
+        AxSandboxService.systemReady();
         getSpoofManager().systemReady();
     }
     
