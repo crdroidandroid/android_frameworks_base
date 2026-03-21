@@ -214,6 +214,7 @@ import com.android.server.policy.WindowManagerPolicy;
 import com.android.server.statusbar.StatusBarManagerInternal;
 import com.android.server.utils.Slogf;
 import com.android.server.wm.ActivityTaskManagerInternal;
+import com.android.server.wm.AxSandboxService;
 import com.android.server.wm.WindowManagerInternal;
 import com.android.settingslib.RestrictedLockUtils;
 
@@ -1285,6 +1286,14 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub
             final int resolvedUserId = mSecurityPolicy
                     .resolveCallingUserIdEnforcingPermissionsLocked(userId);
 
+            final int callingUid = Binder.getCallingUid();
+            String[] clientPackages = mPackageManager.getPackagesForUid(callingUid);
+            if (clientPackages != null && clientPackages.length > 0) {
+                if (AxSandboxService.get().isPackageSandboxed(clientPackages[0])) {
+                    return IntPair.of(0, 0);
+                }
+            }
+
             AccessibilityUserState userState = getUserStateLocked(resolvedUserId);
             // Support a process moving from the default device to a single virtual
             // device.
@@ -1596,6 +1605,9 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub
             final List<AccessibilityServiceInfo> result = new ArrayList<>(serviceCount);
             for (int i = 0; i < serviceCount; ++i) {
                 final AccessibilityServiceConnection service = services.get(i);
+                if (AxSandboxService.get().isPackageSandboxed(service.getComponentName().getPackageName())) {
+                    continue;
+                }
                 if ((service.mFeedbackType & feedbackType) != 0
                         || feedbackType == AccessibilityServiceInfo.FEEDBACK_ALL_MASK) {
                     result.add(service.getServiceInfo());

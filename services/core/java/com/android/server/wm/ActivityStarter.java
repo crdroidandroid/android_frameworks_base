@@ -847,6 +847,21 @@ class ActivityStarter {
 
                 final long origId = Binder.clearCallingIdentity();
                 try {
+                    if (mRequest.intent != null && mRequest.intent.getComponent() != null) {
+                        String targetPkg = mRequest.intent.getComponent().getPackageName();
+                        String callerPkg = mRequest.callingPackage;
+                        if (targetPkg != null
+                                && AxSandboxService.get().isPackageHidden(targetPkg)
+                                && !AxSandboxService.BLACKLISTED_PACKAGES.contains(callerPkg)
+                                && !targetPkg.equals(callerPkg)) {
+                            int callerUid = mRequest.callingUid;
+                            if (callerUid != android.os.Process.SYSTEM_UID
+                                    && callerUid != android.os.Process.ROOT_UID) {
+                                return ActivityManager.START_CLASS_NOT_FOUND;
+                            }
+                        }
+                    }
+
                     res = resolveToHeavyWeightSwitcherIfNeeded();
                     if (res != START_SUCCESS) {
                         return res;

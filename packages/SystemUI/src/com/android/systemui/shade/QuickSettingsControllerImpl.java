@@ -114,6 +114,12 @@ import com.android.systemui.util.ScrimUtils;
 import com.android.systemui.util.kotlin.JavaAdapter;
 import com.android.systemui.utils.windowmanager.WindowManagerProvider;
 
+import com.android.systemui.applocker.AxAppLockerHelper;
+import com.android.systemui.statusbar.notification.row.ExpandableNotificationRow;
+import com.android.systemui.statusbar.notification.collection.NotificationEntry;
+import android.service.notification.StatusBarNotification;
+import android.view.View;
+
 import lineageos.providers.LineageSettings;
 
 import dalvik.annotation.optimization.NeverCompile;
@@ -2554,5 +2560,15 @@ public class QuickSettingsControllerImpl implements QuickSettingsController, Dum
     interface FlingQsWithoutClickListener {
         void onFlingQsWithoutClick(ValueAnimator animator, float qsExpansionHeight,
                 float target, float vel);
+    }
+
+    public final void onAppLockerUpdated(String packageName) {
+        NotificationStackScrollLayoutController controller = mNotificationStackScrollLayoutController;
+        if (controller == null || controller.getView() == null) {
+            return;
+        }
+
+        NotificationStackScrollLayout view = controller.getView();
+        view.post(() -> view.onAppLockerUpdate(packageName));
     }
 }
