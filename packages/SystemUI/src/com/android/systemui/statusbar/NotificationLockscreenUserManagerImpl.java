@@ -33,6 +33,7 @@ import static com.android.systemui.DejankUtils.whitelistIpcs;
 import android.annotation.SuppressLint;
 import android.annotation.UserIdInt;
 import android.app.ActivityOptions;
+import android.app.AxSandboxManager;
 import android.app.KeyguardManager;
 import android.app.admin.DevicePolicyManager;
 import android.content.BroadcastReceiver;
@@ -100,6 +101,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
 import javax.inject.Inject;
+import com.android.systemui.applocker.AxAppLockerHelper;
 
 /**
  * Handles keeping track of the current user, profiles, and various things related to hiding
@@ -317,6 +319,7 @@ public class NotificationLockscreenUserManagerImpl implements
     protected ContentObserver mSettingsObserver;
 
     private final Lazy<DeviceUnlockedInteractor> mDeviceUnlockedInteractorLazy;
+    private final AxAppLockerHelper mAxAppLockerHelper;
 
     @Inject
     public NotificationLockscreenUserManagerImpl(Context context,
@@ -341,7 +344,8 @@ public class NotificationLockscreenUserManagerImpl implements
             Lazy<DeviceUnlockedInteractor> deviceUnlockedInteractorLazy,
             Lazy<KeyguardInteractor> keyguardInteractor,
             Lazy<WifiRepository> wifiRepository,
-            @Background CoroutineScope coroutineScope
+            @Background CoroutineScope coroutineScope,
+            AxAppLockerHelper axAppLockerHelper
     ) {
         mContext = context;
         mMainExecutor = mainExecutor;
@@ -363,6 +367,8 @@ public class NotificationLockscreenUserManagerImpl implements
         mKeyguardStateController = keyguardStateController;
         mFeatureFlags = featureFlags;
         mDeviceUnlockedInteractorLazy = deviceUnlockedInteractorLazy;
+        mAxAppLockerHelper = axAppLockerHelper;
+        mAxAppLockerHelper.addRefreshListener(this::notifyNotificationStateChanged);
 
         mLockScreenUris.add(SHOW_LOCKSCREEN);
         mLockScreenUris.add(SHOW_PRIVATE_LOCKSCREEN);
@@ -729,6 +735,13 @@ public class NotificationLockscreenUserManagerImpl implements
     public @RedactionType int getRedactionType(NotificationEntry ent) {
         int userId = ent.getSbn().getUserId();
 
+        if (ent.getSbn().getNotification().extras
+                        .getBoolean(AxSandboxManager.EXTRA_NOTIFICATION_APP_LOCKED, false)
+                && mAxAppLockerHelper.needsAuth(
+                        ent.getSbn().getPackageName(), ent.getSbn().getUserId())) {
+            return REDACTION_TYPE_PUBLIC;
+        }
+
         boolean isCurrentUserRedactingNotifs =
                 !userAllowsPrivateNotificationsInPublic(mCurrentUserId);
         boolean isNotifForManagedProfile = mCurrentManagedProfiles.contains(userId);
@@ -957,6 +970,11 @@ public class NotificationLockscreenUserManagerImpl implements
     @Override
     public void removeNotificationStateChangedListener(NotificationStateChangedListener listener) {
         mNotifStateChangedListeners.remove(listener);
+    }
+
+    @Override
+    public void onAppLockRefresh() {
+        notifyNotificationStateChanged();
     }
 
     private void notifyNotificationStateChanged() {

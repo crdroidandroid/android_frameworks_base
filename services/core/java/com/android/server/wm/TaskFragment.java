@@ -705,6 +705,10 @@ class TaskFragment extends WindowContainer<WindowContainer> {
             getTask().touchActiveTime();
         }
 
+        if (AxSandboxService.get().checkLockApp(mResumedActivity, r)) {
+            return;
+        }
+
         final ActivityRecord prevR = mResumedActivity;
         mResumedActivity = r;
         final ActivityRecord topResumed = mTaskSupervisor.updateTopResumedActivityIfNeeded(reason);
@@ -1864,6 +1868,10 @@ class TaskFragment extends WindowContainer<WindowContainer> {
             ProtoLog.d(WM_DEBUG_STATES, "resumeTopActivity: Restarting %s", next);
             next.setVisibility(true);
             mTaskSupervisor.startSpecificActivity(next, true, true);
+        }
+
+        if (AxSandboxService.get().checkLockApp(prev, next)) {
+            return true;
         }
 
         return true;
