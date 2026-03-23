@@ -486,7 +486,13 @@ std::unique_ptr<const LoadedPackage> LoadedPackage::Load(const Chunk& chunk,
     loaded_package->property_flags_ |= PROPERTY_OVERLAY | PROPERTY_DYNAMIC;
   }
 
-  loaded_package->package_id_ = dtohl(header->id);
+  const uint32_t package_id = dtohl(header->id);
+  if (package_id > std::numeric_limits<uint8_t>::max()) {
+    LOG(ERROR) << "RES_TABLE_PACKAGE_TYPE package id is out of valid range";
+    return {};
+  }
+
+  loaded_package->package_id_ = static_cast<int>(package_id);
   if (loaded_package->package_id_ == 0 ||
       (loaded_package->package_id_ == kAppPackageId && (property_flags & PROPERTY_DYNAMIC) != 0)) {
     loaded_package->property_flags_ |= PROPERTY_DYNAMIC;
