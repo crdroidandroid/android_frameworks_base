@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/clock_frame"
+    android:gravity="center"
+    android:layout_gravity="center"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="20.0dip" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextClock
+                android:textSize="40.0dip"
+                android:textColor="@android:color/system_accent1_100"
+                android:id="@+id/lsclock10_a"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:format12Hour="EEEE "
+                android:format24Hour="EEEE " />
+            <TextClock
+                android:textSize="40.0dip"
+                android:textColor="@android:color/system_accent1_100"
+                android:id="@+id/lsclock10_c"
+                android:background="@drawable/anci_dot_bg_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:paddingStart="10.0dip"
+                android:paddingEnd="15.0dip"
+                android:format12Hour="dd"
+                android:format24Hour="dd" />
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextClock
+                android:textSize="40.0dip"
+                android:textColor="@android:color/system_accent1_100"
+                android:id="@+id/lsclock10_d"
+                android:background="@drawable/anci_dot_bg_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:paddingStart="15.0dip"
+                android:paddingEnd="15.0dip"
+                android:format12Hour="MMM"
+                android:format24Hour="MMM" />
+            <TextClock
+                android:textSize="40.0dip"
+                android:textColor="@android:color/system_accent1_100"
+                android:id="@+id/lsclock10_e"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:format12Hour=" hh:mm"
+                android:format24Hour=" HH:mm" />
+            <TextClock
+                android:textSize="20.0dip"
+                android:textColor="@android:color/system_accent1_100"
+                android:id="@+id/lsclock10_b"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:format12Hour="a"
+                android:format24Hour=" " />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_gravity="center"
+            android:background="@drawable/anci_dot_bg"
+            android:layout_width="150.0dip"
+            android:layout_height="5.0dip"
+            android:layout_marginTop="15.0dip" />
+        <LinearLayout
+            android:layout_gravity="center"
+            android:background="@drawable/anci_dot_bg"
+            android:layout_width="100.0dip"
+            android:layout_height="3.649994dip"
+            android:layout_marginTop="5.0dip" />
+        <LinearLayout
+            android:layout_gravity="center"
+            android:background="@drawable/anci_dot_bg"
+            android:layout_width="70.0dip"
+            android:layout_height="2.5dip"
+            android:layout_marginTop="5.0dip" />
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/clock_frame"
+    android:gravity="center"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="0.0dip"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="-20.0dip" />
+    <FrameLayout
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <com.airbnb.lottie.LottieAnimationView
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:clickable="false"
+            android:layout_width="250.0dip"
+            android:layout_height="250.0dip"
+            android:layout_marginStart="0.0dip"
+            app:lottie_autoPlay="true"
+            app:lottie_rawRes="@raw/ovalium"
+            app:lottie_loop="true" />
+        <LinearLayout
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="0.0dip">
+            <LinearLayout
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="40.0dip" />
+            <LinearLayout
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0.0dip">
+                <TextClock
+                    android:textSize="15.0dip"
+                    android:textColor="@android:color/system_accent1_100"
+                    android:id="@+id/lsclock9_d"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:format12Hour=" MMMM dd "
+                    android:format24Hour=" MMMM dd " />
+                <LinearLayout
+                    android:layout_gravity="center"
+                    android:background="@drawable/anci_dot_bg"
+                    android:layout_width="5.0dip"
+                    android:layout_height="16.0dip" />
+                <TextClock
+                    android:textSize="15.0dip"
+                    android:textColor="@android:color/system_accent1_100"
+                    android:id="@+id/lsclock9_e"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:format12Hour=" EEEE"
+                    android:format24Hour=" EEEE" />
+            </LinearLayout>
+            <LinearLayout
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="30.0dip" />
+            <LinearLayout
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="0.0dip">
+                    <TextClock
+                        android:textSize="25.0dip"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/system_accent1_100"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:id="@+id/lsclock9_a"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:format12Hour=" hh"
+                        android:format24Hour=" HH" />
+                    <TextClock
+                        android:textSize="45.0dip"
+                        android:textStyle="bold"
+                        android:textColor="#00000000"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:id="@+id/lsclock9_c"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:format12Hour="...."
+                        android:format24Hour="...." />
+                </LinearLayout>
+                <TextClock
+                    android:textSize="0.0dip"
+                    android:textColor="@android:color/system_accent1_100"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:id="@+id/lsclock9_b"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:format12Hour=" "
+                    android:format24Hour=" " />
+                <LinearLayout
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextClock
+                        android:textSize="45.0dip"
+                        android:textStyle="bold"
+                        android:textColor="#00000000"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:id="@+id/lsclock9_c"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:format12Hour="....."
+                        android:format24Hour="....." />
+                    <TextClock
+                        android:textSize="25.0dip"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/system_accent1_100"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:id="@+id/lsclock9_c"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:format12Hour="mm"
+                        android:format24Hour="mm" />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="20.0dip" />
+        </LinearLayout>
+    </FrameLayout>
+</LinearLayout>
