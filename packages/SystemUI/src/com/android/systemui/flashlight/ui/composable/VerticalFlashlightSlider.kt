@@ -44,6 +44,7 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderColors
 import androidx.compose.material3.SliderState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -68,6 +69,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.clipRect
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.FlashlightOff
@@ -164,108 +166,111 @@ fun VerticalFlashlightSlider(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(2.dp),
         ) {
-            Slider(
-                modifier =
-                    Modifier.rotate(270f)
-                        // 80 dp is enough for track height, but we need 120 for thumb height.
-                        // But since the rotate only rotates the draw layer, we would end up with  a
-                        // 120
-                        // slider length rather than 140. Instead of 120 we go with 140 so that we
-                        // don't
-                        // need extra code to rotate the layout.
-                        .size(TRACK_LENGTH)
-                        .semantics(mergeDescendants = true) {
-                            this.text = AnnotatedString(flashlightStrength)
+            // We want to assume that we always draw the track path from left to right.
+            // Additionally, if we don't force LTR, on RTL some of the logic will be upside down.
+            // For example the handle would be smaller up top, or the flashlight level would be at
+            // 100% when the handle is fully at the bottom.
+            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                Slider(
+                    modifier =
+                        Modifier.rotate(270f)
+                            // 80 dp is enough for track height, but we need 120 for thumb height.
+                            // But since the rotate only rotates the draw layer, we would end up
+                            // with a 120 slider length rather than 140. Instead of 120 we go with
+                            // 140 so that we don't need extra code to rotate the layout.
+                            .size(TRACK_LENGTH)
+                            .semantics(mergeDescendants = true) {
+                                this.text = AnnotatedString(flashlightStrength)
+                            }
+                            .sliderPercentage { toPercent(animatedValue, valueRange) }
+                            .sysuiResTag("slider"),
+                    enabled = isEnabled,
+                    value = animatedValue,
+                    valueRange = floatValueRange,
+                    onValueChange = {
+                        if (isEnabled) {
+                            hapticsViewModel.onValueChange(it)
+                            value = it.toInt()
+                            atEnd = value != valueRange.first
+                            onValueChange(value)
                         }
-                        .sliderPercentage { toPercent(animatedValue, valueRange) }
-                        .sysuiResTag("slider"),
-                enabled = isEnabled,
-                value = animatedValue,
-                valueRange = floatValueRange,
-                onValueChange = {
-                    if (isEnabled) {
-                        hapticsViewModel.onValueChange(it)
-                        value = it.toInt()
-                        atEnd = value != valueRange.first
-                        onValueChange(value)
-                    }
-                },
-                onValueChangeFinished = {
-                    if (isEnabled) {
-                        hapticsViewModel.onValueChangeEnded()
-                        onValueChangeFinished(value)
-                    }
-                },
-                interactionSource = interactionSource,
-                colors = colors,
-                thumb = { sliderState ->
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        val thumbHeight by
-                            animateDpAsState(
-                                thumbHeight(
-                                    sliderState.value / sliderState.valueRange.endInclusive,
-                                    sliderState.isDragging,
+                    },
+                    onValueChangeFinished = {
+                        if (isEnabled) {
+                            hapticsViewModel.onValueChangeEnded()
+                            onValueChangeFinished(value)
+                        }
+                    },
+                    interactionSource = interactionSource,
+                    colors = colors,
+                    thumb = { sliderState ->
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            val thumbHeight by
+                                animateDpAsState(
+                                    thumbHeight(
+                                        sliderState.value / sliderState.valueRange.endInclusive,
+                                        sliderState.isDragging,
+                                    )
                                 )
-                            )
 
-                        Thumb(
-                            interactionSource = interactionSource,
-                            colors = colors,
-                            thumbSize = DpSize(THUMB_WIDTH, thumbHeight),
-                        )
-                    }
-                },
-                track = { sliderState ->
-                    TrapezoidTrack(
-                        modifier =
-                            Modifier.drawWithContent {
-                                    // Cut a gap around the thumb. The is pre-rotation and
-                                    // horizontal,
-                                    // hence we use the left-right gap metrics instead of
-                                    // top-bottom.
-                                    clipRect(
-                                        left =
-                                            size.width * (sliderState.coercedValueAsFraction) -
-                                                THUMB_CENTER_TO_GAP_OUTSIDE.toPx(),
-                                        top = 0f,
-                                        bottom = size.height,
-                                        right =
-                                            size.width * (sliderState.coercedValueAsFraction) +
-                                                THUMB_CENTER_TO_GAP_OUTSIDE.toPx(),
-                                        clipOp = ClipOp.Difference,
-                                    ) {
-                                        this@drawWithContent.drawContent()
+                            Thumb(
+                                interactionSource = interactionSource,
+                                colors = colors,
+                                thumbSize = DpSize(THUMB_WIDTH, thumbHeight),
+                            )
+                        }
+                    },
+                    track = { sliderState ->
+                        TrapezoidTrack(
+                            modifier =
+                                Modifier.drawWithContent {
+                                        // Cut a gap around the thumb. The is pre-rotation and
+                                        // horizontal, hence we use the left-right gap metrics
+                                        // instead of top-bottom.
+                                        clipRect(
+                                            left =
+                                                size.width * (sliderState.coercedValueAsFraction) -
+                                                    THUMB_CENTER_TO_GAP_OUTSIDE.toPx(),
+                                            top = 0f,
+                                            bottom = size.height,
+                                            right =
+                                                size.width * (sliderState.coercedValueAsFraction) +
+                                                    THUMB_CENTER_TO_GAP_OUTSIDE.toPx(),
+                                            clipOp = ClipOp.Difference,
+                                        ) {
+                                            this@drawWithContent.drawContent()
+                                        }
                                     }
-                                }
-                                // TODO(440620729): gradient blur from top to bottom. or no bottom
-                                // blur.
-                                .blur(
-                                    BLUR_X,
-                                    // TODO(440620729): start contraction on click down, not on
-                                    // drag.
-                                    if (isDragged.value) (BLUR_Y * BLUR_CONTRACTION) else BLUR_Y,
-                                    EdgeTreatment,
-                                )
-                                .motionTestValues {
-                                    trackEndAlpha(sliderState.coercedValueAsFraction) exportAs
-                                        VerticalFlashlightSliderMotionTestKeys.TrackEndAlpha
-                                },
-                        brush =
-                            Brush.horizontalGradient(
-                                0f to colors.activeTrackColor,
-                                0.5f to colors.activeTrackColor,
-                                1.0f to
-                                    // lower end alpha from 1 to 0.12 as slider progresses.
-                                    colors.activeTrackColor.copy(
-                                        alpha = trackEndAlpha(sliderState.coercedValueAsFraction)
-                                    ),
-                            ),
-                        sliderState = sliderState,
-                        maxSliderRange = floatValueRange.endInclusive,
-                        widthContraction = if (isDragged.value) WIDTH_CONTRACTION else 1f,
-                    )
-                },
-            )
+                                    // TODO(440620729): gradient blur from top to bottom
+                                    .blur(
+                                        BLUR_X,
+                                        // TODO(440620729): start contraction on click-down not drag
+                                        if (isDragged.value) (BLUR_Y * BLUR_CONTRACTION)
+                                        else BLUR_Y,
+                                        EdgeTreatment,
+                                    )
+                                    .motionTestValues {
+                                        trackEndAlpha(sliderState.coercedValueAsFraction) exportAs
+                                            VerticalFlashlightSliderMotionTestKeys.TrackEndAlpha
+                                    },
+                            brush =
+                                Brush.horizontalGradient(
+                                    0f to colors.activeTrackColor,
+                                    0.5f to colors.activeTrackColor,
+                                    1.0f to
+                                        // lower end alpha from 1 to 0.12 as slider progresses.
+                                        colors.activeTrackColor.copy(
+                                            alpha =
+                                                trackEndAlpha(sliderState.coercedValueAsFraction)
+                                        ),
+                                ),
+                            sliderState = sliderState,
+                            maxSliderRange = floatValueRange.endInclusive,
+                            widthContraction = if (isDragged.value) WIDTH_CONTRACTION else 1f,
+                        )
+                    },
+                )
+            }
             AnimatedVectorFlashlightDrawable(atEnd, colors.thumbColor, Modifier.size(50.dp))
         }
     }
