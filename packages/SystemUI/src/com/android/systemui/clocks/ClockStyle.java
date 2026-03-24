@@ -109,6 +109,7 @@ public class ClockStyle extends RelativeLayout implements TunerService.Tunable {
     public static final String CLOCK_TEXT_OPACITY_KEY = Settings.Secure.LOCK_SCREEN_CUSTOM_CLOCK_OPACITY;
     public static final String CLOCK_FRAME_MARGIN_TOP_KEY = Settings.Secure.LOCK_SCREEN_CUSTOM_CLOCK_MARGIN_TOP;
     public static final String CLOCK_SIZE_KEY = Settings.Secure.LOCK_SCREEN_CUSTOM_CLOCK_SIZE;
+    public static final String CLOCK_AOD_ANIM_KEY = Settings.Secure.LOCK_SCREEN_CUSTOM_CLOCK_AOD_ANIM;
 
     public static final String COLOR_MODE_DEFAULT = "default";
     public static final String COLOR_MODE_ACCENT = "accent";
@@ -128,6 +129,12 @@ public class ClockStyle extends RelativeLayout implements TunerService.Tunable {
 
     private static final int BURN_IN_PROTECTION_INTERVAL = 10_000;
     private static final int BURN_IN_PROTECTION_MAX_SHIFT = 4;
+
+    private static final float AOD_SCALE_DOWN = 0.85f;
+    private static final long AOD_ANIM_OUT_MS = 300L;
+    private static final long AOD_ANIM_IN_MS  = 400L;
+
+    private boolean mAodAnimEnabled = true;
 
     private final Context mContext;
     private final KeyguardManager mKeyguardManager;
@@ -205,6 +212,7 @@ public class ClockStyle extends RelativeLayout implements TunerService.Tunable {
         public void onDozingChanged(boolean dozing) {
             if (mDozing == dozing) return;
             mDozing = dozing;
+            animateAodTransition(dozing);
             applyClockAlpha();
             applyTextClockColor(currentClockView != null ? currentClockView : ClockStyle.this);
             if (mDozing) {
@@ -243,7 +251,8 @@ public class ClockStyle extends RelativeLayout implements TunerService.Tunable {
                     CLOCK_CUSTOM_COLOR_KEY,
                     CLOCK_TEXT_OPACITY_KEY,
                     CLOCK_FRAME_MARGIN_TOP_KEY,
-                    CLOCK_SIZE_KEY);
+                    CLOCK_SIZE_KEY,
+                    CLOCK_AOD_ANIM_KEY);
             mStatusBarStateController.addCallback(mStatusBarStateListener);
             mDozing = mStatusBarStateController.isDozing();
             mStatusBarStateListener.onDozingChanged(mDozing);
@@ -367,6 +376,36 @@ public class ClockStyle extends RelativeLayout implements TunerService.Tunable {
         currentClockView.setScaleY(scale);
         currentClockView.setPivotX(currentClockView.getWidth() / 2f);
         currentClockView.setPivotY(0f);
+    }
+
+    private void animateAodTransition(boolean toAod) {
+        if (currentClockView == null || !mAodAnimEnabled) return;
+        currentClockView.animate().cancel();
+        if (toAod) {
+            currentClockView.animate()
+                    .scaleX(AOD_SCALE_DOWN)
+                    .scaleY(AOD_SCALE_DOWN)
+                    .alpha(0f)
+                    .setDuration(AOD_ANIM_OUT_MS)
+                    .setInterpolator(new android.view.animation.AccelerateInterpolator(1.5f))
+                    .withEndAction(() -> {
+                        applyClockAlpha();
+                        currentClockView.setScaleX(AOD_SCALE_DOWN);
+                        currentClockView.setScaleY(AOD_SCALE_DOWN);
+                    })
+                    .start();
+        } else {
+            currentClockView.setScaleX(AOD_SCALE_DOWN);
+            currentClockView.setScaleY(AOD_SCALE_DOWN);
+            float targetScale = getScaleFactor();
+            currentClockView.animate()
+                    .scaleX(targetScale)
+                    .scaleY(targetScale)
+                    .alpha(mClockOpacity / 100f)
+                    .setDuration(AOD_ANIM_IN_MS)
+                    .setInterpolator(new android.view.animation.OvershootInterpolator(1.2f))
+                    .start();
+        }
     }
 
     private void applyClockScaleAfterLayout(final View view) {
@@ -507,6 +546,9 @@ public class ClockStyle extends RelativeLayout implements TunerService.Tunable {
                 mClockSizeScale = TunerService.parseInteger(newValue, DEFAULT_CLOCK_SIZE);
                 mClockSizeScale = Math.max(MIN_CLOCK_SIZE, Math.min(MAX_CLOCK_SIZE, mClockSizeScale));
                 applyClockScale();
+                break;
+            case CLOCK_AOD_ANIM_KEY:
+                mAodAnimEnabled = TunerService.parseInteger(newValue, 1) != 0;
                 break;
         }
     }
