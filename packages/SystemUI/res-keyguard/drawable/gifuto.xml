@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list
+  xmlns:android="http://schemas.android.com/apk/res/android">
+  <item>
+        <shape>
+            <solid android:color="#00ff0000" />
+        </shape>
+    </item>
+    <item>
+    <animated-image android:src="@drawable/gifu" android:gravity="center" android:scaleType="centerCrop" android:autoStart="true" repeatMode="1" android:repeatCount="-1" />
+    </item>
+</layer-list>
