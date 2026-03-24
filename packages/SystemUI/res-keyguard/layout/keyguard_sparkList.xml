@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/clock_frame"
+    android:gravity="top"
+    android:layout_gravity="top"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+        <LinearLayout
+        android:layout_gravity="center_horizontal"
+        android:orientation="vertical"
+        android:id="@+id/clock_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layoutDirection="ltr">
+        <LinearLayout
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextClock
+                android:textSize="120.0sp"
+                android:textStyle="normal"
+                android:textColor="#d9ffffff"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:id="@+id/timeclock1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:textAllCaps="true"
+                android:format12Hour="hh"
+                android:format24Hour="kk"
+                android:letterSpacing="0.05" />
+            <ImageView
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:layout_width="48.0dip"
+                android:layout_height="16.0dip"
+                android:src="@drawable/sparkls1_bg1"
+                android:alpha="0.5" />
+            <TextClock
+                android:textSize="120.0sp"
+                android:textStyle="normal"
+                android:textColor="#d9ffffff"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:id="@+id/timeclock2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:textAllCaps="true"
+                android:format12Hour="mm"
+                android:format24Hour="mm"
+                android:letterSpacing="0.05" />
+        </LinearLayout>
+        <FrameLayout
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:layout_width="128.0dip"
+            android:layout_height="38.0dip">
+            <ImageView
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:src="@drawable/sparkls1_bg2"
+                android:alpha="1.0" />
+            <ImageView
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:paddingTop="4.0dip"
+                android:paddingBottom="4.0dip"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:src="@drawable/sparkls1_bg1"
+                android:alpha="0.5"
+                android:paddingStart="4.0dip"
+                android:paddingEnd="4.0dip" />
+            <TextClock
+                android:textSize="18.0sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/system_accent1_100"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:textAllCaps="false"
+                android:format12Hour="EEE, MMM dd"
+                android:format24Hour="EEE, MMM dd" />
+        </FrameLayout>
+    </LinearLayout>
+</LinearLayout>
