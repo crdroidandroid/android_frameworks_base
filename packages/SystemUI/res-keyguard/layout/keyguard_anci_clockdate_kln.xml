@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/clock_frame"
+    android:gravity="center"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <FrameLayout
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+        <ImageView
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ls_bg_ribbon" />
+        <LinearLayout
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextClock
+                    android:textSize="17.0dip"
+                    android:textStyle="bold"
+                    android:textColor="#00000000"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="1.0dip"
+                    android:singleLine="true"
+                    android:format12Hour="   "
+                    android:format24Hour="   " />
+                <TextClock
+                    android:textSize="17.0dip"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/system_accent1_100"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:id="@+id/anci_analog_clockdate13"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="1.0dip"
+                    android:singleLine="true"
+                    android:format12Hour="k:mm"
+                    android:format24Hour="k:mm" />
+            </LinearLayout>
+            <LinearLayout
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextClock
+                    android:textSize="17.0dip"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/system_accent1_100"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1.0dip"
+                    android:singleLine="true"
+                    android:format12Hour="EEE dd"
+                    android:format24Hour="EEE dd" />
+                <TextClock
+                    android:textSize="17.0dip"
+                    android:textStyle="bold"
+                    android:textColor="#00000000"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1.0dip"
+                    android:singleLine="true"
+                    android:format12Hour="   "
+                    android:format24Hour="   " />
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+</LinearLayout>
