@@ -68,6 +68,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.eq;
@@ -83,6 +84,7 @@ import android.app.ActivityManager;
 import android.app.ActivityThread;
 import android.app.IApplicationThread;
 import android.content.pm.ActivityInfo;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.os.Binder;
@@ -2003,5 +2005,69 @@ public class WindowManagerServiceTests extends WindowTestsBase {
             @AppCompatConfiguration.LetterboxBackgroundType int letterboxBackgroundType) {
         mWm.mAppCompatConfiguration.setLetterboxBackgroundTypeOverride(letterboxBackgroundType);
         return mWm.isLetterboxBackgroundMultiColored();
+    }
+
+    @Test
+    public void testAddToastWindow_singleWindowPerToken() {
+        final IBinder token = new Binder();
+        mWm.addWindowToken(token, TYPE_TOAST, DEFAULT_DISPLAY, null /* options */);
+
+        final int uid1 = 1234;
+        final int pid1 = 1234;
+        final Session session1 = createTestSession(mAtm, pid1, uid1);
+        final WindowManager.LayoutParams params1 = new WindowManager.LayoutParams(TYPE_TOAST);
+        params1.token = token;
+        params1.packageName = "test1";
+
+        final ApplicationInfo appInfo1 = new ApplicationInfo();
+        appInfo1.targetSdkVersion = android.os.Build.VERSION_CODES.O;
+        doReturn(appInfo1)
+                .when(mWm.mPmInternal)
+                .getApplicationInfo(eq("test1"), anyLong(), anyInt(), anyInt());
+        doReturn(true).when(mWm.mPmInternal).isSameApp(eq("test1"), eq(uid1), anyInt());
+
+        final IWindow client1 = new TestIWindow();
+        final int res1 =
+                mWm.addWindow(
+                        session1,
+                        client1,
+                        params1,
+                        View.VISIBLE,
+                        DEFAULT_DISPLAY,
+                        0 /* requestUserId */,
+                        WindowInsets.Type.defaultVisible(),
+                        null,
+                        new WindowRelayoutResult());
+        assertThat(res1).isAtLeast(WindowManagerGlobal.ADD_OKAY);
+
+        // Add second window with same token but different UID to bypass the canAddToastWindowForUid
+        // check
+        final int uid2 = 1235;
+        final int pid2 = 1235;
+        final Session session2 = createTestSession(mAtm, pid2, uid2);
+        final WindowManager.LayoutParams params2 = new WindowManager.LayoutParams(TYPE_TOAST);
+        params2.token = token;
+        params2.packageName = "test2";
+
+        final ApplicationInfo appInfo2 = new ApplicationInfo();
+        appInfo2.targetSdkVersion = android.os.Build.VERSION_CODES.O;
+        doReturn(appInfo2)
+                .when(mWm.mPmInternal)
+                .getApplicationInfo(eq("test2"), anyLong(), anyInt(), anyInt());
+        doReturn(true).when(mWm.mPmInternal).isSameApp(eq("test2"), eq(uid2), anyInt());
+
+        final IWindow client2 = new TestIWindow();
+        final int res2 =
+                mWm.addWindow(
+                        session2,
+                        client2,
+                        params2,
+                        View.VISIBLE,
+                        DEFAULT_DISPLAY,
+                        0 /* requestUserId */,
+                        WindowInsets.Type.defaultVisible(),
+                        null,
+                        new WindowRelayoutResult());
+        assertThat(res2).isEqualTo(WindowManagerGlobal.ADD_BAD_APP_TOKEN);
     }
 }

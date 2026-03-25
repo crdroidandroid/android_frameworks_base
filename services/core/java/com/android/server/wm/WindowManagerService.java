@@ -1879,6 +1879,12 @@ public class WindowManagerService extends IWindowManager.Stub
                     ProtoLog.w(WM_ERROR, "Adding more than one toast window for UID at a time.");
                     return WindowManagerGlobal.ADD_DUPLICATE_ADD;
                 }
+                // Because a WindowToken of TYPE_TOAST only allows one toast window, block the
+                // addition of any other toast window to this token.
+                if (addToastWindowRequiresToken && !token.isEmpty()) {
+                    ProtoLog.w(WM_ERROR, "Adding toast window with non-empty token.");
+                    return WindowManagerGlobal.ADD_BAD_APP_TOKEN;
+                }
                 // Make sure this happens before we moved focus as one can make the
                 // toast focusable to force it not being hidden after the timeout.
                 // Focusable toasts are always timed out to prevent a focused app to
