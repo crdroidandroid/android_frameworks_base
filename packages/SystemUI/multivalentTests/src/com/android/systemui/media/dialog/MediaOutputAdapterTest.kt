@@ -243,6 +243,31 @@ class MediaOutputAdapterTest : SysuiTestCase() {
     }
 
     @Test
+    fun onBindViewHolder_initSeekbarWithIncorrectVolumeValues_noop() {
+        mMediaDevice1.stub {
+            on { state } doReturn STATE_CONNECTED
+            on { maxVolume } doReturn TEST_MAX_VOLUME
+        }
+
+        // volume < 0
+        mMediaDevice1.stub { on { currentVolume } doReturn -2 }
+        updateAdapterWithDevices(listOf(mMediaDevice1))
+        createAndBindDeviceViewHolder(position = 0).apply { assertThat(mSlider.value).isEqualTo(0) }
+
+        // volume > max volume
+        mMediaDevice1.stub { on { currentVolume } doReturn TEST_MAX_VOLUME + 2 }
+        updateAdapterWithDevices(listOf(mMediaDevice1))
+        createAndBindDeviceViewHolder(position = 0).apply { assertThat(mSlider.value).isEqualTo(0) }
+
+        // valid volume
+        mMediaDevice1.stub { on { currentVolume } doReturn TEST_CURRENT_VOLUME }
+        updateAdapterWithDevices(listOf(mMediaDevice1))
+        createAndBindDeviceViewHolder(position = 0).apply {
+            assertThat(mSlider.value).isEqualTo(TEST_CURRENT_VOLUME)
+        }
+    }
+
+    @Test
     fun onBindViewHolder_dragSeekbar_adjustsVolume() {
         mMediaDevice1.stub {
             on { maxVolume } doReturn TEST_MAX_VOLUME
