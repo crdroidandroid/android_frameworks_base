@@ -61,13 +61,18 @@ constructor(
     private val useExtraLargeTiles by
         largeTileSpanInteractor.useExtraLargeTiles.hydratedStateOf(initialValue = false)
 
-    val largeSpan: Int
-        get() =
-            if (useExtraLargeTiles) {
-                if (columns > maxSpan) columns / 2 else columns
-            } else {
-                largeTileSpanInteractor.defaultTileMaxWidth
-            }
+    private val classicStyle by
+        largeTileSpanInteractor.classicStyle.hydratedStateOf(initialValue = false)
+
+    val largeSpan: Int by derivedStateOf {
+        if (classicStyle) {
+            1
+        } else if (useExtraLargeTiles) {
+            if (columns > maxSpan) columns / 2 else columns
+        } else {
+            largeTileSpanInteractor.defaultTileMaxWidth
+        }
+    }
 
     private val mediaInRowInLandscapeViewModel =
         if (mediaLocation != null && mediaUiBehavior != null) {
