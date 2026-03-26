@@ -188,6 +188,7 @@ import com.android.systemui.qs.panels.ui.compose.infinitegrid.EditModeTileDefaul
 import com.android.systemui.qs.panels.ui.compose.infinitegrid.EditModeTileDefaults.GridBackgroundCornerRadius
 import com.android.systemui.qs.panels.ui.compose.infinitegrid.EditModeTileDefaults.TilePlacementSpec
 import com.android.systemui.qs.panels.ui.compose.infinitegrid.rememberTileShapeMode
+import com.android.systemui.qs.panels.ui.compose.infinitegrid.rememberQSPanelStyle
 import com.android.systemui.qs.panels.ui.compose.selection.InteractiveTileContainer
 import com.android.systemui.qs.panels.ui.compose.selection.MutableSelectionState
 import com.android.systemui.qs.panels.ui.compose.selection.QSDragAnchorsData
@@ -930,6 +931,16 @@ private fun LazyGridItemScope.TileGridCell(
     val stateDescription = stringResource(id = R.string.accessibility_qs_edit_position, index + 1)
     val tileState by rememberTileState(cell.tile, selectionState)
     val resizingState = rememberResizingState(cell.tile.tileSpec, cell.isIcon)
+    val panelStyle = rememberQSPanelStyle()
+    val progress: () -> Float = {
+        if (panelStyle) {
+            0f
+        } else if (tileState == TileState.Selected) {
+            resizingState.progress()
+        } else {
+            if (cell.isIcon) 0f else 1f
+        }
+    }
 
     if (tileState == TileState.Selected) {
         // If the tile is selected, listen to new target values from the draggable anchor to toggle
@@ -1094,7 +1105,7 @@ private fun LazyGridItemScope.TileGridCell(
                 }
                 .thenIf(isSelectable) { selectableModifier }
         ) {
-            EditTile(tile = cell.tile, state = resizingState, progress = resizingState::progress)
+            EditTile(tile = cell.tile, state = resizingState, progress = progress)
         }
     }
 }
@@ -1396,8 +1407,9 @@ private fun Modifier.tileBackground(
     color: () -> Color,
     iconOnly: Boolean,
 ): Modifier {
+    val panelStyle = rememberQSPanelStyle()
     val shapeMode = rememberTileShapeMode()
-    return if (shapeMode == 4 && iconOnly) {
+    return if (panelStyle || (shapeMode == 4 && iconOnly)) {
         // Draw a centered circle that fits the tile's min dimension
         drawBehind {
             val border = 0f
@@ -1468,6 +1480,9 @@ private object EditModeTileDefaults {
             label = MaterialTheme.colorScheme.onSurface,
             secondaryLabel = MaterialTheme.colorScheme.onSurface,
             icon = MaterialTheme.colorScheme.onSurface,
+            outline = MaterialTheme.colorScheme.onSurface,
+            classicLabel = MaterialTheme.colorScheme.onSurface.copy(alpha = .9f),
+            classicSecondaryLabel = MaterialTheme.colorScheme.onSurface.copy(alpha = .8f),
         )
 }
 
