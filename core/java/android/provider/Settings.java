@@ -7546,6 +7546,24 @@ public final class Settings {
         public static final String CUSTOM_GRADIENT_END_COLOR = "custom_gradient_end_color";
 
         /**
+         * Whether to use classic QS panel style for tiles
+         * @hide
+         */
+        public static final String QS_PANEL_STYLE = "qs_panel_style";
+
+        /**
+         * Whether to hide label under tiles in classic QS panel style
+         * @hide
+         */
+        public static final String QS_TILE_LABEL_HIDE = "qs_tile_label_hide";
+
+        /**
+         * Select tile shape for classic QS panel style
+         * @hide
+         */
+        public static final String QS_TILE_ICON_SHAPE = "qs_tile_icon_shape";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
