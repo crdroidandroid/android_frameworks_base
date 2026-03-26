@@ -17,10 +17,13 @@
 package com.android.systemui.qs.panels.ui.compose.infinitegrid
 
 import android.content.Context
+import android.graphics.Matrix
+import android.graphics.Path
 import android.graphics.drawable.Animatable
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.graphics.drawable.Drawable
 import android.text.TextUtils
+import android.util.PathParser
 import androidx.annotation.VisibleForTesting
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.graphics.res.animatedVectorResource
@@ -39,6 +42,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -69,6 +73,7 @@ import androidx.compose.ui.graphics.ColorProducer
 import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.DefaultAlpha
 import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.asComposePath
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
@@ -84,10 +89,14 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.semantics.toggleableState
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.Hyphens
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.android.compose.modifiers.size
 import com.android.compose.modifiers.thenIf
 import com.android.compose.ui.graphics.painter.rememberDrawablePainter
@@ -114,6 +123,112 @@ private const val TEST_TAG_TILE_ICON = "qs_tile_icon"
 private const val TEST_TAG_TOGGLE = "qs_tile_toggle_target"
 private const val TEST_TAG_SMALL = "qs_tile_small"
 private const val TEST_TAG_LARGE = "qs_tile_large"
+
+@Composable
+fun ClassicTileContent(
+    label: String,
+    secondaryLabel: String?,
+    iconProvider: Context.() -> Icon,
+    iconShapeKey: String,
+    colors: TileColors,
+    labelHide: Boolean,
+    modifier: Modifier = Modifier,
+) {
+    val isNoBackground = iconShapeKey in QSTileIconShapes.NO_BACKGROUND_KEYS
+    val iconShape = remember(iconShapeKey) {
+        QSTileIconShapes.shapeForKey(iconShapeKey)
+    }
+
+    val overlayPathData = remember(iconShapeKey) {
+        QSTileIconShapes.OVERLAY_BY_KEY[iconShapeKey]
+    }
+    val overlayPath = remember(overlayPathData) {
+        overlayPathData?.let { pathData ->
+            try {
+                PathParser.createPathFromPathData(pathData)
+            } catch (_: RuntimeException) {
+                null
+            }
+        }
+    }
+
+    val animatedColor by animateColorAsState(colors.background, label = "QSTileCircleBgColor")
+    val animatedOutlineColor by animateColorAsState(colors.outline, label = "QSTileOutlineColor")
+
+    val iconBoxSize = CommonTileDefaults.TileHeight
+    val iconSize = CommonTileDefaults.LargeTileIconSize
+
+    Column(
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier.fillMaxWidth(),
+    ) {
+        Box(
+            modifier = Modifier
+                .size(iconBoxSize)
+                .thenIf(!isNoBackground) {
+                    Modifier
+                        .clip(iconShape)
+                        .drawBehind {
+                            drawRect(color = animatedColor)
+                        }
+                }
+                .thenIf(overlayPath != null) {
+                    Modifier.drawWithContent {
+                        drawContent()
+                        overlayPath?.let { path ->
+                            val scaledPath = Path(path)
+                            val matrix = Matrix()
+                            matrix.setScale(size.width / 100f, size.height / 100f)
+                            scaledPath.transform(matrix)
+                            drawPath(
+                                path = scaledPath.asComposePath(),
+                                color = animatedOutlineColor,
+                            )
+                        }
+                    }
+                },
+        ) {
+            SmallTileContent(
+                iconProvider = iconProvider,
+                color = if (!isNoBackground) colors.icon else animatedOutlineColor,
+                size = { iconSize },
+                modifier = Modifier.align(Alignment.Center),
+            )
+        }
+
+        if (!labelHide) {
+            val animatedLabelColor by animateColorAsState(colors.classicLabel, label = "QSTileLabelColor")
+            val animatedSecondaryLabelColor by
+                animateColorAsState(colors.classicSecondaryLabel, label = "QSTileSecondaryLabelColor")
+            TileLabel(
+                text = label,
+                color = { animatedLabelColor },
+                style = MaterialTheme.typography.labelMedium.copy(
+                    fontWeight = FontWeight.SemiBold,
+                    textAlign = TextAlign.Center,
+                    hyphens = Hyphens.Auto,
+                ),
+                modifier = Modifier
+                    .padding(top = 4.dp)
+                    .fillMaxWidth(),
+            )
+            if (!TextUtils.isEmpty(secondaryLabel)) {
+                TileLabel(
+                    text = secondaryLabel ?: "",
+                    color = { animatedSecondaryLabelColor },
+                    style = MaterialTheme.typography.labelSmall.copy(
+                        fontWeight = FontWeight.Normal,
+                        textAlign = TextAlign.Center,
+                        hyphens = Hyphens.Auto,
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                )
+            }
+        }
+    }
+}
 
 @Composable
 fun LargeTileContent(
@@ -214,7 +329,9 @@ fun LargeTileLabels(
     Column(verticalArrangement = Arrangement.Center, modifier = modifier.fillMaxHeight()) {
         TileLabel(
             text = label,
-            style = MaterialTheme.typography.titleSmallEmphasized,
+            style = MaterialTheme.typography.titleSmallEmphasized.copy(
+                fontWeight = FontWeight.SemiBold,
+            ),
             color = { animatedLabelColor },
             isVisible = isVisible,
         )
@@ -222,7 +339,9 @@ fun LargeTileLabels(
             TileLabel(
                 secondaryLabel ?: "",
                 color = { animatedSecondaryLabelColor },
-                style = MaterialTheme.typography.labelMedium,
+                style = MaterialTheme.typography.labelMedium.copy(
+                    fontWeight = FontWeight.Normal,
+                ),
                 isVisible = isVisible,
                 modifier =
                     Modifier.thenIf(
