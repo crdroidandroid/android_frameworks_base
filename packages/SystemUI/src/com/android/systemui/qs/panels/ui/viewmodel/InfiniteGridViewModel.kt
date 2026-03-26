@@ -16,6 +16,7 @@
 
 package com.android.systemui.qs.panels.ui.viewmodel
 
+import androidx.compose.runtime.getValue
 import com.android.systemui.lifecycle.ExclusiveActivatable
 import com.android.systemui.lifecycle.Hydrator
 import com.android.systemui.media.controls.ui.controller.MediaHierarchyManager.Companion.LOCATION_QS
@@ -58,8 +59,11 @@ constructor(
             )
 
     override fun splitIntoPages(tiles: List<TileViewModel>, rows: Int): List<List<TileViewModel>> {
+        val largeTilesSpan = columnsWithMediaViewModel.largeSpan
+        val largeTiles by iconTilesViewModel.largeTilesState
+
         return splitInRows(
-                tiles.map { SizedTileImpl(it, widthOf(it.spec)) },
+                tiles.map { SizedTileImpl(it, if (largeTiles.contains(it.spec)) largeTilesSpan else 1) },
                 columnsWithMediaViewModel.columns,
             )
             .chunked(rows)
