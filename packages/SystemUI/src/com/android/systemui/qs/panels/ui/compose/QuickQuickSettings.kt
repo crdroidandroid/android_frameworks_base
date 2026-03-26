@@ -31,6 +31,7 @@ import com.android.systemui.compose.modifiers.sysuiResTag
 import com.android.systemui.grid.ui.compose.VerticalSpannedGrid
 import com.android.systemui.qs.composefragment.ui.GridAnchor
 import com.android.systemui.qs.panels.ui.compose.infinitegrid.Tile
+import com.android.systemui.qs.panels.ui.compose.infinitegrid.rememberQSPanelStyle
 import com.android.systemui.qs.panels.ui.viewmodel.BounceableTileViewModel
 import com.android.systemui.qs.panels.ui.viewmodel.QuickQuickSettingsViewModel
 import com.android.systemui.qs.shared.ui.QuickSettings.Elements.toElementKey
@@ -47,6 +48,7 @@ fun ContentScope.QuickQuickSettings(
     val tiles = sizedTiles.fastMap { it.tile }
     val squishiness by viewModel.squishinessViewModel.squishiness.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope()
+    val classicStyle = rememberQSPanelStyle()
 
     Box(modifier = modifier) {
         GridAnchor()
@@ -66,7 +68,7 @@ fun ContentScope.QuickQuickSettings(
             Element(it.tile.spec.toElementKey(), Modifier) {
                 Tile(
                     tile = it.tile,
-                    iconOnly = it.isIcon,
+                    iconOnly = classicStyle || it.isIcon,
                     squishiness = { squishiness },
                     coroutineScope = scope,
                     bounceableInfo =
