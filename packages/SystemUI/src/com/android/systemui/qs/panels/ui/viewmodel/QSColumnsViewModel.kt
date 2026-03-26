@@ -71,9 +71,18 @@ constructor(
             initialValue = false,
         )
 
+    private val classicStyle by
+        hydrator.hydratedStateOf(
+            traceName = "classicStyle",
+            source = largeTileSpanInteractor.classicStyle,
+            initialValue = false,
+        )
+
     val largeSpan: Int
         get() =
-            if (useExtraLargeTiles) {
+            if (classicStyle) {
+                1
+            } else if (useExtraLargeTiles) {
                 if (columns > maxSpan) columns / 2 else columns
             } else {
                 largeTileSpanInteractor.defaultTileMaxWidth
