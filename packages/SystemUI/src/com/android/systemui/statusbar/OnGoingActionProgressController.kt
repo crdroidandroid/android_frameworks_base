@@ -77,6 +77,7 @@ class OnGoingActionProgressController(
     private var isEnabled = false
     private var isCompactModeEnabled = false
     private var chipColorMode = CHIP_COLOR_MODE_DEFAULT
+    private var chipBgAlpha = 100
 
     private var currentProgress = 0
     private var currentProgressMax = 0
@@ -124,7 +125,8 @@ class OnGoingActionProgressController(
                 if (uri == Settings.System.getUriFor(ONGOING_ACTION_CHIP_ENABLED) ||
                     uri == Settings.System.getUriFor(ONGOING_MEDIA_PROGRESS) ||
                     uri == Settings.System.getUriFor(ONGOING_COMPACT_MODE_ENABLED) ||
-                    uri == Settings.System.getUriFor(ONGOING_CHIP_COLOR_MODE)) {
+                    uri == Settings.System.getUriFor(ONGOING_CHIP_COLOR_MODE) ||
+                    uri == Settings.System.getUriFor(ONGOING_CHIP_BG_ALPHA)) {
                     updateSettings()
                 }
             }
@@ -150,6 +152,12 @@ class OnGoingActionProgressController(
                 )
                 contentResolver.registerContentObserver(
                     Settings.System.getUriFor(ONGOING_CHIP_COLOR_MODE),
+                    false,
+                    this,
+                    UserHandle.USER_ALL
+                )
+                contentResolver.registerContentObserver(
+                    Settings.System.getUriFor(ONGOING_CHIP_BG_ALPHA),
                     false,
                     this,
                     UserHandle.USER_ALL
@@ -351,6 +359,7 @@ class OnGoingActionProgressController(
                     trackTitle = null,
                     artistName = null,
                     chipBgColor = null,
+                    chipBgAlpha = chipBgAlpha,
                 )
             )
             return
@@ -385,6 +394,7 @@ class OnGoingActionProgressController(
                 trackTitle = trackTitle,
                 artistName = artistName,
                 chipBgColor = currentChipBgColor,
+                chipBgAlpha = chipBgAlpha,
             )
         )
     }
@@ -857,6 +867,13 @@ class OnGoingActionProgressController(
             UserHandle.USER_CURRENT
         )
 
+        chipBgAlpha = Settings.System.getIntForUser(
+            contentResolver,
+            ONGOING_CHIP_BG_ALPHA,
+            100,
+            UserHandle.USER_CURRENT
+        ).coerceIn(0, 100)
+
         if (!isCompactModeEnabled) {
             isExpanded = false
         }
@@ -912,6 +929,7 @@ class OnGoingActionProgressController(
         private const val ONGOING_MEDIA_PROGRESS = Settings.System.ONGOING_MEDIA_PROGRESS
         private const val ONGOING_COMPACT_MODE_ENABLED = Settings.System.ONGOING_COMPACT_MODE
         private const val ONGOING_CHIP_COLOR_MODE = Settings.System.ONGOING_CHIP_COLOR_MODE
+        private const val ONGOING_CHIP_BG_ALPHA = Settings.System.ONGOING_CHIP_BG_ALPHA
 
         private const val MEDIA_UPDATE_INTERVAL_MS = 1000L
         private const val DEBOUNCE_DELAY_MS = 150L
@@ -947,4 +965,5 @@ data class ProgressState(
     val trackTitle: String? = null,
     val artistName: String? = null,
     val chipBgColor: Int? = null,
+    val chipBgAlpha: Int = 100,
 )

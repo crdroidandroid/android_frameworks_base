@@ -7566,6 +7566,11 @@ public final class Settings {
         public static final String ONGOING_CHIP_COLOR_MODE = "ongoing_chip_color_mode";
 
         /**
+         * @hide
+         */
+        public static final String ONGOING_CHIP_BG_ALPHA = "ongoing_chip_bg_alpha";
+
+        /**
          * Whether to use classic QS panel style for tiles
          * @hide
          */
