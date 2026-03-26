@@ -408,6 +408,12 @@ class MediaOutputAdapter(controller: MediaSwitchingController) :
                 return
             }
 
+            if (currentVolume !in 0..maxVolume) {
+                Log.e(TAG, "currentVolume must be between 0 and $maxVolume, actual: $currentVolume")
+                // Slider doesn't allow setting volume out of range, return to prevent crash.
+                return
+            }
+
             mSlider.isClickable = false
             mSlider.isEnabled = isVolumeControlAllowed
             mSlider.valueFrom = 0f
