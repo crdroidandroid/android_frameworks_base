@@ -28,4 +28,6 @@ class LargeTileSpanInteractor @Inject constructor(repo: LargeTileSpanRepository)
     val tileMaxWidth: Flow<Int> = repo.tileMaxWidth
 
     val defaultTileMaxWidth: Int = repo.defaultTileMaxWidth
+
+    val classicStyle: Flow<Boolean> = repo.classicStyle
 }
