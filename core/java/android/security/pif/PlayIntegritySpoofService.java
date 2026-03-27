@@ -530,9 +530,13 @@ public final class PlayIntegritySpoofService {
         Log.i(TAG, "Photos spoofing enabled - device appears as Pixel XL");
     }
 
-    public boolean hasSystemFeature(String name, int version) {
-        if (!isPixelDevice() && PIXEL_FEATURES.contains(name)) return false;
-        return NEXUS_FEATURES.contains(name);
+    public Boolean hasSystemFeature(String name, int version) {
+        final String pkgName = ActivityThread.currentPackageName();
+        if (shouldSpoofPhotos(pkgName)) {
+            if (!isPixelDevice() && PIXEL_FEATURES.contains(name)) return false;
+            return NEXUS_FEATURES.contains(name);
+        }
+        return null;
     }
 
     private static boolean isPixelDevice() {
