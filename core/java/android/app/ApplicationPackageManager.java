@@ -847,8 +847,9 @@ public class ApplicationPackageManager extends PackageManager {
         // TODO(b/375000483): Refactor all of this logic, including flag queries, into
         // the SystemFeaturesCache class after initial rollout and validation.
         PlayIntegritySpoofService pifService = PlayIntegritySpoofService.getInstance();
-        if (pifService.shouldSpoofPhotos(ActivityThread.currentPackageName())) {
-            return pifService.hasSystemFeature(name, version);
+        Boolean spoofedResult = pifService.hasSystemFeature(name, version);
+        if (spoofedResult != null) {
+            return spoofedResult;
         }
 
         Boolean maybeHasSystemFeature = RoSystemFeatures.maybeHasFeature(name, version);
