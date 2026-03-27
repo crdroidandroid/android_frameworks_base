@@ -311,7 +311,7 @@ public class NotificationChannelTest {
 
     @Test
     @EnableFlags(Flags.FLAG_NOTIFICATION_CHANNEL_VIBRATION_EFFECT_API)
-    public void testVibrationEffect_droppedIfTooLargeAndNotTrimmable() {
+    public void setVibrationEffect_droppedIfTooLargeAndNotTrimmable() {
         NotificationChannel channel = new NotificationChannel("id", "name", 3);
         // populate pattern with contents
         long[] pattern = new long[65550 / 2];
@@ -322,13 +322,15 @@ public class NotificationChannelTest {
         VibrationEffect effect = VibrationEffect.createWaveform(pattern, 1);
         channel.setVibrationEffect(effect);
 
+        assertThat(channel.getVibrationEffect()).isNull();
+
         NotificationChannel result = writeToAndReadFromParcel(channel);
         assertThat(result.getVibrationEffect()).isNull();
     }
 
     @Test
     @EnableFlags(Flags.FLAG_NOTIFICATION_CHANNEL_VIBRATION_EFFECT_API)
-    public void testVibrationEffect_trimmedIfLargeAndTrimmable() {
+    public void setVibrationEffect_andThenParceled_trimmedIfLargeAndTrimmable() {
         NotificationChannel channel = new NotificationChannel("id", "name", 3);
         // populate pattern with contents
         long[] pattern = new long[65550 / 2];
@@ -338,6 +340,10 @@ public class NotificationChannelTest {
         // Effect is equivalent to the pattern
         VibrationEffect effect = VibrationEffect.createWaveform(pattern, -1);
         channel.setVibrationEffect(effect);
+
+        assertThat(channel.getVibrationEffect()).isNotNull();
+        assertThat(channel.getVibrationEffect().computeCreateWaveformOffOnTimingsOrNull())
+                .hasLength(pattern.length);
 
         NotificationChannel result = writeToAndReadFromParcel(channel);
         assertThat(result.getVibrationEffect()).isNotNull();
@@ -350,10 +356,39 @@ public class NotificationChannelTest {
     public void testVibrationEffect_keptIfSmall() {
         NotificationChannel channel = new NotificationChannel("id", "name", 3);
         VibrationEffect effect = VibrationEffect.createOneShot(1, 100);
+
         channel.setVibrationEffect(effect);
+
+        assertThat(channel.getVibrationEffect()).isEqualTo(effect);
 
         NotificationChannel result = writeToAndReadFromParcel(channel);
         assertThat(result.getVibrationEffect()).isEqualTo(effect);
+    }
+
+    @Test
+    @EnableFlags(Flags.FLAG_NOTIFICATION_CHANNEL_VIBRATION_EFFECT_API)
+    public void testVibrationEffect_tooLongForSerialization_droppedWhenWritingXml()
+            throws Exception {
+        NotificationChannel channel = new NotificationChannel("id", "name", 3);
+
+        long[] timings = new long[65550 / 2];
+        for (int i = 0; i < timings.length; i++) {
+            timings[i] = 100;
+        }
+        // A repeating effect cannot be trimmed
+        VibrationEffect effect = VibrationEffect.createWaveform(timings, 1);
+
+        // Use reflection to sneakily skip the enforcement in setVibrationEffect.
+        Field mVibrationEffect = Class.forName(CLASS).getDeclaredField("mVibrationEffect");
+        mVibrationEffect.setAccessible(true);
+        mVibrationEffect.set(channel, effect);
+
+        NotificationChannel unparceled = writeToAndReadFromParcel(channel);
+        assertThat(unparceled.getVibrationEffect()).isNotNull();
+        assertThat(unparceled.getVibrationEffect()).isEqualTo(effect); // Still here!
+
+        NotificationChannel restoredFromXml = backUpAndRestore(unparceled);
+        assertThat(restoredFromXml.getVibrationEffect()).isNull(); // But not actually written
     }
 
     @Test
