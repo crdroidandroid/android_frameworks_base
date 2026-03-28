@@ -76,6 +76,7 @@ import androidx.compose.ui.zIndex
 import com.android.compose.modifiers.thenIf
 import com.android.systemui.qs.panels.ui.compose.infinitegrid.CommonTileDefaults.ActiveTileCornerRadius
 import com.android.systemui.qs.panels.ui.compose.infinitegrid.CommonTileDefaults.InactiveCornerRadius
+import com.android.systemui.qs.panels.ui.compose.infinitegrid.rememberQSPanelStyle
 import com.android.systemui.qs.panels.ui.compose.infinitegrid.rememberTileShapeMode
 import com.android.systemui.qs.panels.ui.compose.selection.SelectionDefaults.BADGE_ANGLE_RAD
 import com.android.systemui.qs.panels.ui.compose.selection.SelectionDefaults.BadgeIconSize
@@ -198,6 +199,7 @@ private fun Modifier.selectionBorder(
     selectionAlpha: () -> Float = { 0f }
 ): Modifier {
     val shapeMode = rememberTileShapeMode()
+    val panelStyle = rememberQSPanelStyle()
     val borderRadiusPx = with(LocalDensity.current) {
         when (shapeMode) {
             1 -> InactiveCornerRadius.toPx()
@@ -214,7 +216,7 @@ private fun Modifier.selectionBorder(
         val borderWidthPx = selectionBorderWidth.toPx()
         val alpha = selectionAlpha()
 
-        if (shapeMode == 4 && iconOnly) {
+        if (panelStyle || (shapeMode == 4 && iconOnly)) {
             val w = this.size.width
             val h = this.size.height
             val radius = (min(w, h) - borderWidthPx) / 2f
