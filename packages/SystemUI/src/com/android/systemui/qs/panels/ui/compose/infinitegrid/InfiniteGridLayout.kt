@@ -97,6 +97,8 @@ constructor(
         val squishiness by viewModel.squishinessViewModel.squishiness.collectAsStateWithLifecycle()
         val scope = rememberCoroutineScope()
 
+        val classicStyle = rememberQSPanelStyle()
+
         if (QSMaterialExpressiveTiles.isEnabled) {
             ButtonGroupGrid(
                 sizedTiles = sizedTiles,
@@ -108,7 +110,7 @@ constructor(
             ) { sizedTile, interactionSource ->
                 Tile(
                     tile = sizedTile.tile,
-                    iconOnly = iconTilesViewModel.isIconTile(sizedTile.tile.spec),
+                    iconOnly = classicStyle || iconTilesViewModel.isIconTile(sizedTile.tile.spec),
                     squishiness = { squishiness },
                     tileHapticsViewModelFactoryProvider = tileHapticsViewModelFactoryProvider,
                     coroutineScope = scope,
@@ -137,7 +139,7 @@ constructor(
                 Element(it.tile.spec.toElementKey(), Modifier) {
                     Tile(
                         tile = it.tile,
-                        iconOnly = iconTilesViewModel.isIconTile(it.tile.spec),
+                        iconOnly = classicStyle || iconTilesViewModel.isIconTile(it.tile.spec),
                         squishiness = { squishiness },
                         tileHapticsViewModelFactoryProvider = tileHapticsViewModelFactoryProvider,
                         coroutineScope = scope,
