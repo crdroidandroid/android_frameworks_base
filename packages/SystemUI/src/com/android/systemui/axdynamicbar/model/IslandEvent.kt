@@ -276,7 +276,11 @@ sealed class IslandEvent(open val priority: Int, val id: String) : Comparable<Is
         val remoteInput: RemoteInput,
     )
 
-    data class MediaCustomAction(val label: String, val action: String)
+    data class MediaCustomAction(
+        val label: String,
+        val action: String,
+        val icon: Drawable? = null,
+    )
 
     data class Notification(
         val sbn: StatusBarNotification,

@@ -27,6 +27,9 @@ import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -141,6 +144,22 @@ constructor(
             repository.notification.notificationRemovedFlow.collect { key ->
                 val alert = _uiState.value.notificationAlert ?: return@collect
                 if (alert.sbn.key == key) dismissNotificationAlert()
+            }
+        }
+
+        applicationScope.launch {
+            combine(
+                _uiState.map { state ->
+                    state.shouldShow &&
+                        state.events.any { it is IslandEvent.Media && it.isPlaying && it.duration > 0L }
+                },
+                _isPanelExpanded,
+                qsExpansion.map { it > 0f },
+            ) { mediaActive, panelExpanded, qsOpen ->
+                mediaActive && !panelExpanded && !qsOpen
+            }.distinctUntilChanged().collect { needsPolling ->
+                if (needsPolling) repository.media.startProgressPolling()
+                else repository.media.stopProgressPolling()
             }
         }
 

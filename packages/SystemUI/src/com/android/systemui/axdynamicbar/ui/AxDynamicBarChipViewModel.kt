@@ -1,6 +1,5 @@
 package com.android.systemui.axdynamicbar.ui
 
-import android.os.SystemProperties
 import com.android.systemui.axdynamicbar.domain.AxDynamicBarInteractor
 import com.android.systemui.axdynamicbar.model.IslandEvent
 import com.android.systemui.biometrics.AuthController
@@ -54,11 +53,9 @@ constructor(
     udfpsOverlayInteractor: UdfpsOverlayInteractor,
 ) {
 
-    val isCompactKeyguardChip: StateFlow<Boolean> =
+    val isLowUdfps: StateFlow<Boolean> =
         udfpsOverlayInteractor.udfpsOverlayParams
             .map { params ->
-                val propOverride = SystemProperties.getInt(PROP_COMPACT_CHIP, -1)
-                if (propOverride >= 0) return@map propOverride == 1
                 if (!authController.isUdfpsSupported) return@map false
                 val sensorBottom = params.sensorBounds.bottom
                 val displayHeight = params.naturalDisplayHeight
@@ -199,8 +196,7 @@ constructor(
     }
 
     companion object {
-        private const val PROP_COMPACT_CHIP = "persist.sys.axdb.compact_chip"
-        private const val LOW_UDFPS_THRESHOLD = 0.75f
+        private const val LOW_UDFPS_THRESHOLD = 0.93f
     }
 }
 
