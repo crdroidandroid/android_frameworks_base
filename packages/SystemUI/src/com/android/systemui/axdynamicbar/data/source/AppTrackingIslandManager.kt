@@ -58,6 +58,7 @@ class AppTrackingIslandManager @Inject constructor(@Application private val cont
                     currentForegroundPkg = null
                     return
                 }
+                if (!hasLauncherIntent(pkg)) return
 
                 val leavingPkg = currentForegroundPkg
                 currentForegroundPkg = pkg
@@ -134,6 +135,7 @@ class AppTrackingIslandManager @Inject constructor(@Application private val cont
     fun stopListening() {
         if (!listening) return
         listening = false
+        launcherIntentCache.clear()
         TaskStackChangeListeners.getInstance().unregisterTaskStackListener(listener)
         synchronized(recentApps) {
             recentApps.clear()
@@ -164,6 +166,18 @@ class AppTrackingIslandManager @Inject constructor(@Application private val cont
             }
         }
     }
+
+    private val launcherIntentCache = HashMap<String, Boolean>()
+
+    private fun hasLauncherIntent(pkg: String): Boolean =
+        launcherIntentCache.getOrPut(pkg) {
+            val intent = Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER).setPackage(pkg)
+            try {
+                context.packageManager.queryIntentActivities(intent, 0).isNotEmpty()
+            } catch (_: Exception) {
+                false
+            }
+        }
 
     private fun resolveLauncherPackage(): String? =
         try {
