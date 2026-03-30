@@ -3,7 +3,11 @@ package com.android.systemui.axdynamicbar.ui.compose
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.runtime.LaunchedEffect
+import kotlin.math.abs
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
@@ -111,10 +115,15 @@ fun AxDynamicBarNowBar(
                 )
                 val rawProgress = chipProgressFor(display.event)
                 val progressTarget = rawProgress ?: 0f
-                val animatedProgress by animateFloatAsState(
-                    progressTarget, MaterialTheme.motionScheme.defaultSpatialSpec(), label = "progress",
-                )
-                val progress = if (rawProgress != null) animatedProgress else null
+                val progressAnim = remember { Animatable(progressTarget) }
+                LaunchedEffect(progressTarget) {
+                    if (abs(progressTarget - progressAnim.value) > 0.05f) {
+                        progressAnim.animateTo(progressTarget, tween(300, easing = FastOutSlowInEasing))
+                    } else {
+                        progressAnim.snapTo(progressTarget)
+                    }
+                }
+                val progress = if (rawProgress != null) progressAnim.value else null
 
                 Box(
                     modifier = Modifier
@@ -232,7 +241,7 @@ private fun AlertPillContent(event: IslandEvent, contentColor: Color) {
                 color = contentColor,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.basicMarquee(),
+                modifier = Modifier.basicMarquee(iterations = 1),
             )
         }
     }

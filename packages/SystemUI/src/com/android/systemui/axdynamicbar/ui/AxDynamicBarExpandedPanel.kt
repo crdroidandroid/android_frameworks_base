@@ -35,6 +35,9 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 
+import androidx.activity.OnBackPressedDispatcher
+import androidx.activity.OnBackPressedDispatcherOwner
+import androidx.activity.setViewTreeOnBackPressedDispatcherOwner
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
@@ -114,8 +117,7 @@ constructor(
 
         viewModel.isExpanded
             .onEach { expanded ->
-                updateOverlayFocusability(expanded)
-                updateOverlaySize(expanded)
+                updateOverlay(expanded)
             }
             .launchIn(applicationScope)
     }
@@ -149,6 +151,7 @@ constructor(
 
         view.setViewTreeLifecycleOwner(lifecycleOwner)
         view.setViewTreeSavedStateRegistryOwner(lifecycleOwner)
+        view.setViewTreeOnBackPressedDispatcherOwner(lifecycleOwner)
         panelLifecycleOwner = lifecycleOwner
 
         val isCurrentlyExpanded = viewModel.isExpanded.value
@@ -194,28 +197,20 @@ constructor(
         panelLifecycleOwner = null
     }
 
-    private fun updateOverlayFocusability(expanded: Boolean) = ensureMainThread {
-        val view = overlayView ?: return@ensureMainThread
-        val params = view.layoutParams as? WindowManager.LayoutParams ?: return@ensureMainThread
-        if (expanded) {
-            params.flags = params.flags and WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE.inv()
-        } else {
-            params.flags = params.flags or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-        }
-        windowManager.updateViewLayout(view, params)
-    }
-
     private var shrinkRunnable: Runnable? = null
 
-    private fun updateOverlaySize(expanded: Boolean) = ensureMainThread {
+    private fun updateOverlay(expanded: Boolean) = ensureMainThread {
         shrinkRunnable?.let { mainHandler.removeCallbacks(it) }
         shrinkRunnable = null
         val view = overlayView ?: return@ensureMainThread
         val params = view.layoutParams as? WindowManager.LayoutParams ?: return@ensureMainThread
         if (expanded) {
+            params.flags = params.flags and WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE.inv()
             params.height = WindowManager.LayoutParams.MATCH_PARENT
             windowManager.updateViewLayout(view, params)
         } else {
+            params.flags = params.flags or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+            windowManager.updateViewLayout(view, params)
             val runnable = Runnable {
                 val v = overlayView ?: return@Runnable
                 val p = v.layoutParams as? WindowManager.LayoutParams ?: return@Runnable
@@ -263,11 +258,9 @@ private fun OverlayContent(viewModel: AxDynamicBarChipViewModel, statusBarHeight
     val notifVisible = remember { MutableTransitionState(false) }
 
     LaunchedEffect(isExpanded) {
-        delay(16) 
         expandedVisible.targetState = isExpanded
     }
     LaunchedEffect(showNotif) {
-        delay(16)
         notifVisible.targetState = showNotif
     }
 
@@ -375,15 +368,20 @@ private fun OverlayContent(viewModel: AxDynamicBarChipViewModel, statusBarHeight
     }
 }
 
-private class PanelLifecycleOwner : LifecycleOwner, SavedStateRegistryOwner {
+private class PanelLifecycleOwner : LifecycleOwner, SavedStateRegistryOwner,
+    OnBackPressedDispatcherOwner {
     private val lifecycleRegistry = LifecycleRegistry(this)
     private val savedStateRegistryController = SavedStateRegistryController.create(this)
+    private val backDispatcher = OnBackPressedDispatcher()
 
     override val lifecycle: Lifecycle
         get() = lifecycleRegistry
 
     override val savedStateRegistry
         get() = savedStateRegistryController.savedStateRegistry
+
+    override val onBackPressedDispatcher: OnBackPressedDispatcher
+        get() = backDispatcher
 
     init {
         savedStateRegistryController.performRestore(null)
