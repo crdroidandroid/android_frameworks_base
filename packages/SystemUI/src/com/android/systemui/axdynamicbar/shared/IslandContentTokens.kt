@@ -23,7 +23,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Repeat
 import androidx.compose.material.icons.filled.Shuffle
 import androidx.compose.material.icons.filled.ThumbDown
@@ -31,17 +30,11 @@ import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import android.os.SystemClock
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
-import kotlinx.coroutines.delay
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -51,6 +44,7 @@ import com.android.systemui.axdynamicbar.model.IslandEvent
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -108,7 +102,10 @@ internal const val AlphaIconBg = 0.16f
 internal const val AlphaTrack = 0.25f
 
 internal val TsBadge: TextStyle
-    @Composable get() = MaterialTheme.typography.labelSmall.copy(fontSize = 8.sp)
+    @Composable get() = MaterialTheme.typography.labelSmall.copy(
+        fontSize = 8.sp,
+        platformStyle = PlatformTextStyle(includeFontPadding = false),
+    )
 
 
 internal val BatteryChargingColor = Color(0xFF66BB6A)
@@ -162,12 +159,18 @@ internal val CardBorderBrush: Brush
         )
 
 internal val PillPrimary: TextStyle
-    @Composable get() = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.SemiBold)
+    @Composable get() = MaterialTheme.typography.labelSmall.copy(
+        fontWeight = FontWeight.SemiBold,
+        platformStyle = PlatformTextStyle(includeFontPadding = false),
+    )
 
 internal val PillAccent: TextStyle
     @Composable get() = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold)
 internal val PillMono: TextStyle
-    @Composable get() = MaterialTheme.typography.labelSmall.copy(fontFamily = FontFamily.Monospace)
+    @Composable get() = MaterialTheme.typography.labelSmall.copy(
+        fontFamily = FontFamily.Monospace,
+        platformStyle = PlatformTextStyle(includeFontPadding = false),
+    )
 internal val TsMono: TextStyle
     @Composable get() = MaterialTheme.typography.labelMedium.copy(fontFamily = FontFamily.Monospace)
 
@@ -425,49 +428,25 @@ internal data class MediaProgress(val progress: Float, val positionMs: Long)
 
 @Composable
 internal fun rememberMediaProgress(event: IslandEvent.Media): MediaProgress {
-    val duration = event.duration
-    var progress by remember { mutableFloatStateOf(event.progress) }
-    var positionMs by remember { mutableLongStateOf(event.position) }
-    val currentEvent by rememberUpdatedState(event)
-
-    val computedPosition = if (event.isPlaying && duration > 0L) {
-        val elapsed = SystemClock.elapsedRealtime() - event.positionUpdateTime
-        (event.position + (elapsed * event.playbackSpeed).toLong()).coerceIn(0L, duration)
-    } else {
-        event.position
-    }
-    positionMs = computedPosition
-    progress = if (duration > 0L) (computedPosition.toFloat() / duration).coerceIn(0f, 1f)
-        else event.progress
-
-    LaunchedEffect(event.isPlaying, event.duration) {
-        if (!currentEvent.isPlaying || currentEvent.duration <= 0L) return@LaunchedEffect
-        while (true) {
-            delay(1000L)
-            val ev = currentEvent
-            if (!ev.isPlaying || ev.duration <= 0L) break
-            val elapsed = SystemClock.elapsedRealtime() - ev.positionUpdateTime
-            val current = (ev.position + (elapsed * ev.playbackSpeed).toLong())
-                .coerceIn(0L, ev.duration)
-            positionMs = current
-            progress = (current.toFloat() / ev.duration).coerceIn(0f, 1f)
-        }
-    }
-
-    return MediaProgress(progress, positionMs)
+    return MediaProgress(event.progress, event.position)
 }
 
 internal fun formatElapsedTime(ms: Long): String {
     val secs = (ms / 1000).coerceAtLeast(0)
-    return "%d:%02d".format(secs / 60, secs % 60)
+    return "%02d:%02d".format(secs / 60, secs % 60)
+}
+
+internal fun formatCountdownSeconds(secs: Long): String {
+    val s = secs.coerceAtLeast(0)
+    return "%02d:%02d".format(s / 60, s % 60)
 }
 
 internal fun formatCountdownLong(ms: Long): String {
     val secs = (ms / 1000).coerceAtLeast(0)
     val mins = secs / 60
     val hrs = mins / 60
-    return if (hrs > 0) "%d:%02d:%02d".format(hrs, mins % 60, secs % 60)
-    else "%d:%02d".format(mins, secs % 60)
+    return if (hrs > 0) "%02d:%02d:%02d".format(hrs, mins % 60, secs % 60)
+    else "%02d:%02d".format(mins, secs % 60)
 }
 
 internal fun formatStopwatch(ms: Long): String {
@@ -536,7 +515,7 @@ internal fun textKeyFor(event: IslandEvent): Any =
         else -> event.id
     }
 
-internal fun resolveCustomActionIcon(label: String): ImageVector {
+internal fun resolveLabelIcon(label: String): ImageVector {
     val lower = label.lowercase()
     return when {
         lower.contains("shuffle") -> Icons.Filled.Shuffle
@@ -548,14 +527,21 @@ internal fun resolveCustomActionIcon(label: String): ImageVector {
     }
 }
 
-internal fun resolveEndActionIcon(label: String): ImageVector {
-    val lower = label.lowercase()
-    return when {
-        lower.contains("like") || lower.contains("love") || lower.contains("favorite") -> Icons.Filled.FavoriteBorder
-        lower.contains("thumb") && lower.contains("up") -> Icons.Filled.ThumbUp
-        lower.contains("thumb") && lower.contains("down") -> Icons.Filled.ThumbDown
-        lower.contains("repeat") -> Icons.Filled.Repeat
-        else -> Icons.Filled.FavoriteBorder
+@Composable
+internal fun CustomActionIcon(
+    ca: IslandEvent.MediaCustomAction,
+    tint: Color,
+    modifier: Modifier = Modifier,
+) {
+    val appBitmap = ca.icon?.let { drawable ->
+        remember(drawable) {
+            try { drawable.toBitmap(48, 48).asImageBitmap() } catch (_: Exception) { null }
+        }
+    }
+    if (appBitmap != null) {
+        Icon(appBitmap, ca.label, tint = tint, modifier = modifier)
+    } else {
+        Icon(resolveLabelIcon(ca.label), ca.label, tint = tint, modifier = modifier)
     }
 }
 
