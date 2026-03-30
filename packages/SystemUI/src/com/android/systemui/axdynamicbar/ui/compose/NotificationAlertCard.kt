@@ -3,12 +3,11 @@ package com.android.systemui.axdynamicbar.ui.compose
 import android.app.Notification
 import android.app.PendingIntent
 import android.app.RemoteInput
-import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
-import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.spring
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -40,18 +39,14 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.layout.layout
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -68,9 +63,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.android.compose.animation.scene.ContentScope
+import com.android.compose.animation.scene.ElementKey
+import com.android.compose.animation.scene.SceneKey
+import com.android.compose.animation.scene.SceneTransitionLayout
+import com.android.compose.animation.scene.rememberMutableSceneTransitionLayoutState
+import com.android.compose.animation.scene.transitions
 import com.android.systemui.axdynamicbar.shared.IslandActions
 import com.android.systemui.axdynamicbar.model.IslandEvent
-import com.android.systemui.axdynamicbar.shared.ActionBg
 import com.android.systemui.axdynamicbar.shared.AlphaIconBg
 import com.android.systemui.axdynamicbar.shared.AlphaSubtle
 import com.android.systemui.axdynamicbar.shared.CardBg
@@ -78,7 +78,6 @@ import com.android.systemui.axdynamicbar.shared.CardBorderBrush
 import com.android.systemui.axdynamicbar.shared.DarkCard
 import com.android.systemui.axdynamicbar.shared.ExpressivePillButton
 import com.android.systemui.axdynamicbar.shared.GreenAccent
-import com.android.systemui.axdynamicbar.shared.OnActionText
 import com.android.systemui.axdynamicbar.shared.OnCardText
 import com.android.systemui.axdynamicbar.shared.RedAccent
 import com.android.systemui.axdynamicbar.shared.ShapeCard
@@ -99,10 +98,52 @@ import com.android.systemui.axdynamicbar.shared.sendWithBal
 import com.android.systemui.axdynamicbar.shared.toScaledBitmap
 
 private const val MAX_EXPANDED_ACTIONS = 3
-private val NotifCompactHeight = 56.dp
-private val NotifCollapsedHeight = 164.dp
-private val NotifExpandedHeight = 358.dp
 private val ThumbnailSize = 44.dp
+
+private object AlertCardScenes {
+    val Compact = SceneKey("AlertCompact")
+    val Collapsed = SceneKey("AlertCollapsed")
+    val Expanded = SceneKey("AlertExpanded")
+}
+
+private object AlertCardElements {
+    val AppIcon = ElementKey("AlertAppIcon")
+    val CompactLabel = ElementKey("AlertCompactLabel")
+    val CompactExpand = ElementKey("AlertCompactExpand")
+    val Avatar = ElementKey("AlertAvatar")
+    val SenderName = ElementKey("AlertSenderName")
+    val CardContent = ElementKey("AlertCardContent")
+    val CardExpand = ElementKey("AlertCardExpand")
+}
+
+private const val SPRING_STIFFNESS = 500f
+private const val SPRING_DAMPING = 0.9f
+
+private val alertCardTransitions = transitions {
+    from(AlertCardScenes.Compact, to = AlertCardScenes.Expanded) {
+        spec = spring(stiffness = SPRING_STIFFNESS, dampingRatio = SPRING_DAMPING)
+        sharedElement(AlertCardElements.AppIcon)
+        fade(AlertCardElements.CompactLabel)
+        fade(AlertCardElements.CompactExpand)
+        fade(AlertCardElements.CardContent)
+        fade(AlertCardElements.CardExpand)
+    }
+    from(AlertCardScenes.Compact, to = AlertCardScenes.Collapsed) {
+        spec = spring(stiffness = SPRING_STIFFNESS, dampingRatio = SPRING_DAMPING)
+        sharedElement(AlertCardElements.AppIcon)
+        fade(AlertCardElements.CompactLabel)
+        fade(AlertCardElements.CompactExpand)
+        fade(AlertCardElements.CardContent)
+        fade(AlertCardElements.CardExpand)
+    }
+    from(AlertCardScenes.Collapsed, to = AlertCardScenes.Expanded) {
+        spec = spring(stiffness = SPRING_STIFFNESS, dampingRatio = SPRING_DAMPING)
+        sharedElement(AlertCardElements.AppIcon)
+        sharedElement(AlertCardElements.Avatar)
+        sharedElement(AlertCardElements.SenderName)
+        sharedElement(AlertCardElements.CardExpand)
+    }
+}
 
 private suspend fun PointerInputScope.detectInteractionGesture(
     onStart: () -> Unit,
@@ -130,36 +171,27 @@ fun NotificationAlertCard(
     initiallyCompact: Boolean = false,
     modifier: Modifier = Modifier,
 ) {
-    val context = LocalContext.current
     val extras = notification.sbn.notification?.extras
     val isCall = extras?.let {
         it.containsKey(Notification.EXTRA_ANSWER_INTENT) ||
             it.containsKey(Notification.EXTRA_DECLINE_INTENT) ||
             it.containsKey(Notification.EXTRA_HANG_UP_INTENT)
     } ?: false
-    var isCompact by remember(notification.sbn.key) { mutableStateOf(initiallyCompact && !isCall) }
-    var showReply by remember { mutableStateOf(false) }
-    var isExpanded by remember { mutableStateOf(!isCompact) }
-    var isTextTruncated by remember { mutableStateOf(false) }
     val title = notification.title
     val body = notification.text
     val hasTitleAndBody = title != null && title != notification.senderName && !body.isNullOrEmpty()
     val hasExtraActions = notification.actions.size > 2
-    val hasExpandableContent = !isCall && (isTextTruncated || hasTitleAndBody || hasExtraActions)
+    val hasExpandableContent = !isCall && (hasTitleAndBody || hasExtraActions)
     val accent = chipAccentColorFor(notification)
-    val density = LocalDensity.current
-    val compactHeightPx = with(density) { NotifCompactHeight.roundToPx() }
-    val minHeightPx = with(density) { NotifCollapsedHeight.roundToPx() }
-    val maxHeightPx = with(density) { NotifExpandedHeight.roundToPx() }
-    val effectiveMinPx = if (isCompact) compactHeightPx else minHeightPx
-    val effectiveMaxPx = if (isCompact) compactHeightPx else maxHeightPx
-    var measuredHeightPx by remember { mutableIntStateOf(effectiveMinPx) }
-    val heightAnim = remember { Animatable(effectiveMinPx.toFloat()) }
-    val motionScheme = MaterialTheme.motionScheme
-    val targetPx = measuredHeightPx.coerceIn(effectiveMinPx, effectiveMaxPx)
-    LaunchedEffect(targetPx) {
-        heightAnim.animateTo(targetPx.toFloat(), motionScheme.defaultSpatialSpec())
-    }
+    var showReply by remember(notification.sbn.key) { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
+
+    val initialScene = if (initiallyCompact && !isCall) AlertCardScenes.Compact
+        else AlertCardScenes.Expanded
+    val stlState = rememberMutableSceneTransitionLayoutState(
+        initialScene = initialScene,
+        transitions = alertCardTransitions,
+    )
 
     DisposableEffect(Unit) {
         onDispose { interactor.onNotificationAlertInteractionEnd() }
@@ -175,15 +207,6 @@ fun NotificationAlertCard(
     ) {
         Column(
             modifier = Modifier.fillMaxWidth()
-                .layout { measurable, constraints ->
-                    val placeable = measurable.measure(
-                        constraints.copy(maxHeight = effectiveMaxPx),
-                    )
-                    measuredHeightPx = placeable.height
-                    val h = heightAnim.value.toInt().coerceIn(effectiveMinPx, effectiveMaxPx)
-                    layout(placeable.width, h) { placeable.place(0, 0) }
-                }
-                .clipToBounds()
                 .pointerInput(Unit) {
                     detectInteractionGesture(
                         onStart = interactor::onNotificationAlertInteractionStart,
@@ -194,159 +217,262 @@ fun NotificationAlertCard(
                 .background(CardBg)
                 .border(1.dp, CardBorderBrush, ShapeCard),
         ) {
-            if (isCompact) {
-                Surface(
-                    onClick = { isCompact = false; isExpanded = true },
-                    color = Color.Transparent,
+            SceneTransitionLayout(state = stlState) {
+                scene(AlertCardScenes.Compact) {
+                    CompactScene(
+                        notification = notification,
+                        accent = accent,
+                        onExpand = {
+                            stlState.setTargetScene(AlertCardScenes.Expanded, scope)
+                        },
+                    )
+                }
+                scene(AlertCardScenes.Collapsed) {
+                    CardScene(
+                        notification = notification,
+                        accent = accent,
+                        expanded = false,
+                        isCall = isCall,
+                        initiallyCompact = initiallyCompact,
+                        hasExpandableContent = hasExpandableContent,
+                        hasTitleAndBody = hasTitleAndBody,
+                        showReply = showReply,
+                        interactor = interactor,
+                        onDismiss = onDismiss,
+                        onExpandToggle = {
+                            stlState.setTargetScene(AlertCardScenes.Expanded, scope)
+                        },
+                        onCollapseToCompact = {
+                            stlState.setTargetScene(AlertCardScenes.Compact, scope)
+                        },
+                        onShowReply = { showReply = true },
+                        onSentReply = { showReply = false; onDismiss() },
+                    )
+                }
+                scene(AlertCardScenes.Expanded) {
+                    CardScene(
+                        notification = notification,
+                        accent = accent,
+                        expanded = true,
+                        isCall = isCall,
+                        initiallyCompact = initiallyCompact,
+                        hasExpandableContent = hasExpandableContent,
+                        hasTitleAndBody = hasTitleAndBody,
+                        showReply = showReply,
+                        interactor = interactor,
+                        onDismiss = onDismiss,
+                        onExpandToggle = {
+                            val target = if (initiallyCompact) AlertCardScenes.Compact
+                                else AlertCardScenes.Collapsed
+                            stlState.setTargetScene(target, scope)
+                        },
+                        onCollapseToCompact = {
+                            stlState.setTargetScene(AlertCardScenes.Compact, scope)
+                        },
+                        onShowReply = { showReply = true },
+                        onSentReply = { showReply = false; onDismiss() },
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ContentScope.CompactScene(
+    notification: IslandEvent.Notification,
+    accent: Color,
+    onExpand: () -> Unit,
+) {
+    Surface(
+        onClick = onExpand,
+        color = Color.Transparent,
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth()
+                .padding(horizontal = SpaceXxl, vertical = SpaceMd),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(SpaceSm),
+        ) {
+            notification.appIcon?.let { icon ->
+                Image(
+                    bitmap = icon.toScaledBitmap(SizeIconSm),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .element(AlertCardElements.AppIcon)
+                        .size(SizeIconSm)
+                        .clip(ShapeSm),
+                )
+            }
+            Row(
+                modifier = Modifier
+                    .element(AlertCardElements.CompactLabel)
+                    .weight(1f),
+                horizontalArrangement = Arrangement.spacedBy(SpaceSm),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                val label = notification.senderName
+                    ?: notification.title
+                    ?: notification.appName
+                Text(
+                    label,
+                    color = OnCardText,
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.SemiBold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                val preview = notification.text ?: notification.title ?: ""
+                if (preview.isNotEmpty() && preview != label) {
+                    Text(
+                        "· $preview",
+                        color = SubtleGray,
+                        style = MaterialTheme.typography.bodySmall,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.weight(1f),
+                    )
+                } else {
+                    Spacer(Modifier.weight(1f))
+                }
+            }
+            ExpandChip(
+                Icons.Filled.ExpandMore,
+                accent,
+                onExpand,
+                Modifier.element(AlertCardElements.CompactExpand),
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+private fun ContentScope.CardScene(
+    notification: IslandEvent.Notification,
+    accent: Color,
+    expanded: Boolean,
+    isCall: Boolean,
+    initiallyCompact: Boolean,
+    hasExpandableContent: Boolean,
+    hasTitleAndBody: Boolean,
+    showReply: Boolean,
+    interactor: IslandActions,
+    onDismiss: () -> Unit,
+    onExpandToggle: () -> Unit,
+    onCollapseToCompact: () -> Unit,
+    onShowReply: () -> Unit,
+    onSentReply: () -> Unit,
+) {
+    val context = LocalContext.current
+    val title = notification.title
+    val body = notification.text
+
+    Column(modifier = Modifier.element(AlertCardElements.CardContent).fillMaxWidth()) {
+        Surface(
+            onClick = {
+                if (!showReply) {
+                    try { notification.sbn.notification?.contentIntent?.sendWithBal(context) }
+                    catch (_: PendingIntent.CanceledException) {}
+                    if (!isCall) onDismiss()
+                }
+            },
+            color = Color.Transparent,
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth().padding(SpaceXxl),
+                verticalArrangement = Arrangement.spacedBy(SpaceLg),
+            ) {
+                Row(
                     modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(SpaceSm),
                 ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth()
-                            .padding(horizontal = SpaceXxl, vertical = SpaceMd),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(SpaceSm),
-                    ) {
-                        notification.appIcon?.let { icon ->
-                            Image(
-                                bitmap = icon.toScaledBitmap(SizeIconSm),
-                                contentDescription = null,
-                                modifier = Modifier.size(SizeIconSm).clip(ShapeSm),
+                    notification.appIcon?.let { icon ->
+                        Image(
+                            bitmap = icon.toScaledBitmap(SizeIconSm),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .element(AlertCardElements.AppIcon)
+                                .size(SizeIconSm)
+                                .clip(ShapeSm),
+                        )
+                    }
+                    Text(
+                        if (notification.isGroupConversation && notification.conversationTitle != null)
+                            "${notification.appName} · ${notification.conversationTitle}"
+                        else
+                            notification.appName.ifEmpty { notification.senderName ?: "" },
+                        color = accent,
+                        style = MaterialTheme.typography.labelMedium,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.weight(1f),
+                    )
+                    if (isCall) {
+                        CallActions(notification, interactor, onDismiss)
+                    }
+                    if (!showReply && !isCall) {
+                        val expandMod = Modifier.element(AlertCardElements.CardExpand)
+                        if (initiallyCompact) {
+                            ExpandChip(Icons.Filled.ExpandLess, accent, onCollapseToCompact, expandMod)
+                        } else if (hasExpandableContent) {
+                            ExpandChip(
+                                if (expanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
+                                accent,
+                                onExpandToggle,
+                                expandMod,
                             )
                         }
-                        val label = notification.senderName
-                            ?: notification.title
-                            ?: notification.appName
+                    }
+                }
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.Top,
+                    horizontalArrangement = Arrangement.spacedBy(SpaceLg),
+                ) {
+                    NotifAvatar(
+                        notification,
+                        accent,
+                        SizeCompactIcon,
+                        Modifier.element(AlertCardElements.Avatar),
+                    )
+
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        verticalArrangement = Arrangement.spacedBy(SpaceXs),
+                    ) {
+                        val sender = notification.senderName ?: notification.appName
                         Text(
-                            label,
+                            sender,
                             color = OnCardText,
                             style = MaterialTheme.typography.titleSmall,
                             fontWeight = FontWeight.SemiBold,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.element(AlertCardElements.SenderName),
                         )
-                        val preview = notification.text ?: notification.title ?: ""
-                        if (preview.isNotEmpty() && preview != label) {
-                            Text(
-                                "· $preview",
-                                color = SubtleGray,
-                                style = MaterialTheme.typography.bodySmall,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis,
-                                modifier = Modifier.weight(1f),
-                            )
-                        } else {
-                            Spacer(Modifier.weight(1f))
-                        }
-                        ExpandChip(Icons.Filled.ExpandMore, accent) { isCompact = false; isExpanded = true }
-                    }
-                }
-            } else {
-            Surface(
-                onClick = {
-                    if (!showReply) {
-                        try { notification.sbn.notification?.contentIntent?.sendWithBal(context) }
-                        catch (_: PendingIntent.CanceledException) {}
-                        if (!isCall) onDismiss()
-                    }
-                },
-                color = Color.Transparent,
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                Column(
-                    modifier = Modifier.fillMaxWidth().padding(SpaceXxl),
-                    verticalArrangement = Arrangement.spacedBy(SpaceLg),
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(SpaceSm),
-                    ) {
-                        notification.appIcon?.let { icon ->
-                            Image(
-                                bitmap = icon.toScaledBitmap(SizeIconSm),
-                                contentDescription = null,
-                                modifier = Modifier.size(SizeIconSm).clip(ShapeSm),
-                            )
-                        }
-                        Text(
-                            if (notification.isGroupConversation && notification.conversationTitle != null)
-                                "${notification.appName} · ${notification.conversationTitle}"
-                            else
-                                notification.appName.ifEmpty { notification.senderName ?: "" },
-                            color = accent,
-                            style = MaterialTheme.typography.labelMedium,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier.weight(1f),
-                        )
-                        if (isCall) {
-                            CallActions(notification, interactor, onDismiss)
-                        }
-                        if (!showReply && !isCall) {
-                            if (initiallyCompact) {
-                                ExpandChip(Icons.Filled.ExpandLess, accent) {
-                                    isExpanded = false
-                                    isCompact = true
-                                }
-                            } else if (hasExpandableContent) {
-                                ExpandChip(
-                                    if (isExpanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
-                                    accent,
-                                ) { isExpanded = !isExpanded }
-                            }
-                        }
-                    }
 
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.Top,
-                        horizontalArrangement = Arrangement.spacedBy(SpaceLg),
-                    ) {
-                        NotifAvatar(notification, accent, SizeCompactIcon)
-
-                        Column(
-                            modifier = Modifier.weight(1f),
-                            verticalArrangement = Arrangement.spacedBy(SpaceXs),
-                        ) {
-                            val sender = notification.senderName ?: notification.appName
-                            Text(
-                                sender,
-                                color = OnCardText,
-                                style = MaterialTheme.typography.titleSmall,
-                                fontWeight = FontWeight.SemiBold,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis,
-                            )
-
-                            if (isExpanded) {
-                                if (hasTitleAndBody) {
-                                    Text(
-                                        title!!,
-                                        color = OnCardText,
-                                        style = MaterialTheme.typography.bodyMedium,
-                                        fontWeight = FontWeight.Medium,
-                                        maxLines = 2,
-                                        overflow = TextOverflow.Ellipsis,
-                                    )
-                                    Text(
-                                        body!!,
-                                        color = SubtleGray,
-                                        style = MaterialTheme.typography.bodySmall,
-                                        maxLines = 8,
-                                        overflow = TextOverflow.Ellipsis,
-                                    )
-                                } else {
-                                    val preview = body ?: title ?: ""
-                                    if (preview.isNotEmpty()) {
-                                        Text(
-                                            preview,
-                                            color = SubtleGray,
-                                            style = MaterialTheme.typography.bodySmall,
-                                            maxLines = 10,
-                                            overflow = TextOverflow.Ellipsis,
-                                        )
-                                    }
-                                }
+                        if (expanded) {
+                            if (hasTitleAndBody) {
+                                Text(
+                                    title!!,
+                                    color = OnCardText,
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    fontWeight = FontWeight.Medium,
+                                    maxLines = 2,
+                                    overflow = TextOverflow.Ellipsis,
+                                )
+                                Text(
+                                    body!!,
+                                    color = SubtleGray,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    maxLines = 8,
+                                    overflow = TextOverflow.Ellipsis,
+                                )
                             } else {
                                 val preview = body ?: title ?: ""
                                 if (preview.isNotEmpty()) {
@@ -354,68 +480,81 @@ fun NotificationAlertCard(
                                         preview,
                                         color = SubtleGray,
                                         style = MaterialTheme.typography.bodySmall,
-                                        maxLines = 2,
+                                        maxLines = 10,
                                         overflow = TextOverflow.Ellipsis,
-                                        onTextLayout = { isTextTruncated = it.hasVisualOverflow },
                                     )
                                 }
                             }
+                        } else {
+                            val preview = body ?: title ?: ""
+                            if (preview.isNotEmpty()) {
+                                Text(
+                                    preview,
+                                    color = SubtleGray,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    maxLines = 2,
+                                    overflow = TextOverflow.Ellipsis,
+                                )
+                            }
                         }
+                    }
 
-                        notification.notificationImage?.let { img ->
-                            Image(
-                                bitmap = img.toScaledBitmap(ThumbnailSize),
-                                contentDescription = null,
-                                modifier = Modifier.size(ThumbnailSize).clip(ShapeSm),
-                                contentScale = ContentScale.Crop,
-                            )
-                        }
+                    notification.notificationImage?.let { img ->
+                        Image(
+                            bitmap = img.toScaledBitmap(ThumbnailSize),
+                            contentDescription = null,
+                            modifier = Modifier.size(ThumbnailSize).clip(ShapeSm),
+                            contentScale = ContentScale.Crop,
+                        )
                     }
                 }
             }
+        }
 
-            val hasReply = notification.replyAction != null
-            val hasActions = notification.actions.isNotEmpty() || hasReply
-            if (!isCall && !showReply && hasActions) {
-                Box(
-                    modifier = Modifier.fillMaxWidth()
-                        .padding(horizontal = SpaceXxl)
-                        .padding(bottom = SpaceXxl),
-                ) {
-                    if (isExpanded) {
-                        ExpandedActions(notification, accent, onDismiss) { showReply = true }
-                    } else {
-                        CollapsedActions(notification, accent, onDismiss) { showReply = true }
-                    }
+        val hasReply = notification.replyAction != null
+        val hasActions = notification.actions.isNotEmpty() || hasReply
+        if (!isCall && !showReply && hasActions) {
+            Box(
+                modifier = Modifier.fillMaxWidth()
+                    .padding(horizontal = SpaceXxl)
+                    .padding(bottom = SpaceXxl),
+            ) {
+                if (expanded) {
+                    ExpandedActions(notification, accent, onDismiss, onShowReply)
+                } else {
+                    CollapsedActions(notification, accent, onDismiss, onShowReply)
                 }
             }
+        }
 
-            if (showReply && notification.replyAction != null) {
-                ReplyField(
-                    reply = notification.replyAction!!,
-                    accent = accent,
-                    interactor = interactor,
-                    onSent = {
-                        showReply = false
-                        onDismiss()
-                    },
-                )
-            }
-            }
+        if (showReply && notification.replyAction != null) {
+            ReplyField(
+                reply = notification.replyAction!!,
+                accent = accent,
+                interactor = interactor,
+                onSent = onSentReply,
+            )
         }
     }
 }
 
 @Composable
-private fun NotifAvatar(notification: IslandEvent.Notification, accent: Color, size: Dp) {
+private fun NotifAvatar(
+    notification: IslandEvent.Notification,
+    accent: Color,
+    size: Dp,
+    modifier: Modifier = Modifier,
+) {
     val icon = notification.senderIcon ?: notification.appIcon
     val isRound = notification.isConversation && notification.senderIcon != null
 
     if (notification.isConversation && notification.senderIcon != null && notification.appIcon != null) {
-        BadgedContactIcon(icon!!, notification.appIcon!!, size, (size.value * 0.44f).dp, true)
+        Box(modifier = modifier) {
+            BadgedContactIcon(icon!!, notification.appIcon!!, size, (size.value * 0.44f).dp, true)
+        }
     } else if (icon != null) {
         Box(
-            modifier = Modifier.size(size).clip(if (isRound) CircleShape else ShapeIconMedium),
+            modifier = modifier.size(size).clip(if (isRound) CircleShape else ShapeIconMedium),
             contentAlignment = Alignment.Center,
         ) {
             Image(
@@ -427,7 +566,7 @@ private fun NotifAvatar(notification: IslandEvent.Notification, accent: Color, s
         }
     } else {
         Box(
-            modifier = Modifier.size(size).clip(ShapeIconMedium).background(accent.copy(alpha = AlphaSubtle)),
+            modifier = modifier.size(size).clip(ShapeIconMedium).background(accent.copy(alpha = AlphaSubtle)),
             contentAlignment = Alignment.Center,
         ) {
             Icon(Icons.Filled.Notifications, null, tint = accent, modifier = Modifier.size(SizeIconSm))
@@ -492,46 +631,50 @@ private fun CallActions(
 
     Row(horizontalArrangement = Arrangement.spacedBy(SpaceMd)) {
         if (isIncoming) {
-            notification.actions.forEach { action ->
-                val pi = action.action.actionIntent
-                val isDecline = (declinePi != null && pi == declinePi) || (hangUpPi != null && pi == hangUpPi)
-                val isAnswer = answerPi != null && pi == answerPi
-                val decline = isDecline || (!isAnswer && declinePi == null)
-                val bg = if (decline) RedAccent else GreenAccent
-                ActionCircle(
-                    if (decline) Icons.Filled.CallEnd else Icons.Filled.Call,
-                    bg, chipContentColorOn(bg),
-                ) {
+            val answerAction = notification.actions.firstOrNull { a ->
+                answerPi != null && a.action.actionIntent == answerPi
+            }
+            val declineAction = notification.actions.firstOrNull { a ->
+                val pi = a.action.actionIntent
+                (declinePi != null && pi == declinePi) || (hangUpPi != null && pi == hangUpPi)
+            }
+            declineAction?.let { action ->
+                ActionCircle(Icons.Filled.CallEnd, RedAccent, chipContentColorOn(RedAccent)) {
+                    try { action.action.actionIntent?.sendWithBal(context) }
+                    catch (_: PendingIntent.CanceledException) {}
+                    onDismiss()
+                }
+            }
+            answerAction?.let { action ->
+                ActionCircle(Icons.Filled.Call, GreenAccent, chipContentColorOn(GreenAccent)) {
                     try { action.action.actionIntent?.sendWithBal(context) }
                     catch (_: PendingIntent.CanceledException) {}
                     onDismiss()
                 }
             }
         } else {
-            notification.actions.forEach { action ->
-                val pi = action.action.actionIntent
-                val semantic = action.action.semanticAction
-                val isMute = semantic == Notification.Action.SEMANTIC_ACTION_MUTE ||
-                    semantic == Notification.Action.SEMANTIC_ACTION_UNMUTE
-                val isEnd = if (hangUpPi != null) pi == hangUpPi
-                    else !isMute && action == notification.actions.first()
-                val bg = if (isEnd) RedAccent else ActionBg
-                val tint = if (isEnd) chipContentColorOn(RedAccent) else OnCardText
+            val endAction = if (hangUpPi != null) {
+                notification.actions.firstOrNull { it.action.actionIntent == hangUpPi }
+            } else {
+                notification.actions.firstOrNull { a ->
+                    val semantic = a.action.semanticAction
+                    semantic != Notification.Action.SEMANTIC_ACTION_MUTE &&
+                        semantic != Notification.Action.SEMANTIC_ACTION_UNMUTE
+                }
+            }
+            endAction?.let { action ->
                 val drawable = action.action.getIcon()?.loadDrawable(context)
                 if (drawable != null) {
-                    DrawableActionCircle(drawable, bg, tint) {
+                    DrawableActionCircle(drawable, RedAccent, chipContentColorOn(RedAccent)) {
                         try { action.action.actionIntent?.sendWithBal(context) }
                         catch (_: PendingIntent.CanceledException) {}
-                        if (isEnd) onDismiss()
+                        onDismiss()
                     }
                 } else {
-                    ActionCircle(
-                        if (isEnd) Icons.Filled.CallEnd else Icons.Filled.Call,
-                        bg, tint,
-                    ) {
+                    ActionCircle(Icons.Filled.CallEnd, RedAccent, chipContentColorOn(RedAccent)) {
                         try { action.action.actionIntent?.sendWithBal(context) }
                         catch (_: PendingIntent.CanceledException) {}
-                        if (isEnd) onDismiss()
+                        onDismiss()
                     }
                 }
             }
@@ -554,12 +697,17 @@ private fun ActionCircle(
 }
 
 @Composable
-private fun ExpandChip(icon: ImageVector, accent: Color, onClick: () -> Unit) {
+private fun ExpandChip(
+    icon: ImageVector,
+    accent: Color,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Surface(
         onClick = onClick,
         shape = CircleShape,
         color = accent.copy(alpha = AlphaIconBg),
-        modifier = Modifier.size(36.dp),
+        modifier = modifier.size(36.dp),
     ) {
         Box(contentAlignment = Alignment.Center, modifier = Modifier.size(36.dp)) {
             Icon(icon, contentDescription = null, tint = accent, modifier = Modifier.size(18.dp))
@@ -627,7 +775,6 @@ private fun ExpandedActions(
         }
     }
 }
-
 
 @Composable
 private fun ReplyField(

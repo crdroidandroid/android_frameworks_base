@@ -2,8 +2,14 @@ package com.android.systemui.axdynamicbar.ui.compose
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.runtime.LaunchedEffect
+import kotlin.math.abs
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.animation.fadeIn
@@ -164,10 +170,9 @@ fun AxDynamicBarChip(
             AnimatedContent(
                 targetState = ChipDisplay(displayEvent, isAlert),
                 transitionSpec = {
-                    ((fadeIn(motionScheme.defaultEffectsSpec()) + scaleIn(initialScale = 0.92f, animationSpec = motionScheme.defaultSpatialSpec())) togetherWith
-                        (fadeOut(motionScheme.fastEffectsSpec()) + scaleOut(targetScale = 0.92f, animationSpec = motionScheme.fastSpatialSpec()))).using(
-                        sizeTransform = null
-                    )
+                    (fadeIn(motionScheme.defaultEffectsSpec()) + scaleIn(initialScale = 0.92f, animationSpec = motionScheme.defaultSpatialSpec())) togetherWith
+                        (fadeOut(motionScheme.fastEffectsSpec()) + scaleOut(targetScale = 0.92f, animationSpec = motionScheme.fastSpatialSpec())) using
+                        SizeTransform(clip = false, sizeAnimationSpec = { _, _ -> motionScheme.defaultSpatialSpec() })
                 },
                 contentKey = { if (it.isAlert) "alert" else it.event::class.simpleName },
                 label = "chip_event",
@@ -179,10 +184,15 @@ fun AxDynamicBarChip(
                 )
                 val rawProgress = chipProgressFor(display.event)
                 val progressTarget = rawProgress ?: 0f
-                val animatedProgress by animateFloatAsState(
-                    progressTarget, MaterialTheme.motionScheme.defaultSpatialSpec(), label = "progress",
-                )
-                val progress = if (rawProgress != null) animatedProgress else null
+                val progressAnim = remember { Animatable(progressTarget) }
+                LaunchedEffect(progressTarget) {
+                    if (abs(progressTarget - progressAnim.value) > 0.05f) {
+                        progressAnim.animateTo(progressTarget, tween(300, easing = FastOutSlowInEasing))
+                    } else {
+                        progressAnim.snapTo(progressTarget)
+                    }
+                }
+                val progress = if (rawProgress != null) progressAnim.value else null
 
                 Box(
                     modifier = Modifier.fillMaxHeight(),
@@ -193,6 +203,7 @@ fun AxDynamicBarChip(
                             Modifier.height(ChipHeight)
                                 .clip(ChipShape)
                                 .background(accent)
+                                .animateContentSize(motionScheme.defaultSpatialSpec())
                                 .then(
                                     if (progress != null) {
                                         val trackColor = lerp(accent, contentColor, 0.2f)
@@ -263,7 +274,7 @@ fun AxDynamicBarChip(
                                         color = contentColor,
                                         maxLines = 1,
                                         overflow = TextOverflow.Ellipsis,
-                                        modifier = Modifier.widthIn(max = 100.dp).basicMarquee(),
+                                        modifier = Modifier.widthIn(max = 100.dp).basicMarquee(iterations = 1),
                                     )
                                 }
                             }
@@ -284,8 +295,11 @@ fun AxDynamicBarChip(
                             AnimatedContent(
                                 targetState = display.event,
                                 transitionSpec = {
-                                    (fadeIn(motionScheme.defaultEffectsSpec()) togetherWith fadeOut(motionScheme.fastEffectsSpec()))
-                                        .using(sizeTransform = null)
+                                    (fadeIn(motionScheme.defaultEffectsSpec()) +
+                                        scaleIn(initialScale = 0.85f, animationSpec = motionScheme.defaultSpatialSpec())) togetherWith
+                                        (fadeOut(motionScheme.fastEffectsSpec()) +
+                                            scaleOut(targetScale = 0.85f, animationSpec = motionScheme.fastSpatialSpec())) using
+                                        SizeTransform(clip = false, sizeAnimationSpec = { _, _ -> motionScheme.defaultSpatialSpec() })
                                 },
                                 contentKey = { iconKeyFor(it) },
                                 label = "chip_icon",
@@ -296,8 +310,11 @@ fun AxDynamicBarChip(
                             AnimatedContent(
                                 targetState = display.event,
                                 transitionSpec = {
-                                    (fadeIn(motionScheme.defaultEffectsSpec()) togetherWith fadeOut(motionScheme.fastEffectsSpec()))
-                                        .using(sizeTransform = null)
+                                    (fadeIn(motionScheme.defaultEffectsSpec()) +
+                                        scaleIn(initialScale = 0.85f, animationSpec = motionScheme.defaultSpatialSpec())) togetherWith
+                                        (fadeOut(motionScheme.fastEffectsSpec()) +
+                                            scaleOut(targetScale = 0.85f, animationSpec = motionScheme.fastSpatialSpec())) using
+                                        SizeTransform(clip = false, sizeAnimationSpec = { _, _ -> motionScheme.defaultSpatialSpec() })
                                 },
                                 contentKey = { textKeyFor(it) },
                                 label = "chip_text",
@@ -305,7 +322,7 @@ fun AxDynamicBarChip(
                             ) { event ->
                                 PillEventText(
                                     event,
-                                    Modifier.widthIn(max = 100.dp),
+                                    Modifier.widthIn(max = 88.dp),
                                     overrideColor = contentColor,
                                 )
                             }
