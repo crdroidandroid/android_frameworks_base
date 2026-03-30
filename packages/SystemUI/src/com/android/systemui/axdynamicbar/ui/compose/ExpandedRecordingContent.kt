@@ -88,7 +88,7 @@ private fun ScreenRecordCountdownExpanded(event: IslandEvent.ScreenRecording) {
         icon = { Icon(Icons.Filled.Videocam, null, tint = RedAccent, modifier = Modifier.size(22.dp)) },
         title = {
             Text(stringResource(R.string.ax_dynamic_bar_screen_recording), color = SubtleGray, style = MaterialTheme.typography.labelMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
-            Text(event.countdownSeconds.toString(), color = RedAccent, style = MaterialTheme.typography.headlineMedium)
+            Text(formatCountdownSeconds(event.countdownSeconds), color = RedAccent, style = MaterialTheme.typography.headlineMedium)
         },
     )
 }
@@ -246,7 +246,7 @@ internal fun RowScope.CompactRecordingRow(event: IslandEvent.ScreenRecording) {
         Spacer(Modifier.width(SpaceLg))
         Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(SpaceXxs)) {
             Text(stringResource(R.string.ax_dynamic_bar_screen_recording), color = OnCardText, style = MaterialTheme.typography.bodySmall)
-            Text(event.countdownSeconds.toString(), color = SubtleGray, style = MaterialTheme.typography.labelSmall)
+            Text(formatCountdownSeconds(event.countdownSeconds), color = SubtleGray, style = MaterialTheme.typography.labelSmall)
         }
         return
     }
