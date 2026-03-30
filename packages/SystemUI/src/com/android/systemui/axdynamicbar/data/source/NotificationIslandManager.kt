@@ -127,7 +127,7 @@ constructor(
 
     var activeMediaPackageProvider: (() -> String?)? = null
 
-    private val seenNotificationKeys = mutableSetOf<String>()
+    private val seenNotificationPostTimes = mutableMapOf<String, Long>()
 
     var onTimerEvent: ((IslandEvent.Timer) -> Unit)? = null
     var onAlarmEvent: ((IslandEvent.Alarm) -> Unit)? = null
@@ -145,7 +145,7 @@ constructor(
         object : ScrimUtils.ScrimEventListener {
             override fun onNotificationRemoved(sbn: StatusBarNotification) {
                 val pkg = sbn.packageName ?: return
-                seenNotificationKeys.remove(sbn.key)
+                seenNotificationPostTimes.remove(sbn.key)
 
                 if (sbn.key == timerNotificationKey) {
                     timerNotificationKey = null
@@ -362,6 +362,10 @@ constructor(
                     if ("promoted_ongoing" !in disabledTypes) handlePromotedOngoing(sbn, extras, pkg)
                     return
                 }
+                if (!sbn.isOngoing) {
+                    _promotedOngoingEvents.value =
+                        _promotedOngoingEvents.value.filter { it.sbn.key != sbn.key }
+                }
                 if (sbn.isOngoing) return
                 if ("notification" in disabledTypes) return
                 val category = sbn.notification?.category
@@ -379,7 +383,33 @@ constructor(
                         it.isNotEmpty()
                     } ?: extras.getString("android.text")
 
-                if (!seenNotificationKeys.add(sbn.key)) return
+                val notif = sbn.notification
+                val isMessagingStyle =
+                    notif != null && notif.isStyle(Notification.MessagingStyle::class.java)
+                val latestMessageTime: Long =
+                    if (isMessagingStyle) {
+                        val msgs =
+                            notif?.extras?.getParcelableArray(
+                                Notification.EXTRA_MESSAGES,
+                                Parcelable::class.java,
+                            )
+                        if (msgs != null && msgs.isNotEmpty()) {
+                            Notification.MessagingStyle.Message
+                                .getMessagesFromBundleArray(msgs)
+                                .maxOfOrNull { it.timestamp } ?: 0L
+                        } else 0L
+                    } else 0L
+
+                val postTime = sbn.postTime
+                val signature =
+                    if (isMessagingStyle && latestMessageTime > 0L) latestMessageTime
+                    else postTime
+                val lastSignature = seenNotificationPostTimes.put(sbn.key, signature)
+                if (lastSignature != null) {
+                    if (signature == lastSignature) return
+                    if (!isMessagingStyle &&
+                        notifFlags and Notification.FLAG_ONLY_ALERT_ONCE != 0) return
+                }
 
                 val icon =
                     try {
@@ -426,10 +456,9 @@ constructor(
                 var isConversation = false
                 var isGroupConversation = false
                 var conversationTitle: String? = null
-                val notif = sbn.notification
                 if (
                     notif != null &&
-                        notif.isStyle(Notification.MessagingStyle::class.java) &&
+                        isMessagingStyle &&
                         notif.extras != null
                 ) {
                     isConversation = true
@@ -522,7 +551,7 @@ constructor(
         if (!listening) return
         listening = false
         ScrimUtils.get().removeListener(scrimListener)
-        seenNotificationKeys.clear()
+        seenNotificationPostTimes.clear()
         timerJob?.cancel()
         timerJob = null
         _timerEvent.value = null

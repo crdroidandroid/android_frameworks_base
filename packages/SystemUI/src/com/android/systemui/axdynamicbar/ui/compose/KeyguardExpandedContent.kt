@@ -335,7 +335,6 @@ private fun KeyguardMediaPanel(event: IslandEvent.Media, interactor: IslandActio
                 val displayMs =
                     if (isSeeking) (seekProgress * event.duration).toLong()
                     else mediaProgress.positionMs
-
                 Column(verticalArrangement = Arrangement.spacedBy(SpaceSm)) {
                     Box(
                         modifier = Modifier
@@ -372,6 +371,7 @@ private fun KeyguardMediaPanel(event: IslandEvent.Media, interactor: IslandActio
                             modifier = Modifier.fillMaxWidth(),
                             color = colors.accent,
                             trackColor = colors.accent.copy(alpha = AlphaSubtle),
+                            amplitude = { if (event.isPlaying) 1f else 0f },
                         )
                     }
                     Row(
@@ -408,8 +408,11 @@ private fun KeyguardMediaPanel(event: IslandEvent.Media, interactor: IslandActio
                     modifier = Modifier.size(SizeButtonLg),
                 ) {
                     val ca = event.customActions.firstOrNull()
-                    val caIcon = ca?.let { resolveCustomActionIcon(it.label) } ?: Icons.Filled.Shuffle
-                    Icon(caIcon, ca?.label ?: stringResource(R.string.ax_dynamic_bar_shuffle), tint = SubtleGray, modifier = Modifier.size(SpacePanel))
+                    if (ca != null) {
+                        CustomActionIcon(ca, tint = SubtleGray, modifier = Modifier.size(SpacePanel))
+                    } else {
+                        Icon(Icons.Filled.Shuffle, stringResource(R.string.ax_dynamic_bar_shuffle), tint = SubtleGray, modifier = Modifier.size(SpacePanel))
+                    }
                 }
 
                 IconButton(
@@ -454,8 +457,11 @@ private fun KeyguardMediaPanel(event: IslandEvent.Media, interactor: IslandActio
                     modifier = Modifier.size(SizeButtonLg),
                 ) {
                     val ca = event.customActions.getOrNull(1)
-                    val endIcon = ca?.let { resolveEndActionIcon(it.label) } ?: Icons.Filled.VolumeUp
-                    Icon(endIcon, ca?.label ?: stringResource(R.string.ax_dynamic_bar_output), tint = SubtleGray, modifier = Modifier.size(SpacePanel))
+                    if (ca != null) {
+                        CustomActionIcon(ca, tint = SubtleGray, modifier = Modifier.size(SpacePanel))
+                    } else {
+                        Icon(Icons.Filled.VolumeUp, stringResource(R.string.ax_dynamic_bar_output), tint = SubtleGray, modifier = Modifier.size(SpacePanel))
+                    }
                 }
             }
         }
@@ -664,7 +670,7 @@ private fun KeyguardRecordingPanel(event: IslandEvent.ScreenRecording, interacto
             }
 
             Text(
-                event.countdownSeconds.toString(),
+                formatCountdownSeconds(event.countdownSeconds),
                 color = OnCardText,
                 style = MaterialTheme.typography.displayLarge,
             )

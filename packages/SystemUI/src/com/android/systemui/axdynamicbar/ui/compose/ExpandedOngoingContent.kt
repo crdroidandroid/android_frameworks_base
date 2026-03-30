@@ -276,8 +276,12 @@ internal fun RowScope.CompactPromotedOngoingRow(event: IslandEvent.PromotedOngoi
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
         )
-        if (event.shortText.isNotEmpty()) {
-            Text(event.shortText, color = BlueAccent, style = MaterialTheme.typography.labelSmall)
+        val subLabel = event.shortText.ifEmpty {
+            if ((event.progress >= 0f || event.isIndeterminate) && event.text.isNotEmpty()) event.text
+            else ""
+        }
+        if (subLabel.isNotEmpty()) {
+            Text(subLabel, color = BlueAccent, style = MaterialTheme.typography.labelSmall)
         }
     }
 }

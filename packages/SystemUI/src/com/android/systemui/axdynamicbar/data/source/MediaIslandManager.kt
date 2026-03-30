@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.Icon as DrawableIcon
 import android.media.AudioDeviceInfo
 import android.media.AudioManager
 import android.media.MediaMetadata
@@ -20,6 +21,7 @@ import com.android.systemui.dagger.qualifiers.Main
 import com.android.systemui.media.MediaSessionManager
 import com.android.systemui.media.NotificationMediaManager
 import com.android.systemui.media.dialog.MediaOutputDialogManager
+import com.android.systemui.util.concurrency.RepeatableExecutor
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -31,11 +33,13 @@ class MediaIslandManager
 constructor(
     @Application private val context: Context,
     @Main private val mainHandler: Handler,
+    @Main private val mainExecutor: RepeatableExecutor,
     private val notificationMediaManager: NotificationMediaManager,
     private val mediaOutputDialogManager: MediaOutputDialogManager,
 ) {
     companion object {
         private const val TAG = "MediaIslandManager"
+        private const val POSITION_UPDATE_INTERVAL_MS = 1000L
     }
 
     private val _mediaEvent = MutableStateFlow<IslandEvent.Media?>(null)
@@ -125,8 +129,32 @@ constructor(
         if (updateTime <= 0) return basePos
         val elapsed = SystemClock.elapsedRealtime() - updateTime
         val speed = state.playbackSpeed.takeIf { it > 0f } ?: 1f
-        val duration = _mediaEvent.value?.duration ?: Long.MAX_VALUE
+        val duration = _mediaEvent.value?.duration?.takeIf { it > 0L } ?: Long.MAX_VALUE
         return (basePos + (elapsed * speed).toLong()).coerceIn(0L, duration)
+    }
+
+    private var cancelProgressPolling: Runnable? = null
+
+    private fun tickProgress() {
+        val ev = _mediaEvent.value ?: return
+        if (!ev.isPlaying || ev.duration <= 0L) return
+        val now = SystemClock.elapsedRealtime()
+        val elapsed = now - ev.positionUpdateTime
+        val pos = (ev.position + (elapsed * ev.playbackSpeed).toLong()).coerceIn(0L, ev.duration)
+        val prog = (pos.toFloat() / ev.duration).coerceIn(0f, 1f)
+        _mediaEvent.value = ev.copy(progress = prog, position = pos, positionUpdateTime = now)
+    }
+
+    fun startProgressPolling() {
+        if (cancelProgressPolling != null) return
+        cancelProgressPolling = mainExecutor.executeRepeatedly(
+            ::tickProgress, 0L, POSITION_UPDATE_INTERVAL_MS,
+        )
+    }
+
+    fun stopProgressPolling() {
+        cancelProgressPolling?.run()
+        cancelProgressPolling = null
     }
 
     private fun updatePosition(state: PlaybackState) {
@@ -135,7 +163,9 @@ constructor(
         val posMs = computeAccuratePosition(state)
         val progress = (posMs.toFloat() / duration.toFloat()).coerceIn(0f, 1f)
         val speed = state.playbackSpeed.takeIf { it > 0f } ?: 1f
+        val playing = isInMotion(state)
         _mediaEvent.value = current.copy(
+            isPlaying = playing,
             position = posMs,
             progress = progress,
             playbackSpeed = speed,
@@ -178,16 +208,21 @@ constructor(
                     if (duration > 0L) (posMs.toFloat() / duration.toFloat()).coerceIn(0f, 1f)
                     else 0f
                 val outputDevice = getOutputDeviceName()
+                val pkg = controller?.packageName
                 val customActions =
                     ps?.customActions?.take(2)?.mapNotNull { ca ->
                         val lbl =
                             ca.name?.toString()?.takeIf { it.isNotEmpty() }
                                 ?: return@mapNotNull null
                         val act = ca.action?.takeIf { it.isNotEmpty() } ?: return@mapNotNull null
-                        IslandEvent.MediaCustomAction(label = lbl, action = act)
+                        val icon = try {
+                            if (ca.icon != 0 && pkg != null) {
+                                DrawableIcon.createWithResource(pkg, ca.icon)
+                                    .loadDrawable(context)
+                            } else null
+                        } catch (_: Exception) { null }
+                        IslandEvent.MediaCustomAction(label = lbl, action = act, icon = icon)
                     } ?: emptyList()
-
-                val pkg = controller?.packageName
                 val appIcon = sessionAppIcon
 
                 val speed = ps?.playbackSpeed?.takeIf { it > 0f } ?: 1f
@@ -248,6 +283,7 @@ constructor(
     fun stopListening() {
         if (!listening) return
         listening = false
+        stopProgressPolling()
         notificationMediaManager.removeCallback(mediaListener)
         MediaSessionManager.get().removeListener(mediaSessionListener)
         try {
@@ -263,15 +299,20 @@ constructor(
     }
 
     fun clear() {
+        stopProgressPolling()
         _mediaEvent.value = null
     }
 
     fun togglePlayPause() {
         val c = getActiveController() ?: return
-        when (c.playbackState?.state) {
-            PlaybackState.STATE_PLAYING -> c.transportControls.pause()
-            else -> c.transportControls.play()
+        val playing = c.playbackState?.state == PlaybackState.STATE_PLAYING
+        if (playing) {
+            c.transportControls.pause()
+        } else {
+            c.transportControls.play()
         }
+        val current = _mediaEvent.value ?: return
+        _mediaEvent.value = current.copy(isPlaying = !playing)
     }
 
     fun skipNext() {
