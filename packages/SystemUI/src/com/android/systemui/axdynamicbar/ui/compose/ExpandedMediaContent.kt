@@ -353,6 +353,7 @@ private fun MediaSeekBar(
                 modifier = Modifier.fillMaxWidth(),
                 color = accent,
                 trackColor = accent.copy(alpha = AlphaSubtle),
+                amplitude = { if (event.isPlaying) 1f else 0f },
             )
         }
     }
@@ -374,11 +375,7 @@ private fun MediaCustomActionButton(
             modifier = Modifier.size(ControlButtonSize),
         ) {
             Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                Icon(
-                    resolveCustomActionIcon(ca.label), ca.label,
-                    tint = accent,
-                    modifier = Modifier.size(ControlIconSize),
-                )
+                CustomActionIcon(ca, tint = accent, modifier = Modifier.size(ControlIconSize))
             }
         }
     } else {
@@ -416,11 +413,7 @@ private fun MediaEndActionButton(
             modifier = Modifier.size(ControlButtonSize),
         ) {
             Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                Icon(
-                    resolveEndActionIcon(ca.label), ca.label,
-                    tint = accent,
-                    modifier = Modifier.size(ControlIconSize),
-                )
+                CustomActionIcon(ca, tint = accent, modifier = Modifier.size(ControlIconSize))
             }
         }
     } else {
