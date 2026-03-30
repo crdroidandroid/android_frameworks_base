@@ -573,6 +573,7 @@ android_library {
         "uilatencystats_flags_core_java_lib",
         "personalcontext_ace_visualizer",
         "vendor.lineage.powershare-V1-java",
+        "ax_compose",
     ],
     enable_ksp: true,
     annotation_processor_flags: [

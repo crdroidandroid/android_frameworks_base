@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -33,6 +34,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -743,7 +745,10 @@ private fun AnimatedDownloadIcon(color: Color) {
 
 @Composable
 private fun PromotedOngoingText(event: IslandEvent.PromotedOngoing, modifier: Modifier, overrideColor: Color? = null) {
-    val label = event.shortText.ifEmpty { event.title.ifEmpty { event.appName } }
+    val label = event.shortText.ifEmpty {
+        if ((event.progress >= 0f || event.isIndeterminate) && event.text.isNotEmpty()) event.text
+        else event.title.ifEmpty { event.appName }
+    }
     MarqueeLabel(label, overrideColor ?: BlueAccent, modifier)
 }
 
@@ -1034,14 +1039,14 @@ private fun MarqueeLabel(text: String, color: Color, modifier: Modifier = Modifi
         style = PillPrimary,
         maxLines = 1,
         overflow = TextOverflow.Clip,
-        modifier = modifier.basicMarquee(),
+        modifier = modifier.basicMarquee(iterations = 1),
     )
 }
 
 @Composable
 private fun RecordingText(event: IslandEvent.ScreenRecording, modifier: Modifier, color: Color) {
     if (event.isCountdown) {
-        Text(event.countdownSeconds.toString(), color = color, style = PillMono, modifier = modifier)
+        Text(formatCountdownSeconds(event.countdownSeconds), color = color, style = PillMono, modifier = modifier)
         return
     }
     var elapsedMs by remember(event.startTimeMs) {
@@ -1100,7 +1105,8 @@ private fun MediaText(event: IslandEvent.Media, modifier: Modifier, overrideColo
     val baseColor = overrideColor ?: OrangeAccent
     val alpha = if (event.isPlaying) 1f else AlphaHint
     val color = baseColor.copy(alpha = alpha)
-    WaveformAnimation(color = color, modifier = modifier.size(20.dp, 12.dp), isAnimating = event.isPlaying)
+    val text = if (event.artist.isNotBlank()) "${event.track} - ${event.artist}" else event.track
+    MarqueeLabel(text, color, modifier.widthIn(max = 66.dp))
 }
 
 @Composable
@@ -1113,7 +1119,7 @@ private fun BtText(event: IslandEvent.Bluetooth, modifier: Modifier, overrideCol
             style = MaterialTheme.typography.labelSmall,
             maxLines = 1,
             overflow = TextOverflow.Clip,
-            modifier = modifier.basicMarquee(),
+            modifier = modifier.basicMarquee(iterations = 1),
         )
     } else {
         MarqueeLabel(event.deviceName.take(12), color, modifier)
@@ -1253,10 +1259,10 @@ fun PulsingDot(color: Color, size: Dp = 8.dp, durationMs: Int = 600, minAlpha: F
 
 @Composable
 fun WaveformAnimation(color: Color, modifier: Modifier = Modifier.size(34.dp, 20.dp), isAnimating: Boolean = true, barCount: Int = 4) {
-    val phase: Float
+    val phaseState: State<Float>?
     if (isAnimating) {
         val transition = rememberInfiniteTransition(label = "waveform")
-        val animatedPhase by
+        phaseState =
             transition.animateFloat(
                 initialValue = 0f,
                 targetValue = 2f * PI.toFloat(),
@@ -1264,11 +1270,11 @@ fun WaveformAnimation(color: Color, modifier: Modifier = Modifier.size(34.dp, 20
                     infiniteRepeatable(tween(900, easing = LinearEasing), RepeatMode.Restart),
                 label = "wave_phase",
             )
-        phase = animatedPhase
     } else {
-        phase = 0f
+        phaseState = null
     }
     Canvas(modifier = modifier) {
+        val phase = phaseState?.value ?: 0f
         val barW = size.width / (barCount * 2.8f)
         val maxH = size.height * 0.82f
         val staticH = if (!isAnimating) maxH * 0.35f else 0f
