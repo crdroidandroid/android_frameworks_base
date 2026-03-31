@@ -52,6 +52,8 @@ constructor(
                     _torchEvent.value = null
                 }
             }
+
+            override fun onFlashlightStrengthChanged(level: Int) {}
         }
 
     private fun startLevelObserver() {
