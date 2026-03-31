@@ -2,6 +2,7 @@ package com.android.systemui.axdynamicbar.domain
 
 import android.app.Notification
 import android.media.AudioManager
+import android.net.Uri
 import android.provider.Settings.Global
 import com.android.systemui.axdynamicbar.data.IslandEventRepository
 import com.android.systemui.axdynamicbar.model.IslandEvent
@@ -20,17 +21,17 @@ import com.android.systemui.statusbar.KeyguardIndicationController
 import com.android.systemui.statusbar.StatusBarState
 import com.android.systemui.statusbar.policy.KeyguardStateController
 import com.android.systemui.statusbar.policy.ZenModeController
+import com.android.systemui.util.settings.GlobalSettings
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
-import android.net.Uri
 
 @SysUISingleton
 class AxDynamicBarInteractor
@@ -47,6 +48,7 @@ constructor(
     private val shadeInteractor: ShadeInteractor,
     private val shadeRepository: ShadeRepository,
     private val zenModeController: ZenModeController,
+    private val globalSettings: GlobalSettings,
     private val audioManager: AudioManager,
 ) : IslandActions {
     private val _uiState = MutableStateFlow(IslandUiState())
@@ -57,9 +59,9 @@ constructor(
 
     private val dismissedEventIds: MutableSet<String> = ConcurrentHashMap.newKeySet()
 
-    var onCollapseRequested: (() -> Unit)? = null
-
     override var onFocusableRequested: ((Boolean) -> Unit)? = null
+
+    var onCollapseRequested: (() -> Unit)? = null
 
     private var isInitialized = false
 
@@ -216,6 +218,12 @@ constructor(
         applicationScope.launch {
             settings.disabledEventTypes.collect {
                 repository.refreshListeners()
+            }
+        }
+
+        applicationScope.launch {
+            settings.isHeadsUpEnabled.collect { enabled ->
+                if (!enabled) dismissNotificationAlert()
             }
         }
 
@@ -427,6 +435,7 @@ constructor(
 
     private fun shouldSuppressForDndOrRinger(notification: IslandEvent.Notification): Boolean {
         if (notification.isActiveCall()) return false
+        if (!settings.isHeadsUpEnabled.value) return true
         val category = notification.sbn.notification?.category
         if (category == Notification.CATEGORY_CALL || category == Notification.CATEGORY_ALARM) return false
         val zenMode = zenModeController.zen
@@ -574,4 +583,3 @@ constructor(
             else -> null
         }
 }
-
