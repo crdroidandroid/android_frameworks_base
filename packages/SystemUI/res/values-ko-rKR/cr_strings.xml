@@ -53,7 +53,7 @@
     <string name="music_controls_no_title">제목 없음</string>
     <string name="smartspace_content_desc">한눈에 보기</string>
     <string name="smartspace_flight_qr_code">QR코드</string>
-    <string name="smartspace_role_desc">View</string>
+    <string name="smartspace_role_desc">보기</string>
     <!-- Button to restart SystemUI, within the Restart Options dialog -->
     <string name="global_action_restart_systemui">시스템 UI</string>
     <!-- On The Go -->
