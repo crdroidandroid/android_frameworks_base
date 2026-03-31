@@ -384,10 +384,7 @@ constructor(
             is IslandEvent.MicCamActive -> {}
             is IslandEvent.AudioRecording -> repository.notification.clearAudioRecording()
             is IslandEvent.Casting -> repository.connectivity.clearCasting()
-            is IslandEvent.Sports -> {
-                repository.smartspace.clearSportsEvent(event.key)
-                repository.notification.clearSportsEvent(event.key)
-            }
+            is IslandEvent.Sports -> repository.notification.clearSportsEvent(event.key)
             is IslandEvent.NowPlaying -> {}
             is IslandEvent.PromotedOngoing ->
                 repository.notification.clearPromotedOngoing(event.sbn.key)
