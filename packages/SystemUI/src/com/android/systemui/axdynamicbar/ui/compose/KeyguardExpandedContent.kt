@@ -2,6 +2,10 @@
 
 package com.android.systemui.axdynamicbar.ui.compose
 
+import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.LayerDrawable
+import android.util.TypedValue
+import android.widget.SeekBar
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.core.RepeatMode
@@ -19,6 +23,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -62,11 +67,13 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -79,6 +86,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.viewinterop.AndroidView
 import kotlin.math.cos
 import kotlin.math.sin
 import androidx.compose.ui.unit.Dp
@@ -89,7 +97,10 @@ import com.android.systemui.axdynamicbar.model.IslandEvent
 import com.android.systemui.axdynamicbar.model.RecordingState
 import com.android.systemui.axdynamicbar.shared.*
 import com.android.systemui.haptics.slider.compose.ui.SliderHapticsViewModel
+import com.android.systemui.media.controls.ui.drawable.SquigglyProgress
 import kotlinx.coroutines.delay
+
+private val KeyguardSeekBarHeight = 28.dp
 
 @Composable
 internal fun KeyguardExpandedContent(
@@ -374,59 +385,7 @@ private fun KeyguardMediaPanel(event: IslandEvent.Media, interactor: IslandActio
 
                 if (event.duration > 0L) {
                     Spacer(Modifier.height(SpaceMd))
-                    val mediaProgress = rememberMediaProgress(event)
-                    var isSeeking by remember { mutableStateOf(false) }
-                    var seekProgress by remember { mutableFloatStateOf(mediaProgress.progress) }
-                    if (!isSeeking) seekProgress = mediaProgress.progress
-                    val displayMs =
-                        if (isSeeking) (seekProgress * event.duration).toLong()
-                        else mediaProgress.positionMs
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(SpaceSection)
-                            .pointerInput("tap") {
-                                detectTapGestures { offset ->
-                                    val f = (offset.x / size.width.toFloat()).coerceIn(0f, 1f)
-                                    seekProgress = f
-                                    interactor.seekTo((f * event.duration).toLong())
-                                }
-                            }
-                            .pointerInput("drag") {
-                                detectHorizontalDragGestures(
-                                    onDragStart = { offset ->
-                                        isSeeking = true
-                                        seekProgress = (offset.x / size.width.toFloat()).coerceIn(0f, 1f)
-                                    },
-                                    onDragEnd = {
-                                        isSeeking = false
-                                        interactor.seekTo((seekProgress * event.duration).toLong())
-                                    },
-                                    onDragCancel = { isSeeking = false },
-                                    onHorizontalDrag = { change, _ ->
-                                        seekProgress = (change.position.x / size.width.toFloat()).coerceIn(0f, 1f)
-                                        change.consume()
-                                    },
-                                )
-                            },
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        LinearWavyProgressIndicator(
-                            progress = { seekProgress },
-                            modifier = Modifier.fillMaxWidth(),
-                            color = colors.accent,
-                            trackColor = colors.accent.copy(alpha = AlphaSubtle),
-                            amplitude = { if (event.isPlaying) 1f else 0f },
-                        )
-                    }
-                    Spacer(Modifier.height(SpaceXs))
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                    ) {
-                        Text(formatElapsedTime(displayMs), color = OnCardSecondary, style = MaterialTheme.typography.labelSmall)
-                        Text(formatElapsedTime(event.duration), color = OnCardSecondary, style = MaterialTheme.typography.labelSmall)
-                    }
+                    KeyguardMediaSeekBar(event, interactor, colors.accent)
                 }
 
                 Spacer(Modifier.height(SpaceMd))
@@ -517,6 +476,202 @@ private fun KeyguardMediaPanel(event: IslandEvent.Media, interactor: IslandActio
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun KeyguardMediaSeekBar(
+    event: IslandEvent.Media,
+    interactor: IslandActions,
+    accent: Color,
+) {
+    val mediaProgress = rememberMediaProgress(event)
+    val isPlaying = event.isPlaying
+    val durationMs = event.duration
+    val positionMs = mediaProgress.positionMs
+    val serverFraction = mediaProgress.progress
+
+    var isScrubbing by remember { mutableStateOf(false) }
+    var displayFraction by remember { mutableStateOf(serverFraction) }
+
+    val interactorRef = rememberUpdatedState(interactor)
+
+    // Read the dismiss swipe lock provided by MagneticSwipeToDismiss
+    val swipeLock = LocalDismissSwipeLock.current
+
+    // Smooth frame-interpolated progress
+    LaunchedEffect(positionMs, durationMs, isPlaying) {
+        if (isScrubbing) return@LaunchedEffect
+
+        displayFraction = serverFraction
+
+        if (!isPlaying || durationMs <= 0L) return@LaunchedEffect
+
+        val startWallMs = System.currentTimeMillis()
+        val startProgressMs = positionMs
+        while (true) {
+            delay(16L)
+            if (isScrubbing) break
+            val elapsed = System.currentTimeMillis() - startWallMs
+            val interpolated = ((startProgressMs + elapsed).toFloat() / durationMs).coerceIn(0f, 1f)
+            displayFraction = interpolated
+            if (interpolated >= 1f) break
+        }
+    }
+
+    val displayMs = (displayFraction * durationMs).toLong()
+    val accentArgb = accent.toArgb()
+    val trackAlphaArgb = accent.copy(alpha = AlphaSubtle).toArgb()
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(KeyguardSeekBarHeight)
+            .pointerInput(swipeLock) {
+                awaitEachGesture {
+                    awaitPointerEvent()
+                    swipeLock.value = true
+                    try {
+                        do {
+                            val event = awaitPointerEvent()
+                        } while (event.changes.any { it.pressed })
+                    } finally {
+                        swipeLock.value = false
+                    }
+                }
+            }
+            .pointerInput("tap") {
+                detectTapGestures { offset ->
+                    val f = (offset.x / size.width.toFloat()).coerceIn(0f, 1f)
+                    displayFraction = f
+                    interactorRef.value.seekTo((f * durationMs).toLong())
+                }
+            }
+            .pointerInput("drag") {
+                detectHorizontalDragGestures(
+                    onDragStart = { offset ->
+                        isScrubbing = true
+                        displayFraction = (offset.x / size.width.toFloat()).coerceIn(0f, 1f)
+                    },
+                    onDragEnd = {
+                        interactorRef.value.seekTo((displayFraction * durationMs).toLong())
+                        isScrubbing = false
+                    },
+                    onDragCancel = { isScrubbing = false },
+                    onHorizontalDrag = { change, _ ->
+                        displayFraction =
+                            (change.position.x / size.width.toFloat()).coerceIn(0f, 1f)
+                        change.consume()
+                    },
+                )
+            },
+        contentAlignment = Alignment.Center,
+    ) {
+        AndroidView(
+            factory = { context ->
+                SeekBar(context).apply {
+                    max = 10_000
+                    splitTrack = false
+                    setPadding(0, 0, 0, 0)
+                    isEnabled = false
+
+                    thumb = createKeyguardSeekBarThumb(context, accentArgb)
+                    thumbOffset = thumb.intrinsicWidth / 2
+
+                    val layer = (progressDrawable?.mutate() as? LayerDrawable)
+                    if (layer != null) {
+                        layer.findDrawableByLayerId(android.R.id.background)
+                            ?.mutate()?.setTint(trackAlphaArgb)
+
+                        layer.findDrawableByLayerId(android.R.id.secondaryProgress)
+                            ?.mutate()?.setTint(
+                                com.android.internal.graphics.ColorUtils
+                                    .setAlphaComponent(accentArgb, 60)
+                            )
+
+                        val squiggle = SquigglyProgress().apply {
+                            waveLength = context.resources.getDimensionPixelSize(
+                                R.dimen.qs_media_seekbar_progress_wavelength
+                            ).toFloat()
+                            lineAmplitude = context.resources.getDimensionPixelSize(
+                                R.dimen.qs_media_seekbar_progress_amplitude
+                            ).toFloat()
+                            phaseSpeed = context.resources.getDimensionPixelSize(
+                                R.dimen.qs_media_seekbar_progress_phase
+                            ).toFloat()
+                            strokeWidth = context.resources.getDimensionPixelSize(
+                                R.dimen.qs_media_seekbar_progress_stroke_width
+                            ).toFloat()
+                            setTint(accentArgb)
+                            drawRemainingLine = false
+                            transitionEnabled = false
+                            animate = false
+                        }
+                        layer.setDrawableByLayerId(android.R.id.progress, squiggle)
+                        progressDrawable = layer
+                    }
+                }
+            },
+            update = { bar ->
+                val target = (displayFraction * 10_000f).toInt().coerceIn(0, 10_000)
+                bar.progress = target
+
+                // Re-tint thumb for accent color changes (e.g. track switch)
+                (bar.thumb as? GradientDrawable)?.setColor(accentArgb)
+
+                val alpha = if (isPlaying) 255 else (255 * 0.55f).toInt()
+                bar.thumb?.alpha = alpha
+
+                val layer = bar.progressDrawable as? LayerDrawable
+
+                // Re-tint track colors
+                layer?.findDrawableByLayerId(android.R.id.background)
+                    ?.setTint(trackAlphaArgb)
+                layer?.findDrawableByLayerId(android.R.id.secondaryProgress)
+                    ?.setTint(
+                        com.android.internal.graphics.ColorUtils
+                            .setAlphaComponent(accentArgb, 60)
+                    )
+
+                val squiggle = layer
+                    ?.findDrawableByLayerId(android.R.id.progress) as? SquigglyProgress
+
+                squiggle?.apply {
+                    setTint(accentArgb)
+                    setAlpha(alpha)
+                    animate = isPlaying && !isScrubbing
+                }
+
+                layer?.alpha = alpha
+            },
+            modifier = Modifier.fillMaxWidth().height(KeyguardSeekBarHeight),
+        )
+    }
+    Spacer(Modifier.height(SpaceXs))
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+    ) {
+        Text(formatElapsedTime(displayMs), color = OnCardSecondary, style = MaterialTheme.typography.labelSmall)
+        Text(formatElapsedTime(event.duration), color = OnCardSecondary, style = MaterialTheme.typography.labelSmall)
+    }
+}
+
+private fun createKeyguardSeekBarThumb(context: android.content.Context, tintColor: Int): GradientDrawable {
+    val wPx = TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP, 4f, context.resources.displayMetrics
+    ).toInt().coerceAtLeast(1)
+    val hPx = TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP, 16f, context.resources.displayMetrics
+    ).toInt().coerceAtLeast(1)
+    val radiusPx = TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP, 16f, context.resources.displayMetrics
+    )
+    return GradientDrawable().apply {
+        shape = GradientDrawable.RECTANGLE
+        setSize(wPx, hPx)
+        cornerRadius = radiusPx
+        setColor(tintColor)
     }
 }
 
