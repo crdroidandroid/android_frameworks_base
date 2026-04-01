@@ -33,10 +33,10 @@
     <string name="global_action_current_user">Hiện tại</string>
     <string name="global_action_users">Người dùng</string>
     <string name="status_bar_icons_title">Biểu tượng thanh trạng thái</string>
-    <string name="drag_or_tap_to_add_tiles">Giữ &amp;  kéo hoặc nhấn để thêm ô</string>
+    <string name="drag_or_tap_to_add_tiles">Giữ &amp; kéo hoặc nhấn để thêm ô</string>
     <string name="quick_settings_ambient_display_label">Hiển thị môi trường xung quanh</string>
     <string name="accessibility_quick_settings_ambient_display_off">Tắt hiển thị môi trường xung quanh.</string>
-    <string name="accessibility_quick_settings_ambient_display_on">Hiển thị môi trường xung quanh bật.</string>
+    <string name="accessibility_quick_settings_ambient_display_on">Bật hiển thị môi trường xung quanh.</string>
     <string name="quick_settings_aod_label">AOD</string>
     <string name="quick_settings_aod_off_powersave_label">Tắt AOD\nTiết kiệm pin</string>
     <string name="quick_settings_caffeine_label">Cafein</string>
