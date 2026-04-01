@@ -17,18 +17,12 @@
 package com.android.providers.settings;
 
 import static com.android.providers.settings.SettingsProvider.SETTINGS_PROVIDER_JOBS_NS;
-import static com.android.providers.settings.SettingsProvider.TABLE_CONFIG;
-import static com.android.providers.settings.SettingsProvider.TABLE_GLOBAL;
-import static com.android.providers.settings.SettingsProvider.TABLE_SECURE;
-import static com.android.providers.settings.SettingsProvider.TABLE_SSAID;
-import static com.android.providers.settings.SettingsProvider.TABLE_SYSTEM;
 import static com.android.providers.settings.SettingsProvider.WRITE_FALLBACK_SETTINGS_FILES_JOB_ID;
+import static com.android.providers.settings.SettingsProvider.EXTRA_FILE_PATHS;
 
 import android.app.job.JobParameters;
 import android.app.job.JobService;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 /**
  * JobService to make a copy of a list of files, given their paths.
@@ -40,13 +34,10 @@ public class WriteFallbackSettingsFilesJobService extends JobService {
                 || params.getJobId() != WRITE_FALLBACK_SETTINGS_FILES_JOB_ID) {
             return false;
         }
-        final List<String> settingsFiles = new ArrayList<>();
-        settingsFiles.add(params.getExtras().getString(TABLE_GLOBAL, ""));
-        settingsFiles.add(params.getExtras().getString(TABLE_SYSTEM, ""));
-        settingsFiles.add(params.getExtras().getString(TABLE_SECURE, ""));
-        settingsFiles.add(params.getExtras().getString(TABLE_SSAID, ""));
-        settingsFiles.add(params.getExtras().getString(TABLE_CONFIG, ""));
-        SettingsProvider.writeFallBackSettingsFiles(settingsFiles);
+        final String[] filePaths = params.getExtras().getStringArray(EXTRA_FILE_PATHS);
+        if (filePaths != null && filePaths.length > 0) {
+            SettingsProvider.writeFallBackSettingsFiles(Arrays.asList(filePaths));
+        }
         return false;
     }
 
