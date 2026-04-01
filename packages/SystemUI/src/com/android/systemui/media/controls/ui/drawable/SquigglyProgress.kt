@@ -84,6 +84,12 @@ class SquigglyProgress : Drawable() {
             invalidateSelf()
         }
 
+    var drawRemainingLine: Boolean = true
+        set(value) {
+            field = value
+            invalidateSelf()
+        }
+
     init {
         wavePaint.strokeCap = Paint.Cap.ROUND
         linePaint.strokeCap = Paint.Cap.ROUND
@@ -199,14 +205,14 @@ class SquigglyProgress : Drawable() {
         canvas.drawPath(path, wavePaint)
         canvas.restore()
 
-        if (transitionEnabled) {
+        if (drawRemainingLine && transitionEnabled) {
             // If there's a smooth transition, we draw the rest of the
             // path in a different color (using different clip params)
             canvas.save()
             canvas.clipRect(totalProgressPx, -1f * clipTop, totalWidth, clipTop)
             canvas.drawPath(path, linePaint)
             canvas.restore()
-        } else {
+        } else if (drawRemainingLine) {
             // No transition, just draw a flat line to the end of the region.
             // The discontinuity is hidden by the progress bar thumb shape.
             canvas.drawLine(totalProgressPx, 0f, totalWidth, 0f, linePaint)
