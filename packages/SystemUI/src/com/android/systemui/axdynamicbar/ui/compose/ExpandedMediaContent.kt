@@ -8,6 +8,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -317,6 +318,9 @@ private fun MediaSeekBar(
 
     val interactorRef = rememberUpdatedState(interactor)
 
+    // Read the dismiss swipe lock provided by MagneticSwipeToDismiss
+    val swipeLock = LocalDismissSwipeLock.current
+
     // Smooth frame-interpolated progress when playing, snaps when paused or scrubbing
     LaunchedEffect(positionMs, durationMs, isPlaying) {
         if (isScrubbing) return@LaunchedEffect
@@ -337,7 +341,7 @@ private fun MediaSeekBar(
         }
     }
 
-    val displayMs = if (isScrubbing) (displayFraction * durationMs).toLong() else (displayFraction * durationMs).toLong()
+    val displayMs = (displayFraction * durationMs).toLong()
     val accentArgb = accent.toArgb()
     val trackAlphaArgb = accent.copy(alpha = AlphaSubtle).toArgb()
 
@@ -362,6 +366,19 @@ private fun MediaSeekBar(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(SeekBarHeight)
+                .pointerInput(swipeLock) {
+                    awaitEachGesture {
+                        awaitPointerEvent() // DOWN
+                        swipeLock.value = true
+                        try {
+                            do {
+                                val event = awaitPointerEvent()
+                            } while (event.changes.any { it.pressed })
+                        } finally {
+                            swipeLock.value = false
+                        }
+                    }
+                }
                 .pointerInput("tap") {
                     detectTapGestures { offset ->
                         val fraction = (offset.x / size.width.toFloat()).coerceIn(0f, 1f)
