@@ -215,30 +215,30 @@
     <string name="ax_dynamic_bar_one_device">1 Gerät</string>
     <string name="ax_dynamic_bar_bluetooth_device">Bluetooth-Gerät</string>
     <string name="ax_dynamic_bar_apps_count"><xliff:g id="count" example="2">%d</xliff:g> Apps</string>
-    <string name="ax_dynamic_bar_just_now">Just now</string>
-    <string name="ax_dynamic_bar_mins_ago"><xliff:g id="count" example="5">%d</xliff:g>m ago</string>
-    <string name="ax_dynamic_bar_hours_ago"><xliff:g id="count" example="2">%d</xliff:g>h ago</string>
-    <string name="ax_dynamic_bar_days_ago"><xliff:g id="count" example="3">%d</xliff:g>d ago</string>
-    <string name="ax_dynamic_bar_weeks_ago"><xliff:g id="count" example="1">%d</xliff:g>w ago</string>
-    <string name="ax_dynamic_bar_resume">Resume</string>
-    <string name="ax_dynamic_bar_clipboard">Clipboard</string>
-    <string name="ax_dynamic_bar_previous">Previous</string>
-    <string name="ax_dynamic_bar_next">Next</string>
-    <string name="ax_dynamic_bar_shuffle">Shuffle</string>
-    <string name="ax_dynamic_bar_output">Output</string>
-    <string name="ax_dynamic_bar_rec_short">Rec</string>
-    <string name="ax_dynamic_bar_cast_short">Cast</string>
-    <string name="ax_dynamic_bar_active">Active</string>
-    <string name="ax_dynamic_bar_biometric">Biometric</string>
-    <string name="ax_dynamic_bar_trust">Trust</string>
-    <string name="ax_dynamic_bar_alignment">Alignment</string>
-    <string name="ax_dynamic_bar_cam_short">Cam</string>
-    <string name="ax_dynamic_bar_mic_short">Mic</string>
-    <string name="ax_dynamic_bar_recent_apps">Recent Apps</string>
-    <string name="ax_dynamic_bar_count_running"><xliff:g id="count" example="3">%d</xliff:g> running</string>
-    <string name="ax_dynamic_bar_sports_vs">vs</string>
+    <string name="ax_dynamic_bar_just_now">Gerade eben</string>
+    <string name="ax_dynamic_bar_mins_ago">Vor <xliff:g id="count" example="5">%d</xliff:g>min</string>
+    <string name="ax_dynamic_bar_hours_ago">Vor <xliff:g id="count" example="5">%d</xliff:g>Std.</string>
+    <string name="ax_dynamic_bar_days_ago">Vor <xliff:g id="count" example="5">%d</xliff:g>T.</string>
+    <string name="ax_dynamic_bar_weeks_ago">Vor <xliff:g id="count" example="5">%d</xliff:g>Wo.</string>
+    <string name="ax_dynamic_bar_resume">Fortfahren</string>
+    <string name="ax_dynamic_bar_clipboard">Zwischenablage</string>
+    <string name="ax_dynamic_bar_previous">Zurück</string>
+    <string name="ax_dynamic_bar_next">Weiter</string>
+    <string name="ax_dynamic_bar_shuffle">Zufallswiedergabe</string>
+    <string name="ax_dynamic_bar_output">Ausgabe</string>
+    <string name="ax_dynamic_bar_rec_short">Aufnahme</string>
+    <string name="ax_dynamic_bar_cast_short">Übertragen</string>
+    <string name="ax_dynamic_bar_active">Aktiv</string>
+    <string name="ax_dynamic_bar_biometric">Biometrie</string>
+    <string name="ax_dynamic_bar_trust">Vertrauen</string>
+    <string name="ax_dynamic_bar_alignment">Ausrichtung</string>
+    <string name="ax_dynamic_bar_cam_short">Kamera</string>
+    <string name="ax_dynamic_bar_mic_short">Mikrofon</string>
+    <string name="ax_dynamic_bar_recent_apps">Kürzlich verwendete Apps</string>
+    <string name="ax_dynamic_bar_count_running"><xliff:g id="count" example="3">%d</xliff:g> aktiv</string>
+    <string name="ax_dynamic_bar_sports_vs">gegen</string>
     <string name="ax_dynamic_bar_sports_live">LIVE</string>
-    <string name="ax_dynamic_bar_sports_final">Final</string>
-    <string name="ax_dynamic_bar_sports_halftime">Halftime</string>
-    <string name="ax_dynamic_bar_sports_upcoming">Upcoming</string>
+    <string name="ax_dynamic_bar_sports_final">Finale</string>
+    <string name="ax_dynamic_bar_sports_halftime">Halbzeit</string>
+    <string name="ax_dynamic_bar_sports_upcoming">Demnächst</string>
 </resources>
