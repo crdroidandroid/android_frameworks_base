@@ -5,6 +5,9 @@ import androidx.compose.animation.core.spring
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,6 +27,13 @@ import kotlin.math.abs
 import kotlin.math.sign
 import kotlinx.coroutines.launch
 import androidx.compose.ui.input.pointer.PointerInputChange
+
+/**
+ * A child (e.g. media seekbar) can set this to `true` to prevent
+ * [MagneticSwipeToDismiss] from claiming horizontal drags.
+ * Set it on ACTION_DOWN so the lock is active before slop detection.
+ */
+val LocalDismissSwipeLock = compositionLocalOf<MutableState<Boolean>> { mutableStateOf(false) }
 
 private val DETACH_THRESHOLD = 72.dp
 private const val MAGNETIC_PULL = 0.5f
@@ -53,133 +63,141 @@ internal fun MagneticSwipeToDismiss(
     var detached by remember { mutableStateOf(false) }
     var dismissed by remember { mutableStateOf(false) }
 
+    val swipeLock = remember { mutableStateOf(false) }
+
     if (dismissed) return
 
     val absOff = maxOf(abs(offsetX.value), abs(offsetY.value))
     val progress = (absOff / (detachPx * 4f)).coerceIn(0f, 1f)
 
-    Box(
-        modifier =
-            modifier
-                .graphicsLayer {
-                    translationX = offsetX.value
-                    translationY = offsetY.value
-                    alpha = 1f - progress * 0.5f
-                    scaleX = 1f - progress * 0.04f
-                    scaleY = 1f - progress * 0.04f
-                    rotationZ = (offsetX.value / detachPx).coerceIn(-1f, 1f) * 2f
-                }
-                .pointerInput(allowUpDismiss) {
-                    val touchSlop = viewConfig.touchSlop
+    CompositionLocalProvider(LocalDismissSwipeLock provides swipeLock) {
+        Box(
+            modifier =
+                modifier
+                    .graphicsLayer {
+                        translationX = offsetX.value
+                        translationY = offsetY.value
+                        alpha = 1f - progress * 0.5f
+                        scaleX = 1f - progress * 0.04f
+                        scaleY = 1f - progress * 0.04f
+                        rotationZ = (offsetX.value / detachPx).coerceIn(-1f, 1f) * 2f
+                    }
+                    .pointerInput(allowUpDismiss) {
+                        val touchSlop = viewConfig.touchSlop
 
-                    awaitEachGesture {
+                        awaitEachGesture {
                         
-                        val down: PointerInputChange
-                        while (true) {
-                            val event = awaitPointerEvent(PointerEventPass.Initial)
-                            val d = event.changes.firstOrNull {
-                                it.changedToDownIgnoreConsumed()
+                            val down: PointerInputChange
+                            while (true) {
+                                val event = awaitPointerEvent(PointerEventPass.Initial)
+                                val d = event.changes.firstOrNull {
+                                    it.changedToDownIgnoreConsumed()
+                                }
+                                if (d != null) { down = d; break }
                             }
-                            if (d != null) { down = d; break }
-                        }
                         
-                        var axis = 0
-                        var velocity = 0f
-                        var prevTime = 0L
-                        detached = false
+                            var axis = 0
+                            var velocity = 0f
+                            var prevTime = 0L
+                            detached = false
 
-                        while (true) {
-                            val event = awaitPointerEvent(PointerEventPass.Initial)
-                            val change = event.changes.firstOrNull() ?: break
+                            while (true) {
+                                val event = awaitPointerEvent(PointerEventPass.Initial)
+                                val change = event.changes.firstOrNull() ?: break
 
-                            if (!change.pressed) {
+                                if (!change.pressed) {
                                 
-                                if (axis != 0) change.consume()
-                                if (axis == 0) break 
+                                    if (axis != 0) change.consume()
+                                    if (axis == 0) break 
 
-                                val offset = if (axis == 2) offsetY else offsetX
-                                val vel = velocity
-                                val off = offset.value
-                                scope.launch {
-                                    val shouldDismiss =
-                                        abs(vel) >= dismissVelPx ||
-                                            (detached && abs(off) > detachPx * 0.5f)
-                                    if (shouldDismiss) {
-                                        val target = when (axis) {
-                                            2 -> -size.height * 1.5f 
-                                            else -> {
-                                                val dir = if (abs(vel) > 100f) sign(vel) else sign(off)
-                                                dir * size.width * 1.5f
+                                    val offset = if (axis == 2) offsetY else offsetX
+                                    val vel = velocity
+                                    val off = offset.value
+                                    scope.launch {
+                                        val shouldDismiss =
+                                            abs(vel) >= dismissVelPx ||
+                                                (detached && abs(off) > detachPx * 0.5f)
+                                        if (shouldDismiss) {
+                                            val target = when (axis) {
+                                                2 -> -size.height * 1.5f 
+                                                else -> {
+                                                    val dir = if (abs(vel) > 100f) sign(vel) else sign(off)
+                                                    dir * size.width * 1.5f
+                                                }
                                             }
-                                        }
-                                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                                        offset.animateTo(
-                                            target,
-                                            spring(dampingRatio = 1f, stiffness = FLING_STIFFNESS),
-                                        )
-                                        dismissed = true
-                                        onDismiss()
-                                    } else {
-                                        if (detached) {
                                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                            offset.animateTo(
+                                                target,
+                                                spring(dampingRatio = 1f, stiffness = FLING_STIFFNESS),
+                                            )
+                                            dismissed = true
+                                            onDismiss()
+                                        } else {
+                                            if (detached) {
+                                                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                            }
+                                            offset.animateTo(0f, spring(SNAP_DAMPING, SNAP_STIFFNESS))
+                                            detached = false
                                         }
-                                        offset.animateTo(0f, spring(SNAP_DAMPING, SNAP_STIFFNESS))
-                                        detached = false
                                     }
+                                    break
                                 }
-                                break
-                            }
 
-                            val dx = change.position.x - down.position.x
-                            val dy = change.position.y - down.position.y
+                                val dx = change.position.x - down.position.x
+                                val dy = change.position.y - down.position.y
 
-                            if (axis == 0) {
-                                if (abs(dx) > touchSlop || abs(dy) > touchSlop) {
-                                    axis = if (abs(dx) >= abs(dy)) {
-                                        1 
-                                    } else if (allowUpDismiss && dy < 0) {
-                                        2 
+                                if (axis == 0) {
+                                    if (abs(dx) > touchSlop || abs(dy) > touchSlop) {
+                                        val wouldBeHorizontal = abs(dx) >= abs(dy)
+                                        // If a child (seekbar) has locked horizontal swipe, skip.
+                                        if (wouldBeHorizontal && swipeLock.value) {
+                                            break
+                                        }
+                                        axis = if (wouldBeHorizontal) {
+                                            1 
+                                        } else if (allowUpDismiss && dy < 0) {
+                                            2 
+                                        } else {
+                                            break 
+                                        }
                                     } else {
-                                        break 
+                                        continue 
+                                    }
+                                }
+
+                                change.consume()
+
+                                val delta = change.position - change.previousPosition
+                                val dragAmount = if (axis == 2) delta.y else delta.x
+                                val offset = if (axis == 2) offsetY else offsetX
+
+                                val now = change.uptimeMillis
+                                if (prevTime > 0L) {
+                                    val dt = (now - prevTime).coerceAtLeast(1) / 1000f
+                                    val instantVel = dragAmount / dt
+                                    velocity =
+                                        velocity * (1f - VELOCITY_SMOOTHING) +
+                                            instantVel * VELOCITY_SMOOTHING
+                                }
+                                prevTime = now
+
+                                if (!detached) {
+                                    val target = offset.value + dragAmount * MAGNETIC_PULL
+                                    if (abs(target) >= detachPx) {
+                                        detached = true
+                                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                        scope.launch { offset.snapTo(offset.value + dragAmount) }
+                                    } else {
+                                        scope.launch { offset.snapTo(target) }
                                     }
                                 } else {
-                                    continue 
-                                }
-                            }
-
-                            change.consume()
-
-                            val delta = change.position - change.previousPosition
-                            val dragAmount = if (axis == 2) delta.y else delta.x
-                            val offset = if (axis == 2) offsetY else offsetX
-
-                            val now = change.uptimeMillis
-                            if (prevTime > 0L) {
-                                val dt = (now - prevTime).coerceAtLeast(1) / 1000f
-                                val instantVel = dragAmount / dt
-                                velocity =
-                                    velocity * (1f - VELOCITY_SMOOTHING) +
-                                        instantVel * VELOCITY_SMOOTHING
-                            }
-                            prevTime = now
-
-                            if (!detached) {
-                                val target = offset.value + dragAmount * MAGNETIC_PULL
-                                if (abs(target) >= detachPx) {
-                                    detached = true
-                                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                                     scope.launch { offset.snapTo(offset.value + dragAmount) }
-                                } else {
-                                    scope.launch { offset.snapTo(target) }
                                 }
-                            } else {
-                                scope.launch { offset.snapTo(offset.value + dragAmount) }
                             }
                         }
                     }
-                }
-    ) {
-        content()
+        ) {
+            content()
+        }
     }
 }
-
