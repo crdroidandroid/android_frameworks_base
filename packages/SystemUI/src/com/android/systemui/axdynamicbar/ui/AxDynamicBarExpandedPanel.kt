@@ -21,7 +21,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.input.pointer.PointerEventPass
@@ -244,7 +243,6 @@ private fun OverlayContent(viewModel: AxDynamicBarChipViewModel, statusBarHeight
         else with(density) { statusBarHeightPx.toDp() } + largeScreenExtra
     val chipState by viewModel.chipState.collectAsStateWithLifecycle()
     val isExpanded by viewModel.isExpanded.collectAsStateWithLifecycle()
-    val chipX by viewModel.chipCenterXFraction.collectAsStateWithLifecycle()
 
     val expandedVisible = remember { MutableTransitionState(false) }
 
@@ -259,13 +257,7 @@ private fun OverlayContent(viewModel: AxDynamicBarChipViewModel, statusBarHeight
         }
     }
 
-    val originX = chipX
-    val origin = TransformOrigin(originX, 0f)
-    
-    val chipAlignment = BiasAlignment(
-        horizontalBias = originX * 2f - 1f,  
-        verticalBias = -1f,                    
-    )
+    val origin = TransformOrigin(0.5f, 0f)
 
     AnimatedVisibility(
         visibleState = expandedVisible,
@@ -313,7 +305,7 @@ private fun OverlayContent(viewModel: AxDynamicBarChipViewModel, statusBarHeight
                     }
                 }
                 .padding(top = topPad),
-            contentAlignment = chipAlignment,
+            contentAlignment = Alignment.TopCenter,
         ) {
             chipState?.let { state ->
                 val filtered = state.allEvents.filter { it !is IslandEvent.AospChip }
