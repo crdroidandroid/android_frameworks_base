@@ -215,16 +215,16 @@
     <string name="ax_dynamic_bar_bluetooth_device">蓝牙设备</string>
     <string name="ax_dynamic_bar_apps_count"><xliff:g id="count" example="2">%d</xliff:g> 应用</string>
     <string name="ax_dynamic_bar_just_now">Just now</string>
-    <string name="ax_dynamic_bar_mins_ago"><xliff:g id="count" example="5">%d</xliff:g>m ago</string>
-    <string name="ax_dynamic_bar_hours_ago"><xliff:g id="count" example="2">%d</xliff:g>h ago</string>
-    <string name="ax_dynamic_bar_days_ago"><xliff:g id="count" example="3">%d</xliff:g>d ago</string>
+    <string name="ax_dynamic_bar_mins_ago"><xliff:g id="count" example="5">%d</xliff:g>分钟前</string>
+    <string name="ax_dynamic_bar_hours_ago"><xliff:g id="count" example="2">%d</xliff:g>小时前</string>
+    <string name="ax_dynamic_bar_days_ago"><xliff:g id="count" example="3">%d</xliff:g>周前</string>
     <string name="ax_dynamic_bar_weeks_ago"><xliff:g id="count" example="1">%d</xliff:g>w ago</string>
     <string name="ax_dynamic_bar_resume">Resume</string>
     <string name="ax_dynamic_bar_clipboard">Clipboard</string>
     <string name="ax_dynamic_bar_previous">Previous</string>
     <string name="ax_dynamic_bar_next">下一个</string>
     <string name="ax_dynamic_bar_shuffle">Shuffle</string>
-    <string name="ax_dynamic_bar_output">Output</string>
+    <string name="ax_dynamic_bar_output">输出</string>
     <string name="ax_dynamic_bar_rec_short">Rec</string>
     <string name="ax_dynamic_bar_cast_short">Cast</string>
     <string name="ax_dynamic_bar_active">Active</string>
@@ -233,7 +233,7 @@
     <string name="ax_dynamic_bar_alignment">Alignment</string>
     <string name="ax_dynamic_bar_cam_short">相机</string>
     <string name="ax_dynamic_bar_mic_short">麦克风</string>
-    <string name="ax_dynamic_bar_recent_apps">Recent Apps</string>
+    <string name="ax_dynamic_bar_recent_apps">最近应用</string>
     <string name="ax_dynamic_bar_count_running"><xliff:g id="count" example="3">%d</xliff:g> 正在运行</string>
     <string name="ax_dynamic_bar_sports_vs">vs</string>
     <string name="ax_dynamic_bar_sports_live">直播</string>
