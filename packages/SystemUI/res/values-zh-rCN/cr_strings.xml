@@ -167,7 +167,7 @@
     <string name="ax_dynamic_bar_music">音乐</string>
     <string name="ax_dynamic_bar_copied">Copied</string>
     <string name="ax_dynamic_bar_copied_feedback">Copied!</string>
-    <string name="ax_dynamic_bar_image_copied">Image copied</string>
+    <string name="ax_dynamic_bar_image_copied">图片已复制</string>
     <string name="ax_dynamic_bar_copy_image">复制图片</string>
     <string name="ax_dynamic_bar_clipboard_image_desc">剪贴板图片</string>
     <string name="ax_dynamic_bar_image">图片</string>
@@ -192,7 +192,7 @@
     <string name="ax_dynamic_bar_recents">Recents</string>
     <string name="ax_dynamic_bar_unlocked">已解锁</string>
     <string name="ax_dynamic_bar_device_unlocked">设备已解锁</string>
-    <string name="ax_dynamic_bar_progress">Progress</string>
+    <string name="ax_dynamic_bar_progress">进度</string>
     <string name="ax_dynamic_bar_casting_to">投放到</string>
     <string name="ax_dynamic_bar_camera_mic">相机 &amp; 麦克风</string>
     <string name="ax_dynamic_bar_camera">相机</string>
@@ -209,18 +209,18 @@
     <string name="ax_dynamic_bar_one_device_connected">1 台设备已连接</string>
     <string name="ax_dynamic_bar_devices_connected"><xliff:g id="count" example="3">%d</xliff:g> 台设备已连接</string>
     <string name="ax_dynamic_bar_vpn_connected">VPN 已连接</string>
-    <string name="ax_dynamic_bar_secured">Secured</string>
+    <string name="ax_dynamic_bar_secured">安全的</string>
     <string name="ax_dynamic_bar_connecting">正在连接\u2026</string>
     <string name="ax_dynamic_bar_one_device">1 台设备</string>
     <string name="ax_dynamic_bar_bluetooth_device">蓝牙设备</string>
     <string name="ax_dynamic_bar_apps_count"><xliff:g id="count" example="2">%d</xliff:g> 应用</string>
-    <string name="ax_dynamic_bar_just_now">Just now</string>
+    <string name="ax_dynamic_bar_just_now">刚刚</string>
     <string name="ax_dynamic_bar_mins_ago"><xliff:g id="count" example="5">%d</xliff:g>分钟前</string>
     <string name="ax_dynamic_bar_hours_ago"><xliff:g id="count" example="2">%d</xliff:g>小时前</string>
-    <string name="ax_dynamic_bar_days_ago"><xliff:g id="count" example="3">%d</xliff:g>周前</string>
-    <string name="ax_dynamic_bar_weeks_ago"><xliff:g id="count" example="1">%d</xliff:g>w ago</string>
+    <string name="ax_dynamic_bar_days_ago"><xliff:g id="count" example="3">%d</xliff:g>天前</string>
+    <string name="ax_dynamic_bar_weeks_ago"><xliff:g id="count" example="1">%d</xliff:g>周前</string>
     <string name="ax_dynamic_bar_resume">Resume</string>
-    <string name="ax_dynamic_bar_clipboard">Clipboard</string>
+    <string name="ax_dynamic_bar_clipboard">剪贴板</string>
     <string name="ax_dynamic_bar_previous">Previous</string>
     <string name="ax_dynamic_bar_next">下一个</string>
     <string name="ax_dynamic_bar_shuffle">Shuffle</string>
