@@ -766,6 +766,19 @@ public final class MediaRouterService extends IMediaRouterService.Stub
             }
             // We don't need to change a2dp status when bluetooth is not connected.
             if (btDevice != null) {
+                // During wired device disconnection, AudioDeviceBroker sets
+                // mBluetoothA2dpEnabled=true synchronously, but mGlobalBluetoothA2dpOn
+                // is updated later via async dispatchAudioRoutesChanged. If a playback
+                // state change triggers us in this window, mGlobalBluetoothA2dpOn is
+                // stale. Cross-check with AudioService to avoid overriding the
+                // already-restored A2DP state.
+                if (!a2dpOn && mAudioService.isBluetoothA2dpOn()) {
+                    Slog.d(TAG, "restoreBluetoothA2dp: skip setting a2dp off"
+                            + " - AudioService already has a2dp on"
+                            + " (transient state during wired device disconnection)");
+                    return;
+                }
+
                 if (DEBUG) {
                     Slog.d(TAG, "restoreBluetoothA2dp(" + a2dpOn + ")");
                 }
