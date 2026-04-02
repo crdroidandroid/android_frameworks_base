@@ -200,36 +200,36 @@
     <string name="ax_dynamic_bar_microphone">Mikrofon</string>
     <string name="ax_dynamic_bar_camera_mic_short">Kamera &amp; Mic</string>
     <string name="ax_dynamic_bar_hotspot_devices"><xliff:g id="count" example="3">%d</xliff:g> készülék</string>
-    <string name="ax_dynamic_bar_wireless_charging">Wireless Charging</string>
-    <string name="ax_dynamic_bar_until_full">until full</string>
-    <string name="ax_dynamic_bar_battery_saver">Battery Saver</string>
-    <string name="ax_dynamic_bar_incoming_call">Incoming Call</string>
-    <string name="ax_dynamic_bar_connected">Connected</string>
-    <string name="ax_dynamic_bar_disconnect">Disconnect</string>
-    <string name="ax_dynamic_bar_no_devices">No devices</string>
-    <string name="ax_dynamic_bar_one_device_connected">1 device connected</string>
-    <string name="ax_dynamic_bar_devices_connected"><xliff:g id="count" example="3">%d</xliff:g> devices connected</string>
-    <string name="ax_dynamic_bar_vpn_connected">VPN Connected</string>
-    <string name="ax_dynamic_bar_secured">Secured</string>
-    <string name="ax_dynamic_bar_connecting">Connecting\u2026</string>
-    <string name="ax_dynamic_bar_one_device">1 device</string>
-    <string name="ax_dynamic_bar_bluetooth_device">Bluetooth device</string>
-    <string name="ax_dynamic_bar_apps_count"><xliff:g id="count" example="2">%d</xliff:g> apps</string>
-    <string name="ax_dynamic_bar_just_now">Just now</string>
-    <string name="ax_dynamic_bar_mins_ago"><xliff:g id="count" example="5">%d</xliff:g>m ago</string>
-    <string name="ax_dynamic_bar_hours_ago"><xliff:g id="count" example="2">%d</xliff:g>h ago</string>
-    <string name="ax_dynamic_bar_days_ago"><xliff:g id="count" example="3">%d</xliff:g>d ago</string>
-    <string name="ax_dynamic_bar_weeks_ago"><xliff:g id="count" example="1">%d</xliff:g>w ago</string>
-    <string name="ax_dynamic_bar_resume">Resume</string>
-    <string name="ax_dynamic_bar_clipboard">Clipboard</string>
-    <string name="ax_dynamic_bar_previous">Previous</string>
-    <string name="ax_dynamic_bar_next">Next</string>
-    <string name="ax_dynamic_bar_shuffle">Shuffle</string>
-    <string name="ax_dynamic_bar_output">Output</string>
-    <string name="ax_dynamic_bar_rec_short">Rec</string>
-    <string name="ax_dynamic_bar_cast_short">Cast</string>
-    <string name="ax_dynamic_bar_active">Active</string>
-    <string name="ax_dynamic_bar_biometric">Biometric</string>
+    <string name="ax_dynamic_bar_wireless_charging">Vezeték nélküli töltés</string>
+    <string name="ax_dynamic_bar_until_full">a teljes feltöltésig</string>
+    <string name="ax_dynamic_bar_battery_saver">Akkumulátorkímélő</string>
+    <string name="ax_dynamic_bar_incoming_call">Bejövő hívás</string>
+    <string name="ax_dynamic_bar_connected">Csatlakozva</string>
+    <string name="ax_dynamic_bar_disconnect">Kapcsolat bontása</string>
+    <string name="ax_dynamic_bar_no_devices">Nincsenek készülékek</string>
+    <string name="ax_dynamic_bar_one_device_connected">1 készülék csatlakozva</string>
+    <string name="ax_dynamic_bar_devices_connected"><xliff:g id="count" example="3">%d</xliff:g> készülék csatlakozva</string>
+    <string name="ax_dynamic_bar_vpn_connected">Csatlakoztatott VPN</string>
+    <string name="ax_dynamic_bar_secured">Biztosnágos</string>
+    <string name="ax_dynamic_bar_connecting">Csatlakozás…</string>
+    <string name="ax_dynamic_bar_one_device">1 készülék</string>
+    <string name="ax_dynamic_bar_bluetooth_device">Bluetooth eszköz</string>
+    <string name="ax_dynamic_bar_apps_count"><xliff:g id="count" example="2">%d</xliff:g> alkalmazás</string>
+    <string name="ax_dynamic_bar_just_now">Épp most</string>
+    <string name="ax_dynamic_bar_mins_ago"><xliff:g id="count" example="5">%d</xliff:g>p ezelőtt</string>
+    <string name="ax_dynamic_bar_hours_ago"><xliff:g id="count" example="2">%d</xliff:g>ó ezelőtt</string>
+    <string name="ax_dynamic_bar_days_ago"><xliff:g id="count" example="3">%d</xliff:g>n ezelőtt</string>
+    <string name="ax_dynamic_bar_weeks_ago"><xliff:g id="count" example="1">%d</xliff:g>h ezelőtt</string>
+    <string name="ax_dynamic_bar_resume">Folytatás</string>
+    <string name="ax_dynamic_bar_clipboard">Vágólap</string>
+    <string name="ax_dynamic_bar_previous">Előző</string>
+    <string name="ax_dynamic_bar_next">Következő</string>
+    <string name="ax_dynamic_bar_shuffle">Véletlenszerű</string>
+    <string name="ax_dynamic_bar_output">Kimenet</string>
+    <string name="ax_dynamic_bar_rec_short">Felvétel</string>
+    <string name="ax_dynamic_bar_cast_short">Átküldés</string>
+    <string name="ax_dynamic_bar_active">Aktív</string>
+    <string name="ax_dynamic_bar_biometric">Biometrikus</string>
     <string name="ax_dynamic_bar_trust">Trust</string>
     <string name="ax_dynamic_bar_alignment">Alignment</string>
     <string name="ax_dynamic_bar_cam_short">Cam</string>
