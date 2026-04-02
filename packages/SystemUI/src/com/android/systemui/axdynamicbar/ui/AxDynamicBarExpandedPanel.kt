@@ -24,7 +24,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.input.pointer.PointerEventPass
@@ -266,11 +265,6 @@ private fun OverlayContent(viewModel: AxDynamicBarChipViewModel, statusBarHeight
 
     val originX = chipX
     val origin = TransformOrigin(originX, 0f)
-    
-    val chipAlignment = BiasAlignment(
-        horizontalBias = originX * 2f - 1f,  
-        verticalBias = -1f,                    
-    )
 
     AnimatedVisibility(
         visibleState = expandedVisible,
@@ -318,7 +312,7 @@ private fun OverlayContent(viewModel: AxDynamicBarChipViewModel, statusBarHeight
                     }
                 }
                 .padding(top = topPad),
-            contentAlignment = chipAlignment,
+            contentAlignment = Alignment.TopCenter,
         ) {
             chipState?.let { state ->
                 ExpandedIslandContent(
@@ -332,24 +326,26 @@ private fun OverlayContent(viewModel: AxDynamicBarChipViewModel, statusBarHeight
         }
     }
 
+    val alertOrigin = TransformOrigin(0.5f, 0f)
+
     AnimatedVisibility(
         visibleState = notifVisible,
         enter = fadeIn(tween(300)) + scaleIn(
             animationSpec = tween(300),
             initialScale = 0.4f,
-            transformOrigin = origin,
+            transformOrigin = alertOrigin,
         ),
         exit = fadeOut(tween(250)) + scaleOut(
             animationSpec = tween(250),
             targetScale = 0.4f,
-            transformOrigin = origin,
+            transformOrigin = alertOrigin,
         ),
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = topPad),
-            contentAlignment = chipAlignment,
+            contentAlignment = Alignment.TopCenter,
         ) {
             val alert = lastAlert.value
             if (alert != null) {
@@ -391,4 +387,3 @@ private class PanelLifecycleOwner : LifecycleOwner, SavedStateRegistryOwner,
         lifecycleRegistry.handleLifecycleEvent(event)
     }
 }
-
