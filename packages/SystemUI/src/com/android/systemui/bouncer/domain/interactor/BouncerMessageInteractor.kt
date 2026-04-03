@@ -343,7 +343,16 @@ constructor(
                     setMessage(message)
                 }
             }
-        countDownTimerUtil.startNewTimer(secondsBeforeLockoutReset * 1000, 1000, callback)
+        //At the start, cancel current Timer
+        cancelCurrentTimer()
+        currentTimer = countDownTimerUtil.startNewTimer(secondsBeforeLockoutReset * 1000, 1000, callback)
+    }
+
+    /*cancel current Timer*/
+    var currentTimer: CountDownTimer? = null
+    private fun cancelCurrentTimer() {
+        currentTimer?.cancel()
+        currentTimer = null
     }
 
     fun onPrimaryAuthIncorrectAttempt() {
@@ -479,6 +488,8 @@ constructor(
                 if (showing) {
                     bouncerMessage
                 } else {
+                    //cancel countdown timer when bouncer is hidden (success unlock or dismiss)
+                    cancelCurrentTimer()
                     null
                 }
             }
