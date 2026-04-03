@@ -620,7 +620,10 @@ public final class SystemServiceRegistry {
                 new CachedServiceFetcher<DropBoxManager>() {
             @Override
             public DropBoxManager createService(ContextImpl ctx) throws ServiceNotFoundException {
-                IBinder b = ServiceManager.getServiceOrThrow(Context.DROPBOX_SERVICE);
+                IBinder b = ServiceManager.getService(Context.DROPBOX_SERVICE);
+                if (b == null) {
+                    return null;
+                }
                 IDropBoxManagerService service = IDropBoxManagerService.Stub.asInterface(b);
                 return new DropBoxManager(ctx, service);
             }});
