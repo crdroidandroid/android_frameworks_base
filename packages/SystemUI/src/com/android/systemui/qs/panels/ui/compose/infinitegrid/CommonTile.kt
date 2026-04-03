@@ -154,16 +154,12 @@ fun ClassicTileContent(
     val animatedColor by animateColorAsState(colors.background, label = "QSTileCircleBgColor")
     val animatedOutlineColor by animateColorAsState(colors.outline, label = "QSTileOutlineColor")
 
-    val tileHeight = if (labelHide) {
-        CommonTileDefaults.TileHeight
-    } else {
-        CommonTileDefaults.TileHeight - 8.dp
-    }
-
-    val iconSize = if (labelHide) {
-        CommonTileDefaults.IconSize
-    } else {
-        CommonTileDefaults.LargeTileIconSize
+    val (tileHeight, iconSize) = remember(labelHide) {
+        if (labelHide) {
+            CommonTileDefaults.TileHeight to CommonTileDefaults.IconSize
+        } else {
+            (CommonTileDefaults.TileHeight - 8.dp) to CommonTileDefaults.LargeTileIconSize
+        }
     }
 
     Column(
