@@ -23,6 +23,7 @@ class AxDynamicBarSettings @Inject constructor(
         const val KEY_ENABLED = "ax_dynamic_bar_enabled"
         const val KEY_EVENTS = "ax_dynamic_bar_events"
         const val KEY_KEYGUARD_ENABLED = "ax_dynamic_bar_keyguard_enabled"
+        const val KEY_KEYGUARD_BATTERY_CHIP_MODE = "ax_dynamic_bar_keyguard_battery_chip_mode"
     }
 
     private val _isEnabled = MutableStateFlow(false)
@@ -31,6 +32,8 @@ class AxDynamicBarSettings @Inject constructor(
     private val _isKeyguardEnabled = MutableStateFlow(true)
     val isKeyguardEnabled: StateFlow<Boolean> = _isKeyguardEnabled.asStateFlow()
 
+    private val _keyguardBatteryChipMode = MutableStateFlow(1)
+    val keyguardBatteryChipMode: StateFlow<Int> = _keyguardBatteryChipMode.asStateFlow()
     private val _disabledEventTypes = MutableStateFlow<Set<String>>(emptySet())
     val disabledEventTypes: StateFlow<Set<String>> = _disabledEventTypes.asStateFlow()
 
@@ -69,6 +72,12 @@ class AxDynamicBarSettings @Inject constructor(
             settingsObserver,
             UserHandle.USER_ALL,
         )
+        secureSettings.registerContentObserverForUserSync(
+            KEY_KEYGUARD_BATTERY_CHIP_MODE,
+            false,
+            settingsObserver,
+            UserHandle.USER_ALL,
+        )
     }
 
     fun destroy() {
@@ -82,6 +91,8 @@ class AxDynamicBarSettings @Inject constructor(
             secureSettings.getIntForUser(KEY_ENABLED, 0, UserHandle.USER_CURRENT) == 1
         _isKeyguardEnabled.value =
             secureSettings.getIntForUser(KEY_KEYGUARD_ENABLED, 1, UserHandle.USER_CURRENT) == 1
+        _keyguardBatteryChipMode.value =
+            secureSettings.getIntForUser(KEY_KEYGUARD_BATTERY_CHIP_MODE, 1, UserHandle.USER_CURRENT)
 
         val json = secureSettings.getStringForUser(KEY_EVENTS, UserHandle.USER_CURRENT) ?: ""
         _disabledEventTypes.value =
