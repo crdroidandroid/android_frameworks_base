@@ -10251,7 +10251,7 @@ public class ActivityManagerService extends IActivityManager.Stub
 
         // Exit early if the dropbox isn't configured to accept this report type.
         final String dropboxTag = processClass(process) + "_strictmode";
-        if (dbox == null || !dbox.isTagEnabled(dropboxTag)) return;
+        if (!isDropBoxTagEnabled(dbox, dropboxTag)) return;
 
         final StringBuilder sb = new StringBuilder(1024);
         synchronized (sb) {
@@ -10292,8 +10292,35 @@ public class ActivityManagerService extends IActivityManager.Stub
 
         final String res = sb.toString();
         IoThread.getHandler().post(() -> {
-            dbox.addText(dropboxTag, res);
+            addTextToDropBox(dbox, dropboxTag, res);
         });
+    }
+
+    private boolean isDropBoxTagEnabled(DropBoxManager dbox, String dropboxTag) {
+        return isDropBoxTagEnabled(dbox, dropboxTag, null);
+    }
+
+    private boolean isDropBoxTagEnabled(DropBoxManager dbox, String dropboxTag,
+            String exceptionClassName) {
+        if (dbox == null) {
+            return false;
+        }
+        try {
+            return exceptionClassName != null
+                    ? dbox.isTagEnabled(dropboxTag, exceptionClassName)
+                    : dbox.isTagEnabled(dropboxTag);
+        } catch (RuntimeException e) {
+            Slog.w(TAG, "Unable to query DropBox tag " + dropboxTag, e);
+            return false;
+        }
+    }
+
+    private void addTextToDropBox(DropBoxManager dbox, String dropboxTag, String data) {
+        try {
+            dbox.addText(dropboxTag, data);
+        } catch (RuntimeException e) {
+            Slog.w(TAG, "Unable to write DropBox entry " + dropboxTag, e);
+        }
     }
 
     /**
@@ -10571,9 +10598,9 @@ public class ActivityManagerService extends IActivityManager.Stub
         if (crashInfo != null) {
             // For a subset of errors, we augment the check with the associated exception class
             // name to allow more granular filtering and control.
-            if (!dbox.isTagEnabled(dropboxTag, crashInfo.exceptionClassName)) return;
+            if (!isDropBoxTagEnabled(dbox, dropboxTag, crashInfo.exceptionClassName)) return;
         } else {
-            if (!dbox.isTagEnabled(dropboxTag)) return;
+            if (!isDropBoxTagEnabled(dbox, dropboxTag)) return;
         }
 
         if (dropboxTag.equals("system_server_crash") && Binder.getCallingPid() != Process.myPid()) {
@@ -10757,7 +10784,7 @@ public class ActivityManagerService extends IActivityManager.Stub
                     }
                 }
 
-                dbox.addText(dropboxTag, sb.toString());
+                addTextToDropBox(dbox, dropboxTag, sb.toString());
             }
         };
 
