@@ -9611,7 +9611,7 @@ public class ActivityManagerService extends IActivityManager.Stub
 
         // Exit early if the dropbox isn't configured to accept this report type.
         final String dropboxTag = processClass(process) + "_strictmode";
-        if (dbox == null || !dbox.isTagEnabled(dropboxTag)) return;
+        if (!isDropBoxTagEnabled(dbox, dropboxTag)) return;
 
         final StringBuilder sb = new StringBuilder(1024);
         synchronized (sb) {
@@ -9652,8 +9652,28 @@ public class ActivityManagerService extends IActivityManager.Stub
 
         final String res = sb.toString();
         IoThread.getHandler().post(() -> {
-            dbox.addText(dropboxTag, res);
+            addTextToDropBox(dbox, dropboxTag, res);
         });
+    }
+
+    private boolean isDropBoxTagEnabled(DropBoxManager dbox, String dropboxTag) {
+        if (dbox == null) {
+            return false;
+        }
+        try {
+            return dbox.isTagEnabled(dropboxTag);
+        } catch (RuntimeException e) {
+            Slog.w(TAG, "Unable to query DropBox tag " + dropboxTag, e);
+            return false;
+        }
+    }
+
+    private void addTextToDropBox(DropBoxManager dbox, String dropboxTag, String data) {
+        try {
+            dbox.addText(dropboxTag, data);
+        } catch (RuntimeException e) {
+            Slog.w(TAG, "Unable to write DropBox entry " + dropboxTag, e);
+        }
     }
 
     /**
@@ -9926,7 +9946,7 @@ public class ActivityManagerService extends IActivityManager.Stub
 
         // Exit early if the dropbox isn't configured to accept this report type.
         final String dropboxTag = processClass(process) + "_" + eventType;
-        if (dbox == null || !dbox.isTagEnabled(dropboxTag)) return;
+        if (!isDropBoxTagEnabled(dbox, dropboxTag)) return;
 
         // Check if we should rate limit and abort early if needed.
         final DropboxRateLimiter.RateLimitResult rateLimitResult =
@@ -10081,7 +10101,7 @@ public class ActivityManagerService extends IActivityManager.Stub
                     }
                 }
 
-                dbox.addText(dropboxTag, sb.toString());
+                addTextToDropBox(dbox, dropboxTag, sb.toString());
             }
         };
 
