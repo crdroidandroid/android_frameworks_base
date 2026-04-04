@@ -23,6 +23,8 @@ class AxDynamicBarSettings @Inject constructor(
         const val KEY_ENABLED = "ax_dynamic_bar_enabled"
         const val KEY_EVENTS = "ax_dynamic_bar_events"
         const val KEY_KEYGUARD_ENABLED = "ax_dynamic_bar_keyguard_enabled"
+        const val KEY_KEYGUARD_BATTERY_CHIP_MODE = "ax_dynamic_bar_keyguard_battery_chip_mode"
+        const val KEY_KEYGUARD_COMPACT_CHIP_ENABLED = "ax_dynamic_bar_keyguard_compact_chip_enabled"
         const val KEY_COMPACT_NOTIFICATIONS = "ax_dynamic_bar_compact_notifications"
     }
 
@@ -31,6 +33,12 @@ class AxDynamicBarSettings @Inject constructor(
 
     private val _isKeyguardEnabled = MutableStateFlow(true)
     val isKeyguardEnabled: StateFlow<Boolean> = _isKeyguardEnabled.asStateFlow()
+
+    private val _keyguardBatteryChipMode = MutableStateFlow(1)
+    val keyguardBatteryChipMode: StateFlow<Int> = _keyguardBatteryChipMode.asStateFlow()
+
+    private val _isKeyguardCompactChipEnabled = MutableStateFlow(false)
+    val isKeyguardCompactChipEnabled: StateFlow<Boolean> = _isKeyguardCompactChipEnabled.asStateFlow()
 
     private val _compactNotifications = MutableStateFlow(true)
     val compactNotifications: StateFlow<Boolean> = _compactNotifications.asStateFlow()
@@ -70,6 +78,18 @@ class AxDynamicBarSettings @Inject constructor(
             UserHandle.USER_ALL,
         )
         secureSettings.registerContentObserverForUserSync(
+            KEY_KEYGUARD_BATTERY_CHIP_MODE,
+            false,
+            settingsObserver,
+            UserHandle.USER_ALL,
+        )
+        secureSettings.registerContentObserverForUserSync(
+            KEY_KEYGUARD_COMPACT_CHIP_ENABLED,
+            false,
+            settingsObserver,
+            UserHandle.USER_ALL,
+        )
+        secureSettings.registerContentObserverForUserSync(
             KEY_COMPACT_NOTIFICATIONS,
             false,
             settingsObserver,
@@ -88,6 +108,10 @@ class AxDynamicBarSettings @Inject constructor(
             secureSettings.getIntForUser(KEY_ENABLED, 0, UserHandle.USER_CURRENT) == 1
         _isKeyguardEnabled.value =
             secureSettings.getIntForUser(KEY_KEYGUARD_ENABLED, 1, UserHandle.USER_CURRENT) == 1
+        _keyguardBatteryChipMode.value =
+            secureSettings.getIntForUser(KEY_KEYGUARD_BATTERY_CHIP_MODE, 1, UserHandle.USER_CURRENT)
+        _isKeyguardCompactChipEnabled.value =
+            secureSettings.getIntForUser(KEY_KEYGUARD_COMPACT_CHIP_ENABLED, 0, UserHandle.USER_CURRENT) == 1
         _compactNotifications.value =
             secureSettings.getIntForUser(KEY_COMPACT_NOTIFICATIONS, 1, UserHandle.USER_CURRENT) == 1
 

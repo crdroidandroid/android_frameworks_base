@@ -7,10 +7,12 @@ import com.android.systemui.biometrics.AuthController
 import com.android.systemui.biometrics.domain.interactor.UdfpsOverlayInteractor
 import com.android.systemui.dagger.SysUISingleton
 import com.android.systemui.dagger.qualifiers.Application
+import com.android.systemui.statusbar.KeyguardIndicationController
 import com.android.systemui.statusbar.pipeline.battery.domain.interactor.BatteryInteractor
 import com.android.systemui.statusbar.policy.BatteryController
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,6 +22,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -42,6 +47,7 @@ data class KeyguardBatteryInfo(
     val timeRemaining: String?,
 )
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @SysUISingleton
 class AxDynamicBarChipViewModel
 @Inject
@@ -52,18 +58,28 @@ constructor(
     private val batteryController: BatteryController,
     authController: AuthController,
     udfpsOverlayInteractor: UdfpsOverlayInteractor,
+    keyguardIndicationController: KeyguardIndicationController,
 ) {
+    val isKeyguardCompactChipEnabled: StateFlow<Boolean> = interactor.settings.isKeyguardCompactChipEnabled
 
-    val isCompactKeyguardChip: StateFlow<Boolean> =
+    val useCompactKeyguardChip: StateFlow<Boolean> =
         udfpsOverlayInteractor.udfpsOverlayParams
             .map { params ->
-                val propOverride = SystemProperties.getInt(PROP_COMPACT_CHIP, -1)
-                if (propOverride >= 0) return@map propOverride == 1
                 if (!authController.isUdfpsSupported) return@map false
                 val sensorBottom = params.sensorBounds.bottom
                 val displayHeight = params.naturalDisplayHeight
                 if (displayHeight <= 0) return@map false
                 sensorBottom > displayHeight * LOW_UDFPS_THRESHOLD
+            }
+            .distinctUntilChanged()
+            .stateIn(applicationScope, SharingStarted.Eagerly, false)
+
+    val isKeyguardCompactChip: StateFlow<Boolean> =
+        combine(
+                isKeyguardCompactChipEnabled,
+                useCompactKeyguardChip,
+            ) { forceCompact, useCompact ->
+                forceCompact || useCompact
             }
             .distinctUntilChanged()
             .stateIn(applicationScope, SharingStarted.Eagerly, false)
@@ -86,6 +102,7 @@ constructor(
 
     val isEnabled: StateFlow<Boolean> = interactor.settings.isEnabled
     val isKeyguardEnabled: StateFlow<Boolean> = interactor.settings.isKeyguardEnabled
+    val keyguardBatteryChipMode: StateFlow<Int> = interactor.settings.keyguardBatteryChipMode
 
     val keyguardBatteryInfo: StateFlow<KeyguardBatteryInfo> =
         combine(
@@ -106,6 +123,26 @@ constructor(
             SharingStarted.Lazily,
             KeyguardBatteryInfo(0, false, false, false, null),
         )
+
+    // Re-compute charging string whenever battery info changes
+    val batteryString: StateFlow<String> =
+        keyguardBatteryInfo
+            .map { it.isCharging }
+            .distinctUntilChanged()
+            .flatMapLatest { charging ->
+                if (charging) {
+                    flow {
+                        while (true) {
+                            emit(keyguardIndicationController.powerChargingString)
+                            delay(BATTERY_STRING_REFRESH_MS)
+                        }
+                    }
+                } else {
+                    flowOf(keyguardIndicationController.powerChargingString)
+                }
+            }
+            .distinctUntilChanged()
+            .stateIn(applicationScope, SharingStarted.Eagerly, "")
 
     val isOnKeyguard: StateFlow<Boolean> = interactor.isOnKeyguard
 
@@ -199,8 +236,7 @@ constructor(
     }
 
     companion object {
-        private const val PROP_COMPACT_CHIP = "persist.sys.axdb.compact_chip"
         private const val LOW_UDFPS_THRESHOLD = 0.75f
+        private const val BATTERY_STRING_REFRESH_MS = 2_000L
     }
 }
-

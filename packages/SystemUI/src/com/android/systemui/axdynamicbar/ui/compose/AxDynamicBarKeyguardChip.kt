@@ -109,10 +109,12 @@ fun AxDynamicBarKeyguardChip(
     val isOnKeyguard by viewModel.isOnKeyguard.collectAsStateWithLifecycle()
     val isEnabled by viewModel.isEnabled.collectAsStateWithLifecycle()
     val isKeyguardEnabled by viewModel.isKeyguardEnabled.collectAsStateWithLifecycle()
+    val keyguardBatteryChipMode by viewModel.keyguardBatteryChipMode.collectAsStateWithLifecycle()
     val batteryInfo by viewModel.keyguardBatteryInfo.collectAsStateWithLifecycle()
     val isKeyguardExpanded by viewModel.isKeyguardExpanded.collectAsStateWithLifecycle()
-    val isCompact by viewModel.isCompactKeyguardChip.collectAsStateWithLifecycle()
+    val isCompact by viewModel.isKeyguardCompactChip.collectAsStateWithLifecycle()
     val touchSlop = LocalViewConfiguration.current.touchSlop
+    val batteryString by viewModel.batteryString.collectAsStateWithLifecycle()
 
     val chipHeight = if (isCompact) ChipHeightCompact else ChipHeight
 
@@ -240,8 +242,13 @@ fun AxDynamicBarKeyguardChip(
                     )
                 }
             } else {
-                
-                KeyguardBatteryChip(batteryInfo, isCompact)
+                KeyguardBatteryChip(
+                    batteryInfo,
+                    isCompact,
+                    keyguardBatteryChipMode,
+                    batteryString,
+                    modifier,
+                )
             }
         }
     }
@@ -436,7 +443,17 @@ private fun KeyguardChipBody(
 }
 
 @Composable
-private fun KeyguardBatteryChip(info: KeyguardBatteryInfo, compact: Boolean) {
+private fun KeyguardBatteryChip(
+    info: KeyguardBatteryInfo,
+    compact: Boolean,
+    keyguardBatteryChipMode: Int,
+    batteryString: String,
+    modifier: Modifier,
+) {
+    if (keyguardBatteryChipMode <= 0) return
+
+   if (keyguardBatteryChipMode == 1 && !info.isCharging) return
+
     val accent = when {
         info.isCharging -> BatteryChargingColor
         info.isPowerSave -> BatteryPowerSaveColor
@@ -445,30 +462,41 @@ private fun KeyguardBatteryChip(info: KeyguardBatteryInfo, compact: Boolean) {
     val contentColor = chipContentColorOn(accent)
     val height = if (compact) ChipHeightCompact else ChipHeight
     val battIconSize = if (compact) BatteryIconSizeCompact else BatteryIconSize
+    val maxWidth = if (compact) 220.dp else 260.dp
 
     Box(contentAlignment = Alignment.Center) {
         Row(
-            modifier = Modifier
+            modifier = modifier
                 .height(height)
                 .clip(ChipShape)
                 .background(accent)
+                .widthIn(max = maxWidth)
                 .padding(horizontal = if (compact) SpaceSm else SpaceMd),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            
             if (info.isCharging) {
                 AnimatedChargingBoltIcon(contentColor, battIconSize)
             } else {
                 AnimatedBatteryFillIcon(info.level, contentColor, battIconSize)
             }
             Spacer(Modifier.width(SpaceXs))
+            if (!compact && info.isCharging) {
+                Text(
+                    batteryString,
+                    style = PillPrimary,
+                    color = contentColor.copy(alpha = AlphaSecondary),
+                    maxLines = 2,
+                    overflow = TextOverflow.Clip,
+                    modifier = modifier.basicMarquee(),
+                )
+                return
+            }
             Text(
                 "${info.level}%",
                 style = PillPrimary,
                 color = contentColor,
                 maxLines = 1,
             )
-
             val secondaryLabel = when {
                 info.isCharging && info.isWireless -> stringResource(R.string.ax_dynamic_bar_wireless)
                 info.isCharging -> stringResource(R.string.ax_dynamic_bar_charging)
@@ -858,4 +886,3 @@ private fun StopwatchTimeText(event: IslandEvent.Stopwatch, color: Color, modifi
         Text(formatStopwatch(elapsedMs), color = color, style = PillMono, modifier = modifier)
     }
 }
-
