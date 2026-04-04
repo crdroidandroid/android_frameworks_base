@@ -87,6 +87,7 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.semantics.toggleableState
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.Hyphens
 import androidx.compose.ui.text.style.TextAlign
@@ -331,7 +332,9 @@ fun LargeTileLabels(
     Column(verticalArrangement = Arrangement.Center, modifier = modifier.fillMaxHeight()) {
         TileLabel(
             text = label,
-            style = MaterialTheme.typography.titleSmallEmphasized,
+            style = MaterialTheme.typography.bodyMedium.copy(
+                fontWeight = FontWeight.SemiBold,
+            ),
             color = { animatedLabelColor },
             isVisible = isVisible,
         )
@@ -339,7 +342,9 @@ fun LargeTileLabels(
             TileLabel(
                 secondaryLabel ?: "",
                 color = { animatedSecondaryLabelColor },
-                style = MaterialTheme.typography.labelMedium,
+                style = MaterialTheme.typography.labelSmall.copy(
+                    fontWeight = FontWeight.Normal,
+                ),
                 isVisible = isVisible,
                 modifier =
                     Modifier.thenIf(
