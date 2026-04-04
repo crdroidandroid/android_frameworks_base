@@ -108,9 +108,11 @@ fun AxDynamicBarKeyguardChip(
     val isOnKeyguard by viewModel.isOnKeyguard.collectAsStateWithLifecycle()
     val isEnabled by viewModel.isEnabled.collectAsStateWithLifecycle()
     val isKeyguardEnabled by viewModel.isKeyguardEnabled.collectAsStateWithLifecycle()
+    val keyguardBatteryChipMode by viewModel.keyguardBatteryChipMode.collectAsStateWithLifecycle()
     val batteryInfo by viewModel.keyguardBatteryInfo.collectAsStateWithLifecycle()
     val isKeyguardExpanded by viewModel.isKeyguardExpanded.collectAsStateWithLifecycle()
     val touchSlop = LocalViewConfiguration.current.touchSlop
+    val batteryString by viewModel.batteryString.collectAsStateWithLifecycle()
 
     val motionScheme = MaterialTheme.motionScheme
 
@@ -238,8 +240,12 @@ fun AxDynamicBarKeyguardChip(
                     )
                 }
             } else {
-                
-                KeyguardBatteryChip(batteryInfo)
+                KeyguardBatteryChip(
+                    batteryInfo,
+                    keyguardBatteryChipMode,
+                    batteryString,
+                    modifier,
+                )
             }
         }
     }
@@ -500,7 +506,16 @@ private fun KeyguardChipBody(
 }
 
 @Composable
-private fun KeyguardBatteryChip(info: KeyguardBatteryInfo) {
+private fun KeyguardBatteryChip(
+    info: KeyguardBatteryInfo,
+    keyguardBatteryChipMode: Int,
+    batteryString: String,
+    modifier: Modifier,
+) {
+    if (keyguardBatteryChipMode <= 0) return
+
+    if (keyguardBatteryChipMode == 1 && !info.isCharging) return
+
     val accent = when {
         info.isCharging -> BatteryChargingColor
         info.isPowerSave -> BatteryPowerSaveColor
@@ -510,10 +525,11 @@ private fun KeyguardBatteryChip(info: KeyguardBatteryInfo) {
 
     Box(contentAlignment = Alignment.Center) {
         Row(
-            modifier = Modifier
+            modifier = modifier
                 .height(ChipHeight)
                 .clip(ChipShape)
                 .background(accent)
+                .widthIn(max = 260.dp)
                 .padding(horizontal = SpaceMd),
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -524,6 +540,17 @@ private fun KeyguardBatteryChip(info: KeyguardBatteryInfo) {
                 AnimatedBatteryFillIcon(info.level, contentColor, BatteryIconSize)
             }
             Spacer(Modifier.width(SpaceXs))
+            if (info.isCharging) {
+                Text(
+                    batteryString,
+                    style = PillPrimary,
+                    color = contentColor.copy(alpha = AlphaSecondary),
+                    maxLines = 2,
+                    overflow = TextOverflow.Clip,
+                    modifier = modifier.basicMarquee(),
+                )
+                return
+            }
             Text(
                 "${info.level}%",
                 style = PillPrimary,
@@ -919,4 +946,3 @@ private fun StopwatchTimeText(event: IslandEvent.Stopwatch, color: Color, modifi
         Text(formatStopwatch(elapsedMs), color = color, style = PillMono, modifier = modifier)
     }
 }
-
