@@ -3,8 +3,10 @@ package com.android.systemui.navigationbar.gestural
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Canvas
+import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.Path
+import android.util.PathParser
 import android.graphics.RectF
 import android.util.MathUtils.min
 import android.view.View
@@ -13,11 +15,18 @@ import androidx.dynamicanimation.animation.SpringAnimation
 import androidx.dynamicanimation.animation.SpringForce
 import com.android.internal.util.LatencyTracker
 import com.android.systemui.navigationbar.gestural.BackPanelController.DelayedOnAnimationEndListener
+import com.android.systemui.res.R
 
 private const val TAG = "BackPanel"
 private const val DEBUG = false
 
 class BackPanel(context: Context, private val latencyTracker: LatencyTracker) : View(context) {
+
+    companion object {
+        const val ARROW_MODE_STOCK = 0
+        const val ARROW_MODE_FILL = 1
+        const val ARROW_MODE_CUSTOM_PATH = 2
+    }
 
     var arrowsPointLeft = false
         set(value) {
@@ -511,13 +520,21 @@ class BackPanel(context: Context, private val latencyTracker: LatencyTracker) : 
             }
         }
 
-        val arrowPath = calculateArrowPath(dx = dx, dy = dy)
+        val arrowMode = resources.getInteger(R.integer.config_backGestureArrowMode)
         val arrowPaint =
-            arrowPaint.apply { alpha = (255 * min(arrowAlpha.pos, backgroundAlpha.pos)).toInt() }
+            arrowPaint.apply {
+                alpha = (255 * min(arrowAlpha.pos, backgroundAlpha.pos)).toInt()
+                style = if (arrowMode == ARROW_MODE_FILL) Paint.Style.FILL else Paint.Style.STROKE
+            }
         if (isLeftPanel) {
             canvas.scale(-1f, 1f, dx / 2f, dy / 2f)
         }
-        canvas.drawPath(arrowPath, arrowPaint)
+        val path = when (arrowMode) {
+            ARROW_MODE_FILL -> calculateArrowPathEx(arrowPath, arrowPaint, x = dx, y = dy)
+            ARROW_MODE_CUSTOM_PATH -> getArrowPathFromResource(dx = dx, dy = dy)
+            else -> calculateArrowPath(dx = dx, dy = dy)
+        }
+        canvas.drawPath(path, arrowPaint)
         canvas.restore()
 
         if (trackingBackArrowLatency) {
@@ -531,6 +548,76 @@ class BackPanel(context: Context, private val latencyTracker: LatencyTracker) : 
     fun startTrackingShowBackArrowLatency() {
         latencyTracker.onActionStart(LatencyTracker.ACTION_SHOW_BACK_ARROW)
         trackingBackArrowLatency = true
+    }
+
+    private fun getArrowPathFromResource(dx: Float, dy: Float): Path {
+        val pathData = resources.getString(R.string.config_backGestureArrowPathData)
+        val parsed = PathParser.createPathFromPathData(pathData)
+        if (parsed != null) {
+            val matrix = Matrix()
+            matrix.setScale(dx, dy)
+            parsed.transform(matrix)
+            arrowPath.set(parsed)
+        } else {
+            arrowPath.reset()
+            arrowPath.moveTo(dx, -dy)
+            arrowPath.lineTo(0f, 0f)
+            arrowPath.lineTo(dx, dy)
+        }
+        arrowPath.moveTo(dx, -dy)
+        if (triggerLongSwipe) {
+            arrowPath.addPath(arrowPath, arrowPaint.strokeWidth * 2.0f * -1, 0.0f)
+        }
+        return arrowPath
+    }
+
+    fun getIsLeftPanel(): Boolean = isLeftPanel
+
+    fun getArrowBoundingBox(): RectF {
+        return getArrowBoundingBox(
+            width, height, backgroundWidth.pos, scale.pos, scalePivotX.pos,
+            arrowLength.pos, arrowHeight.pos, horizontalTranslation.pos,
+            verticalTranslation.pos, isLeftPanel, arrowsPointLeft, arrowPath
+        )
+    }
+
+    fun getArrowBoundingBox(
+        width: Int, height: Int, backgroundWidth: Float, scale: Float,
+        scalePivotX: Float, dx: Float, dy: Float, hTranslation: Float,
+        vTranslation: Float, isLeftPanel: Boolean, arrowsPointLeft: Boolean,
+        arrowPath: Path
+    ): RectF {
+        val matrix = Matrix()
+        if (!isLeftPanel) {
+            matrix.preScale(-1f, 1f, width / 2f, 0f)
+        }
+        matrix.preTranslate(hTranslation, (height * 0.5f) + vTranslation)
+        matrix.preScale(scale, scale, scalePivotX, 0f)
+        val adjustedBackgroundWidth = if (dx > 0) backgroundWidth - dx else backgroundWidth
+        matrix.preTranslate(adjustedBackgroundWidth / 2, 0f)
+        if (arrowsPointLeft xor isLeftPanel) {
+            matrix.preScale(-1f, 1f, 0f, 0f)
+            matrix.preTranslate(-dx, 0f)
+        }
+        val rectF = RectF()
+        arrowPath.computeBounds(rectF, true)
+        matrix.mapRect(rectF)
+        return rectF
+    }
+
+    fun calculateArrowPathEx(arrowPath: Path, paint: Paint, x: Float, y: Float): Path {
+        arrowPath.reset()
+        val strokeWidth = paint.strokeWidth
+        val adjustedX = if (x < strokeWidth) 0f else x
+        arrowPath.addCircle(0f, 0f, strokeWidth, Path.Direction.CW)
+        for (i in 0 until 3) {
+            val ratio = (i + 1).toFloat() / 3
+            val xPos = adjustedX * ratio
+            val yPos = y * ratio
+            arrowPath.addCircle(xPos, yPos, strokeWidth, Path.Direction.CW)
+            arrowPath.addCircle(xPos, -yPos, strokeWidth, Path.Direction.CW)
+        }
+        return arrowPath
     }
 
     private fun RectF.toPathWithRoundCorners(
