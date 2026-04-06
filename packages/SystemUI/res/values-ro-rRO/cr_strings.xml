@@ -148,4 +148,98 @@
     <string name="screenrecord_delete_label">Șterge</string>
     <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
     <string name="screenrecord_delete_description">Înregistrare ecran ștearsă</string>
+    <!-- AxDynamicBar strings [CHAR LIMIT=NONE] -->
+    <string name="ax_dynamic_bar_timer">Temporizator</string>
+    <string name="ax_dynamic_bar_stopwatch">Cronometru</string>
+    <string name="ax_dynamic_bar_alarm">Alarmă</string>
+    <string name="ax_dynamic_bar_flashlight">Lanternă</string>
+    <string name="ax_dynamic_bar_hotspot">Hotspot</string>
+    <string name="ax_dynamic_bar_hotspot_active">Hotspot activ</string>
+    <string name="ax_dynamic_bar_vpn_active">VPN activ</string>
+    <string name="ax_dynamic_bar_screen_recording">Înregistrare ecran</string>
+    <string name="ax_dynamic_bar_now_playing">Acum se redă</string>
+    <string name="ax_dynamic_bar_media_output">Ieșire media</string>
+    <string name="ax_dynamic_bar_sound_mode">Mod sunet</string>
+    <string name="ax_dynamic_bar_silent">Silențios</string>
+    <string name="ax_dynamic_bar_vibrate">Vibrează</string>
+    <string name="ax_dynamic_bar_ring">Sonerie</string>
+    <string name="ax_dynamic_bar_charging">Încărcare</string>
+    <string name="ax_dynamic_bar_wireless">Wireless</string>
+    <string name="ax_dynamic_bar_saver">Economizor</string>
+    <string name="ax_dynamic_bar_music">Muzică</string>
+    <string name="ax_dynamic_bar_copied">Copiat</string>
+    <string name="ax_dynamic_bar_copied_feedback">Copiat!</string>
+    <string name="ax_dynamic_bar_image_copied">Imagine copiată</string>
+    <string name="ax_dynamic_bar_copy_image">Copiază imaginea</string>
+    <string name="ax_dynamic_bar_clipboard_image_desc">Imagine clipboard</string>
+    <string name="ax_dynamic_bar_image">Imagine</string>
+    <string name="ax_dynamic_bar_url">URL</string>
+    <string name="ax_dynamic_bar_dismiss">Renunţaţi</string>
+    <string name="ax_dynamic_bar_open">Deschideți</string>
+    <string name="ax_dynamic_bar_stop">Oprește</string>
+    <string name="ax_dynamic_bar_stop_recording">Oprește înregistrarea</string>
+    <string name="ax_dynamic_bar_reset">Reset</string>
+    <string name="ax_dynamic_bar_clear_all">Șterge tot</string>
+    <string name="ax_dynamic_bar_show_more">Arată mai mult</string>
+    <string name="ax_dynamic_bar_show_less">Arată mai puțin</string>
+    <string name="ax_dynamic_bar_play">Redare</string>
+    <string name="ax_dynamic_bar_pause">Pauză</string>
+    <string name="ax_dynamic_bar_paused">În pauză</string>
+    <string name="ax_dynamic_bar_saved">Salvat</string>
+    <string name="ax_dynamic_bar_recording">Înregistrare</string>
+    <string name="ax_dynamic_bar_done">Terminat</string>
+    <string name="ax_dynamic_bar_ringing">Sonerie</string>
+    <string name="ax_dynamic_bar_running">Rulează</string>
+    <string name="ax_dynamic_bar_on">PORNITĂ</string>
+    <string name="ax_dynamic_bar_recents">Recente</string>
+    <string name="ax_dynamic_bar_unlocked">Deblocat</string>
+    <string name="ax_dynamic_bar_device_unlocked">Dispozitiv deblocat</string>
+    <string name="ax_dynamic_bar_progress">Progres</string>
+    <string name="ax_dynamic_bar_casting_to">Redare la</string>
+    <string name="ax_dynamic_bar_camera_mic">Camera &amp; Microfon</string>
+    <string name="ax_dynamic_bar_camera">Cameră</string>
+    <string name="ax_dynamic_bar_microphone">Microfon</string>
+    <string name="ax_dynamic_bar_camera_mic_short">Camera &amp; Microfon</string>
+    <string name="ax_dynamic_bar_hotspot_devices"><xliff:g id="count" example="3">%d</xliff:g> dispozitive</string>
+    <string name="ax_dynamic_bar_wireless_charging">Încărcare fără fir</string>
+    <string name="ax_dynamic_bar_until_full">până când este plin</string>
+    <string name="ax_dynamic_bar_battery_saver">Economisire baterie</string>
+    <string name="ax_dynamic_bar_incoming_call">Apel primit</string>
+    <string name="ax_dynamic_bar_connected">Conectat</string>
+    <string name="ax_dynamic_bar_disconnect">Deconectare</string>
+    <string name="ax_dynamic_bar_no_devices">Niciun dispozitiv</string>
+    <string name="ax_dynamic_bar_one_device_connected">1 dispozitiv conectat</string>
+    <string name="ax_dynamic_bar_devices_connected"><xliff:g id="count" example="3">%d</xliff:g> dispozitive conectate</string>
+    <string name="ax_dynamic_bar_vpn_connected">VPN conectat</string>
+    <string name="ax_dynamic_bar_secured">Securizat</string>
+    <string name="ax_dynamic_bar_connecting">Se conectează\u2026</string>
+    <string name="ax_dynamic_bar_one_device">1 dispozitiv</string>
+    <string name="ax_dynamic_bar_bluetooth_device">Dispozitiv Bluetooth</string>
+    <string name="ax_dynamic_bar_apps_count"><xliff:g id="count" example="2">%d</xliff:g> aplicații</string>
+    <string name="ax_dynamic_bar_just_now">Chiar acum</string>
+    <string name="ax_dynamic_bar_mins_ago"><xliff:g id="count" example="5">%d</xliff:g>m în urmă</string>
+    <string name="ax_dynamic_bar_hours_ago"><xliff:g id="count" example="2">%d</xliff:g>h în urmă</string>
+    <string name="ax_dynamic_bar_days_ago"><xliff:g id="count" example="3">%d</xliff:g>d în urmă</string>
+    <string name="ax_dynamic_bar_weeks_ago"><xliff:g id="count" example="1">%d</xliff:g>w în urmă</string>
+    <string name="ax_dynamic_bar_resume">Reluare</string>
+    <string name="ax_dynamic_bar_clipboard">Clipboard</string>
+    <string name="ax_dynamic_bar_previous">Precedent</string>
+    <string name="ax_dynamic_bar_next">Următoarea</string>
+    <string name="ax_dynamic_bar_shuffle">Amestecare</string>
+    <string name="ax_dynamic_bar_output">Ieșire</string>
+    <string name="ax_dynamic_bar_rec_short">Rec</string>
+    <string name="ax_dynamic_bar_cast_short">Proiectați</string>
+    <string name="ax_dynamic_bar_active">Activ</string>
+    <string name="ax_dynamic_bar_biometric">Biometrică</string>
+    <string name="ax_dynamic_bar_trust">Încrederea</string>
+    <string name="ax_dynamic_bar_alignment">Aliniere</string>
+    <string name="ax_dynamic_bar_cam_short">Cam</string>
+    <string name="ax_dynamic_bar_mic_short">Mic</string>
+    <string name="ax_dynamic_bar_recent_apps">Aplicații recente</string>
+    <string name="ax_dynamic_bar_count_running"><xliff:g id="count" example="3">%d</xliff:g> rulează</string>
+    <string name="ax_dynamic_bar_sports_vs">vs</string>
+    <string name="ax_dynamic_bar_sports_live">ÎN DIRECT</string>
+    <string name="ax_dynamic_bar_sports_final">Final</string>
+    <string name="ax_dynamic_bar_sports_halftime">Pauză</string>
+    <string name="ax_dynamic_bar_sports_upcoming">Următoare</string>
 </resources>
