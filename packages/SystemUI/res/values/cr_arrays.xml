@@ -16,4 +16,8 @@
         <item>@string/quick_settings_compass_W</item>  <!-- West -->
         <item>@string/quick_settings_compass_NW</item> <!-- North west -->
     </string-array>
+
+    <!-- Themes -->
+    <array name="config_chargingAnimFrames"/>
+    <array name="config_chargingAnimGlare"/>
 </resources>
