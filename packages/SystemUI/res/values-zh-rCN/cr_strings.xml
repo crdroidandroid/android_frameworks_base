@@ -154,16 +154,16 @@
     <string name="ax_dynamic_bar_hotspot">热点</string>
     <string name="ax_dynamic_bar_hotspot_active">热点已开启</string>
     <string name="ax_dynamic_bar_vpn_active">VPN 已开启</string>
-    <string name="ax_dynamic_bar_screen_recording">屏幕录制</string>
+    <string name="ax_dynamic_bar_screen_recording">屏幕录制中</string>
     <string name="ax_dynamic_bar_now_playing">正在播放</string>
     <string name="ax_dynamic_bar_media_output">媒体输出</string>
     <string name="ax_dynamic_bar_sound_mode">声音模式</string>
     <string name="ax_dynamic_bar_silent">静音</string>
     <string name="ax_dynamic_bar_vibrate">振动</string>
-    <string name="ax_dynamic_bar_ring">铃声</string>
+    <string name="ax_dynamic_bar_ring">响铃</string>
     <string name="ax_dynamic_bar_charging">正在充电</string>
     <string name="ax_dynamic_bar_wireless">无线</string>
-    <string name="ax_dynamic_bar_saver">Saver</string>
+    <string name="ax_dynamic_bar_saver">节省</string>
     <string name="ax_dynamic_bar_music">音乐</string>
     <string name="ax_dynamic_bar_copied">已复制</string>
     <string name="ax_dynamic_bar_copied_feedback">已复制！</string>
@@ -193,7 +193,7 @@
     <string name="ax_dynamic_bar_unlocked">已解锁</string>
     <string name="ax_dynamic_bar_device_unlocked">设备已解锁</string>
     <string name="ax_dynamic_bar_progress">进度</string>
-    <string name="ax_dynamic_bar_casting_to">投放到</string>
+    <string name="ax_dynamic_bar_casting_to">投射到</string>
     <string name="ax_dynamic_bar_camera_mic">相机 &amp; 麦克风</string>
     <string name="ax_dynamic_bar_camera">相机</string>
     <string name="ax_dynamic_bar_microphone">麦克风</string>
@@ -221,12 +221,12 @@
     <string name="ax_dynamic_bar_weeks_ago"><xliff:g id="count" example="1">%d</xliff:g>周前</string>
     <string name="ax_dynamic_bar_resume">继续</string>
     <string name="ax_dynamic_bar_clipboard">剪贴板</string>
-    <string name="ax_dynamic_bar_previous">Previous</string>
+    <string name="ax_dynamic_bar_previous">返回</string>
     <string name="ax_dynamic_bar_next">下一个</string>
-    <string name="ax_dynamic_bar_shuffle">Shuffle</string>
+    <string name="ax_dynamic_bar_shuffle">随机</string>
     <string name="ax_dynamic_bar_output">输出</string>
-    <string name="ax_dynamic_bar_rec_short">Rec</string>
-    <string name="ax_dynamic_bar_cast_short">Cast</string>
+    <string name="ax_dynamic_bar_rec_short">录制</string>
+    <string name="ax_dynamic_bar_cast_short">投射</string>
     <string name="ax_dynamic_bar_active">活动</string>
     <string name="ax_dynamic_bar_biometric">生物识别</string>
     <string name="ax_dynamic_bar_trust">信任</string>
