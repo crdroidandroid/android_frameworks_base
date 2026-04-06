@@ -11,7 +11,7 @@
     <!-- Lock gesture -->
     <string name="gesture_locked_warning">제스처 잠금을 해제하려면 다시 한 번 스와이프하세요.</string>
     <!-- GameSpace -->
-    <string name="gamespace_new_game_added"><xliff:g id="name" example="MyApp">%s</xliff:g> added to GameSpace</string>
+    <string name="gamespace_new_game_added"><xliff:g id="name" example="MyApp">%s</xliff:g> GameSpace에 추가되었습니다</string>
     <!-- App lock -->
     <string name="unlock_application"><xliff:g id="label" example="Telegram">%1$s</xliff:g> 잠금 해제</string>
     <!-- Pocket Lock -->
