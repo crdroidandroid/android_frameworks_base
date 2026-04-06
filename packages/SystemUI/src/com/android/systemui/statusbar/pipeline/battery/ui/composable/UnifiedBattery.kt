@@ -49,6 +49,7 @@ import androidx.compose.ui.layout.MeasureScope
 import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.layout.onLayoutRectChanged
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
@@ -58,8 +59,10 @@ import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastFirstOrNull
+import com.android.systemui.battery.ThemedBatteryBody
 import com.android.systemui.common.ui.compose.load
 import com.android.systemui.compose.modifiers.sysuiResTag
+import com.android.systemui.res.R
 import com.android.systemui.statusbar.phone.domain.interactor.IsAreaDark
 import com.android.systemui.statusbar.pipeline.battery.data.repository.BatteryRepository
 import com.android.systemui.statusbar.pipeline.battery.shared.ui.BatteryColors
@@ -219,7 +222,15 @@ fun BatteryLayout(
         content = {
             val iconStyle = iconStyleProvider()
 
-            if (
+            if (iconStyle == BatteryRepository.ICON_STYLE_THEMED) {
+                ThemedBatteryBody(
+                    levelProvider = levelProvider,
+                    colorsProvider = colorsProvider,
+                    showLevelProvider = showLevelProvider,
+                    attr = attribution,
+                    contentDescription = contentDescription,
+                )
+            } else if (
                 iconStyle == BatteryRepository.ICON_STYLE_CIRCLE ||
                     iconStyle == BatteryRepository.ICON_STYLE_CIRCLE_DOTTED
             ) {
@@ -275,6 +286,8 @@ class BatteryMeasurePolicy : MeasurePolicy {
 
         data object FrameCircle : LayoutId()
 
+        data class FrameThemed(val width: Float, val height: Float) : LayoutId()
+
         data object Cap : LayoutId()
 
         // We don't have to depend on the whole [BatteryGlyph] here, we just need to know the
@@ -289,30 +302,35 @@ class BatteryMeasurePolicy : MeasurePolicy {
         val batteryFrame =
             measurables.fastFirstOrNull {
                 it.layoutId == LayoutId.Frame || it.layoutId == LayoutId.FrameCircle
+                    || it.layoutId is LayoutId.FrameThemed
             } ?: return layout(0, 0) {}
 
         // We will scale the entire battery icon based on the given height
         val scale = constraints.maxHeight / BatteryFrame.innerHeight
 
         val batterySize = BatteryFrame.bodyPathSpec.scaledSize(scale)
+        val frameW: Int
+        val frameH: Int
+        val themed = batteryFrame.layoutId as? LayoutId.FrameThemed
+        if (themed != null) {
+            val themedScale = constraints.maxHeight.toFloat() / themed.height
+            frameW = (themed.width * themedScale).roundToInt()
+            frameH = constraints.maxHeight
+        } else if (batteryFrame.layoutId == LayoutId.FrameCircle) {
+            frameW = batterySize.height.roundToInt()
+            frameH = batterySize.height.roundToInt()
+        } else {
+            frameW = batterySize.width.roundToInt()
+            frameH = batterySize.height.roundToInt()
+        }
         val batteryFramePlaceable =
             batteryFrame.measure(
                 constraints =
                     constraints.copy(
-                        minWidth =
-                            if (batteryFrame.layoutId == LayoutId.FrameCircle) {
-                                batterySize.height.roundToInt()
-                            } else {
-                                batterySize.width.roundToInt()
-                            },
-                        maxWidth =
-                            if (batteryFrame.layoutId == LayoutId.FrameCircle) {
-                                batterySize.height.roundToInt()
-                            } else {
-                                batterySize.width.roundToInt()
-                            },
-                        minHeight = batterySize.height.roundToInt(),
-                        maxHeight = batterySize.height.roundToInt(),
+                        minWidth = frameW,
+                        maxWidth = frameW,
+                        minHeight = frameH,
+                        maxHeight = frameH,
                     )
             )
 
@@ -350,7 +368,8 @@ class BatteryMeasurePolicy : MeasurePolicy {
             // 1dp of padding * scale for the cap
             totalWidth += capPlaceable.width + scale.roundToInt()
         }
-        val totalHeight = batterySize.height.roundToInt()
+        val totalHeight =
+            if (themed != null) frameH else batterySize.height.roundToInt()
         return layout(totalWidth, totalHeight) {
             if (layoutDirection == LayoutDirection.Rtl) {
                 val (offsetX, placeable) =
@@ -515,6 +534,7 @@ fun CircleBatteryBody(
         }
     }
 }
+
 
 /**
  * Draws just the round-rect piece of the battery frame. If [glyphsProvider] is non-empty, then this
