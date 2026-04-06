@@ -22,6 +22,7 @@ import android.os.Handler
 import android.os.Looper
 import android.os.UserHandle
 import com.android.systemui.Flags
+import com.android.systemui.res.R
 import com.android.systemui.dagger.SysUISingleton
 import com.android.systemui.dagger.qualifiers.Application
 import com.android.systemui.dagger.qualifiers.Background
@@ -30,6 +31,8 @@ import com.android.systemui.log.table.logDiffsForTable
 import com.android.systemui.shared.settings.data.repository.SystemSettingsRepository
 import com.android.systemui.statusbar.pipeline.dagger.BatteryTableLog
 import com.android.systemui.statusbar.policy.BatteryController
+import com.android.systemui.statusbar.policy.ConfigurationController
+import com.android.systemui.statusbar.policy.onThemeChanged
 import com.android.systemui.utils.coroutines.flow.conflatedCallbackFlow
 import javax.inject.Inject
 import kotlin.coroutines.resume
@@ -47,6 +50,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.scan
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -94,6 +98,7 @@ interface BatteryRepository {
         const val ICON_STYLE_CIRCLE = 1
         const val ICON_STYLE_TEXT = 2
         const val ICON_STYLE_CIRCLE_DOTTED = 3
+        const val ICON_STYLE_THEMED = 4
         const val SHOW_PERCENT_HIDDEN = 0
         const val SHOW_PERCENT_INSIDE = 1
         const val SHOW_PERCENT_NEXT_TO = 2
@@ -119,9 +124,23 @@ constructor(
     @Background scope: CoroutineScope,
     @Background bgDispatcher: CoroutineDispatcher,
     private val controller: BatteryController,
+    private val configurationController: ConfigurationController,
     settingsRepository: SystemSettingsRepository,
     @BatteryTableLog tableLog: TableLogBuffer,
 ) : BatteryRepository {
+    private fun readBatteryIconStyle(context: Context): Int {
+        val overlayActive = context.resources.getInteger(
+            R.integer.config_batteryOverrideStyle
+        ) >= 0
+        if (overlayActive) return BatteryRepository.ICON_STYLE_THEMED
+        return LineageSettings.System.getIntForUser(
+            context.contentResolver,
+            LineageSettings.System.STATUS_BAR_BATTERY_STYLE,
+            BatteryRepository.ICON_STYLE_DEFAULT,
+            UserHandle.USER_CURRENT,
+        )
+    }
+
     private fun <T> flaggedCallbackFlow(block: suspend ProducerScope<T>.() -> Unit): Flow<T> {
         if (Flags.statusBarBatteryNoConflation()) {
             return callbackFlow(block)
@@ -275,42 +294,36 @@ constructor(
             )
             .stateIn(scope, SharingStarted.WhileSubscribed(), batteryState.value.isStateUnknown)
 
-    override val batteryIconStyle =
+    private val batteryStyleSettingsFlow: Flow<Int> =
         callbackFlow {
-                val resolver = context.contentResolver
-                val uri =
-                    LineageSettings.System.getUriFor(
-                        LineageSettings.System.STATUS_BAR_BATTERY_STYLE
-                    )
-
-                fun readMode(): Int {
-                    return LineageSettings.System.getIntForUser(
-                        resolver,
-                        LineageSettings.System.STATUS_BAR_BATTERY_STYLE,
-                        BatteryRepository.ICON_STYLE_DEFAULT,
-                        UserHandle.USER_CURRENT,
-                    )
-                }
-
-                val observer =
-                    object : ContentObserver(Handler(Looper.getMainLooper())) {
-                        override fun onChange(selfChange: Boolean) {
-                            trySend(readMode())
-                        }
-                    }
-
-                resolver.registerContentObserver(
-                    uri,
-                    /* notifyForDescendants = */ false,
-                    observer,
-                    UserHandle.USER_ALL,
+            val resolver = context.contentResolver
+            val uri =
+                LineageSettings.System.getUriFor(
+                    LineageSettings.System.STATUS_BAR_BATTERY_STYLE
                 )
 
-                // Emit current value immediately
-                trySend(readMode())
+            val observer =
+                object : ContentObserver(Handler(Looper.getMainLooper())) {
+                    override fun onChange(selfChange: Boolean) {
+                        trySend(readBatteryIconStyle(context))
+                    }
+                }
 
-                awaitClose { resolver.unregisterContentObserver(observer) }
-            }
+            resolver.registerContentObserver(
+                uri,
+                /* notifyForDescendants = */ false,
+                observer,
+                UserHandle.USER_ALL,
+            )
+
+            // Emit current value immediately
+            trySend(readBatteryIconStyle(context))
+
+            awaitClose { resolver.unregisterContentObserver(observer) }
+        }
+
+    override val batteryIconStyle =
+        merge(batteryStyleSettingsFlow, configurationController.onThemeChanged.map { readBatteryIconStyle(context) })
             .distinctUntilChanged()
             .flowOn(bgDispatcher)
             .stateIn(
