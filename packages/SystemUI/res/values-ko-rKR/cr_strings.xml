@@ -16,9 +16,9 @@
     <!-- Name of the VoWiFi status bar icon. -->
     <string name="status_bar_vowifi">Wi-Fi 통화(VoWiFi)</string>
     <!-- Data disabled icon -->
-    <string name="data_disabled_icon_title">Data disabled icon</string>
+    <string name="data_disabled_icon_title">데이터 비활성화 아이콘</string>
     <!-- 4G icon instead LTE -->
-    <string name="fourg_icon_title">4G icon</string>
+    <string name="fourg_icon_title">4G 아이콘</string>
     <!-- Status bar network traffic monitor strings -->
     <string name="kilobitspersecond_short">kb/초</string>
     <string name="megabitspersecond_short">Mb/초</string>
@@ -29,7 +29,7 @@
     <!-- Weather -->
     <string name="weather_condition_clouds">흐림</string>
     <string name="weather_condition_rain">비</string>
-    <string name="weather_condition_clear">Clear Sky</string>
+    <string name="weather_condition_clear">맑은 하늘</string>
     <string name="weather_condition_storm">강풍</string>
     <string name="weather_condition_snow">눈</string>
     <string name="weather_condition_wind">바람</string>
@@ -47,13 +47,13 @@
     <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • Turbo 충전 중 (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> 뒤 충전 완료)</string>
     <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • Turbo 충전 중</string>
     <!-- Smartspace -->
-    <string name="accessibility_next_alarm">Next alarm at %s</string>
-    <string name="accessibility_smartspace_page">Page %1$d of %2$d</string>
-    <string name="active_mode_content_description">%1$s is on</string>
-    <string name="music_controls_no_title">No title</string>
-    <string name="smartspace_content_desc">At a glance</string>
-    <string name="smartspace_flight_qr_code">QR code</string>
-    <string name="smartspace_role_desc">View</string>
+    <string name="accessibility_next_alarm">%s에 다음 알람</string>
+    <string name="accessibility_smartspace_page">%2$d페이지 중 %1$d페이지</string>
+    <string name="active_mode_content_description">%1$s가 활성화되었습니다</string>
+    <string name="music_controls_no_title">제목 없음</string>
+    <string name="smartspace_content_desc">한눈에 보기</string>
+    <string name="smartspace_flight_qr_code">QR코드</string>
+    <string name="smartspace_role_desc">보기</string>
     <!-- Button to restart SystemUI, within the Restart Options dialog -->
     <string name="global_action_restart_systemui">시스템 UI</string>
     <!-- On The Go -->
@@ -71,7 +71,7 @@
     <string name="global_action_onthego">On-The-Go</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">를 오늘 사용함</string>
-    <string name="usage_data_weekly">used this week</string>
+    <string name="usage_data_weekly">이번 주에 사용됨</string>
     <string name="usage_data_default_suffix">데이터</string>
     <string name="usage_wifi_default_suffix">와이파이</string>
     <!-- Kill button in notification guts -->
@@ -83,7 +83,7 @@
     <string name="quick_settings_sound_label">소리 모드</string>
     <string name="quick_settings_sound_ring">소리</string>
     <string name="quick_settings_sound_vibrate">진동</string>
-    <string name="quick_settings_sound_silent">Silent</string>
+    <string name="quick_settings_sound_silent">무음</string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">CPU 정보</string>
     <!-- FPS Info tile -->
@@ -124,18 +124,18 @@
     <!-- AI Assistant affordance [CHAR LIMIT=32] -->
     <string name="accessibility_assistant_button">AI 어시스턴트</string>
     <!-- Preferred network tile -->
-    <string name="qs_preferred_network_label">Preferred network</string>
+    <string name="qs_preferred_network_label">선호 네트워크</string>
     <string name="qs_preferred_network_lte">4G / LTE</string>
     <string name="qs_preferred_network_nr">5G / NR</string>
-    <string name="qs_preferred_network_unsupported">Unsupported</string>
+    <string name="qs_preferred_network_unsupported">지원되지 않음</string>
     <!-- VPN tethering QS tile -->
-    <string name="vpn_tethering_label">VPN tethering</string>
+    <string name="vpn_tethering_label">VPN 테더링</string>
     <!-- Text while recognizing face -->
     <string name="face_unlock_recognizing">얼굴 인식 중\u2026</string>
     <!-- Flashlight Strength -->
-    <string name="flashlight_strength_title">Flashlight Strength</string>
-    <string name="flashlight_strength_turn_off">Turn off</string>
-    <string name="flashlight_strength_turn_on">Turn on</string>
+    <string name="flashlight_strength_title">손전등 밝기</string>
+    <string name="flashlight_strength_turn_off">끄기</string>
+    <string name="flashlight_strength_turn_on">켜기</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="other">%d개 기기 연결됨</item>
@@ -146,4 +146,98 @@
     <string name="screenrecord_delete_label">삭제</string>
     <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
     <string name="screenrecord_delete_description">화면 녹화 영상이 삭제되었습니다.</string>
+    <!-- AxDynamicBar strings [CHAR LIMIT=NONE] -->
+    <string name="ax_dynamic_bar_timer">Timer</string>
+    <string name="ax_dynamic_bar_stopwatch">Stopwatch</string>
+    <string name="ax_dynamic_bar_alarm">Alarm</string>
+    <string name="ax_dynamic_bar_flashlight">Flashlight</string>
+    <string name="ax_dynamic_bar_hotspot">Hotspot</string>
+    <string name="ax_dynamic_bar_hotspot_active">Hotspot Active</string>
+    <string name="ax_dynamic_bar_vpn_active">VPN Active</string>
+    <string name="ax_dynamic_bar_screen_recording">Screen Recording</string>
+    <string name="ax_dynamic_bar_now_playing">Now Playing</string>
+    <string name="ax_dynamic_bar_media_output">Media output</string>
+    <string name="ax_dynamic_bar_sound_mode">Sound Mode</string>
+    <string name="ax_dynamic_bar_silent">무음</string>
+    <string name="ax_dynamic_bar_vibrate">진동</string>
+    <string name="ax_dynamic_bar_ring">소리</string>
+    <string name="ax_dynamic_bar_charging">Charging</string>
+    <string name="ax_dynamic_bar_wireless">Wireless</string>
+    <string name="ax_dynamic_bar_saver">Saver</string>
+    <string name="ax_dynamic_bar_music">Music</string>
+    <string name="ax_dynamic_bar_copied">Copied</string>
+    <string name="ax_dynamic_bar_copied_feedback">Copied!</string>
+    <string name="ax_dynamic_bar_image_copied">Image copied</string>
+    <string name="ax_dynamic_bar_copy_image">Copy Image</string>
+    <string name="ax_dynamic_bar_clipboard_image_desc">Clipboard image</string>
+    <string name="ax_dynamic_bar_image">Image</string>
+    <string name="ax_dynamic_bar_url">URL</string>
+    <string name="ax_dynamic_bar_dismiss">Dismiss</string>
+    <string name="ax_dynamic_bar_open">Open</string>
+    <string name="ax_dynamic_bar_stop">중지</string>
+    <string name="ax_dynamic_bar_stop_recording">Stop Recording</string>
+    <string name="ax_dynamic_bar_reset">Reset</string>
+    <string name="ax_dynamic_bar_clear_all">Clear All</string>
+    <string name="ax_dynamic_bar_show_more">Show more</string>
+    <string name="ax_dynamic_bar_show_less">Show less</string>
+    <string name="ax_dynamic_bar_play">Play</string>
+    <string name="ax_dynamic_bar_pause">Pause</string>
+    <string name="ax_dynamic_bar_paused">Paused</string>
+    <string name="ax_dynamic_bar_saved">Saved</string>
+    <string name="ax_dynamic_bar_recording">Recording</string>
+    <string name="ax_dynamic_bar_done">Done</string>
+    <string name="ax_dynamic_bar_ringing">Ringing</string>
+    <string name="ax_dynamic_bar_running">Running</string>
+    <string name="ax_dynamic_bar_on">ON</string>
+    <string name="ax_dynamic_bar_recents">Recents</string>
+    <string name="ax_dynamic_bar_unlocked">Unlocked</string>
+    <string name="ax_dynamic_bar_device_unlocked">Device Unlocked</string>
+    <string name="ax_dynamic_bar_progress">Progress</string>
+    <string name="ax_dynamic_bar_casting_to">Casting to</string>
+    <string name="ax_dynamic_bar_camera_mic">Camera &amp; Microphone</string>
+    <string name="ax_dynamic_bar_camera">Camera</string>
+    <string name="ax_dynamic_bar_microphone">Microphone</string>
+    <string name="ax_dynamic_bar_camera_mic_short">Camera &amp; Mic</string>
+    <string name="ax_dynamic_bar_hotspot_devices"><xliff:g id="count" example="3">%d</xliff:g> devices</string>
+    <string name="ax_dynamic_bar_wireless_charging">Wireless Charging</string>
+    <string name="ax_dynamic_bar_until_full">until full</string>
+    <string name="ax_dynamic_bar_battery_saver">Battery Saver</string>
+    <string name="ax_dynamic_bar_incoming_call">Incoming Call</string>
+    <string name="ax_dynamic_bar_connected">Connected</string>
+    <string name="ax_dynamic_bar_disconnect">Disconnect</string>
+    <string name="ax_dynamic_bar_no_devices">No devices</string>
+    <string name="ax_dynamic_bar_one_device_connected">1 device connected</string>
+    <string name="ax_dynamic_bar_devices_connected"><xliff:g id="count" example="3">%d</xliff:g> devices connected</string>
+    <string name="ax_dynamic_bar_vpn_connected">VPN Connected</string>
+    <string name="ax_dynamic_bar_secured">Secured</string>
+    <string name="ax_dynamic_bar_connecting">Connecting\u2026</string>
+    <string name="ax_dynamic_bar_one_device">1 device</string>
+    <string name="ax_dynamic_bar_bluetooth_device">Bluetooth device</string>
+    <string name="ax_dynamic_bar_apps_count"><xliff:g id="count" example="2">%d</xliff:g> apps</string>
+    <string name="ax_dynamic_bar_just_now">Just now</string>
+    <string name="ax_dynamic_bar_mins_ago"><xliff:g id="count" example="5">%d</xliff:g>m ago</string>
+    <string name="ax_dynamic_bar_hours_ago"><xliff:g id="count" example="2">%d</xliff:g>h ago</string>
+    <string name="ax_dynamic_bar_days_ago"><xliff:g id="count" example="3">%d</xliff:g>d ago</string>
+    <string name="ax_dynamic_bar_weeks_ago"><xliff:g id="count" example="1">%d</xliff:g>w ago</string>
+    <string name="ax_dynamic_bar_resume">Resume</string>
+    <string name="ax_dynamic_bar_clipboard">Clipboard</string>
+    <string name="ax_dynamic_bar_previous">Previous</string>
+    <string name="ax_dynamic_bar_next">Next</string>
+    <string name="ax_dynamic_bar_shuffle">Shuffle</string>
+    <string name="ax_dynamic_bar_output">Output</string>
+    <string name="ax_dynamic_bar_rec_short">Rec</string>
+    <string name="ax_dynamic_bar_cast_short">Cast</string>
+    <string name="ax_dynamic_bar_active">Active</string>
+    <string name="ax_dynamic_bar_biometric">Biometric</string>
+    <string name="ax_dynamic_bar_trust">Trust</string>
+    <string name="ax_dynamic_bar_alignment">Alignment</string>
+    <string name="ax_dynamic_bar_cam_short">Cam</string>
+    <string name="ax_dynamic_bar_mic_short">Mic</string>
+    <string name="ax_dynamic_bar_recent_apps">Recent Apps</string>
+    <string name="ax_dynamic_bar_count_running"><xliff:g id="count" example="3">%d</xliff:g> running</string>
+    <string name="ax_dynamic_bar_sports_vs">vs</string>
+    <string name="ax_dynamic_bar_sports_live">LIVE</string>
+    <string name="ax_dynamic_bar_sports_final">Final</string>
+    <string name="ax_dynamic_bar_sports_halftime">Halftime</string>
+    <string name="ax_dynamic_bar_sports_upcoming">Upcoming</string>
 </resources>
