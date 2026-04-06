@@ -146,4 +146,98 @@
     <string name="screenrecord_delete_label">Xóa</string>
     <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
     <string name="screenrecord_delete_description">Đã xóa ghi màn hình</string>
+    <!-- AxDynamicBar strings [CHAR LIMIT=NONE] -->
+    <string name="ax_dynamic_bar_timer">Hẹn giờ</string>
+    <string name="ax_dynamic_bar_stopwatch">Bấm giờ</string>
+    <string name="ax_dynamic_bar_alarm">Báo thức</string>
+    <string name="ax_dynamic_bar_flashlight">Đèn pin</string>
+    <string name="ax_dynamic_bar_hotspot">Điểm phát sóng</string>
+    <string name="ax_dynamic_bar_hotspot_active">Điểm phát sóng đang hoạt động</string>
+    <string name="ax_dynamic_bar_vpn_active">VPN đang hoạt động</string>
+    <string name="ax_dynamic_bar_screen_recording">Đang ghi màn hình</string>
+    <string name="ax_dynamic_bar_now_playing">Đang phát</string>
+    <string name="ax_dynamic_bar_media_output">Đầu ra đa phương tiện</string>
+    <string name="ax_dynamic_bar_sound_mode">Chế độ âm thanh</string>
+    <string name="ax_dynamic_bar_silent">Im lặng</string>
+    <string name="ax_dynamic_bar_vibrate">Rung</string>
+    <string name="ax_dynamic_bar_ring">Chuông</string>
+    <string name="ax_dynamic_bar_charging">Đang sạc</string>
+    <string name="ax_dynamic_bar_wireless">Không dây</string>
+    <string name="ax_dynamic_bar_saver">Tiết kiệm</string>
+    <string name="ax_dynamic_bar_music">Nhạc</string>
+    <string name="ax_dynamic_bar_copied">Đã sao chép</string>
+    <string name="ax_dynamic_bar_copied_feedback">Đã sao chép!</string>
+    <string name="ax_dynamic_bar_image_copied">Đã sao chép hình ảnh</string>
+    <string name="ax_dynamic_bar_copy_image">Sao chép hình ảnh</string>
+    <string name="ax_dynamic_bar_clipboard_image_desc">Hình ảnh trong bảng tạm</string>
+    <string name="ax_dynamic_bar_image">Hình ảnh</string>
+    <string name="ax_dynamic_bar_url">URL</string>
+    <string name="ax_dynamic_bar_dismiss">Bỏ qua</string>
+    <string name="ax_dynamic_bar_open">Mở</string>
+    <string name="ax_dynamic_bar_stop">Dừng lại</string>
+    <string name="ax_dynamic_bar_stop_recording">Dừng ghi</string>
+    <string name="ax_dynamic_bar_reset">Đặt lại</string>
+    <string name="ax_dynamic_bar_clear_all">Xoá tất cả</string>
+    <string name="ax_dynamic_bar_show_more">Hiện thêm</string>
+    <string name="ax_dynamic_bar_show_less">Hiện ít hơn</string>
+    <string name="ax_dynamic_bar_play">Phát</string>
+    <string name="ax_dynamic_bar_pause">Tạm dừng</string>
+    <string name="ax_dynamic_bar_paused">Đã tạm dừng</string>
+    <string name="ax_dynamic_bar_saved">Đã lưu</string>
+    <string name="ax_dynamic_bar_recording">Đang ghi</string>
+    <string name="ax_dynamic_bar_done">Xong</string>
+    <string name="ax_dynamic_bar_ringing">Đang đổ chuông</string>
+    <string name="ax_dynamic_bar_running">Đang chạy</string>
+    <string name="ax_dynamic_bar_on">BẬT</string>
+    <string name="ax_dynamic_bar_recents">Ứng dụng gần đây</string>
+    <string name="ax_dynamic_bar_unlocked">Đã mở khoá</string>
+    <string name="ax_dynamic_bar_device_unlocked">Thiết bị đã mở khoá</string>
+    <string name="ax_dynamic_bar_progress">Tiến trình</string>
+    <string name="ax_dynamic_bar_casting_to">Đang chiếu lên</string>
+    <string name="ax_dynamic_bar_camera_mic">Camera &amp; Microphone</string>
+    <string name="ax_dynamic_bar_camera">Camera</string>
+    <string name="ax_dynamic_bar_microphone">Microphone</string>
+    <string name="ax_dynamic_bar_camera_mic_short">Camera &amp; Mic</string>
+    <string name="ax_dynamic_bar_hotspot_devices"><xliff:g id="count" example="3">%d</xliff:g> thiết bị</string>
+    <string name="ax_dynamic_bar_wireless_charging">Sạc không dây</string>
+    <string name="ax_dynamic_bar_until_full">cho đến khi đầy</string>
+    <string name="ax_dynamic_bar_battery_saver">Tiết kiệm pin</string>
+    <string name="ax_dynamic_bar_incoming_call">Cuộc gọi đến</string>
+    <string name="ax_dynamic_bar_connected">Đã kết nối</string>
+    <string name="ax_dynamic_bar_disconnect">Ngắt kết nối</string>
+    <string name="ax_dynamic_bar_no_devices">Không có thiết bị</string>
+    <string name="ax_dynamic_bar_one_device_connected">1 thiết bị đã kết nối</string>
+    <string name="ax_dynamic_bar_devices_connected"><xliff:g id="count" example="3">%d</xliff:g> thiết bị đã kết nối</string>
+    <string name="ax_dynamic_bar_vpn_connected">VPN đã kết nối</string>
+    <string name="ax_dynamic_bar_secured">Đã bảo mật</string>
+    <string name="ax_dynamic_bar_connecting">Đang kết nối\u2026</string>
+    <string name="ax_dynamic_bar_one_device">1 thiết bị</string>
+    <string name="ax_dynamic_bar_bluetooth_device">Thiết bị Bluetooth</string>
+    <string name="ax_dynamic_bar_apps_count"><xliff:g id="count" example="2">%d</xliff:g> ứng dụng</string>
+    <string name="ax_dynamic_bar_just_now">Vừa xong</string>
+    <string name="ax_dynamic_bar_mins_ago"><xliff:g id="count" example="5">%d</xliff:g> phút trước</string>
+    <string name="ax_dynamic_bar_hours_ago"><xliff:g id="count" example="2">%d</xliff:g> giờ trước</string>
+    <string name="ax_dynamic_bar_days_ago"><xliff:g id="count" example="3">%d</xliff:g> ngày trước</string>
+    <string name="ax_dynamic_bar_weeks_ago"><xliff:g id="count" example="1">%d</xliff:g> tuần trước</string>
+    <string name="ax_dynamic_bar_resume">Tiếp tục</string>
+    <string name="ax_dynamic_bar_clipboard">Bảng tạm</string>
+    <string name="ax_dynamic_bar_previous">Trước</string>
+    <string name="ax_dynamic_bar_next">Tiếp theo</string>
+    <string name="ax_dynamic_bar_shuffle">Phát ngẫu nhiên</string>
+    <string name="ax_dynamic_bar_output">Đầu ra</string>
+    <string name="ax_dynamic_bar_rec_short">Ghi</string>
+    <string name="ax_dynamic_bar_cast_short">Chiếu</string>
+    <string name="ax_dynamic_bar_active">Đang hoạt động</string>
+    <string name="ax_dynamic_bar_biometric">Sinh trắc học</string>
+    <string name="ax_dynamic_bar_trust">Tin cậy</string>
+    <string name="ax_dynamic_bar_alignment">Căn chỉnh</string>
+    <string name="ax_dynamic_bar_cam_short">Cam</string>
+    <string name="ax_dynamic_bar_mic_short">Mic</string>
+    <string name="ax_dynamic_bar_recent_apps">Ứng dụng gần đây</string>
+    <string name="ax_dynamic_bar_count_running"><xliff:g id="count" example="3">%d</xliff:g> đang chạy</string>
+    <string name="ax_dynamic_bar_sports_vs">vs</string>
+    <string name="ax_dynamic_bar_sports_live">TRỰC TIẾP</string>
+    <string name="ax_dynamic_bar_sports_final">Chung kết</string>
+    <string name="ax_dynamic_bar_sports_halftime">Hiệp nghỉ</string>
+    <string name="ax_dynamic_bar_sports_upcoming">Sắp diễn ra</string>
 </resources>
