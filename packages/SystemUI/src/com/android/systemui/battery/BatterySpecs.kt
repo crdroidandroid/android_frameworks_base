@@ -14,15 +14,15 @@
 
 package com.android.systemui.battery
 
-import com.android.settingslib.graph.ThemedBatteryDrawable
+import com.android.systemui.battery.ThemedBatteryDrawable
 
 /** An object storing specs related to the battery icon in the status bar. */
 object BatterySpecs {
 
     /** Width of the main battery icon, not including the shield. */
-    const val BATTERY_WIDTH = ThemedBatteryDrawable.WIDTH
+    const val BATTERY_WIDTH = ThemedBatteryDrawable.DEFAULT_WIDTH
     /** Height of the main battery icon, not including the shield. */
-    const val BATTERY_HEIGHT = ThemedBatteryDrawable.HEIGHT
+    const val BATTERY_HEIGHT = ThemedBatteryDrawable.DEFAULT_HEIGHT
 
     private const val SHIELD_WIDTH = 10f
     private const val SHIELD_HEIGHT = 13f
