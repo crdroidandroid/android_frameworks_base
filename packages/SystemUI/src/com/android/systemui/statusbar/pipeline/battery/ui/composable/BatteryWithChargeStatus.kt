@@ -64,9 +64,14 @@ fun BatteryWithChargeStatus(
     val viewModel =
         rememberViewModel(traceName = "BatteryWithPercent") { viewModelFactory.create() }
 
+    val ctx = LocalContext.current
+    val themedIconHeightPx =
+        ctx.resources.getDimensionPixelSize(
+            com.android.systemui.res.R.dimen.config_batterymeterIconHeight)
     val batteryHeight =
         with(LocalDensity.current) {
-            BatteryViewModel.getStatusBarBatteryHeight(LocalContext.current).toDp()
+            if (themedIconHeightPx > 0) themedIconHeightPx.toDp()
+            else BatteryViewModel.getStatusBarBatteryHeight(ctx).toDp()
         }
 
     val textStyle =

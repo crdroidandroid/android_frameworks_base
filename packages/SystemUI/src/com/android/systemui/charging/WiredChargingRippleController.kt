@@ -16,13 +16,20 @@
 
 package com.android.systemui.charging
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.res.Configuration
+import android.graphics.Color
 import android.graphics.PixelFormat
+import android.graphics.Typeface
 import android.os.SystemProperties
+import android.view.Gravity
 import android.view.Surface
 import android.view.View
 import android.view.WindowManager
+import android.widget.FrameLayout
+import android.widget.TextView
 import com.android.internal.annotations.VisibleForTesting
 import com.android.internal.logging.UiEvent
 import com.android.internal.logging.UiEventLogger
@@ -61,6 +68,7 @@ class WiredChargingRippleController @Inject constructor(
     private val uiEventLogger: UiEventLogger
 ) {
     private var pluggedIn: Boolean = false
+    private var batteryLevel: Int = 0
     private val rippleEnabled: Boolean = featureFlags.isEnabled(Flags.CHARGING_RIPPLE) &&
             !SystemProperties.getBoolean("persist.debug.suppress-charging-ripple", false)
     private var normalizedPortPosX: Float = context.resources.getFloat(
@@ -84,6 +92,10 @@ class WiredChargingRippleController @Inject constructor(
 
     @VisibleForTesting
     var rippleView: RippleView = RippleView(context, attrs = null).also { it.setupShader() }
+    @VisibleForTesting
+    var axRippleView: AXRippleView = AXRippleView(context, attrs = null)
+    @VisibleForTesting
+    var axChargingCircleView: AXChargingCircleView = AXChargingCircleView(context, attrs = null)
 
     init {
         pluggedIn = batteryController.isPluggedIn
@@ -105,6 +117,7 @@ class WiredChargingRippleController @Inject constructor(
                     return
                 }
 
+                batteryLevel = level
                 if (!pluggedIn && nowPluggedIn) {
                     startRippleWithDebounce()
                 }
@@ -148,6 +161,14 @@ class WiredChargingRippleController @Inject constructor(
     }
 
     fun startRipple() {
+        if (context.resources.getBoolean(R.bool.config_useCustomChargingAnim)) {
+            startCustomRipple()
+        } else {
+            startAospRipple()
+        }
+    }
+
+    private fun startAospRipple() {
         if (rippleView.rippleInProgress() || rippleView.parent != null) {
             // Skip if ripple is still playing, or not playing but already added the parent
             // (which might happen just before the animation starts or right after
@@ -155,19 +176,112 @@ class WiredChargingRippleController @Inject constructor(
             return
         }
         windowLayoutParams.packageName = context.opPackageName
-        rippleView.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
+
+        val container = FrameLayout(context)
+        container.addView(rippleView, FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT,
+            FrameLayout.LayoutParams.MATCH_PARENT
+        ))
+
+        val percentText = TextView(context).apply {
+            text = "$batteryLevel%"
+            textSize = 48f
+            typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+            setTextColor(Color.WHITE)
+            gravity = Gravity.CENTER
+            alpha = 0f
+        }
+        container.addView(percentText, FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT,
+            FrameLayout.LayoutParams.MATCH_PARENT
+        ).apply { gravity = Gravity.CENTER })
+
+        container.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
             override fun onViewDetachedFromWindow(view: View) {}
 
             override fun onViewAttachedToWindow(view: View) {
                 layoutRipple()
                 rippleView.startRipple(Runnable {
-                    windowManager.removeView(rippleView)
+                    container.removeView(rippleView)
+                    windowManager.removeView(container)
                 })
-                rippleView.removeOnAttachStateChangeListener(this)
+                val fadeIn = ObjectAnimator.ofFloat(percentText, "alpha", 0f, 1f).apply {
+                    duration = 300
+                    startDelay = 100
+                }
+                val fadeOut = ObjectAnimator.ofFloat(percentText, "alpha", 1f, 0f).apply {
+                    duration = 400
+                    startDelay = 900
+                }
+                AnimatorSet().apply {
+                    playTogether(fadeIn, fadeOut)
+                    start()
+                }
+                container.removeOnAttachStateChangeListener(this)
             }
         })
-        windowManager.addView(rippleView, windowLayoutParams)
+        windowManager.addView(container, windowLayoutParams)
         uiEventLogger.log(WiredChargingRippleEvent.CHARGING_RIPPLE_PLAYED)
+    }
+
+    private fun startCustomRipple() {
+        val mode = context.resources.getInteger(R.integer.config_chargingAnimMode)
+        if (mode == CHARGING_ANIM_MODE_CIRCLE) {
+            startCircleAnimation()
+        } else {
+            startRippleAnimation()
+        }
+    }
+
+    private fun startRippleAnimation() {
+        if (axRippleView.rippleInProgress() || axRippleView.parent != null) {
+            // Skip if ripple is still playing, or not playing but already added the parent
+            // (which might happen just before the animation starts or right after
+            // the animation ends.)
+            return
+        }
+        axRippleView.preloadRes()
+        windowLayoutParams.packageName = context.opPackageName
+        axRippleView.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
+            override fun onViewDetachedFromWindow(view: View) {}
+
+            override fun onViewAttachedToWindow(view: View) {
+                axRippleView.startRipple(Runnable {
+                    windowManager.removeView(axRippleView)
+                })
+                axRippleView.removeOnAttachStateChangeListener(this)
+            }
+        })
+        windowManager.addView(axRippleView, windowLayoutParams)
+        uiEventLogger.log(WiredChargingRippleEvent.CHARGING_RIPPLE_PLAYED)
+    }
+
+    private fun startCircleAnimation() {
+        if (axChargingCircleView.animationInProgress() || axChargingCircleView.parent != null) {
+            // Skip if animation is still playing, or not playing but already added the parent
+            // (which might happen just before the animation starts or right after
+            // the animation ends.)
+            return
+        }
+        axChargingCircleView.setBatteryLevel(batteryLevel)
+        axChargingCircleView.preloadRes()
+        windowLayoutParams.packageName = context.opPackageName
+        axChargingCircleView.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
+            override fun onViewDetachedFromWindow(view: View) {}
+
+            override fun onViewAttachedToWindow(view: View) {
+                axChargingCircleView.startAnimation(Runnable {
+                    windowManager.removeView(axChargingCircleView)
+                })
+                axChargingCircleView.removeOnAttachStateChangeListener(this)
+            }
+        })
+        windowManager.addView(axChargingCircleView, windowLayoutParams)
+        uiEventLogger.log(WiredChargingRippleEvent.CHARGING_RIPPLE_PLAYED)
+    }
+
+    companion object {
+        private const val CHARGING_ANIM_MODE_CIRCLE = 1
     }
 
     private fun layoutRipple() {

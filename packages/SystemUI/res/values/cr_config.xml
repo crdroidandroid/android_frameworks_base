@@ -35,4 +35,47 @@
 
     <!-- Whether to disable Smart Pixels on UDFPS -->
     <bool name="config_disableSmartPixelsOnUDFPS">false</bool>
+
+    <!-- Themes -->
+    <integer name="config_backGestureArrowMode">0</integer>
+    <string name="config_backGestureArrowPathData" translatable="false">M 1,-1 L 0,0 L 1,1</string>
+    <bool name="config_useCustomChargingAnim">false</bool>
+    <integer name="config_chargingAnimMode">0</integer>
+    <integer name="config_chargingAnimDimAlpha">120</integer>
+    <integer name="config_chargingAnimLowBatteryThreshold">15</integer>
+    <color name="config_chargingAnimPercentColor">#FFFFFFFF</color>
+    <color name="config_chargingAnimLowBatteryColor">#FFFF453A</color>
+    <color name="config_chargingAnimLightColor">#FFFFFFFF</color>
+    <array name="config_chargingAnimTurboLineFrames" />
+    <integer name="config_chargingAnimBoltWidth">0</integer>
+    <integer name="config_chargingAnimBoltHeight">0</integer>
+    <integer name="config_chargingAnimBoltRadius">0</integer>
+    <string name="config_batterymeterPerimeterPath" translatable="false">M3.5,2 v0 H1.33 C0.6,2 0,2.6 0,3.33 V13v5.67 C0,19.4 0.6,20 1.33,20 h9.33 C11.4,20 12,19.4 12,18.67 V13V3.33 C12,2.6 11.4,2 10.67,2 H8.5 V0 H3.5 z M2,18v-7V4h8v9v5H2L2,18z</string>
+    <string name="config_batterymeterErrorPerimeterPath" translatable="false">@string/config_batterymeterPerimeterPath</string>
+    <string name="config_batterymeterFillMask" translatable="false">M2,18 v-14 h8 v14 z</string>
+    <string name="config_batterymeterBoltPath" translatable="false">M5,17.5 V12 H3 L7,4.5 V10 h2 L5,17.5 z</string>
+    <string name="config_batterymeterPowersavePath" translatable="false">M9,10l-2,0l0,-2l-2,0l0,2l-2,0l0,2l2,0l0,2l2,0l0,-2l2,0z</string>
+    <bool name="config_batterymeterDualTone">false</bool>
+    <integer name="config_batterymeterWidth">12</integer>
+    <integer name="config_batterymeterHeight">20</integer>
+    <bool name="config_batterymeterHorizontalFill">false</bool>
+    <bool name="config_batterymeterReverseFill">false</bool>
+    <bool name="config_batterymeterPowerSaveDrawError">false</bool>
+    <integer name="config_batterymeterLevelCornerRadius">0</integer>
+    <integer name="config_batterymeterCriticalLevel">-1</integer>
+    <color name="config_batterymeterChargingFillColor">#00000000</color>
+    <color name="config_batterymeterPowerSaveFillColor">#00000000</color>
+    <integer name="config_batterymeterTextStyle">1</integer>
+    <bool name="config_batterymeterGlyphFollowFrame">false</bool>
+    <string name="config_batterymeterTextFontFamily" translatable="false"></string>
+    <bool name="config_batterymeterBoltKnockout">false</bool>
+    <integer name="config_batterymeterTextSizePct">0</integer>
+    <dimen name="config_batterymeterIconWidth">0dp</dimen>
+    <dimen name="config_batterymeterIconHeight">0dp</dimen>
+    <integer name="config_batteryOverrideStyle">-1</integer>
+    <bool name="config_themedBatteryPercentWhileCharging">false</bool>
+    <bool name="config_themedBatteryPillStyle">false</bool>
+    <bool name="config_themedBatteryPillIconLeading">true</bool>
+    <bool name="config_themedBatteryPillOutline">false</bool>
+    <bool name="config_themedBatteryPillNub">true</bool>
 </resources>
