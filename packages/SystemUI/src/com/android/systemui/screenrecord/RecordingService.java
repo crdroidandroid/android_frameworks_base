@@ -94,6 +94,11 @@ public class RecordingService extends Service implements ScreenMediaRecorderList
     private static final String EXTRA_LOW_QUALITY = "extra_lowQuality";
     private static final String EXTRA_LONGER_DURATION = "extra_longerDuration";
     private final static String EXTRA_HEVC = "extra_HEVC";
+    private static final String EXTRA_RESOLUTION_MODE = "extra_resolutionMode";
+    private static final String EXTRA_FPS_MODE = "extra_fpsMode";
+    private static final String EXTRA_TIME_LIMIT_MS = "extra_timeLimitMs";
+    private static final String EXTRA_FILE_SIZE_BYTES = "extra_fileSizeBytes";
+    private static final String EXTRA_BITRATE_MULTIPLIER = "extra_bitrateMultiplier";
 
     protected static final String ACTION_START = "com.android.systemui.screenrecord.START";
     protected static final String ACTION_SHOW_START_NOTIF =
@@ -129,6 +134,11 @@ public class RecordingService extends Service implements ScreenMediaRecorderList
     private boolean mLowQuality;
     private boolean mLongerDuration;
     private boolean mHEVC;
+    private int mResolutionMode;
+    private int mFpsMode;
+    private int mTimeLimitMs;
+    private long mFileSizeBytes;
+    private float mBitrateMultiplier = 1.0f;
 
     @Inject
     public RecordingService(ScreenRecordUxController controller, @LongRunning Executor executor,
@@ -174,6 +184,21 @@ public class RecordingService extends Service implements ScreenMediaRecorderList
                 .putExtra(EXTRA_HEVC, hevc);
     }
 
+    public static Intent getStartIntent(Context context, int resultCode,
+            int audioSource, boolean showTaps,
+            @Nullable MediaProjectionCaptureTarget captureTarget,
+            boolean lowQuality, boolean longerDuration, boolean hevc,
+            int resolutionMode, int fpsMode, int timeLimitMs, long fileSizeBytes,
+            float bitrateMultiplier) {
+        return getStartIntent(context, resultCode, audioSource, showTaps, captureTarget,
+                lowQuality, longerDuration, hevc)
+                .putExtra(EXTRA_RESOLUTION_MODE, resolutionMode)
+                .putExtra(EXTRA_FPS_MODE, fpsMode)
+                .putExtra(EXTRA_TIME_LIMIT_MS, timeLimitMs)
+                .putExtra(EXTRA_FILE_SIZE_BYTES, fileSizeBytes)
+                .putExtra(EXTRA_BITRATE_MULTIPLIER, bitrateMultiplier);
+    }
+
     /**
      * Get an intent to start the recording service.
      *
@@ -199,6 +224,27 @@ public class RecordingService extends Service implements ScreenMediaRecorderList
             boolean hevc) {
         return getStartIntent(context, resultCode, audioSource, showTaps, captureTarget, lowQuality,
             longerDuration, hevc)
+                .putExtra(EXTRA_DISPLAY_ID, displayId);
+    }
+
+    public static Intent getStartIntent(
+            Context context,
+            int resultCode,
+            int audioSource,
+            boolean showTaps,
+            int displayId,
+            @Nullable MediaProjectionCaptureTarget captureTarget,
+            boolean lowQuality,
+            boolean longerDuration,
+            boolean hevc,
+            int resolutionMode,
+            int fpsMode,
+            int timeLimitMs,
+            long fileSizeBytes,
+            float bitrateMultiplier) {
+        return getStartIntent(context, resultCode, audioSource, showTaps, captureTarget, lowQuality,
+                longerDuration, hevc, resolutionMode, fpsMode, timeLimitMs, fileSizeBytes,
+                bitrateMultiplier)
                 .putExtra(EXTRA_DISPLAY_ID, displayId);
     }
 
@@ -231,6 +277,11 @@ public class RecordingService extends Service implements ScreenMediaRecorderList
                 mLowQuality = intent.getBooleanExtra(EXTRA_LOW_QUALITY, false);
                 mLongerDuration = intent.getBooleanExtra(EXTRA_LONGER_DURATION, false);
                 mHEVC = intent.getBooleanExtra(EXTRA_HEVC, true);
+                mResolutionMode = intent.getIntExtra(EXTRA_RESOLUTION_MODE, 0);
+                mFpsMode = intent.getIntExtra(EXTRA_FPS_MODE, 0);
+                mTimeLimitMs = intent.getIntExtra(EXTRA_TIME_LIMIT_MS, 0);
+                mFileSizeBytes = intent.getLongExtra(EXTRA_FILE_SIZE_BYTES, 0L);
+                mBitrateMultiplier = intent.getFloatExtra(EXTRA_BITRATE_MULTIPLIER, 1.0f);
 
                 MediaProjectionCaptureTarget captureTarget =
                         intent.getParcelableExtra(EXTRA_CAPTURE_TARGET,
@@ -259,6 +310,11 @@ public class RecordingService extends Service implements ScreenMediaRecorderList
                 setLowQuality(mLowQuality);
                 setLongerDuration(mLongerDuration);
                 setHEVC(mHEVC);
+                setResolutionMode(mResolutionMode);
+                setRequestedFps(mFpsMode);
+                setTimeLimitMs(mTimeLimitMs);
+                setFileSizeBytes(mFileSizeBytes);
+                setBitrateMultiplier(mBitrateMultiplier);
 
                 if (startRecording()) {
                     updateState(true);
@@ -698,6 +754,36 @@ public class RecordingService extends Service implements ScreenMediaRecorderList
     private void setHEVC(boolean hevc) {
         if (getRecorder() != null) {
             getRecorder().setHEVC(hevc);
+        }
+    }
+
+    private void setResolutionMode(int resolutionMode) {
+        if (getRecorder() != null) {
+            getRecorder().setResolutionMode(resolutionMode);
+        }
+    }
+
+    private void setRequestedFps(int fps) {
+        if (getRecorder() != null) {
+            getRecorder().setRequestedFps(fps);
+        }
+    }
+
+    private void setTimeLimitMs(int timeLimitMs) {
+        if (getRecorder() != null) {
+            getRecorder().setTimeLimitMs(timeLimitMs);
+        }
+    }
+
+    private void setFileSizeBytes(long fileSizeBytes) {
+        if (getRecorder() != null) {
+            getRecorder().setFileSizeBytes(fileSizeBytes);
+        }
+    }
+
+    private void setBitrateMultiplier(float multiplier) {
+        if (getRecorder() != null) {
+            getRecorder().setBitrateMultiplier(multiplier);
         }
     }
 

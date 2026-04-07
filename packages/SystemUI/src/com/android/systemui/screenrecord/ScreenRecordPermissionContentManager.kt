@@ -21,6 +21,7 @@ import android.app.Activity
 import android.content.Intent
 import android.hardware.display.DisplayManager
 import android.media.MediaCodecInfo
+import android.util.DisplayMetrics
 import android.media.MediaCodecList
 import android.media.MediaFormat
 import android.media.projection.StopReason
@@ -117,6 +118,12 @@ class ScreenRecordPermissionContentManager(
     private lateinit var hevcSwitch: CompoundButton
     private lateinit var tapsView: View
     private lateinit var options: Spinner
+    private lateinit var bitrateSpinner: Spinner
+    private lateinit var resolutionSpinner: Spinner
+    private lateinit var fpsSpinner: Spinner
+    private lateinit var timeLimitSpinner: Spinner
+    private lateinit var fileSizeSpinner: Spinner
+    private val resolutionModeValues = mutableListOf<Int>()
 
     override fun bind(view: View) {
         super.bind(view)
@@ -191,6 +198,17 @@ class ScreenRecordPermissionContentManager(
             audioSwitch.isChecked = true
         }
 
+        resolutionSpinner = containerView.requireViewById(R.id.screenrecord_resolution_spinner)
+        fpsSpinner = containerView.requireViewById(R.id.screenrecord_fps_spinner)
+        timeLimitSpinner = containerView.requireViewById(R.id.screenrecord_time_limit_spinner)
+        fileSizeSpinner = containerView.requireViewById(R.id.screenrecord_file_size_spinner)
+        bitrateSpinner = containerView.requireViewById(R.id.screenrecord_bitrate_spinner)
+        setupSpinner(bitrateSpinner, R.array.screenrecord_bitrate_entries)
+        setupResolutionSpinner()
+        setupSpinner(fpsSpinner, R.array.screenrecord_fps_entries)
+        setupSpinner(timeLimitSpinner, R.array.screenrecord_time_limit_entries)
+        setupSpinner(fileSizeSpinner, R.array.screenrecord_file_size_entries)
+
         // Disable HEVC when hardware accelerated codec is not available
         if (!hasHevcHwEncoder()) {
             Prefs.putInt(containerView.context, PREF_HEVC, 0)
@@ -242,6 +260,11 @@ class ScreenRecordPermissionContentManager(
         val longerDuration = longerDurationSwitch.isChecked
         val skipTime = skipTimeSwitch.isChecked
         val hevc = hevcSwitch.isChecked
+        val bitrateMultiplier = BITRATE_MULTIPLIER_VALUES[bitrateSpinner.selectedItemPosition]
+        val resolutionMode = resolutionModeValues[resolutionSpinner.selectedItemPosition]
+        val fpsMode = FPS_MODE_VALUES[fpsSpinner.selectedItemPosition]
+        val timeLimitMs = TIME_LIMIT_VALUES_MS[timeLimitSpinner.selectedItemPosition]
+        val fileSizeBytes = FILE_SIZE_VALUES_BYTES[fileSizeSpinner.selectedItemPosition]
 
         savePrefs();
 
@@ -258,11 +281,67 @@ class ScreenRecordPermissionContentManager(
                         lowQuality = lowQuality,
                         longerDuration = longerDuration,
                         hevc = hevc,
+                        bitrateMultiplier = bitrateMultiplier,
+                        resolutionMode = resolutionMode,
+                        fpsMode = fpsMode,
+                        timeLimitMs = timeLimitMs,
+                        fileSizeBytes = fileSizeBytes,
                     )
                 )
             },
             { screenRecordingStartStopInteractor.stopRecording(StopReason.STOP_UNKNOWN) },
         )
+    }
+
+    private fun setupResolutionSpinner() {
+        val ctx = containerView.context
+        val dm = ctx.getSystemService(DisplayManager::class.java)
+        val metrics = DisplayMetrics()
+        dm.getDisplay(Display.DEFAULT_DISPLAY).getRealMetrics(metrics)
+        val screenW = metrics.widthPixels
+        val screenH = metrics.heightPixels
+        val longEdge = maxOf(screenW, screenH)
+
+        val entries = mutableListOf<CharSequence>(ctx.getString(R.string.screenrecord_resolution_auto))
+        resolutionModeValues.clear()
+        resolutionModeValues.add(0)
+
+        if (longEdge > 2560) {
+            entries.add(resolutionLabel(screenW, screenH, 2560))
+            resolutionModeValues.add(2560)
+        }
+        if (longEdge > 1920) {
+            entries.add(resolutionLabel(screenW, screenH, 1920))
+            resolutionModeValues.add(1920)
+        }
+        if (longEdge > 1280) {
+            entries.add(resolutionLabel(screenW, screenH, 1280))
+            resolutionModeValues.add(1280)
+        }
+
+        val adapter = ArrayAdapter(ctx, R.layout.screenrecord_spinner_item, entries)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        resolutionSpinner.adapter = adapter
+    }
+
+    private fun resolutionLabel(screenW: Int, screenH: Int, longEdgeCap: Int): String {
+        val scale = longEdgeCap.toDouble() / maxOf(screenW, screenH)
+        val w = (screenW * scale).toInt()
+        val h = (screenH * scale).toInt()
+        val className = when (longEdgeCap) {
+            2560 -> "1440p"
+            1920 -> "1080p"
+            else -> "720p"
+        }
+        return "$className  ($w × $h)"
+    }
+
+    private fun setupSpinner(spinner: Spinner, entriesRes: Int) {
+        val ctx = containerView.context
+        val entries = ctx.resources.getTextArray(entriesRes)
+        val adapter = ArrayAdapter(ctx, R.layout.screenrecord_spinner_item, entries)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = adapter
     }
 
     private fun hasHevcHwEncoder(): Boolean {
@@ -292,6 +371,11 @@ class ScreenRecordPermissionContentManager(
         Prefs.putInt(userContext, PREF_AUDIO_SOURCE, options.selectedItemPosition)
         Prefs.putInt(userContext, PREF_SKIP, if (skipTimeSwitch.isChecked) 1 else 0)
         Prefs.putInt(userContext, PREF_HEVC, if (hevcSwitch.isChecked) 1 else 0)
+        Prefs.putInt(userContext, PREF_BITRATE, bitrateSpinner.selectedItemPosition)
+        Prefs.putInt(userContext, PREF_RESOLUTION, resolutionModeValues[resolutionSpinner.selectedItemPosition])
+        Prefs.putInt(userContext, PREF_FPS, fpsSpinner.selectedItemPosition)
+        Prefs.putInt(userContext, PREF_TIME_LIMIT, timeLimitSpinner.selectedItemPosition)
+        Prefs.putInt(userContext, PREF_FILE_SIZE, fileSizeSpinner.selectedItemPosition)
     }
 
     private fun loadPrefs() {
@@ -303,6 +387,12 @@ class ScreenRecordPermissionContentManager(
         options.setSelection(Prefs.getInt(userContext, PREF_AUDIO_SOURCE, 0))
         skipTimeSwitch.isChecked = Prefs.getInt(userContext, PREF_SKIP, 0) == 1
         hevcSwitch.isChecked = Prefs.getInt(userContext, PREF_HEVC, 1) == 1
+        bitrateSpinner.setSelection(Prefs.getInt(userContext, PREF_BITRATE, 0))
+        val savedResMode = Prefs.getInt(userContext, PREF_RESOLUTION, 0)
+        resolutionSpinner.setSelection(resolutionModeValues.indexOf(savedResMode).coerceAtLeast(0))
+        fpsSpinner.setSelection(Prefs.getInt(userContext, PREF_FPS, 0))
+        timeLimitSpinner.setSelection(Prefs.getInt(userContext, PREF_TIME_LIMIT, 0))
+        fileSizeSpinner.setSelection(Prefs.getInt(userContext, PREF_FILE_SIZE, 0))
     }
 
     private inner class CaptureTargetResultReceiver :
@@ -340,6 +430,16 @@ class ScreenRecordPermissionContentManager(
         private const val PREF_AUDIO_SOURCE = "screenrecord_audio_source"
         private const val PREF_SKIP = "screenrecord_skip_timer"
         private const val PREF_HEVC = "screenrecord_use_hevc"
+        private const val PREF_BITRATE = "screenrecord_bitrate"
+        private const val PREF_RESOLUTION = "screenrecord_resolution_mode"
+        private const val PREF_FPS = "screenrecord_fps_mode"
+        private const val PREF_TIME_LIMIT = "screenrecord_time_limit"
+        private const val PREF_FILE_SIZE = "screenrecord_file_size"
+
+        private val BITRATE_MULTIPLIER_VALUES = floatArrayOf(1.0f, 0.5f, 0.25f)
+        private val FPS_MODE_VALUES = intArrayOf(0, 30, 60)
+        private val TIME_LIMIT_VALUES_MS = intArrayOf(0, 5 * 60 * 1000, 10 * 60 * 1000, 30 * 60 * 1000, 60 * 60 * 1000)
+        private val FILE_SIZE_VALUES_BYTES = longArrayOf(0L, 10L shl 20, 100L shl 20, 500L shl 20, 1L shl 30, 15L shl 30)
 
         fun createOptionList(displayManager: DisplayManager): List<ScreenShareOption> {
             val connectedDisplays = getConnectedDisplays(displayManager)

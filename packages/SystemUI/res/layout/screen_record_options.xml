@@ -91,7 +91,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:layout_marginTop="@dimen/screenrecord_option_padding">
+        android:layout_marginTop="@dimen/screenrecord_option_padding"
+        android:visibility="gone">
         <ImageView
             android:layout_width="@dimen/screenrecord_option_icon_size"
             android:layout_height="@dimen/screenrecord_option_icon_size"
@@ -138,7 +139,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:layout_marginTop="@dimen/screenrecord_option_padding">
+        android:layout_marginTop="@dimen/screenrecord_option_padding"
+        android:visibility="gone">
         <ImageView
             android:layout_width="@dimen/screenrecord_option_icon_size"
             android:layout_height="@dimen/screenrecord_option_icon_size"
@@ -202,10 +204,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@*android:string/config_bodyFontFamily"
                 android:text="@string/screenrecord_skip_time_label"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="?android:attr/textColorPrimary"
+                android:textAppearance="@style/TextAppearance.ScreenRecord.SwitchLabel"
                 android:contentDescription="@string/screenrecord_skip_time_label"/>
             <TextView
                 android:layout_width="match_parent"
@@ -225,6 +225,161 @@
             android:contentDescription="@string/screenrecord_skip_time_label"
             android:theme="@style/Theme.Material3.DynamicColors.DayNight"
             android:importantForAccessibility="yes" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/show_bitrate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginTop="@dimen/screenrecord_option_padding">
+        <ImageView
+            android:layout_width="@dimen/screenrecord_option_icon_size"
+            android:layout_height="@dimen/screenrecord_option_icon_size"
+            android:src="@drawable/ic_sr_quality"
+            android:tint="?android:attr/textColorSecondary"
+            android:layout_marginEnd="@dimen/screenrecord_option_padding"
+            android:importantForAccessibility="no"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:minHeight="48dp"
+            android:text="@string/screenrecord_bitrate_label"
+            android:textAppearance="@style/TextAppearance.ScreenRecord.SwitchLabel"
+            android:contentDescription="@string/screenrecord_bitrate_label"/>
+        <Spinner
+            android:id="@+id/screenrecord_bitrate_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:dropDownWidth="wrap_content"
+            android:popupBackground="@drawable/screenrecord_spinner_background"
+            android:importantForAccessibility="yes"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/show_resolution"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginTop="@dimen/screenrecord_option_padding">
+        <ImageView
+            android:layout_width="@dimen/screenrecord_option_icon_size"
+            android:layout_height="@dimen/screenrecord_option_icon_size"
+            android:src="@drawable/ic_sr_quality"
+            android:tint="?android:attr/textColorSecondary"
+            android:layout_marginEnd="@dimen/screenrecord_option_padding"
+            android:importantForAccessibility="no"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:minHeight="48dp"
+            android:text="@string/screenrecord_resolution_label"
+            android:textAppearance="@style/TextAppearance.ScreenRecord.SwitchLabel"
+            android:contentDescription="@string/screenrecord_resolution_label"/>
+        <Spinner
+            android:id="@+id/screenrecord_resolution_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:dropDownWidth="wrap_content"
+            android:popupBackground="@drawable/screenrecord_spinner_background"
+            android:importantForAccessibility="yes"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/show_fps"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginTop="@dimen/screenrecord_option_padding">
+        <ImageView
+            android:layout_width="@dimen/screenrecord_option_icon_size"
+            android:layout_height="@dimen/screenrecord_option_icon_size"
+            android:src="@drawable/ic_sr_clock"
+            android:tint="?android:attr/textColorSecondary"
+            android:layout_marginEnd="@dimen/screenrecord_option_padding"
+            android:importantForAccessibility="no"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:minHeight="48dp"
+            android:text="@string/screenrecord_fps_label"
+            android:textAppearance="@style/TextAppearance.ScreenRecord.SwitchLabel"
+            android:contentDescription="@string/screenrecord_fps_label"/>
+        <Spinner
+            android:id="@+id/screenrecord_fps_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:dropDownWidth="wrap_content"
+            android:popupBackground="@drawable/screenrecord_spinner_background"
+            android:importantForAccessibility="yes"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/show_time_limit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginTop="@dimen/screenrecord_option_padding">
+        <ImageView
+            android:layout_width="@dimen/screenrecord_option_icon_size"
+            android:layout_height="@dimen/screenrecord_option_icon_size"
+            android:src="@drawable/ic_sr_clock"
+            android:tint="?android:attr/textColorSecondary"
+            android:layout_marginEnd="@dimen/screenrecord_option_padding"
+            android:importantForAccessibility="no"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:minHeight="48dp"
+            android:text="@string/screenrecord_time_limit_label"
+            android:textAppearance="@style/TextAppearance.ScreenRecord.SwitchLabel"
+            android:contentDescription="@string/screenrecord_time_limit_label"/>
+        <Spinner
+            android:id="@+id/screenrecord_time_limit_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:dropDownWidth="wrap_content"
+            android:popupBackground="@drawable/screenrecord_spinner_background"
+            android:importantForAccessibility="yes"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/show_file_size"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginTop="@dimen/screenrecord_option_padding">
+        <ImageView
+            android:layout_width="@dimen/screenrecord_option_icon_size"
+            android:layout_height="@dimen/screenrecord_option_icon_size"
+            android:src="@drawable/ic_storage"
+            android:tint="?android:attr/textColorSecondary"
+            android:layout_marginEnd="@dimen/screenrecord_option_padding"
+            android:importantForAccessibility="no"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:minHeight="48dp"
+            android:text="@string/screenrecord_file_size_label"
+            android:textAppearance="@style/TextAppearance.ScreenRecord.SwitchLabel"
+            android:contentDescription="@string/screenrecord_file_size_label"/>
+        <Spinner
+            android:id="@+id/screenrecord_file_size_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:dropDownWidth="wrap_content"
+            android:popupBackground="@drawable/screenrecord_spinner_background"
+            android:importantForAccessibility="yes"/>
     </LinearLayout>
     <LinearLayout
         android:id="@+id/show_hevc"
@@ -249,10 +404,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@*android:string/config_bodyFontFamily"
                 android:text="@string/screenrecord_hevc_switch_label"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="?android:attr/textColorPrimary"
+                android:textAppearance="@style/TextAppearance.ScreenRecord.SwitchLabel"
                 android:contentDescription="@string/screenrecord_hevc_switch_label"/>
             <TextView
                 android:layout_width="match_parent"

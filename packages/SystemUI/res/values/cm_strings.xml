@@ -129,6 +129,29 @@
     <string name="screenrecord_skip_time_summary">Remove the 3 second wait</string>
     <string name="screenrecord_hevc_switch_label">HEVC encoding</string>
     <string name="screenrecord_hevc_switch_summary">Use the more efficient HEVC encoder</string>
+    <string name="screenrecord_resolution_label">Resolution</string>
+    <string name="screenrecord_fps_label">Frame rate</string>
+    <string name="screenrecord_time_limit_label">Time limit</string>
+    <string name="screenrecord_file_size_label">File size limit</string>
+    <string name="screenrecord_bitrate_label">Video quality</string>
+    <string name="screenrecord_bitrate_high">High</string>
+    <string name="screenrecord_bitrate_medium">Medium</string>
+    <string name="screenrecord_bitrate_low">Low</string>
+    <string name="screenrecord_resolution_auto">Auto</string>
+    <string name="screenrecord_fps_auto">Auto</string>
+    <string name="screenrecord_fps_30">30 FPS</string>
+    <string name="screenrecord_fps_60">60 FPS</string>
+    <string name="screenrecord_time_unlimited">Unlimited</string>
+    <string name="screenrecord_time_5min">5 minutes</string>
+    <string name="screenrecord_time_10min">10 minutes</string>
+    <string name="screenrecord_time_30min">30 minutes</string>
+    <string name="screenrecord_time_60min">60 minutes</string>
+    <string name="screenrecord_size_unlimited">Unlimited</string>
+    <string name="screenrecord_size_10mb">10 MB</string>
+    <string name="screenrecord_size_100mb">100 MB</string>
+    <string name="screenrecord_size_500mb">500 MB</string>
+    <string name="screenrecord_size_1gb">1 GB</string>
+    <string name="screenrecord_size_15gb">15 GB</string>
 
     <!-- Screen pinning dialog description. (for devices without navbar) -->
     <string name="screen_pinning_description_no_navbar">This keeps it in view until you unpin. Touch &amp; hold Back to unpin.</string>

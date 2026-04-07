@@ -7,17 +7,47 @@
 
     <!-- Cardinal directions for the compass tile -->
     <string-array name="cardinal_directions">
-        <item>@string/quick_settings_compass_N</item>  <!-- North -->
-        <item>@string/quick_settings_compass_NE</item> <!-- North east -->
-        <item>@string/quick_settings_compass_E</item>  <!-- East -->
-        <item>@string/quick_settings_compass_SE</item> <!-- South east -->
-        <item>@string/quick_settings_compass_S</item>  <!-- South -->
-        <item>@string/quick_settings_compass_SW</item> <!-- South west -->
-        <item>@string/quick_settings_compass_W</item>  <!-- West -->
-        <item>@string/quick_settings_compass_NW</item> <!-- North west -->
+        <item>@string/quick_settings_compass_N</item>
+        <item>@string/quick_settings_compass_NE</item>
+        <item>@string/quick_settings_compass_E</item>
+        <item>@string/quick_settings_compass_SE</item>
+        <item>@string/quick_settings_compass_S</item>
+        <item>@string/quick_settings_compass_SW</item>
+        <item>@string/quick_settings_compass_W</item>
+        <item>@string/quick_settings_compass_NW</item>
     </string-array>
 
     <!-- Themes -->
     <array name="config_chargingAnimFrames"/>
     <array name="config_chargingAnimGlare"/>
+
+    <string-array name="screenrecord_bitrate_entries">
+        <item>@string/screenrecord_bitrate_high</item>
+        <item>@string/screenrecord_bitrate_medium</item>
+        <item>@string/screenrecord_bitrate_low</item>
+    </string-array>
+
+    <string-array name="screenrecord_fps_entries">
+        <item>@string/screenrecord_fps_auto</item>
+        <item>@string/screenrecord_fps_30</item>
+        <item>@string/screenrecord_fps_60</item>
+    </string-array>
+
+    <string-array name="screenrecord_time_limit_entries">
+        <item>@string/screenrecord_time_unlimited</item>
+        <item>@string/screenrecord_time_5min</item>
+        <item>@string/screenrecord_time_10min</item>
+        <item>@string/screenrecord_time_30min</item>
+        <item>@string/screenrecord_time_60min</item>
+    </string-array>
+
+    <string-array name="screenrecord_file_size_entries">
+        <item>@string/screenrecord_size_unlimited</item>
+        <item>@string/screenrecord_size_10mb</item>
+        <item>@string/screenrecord_size_100mb</item>
+        <item>@string/screenrecord_size_500mb</item>
+        <item>@string/screenrecord_size_1gb</item>
+        <item>@string/screenrecord_size_15gb</item>
+    </string-array>
+
 </resources>
