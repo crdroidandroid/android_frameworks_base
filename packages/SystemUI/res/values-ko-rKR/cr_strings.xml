@@ -152,16 +152,16 @@
     <string name="ax_dynamic_bar_alarm">알람</string>
     <string name="ax_dynamic_bar_flashlight">손전등</string>
     <string name="ax_dynamic_bar_hotspot">핫스팟</string>
-    <string name="ax_dynamic_bar_hotspot_active">Hotspot Active</string>
-    <string name="ax_dynamic_bar_vpn_active">VPN Active</string>
+    <string name="ax_dynamic_bar_hotspot_active">핫스팟 활성</string>
+    <string name="ax_dynamic_bar_vpn_active">VPN 사용 중</string>
     <string name="ax_dynamic_bar_screen_recording">화면 녹화</string>
     <string name="ax_dynamic_bar_now_playing">Now Playing</string>
     <string name="ax_dynamic_bar_media_output">미디어 출력</string>
-    <string name="ax_dynamic_bar_sound_mode">Sound Mode</string>
+    <string name="ax_dynamic_bar_sound_mode">사운드 모드</string>
     <string name="ax_dynamic_bar_silent">무음</string>
     <string name="ax_dynamic_bar_vibrate">진동</string>
     <string name="ax_dynamic_bar_ring">소리</string>
-    <string name="ax_dynamic_bar_charging">Charging</string>
+    <string name="ax_dynamic_bar_charging">충전 중</string>
     <string name="ax_dynamic_bar_wireless">무선</string>
     <string name="ax_dynamic_bar_saver">Saver</string>
     <string name="ax_dynamic_bar_music">음악</string>
@@ -181,38 +181,38 @@
     <string name="ax_dynamic_bar_show_more">Show more</string>
     <string name="ax_dynamic_bar_show_less">Show less</string>
     <string name="ax_dynamic_bar_play">Play</string>
-    <string name="ax_dynamic_bar_pause">Pause</string>
-    <string name="ax_dynamic_bar_paused">Paused</string>
-    <string name="ax_dynamic_bar_saved">Saved</string>
+    <string name="ax_dynamic_bar_pause">일시중지</string>
+    <string name="ax_dynamic_bar_paused">일시정지 됨</string>
+    <string name="ax_dynamic_bar_saved">저장됨</string>
     <string name="ax_dynamic_bar_recording">Recording</string>
-    <string name="ax_dynamic_bar_done">Done</string>
+    <string name="ax_dynamic_bar_done">완료</string>
     <string name="ax_dynamic_bar_ringing">Ringing</string>
     <string name="ax_dynamic_bar_running">Running</string>
     <string name="ax_dynamic_bar_on">ON</string>
     <string name="ax_dynamic_bar_recents">Recents</string>
-    <string name="ax_dynamic_bar_unlocked">Unlocked</string>
-    <string name="ax_dynamic_bar_device_unlocked">Device Unlocked</string>
+    <string name="ax_dynamic_bar_unlocked">잠금 해제됨</string>
+    <string name="ax_dynamic_bar_device_unlocked">기기 잠금 해제됨</string>
     <string name="ax_dynamic_bar_progress">Progress</string>
     <string name="ax_dynamic_bar_casting_to">Casting to</string>
     <string name="ax_dynamic_bar_camera_mic">Camera &amp; Microphone</string>
     <string name="ax_dynamic_bar_camera">카메라</string>
-    <string name="ax_dynamic_bar_microphone">Microphone</string>
-    <string name="ax_dynamic_bar_camera_mic_short">Camera &amp; Mic</string>
-    <string name="ax_dynamic_bar_hotspot_devices"><xliff:g id="count" example="3">%d</xliff:g> devices</string>
-    <string name="ax_dynamic_bar_wireless_charging">Wireless Charging</string>
+    <string name="ax_dynamic_bar_microphone">마이크로폰</string>
+    <string name="ax_dynamic_bar_camera_mic_short">카메라 &amp; 마이크</string>
+    <string name="ax_dynamic_bar_hotspot_devices"><xliff:g id="count" example="3">%d</xliff:g> 기기</string>
+    <string name="ax_dynamic_bar_wireless_charging">무선 충전</string>
     <string name="ax_dynamic_bar_until_full">until full</string>
     <string name="ax_dynamic_bar_battery_saver">Battery Saver</string>
     <string name="ax_dynamic_bar_incoming_call">Incoming Call</string>
-    <string name="ax_dynamic_bar_connected">Connected</string>
+    <string name="ax_dynamic_bar_connected">연결됨</string>
     <string name="ax_dynamic_bar_disconnect">Disconnect</string>
     <string name="ax_dynamic_bar_no_devices">No devices</string>
-    <string name="ax_dynamic_bar_one_device_connected">1 device connected</string>
+    <string name="ax_dynamic_bar_one_device_connected">1개 기기 연결됨</string>
     <string name="ax_dynamic_bar_devices_connected"><xliff:g id="count" example="3">%d</xliff:g> devices connected</string>
-    <string name="ax_dynamic_bar_vpn_connected">VPN Connected</string>
+    <string name="ax_dynamic_bar_vpn_connected">VPN 연결됨</string>
     <string name="ax_dynamic_bar_secured">Secured</string>
     <string name="ax_dynamic_bar_connecting">Connecting\u2026</string>
-    <string name="ax_dynamic_bar_one_device">1 device</string>
-    <string name="ax_dynamic_bar_bluetooth_device">블루투스 장치</string>
+    <string name="ax_dynamic_bar_one_device">1개 기기</string>
+    <string name="ax_dynamic_bar_bluetooth_device">블루투스 기기</string>
     <string name="ax_dynamic_bar_apps_count"><xliff:g id="count" example="2">%d</xliff:g> apps</string>
     <string name="ax_dynamic_bar_just_now">Just now</string>
     <string name="ax_dynamic_bar_mins_ago"><xliff:g id="count" example="5">%d</xliff:g>m ago</string>
@@ -232,8 +232,8 @@
     <string name="ax_dynamic_bar_trust">Trust</string>
     <string name="ax_dynamic_bar_alignment">Alignment</string>
     <string name="ax_dynamic_bar_cam_short">Cam</string>
-    <string name="ax_dynamic_bar_mic_short">Mic</string>
-    <string name="ax_dynamic_bar_recent_apps">Recent Apps</string>
+    <string name="ax_dynamic_bar_mic_short">마이크</string>
+    <string name="ax_dynamic_bar_recent_apps">최근 앱</string>
     <string name="ax_dynamic_bar_count_running"><xliff:g id="count" example="3">%d</xliff:g> running</string>
     <string name="ax_dynamic_bar_sports_vs">vs</string>
     <string name="ax_dynamic_bar_sports_live">LIVE</string>
