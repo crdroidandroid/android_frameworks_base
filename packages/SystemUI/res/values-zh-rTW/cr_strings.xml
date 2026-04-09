@@ -232,12 +232,12 @@
     <string name="ax_dynamic_bar_trust">信任</string>
     <string name="ax_dynamic_bar_alignment">對齊方式</string>
     <string name="ax_dynamic_bar_cam_short">相機</string>
-    <string name="ax_dynamic_bar_mic_short">Mic</string>
-    <string name="ax_dynamic_bar_recent_apps">Recent Apps</string>
-    <string name="ax_dynamic_bar_count_running"><xliff:g id="count" example="3">%d</xliff:g> running</string>
+    <string name="ax_dynamic_bar_mic_short">麥克風</string>
+    <string name="ax_dynamic_bar_recent_apps">最近使用的應用程式</string>
+    <string name="ax_dynamic_bar_count_running"><xliff:g id="count" example="3">%d</xliff:g> 個執行中</string>
     <string name="ax_dynamic_bar_sports_vs">vs</string>
     <string name="ax_dynamic_bar_sports_live">LIVE</string>
-    <string name="ax_dynamic_bar_sports_final">Final</string>
-    <string name="ax_dynamic_bar_sports_halftime">Halftime</string>
-    <string name="ax_dynamic_bar_sports_upcoming">Upcoming</string>
+    <string name="ax_dynamic_bar_sports_final">決賽</string>
+    <string name="ax_dynamic_bar_sports_halftime">半場</string>
+    <string name="ax_dynamic_bar_sports_upcoming">即將開始</string>
 </resources>
