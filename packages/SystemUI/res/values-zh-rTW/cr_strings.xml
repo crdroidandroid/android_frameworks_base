@@ -129,7 +129,7 @@
     <string name="qs_preferred_network_nr">5G / NR</string>
     <string name="qs_preferred_network_unsupported">不支援</string>
     <!-- VPN tethering QS tile -->
-    <string name="vpn_tethering_label">VPN tethering</string>
+    <string name="vpn_tethering_label">VPN 網路共用</string>
     <!-- Text while recognizing face -->
     <string name="face_unlock_recognizing">臉部辨識中...</string>
     <!-- Flashlight Strength -->
@@ -147,91 +147,91 @@
     <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
     <string name="screenrecord_delete_description">螢幕錄製已刪除</string>
     <!-- AxDynamicBar strings [CHAR LIMIT=NONE] -->
-    <string name="ax_dynamic_bar_timer">Timer</string>
-    <string name="ax_dynamic_bar_stopwatch">Stopwatch</string>
-    <string name="ax_dynamic_bar_alarm">Alarm</string>
-    <string name="ax_dynamic_bar_flashlight">Flashlight</string>
-    <string name="ax_dynamic_bar_hotspot">Hotspot</string>
-    <string name="ax_dynamic_bar_hotspot_active">Hotspot Active</string>
-    <string name="ax_dynamic_bar_vpn_active">VPN Active</string>
-    <string name="ax_dynamic_bar_screen_recording">Screen Recording</string>
-    <string name="ax_dynamic_bar_now_playing">Now Playing</string>
-    <string name="ax_dynamic_bar_media_output">Media output</string>
-    <string name="ax_dynamic_bar_sound_mode">Sound Mode</string>
+    <string name="ax_dynamic_bar_timer">計時器</string>
+    <string name="ax_dynamic_bar_stopwatch">秒錶</string>
+    <string name="ax_dynamic_bar_alarm">鬧鐘</string>
+    <string name="ax_dynamic_bar_flashlight">手電筒</string>
+    <string name="ax_dynamic_bar_hotspot">無線基地台</string>
+    <string name="ax_dynamic_bar_hotspot_active">無線基地台已開啟</string>
+    <string name="ax_dynamic_bar_vpn_active">VPN 已啟用</string>
+    <string name="ax_dynamic_bar_screen_recording">螢幕錄製</string>
+    <string name="ax_dynamic_bar_now_playing">正在播放</string>
+    <string name="ax_dynamic_bar_media_output">媒體輸出</string>
+    <string name="ax_dynamic_bar_sound_mode">聲音模式</string>
     <string name="ax_dynamic_bar_silent">靜音</string>
     <string name="ax_dynamic_bar_vibrate">震動</string>
     <string name="ax_dynamic_bar_ring">鈴聲</string>
-    <string name="ax_dynamic_bar_charging">Charging</string>
-    <string name="ax_dynamic_bar_wireless">Wireless</string>
-    <string name="ax_dynamic_bar_saver">Saver</string>
-    <string name="ax_dynamic_bar_music">Music</string>
-    <string name="ax_dynamic_bar_copied">Copied</string>
-    <string name="ax_dynamic_bar_copied_feedback">Copied!</string>
-    <string name="ax_dynamic_bar_image_copied">Image copied</string>
-    <string name="ax_dynamic_bar_copy_image">Copy Image</string>
-    <string name="ax_dynamic_bar_clipboard_image_desc">Clipboard image</string>
-    <string name="ax_dynamic_bar_image">Image</string>
-    <string name="ax_dynamic_bar_url">URL</string>
-    <string name="ax_dynamic_bar_dismiss">Dismiss</string>
-    <string name="ax_dynamic_bar_open">Open</string>
+    <string name="ax_dynamic_bar_charging">充電中</string>
+    <string name="ax_dynamic_bar_wireless">無線</string>
+    <string name="ax_dynamic_bar_saver">精簡模式</string>
+    <string name="ax_dynamic_bar_music">音樂</string>
+    <string name="ax_dynamic_bar_copied">已複製</string>
+    <string name="ax_dynamic_bar_copied_feedback">已複製！</string>
+    <string name="ax_dynamic_bar_image_copied">已複製影像</string>
+    <string name="ax_dynamic_bar_copy_image">複製影像</string>
+    <string name="ax_dynamic_bar_clipboard_image_desc">剪貼簿影像</string>
+    <string name="ax_dynamic_bar_image">影像</string>
+    <string name="ax_dynamic_bar_url">連結</string>
+    <string name="ax_dynamic_bar_dismiss">關閉</string>
+    <string name="ax_dynamic_bar_open">開啟</string>
     <string name="ax_dynamic_bar_stop">停止</string>
-    <string name="ax_dynamic_bar_stop_recording">Stop Recording</string>
-    <string name="ax_dynamic_bar_reset">Reset</string>
-    <string name="ax_dynamic_bar_clear_all">Clear All</string>
-    <string name="ax_dynamic_bar_show_more">Show more</string>
-    <string name="ax_dynamic_bar_show_less">Show less</string>
-    <string name="ax_dynamic_bar_play">Play</string>
-    <string name="ax_dynamic_bar_pause">Pause</string>
-    <string name="ax_dynamic_bar_paused">Paused</string>
-    <string name="ax_dynamic_bar_saved">Saved</string>
-    <string name="ax_dynamic_bar_recording">Recording</string>
-    <string name="ax_dynamic_bar_done">Done</string>
-    <string name="ax_dynamic_bar_ringing">Ringing</string>
-    <string name="ax_dynamic_bar_running">Running</string>
-    <string name="ax_dynamic_bar_on">ON</string>
-    <string name="ax_dynamic_bar_recents">Recents</string>
-    <string name="ax_dynamic_bar_unlocked">Unlocked</string>
-    <string name="ax_dynamic_bar_device_unlocked">Device Unlocked</string>
-    <string name="ax_dynamic_bar_progress">Progress</string>
-    <string name="ax_dynamic_bar_casting_to">Casting to</string>
-    <string name="ax_dynamic_bar_camera_mic">Camera &amp; Microphone</string>
-    <string name="ax_dynamic_bar_camera">Camera</string>
-    <string name="ax_dynamic_bar_microphone">Microphone</string>
-    <string name="ax_dynamic_bar_camera_mic_short">Camera &amp; Mic</string>
-    <string name="ax_dynamic_bar_hotspot_devices"><xliff:g id="count" example="3">%d</xliff:g> devices</string>
-    <string name="ax_dynamic_bar_wireless_charging">Wireless Charging</string>
-    <string name="ax_dynamic_bar_until_full">until full</string>
-    <string name="ax_dynamic_bar_battery_saver">Battery Saver</string>
-    <string name="ax_dynamic_bar_incoming_call">Incoming Call</string>
-    <string name="ax_dynamic_bar_connected">Connected</string>
-    <string name="ax_dynamic_bar_disconnect">Disconnect</string>
-    <string name="ax_dynamic_bar_no_devices">No devices</string>
-    <string name="ax_dynamic_bar_one_device_connected">1 device connected</string>
-    <string name="ax_dynamic_bar_devices_connected"><xliff:g id="count" example="3">%d</xliff:g> devices connected</string>
-    <string name="ax_dynamic_bar_vpn_connected">VPN Connected</string>
-    <string name="ax_dynamic_bar_secured">Secured</string>
-    <string name="ax_dynamic_bar_connecting">Connecting\u2026</string>
-    <string name="ax_dynamic_bar_one_device">1 device</string>
-    <string name="ax_dynamic_bar_bluetooth_device">Bluetooth device</string>
-    <string name="ax_dynamic_bar_apps_count"><xliff:g id="count" example="2">%d</xliff:g> apps</string>
-    <string name="ax_dynamic_bar_just_now">Just now</string>
-    <string name="ax_dynamic_bar_mins_ago"><xliff:g id="count" example="5">%d</xliff:g>m ago</string>
-    <string name="ax_dynamic_bar_hours_ago"><xliff:g id="count" example="2">%d</xliff:g>h ago</string>
-    <string name="ax_dynamic_bar_days_ago"><xliff:g id="count" example="3">%d</xliff:g>d ago</string>
-    <string name="ax_dynamic_bar_weeks_ago"><xliff:g id="count" example="1">%d</xliff:g>w ago</string>
-    <string name="ax_dynamic_bar_resume">Resume</string>
-    <string name="ax_dynamic_bar_clipboard">Clipboard</string>
-    <string name="ax_dynamic_bar_previous">Previous</string>
-    <string name="ax_dynamic_bar_next">Next</string>
-    <string name="ax_dynamic_bar_shuffle">Shuffle</string>
-    <string name="ax_dynamic_bar_output">Output</string>
-    <string name="ax_dynamic_bar_rec_short">Rec</string>
-    <string name="ax_dynamic_bar_cast_short">Cast</string>
-    <string name="ax_dynamic_bar_active">Active</string>
-    <string name="ax_dynamic_bar_biometric">Biometric</string>
-    <string name="ax_dynamic_bar_trust">Trust</string>
-    <string name="ax_dynamic_bar_alignment">Alignment</string>
-    <string name="ax_dynamic_bar_cam_short">Cam</string>
+    <string name="ax_dynamic_bar_stop_recording">停止錄製</string>
+    <string name="ax_dynamic_bar_reset">重設</string>
+    <string name="ax_dynamic_bar_clear_all">全部清除</string>
+    <string name="ax_dynamic_bar_show_more">顯示更多</string>
+    <string name="ax_dynamic_bar_show_less">顯示較少</string>
+    <string name="ax_dynamic_bar_play">播放</string>
+    <string name="ax_dynamic_bar_pause">暫停</string>
+    <string name="ax_dynamic_bar_paused">已暫停</string>
+    <string name="ax_dynamic_bar_saved">已儲存</string>
+    <string name="ax_dynamic_bar_recording">正在錄製</string>
+    <string name="ax_dynamic_bar_done">完成</string>
+    <string name="ax_dynamic_bar_ringing">響鈴</string>
+    <string name="ax_dynamic_bar_running">運行中</string>
+    <string name="ax_dynamic_bar_on">開啟</string>
+    <string name="ax_dynamic_bar_recents">總覽</string>
+    <string name="ax_dynamic_bar_unlocked">未鎖定</string>
+    <string name="ax_dynamic_bar_device_unlocked">裝置已解鎖</string>
+    <string name="ax_dynamic_bar_progress">進度</string>
+    <string name="ax_dynamic_bar_casting_to">投放至</string>
+    <string name="ax_dynamic_bar_camera_mic">相機 &amp; 麥克風</string>
+    <string name="ax_dynamic_bar_camera">相機</string>
+    <string name="ax_dynamic_bar_microphone">麥克風</string>
+    <string name="ax_dynamic_bar_camera_mic_short">相機 &amp; 麥克風</string>
+    <string name="ax_dynamic_bar_hotspot_devices"><xliff:g id="count" example="3">%d</xliff:g> 裝置</string>
+    <string name="ax_dynamic_bar_wireless_charging">無線充電</string>
+    <string name="ax_dynamic_bar_until_full">直至充飽</string>
+    <string name="ax_dynamic_bar_battery_saver">省電模式</string>
+    <string name="ax_dynamic_bar_incoming_call">來電</string>
+    <string name="ax_dynamic_bar_connected">已連線</string>
+    <string name="ax_dynamic_bar_disconnect">中斷連線</string>
+    <string name="ax_dynamic_bar_no_devices">沒有裝置</string>
+    <string name="ax_dynamic_bar_one_device_connected">1 台裝置已連線</string>
+    <string name="ax_dynamic_bar_devices_connected"><xliff:g id="count" example="3">%d</xliff:g>台裝置已連線</string>
+    <string name="ax_dynamic_bar_vpn_connected">VPN已連線</string>
+    <string name="ax_dynamic_bar_secured">已加密</string>
+    <string name="ax_dynamic_bar_connecting">連線中\u2026</string>
+    <string name="ax_dynamic_bar_one_device">1 台裝置</string>
+    <string name="ax_dynamic_bar_bluetooth_device">藍牙裝置</string>
+    <string name="ax_dynamic_bar_apps_count"><xliff:g id="count" example="2">%d</xliff:g> 應用程式</string>
+    <string name="ax_dynamic_bar_just_now">剛剛</string>
+    <string name="ax_dynamic_bar_mins_ago"><xliff:g id="count" example="5">%d</xliff:g> 應用程式</string>
+    <string name="ax_dynamic_bar_hours_ago"><xliff:g id="count" example="2">%d</xliff:g> 應用程式</string>
+    <string name="ax_dynamic_bar_days_ago"><xliff:g id="count" example="3">%d</xliff:g> 應用程式</string>
+    <string name="ax_dynamic_bar_weeks_ago"><xliff:g id="count" example="1">%d</xliff:g> 應用程式</string>
+    <string name="ax_dynamic_bar_resume">恢復</string>
+    <string name="ax_dynamic_bar_clipboard">剪貼簿</string>
+    <string name="ax_dynamic_bar_previous">上一個</string>
+    <string name="ax_dynamic_bar_next">下一個</string>
+    <string name="ax_dynamic_bar_shuffle">隨機播放</string>
+    <string name="ax_dynamic_bar_output">輸出</string>
+    <string name="ax_dynamic_bar_rec_short">錄製</string>
+    <string name="ax_dynamic_bar_cast_short">投放</string>
+    <string name="ax_dynamic_bar_active">使用中</string>
+    <string name="ax_dynamic_bar_biometric">生物辨識</string>
+    <string name="ax_dynamic_bar_trust">信任</string>
+    <string name="ax_dynamic_bar_alignment">對齊方式</string>
+    <string name="ax_dynamic_bar_cam_short">相機</string>
     <string name="ax_dynamic_bar_mic_short">Mic</string>
     <string name="ax_dynamic_bar_recent_apps">Recent Apps</string>
     <string name="ax_dynamic_bar_count_running"><xliff:g id="count" example="3">%d</xliff:g> running</string>
