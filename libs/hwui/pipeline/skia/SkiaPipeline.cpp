@@ -49,6 +49,7 @@
 #include "thread/CommonPool.h"
 #include "tools/SkSharingProc.h"
 #include "utils/Color.h"
+#include "utils/FrameTraceUtils.h"
 #include "utils/String8.h"
 
 using namespace android::uirenderer::renderthread;
@@ -72,7 +73,7 @@ void SkiaPipeline::renderLayers(const LightGeometry& lightGeometry,
                                 LayerUpdateQueue* layerUpdateQueue, bool opaque,
                                 const LightInfo& lightInfo) {
     LightingInfo::updateLighting(lightGeometry, lightInfo);
-    ATRACE_NAME("draw layers");
+    HWUI_FRAME_ATRACE_NAME("draw layers");
     renderLayersImpl(*layerUpdateQueue, opaque);
     layerUpdateQueue->clear();
 }
@@ -99,7 +100,7 @@ bool SkiaPipeline::renderLayerImpl(RenderNode* layerNode, const Rect& layerDamag
         return false;
     }
 
-    ATRACE_FORMAT("drawLayer [%s] %.1f x %.1f", layerNode->getName(), bounds.width(),
+    HWUI_FRAME_ATRACE_FORMAT("drawLayer [%s] %.1f x %.1f", layerNode->getName(), bounds.width(),
                   bounds.height());
 
     layerNode->getSkiaLayer()->hasRenderedSinceRepaint = false;
