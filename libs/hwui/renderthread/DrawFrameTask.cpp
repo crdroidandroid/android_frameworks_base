@@ -24,6 +24,7 @@
 #include "../DeferredLayerUpdater.h"
 #include "../DisplayList.h"
 #include "../Properties.h"
+#include "../utils/FrameTraceUtils.h"
 #include "../RenderNode.h"
 #include "CanvasContext.h"
 #include "HardwareBufferRenderParams.h"
@@ -80,7 +81,7 @@ int DrawFrameTask::drawFrame() {
 }
 
 void DrawFrameTask::postAndWait() {
-    ATRACE_CALL();
+    HWUI_FRAME_ATRACE_CALL();
     AutoMutex _lock(mLock);
     mRenderThread->queue().post([this]() { run(); });
     mSignal.wait(mLock);
@@ -88,7 +89,7 @@ void DrawFrameTask::postAndWait() {
 
 void DrawFrameTask::run() {
     const int64_t vsyncId = mFrameInfo[static_cast<int>(FrameInfoIndex::FrameTimelineVsyncId)];
-    ATRACE_FORMAT("DrawFrames %" PRId64, vsyncId);
+    HWUI_FRAME_ATRACE_FORMAT("DrawFrames %" PRId64, vsyncId);
 
     mContext->setSyncDelayDuration(systemTime(SYSTEM_TIME_MONOTONIC) - mSyncQueued);
     mContext->setTargetSdrHdrRatio(mRenderSdrHdrRatio);
@@ -167,7 +168,7 @@ void DrawFrameTask::run() {
 }
 
 bool DrawFrameTask::syncFrameState(TreeInfo& info) {
-    ATRACE_CALL();
+    HWUI_FRAME_ATRACE_CALL();
     int64_t vsync = mFrameInfo[static_cast<int>(FrameInfoIndex::Vsync)];
     int64_t intendedVsync = mFrameInfo[static_cast<int>(FrameInfoIndex::IntendedVsync)];
     int64_t vsyncId = mFrameInfo[static_cast<int>(FrameInfoIndex::FrameTimelineVsyncId)];
