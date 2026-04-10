@@ -111,6 +111,8 @@ bool Properties::clipSurfaceViews = false;
 bool Properties::hdr10bitPlus = false;
 bool Properties::skipTelemetry = false;
 
+bool Properties::traceEachFrame = false;
+
 int Properties::timeoutMultiplier = 1;
 
 StretchEffectBehavior Properties::stretchEffectBehavior = StretchEffectBehavior::ShaderHWUI;
@@ -189,6 +191,8 @@ bool Properties::load() {
     timeoutMultiplier = android::base::GetIntProperty("ro.hw_timeout_multiplier", 1);
     skipTelemetry = base::GetBoolProperty(PROPERTY_SKIP_EGLMANAGER_TELEMETRY,
                                           hwui_flags::skip_eglmanager_telemetry());
+
+    traceEachFrame = base::GetBoolProperty(PROPERTY_TRACE_EACH_FRAME, false);
 
     return (prevDebugLayersUpdates != debugLayersUpdates) || (prevDebugOverdraw != debugOverdraw);
 }
