@@ -35,6 +35,7 @@
 #include <functional>
 
 #include "../Properties.h"
+#include "../utils/FrameTraceUtils.h"
 #include "AnimationContext.h"
 #include "ColorArea.h"
 #include "FeatureFlags.h"
@@ -665,7 +666,7 @@ void CanvasContext::draw(bool solelyTextureViewUpdates) {
 
     SkRect windowDirty = computeDirtyRect(frame, &dirty);
 
-    ATRACE_FORMAT("Drawing " RECT_STRING, SK_RECT_ARGS(dirty));
+    HWUI_FRAME_ATRACE_FORMAT("Drawing " RECT_STRING, SK_RECT_ARGS(dirty));
 
     IRenderPipeline::DrawResult drawResult;
     {
@@ -686,7 +687,7 @@ void CanvasContext::draw(bool solelyTextureViewUpdates) {
         if (vsyncId != UiFrameInfoBuilder::INVALID_VSYNC_ID) {
             const auto inputEventId =
                     static_cast<int32_t>(mCurrentFrameInfo->get(FrameInfoIndex::InputEventId));
-            ATRACE_FORMAT(
+            HWUI_FRAME_ATRACE_FORMAT(
                 "frameTimelineInfo(frameNumber=%llu, vsyncId=%lld, inputEventId=0x%" PRIx32 ")",
                 frameCompleteNr, vsyncId, inputEventId);
             const ANativeWindowFrameTimelineInfo ftl = {
@@ -979,7 +980,7 @@ const SkM44& CanvasContext::getPixelSnapMatrix() const {
 
 void CanvasContext::prepareAndDraw(RenderNode* node) {
     int64_t vsyncId = mRenderThread.timeLord().lastVsyncId();
-    ATRACE_FORMAT("%s %" PRId64, __func__, vsyncId);
+    HWUI_FRAME_ATRACE_FORMAT("%s %" PRId64, __func__, vsyncId);
 
     nsecs_t vsync = mRenderThread.timeLord().computeFrameTimeNanos();
     int64_t frameDeadline = mRenderThread.timeLord().lastFrameDeadline();

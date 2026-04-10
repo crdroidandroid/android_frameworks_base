@@ -34,6 +34,7 @@
 #include "pipeline/skia/VkInteropFunctorDrawable.h"
 #include "renderstate/RenderState.h"
 #include "renderthread/Frame.h"
+#include "utils/FrameTraceUtils.h"
 #include "renderthread/IRenderPipeline.h"
 
 using namespace android::uirenderer::renderthread;
@@ -114,7 +115,7 @@ IRenderPipeline::DrawResult SkiaVulkanPipeline::draw(
 
     VulkanManager::VkDrawResult drawResult;
     {
-        ATRACE_NAME("flush commands");
+        HWUI_FRAME_ATRACE_NAME("flush commands");
         drawResult = vulkanManager().finishFrame(backBuffer.get());
     }
     layerUpdateQueue->clear();

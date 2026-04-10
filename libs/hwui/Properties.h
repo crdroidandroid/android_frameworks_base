@@ -236,6 +236,8 @@ enum DebugLevel {
 
 #define PROPERTY_SKIP_EGLMANAGER_TELEMETRY "debug.hwui.skip_eglmanager_telemetry"
 
+#define PROPERTY_TRACE_EACH_FRAME "debug.hwui.trace_each_frame"
+
 /**
  * Property for font reading library.
  */
@@ -356,6 +358,8 @@ public:
     static bool clipSurfaceViews;
     static bool hdr10bitPlus;
     static bool skipTelemetry;
+
+    static bool traceEachFrame;
 
     static int timeoutMultiplier;
 
