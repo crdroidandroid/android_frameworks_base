@@ -38,6 +38,7 @@
 #include "renderthread/EglManager.h"
 #include "renderthread/Frame.h"
 #include "renderthread/IRenderPipeline.h"
+#include "utils/FrameTraceUtils.h"
 #include "utils/GLUtils.h"
 
 using namespace android::uirenderer::renderthread;
@@ -178,7 +179,7 @@ IRenderPipeline::DrawResult SkiaOpenGLPipeline::draw(
     }
 
     {
-        ATRACE_NAME("flush commands");
+        HWUI_FRAME_ATRACE_NAME("flush commands");
         skgpu::ganesh::FlushAndSubmit(surface);
     }
     layerUpdateQueue->clear();
