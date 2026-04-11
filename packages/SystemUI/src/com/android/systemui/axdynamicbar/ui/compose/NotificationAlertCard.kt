@@ -375,11 +375,10 @@ private fun ContentScope.CardScene(
     Column(modifier = Modifier.element(AlertCardElements.CardContent).fillMaxWidth()) {
         Surface(
             onClick = {
-                if (!showReply) {
-                    try { notification.sbn.notification?.contentIntent?.sendWithBal(context) }
-                    catch (_: PendingIntent.CanceledException) {}
-                    if (!isCall) onDismiss()
-                }
+                try { notification.sbn.notification?.contentIntent?.sendWithBal(context) }
+                catch (_: PendingIntent.CanceledException) {}
+                if (showReply) interactor.onFocusableRequested?.invoke(false)
+                if (!isCall) onDismiss()
             },
             color = Color.Transparent,
             modifier = Modifier.fillMaxWidth(),
