@@ -334,18 +334,6 @@ public class ThemeOverlayApplier implements Dumpable {
                 && SYSTEM_USER_CATEGORIES.contains(category)) {
             transaction.setEnabled(identifier, enabled, UserHandle.SYSTEM.getIdentifier());
         }
-
-        // Do not apply Launcher or Theme picker overlays to managed users. Apps are not
-        // installed in there.
-        overlayInfo = mOverlayManager.getOverlayInfo(identifier, UserHandle.SYSTEM);
-        if (overlayInfo == null || overlayInfo.targetPackageName.equals(mLauncherPackage)
-                || overlayInfo.targetPackageName.equals(mThemePickerPackage)) {
-            return;
-        }
-
-        for (UserHandle userHandle : managedProfiles) {
-            transaction.setEnabled(identifier, enabled, userHandle.getIdentifier());
-        }
     }
 
     /**
