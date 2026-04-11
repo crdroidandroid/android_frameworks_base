@@ -39,6 +39,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,6 +48,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -785,6 +788,12 @@ private fun ReplyField(
 ) {
     var replyText by remember { mutableStateOf("") }
     val context = LocalContext.current
+    val focusRequester = remember { FocusRequester() }
+
+    LaunchedEffect(Unit) {
+        interactor.onFocusableRequested?.invoke(true)
+        focusRequester.requestFocus()
+    }
 
     Row(
         modifier = Modifier.fillMaxWidth()
@@ -799,6 +808,7 @@ private fun ReplyField(
             onValueChange = { replyText = it },
             modifier = Modifier.weight(1f)
                 .padding(horizontal = SpaceLg)
+                .focusRequester(focusRequester)
                 .onFocusChanged { interactor.onFocusableRequested?.invoke(it.isFocused) },
             textStyle = MaterialTheme.typography.bodySmall.copy(color = OnCardText),
             singleLine = true,
