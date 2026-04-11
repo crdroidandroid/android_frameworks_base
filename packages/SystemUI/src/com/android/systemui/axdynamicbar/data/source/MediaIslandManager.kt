@@ -135,8 +135,11 @@ constructor(
         if (updateTime <= 0) return basePos
         val elapsed = SystemClock.elapsedRealtime() - updateTime
         val speed = state.playbackSpeed.takeIf { it > 0f } ?: 1f
-        val duration = _mediaEvent.value?.duration?.takeIf { it > 0L } ?: Long.MAX_VALUE
-        return (basePos + (elapsed * speed).toLong()).coerceIn(0L, duration)
+        val rawDuration = _mediaEvent.value?.duration ?: Long.MAX_VALUE
+        val safeDuration = if (rawDuration > 0L) rawDuration else Long.MAX_VALUE
+
+        return (basePos + (elapsed * speed).toLong())
+            .coerceIn(0L, safeDuration)
     }
 
     private var cancelProgressPolling: Runnable? = null
@@ -198,8 +201,9 @@ constructor(
                         ?: metadata?.getString(MediaMetadata.METADATA_KEY_TITLE)
                         ?: ""
                 val artist = metadata?.getString(MediaMetadata.METADATA_KEY_ARTIST) ?: ""
-                val duration = metadata?.getLong(MediaMetadata.METADATA_KEY_DURATION) ?: 0L
-                
+                val durationRaw = metadata?.getLong(MediaMetadata.METADATA_KEY_DURATION) ?: 0L
+                val duration = if (durationRaw > 0L) durationRaw else 0L
+
                 val albumArt = sessionAlbumArt ?: run {
                     val bmp = metadata?.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART)
                         ?: metadata?.getBitmap(MediaMetadata.METADATA_KEY_ART)
