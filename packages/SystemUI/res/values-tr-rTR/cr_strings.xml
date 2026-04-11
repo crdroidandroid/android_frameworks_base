@@ -229,16 +229,16 @@
     <string name="ax_dynamic_bar_rec_short">Rec</string>
     <string name="ax_dynamic_bar_cast_short">Cast</string>
     <string name="ax_dynamic_bar_active">Active</string>
-    <string name="ax_dynamic_bar_biometric">Biometric</string>
-    <string name="ax_dynamic_bar_trust">Trust</string>
+    <string name="ax_dynamic_bar_biometric">Biyometrik</string>
+    <string name="ax_dynamic_bar_trust">Güvenilirlik</string>
     <string name="ax_dynamic_bar_alignment">Alignment</string>
-    <string name="ax_dynamic_bar_cam_short">Cam</string>
-    <string name="ax_dynamic_bar_mic_short">Mic</string>
-    <string name="ax_dynamic_bar_recent_apps">Recent Apps</string>
+    <string name="ax_dynamic_bar_cam_short">Kamera</string>
+    <string name="ax_dynamic_bar_mic_short">Mikrofon</string>
+    <string name="ax_dynamic_bar_recent_apps">Son Uygulamalar</string>
     <string name="ax_dynamic_bar_count_running"><xliff:g id="count" example="3">%d</xliff:g> running</string>
     <string name="ax_dynamic_bar_sports_vs">vs</string>
-    <string name="ax_dynamic_bar_sports_live">LIVE</string>
+    <string name="ax_dynamic_bar_sports_live">CANLI</string>
     <string name="ax_dynamic_bar_sports_final">Final</string>
-    <string name="ax_dynamic_bar_sports_halftime">Halftime</string>
-    <string name="ax_dynamic_bar_sports_upcoming">Upcoming</string>
+    <string name="ax_dynamic_bar_sports_halftime">Devre Arası</string>
+    <string name="ax_dynamic_bar_sports_upcoming">Yaklaşan</string>
 </resources>
