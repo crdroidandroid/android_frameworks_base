@@ -2690,6 +2690,9 @@ public class AppOpsService extends IAppOpsService.Stub {
                 UidState uidState = mUidStates.valueAt(i);
                 // TODO(b/266164193): Ensure this behavior is device-aware after uid op mode for
                 //  runtime permissions is deprecated.
+                if (uidState.getState() >= AppOpsManager.UID_STATE_CACHED) {
+                    continue;
+                }
                 SparseIntArray opModes =
                         getNonDefaultUidModes(
                                 uidState.uid, PERSISTENT_DEVICE_ID_DEFAULT);
