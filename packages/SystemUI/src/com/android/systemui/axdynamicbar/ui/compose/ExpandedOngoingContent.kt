@@ -30,7 +30,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -68,41 +67,60 @@ private fun resolveRemoteViews(ctx: Context, notification: Notification): Remote
     return null
 }
 
+private fun applyOrReapplyRemoteViews(frame: FrameLayout, notification: Notification): Boolean {
+    val rv =
+        try {
+            resolveRemoteViews(frame.context, notification)
+        } catch (_: Exception) {
+            return false
+        } ?: return false
+    val existing = if (frame.childCount > 0) frame.getChildAt(0) else null
+    if (existing != null) {
+        try {
+            rv.reapply(frame.context, existing)
+            prepareForIsland(existing)
+            return true
+        } catch (_: Exception) {
+            frame.removeAllViews()
+        }
+    }
+    return try {
+        val inflated = rv.apply(frame.context, frame)
+        prepareForIsland(inflated)
+        frame.addView(
+            inflated,
+            FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT,
+            ),
+        )
+        true
+    } catch (_: Exception) {
+        false
+    }
+}
+
 @Composable
 private fun SbnContentView(sbn: StatusBarNotification, fallback: @Composable () -> Unit) {
     var failed by remember(sbn.key) { mutableStateOf(false) }
-    if (!failed) {
-        key(sbn.key) {
-            AndroidView(
-                factory = { ctx ->
-                    FrameLayout(ctx).apply {
-                        setBackgroundColor(android.graphics.Color.TRANSPARENT)
-                        try {
-                            val rv = resolveRemoteViews(ctx, sbn.notification)
-                            val inflated = rv?.apply(ctx, this)
-                            if (inflated != null) {
-                                prepareForIsland(inflated)
-                                addView(
-                                    inflated,
-                                    FrameLayout.LayoutParams(
-                                        FrameLayout.LayoutParams.MATCH_PARENT,
-                                        FrameLayout.LayoutParams.WRAP_CONTENT,
-                                    ),
-                                )
-                            } else {
-                                failed = true
-                            }
-                        } catch (_: Exception) {
-                            failed = true
-                        }
-                    }
-                },
-                modifier = Modifier.fillMaxWidth().clip(ShapeIconMedium),
-            )
-        }
-    } else {
+    if (failed) {
         fallback()
+        return
     }
+    AndroidView(
+        factory = { ctx ->
+            FrameLayout(ctx).apply {
+                setBackgroundColor(android.graphics.Color.TRANSPARENT)
+            }
+        },
+        update = { frame ->
+            val notification = sbn.notification
+            if (notification == null || !applyOrReapplyRemoteViews(frame, notification)) {
+                failed = true
+            }
+        },
+        modifier = Modifier.fillMaxWidth().clip(ShapeIconMedium),
+    )
 }
 
 private val COLLAPSE_CHIP_IDS = arrayOf("expand_button_touch_container", "expand_button")
