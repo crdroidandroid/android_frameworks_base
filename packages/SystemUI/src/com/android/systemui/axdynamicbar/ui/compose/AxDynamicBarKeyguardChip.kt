@@ -778,14 +778,25 @@ private fun actionsFor(event: IslandEvent): List<ChipAction> = when (event) {
         if (event.isCountdown) emptyList()
         else listOf(ChipAction(ActionIcon.STOP) { vm, _, _ -> vm.stopScreenRecording() })
     is IslandEvent.AudioRecording -> {
-        val pauseResume = event.actions.firstOrNull()
+        val pauseResume = event.actions.firstOrNull { a ->
+            val label = a.label.toString().lowercase()
+            label.contains("pause") || label.contains("resume")
+        }
+        val stop = event.actions.firstOrNull { a ->
+            val label = a.label.toString().lowercase()
+            label.contains("stop") || label.contains("delete")
+        }
         listOfNotNull(
             pauseResume?.let { action ->
                 ChipAction(
                     if (event.state == RecordingState.RECORDING) ActionIcon.PAUSE else ActionIcon.PLAY,
                 ) { _, _, ctx -> action.action.actionIntent?.sendWithBal(ctx) }
             },
-            ChipAction(ActionIcon.STOP) { vm, e, _ -> vm.dismissEvent(e) },
+            stop?.let { action ->
+                ChipAction(ActionIcon.STOP) { _, _, ctx ->
+                    action.action.actionIntent?.sendWithBal(ctx)
+                }
+            },
         )
     }
     is IslandEvent.Timer -> {
