@@ -166,6 +166,21 @@ public class FontController {
             return null;
         }
 
+        if (fontToOverride.startsWith("variable-")) {
+            if (!isSysPkg) {
+                logger("Skipping variable family override for non-system pkg: " + fontToOverride);
+                return null;
+            }
+            int weight = TypefaceFactory.resolveWeightByName(fontToOverride);
+            int fontWeightAdjustment = getFontWeightAdjustment(); // ← ADD THIS LINE
+            if (fontWeightAdjustment != 0) {
+                weight = Math.min(1000, Math.max(100, weight + fontWeightAdjustment));
+            }
+            boolean isItalic = fontToOverride.contains("italic");
+            Typeface base = Typeface.getSystemDefaultTypeface(getCurrentFont());
+            return Typeface.create(base, weight, isItalic);
+        }
+
         boolean override = OVERRIDE_FONTS.stream().anyMatch(fontToOverride::contains) 
             || (isSysPkg && SYS_OVERRIDE_FONTS.stream().anyMatch(fontToOverride::contains));
         if (!override) {
@@ -248,12 +263,17 @@ public class FontController {
             if (exactMatch != null) {
                 return exactMatch;
             }
+            String bestKey = null;
+            int bestWeight = 400;
             for (Map.Entry<String, Integer> entry : WEIGHT_MAP.entrySet()) {
                 if (familyName.contains(entry.getKey())) {
-                    return entry.getValue();
+                    if (bestKey == null || entry.getKey().length() > bestKey.length()) {
+                        bestKey = entry.getKey();
+                        bestWeight = entry.getValue();
+                    }
                 }
             }
-            return 400;
+            return bestWeight;
         }
     }
 }
