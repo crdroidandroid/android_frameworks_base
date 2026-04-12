@@ -29,6 +29,7 @@ import com.android.systemui.qs.panels.domain.interactor.QuickQuickSettingsRowInt
 import com.android.systemui.qs.panels.shared.model.SizedTileImpl
 import com.android.systemui.qs.panels.shared.model.splitInRowsSequence
 import com.android.systemui.qs.pipeline.domain.interactor.CurrentTilesInteractor
+import com.android.systemui.qs.pipeline.domain.model.TileModel
 import com.android.systemui.qs.pipeline.shared.TileSpec
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -81,9 +82,17 @@ constructor(
     private val currentTiles by
         hydrator.hydratedStateOf(traceName = "currentTiles", source = tilesInteractor.currentTiles)
 
+    private var cachedCurrentTiles: List<TileModel> = emptyList()
+    private var cachedTileVMs: Map<TileSpec, TileViewModel> = emptyMap()
+
     val tileViewModels by derivedStateOf {
-        currentTiles
-            .map { SizedTileImpl(TileViewModel(it.tile, it.spec), it.spec.width()) }
+        val tiles = currentTiles
+        if (tiles !== cachedCurrentTiles) {
+            cachedCurrentTiles = tiles
+            cachedTileVMs = tiles.associate { it.spec to TileViewModel(it.tile, it.spec) }
+        }
+        tiles
+            .map { SizedTileImpl(cachedTileVMs[it.spec]!!, it.spec.width()) }
             .let { splitInRowsSequence(it, columns).take(rows).toList().flatten() }
     }
 
