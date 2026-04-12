@@ -249,6 +249,7 @@ import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 import com.android.internal.util.ArrayUtils;
 import com.android.internal.util.FastMath;
 import com.android.internal.util.Preconditions;
+import com.android.internal.util.android.FontController;
 import com.android.text.flags.Flags;
 
 import libcore.util.EmptyArray;
@@ -4532,8 +4533,9 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
             setFontVariationSettings(attributes.mFontVariationSettings);
         }
 
-        if (Typeface.getFontName().equals("inter")) {
-            setFontFeatureSettings("'ss01'");
+        String fontFeatures = FontController.getFontFeatureSettings();
+        if (fontFeatures != null) {
+            setFontFeatureSettings(fontFeatures);
         }
 
         if (attributes.mHasLineBreakStyle || attributes.mHasLineBreakWordStyle) {
