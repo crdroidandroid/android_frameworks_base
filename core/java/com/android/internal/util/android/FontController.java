@@ -107,7 +107,7 @@ public class FontController {
         WEIGHT_MAP.put("variable-body-small", 400);
     }
 
-    public static FontController get() {
+    public static synchronized FontController get() {
         if (sInstance == null) {
             sInstance = new FontController();
         }
