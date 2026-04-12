@@ -37,6 +37,8 @@ import com.android.systemui.statusbar.notification.stack.ui.view.NotificationScr
  * @param totalVerticalPadding extra padding to be added to the received stack content height.
  * @param constrainToMaxHeight if true, the height will not be taller than the available space.
  */
+private const val STACK_HEIGHT_THRESHOLD = 8
+
 fun Modifier.notificationStackHeight(
     view: NotificationScrollView,
     totalVerticalPadding: Dp = 0.dp,
@@ -67,7 +69,14 @@ private class StackLayoutNode(
     var constrainToMaxHeight: Boolean,
 ) : LayoutModifierNode, Modifier.Node() {
 
-    private val stackHeightChangedListener = Runnable { invalidateMeasureIfAttached() }
+    private var lastMeasuredStackHeight = -1
+    private val stackHeightChangedListener = Runnable {
+        val currentHeight = view.intrinsicStackHeight
+        if (Math.abs(currentHeight - lastMeasuredStackHeight) > STACK_HEIGHT_THRESHOLD) {
+            lastMeasuredStackHeight = currentHeight
+            invalidateMeasureIfAttached()
+        }
+    }
 
     override fun onAttach() {
         super.onAttach()
@@ -83,7 +92,8 @@ private class StackLayoutNode(
         measurable: Measurable,
         constraints: Constraints,
     ): MeasureResult {
-        var contentHeight = padding.roundToPx() + view.intrinsicStackHeight
+        lastMeasuredStackHeight = view.intrinsicStackHeight
+        var contentHeight = padding.roundToPx() + lastMeasuredStackHeight
         if (constrainToMaxHeight) {
             contentHeight = contentHeight.coerceAtMost(constraints.maxHeight)
         }
