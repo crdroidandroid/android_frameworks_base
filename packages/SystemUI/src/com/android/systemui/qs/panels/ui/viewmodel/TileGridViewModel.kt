@@ -23,6 +23,7 @@ import com.android.systemui.qs.panels.domain.interactor.GridLayoutTypeInteractor
 import com.android.systemui.qs.panels.shared.model.GridLayoutType
 import com.android.systemui.qs.panels.ui.compose.GridLayout
 import com.android.systemui.qs.pipeline.domain.interactor.CurrentTilesInteractor
+import com.android.systemui.qs.pipeline.domain.model.TileModel
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import javax.inject.Named
@@ -49,8 +50,18 @@ constructor(
     private val tileModels by
         hydrator.hydratedStateOf(traceName = "tileModels", source = tilesInteractor.currentTiles)
 
+    private var cachedTileModels: List<TileModel> = emptyList()
+    private var cachedTileViewModels: List<TileViewModel> = emptyList()
+
     val tileViewModels: List<TileViewModel>
-        get() = tileModels.map { TileViewModel(it.tile, it.spec) }
+        get() {
+            val current = tileModels
+            if (current !== cachedTileModels) {
+                cachedTileModels = current
+                cachedTileViewModels = current.map { TileViewModel(it.tile, it.spec) }
+            }
+            return cachedTileViewModels
+        }
 
     override suspend fun onActivated(): Nothing {
         hydrator.activate()
