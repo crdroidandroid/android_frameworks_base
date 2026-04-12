@@ -107,6 +107,15 @@ public class FontController {
         WEIGHT_MAP.put("variable-body-small", 400);
     }
 
+    private static final Map<String, String> FONT_FEATURE_MAP = new ArrayMap<>();
+    static {
+        FONT_FEATURE_MAP.put("inter", "'ss01'");
+    }
+
+    public static String getFontFeatureSettings() {
+        return FONT_FEATURE_MAP.getOrDefault(get().getCurrentFont(), null);
+    }
+
     public static synchronized FontController get() {
         if (sInstance == null) {
             sInstance = new FontController();
