@@ -91,7 +91,9 @@ public class NotificationShadeWindowView extends WindowRootView {
     private static final long GC_DELAY_MS = 5000;
     private static final long GC_PSS_THRESHOLD_KB = 350 * 1024;
     private boolean mIsFirstPendingGcOnBoot = true;
+    private boolean mGcScheduled = false;
     private Handler mGcHandler;
+    private final Handler mMainHandler = new Handler(Looper.getMainLooper());
     private final Runnable mGcTask = this::scheduleGcOnIdle;
     public NotificationShadeWindowView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -127,16 +129,19 @@ public class NotificationShadeWindowView extends WindowRootView {
     @Override
     protected void onWindowVisibilityChanged(int visibility) {
         super.onWindowVisibilityChanged(visibility);
-        if (visibility != VISIBLE) {
-            Handler handler = new Handler(Looper.getMainLooper());
-            handler.removeCallbacks(mGcTask);
-            handler.post(mGcTask);
+        if (visibility == VISIBLE) {
+            mMainHandler.removeCallbacks(mGcTask);
+            mGcScheduled = false;
+        } else if (!mGcScheduled) {
+            mGcScheduled = true;
+            mMainHandler.removeCallbacks(mGcTask);
+            mMainHandler.postDelayed(mGcTask, GC_DELAY_MS);
         }
     }
     private void scheduleGcOnIdle() {
+        mGcScheduled = false;
         Looper.getMainLooper().getQueue().addIdleHandler(() -> {
             if (isShown()) {
-                new Handler(Looper.getMainLooper()).postDelayed(mGcTask, GC_DELAY_MS);
                 return false;
             }
             ensureGcHandler();
