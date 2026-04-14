@@ -27,7 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /** @hide */
 public final class PlayIntegritySpoofService {
     private static final String TAG = "PIF";
-    private static final String CONFIG_PATH = "/data/adb/playintegrityfix";
+    private static final String CONFIG_PATH = "/data/system/playintegrityfix";
 
     private static final String[] PROP_FILES = {
         "custom.pif.prop",
