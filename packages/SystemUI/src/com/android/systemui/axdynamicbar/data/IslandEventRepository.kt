@@ -8,6 +8,7 @@ import com.android.systemui.axdynamicbar.data.source.MediaIslandManager
 import com.android.systemui.axdynamicbar.data.source.NotificationIslandManager
 import com.android.systemui.axdynamicbar.data.source.PrivacyIslandManager
 import com.android.systemui.axdynamicbar.data.source.ScreenRecordIslandManager
+import com.android.systemui.axdynamicbar.data.source.SmartspaceIslandManager
 import com.android.systemui.axdynamicbar.data.source.SystemIslandManager
 import com.android.systemui.axdynamicbar.data.source.TorchIslandManager
 import com.android.systemui.axdynamicbar.domain.AxDynamicBarSettings
@@ -34,6 +35,7 @@ constructor(
     val appTracking: AppTrackingIslandManager,
     val torch: TorchIslandManager,
     val biometric: BiometricIslandManager,
+    val smartspace: SmartspaceIslandManager,
     private val settings: AxDynamicBarSettings,
 ) {
     companion object {
@@ -85,6 +87,7 @@ constructor(
         if (isTypeEnabled("app_switch")) appTracking.startListening()
         if (isTypeEnabled("torch")) torch.startListening()
         if (isTypeEnabled("biometric_unlock")) biometric.startListening()
+        if (isTypeEnabled("media") || isTypeEnabled("sports")) smartspace.startListening()
     }
 
     fun stopListening() {
@@ -100,6 +103,7 @@ constructor(
         torch.stopListening()
         appTracking.stopListening()
         biometric.stopListening()
+        smartspace.stopListening()
     }
 
     fun refreshListeners() {
@@ -135,6 +139,9 @@ constructor(
         else torch.stopListening()
         if (isTypeEnabled("biometric_unlock")) biometric.startListening()
         else biometric.stopListening()
+
+        if (isTypeEnabled("media") || isTypeEnabled("sports")) smartspace.startListening()
+        else smartspace.stopListening()
     }
 
     private fun syncDisabledTypes() {
@@ -169,12 +176,23 @@ constructor(
                     cast?.takeIf { isTypeEnabled("casting") },
                 )
             }
+        val sportsGroup = combine(
+            smartspace.sportsEvents,
+            notification.sportsEvents,
+        ) { qlSports, notifSports ->
+            if (!isTypeEnabled("sports")) emptyList()
+            else qlSports + notifSports.filter { ns ->
+                qlSports.none { qs ->
+                    qs.team1Name.equals(ns.team1Name, ignoreCase = true) &&
+                        qs.team2Name.equals(ns.team2Name, ignoreCase = true)
+                }
+            }
+        }
         val promotedGroup = combine(
             notification.promotedOngoingEvents,
-            notification.sportsEvents,
+            sportsGroup,
         ) { promoted, sports ->
-            (if (isTypeEnabled("promoted_ongoing")) promoted else emptyList()) +
-            (if (isTypeEnabled("sports")) sports else emptyList())
+            (if (isTypeEnabled("promoted_ongoing")) promoted else emptyList()) + sports
         }
         val highGroupB =
             combine(highGroupA, torch.torchEvent) { events, t ->
@@ -221,10 +239,12 @@ constructor(
                 lowGroupA,
                 appTracking.appSwitchEvent,
                 notification.audioRecordingEvent,
-            ) { a, appSwitch, audioRec ->
+                smartspace.nowPlayingEvent,
+            ) { a, appSwitch, audioRec, nowPlaying ->
                 a + listOfNotNull(
                     appSwitch?.takeIf { isTypeEnabled("app_switch") },
                     audioRec?.takeIf { isTypeEnabled("audio_recording") },
+                    nowPlaying?.takeIf { isTypeEnabled("media") },
                 )
             }
         val transientGroup = combine(midGroup, lowGroup) { mid, low -> mid + low }
