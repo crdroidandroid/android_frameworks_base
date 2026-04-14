@@ -18,36 +18,28 @@ package com.android.internal.util.crdroid;
 
 import static android.os.UserHandle.USER_SYSTEM;
 
-import android.util.PathParser;
-
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.om.IOverlayManager;
 import android.content.om.OverlayInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.content.pm.ProviderInfo;
 import android.content.res.Resources;
-import android.content.res.Resources.NotFoundException;
-import android.content.res.Configuration;
-import android.database.Cursor;
-import android.graphics.Typeface;
 import android.graphics.Path;
-import android.graphics.drawable.AdaptiveIconDrawable;
-import android.graphics.drawable.Drawable;
+import android.graphics.Typeface;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.PathShape;
-import android.net.Uri;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.PathParser;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -58,30 +50,41 @@ public class ThemeUtils {
     public static final String TAG = "ThemeUtils";
 
     public static final String FONT_KEY = "android.theme.customization.font";
-    public static final String ICON_SHAPE_KEY= "android.theme.customization.adaptive_icon_shape";
+    public static final String ICON_SHAPE_KEY = "android.theme.customization.adaptive_icon_shape";
 
     public static final Comparator<OverlayInfo> OVERLAY_INFO_COMPARATOR =
             Comparator.comparingInt(a -> a.priority);
 
-    private Context mContext;
-    private IOverlayManager mOverlayManager;
-    private PackageManager pm;
-    private Resources overlayRes;
+    private static ThemeUtils instance;
 
-    public ThemeUtils(Context context) {
-        mContext = context;
+    private final WeakReference<Context> mContext;
+    private final IOverlayManager mOverlayManager;
+    private final PackageManager pm;
+
+    private ThemeUtils(Context context) {
+        mContext = new WeakReference<>(context);
         mOverlayManager = IOverlayManager.Stub
                 .asInterface(ServiceManager.getService(Context.OVERLAY_SERVICE));
         pm = context.getPackageManager();
     }
 
+    public static ThemeUtils getInstance(Context context) {
+        if (instance == null) {
+            synchronized (ThemeUtils.class) {
+                if (instance == null) {
+                    instance = new ThemeUtils(context);
+                }
+            }
+        }
+        return instance;
+    }
+
     public void setOverlayEnabled(String category, String packageName, String target) {
         final String currentPackageName = getOverlayInfos(category, target).stream()
-                .filter(info -> info.isEnabled())
+                .filter(OverlayInfo::isEnabled)
                 .map(info -> info.packageName)
                 .findFirst()
                 .orElse(null);
-
         try {
             if (target.equals(packageName)) {
                 if (currentPackageName != null) {
@@ -90,31 +93,30 @@ public class ThemeUtils {
             } else {
                 mOverlayManager.setEnabledExclusiveInCategory(packageName, USER_SYSTEM);
             }
-
             writeSettings(category, packageName, target.equals(packageName));
-
         } catch (RemoteException e) {
             Log.e(TAG, "RemoteException while setting overlay: " + e.getMessage(), e);
         }
     }
 
     public void writeSettings(String category, String packageName, boolean disable) {
+        Context context = mContext.get();
+        if (context == null) return;
         final String overlayPackageJson = Settings.Secure.getStringForUser(
-                mContext.getContentResolver(),
-                Settings.Secure.THEME_CUSTOMIZATION_OVERLAY_PACKAGES, UserHandle.USER_CURRENT);
+                context.getContentResolver(),
+                Settings.Secure.THEME_CUSTOMIZATION_OVERLAY_PACKAGES,
+                UserHandle.USER_CURRENT);
         JSONObject object;
         try {
-            if (overlayPackageJson == null) {
-                object = new JSONObject();
-            } else {
-                object = new JSONObject(overlayPackageJson);
-            }
+            object = overlayPackageJson == null
+                    ? new JSONObject()
+                    : new JSONObject(overlayPackageJson);
             if (disable) {
                 if (object.has(category)) object.remove(category);
             } else {
                 object.put(category, packageName);
             }
-            Settings.Secure.putStringForUser(mContext.getContentResolver(),
+            Settings.Secure.putStringForUser(context.getContentResolver(),
                     Settings.Secure.THEME_CUSTOMIZATION_OVERLAY_PACKAGES,
                     object.toString(), UserHandle.USER_CURRENT);
         } catch (JSONException e) {
@@ -128,15 +130,15 @@ public class ThemeUtils {
 
     public List<String> getOverlayPackagesForCategory(String category, String target) {
         List<String> overlays = new ArrayList<>();
-        List<String> mPkgs = new ArrayList<>();
+        List<String> packages = new ArrayList<>();
         overlays.add(target);
         for (OverlayInfo info : getOverlayInfos(category, target)) {
             if (category.equals(info.getCategory())) {
-                mPkgs.add(info.getPackageName());
+                packages.add(info.getPackageName());
             }
         }
-        Collections.sort(mPkgs);
-        overlays.addAll(mPkgs);
+        Collections.sort(packages);
+        overlays.addAll(packages);
         return overlays;
     }
 
@@ -154,81 +156,87 @@ public class ThemeUtils {
                     filteredInfos.add(overlayInfo);
                 }
             }
-        } catch (RemoteException re) {
-            Log.e(TAG, "RemoteException while getting overlay info: " + re.getMessage(), re);
+        } catch (RemoteException e) {
+            Log.e(TAG, "RemoteException while getting overlay info: " + e.getMessage(), e);
         }
         filteredInfos.sort(OVERLAY_INFO_COMPARATOR);
         return filteredInfos;
     }
 
     public List<Typeface> getFonts() {
-        final List<Typeface> fontlist = new ArrayList<>();
-                for (String overlayPackage : getOverlayPackagesForCategory(FONT_KEY)) {
-            Resources overlayRes = null;
+        final List<Typeface> fontList = new ArrayList<>();
+        for (String overlayPackage : getOverlayPackagesForCategory(FONT_KEY)) {
             try {
-                overlayRes = overlayPackage.equals("android") ? Resources.getSystem()
-                        : pm.getResourcesForApplication(overlayPackage);
-                if (overlayRes != null) {
-                    int fontId = overlayRes.getIdentifier("config_bodyFontFamily", "string", overlayPackage);
-                    if (fontId != 0) {
-                        String fontName = overlayRes.getString(fontId);
-                        fontlist.add(Typeface.create(fontName, Typeface.NORMAL));
-                    }
+                Resources overlayRes = getResourcesForPackage(overlayPackage);
+                int fontId = overlayRes.getIdentifier(
+                        "config_bodyFontFamily", "string", overlayPackage);
+                if (fontId != 0) {
+                    String fontName = overlayRes.getString(fontId);
+                    fontList.add(Typeface.create(fontName, Typeface.NORMAL));
                 }
-            } catch (NameNotFoundException | NotFoundException e) {
+            } catch (NameNotFoundException | Resources.NotFoundException e) {
                 Log.e(TAG, "Error fetching fonts for package: " + overlayPackage, e);
             }
         }
-        return fontlist;
+        return fontList;
     }
 
     public List<ShapeDrawable> getShapeDrawables() {
-        final List<ShapeDrawable> shapelist = new ArrayList<>();
-            for (String overlayPackage : getOverlayPackagesForCategory(ICON_SHAPE_KEY)) {
-                    shapelist.add(createShapeDrawable(overlayPackage));
+        final List<ShapeDrawable> shapeList = new ArrayList<>();
+        for (String overlayPackage : getOverlayPackagesForCategory(ICON_SHAPE_KEY)) {
+            ShapeDrawable drawable = createShapeDrawable(overlayPackage);
+            if (drawable != null) {
+                shapeList.add(drawable);
             }
-        return shapelist;
+        }
+        return shapeList;
     }
 
     public ShapeDrawable createShapeDrawable(String overlayPackage) {
         try {
-            if (overlayPackage.equals("android")) {
-                overlayRes = Resources.getSystem();
-            } else {
-                if (overlayPackage.equals("default")) overlayPackage = "android";
-                overlayRes = pm.getResourcesForApplication(overlayPackage);
+            if (overlayPackage.equals("default")) overlayPackage = "android";
+            Resources overlayRes = getResourcesForPackage(overlayPackage);
+            String shape = overlayRes.getString(overlayRes.getIdentifier(
+                    "config_icon_mask", "string", overlayPackage));
+            if (!TextUtils.isEmpty(shape)) {
+                Path path = PathParser.createPathFromPathData(shape);
+                PathShape pathShape = new PathShape(path, 100f, 100f);
+                ShapeDrawable shapeDrawable = new ShapeDrawable(pathShape);
+                Context context = mContext.get();
+                if (context != null) {
+                    int thumbSize = (int) (context.getResources()
+                            .getDisplayMetrics().density * 72);
+                    shapeDrawable.setIntrinsicHeight(thumbSize);
+                    shapeDrawable.setIntrinsicWidth(thumbSize);
+                }
+                return shapeDrawable;
             }
-        } catch (NameNotFoundException | NotFoundException e) {
-            // Do nothing
+        } catch (NameNotFoundException | Resources.NotFoundException e) {
+            Log.e(TAG, "Error creating shape drawable for package: " + overlayPackage, e);
         }
-        if (overlayRes == null) {
-            Log.e(TAG, "Resources not found for package: " + overlayPackage);
-            return null;
-        }
-        final String shape = overlayRes.getString(
-            overlayRes.getIdentifier("config_icon_mask",
-            "string", overlayPackage));
-        Path path = TextUtils.isEmpty(shape) ? null : PathParser.createPathFromPathData(shape);
-        PathShape pathShape = new PathShape(path, 100f, 100f);
-        ShapeDrawable shapeDrawable = new ShapeDrawable(pathShape);
-        int mThumbSize = (int) (mContext.getResources().getDisplayMetrics().density * 72);
-        shapeDrawable.setIntrinsicHeight(mThumbSize);
-        shapeDrawable.setIntrinsicWidth(mThumbSize);
-        return shapeDrawable;
+        return null;
     }
 
     public boolean isOverlayEnabled(String overlayPackage) {
         try {
             OverlayInfo info = mOverlayManager.getOverlayInfo(overlayPackage, USER_SYSTEM);
-            return info == null ? false : info.isEnabled();
+            return info != null && info.isEnabled();
         } catch (RemoteException e) {
-            Log.e(TAG, "RemoteException while checking if overlay is enabled: " + e.getMessage(), e);
+            Log.e(TAG, "RemoteException while checking if overlay is enabled: "
+                    + e.getMessage(), e);
         }
         return false;
     }
 
     public boolean isDefaultOverlay(String category) {
         return getOverlayPackagesForCategory(category).stream()
-               .noneMatch(pkg -> isOverlayEnabled(pkg));
+                .noneMatch(pkg -> isOverlayEnabled(pkg));
+    }
+
+    private Resources getResourcesForPackage(String overlayPackage)
+            throws NameNotFoundException {
+        return overlayPackage.equals("android")
+                ? Resources.getSystem()
+                : pm.getResourcesForApplication(overlayPackage);
     }
 }
