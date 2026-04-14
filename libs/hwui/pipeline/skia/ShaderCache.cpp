@@ -36,8 +36,8 @@ namespace skiapipeline {
 
 // Cache size limits.
 static const size_t maxKeySize = 1024;
-static const size_t maxValueSize = 2 * 1024 * 1024;
-static const size_t maxTotalSize = 4 * 1024 * 1024;
+static const size_t maxValueSize = 4 * 1024 * 1024;
+static const size_t maxTotalSize = 32 * 1024 * 1024;
 static_assert(maxKeySize + maxValueSize < maxTotalSize);
 
 ShaderCache::ShaderCache() {
