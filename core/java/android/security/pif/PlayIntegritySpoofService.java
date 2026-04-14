@@ -230,7 +230,21 @@ public final class PlayIntegritySpoofService {
             reader.beginObject();
             while (reader.hasNext()) {
                 String key = reader.nextName();
-                String value = reader.nextString();
+                String value;
+                switch (reader.peek()) {
+                    case BOOLEAN:
+                        value = String.valueOf(reader.nextBoolean());
+                        break;
+                    case NUMBER:
+                        value = reader.nextString();
+                        break;
+                    case NULL:
+                        reader.nextNull();
+                        continue;
+                    default:
+                        value = reader.nextString();
+                        break;
+                }
                 processKeyValue(key, value);
             }
             reader.endObject();
