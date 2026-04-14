@@ -35,7 +35,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public final class GamePropsSpoofService {
     private static final String TAG = "GameProps";
-    private static final String CONFIG_PATH = "/data/adb/gameprops";
+    private static final String CONFIG_PATH = "/data/system/gameprops";
     private static final String CONFIG_FILE = "gameprops.json";
 
     private static GamePropsSpoofService sInstance;
