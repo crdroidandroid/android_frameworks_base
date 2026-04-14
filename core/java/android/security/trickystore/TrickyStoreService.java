@@ -21,7 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class TrickyStoreService {
     private static final String TAG = "TrickyStoreService";
-    private static final String CONFIG_PATH = "/data/adb/tricky_store";
+    private static final String CONFIG_PATH = "/data/system/tricky_store";
     private static final String TARGET_FILE = "target.txt";
     private static final String KEYBOX_FILE = "keybox.xml";
     private static final String PATCHLEVEL_FILE = "security_patch.txt";
