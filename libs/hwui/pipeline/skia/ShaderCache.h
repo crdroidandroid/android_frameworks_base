@@ -170,7 +170,7 @@ private:
      *
      *  WARNING: setting this to 0 will disable writing the cache to disk.
      */
-    unsigned int mDeferredSaveDelayMs = 4 * 1000;
+    unsigned int mDeferredSaveDelayMs = 10 * 1000;
 
     /**
      * "mMutex" is the shared mutex used to prevent concurrent access to the member
