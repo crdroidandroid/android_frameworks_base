@@ -42,10 +42,7 @@ import com.android.systemui.dagger.qualifiers.Application
 import com.android.systemui.dagger.qualifiers.Background
 import com.android.systemui.dagger.qualifiers.Main
 import com.android.systemui.media.NotificationMediaManager
-import com.android.systemui.plugins.keyguard.ui.clocks.CalendarSimpleData
-import com.android.systemui.plugins.keyguard.ui.clocks.ClockData
 import com.android.systemui.plugins.statusbar.StatusBarStateController
-import com.android.systemui.quicklook.QuickLookClient
 import com.android.systemui.screenrecord.ScreenRecordUxController
 import com.android.systemui.statusbar.StatusBarState
 import com.android.systemui.statusbar.connectivity.AccessPointController
@@ -107,7 +104,6 @@ class AxPlatformObservers @Inject constructor(
     private val localBluetoothManager: LocalBluetoothManager?,
     private val notificationMediaManager: NotificationMediaManager,
     private val nextAlarmController: NextAlarmController,
-    private val quickLookClient: QuickLookClient,
     private val configurationController: ConfigurationController,
     private val statusBarStateController: StatusBarStateController,
     private val keyguardStateController: KeyguardStateController,
@@ -157,7 +153,6 @@ class AxPlatformObservers @Inject constructor(
         dataSaverController.addCallback(dataSaverCallback)
         notificationMediaManager.addCallback(mediaListener)
         nextAlarmController.addCallback(nextAlarmCallback)
-        quickLookClient.addCallback(quickLookCallback)
         configurationController.addCallback(configurationListener)
         statusBarStateController.addCallback(dozeCallback)
         keyguardStateController.addCallback(keyguardCallback)
@@ -461,6 +456,8 @@ class AxPlatformObservers @Inject constructor(
                 })
             }
         }
+
+        override fun onFlashlightStrengthChanged(level: Int) {}
     }
 
     private val rotationCallback =
@@ -612,23 +609,6 @@ class AxPlatformObservers @Inject constructor(
             })
         } else {
             stateManager.broadcastState(AxPlatformClient.KEY_ALARM, Bundle())
-        }
-    }
-
-    private val quickLookCallback = object : QuickLookClient.Callback {
-        override fun onClockDataChanged(data: ClockData) {
-            val cal = data.calendar
-            if (cal != CalendarSimpleData.EMPTY) {
-                stateManager.broadcastState(AxPlatformClient.KEY_CALENDAR, Bundle().apply {
-                    putLong("id", cal.id)
-                    putString("title", cal.title ?: "")
-                    putLong("startTime", cal.startTime)
-                    putLong("endTime", cal.endTime)
-                    putString("location", cal.location ?: "")
-                })
-            } else {
-                stateManager.broadcastState(AxPlatformClient.KEY_CALENDAR, Bundle())
-            }
         }
     }
 
