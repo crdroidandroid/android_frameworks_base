@@ -243,4 +243,6 @@
     <string name="ax_dynamic_bar_sports_final">Finał</string>
     <string name="ax_dynamic_bar_sports_halftime">Przerwa</string>
     <string name="ax_dynamic_bar_sports_upcoming">Wkrótce</string>
+    <!-- Screenshot -->
+    <string name="quick_settings_screenshot_label">Zrzut ekranu</string>
 </resources>
