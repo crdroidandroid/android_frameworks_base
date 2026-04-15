@@ -240,4 +240,6 @@
     <string name="ax_dynamic_bar_sports_final">Chung kết</string>
     <string name="ax_dynamic_bar_sports_halftime">Hiệp nghỉ</string>
     <string name="ax_dynamic_bar_sports_upcoming">Sắp diễn ra</string>
+    <!-- Screenshot -->
+    <string name="quick_settings_screenshot_label">Chụp ảnh màn hình</string>
 </resources>
