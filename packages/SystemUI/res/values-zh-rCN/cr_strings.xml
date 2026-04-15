@@ -240,4 +240,6 @@
     <string name="ax_dynamic_bar_sports_final">决赛</string>
     <string name="ax_dynamic_bar_sports_halftime">中场休息</string>
     <string name="ax_dynamic_bar_sports_upcoming">即将推出</string>
+    <!-- Screenshot -->
+    <string name="quick_settings_screenshot_label">屏幕截图</string>
 </resources>
