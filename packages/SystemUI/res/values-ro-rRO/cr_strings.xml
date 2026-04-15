@@ -242,4 +242,6 @@
     <string name="ax_dynamic_bar_sports_final">Final</string>
     <string name="ax_dynamic_bar_sports_halftime">Pauză</string>
     <string name="ax_dynamic_bar_sports_upcoming">Următoare</string>
+    <!-- Screenshot -->
+    <string name="quick_settings_screenshot_label">Captură ecran</string>
 </resources>
