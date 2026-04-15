@@ -87,7 +87,7 @@ constructor(
         if (isTypeEnabled("app_switch")) appTracking.startListening()
         if (isTypeEnabled("torch")) torch.startListening()
         if (isTypeEnabled("biometric_unlock")) biometric.startListening()
-        if (isTypeEnabled("media") || isTypeEnabled("sports")) smartspace.startListening()
+        if (isTypeEnabled("now_playing") || isTypeEnabled("sports")) smartspace.startListening()
     }
 
     fun stopListening() {
