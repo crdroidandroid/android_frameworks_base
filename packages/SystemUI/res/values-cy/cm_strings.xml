@@ -66,6 +66,14 @@
     <string name="vpn_credentials_password">Cyfrinair</string>
     <string name="vpn_credentials_dialog_connect">Cysylltu</string>
     <string name="status_bar_firewall">Mur gwarchod</string>
+    <string name="screenrecord_lowquality_label">Ansawdd is</string>
+    <string name="screenrecord_lowquality_summary">Ar gyfer ffeiliau llai o faint</string>
+    <string name="screenrecord_longer_timeout_switch_label">Cyfyngiad maint ffeil mwyaf</string>
+    <string name="screenrecord_longer_timeout_switch_summary">Cyfyngu maint recordiad i 15 GB</string>
+    <string name="screenrecord_skip_time_label">Neidio amserydd</string>
+    <string name="screenrecord_skip_time_summary">Tynnu\'r 3 eiliad o aros</string>
+    <string name="screenrecord_hevc_switch_label">Amgodiad HEVC</string>
+    <string name="screenrecord_hevc_switch_summary">Defnyddio\u2019r amgodydd HEVC mwy effeithlon</string>
     <string name="battery_notification_channel_tv">Rhybudd batri</string>
     <string name="screenshot_delete_label">Dileu</string>
     <string name="screenshot_delete_description">Dileu sgrinlun</string>

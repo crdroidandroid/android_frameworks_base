@@ -77,4 +77,6 @@
     <string name="battery_notification_channel_tv">Akkuwarnung</string>
     <string name="screenshot_delete_label">Löschen</string>
     <string name="screenshot_delete_description">Screenshot löschen</string>
+    <string name="screen_pinning_description_no_navbar">So bleibt er sichtbar, bis du die Fixierung aufhebst. Halte Zurück gedrückt, um die Fixierung aufzuheben.</string>
+    <string name="screen_pinning_toast_no_navbar">Um die Fixierung dieses Bildschirms zu lösen, halte die Zurück-Taste gedrückt</string>
 </resources>
