@@ -241,4 +241,6 @@
     <string name="ax_dynamic_bar_sports_final">Finale</string>
     <string name="ax_dynamic_bar_sports_halftime">Halbzeit</string>
     <string name="ax_dynamic_bar_sports_upcoming">Demnächst</string>
+    <!-- Screenshot -->
+    <string name="quick_settings_screenshot_label">Screenshot</string>
 </resources>
