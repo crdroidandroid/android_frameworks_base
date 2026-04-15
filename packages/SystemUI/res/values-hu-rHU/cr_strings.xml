@@ -241,4 +241,6 @@
     <string name="ax_dynamic_bar_sports_final">Döntő</string>
     <string name="ax_dynamic_bar_sports_halftime">Félidő</string>
     <string name="ax_dynamic_bar_sports_upcoming">Közelgő</string>
+    <!-- Screenshot -->
+    <string name="quick_settings_screenshot_label">Képernyőmentés</string>
 </resources>
