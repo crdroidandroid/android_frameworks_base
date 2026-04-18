@@ -3,7 +3,10 @@ package com.android.systemui.axdynamicbar.data.source
 import android.app.Notification
 import android.content.Context
 import com.android.systemui.res.R
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.Icon
 import android.os.Bundle
 import android.os.Parcelable
 import android.os.SystemClock
@@ -108,6 +111,9 @@ constructor(
     private val _nowPlayingEvent = MutableStateFlow<IslandEvent.NowPlaying?>(null)
     val nowPlayingEvent: StateFlow<IslandEvent.NowPlaying?> = _nowPlayingEvent.asStateFlow()
 
+    private val _callEvents = MutableStateFlow<List<IslandEvent.Call>>(emptyList())
+    val callEvents: StateFlow<List<IslandEvent.Call>> = _callEvents.asStateFlow()
+
     @Volatile var disabledTypes: Set<String> = emptySet()
 
     private var recorderPackage: String? = null
@@ -165,6 +171,9 @@ constructor(
                         accumulatedPauseMs = 0L
                     }
                 }
+
+                _callEvents.value =
+                    _callEvents.value.filter { it.sbn.key != sbn.key }
 
                 _promotedOngoingEvents.value =
                     _promotedOngoingEvents.value.filter { it.sbn.key != sbn.key }
@@ -238,7 +247,14 @@ constructor(
                 }
 
                 if (sbn.notification?.category == Notification.CATEGORY_CALL) {
-                    return
+                    val isCallStyle =
+                        extras.containsKey(Notification.EXTRA_ANSWER_INTENT) ||
+                            extras.containsKey(Notification.EXTRA_DECLINE_INTENT) ||
+                            extras.containsKey(Notification.EXTRA_HANG_UP_INTENT)
+                    if (isCallStyle) {
+                        if ("call" !in disabledTypes) handleCallNotification(sbn, extras)
+                        return
+                    }
                 }
 
                 val allActions = sbn.notification?.actions ?: emptyArray()
@@ -444,18 +460,105 @@ constructor(
                             a.title?.let { IslandEvent.NotificationAction(label = it, action = a) }
                         }
 
+                val replyAction =
+                    allNotifActions
+                        .firstOrNull { a ->
+                            !a.remoteInputs.isNullOrEmpty() && a.actionIntent != null
+                        }
+                        ?.let { a ->
+                            val remoteInput = a.remoteInputs!!.first()
+                            IslandEvent.ReplyAction(
+                                label = a.title ?: remoteInput.label ?: "Reply",
+                                action = a,
+                                remoteInput = remoteInput,
+                            )
+                        }
+
+                var senderIcon: Drawable? = null
+                var senderName: String? = null
+                var latestMessageText: String? = null
+                var isConversation = false
+                var isGroupConversation = false
+                var conversationTitle: String? = null
+                if (
+                    notif != null &&
+                        isMessagingStyle &&
+                        notif.extras != null
+                ) {
+                    isConversation = true
+                    isGroupConversation = notif.extras.getBoolean(
+                        Notification.EXTRA_IS_GROUP_CONVERSATION, false
+                    )
+                    conversationTitle = notif.extras.getCharSequence(
+                        Notification.EXTRA_CONVERSATION_TITLE
+                    )?.toString()?.takeIf { it.isNotEmpty() }
+                    val messagesArray =
+                        notif.extras.getParcelableArray(
+                            Notification.EXTRA_MESSAGES,
+                            Parcelable::class.java,
+                        )
+                    if (messagesArray != null && messagesArray.isNotEmpty()) {
+                        val messages =
+                            Notification.MessagingStyle.Message.getMessagesFromBundleArray(
+                                messagesArray
+                            )
+                        val lastMessage = messages.maxByOrNull { it.timestamp }
+                        val sender = lastMessage?.senderPerson
+                        senderName = sender?.name?.toString()
+                        latestMessageText = lastMessage?.text?.toString()
+                        senderIcon =
+                            try {
+                                sender?.icon?.loadDrawable(context)
+                            } catch (_: Exception) {
+                                null
+                            }
+                    }
+
+                    if (senderIcon == null) {
+                        senderIcon =
+                            try {
+                                notif.extras
+                                    .getParcelable(
+                                        Notification.EXTRA_CONVERSATION_ICON,
+                                        Icon::class.java,
+                                    )
+                                    ?.loadDrawable(context)
+                            } catch (_: Exception) {
+                                null
+                            }
+                    }
+
+                    if (senderIcon == null) {
+                        senderIcon =
+                            try {
+                                notif.getLargeIcon()?.loadDrawable(context)
+                            } catch (_: Exception) {
+                                null
+                            }
+                    }
+                }
+
+                val notificationImage = extractNotificationImage(extras, sbn)
+
                 val event =
                     IslandEvent.Notification(
                         sbn = sbn,
                         title = title,
-                        text = text,
+                        text = latestMessageText ?: text,
                         appIcon = icon,
                         appName = appName,
                         progress = if (hasProgress && !indeterminate) progressRaw else -1,
                         progressMax = progressMax.coerceAtLeast(1),
                         isProgressIndeterminate = indeterminate,
                         actions = actions,
+                        replyAction = replyAction,
+                        isConversation = isConversation,
+                        isGroupConversation = isGroupConversation,
+                        conversationTitle = conversationTitle,
+                        senderIcon = senderIcon,
+                        senderName = senderName,
                         groupKey = groupKey,
+                        notificationImage = notificationImage,
                     )
                 applicationScope.launch { notificationFlow.emit(event) }
                 onNotificationPosted?.invoke(event)
@@ -479,6 +582,7 @@ constructor(
         _timerEvent.value = null
         _stopwatchEvent.value = null
         _alarmEvent.value = null
+        _callEvents.value = emptyList()
         _notificationEvents.value = emptyList()
         _promotedOngoingEvents.value = emptyList()
         _sportsEvents.value = emptyList()
@@ -520,6 +624,10 @@ constructor(
 
     fun clearAlarm() {
         _alarmEvent.value = null
+    }
+
+    fun clearCall(key: String) {
+        _callEvents.value = _callEvents.value.filter { it.sbn.key != key }
     }
 
     private fun handleTimer(
@@ -705,6 +813,62 @@ constructor(
         } catch (_: Exception) {
             ""
         }
+
+    private fun handleCallNotification(sbn: StatusBarNotification, extras: Bundle) {
+        val callerName = extras.getString("android.title")
+        val number = extras.getString("android.text")
+        val callerPhoto =
+            try {
+                sbn.notification?.getLargeIcon()?.loadDrawable(context)
+            } catch (_: Exception) {
+                null
+            }
+
+        val allActions = sbn.notification?.actions ?: emptyArray()
+        val actions =
+            allActions
+                .filter { a -> a.remoteInputs.isNullOrEmpty() && a.actionIntent != null }
+                .take(3)
+                .mapNotNull { a ->
+                    a.title?.let { IslandEvent.NotificationAction(label = it, action = a) }
+                }
+
+        val androidCallType = extras.getInt(
+            Notification.EXTRA_CALL_TYPE,
+            Notification.CallStyle.CALL_TYPE_UNKNOWN,
+        )
+        val callType =
+            if (androidCallType == Notification.CallStyle.CALL_TYPE_INCOMING)
+                "Phone:incoming"
+            else "Phone:active"
+
+        val icon =
+            try {
+                context.packageManager.getApplicationIcon(sbn.packageName)
+            } catch (_: Exception) {
+                null
+            }
+
+        val callWhen = sbn.notification?.`when` ?: 0L
+        val callStart = if (callWhen > 0L) callWhen else System.currentTimeMillis()
+
+        val event =
+            IslandEvent.Call(
+                sbn = sbn,
+                callerName = callerName,
+                number = number,
+                appIcon = icon,
+                callerPhoto = callerPhoto,
+                callType = callType,
+                callStartTimeMs = callStart,
+                actions = actions,
+            )
+
+        val current = _callEvents.value.toMutableList()
+        current.removeAll { it.sbn.key == sbn.key }
+        current.add(0, event)
+        _callEvents.value = current
+    }
 
     private fun actionIconResName(action: Notification.Action, pkg: String): String? {
         val icon = action.getIcon() ?: return null
@@ -958,6 +1122,26 @@ constructor(
         current.add(0, event)
         _sportsEvents.value = current
         return true
+    }
+
+    private fun extractNotificationImage(extras: Bundle, sbn: StatusBarNotification): Drawable? {
+        try {
+            extras.getParcelable(Notification.EXTRA_PICTURE_ICON, Icon::class.java)
+                ?.loadDrawable(context)?.let { return it }
+        } catch (_: Exception) {}
+
+        try {
+            extras.getParcelable(Notification.EXTRA_PICTURE, Bitmap::class.java)
+                ?.let { return BitmapDrawable(context.resources, it) }
+        } catch (_: Exception) {}
+
+        if (!sbn.notification.isStyle(Notification.MessagingStyle::class.java)) {
+            try {
+                sbn.notification?.getLargeIcon()?.loadDrawable(context)?.let { return it }
+            } catch (_: Exception) {}
+        }
+
+        return null
     }
 
     private fun loadNotificationIcon(sbn: StatusBarNotification, pkg: String): Drawable? {

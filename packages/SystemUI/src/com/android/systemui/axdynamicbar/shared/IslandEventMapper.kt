@@ -71,6 +71,11 @@ internal fun eventStyleFor(event: IslandEvent): EventStyle = when (event) {
         icon = Icons.Filled.MusicNote,
         labelRes = R.string.ax_dynamic_bar_music,
     )
+    is IslandEvent.Call -> EventStyle(
+        accent = GreenAccent,
+        icon = null,
+        labelRes = R.string.ax_dynamic_bar_call,
+    )
     is IslandEvent.PromotedOngoing -> EventStyle(
         accent = BlueAccent,
         icon = null,
