@@ -9,6 +9,7 @@ val EVENT_TYPE_IDS: Map<Class<out IslandEvent>, String> =
         IslandEvent.PromotedOngoing::class.java to "promoted_ongoing",
         IslandEvent.Sports::class.java to "sports",
         IslandEvent.Media::class.java to "media",
+        IslandEvent.Call::class.java to "call",
         IslandEvent.Bluetooth::class.java to "bluetooth",
         IslandEvent.Hotspot::class.java to "hotspot",
         IslandEvent.Charging::class.java to "charging",
@@ -49,5 +50,7 @@ interface IslandActions {
     fun switchToApp(taskId: Int)
     fun onNotificationInteraction(eventId: String)
     fun onNotificationInteractionEnd(eventId: String)
+    fun onNotificationAlertInteractionStart()
+    fun onNotificationAlertInteractionEnd()
     fun launchNotificationDismissingKeyguard(event: IslandEvent.Notification)
 }
