@@ -205,6 +205,7 @@
     <string name="ax_dynamic_bar_wireless_charging">Бездротове заряджання</string>
     <string name="ax_dynamic_bar_until_full">До повного</string>
     <string name="ax_dynamic_bar_battery_saver">Режим економії заряду акумулятора</string>
+    <string name="ax_dynamic_bar_call">Дзвінок</string>
     <string name="ax_dynamic_bar_incoming_call">Вхідний виклик</string>
     <string name="ax_dynamic_bar_connected">Підключено</string>
     <string name="ax_dynamic_bar_disconnect">Від’єднатися</string>
@@ -243,4 +244,6 @@
     <string name="ax_dynamic_bar_sports_final">Фінал</string>
     <string name="ax_dynamic_bar_sports_halftime">Перерва</string>
     <string name="ax_dynamic_bar_sports_upcoming">Майбутні</string>
+    <!-- Screenshot -->
+    <string name="quick_settings_screenshot_label">Знімок екрану</string>
 </resources>

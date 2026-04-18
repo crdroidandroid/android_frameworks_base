@@ -202,6 +202,7 @@
     <string name="ax_dynamic_bar_wireless_charging">Sạc không dây</string>
     <string name="ax_dynamic_bar_until_full">cho đến khi đầy</string>
     <string name="ax_dynamic_bar_battery_saver">Tiết kiệm pin</string>
+    <string name="ax_dynamic_bar_call">Call</string>
     <string name="ax_dynamic_bar_incoming_call">Cuộc gọi đến</string>
     <string name="ax_dynamic_bar_connected">Đã kết nối</string>
     <string name="ax_dynamic_bar_disconnect">Ngắt kết nối</string>
@@ -240,4 +241,6 @@
     <string name="ax_dynamic_bar_sports_final">Chung kết</string>
     <string name="ax_dynamic_bar_sports_halftime">Hiệp nghỉ</string>
     <string name="ax_dynamic_bar_sports_upcoming">Sắp diễn ra</string>
+    <!-- Screenshot -->
+    <string name="quick_settings_screenshot_label">Chụp ảnh màn hình</string>
 </resources>
