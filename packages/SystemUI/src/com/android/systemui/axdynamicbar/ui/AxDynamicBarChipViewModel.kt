@@ -173,7 +173,17 @@ constructor(
                 collapseOnNullJob = null
             }
         }.launchIn(applicationScope)
-        
+
+        chipState
+            .map { state ->
+                state?.allEvents?.any {
+                    it is IslandEvent.Call && it.callType == "Phone:incoming"
+                } == true
+            }
+            .distinctUntilChanged()
+            .onEach { hasIncomingCall -> if (hasIncomingCall) expandPanel() }
+            .launchIn(applicationScope)
+
         interactor.isPanelExpanded.onEach { if (it) _isExpanded.value = false }.launchIn(applicationScope)
         interactor.qsExpansion.map { it > 0f }.distinctUntilChanged().onEach { if (it) _isExpanded.value = false }.launchIn(applicationScope)
         

@@ -282,6 +282,20 @@ sealed class IslandEvent(open val priority: Int, val id: String) : Comparable<Is
         val icon: Drawable? = null,
     )
 
+    data class Call(
+        val sbn: StatusBarNotification,
+        val callerName: String? = null,
+        val number: String? = null,
+        val appIcon: Drawable? = null,
+        val callerPhoto: Drawable? = null,
+        val callType: String = "Phone:incoming",
+        val callStartTimeMs: Long = System.currentTimeMillis(),
+        val actions: List<NotificationAction> = emptyList(),
+    ) : IslandEvent(priority = 100, id = "call_${sbn.key}") {
+        override val behavior = EventBehavior(autoDismissMs = null, suppressOnDismiss = false)
+        override fun withoutDrawables() = copy(appIcon = null, callerPhoto = null)
+    }
+
     data class Notification(
         val sbn: StatusBarNotification,
         val title: String? = null,
@@ -324,6 +338,7 @@ sealed class IslandEvent(open val priority: Int, val id: String) : Comparable<Is
                 PromotedOngoing::class.java,
                 Sports::class.java,
                 Media::class.java,
+                Call::class.java,
                 Timer::class.java,
                 Stopwatch::class.java,
             )

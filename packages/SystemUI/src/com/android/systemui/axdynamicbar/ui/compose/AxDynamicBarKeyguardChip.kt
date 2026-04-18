@@ -692,6 +692,10 @@ private fun KeyguardPrimaryText(event: IslandEvent, color: Color, modifier: Modi
             )
         }
         is IslandEvent.Alarm -> MarqueeText(event.label.ifEmpty { stringResource(R.string.ax_dynamic_bar_alarm) }, color, modifier)
+        is IslandEvent.Call -> {
+                if (event.callStartTimeMs > 0) CallTimerText(event, modifier, color)
+                else MarqueeText(event.callType ?: stringResource(R.string.ax_dynamic_bar_call), color, modifier)
+        }
         is IslandEvent.Casting -> MarqueeText(event.deviceName.take(12), color, modifier)
         is IslandEvent.Torch -> MarqueeText(
             if (event.supportsLevel) "${(event.level.toFloat() / event.maxLevel * 100).toInt()}%"
@@ -746,6 +750,7 @@ private fun secondaryTextFor(event: IslandEvent): String? = when (event) {
             "%d:%02d".format(cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE))
         } else null
     }
+    is IslandEvent.Call -> event.callerName
     is IslandEvent.Casting -> stringResource(R.string.ax_dynamic_bar_cast_short)
     is IslandEvent.Vpn -> stringResource(R.string.ax_dynamic_bar_active)
     is IslandEvent.BiometricUnlock -> event.sourceName
@@ -760,6 +765,27 @@ private fun secondaryTextFor(event: IslandEvent): String? = when (event) {
         else -> null
     }
     else -> null
+}
+
+
+@Composable
+private fun CallTimerText(event: IslandEvent.Call, modifier: Modifier, overrideColor: Color? = null) {
+    val isActive = event.callType == "Phone:active"
+    if (isActive) {
+        var elapsedMs by remember(event.callStartTimeMs) {
+            mutableLongStateOf((System.currentTimeMillis() - event.callStartTimeMs).coerceAtLeast(0L))
+        }
+        LaunchedEffect(event.callStartTimeMs) {
+            while (true) {
+                delay(1000)
+                elapsedMs = (System.currentTimeMillis() - event.callStartTimeMs).coerceAtLeast(0L)
+            }
+        }
+        val color = overrideColor ?: GreenAccent
+        Text(formatElapsedTime(elapsedMs), color = color, style = PillMono, modifier = modifier)
+    } else {
+        MarqueeText(stringResource(R.string.ax_dynamic_bar_incoming_call), overrideColor ?: BlueAccent, modifier)
+    }
 }
 
 @Composable

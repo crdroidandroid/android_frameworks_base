@@ -112,6 +112,9 @@ constructor(
     private val _nowPlayingEvent = MutableStateFlow<IslandEvent.NowPlaying?>(null)
     val nowPlayingEvent: StateFlow<IslandEvent.NowPlaying?> = _nowPlayingEvent.asStateFlow()
 
+    private val _callEvents = MutableStateFlow<List<IslandEvent.Call>>(emptyList())
+    val callEvents: StateFlow<List<IslandEvent.Call>> = _callEvents.asStateFlow()
+
     @Volatile var disabledTypes: Set<String> = emptySet()
 
     private var recorderPackage: String? = null
@@ -168,6 +171,9 @@ constructor(
                         accumulatedPauseMs = 0L
                     }
                 }
+
+                _callEvents.value =
+                    _callEvents.value.filter { it.sbn.key != sbn.key }
 
                 _promotedOngoingEvents.value =
                     _promotedOngoingEvents.value.filter { it.sbn.key != sbn.key }
@@ -237,7 +243,7 @@ constructor(
                             extras.containsKey(Notification.EXTRA_DECLINE_INTENT) ||
                             extras.containsKey(Notification.EXTRA_HANG_UP_INTENT)
                     if (isCallStyle) {
-                        handleCallNotification(sbn, extras)
+                        if ("call" !in disabledTypes) handleCallNotification(sbn, extras)
                         return
                     }
                 }
@@ -557,6 +563,7 @@ constructor(
         _timerEvent.value = null
         _stopwatchEvent.value = null
         _alarmEvent.value = null
+        _callEvents.value = emptyList()
         _notificationEvents.value = emptyList()
         _promotedOngoingEvents.value = emptyList()
         _sportsEvents.value = emptyList()
@@ -598,6 +605,10 @@ constructor(
 
     fun clearAlarm() {
         _alarmEvent.value = null
+    }
+
+    fun clearCall(key: String) {
+        _callEvents.value = _callEvents.value.filter { it.sbn.key != key }
     }
 
     private fun handleTimer(
@@ -776,6 +787,7 @@ constructor(
             } catch (_: Exception) {
                 null
             }
+
         val allActions = sbn.notification?.actions ?: emptyArray()
         val actions =
             allActions
@@ -805,20 +817,21 @@ constructor(
         val callStart = if (callWhen > 0L) callWhen else System.currentTimeMillis()
 
         val event =
-            IslandEvent.Notification(
+            IslandEvent.Call(
                 sbn = sbn,
-                title = callerName,
-                text = number,
+                callerName = callerName,
+                number = number,
                 appIcon = icon,
-                appName = callType,
-                actions = actions,
-                senderIcon = callerPhoto,
-                senderName = callerName,
-                isConversation = false,
+                callerPhoto = callerPhoto,
+                callType = callType,
                 callStartTimeMs = callStart,
+                actions = actions,
             )
-        applicationScope.launch { notificationFlow.emit(event) }
-        onNotificationPosted?.invoke(event)
+
+        val current = _callEvents.value.toMutableList()
+        current.removeAll { it.sbn.key == sbn.key }
+        current.add(0, event)
+        _callEvents.value = current
     }
 
     private fun isPromotable(sbn: StatusBarNotification, extras: Bundle): Boolean {

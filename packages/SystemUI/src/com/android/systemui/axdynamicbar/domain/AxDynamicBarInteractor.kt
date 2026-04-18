@@ -396,6 +396,7 @@ constructor(
             is IslandEvent.Hotspot -> repository.connectivity.clearHotspot()
             is IslandEvent.Charging -> repository.system.clearCharging()
             is IslandEvent.Alarm -> repository.notification.clearAlarm()
+            is IslandEvent.Call -> repository.notification.clearCall(event.sbn.key)
             is IslandEvent.Timer -> repository.notification.clearTimer()
             is IslandEvent.Stopwatch -> repository.notification.clearStopwatch()
             is IslandEvent.RingerMode -> repository.system.clearRinger()
