@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 AxionOS
+ * Copyright (C) 2025-2026 AxionOS
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,22 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.android.server;
 
-import com.android.server.am.*;
-import com.android.server.spoof.IAxSpoofManager;
+package com.android.server.spoof;
 
-public interface IAxExtServiceFactory {
-    enum ExtType {
-        AX_SPOOF_MANAGER(IAxSpoofManager.class);
-        private final Class<?> clazz;
-
-        ExtType(Class<?> clazz) {
-            this.clazz = clazz;
-        }
-
-        public Class<?> getClazz() {
-            return clazz;
-        }
+public interface IAxSpoofManager {
+    default void systemReady() {
     }
+
+    String getPifConfig();
+
+    String getGamePropsConfig();
+
+    String getTrickyStoreTarget();
+
+    String getTrickyStoreKeyBox();
+
+    String getTrickyStorePatch();
 }

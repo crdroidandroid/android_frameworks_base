@@ -16,13 +16,12 @@
 
 package android.security.gameprops;
 
+import android.app.ActivityManager;
 import android.os.Build;
+import android.os.RemoteException;
 import android.util.JsonReader;
 import android.util.Log;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.lang.reflect.Field;
@@ -35,8 +34,6 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public final class GamePropsSpoofService {
     private static final String TAG = "GameProps";
-    private static final String CONFIG_PATH = "/data/system/gameprops";
-    private static final String CONFIG_FILE = "gameprops.json";
 
     private static GamePropsSpoofService sInstance;
 
@@ -64,43 +61,28 @@ public final class GamePropsSpoofService {
     public void loadConfig() {
         mGameConfigs.clear();
         mEnabled = false;
+        mConfigLoaded = false;
 
-        File configFile = new File(CONFIG_PATH, CONFIG_FILE);
-        if (!configFile.exists() || !configFile.canRead()) {
-            Log.w(TAG, "Config file not found or not readable: " + configFile.getAbsolutePath());
-            mConfigLoaded = false;
+        String content;
+        try {
+            content = ActivityManager.getService().getSpoofGamePropsConfig();
+        } catch (RemoteException e) {
+            Log.e(TAG, "Failed to fetch gameprops config from system_server", e);
+            return;
+        }
+
+        if (content == null || content.isEmpty()) {
+            Log.w(TAG, "No gameprops config in Settings.Secure");
             return;
         }
 
         try {
-            String content = readFile(configFile);
-            if (content == null || content.isEmpty()) {
-                mConfigLoaded = false;
-                return;
-            }
-
             parseJson(content);
             mConfigLoaded = true;
             Log.i(TAG, "Game props config loaded, games=" + mGameConfigs.size() + ", enabled=" + mEnabled);
-
         } catch (Exception e) {
-            Log.e(TAG, "Failed to load game props config", e);
-            mConfigLoaded = false;
+            Log.e(TAG, "Failed to parse game props config", e);
         }
-    }
-
-    private String readFile(File file) {
-        StringBuilder content = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                content.append(line).append("\n");
-            }
-        } catch (IOException e) {
-            Log.e(TAG, "Failed to read config file", e);
-            return null;
-        }
-        return content.toString();
     }
 
     private void parseJson(String content) {
@@ -108,7 +90,7 @@ public final class GamePropsSpoofService {
             reader.beginObject();
             while (reader.hasNext()) {
                 String key = reader.nextName();
-                
+
                 if ("enabled".equals(key)) {
                     mEnabled = reader.nextBoolean();
                 } else if ("debug".equals(key)) {
@@ -130,7 +112,7 @@ public final class GamePropsSpoofService {
         while (reader.hasNext()) {
             String packageName = reader.nextName();
             Map<String, String> gameProps = new HashMap<>();
-            
+
             reader.beginObject();
             while (reader.hasNext()) {
                 String propKey = reader.nextName();
@@ -138,7 +120,7 @@ public final class GamePropsSpoofService {
                 gameProps.put(propKey, propValue);
             }
             reader.endObject();
-            
+
             if (!gameProps.isEmpty()) {
                 mGameConfigs.put(packageName, gameProps);
                 if (mDebug) {

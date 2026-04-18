@@ -1,5 +1,6 @@
 package android.security.pif;
 
+import android.app.ActivityManager;
 import android.app.ActivityThread;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -7,15 +8,13 @@ import android.content.pm.Signature;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.os.RemoteException;
 import android.os.SystemProperties;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.JsonReader;
 import android.util.Log;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.lang.reflect.Field;
@@ -27,14 +26,6 @@ import java.util.concurrent.ConcurrentHashMap;
 /** @hide */
 public final class PlayIntegritySpoofService {
     private static final String TAG = "PIF";
-    private static final String CONFIG_PATH = "/data/system/playintegrityfix";
-
-    private static final String[] PROP_FILES = {
-        "custom.pif.prop",
-        "custom.pif.json",
-        "pif.prop",
-        "pif.json"
-    };
 
     private static final String DROIDGUARD_PACKAGE = "com.google.android.gms.unstable";
     private static final String VENDING_PACKAGE = "com.android.vending";
@@ -143,63 +134,36 @@ public final class PlayIntegritySpoofService {
     public void loadConfig() {
         mBuildFields.clear();
         mSystemProps.clear();
+        mConfigLoaded = false;
 
-        File configFile = findConfigFile();
-        if (configFile == null) {
-            Log.w(TAG, "No PIF config file found");
-            mConfigLoaded = false;
+        String content;
+        try {
+            content = ActivityManager.getService().getSpoofPifConfig();
+        } catch (RemoteException e) {
+            Log.e(TAG, "Failed to fetch PIF config from system_server", e);
+            return;
+        }
+
+        if (content == null || content.isEmpty()) {
+            Log.w(TAG, "No PIF config in Settings.Secure");
             return;
         }
 
         try {
-            String content = readFile(configFile);
-            if (content == null || content.isEmpty()) {
-                mConfigLoaded = false;
-                return;
-            }
-
-            if (configFile.getName().endsWith(".json")) {
+            String trimmed = content.trim();
+            if (trimmed.startsWith("{")) {
                 parseJson(content);
             } else {
                 parseProp(content);
             }
 
             mConfigLoaded = true;
-            Log.i(TAG, "PIF config loaded from " + configFile.getAbsolutePath() 
-                + ", fields=" + mBuildFields.size() + ", props=" + mSystemProps.size());
+            Log.i(TAG, "PIF config loaded, fields=" + mBuildFields.size()
+                + ", props=" + mSystemProps.size());
 
         } catch (Exception e) {
             Log.e(TAG, "Failed to load PIF config", e);
         }
-    }
-
-    private File findConfigFile() {
-        File dir = new File(CONFIG_PATH);
-        if (!dir.exists()) {
-            return null;
-        }
-
-        for (String fileName : PROP_FILES) {
-            File file = new File(dir, fileName);
-            if (file.exists() && file.canRead()) {
-                return file;
-            }
-        }
-        return null;
-    }
-
-    private String readFile(File file) {
-        StringBuilder content = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                content.append(line).append("\n");
-            }
-        } catch (IOException e) {
-            Log.e(TAG, "Failed to read config file", e);
-            return null;
-        }
-        return content.toString();
     }
 
     private void parseProp(String content) {
