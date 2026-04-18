@@ -33,7 +33,6 @@ private const val UNSET = -1
 
 private val HIDDEN_VIEW_IDS = listOf(
     R.id.shared_notification_container,
-    R.id.keyguard_widgets_area,
     R.id.notificationShelf,
 )
 
