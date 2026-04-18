@@ -6,10 +6,11 @@ data class IslandUiState(
     val pinnedEventIndex: Int = 0,
     val manuallyHidden: Boolean = false,
     val forceVisible: Boolean = false,
+    val notificationAlert: IslandEvent.Notification? = null,
 ) {
 
     val shouldShow: Boolean
-        get() = islandState == IslandState.CHIP
+        get() = islandState == IslandState.CHIP || notificationAlert != null
 
     val isChip: Boolean
         get() = islandState == IslandState.CHIP
