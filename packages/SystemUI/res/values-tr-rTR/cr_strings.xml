@@ -203,6 +203,7 @@
     <string name="ax_dynamic_bar_wireless_charging">Kablosuz Şarj</string>
     <string name="ax_dynamic_bar_until_full">dolana kadar</string>
     <string name="ax_dynamic_bar_battery_saver">Pil Tasarrufu</string>
+    <string name="ax_dynamic_bar_call">Call</string>
     <string name="ax_dynamic_bar_incoming_call">Gelen Çağrı</string>
     <string name="ax_dynamic_bar_connected">Bağlandı</string>
     <string name="ax_dynamic_bar_disconnect">Bağlantıyı Kes</string>
