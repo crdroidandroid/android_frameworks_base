@@ -202,6 +202,7 @@
     <string name="ax_dynamic_bar_wireless_charging">무선 충전</string>
     <string name="ax_dynamic_bar_until_full">완충 시까지</string>
     <string name="ax_dynamic_bar_battery_saver">배터리 세이버</string>
+    <string name="ax_dynamic_bar_call">Call</string>
     <string name="ax_dynamic_bar_incoming_call">수신 전화</string>
     <string name="ax_dynamic_bar_connected">연결됨</string>
     <string name="ax_dynamic_bar_disconnect">연결 해제</string>
