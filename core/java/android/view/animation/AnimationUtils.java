@@ -533,23 +533,31 @@ public class AnimationUtils {
         private static Animation sCloseEnter;
         private static Animation sCloseExit;
 
-        private static Interpolator sFastOutExtraSlowInInterpolator;
+        private static SpringInterpolator sSpatialSpec;
+        private static SpringInterpolator sEffectsSpec;
+        private static int sBackdropColor;
 
-        private static final float DISTANCE = 0.1f;
+        private static final float DISTANCE = 0.333f;
 
         private ActivityAnimations() {}
 
         /** @hide */
         public static void maybeInit(Context context) {
-            if (sFastOutExtraSlowInInterpolator == null) {
-                sFastOutExtraSlowInInterpolator = AnimationUtils.loadInterpolator(
-                        context, R.interpolator.fast_out_extra_slow_in);
+            if (sSpatialSpec == null) {
+                sSpatialSpec = new SpringInterpolator(0.8f, 380f);
+                sEffectsSpec = new SpringInterpolator(1.0f, 3800f);
             }
+            sBackdropColor = context.getColor(
+                    com.android.internal.R.color.materialColorSurfaceContainer);
+            if (sOpenEnter != null) sOpenEnter.setBackdropColor(sBackdropColor);
+            if (sOpenExit != null) sOpenExit.setBackdropColor(sBackdropColor);
+            if (sCloseEnter != null) sCloseEnter.setBackdropColor(sBackdropColor);
+            if (sCloseExit != null) sCloseExit.setBackdropColor(sBackdropColor);
         }
 
         private static class ActivityAnimFactory {
             private float fromX = 0f, toX = 0f;
-            private long duration = 200L;
+            private float fromAlpha = 1f, toAlpha = 1f;
 
             public ActivityAnimFactory fromX(float ratio) {
                 this.fromX = ratio;
@@ -561,6 +569,12 @@ public class AnimationUtils {
                 return this;
             }
 
+            public ActivityAnimFactory fade(float from, float to) {
+                this.fromAlpha = from;
+                this.toAlpha = to;
+                return this;
+            }
+
             public Animation build() {
                 AnimationSet animationSet = new AnimationSet(false);
                 TranslateAnimation slide = new TranslateAnimation(
@@ -569,9 +583,17 @@ public class AnimationUtils {
                         Animation.RELATIVE_TO_SELF, 0f,
                         Animation.RELATIVE_TO_SELF, 0f
                 );
-                slide.setDuration(duration);
-                slide.setInterpolator(sFastOutExtraSlowInInterpolator);
+                slide.setDuration(sSpatialSpec.getDurationMs());
+                slide.setInterpolator(sSpatialSpec);
                 animationSet.addAnimation(slide);
+                if (fromAlpha != toAlpha) {
+                    AlphaAnimation fade = new AlphaAnimation(fromAlpha, toAlpha);
+                    fade.setDuration(sEffectsSpec.getDurationMs());
+                    fade.setInterpolator(sEffectsSpec);
+                    animationSet.addAnimation(fade);
+                }
+                animationSet.setShowBackdrop(true);
+                animationSet.setBackdropColor(sBackdropColor);
                 return animationSet;
             }
         }
@@ -582,6 +604,7 @@ public class AnimationUtils {
                 sOpenEnter = new ActivityAnimFactory()
                         .fromX(1.0f)
                         .toX(0.0f)
+                        .fade(0.0f, 1.0f)
                         .build();
             }
             return sOpenEnter;
@@ -593,6 +616,7 @@ public class AnimationUtils {
                 sOpenExit = new ActivityAnimFactory()
                         .fromX(0.0f)
                         .toX(-DISTANCE)
+                        .fade(1.0f, 0.0f)
                         .build();
             }
             return sOpenExit;
@@ -604,6 +628,7 @@ public class AnimationUtils {
                 sCloseEnter = new ActivityAnimFactory()
                         .fromX(-DISTANCE)
                         .toX(0.0f)
+                        .fade(0.0f, 1.0f)
                         .build();
             }
             return sCloseEnter;
@@ -615,9 +640,64 @@ public class AnimationUtils {
                 sCloseExit = new ActivityAnimFactory()
                         .fromX(0.0f)
                         .toX(1.0f)
+                        .fade(1.0f, 0.0f)
                         .build();
             }
             return sCloseExit;
+        }
+    }
+
+    /** @hide */
+    public static final class SpringInterpolator implements Interpolator {
+        private final float mDampingRatio;
+        private final float mOmega0;
+        private final long mDurationMs;
+        private final float mDurationSec;
+        private final float mEndOutput;
+        private final float mEndGap;
+
+        public SpringInterpolator(float dampingRatio, float stiffness) {
+            mDampingRatio = dampingRatio;
+            mOmega0 = (float) Math.sqrt(stiffness);
+            final float settleSec;
+            if (dampingRatio >= 1.0f) {
+                settleSec = 9.23f / mOmega0;
+            } else {
+                settleSec = 6.91f / (dampingRatio * mOmega0);
+            }
+            mDurationMs = Math.max(50L, (long) (settleSec * 1000f));
+            mDurationSec = mDurationMs / 1000f;
+            mEndOutput = rawSpring(mDurationSec);
+            mEndGap = 1.0f - mEndOutput;
+        }
+
+        public long getDurationMs() {
+            return mDurationMs;
+        }
+
+        private float rawSpring(float t) {
+            final float zeta = mDampingRatio;
+            final float w0 = mOmega0;
+            if (zeta < 1.0f) {
+                final float wd = w0 * (float) Math.sqrt(1.0f - zeta * zeta);
+                final float env = (float) Math.exp(-zeta * w0 * t);
+                return 1.0f - env * ((float) Math.cos(wd * t)
+                        + (zeta * w0 / wd) * (float) Math.sin(wd * t));
+            } else if (zeta > 1.0f) {
+                final float d = (float) Math.sqrt(zeta * zeta - 1.0f);
+                final float r1 = -w0 * (zeta - d);
+                final float r2 = -w0 * (zeta + d);
+                return 1.0f - (r2 * (float) Math.exp(r1 * t)
+                        - r1 * (float) Math.exp(r2 * t)) / (r2 - r1);
+            } else {
+                final float env = (float) Math.exp(-w0 * t);
+                return 1.0f - env * (1.0f + w0 * t);
+            }
+        }
+
+        @Override
+        public float getInterpolation(float input) {
+            return rawSpring(input * mDurationSec) + mEndGap * input;
         }
     }
 }
