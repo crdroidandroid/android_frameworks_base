@@ -204,6 +204,7 @@
     <string name="ax_dynamic_bar_wireless_charging">Încărcare fără fir</string>
     <string name="ax_dynamic_bar_until_full">până când este plin</string>
     <string name="ax_dynamic_bar_battery_saver">Economisire baterie</string>
+    <string name="ax_dynamic_bar_call">Call</string>
     <string name="ax_dynamic_bar_incoming_call">Apel primit</string>
     <string name="ax_dynamic_bar_connected">Conectat</string>
     <string name="ax_dynamic_bar_disconnect">Deconectare</string>
