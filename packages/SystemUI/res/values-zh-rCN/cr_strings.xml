@@ -202,6 +202,7 @@
     <string name="ax_dynamic_bar_wireless_charging">无线充电</string>
     <string name="ax_dynamic_bar_until_full">直到充满</string>
     <string name="ax_dynamic_bar_battery_saver">省电模式</string>
+    <string name="ax_dynamic_bar_call">Call</string>
     <string name="ax_dynamic_bar_incoming_call">来电</string>
     <string name="ax_dynamic_bar_connected">已连接</string>
     <string name="ax_dynamic_bar_disconnect">断开连接</string>
