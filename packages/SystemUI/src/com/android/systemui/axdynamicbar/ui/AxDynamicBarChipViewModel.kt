@@ -26,12 +26,14 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 data class AxDynamicBarChipState(
     val event: IslandEvent,
     val eventCount: Int,
     val pinnedIndex: Int,
     val allEvents: List<IslandEvent>,
+    val notificationAlert: IslandEvent.Notification? = null,
 )
 
 data class KeyguardBatteryInfo(
@@ -73,12 +75,14 @@ constructor(
         interactor.uiState
             .map { uiState ->
                 if (!uiState.shouldShow) return@map null
-                val topEvent = uiState.topEvent ?: return@map null
+                val alert = uiState.notificationAlert
+                val topEvent = uiState.topEvent ?: alert ?: return@map null
                 AxDynamicBarChipState(
                     event = topEvent,
                     eventCount = uiState.activeEvents.size,
                     pinnedIndex = uiState.pinnedEventIndex,
                     allEvents = uiState.events,
+                    notificationAlert = alert,
                 )
             }
             .stateIn(applicationScope, SharingStarted.Lazily, null)
@@ -106,6 +110,32 @@ constructor(
             SharingStarted.Lazily,
             KeyguardBatteryInfo(0, false, false, false, null),
         )
+
+    init {
+        applicationScope.launch {
+            interactor.uiState
+                .map { state ->
+                    state.events
+                        .filterIsInstance<IslandEvent.Call>()
+                        .firstOrNull { it.callType == "Phone:incoming" }
+                        ?.id
+                }
+                .distinctUntilChanged()
+                .collect { incomingCallId ->
+                    if (incomingCallId != null) {
+                        interactor.dismissNotificationAlert()
+                        if (interactor.isOnKeyguard.value) {
+                            keyguardExpansion.expand()
+                        } else {
+                            statusBarExpansion.expand()
+                        }
+                    } else {
+                        statusBarExpansion.collapse()
+                        keyguardExpansion.collapse()
+                    }
+                }
+        }
+    }
 
     // Re-compute charging string whenever battery info changes
     val batteryString: StateFlow<String> =
