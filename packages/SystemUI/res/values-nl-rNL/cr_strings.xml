@@ -203,6 +203,7 @@
     <string name="ax_dynamic_bar_wireless_charging">Draadloos opladen</string>
     <string name="ax_dynamic_bar_until_full">tot volledig</string>
     <string name="ax_dynamic_bar_battery_saver">Batterijbesparing</string>
+    <string name="ax_dynamic_bar_call">Call</string>
     <string name="ax_dynamic_bar_incoming_call">Inkomende oproep</string>
     <string name="ax_dynamic_bar_connected">Verbonden</string>
     <string name="ax_dynamic_bar_disconnect">Verbinding verbreken</string>
