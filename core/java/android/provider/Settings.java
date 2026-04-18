@@ -14941,6 +14941,31 @@ public final class Settings {
          */
         public static final String IDENTITY_CHECK_NOTIFICATION_VIEW_DETAILS_CLICKED =
                 "identity_check_notification_view_details_clicked";
+
+        /**
+         * @hide
+         */
+        public static final String SPOOF_PIF_CONFIG = "spoof_pif_config";
+
+        /**
+         * @hide
+         */
+        public static final String SPOOF_GAMEPROPS_CONFIG = "spoof_gameprops_config";
+
+        /**
+         * @hide
+         */
+        public static final String SPOOF_TRICKYSTORE_TARGET = "spoof_trickystore_target";
+
+        /**
+         * @hide
+         */
+        public static final String SPOOF_TRICKYSTORE_KEYBOX = "spoof_trickystore_keybox";
+
+        /**
+         * @hide
+         */
+        public static final String SPOOF_TRICKYSTORE_PATCH = "spoof_trickystore_patch";
     }
 
     /**
