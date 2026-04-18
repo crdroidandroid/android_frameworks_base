@@ -35,6 +35,8 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @hide
@@ -43,6 +45,8 @@ public class KeyBoxManager {
     private static final String TAG = "KeyBoxManager";
 
     private final Map<String, KeyBox> mKeyboxes = new ConcurrentHashMap<>();
+    
+    private static final Pattern PEM_HEADER = Pattern.compile("-----BEGIN ([^-]+)-----");
 
     /** @hide */
     public static class KeyBox {
@@ -151,6 +155,7 @@ public class KeyBoxManager {
         try {
             String normalizedAlgorithm;
             switch (algorithm.toLowerCase()) {
+                case "ec":
                 case "ecdsa":
                     normalizedAlgorithm = "EC";
                     break;
@@ -183,53 +188,80 @@ public class KeyBoxManager {
     }
 
     private PrivateKey parsePrivateKey(String pem, String algorithm) throws Exception {
+        String pemType = detectPemType(pem);
         byte[] keyBytes = parsePemContent(pem);
-        
-        ASN1InputStream asn1In = new ASN1InputStream(keyBytes);
-        ASN1Primitive asn1 = asn1In.readObject();
-        asn1In.close();
-        
-        if ("EC".equals(algorithm)) {
+
+        if ("EC PRIVATE KEY".equals(pemType)
+                || ("EC".equals(algorithm) && pemType == null)) {
+            return parseEcPrivateKey(keyBytes, algorithm);
+        }
+
+        if ("RSA PRIVATE KEY".equals(pemType)
+                || ("RSA".equals(algorithm) && pemType == null)) {
+            return parseRsaPrivateKey(keyBytes);
+        }
+
+        if ("PRIVATE KEY".equals(pemType) || "ENCRYPTED PRIVATE KEY".equals(pemType)) {
+            PrivateKeyInfo pkInfo = PrivateKeyInfo.getInstance(keyBytes);
+            if ("RSA".equals(algorithm)) {
+                return new KeyFactorySpi().generatePrivate(pkInfo);
+            }
+            if ("EC".equals(algorithm)) {
+                return new EC().generatePrivate(pkInfo);
+            }
+            PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(keyBytes);
+            return KeyFactory.getInstance(algorithm).generatePrivate(spec);
+        }
+
+        PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(keyBytes);
+        return KeyFactory.getInstance(algorithm).generatePrivate(spec);
+    }
+
+    private PrivateKey parseEcPrivateKey(byte[] keyBytes, String algorithm) throws Exception {
+        try (ASN1InputStream asn1In = new ASN1InputStream(keyBytes)) {
+            ASN1Primitive asn1 = asn1In.readObject();
             try {
                 ECPrivateKey ecPrivateKey = ECPrivateKey.getInstance(asn1);
                 X9ECParameters ecParams = ECNamedCurveTable.getByOID(
-                    (ASN1ObjectIdentifier) ecPrivateKey.getParameters());
+                        (ASN1ObjectIdentifier) ecPrivateKey.getParameters());
                 ECDomainParameters domainParams = new ECDomainParameters(
-                    ecParams.getCurve(), ecParams.getG(), ecParams.getN(), ecParams.getH());
+                        ecParams.getCurve(), ecParams.getG(), ecParams.getN(), ecParams.getH());
                 ECPrivateKeyParameters privParams = new ECPrivateKeyParameters(
-                    ecPrivateKey.getKey(), domainParams);
-                BCECPrivateKey bcKey = new BCECPrivateKey(algorithm, privParams, null);
-                return bcKey;
+                        ecPrivateKey.getKey(), domainParams);
+                return new BCECPrivateKey(algorithm, privParams, null);
             } catch (Exception e) {
                 PrivateKeyInfo pkInfo = PrivateKeyInfo.getInstance(asn1);
-                EC ecFactory = new EC();
-                return ecFactory.generatePrivate(pkInfo);
+                return new EC().generatePrivate(pkInfo);
             }
-        } else if ("RSA".equals(algorithm)) {
+        }
+    }
+
+    private PrivateKey parseRsaPrivateKey(byte[] keyBytes) throws Exception {
+        try (ASN1InputStream asn1In = new ASN1InputStream(keyBytes)) {
+            ASN1Primitive asn1 = asn1In.readObject();
             try {
                 RSAPrivateKey rsaPrivateKey = RSAPrivateKey.getInstance(asn1);
                 RSAPrivateCrtKeySpec rsaSpec = new RSAPrivateCrtKeySpec(
-                    rsaPrivateKey.getModulus(),
-                    rsaPrivateKey.getPublicExponent(),
-                    rsaPrivateKey.getPrivateExponent(),
-                    rsaPrivateKey.getPrime1(),
-                    rsaPrivateKey.getPrime2(),
-                    rsaPrivateKey.getExponent1(),
-                    rsaPrivateKey.getExponent2(),
-                    rsaPrivateKey.getCoefficient()
-                );
-                KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-                return keyFactory.generatePrivate(rsaSpec);
+                        rsaPrivateKey.getModulus(),
+                        rsaPrivateKey.getPublicExponent(),
+                        rsaPrivateKey.getPrivateExponent(),
+                        rsaPrivateKey.getPrime1(),
+                        rsaPrivateKey.getPrime2(),
+                        rsaPrivateKey.getExponent1(),
+                        rsaPrivateKey.getExponent2(),
+                        rsaPrivateKey.getCoefficient());
+                return KeyFactory.getInstance("RSA").generatePrivate(rsaSpec);
             } catch (Exception e) {
                 PrivateKeyInfo pkInfo = PrivateKeyInfo.getInstance(asn1);
-                KeyFactorySpi rsaFactory = new KeyFactorySpi();
-                return rsaFactory.generatePrivate(pkInfo);
+                return new KeyFactorySpi().generatePrivate(pkInfo);
             }
         }
-        
-        PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(keyBytes);
-        KeyFactory keyFactory = KeyFactory.getInstance(algorithm);
-        return keyFactory.generatePrivate(spec);
+    }
+
+    private String detectPemType(String pem) {
+        if (pem == null) return null;
+        Matcher m = PEM_HEADER.matcher(pem);
+        return m.find() ? m.group(1).trim().toUpperCase() : null;
     }
 
     private byte[] parsePemContent(String pem) {
