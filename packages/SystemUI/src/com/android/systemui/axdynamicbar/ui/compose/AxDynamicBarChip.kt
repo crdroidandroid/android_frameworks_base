@@ -176,8 +176,8 @@ fun AxDynamicBarChip(
             },
     ) {
         state?.let { chipState ->
-            val displayEvent = chipState.event
-            val isAlert = false
+            val displayEvent = chipState.notificationAlert ?: chipState.event
+            val isAlert = chipState.notificationAlert != null
 
             Expandable(
                 controller = expandableController,
