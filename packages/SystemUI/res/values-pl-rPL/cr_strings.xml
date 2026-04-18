@@ -205,6 +205,7 @@
     <string name="ax_dynamic_bar_wireless_charging">Ładowanie bezprzewodowe</string>
     <string name="ax_dynamic_bar_until_full">do pełnego</string>
     <string name="ax_dynamic_bar_battery_saver">Oszczędzanie baterii</string>
+    <string name="ax_dynamic_bar_call">Call</string>
     <string name="ax_dynamic_bar_incoming_call">Połączenie przychodzące</string>
     <string name="ax_dynamic_bar_connected">Połączono</string>
     <string name="ax_dynamic_bar_disconnect">Rozłączono</string>
