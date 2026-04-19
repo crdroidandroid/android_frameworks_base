@@ -89,6 +89,8 @@ public class KeyBoxManager {
             String currentAlgorithm = null;
             String privateKeyPem = null;
             List<String> certificatePems = new ArrayList<>();
+            StringBuilder privateKeyBuilder = null;
+            StringBuilder certBuilder = null;
             boolean inKey = false;
             boolean inPrivateKey = false;
             boolean inCertificateChain = false;
@@ -106,30 +108,48 @@ public class KeyBoxManager {
                             currentAlgorithm = parser.getAttributeValue(null, "algorithm");
                             privateKeyPem = null;
                             certificatePems.clear();
+                            privateKeyBuilder = null;
+                            certBuilder = null;
                         } else if ("PrivateKey".equals(tagName) && inKey) {
                             inPrivateKey = true;
+                            privateKeyBuilder = new StringBuilder();
                         } else if ("CertificateChain".equals(tagName) && inKey) {
                             inCertificateChain = true;
                         } else if ("Certificate".equals(tagName) && inCertificateChain) {
                             inCertificate = true;
+                            certBuilder = new StringBuilder();
                         }
                         break;
 
                     case XmlPullParser.TEXT:
-                        String text = parser.getText().trim();
-                        if (!text.isEmpty()) {
-                            if (inPrivateKey) {
-                                privateKeyPem = text;
-                            } else if (inCertificate) {
-                                certificatePems.add(text);
+                        String text = parser.getText();
+                        if (text != null) {
+                            if (inPrivateKey && privateKeyBuilder != null) {
+                                privateKeyBuilder.append(text);
+                            } else if (inCertificate && certBuilder != null) {
+                                certBuilder.append(text);
                             }
                         }
                         break;
 
                     case XmlPullParser.END_TAG:
                         if ("PrivateKey".equals(tagName)) {
+                            if (privateKeyBuilder != null) {
+                                String pem = privateKeyBuilder.toString().trim();
+                                if (!pem.isEmpty()) {
+                                    privateKeyPem = pem;
+                                }
+                                privateKeyBuilder = null;
+                            }
                             inPrivateKey = false;
                         } else if ("Certificate".equals(tagName)) {
+                            if (certBuilder != null) {
+                                String pem = certBuilder.toString().trim();
+                                if (!pem.isEmpty()) {
+                                    certificatePems.add(pem);
+                                }
+                                certBuilder = null;
+                            }
                             inCertificate = false;
                         } else if ("CertificateChain".equals(tagName)) {
                             inCertificateChain = false;
