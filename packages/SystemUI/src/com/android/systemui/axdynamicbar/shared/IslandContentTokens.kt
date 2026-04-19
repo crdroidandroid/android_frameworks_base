@@ -10,6 +10,7 @@ import androidx.core.graphics.ColorUtils
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -264,6 +265,10 @@ internal fun chipAccentColorFor(event: IslandEvent): Color {
         val isDark = isSystemInDarkTheme()
         val color = rememberPaletteColor(event.appIcon!!)
         if (color != null) return ensureContrast(color, isDark)
+    }
+    if (event is IslandEvent.AospChip) {
+        val ctx = LocalContext.current
+        return Color(event.active.colors.background(ctx).defaultColor)
     }
     return accentColorFor(event)
 }
