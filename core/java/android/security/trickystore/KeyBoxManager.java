@@ -300,6 +300,7 @@ public class KeyBoxManager {
                 content = content.substring(bom.length());
             }
         }
+        content = content.replaceAll("(?s)<!--.*?-->", "");
         return content.trim();
     }
 }
