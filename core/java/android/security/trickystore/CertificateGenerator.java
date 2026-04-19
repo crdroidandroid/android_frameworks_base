@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.content.pm.SigningInfo;
 import android.util.Log;
 
 import com.android.internal.org.bouncycastle.asn1.ASN1Boolean;
@@ -278,6 +279,17 @@ public final class CertificateGenerator {
         }
     }
 
+    private static Signature[] extractSignatures(PackageInfo info) {
+        SigningInfo signingInfo = info.signingInfo;
+        if (signingInfo != null) {
+            if (signingInfo.hasMultipleSigners()) {
+                return signingInfo.getApkContentsSigners();
+            }
+            return signingInfo.getSigningCertificateHistory();
+        }
+        return info.signatures;
+    }
+
     private static DEROctetString createApplicationId(int uid) throws Throwable {
         Context context = ActivityThread.currentApplication();
         if (context == null) {
@@ -301,14 +313,15 @@ public final class CertificateGenerator {
 
         for (int i = 0; i < size; i++) {
             String name = packages[i];
-            PackageInfo info = pm.getPackageInfo(name, PackageManager.GET_SIGNATURES);
+            PackageInfo info = pm.getPackageInfo(name, PackageManager.GET_SIGNING_CERTIFICATES);
             ASN1Encodable[] arr = new ASN1Encodable[2];
             arr[0] = new DEROctetString(name.getBytes(StandardCharsets.UTF_8));
             arr[1] = new ASN1Integer(info.getLongVersionCode());
             packageInfoAA[i] = new DERSequence(arr);
 
-            if (info.signatures != null) {
-                for (Signature s : info.signatures) {
+            Signature[] pkgSigs = extractSignatures(info);
+            if (pkgSigs != null) {
+                for (Signature s : pkgSigs) {
                     signatures.add(ByteBuffer.wrap(dg.digest(s.toByteArray())));
                 }
             }
