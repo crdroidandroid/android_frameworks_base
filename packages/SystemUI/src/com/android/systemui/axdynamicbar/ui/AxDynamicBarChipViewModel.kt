@@ -1,7 +1,9 @@
 package com.android.systemui.axdynamicbar.ui
 
+import com.android.systemui.animation.Expandable
 import com.android.systemui.axdynamicbar.domain.AxDynamicBarInteractor
 import com.android.systemui.axdynamicbar.model.IslandEvent
+import com.android.systemui.statusbar.chips.ui.model.OngoingActivityChipModel
 import com.android.systemui.biometrics.AuthController
 import com.android.systemui.biometrics.domain.interactor.UdfpsOverlayInteractor
 import com.android.systemui.dagger.SysUISingleton
@@ -10,27 +12,20 @@ import com.android.systemui.statusbar.pipeline.battery.domain.interactor.Battery
 import com.android.systemui.statusbar.policy.BatteryController
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 
 data class AxDynamicBarChipState(
     val event: IslandEvent,
     val eventCount: Int,
     val pinnedIndex: Int,
     val allEvents: List<IslandEvent>,
-    val notificationAlert: IslandEvent.Notification? = null,
 )
 
 data class KeyguardBatteryInfo(
@@ -51,6 +46,8 @@ constructor(
     private val batteryController: BatteryController,
     authController: AuthController,
     udfpsOverlayInteractor: UdfpsOverlayInteractor,
+    val keyguardExpansion: AxDynamicBarKeyguardExpansion,
+    val statusBarExpansion: AxDynamicBarStatusBarExpansion,
 ) {
 
     val isLowUdfps: StateFlow<Boolean> =
@@ -69,14 +66,12 @@ constructor(
         interactor.uiState
             .map { uiState ->
                 if (!uiState.shouldShow) return@map null
-                val alert = uiState.notificationAlert
-                val topEvent = uiState.topEvent ?: alert ?: return@map null
+                val topEvent = uiState.topEvent ?: return@map null
                 AxDynamicBarChipState(
                     event = topEvent,
                     eventCount = uiState.activeEvents.size,
                     pinnedIndex = uiState.pinnedEventIndex,
                     allEvents = uiState.events,
-                    notificationAlert = alert,
                 )
             }
             .stateIn(applicationScope, SharingStarted.Lazily, null)
@@ -124,56 +119,9 @@ constructor(
         _chipCenterXFraction.value = fraction
     }
 
-    private val _isExpanded = MutableStateFlow(false)
-    val isExpanded: StateFlow<Boolean> = _isExpanded.asStateFlow()
-    @Volatile private var collapseOnNullJob: Job? = null
+    val isExpanded: StateFlow<Boolean> = statusBarExpansion.isExpanded
 
-    val isKeyguardExpanded: StateFlow<Boolean> =
-        combine(isExpanded, isOnKeyguard) { exp, kg -> exp && kg }
-            .stateIn(applicationScope, SharingStarted.Lazily, false)
-
-    init {
-        
-        chipState.onEach { state ->
-            if (state == null) {
-                collapseOnNullJob?.cancel()
-                collapseOnNullJob = applicationScope.launch {
-                    delay(200)
-                    _isExpanded.value = false
-                }
-            } else {
-                collapseOnNullJob?.cancel()
-                collapseOnNullJob = null
-            }
-        }.launchIn(applicationScope)
-        
-        interactor.isPanelExpanded.onEach { if (it) _isExpanded.value = false }.launchIn(applicationScope)
-        interactor.qsExpansion.map { it > 0f }.distinctUntilChanged().onEach { if (it) _isExpanded.value = false }.launchIn(applicationScope)
-        
-        isBouncerShowing.onEach { if (it) _isExpanded.value = false }.launchIn(applicationScope)
-        
-        isOnKeyguard.onEach { if (!it) _isExpanded.value = false }.launchIn(applicationScope)
-        
-        combine(interactor.legacyShadeExpansion, isOnKeyguard) { expansion, onKg ->
-            onKg && expansion < 0.95f
-        }.onEach { dismissing -> if (dismissing) _isExpanded.value = false }.launchIn(applicationScope)
-        
-        interactor.isDozing.drop(1).onEach { _isExpanded.value = false }.launchIn(applicationScope)
-        
-        interactor.dozeAmount.map { it > 0f }.distinctUntilChanged().onEach { if (it) _isExpanded.value = false }.launchIn(applicationScope)
-    }
-
-    fun expandPanel() {
-        if (chipState.value != null) _isExpanded.value = true
-    }
-
-    fun collapsePanel() {
-        _isExpanded.value = false
-    }
-
-    fun togglePanel() {
-        if (_isExpanded.value) collapsePanel() else expandPanel()
-    }
+    val isKeyguardExpanded: StateFlow<Boolean> = keyguardExpansion.isExpanded
 
     fun cycleNext() = interactor.cycleNext()
 
@@ -189,10 +137,27 @@ constructor(
 
     fun toggleTorch() = interactor.toggleTorch()
 
-    fun stopScreenRecording() = interactor.stopScreenRecording()
-
     fun launchNotificationFromKeyguard(event: IslandEvent.Notification) {
         interactor.launchNotificationDismissingKeyguard(event)
+    }
+
+    fun handleAospChipTap(event: IslandEvent.AospChip, expandable: Expandable): Boolean {
+        val active = event.active
+        return when (val behavior = active.clickBehavior) {
+            is OngoingActivityChipModel.ClickBehavior.ShowHeadsUpNotification -> {
+                behavior.onClick()
+                true
+            }
+            is OngoingActivityChipModel.ClickBehavior.HideHeadsUpNotification -> {
+                behavior.onClick()
+                true
+            }
+            is OngoingActivityChipModel.ClickBehavior.ExpandAction -> {
+                behavior.onClick(expandable)
+                true
+            }
+            is OngoingActivityChipModel.ClickBehavior.None -> false
+        }
     }
 
     companion object {
