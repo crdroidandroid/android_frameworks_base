@@ -91,8 +91,8 @@ fun AxDynamicBarNowBar(
         exit = slideOutVertically(motionScheme.fastSpatialSpec()) { -it } + fadeOut(motionScheme.fastEffectsSpec()),
     ) {
         state?.let { chipState ->
-            val displayEvent = chipState.notificationAlert ?: chipState.event
-            val isAlert = chipState.notificationAlert != null
+            val displayEvent = chipState.event
+            val isAlert = false
 
             AnimatedContent(
                 targetState = NowBarDisplay(displayEvent, isAlert),
@@ -144,7 +144,7 @@ fun AxDynamicBarNowBar(
                                             if (totalDragX > 0f) viewModel.cyclePrev()
                                             else viewModel.cycleNext()
                                         } else {
-                                            viewModel.togglePanel()
+                                            viewModel.statusBarExpansion.toggle()
                                         }
                                         break
                                     }
