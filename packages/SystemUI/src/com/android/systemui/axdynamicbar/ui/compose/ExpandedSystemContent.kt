@@ -22,8 +22,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BatteryChargingFull
 import androidx.compose.material.icons.filled.Bluetooth
 import androidx.compose.material.icons.filled.BluetoothDisabled
-import androidx.compose.material.icons.filled.NotificationsActive
-import androidx.compose.material.icons.filled.NotificationsOff
+import androidx.compose.material.icons.filled.VolumeOff
+import androidx.compose.material.icons.filled.VolumeUp
 import androidx.compose.material.icons.filled.Vibration
 import androidx.compose.material.icons.filled.VpnKey
 import androidx.compose.material.icons.filled.Wifi
@@ -162,7 +162,7 @@ internal fun RingerModeExpanded(event: IslandEvent.RingerMode, interactor: Islan
             ) {
                 RingerCard(
                     isSelected = event.mode == AudioManager.RINGER_MODE_NORMAL,
-                    icon = Icons.Filled.NotificationsActive,
+                    icon = Icons.Filled.VolumeUp,
                     label = stringResource(R.string.ax_dynamic_bar_ring),
                     accent = BlueAccent,
                     onClick = { interactor.setRingerMode(AudioManager.RINGER_MODE_NORMAL) },
@@ -178,7 +178,7 @@ internal fun RingerModeExpanded(event: IslandEvent.RingerMode, interactor: Islan
                 )
                 RingerCard(
                     isSelected = event.mode == AudioManager.RINGER_MODE_SILENT,
-                    icon = Icons.Filled.NotificationsOff,
+                    icon = Icons.Filled.VolumeOff,
                     label = stringResource(R.string.ax_dynamic_bar_silent),
                     accent = RedAccent,
                     onClick = { interactor.setRingerMode(AudioManager.RINGER_MODE_SILENT) },
