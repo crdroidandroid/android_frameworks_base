@@ -21,21 +21,18 @@ import androidx.compose.material.icons.filled.Alarm
 import androidx.compose.material.icons.filled.AvTimer
 import androidx.compose.material.icons.filled.BatteryChargingFull
 import androidx.compose.material.icons.filled.Bluetooth
-import androidx.compose.material.icons.filled.Cast
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.ContentCopy
-import androidx.compose.material.icons.filled.FiberManualRecord
 import androidx.compose.material.icons.filled.Fingerprint
 import androidx.compose.material.icons.filled.FlashlightOn
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.MusicNote
 import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.NotificationsActive
-import androidx.compose.material.icons.filled.NotificationsOff
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material.icons.filled.Vibration
-import androidx.compose.material.icons.filled.Videocam
+import androidx.compose.material.icons.filled.VolumeOff
+import androidx.compose.material.icons.filled.VolumeUp
 import androidx.compose.material.icons.filled.VpnKey
 import androidx.compose.material.icons.filled.Wifi
 import android.media.AudioManager
@@ -52,11 +49,6 @@ internal data class EventStyle(
 )
 
 internal fun eventStyleFor(event: IslandEvent): EventStyle = when (event) {
-    is IslandEvent.ScreenRecording -> EventStyle(
-        accent = RedAccent,
-        icon = Icons.Filled.FiberManualRecord,
-        labelRes = R.string.ax_dynamic_bar_screen_recording,
-    )
     is IslandEvent.AudioRecording -> EventStyle(
         accent = when (event.state) {
             RecordingState.RECORDING -> RedAccent
@@ -73,23 +65,6 @@ internal fun eventStyleFor(event: IslandEvent): EventStyle = when (event) {
             RecordingState.PAUSED -> R.string.ax_dynamic_bar_paused
             RecordingState.SAVED -> R.string.ax_dynamic_bar_saved
         },
-    )
-    is IslandEvent.MicCamActive -> EventStyle(
-        accent = PinkAccent,
-        icon = when {
-            event.isCam -> Icons.Filled.Videocam
-            else -> Icons.Filled.Mic
-        },
-        labelRes = when {
-            event.isCam && event.isMic -> R.string.ax_dynamic_bar_camera_mic
-            event.isCam -> R.string.ax_dynamic_bar_camera
-            else -> R.string.ax_dynamic_bar_microphone
-        },
-    )
-    is IslandEvent.Casting -> EventStyle(
-        accent = TealAccent,
-        icon = Icons.Filled.Cast,
-        labelRes = R.string.ax_dynamic_bar_casting_to,
     )
     is IslandEvent.Media -> EventStyle(
         accent = PurpleAccent,
@@ -153,9 +128,9 @@ internal fun eventStyleFor(event: IslandEvent): EventStyle = when (event) {
             else -> BlueAccent
         },
         icon = when (event.mode) {
-            AudioManager.RINGER_MODE_SILENT -> Icons.Filled.NotificationsOff
+            AudioManager.RINGER_MODE_SILENT -> Icons.Filled.VolumeOff
             AudioManager.RINGER_MODE_VIBRATE -> Icons.Filled.Vibration
-            else -> Icons.Filled.NotificationsActive
+            else -> Icons.Filled.VolumeUp
         },
         labelRes = when (event.mode) {
             AudioManager.RINGER_MODE_SILENT -> R.string.ax_dynamic_bar_silent
@@ -201,6 +176,11 @@ internal fun eventStyleFor(event: IslandEvent): EventStyle = when (event) {
             else -> IndigoAccent
         },
         icon = null,
+        labelRes = R.string.ax_dynamic_bar_on,
+    )
+    is IslandEvent.AospChip -> EventStyle(
+        accent = BlueAccent,
+        icon = Icons.Filled.Notifications,
         labelRes = R.string.ax_dynamic_bar_on,
     )
 }
