@@ -5,8 +5,6 @@ import com.android.systemui.axdynamicbar.model.IslandEvent
 import com.android.systemui.dagger.SysUISingleton
 import com.android.systemui.dagger.qualifiers.Application
 import com.android.systemui.dagger.qualifiers.Background
-import com.android.systemui.statusbar.chips.casttootherdevice.domain.interactor.MediaRouterChipInteractor
-import com.android.systemui.statusbar.chips.casttootherdevice.domain.model.MediaRouterCastModel
 import com.android.systemui.statusbar.policy.BluetoothController
 import com.android.systemui.statusbar.policy.HotspotController
 import com.android.systemui.statusbar.policy.vpn.domain.interactor.VpnInteractor
@@ -27,7 +25,6 @@ constructor(
     @Background private val backgroundDispatcher: CoroutineDispatcher,
     private val bluetoothController: BluetoothController,
     private val hotspotController: HotspotController,
-    private val mediaRouterChipInteractor: MediaRouterChipInteractor,
     private val vpnInteractor: VpnInteractor,
 ) {
     companion object {
@@ -40,9 +37,6 @@ constructor(
     private val _hotspotEvent = MutableStateFlow<IslandEvent.Hotspot?>(null)
     val hotspotEvent: StateFlow<IslandEvent.Hotspot?> = _hotspotEvent.asStateFlow()
 
-    private val _castingEvent = MutableStateFlow<IslandEvent.Casting?>(null)
-    val castingEvent: StateFlow<IslandEvent.Casting?> = _castingEvent.asStateFlow()
-
     private val _vpnEvent = MutableStateFlow<IslandEvent.Vpn?>(null)
     val vpnEvent: StateFlow<IslandEvent.Vpn?> = _vpnEvent.asStateFlow()
 
@@ -50,7 +44,6 @@ constructor(
     private var listening = false
     private var wasVpnEnabled = false
     private var vpnJob: Job? = null
-    private var castJob: Job? = null
 
     private val bluetoothCallback =
         object : BluetoothController.Callback {
@@ -106,21 +99,6 @@ constructor(
             }
         }
 
-    private fun startCastListener() {
-        castJob?.cancel()
-        castJob =
-            applicationScope.launch(backgroundDispatcher) {
-                mediaRouterChipInteractor.mediaRouterCastingState.collect { state ->
-                    _castingEvent.value =
-                        when (state) {
-                            is MediaRouterCastModel.Casting ->
-                                IslandEvent.Casting(deviceName = state.deviceName ?: "Screen")
-                            is MediaRouterCastModel.DoingNothing -> null
-                        }
-                }
-            }
-    }
-
     private fun startVpnListener() {
         vpnJob?.cancel()
         vpnJob =
@@ -150,7 +128,6 @@ constructor(
 
     private var btListening = false
     private var hotspotListening = false
-    private var castListening = false
     private var vpnListening = false
 
     fun startBluetooth() {
@@ -185,20 +162,6 @@ constructor(
         _hotspotEvent.value = null
     }
 
-    fun startCast() {
-        if (castListening) return
-        castListening = true
-        startCastListener()
-    }
-
-    fun stopCast() {
-        if (!castListening) return
-        castListening = false
-        castJob?.cancel()
-        castJob = null
-        _castingEvent.value = null
-    }
-
     fun startVpn() {
         if (vpnListening) return
         vpnListening = true
@@ -219,7 +182,6 @@ constructor(
         listening = true
         startBluetooth()
         startHotspot()
-        startCast()
         startVpn()
     }
 
@@ -228,7 +190,6 @@ constructor(
         listening = false
         stopBluetooth()
         stopHotspot()
-        stopCast()
         stopVpn()
     }
 
@@ -248,10 +209,6 @@ constructor(
 
     fun clearHotspot() {
         _hotspotEvent.value = null
-    }
-
-    fun clearCasting() {
-        _castingEvent.value = null
     }
 
     fun clearVpn() {

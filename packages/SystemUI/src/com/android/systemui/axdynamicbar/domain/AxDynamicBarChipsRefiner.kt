@@ -20,13 +20,20 @@ import com.android.systemui.dagger.SysUISingleton
 import com.android.systemui.statusbar.chips.ui.model.MultipleOngoingActivityChipsModel
 import com.android.systemui.statusbar.chips.ui.viewmodel.OngoingActivityChipsRefiner
 import javax.inject.Inject
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 @SysUISingleton
 class AxDynamicBarChipsRefiner @Inject constructor(
     private val settings: AxDynamicBarSettings,
 ) : OngoingActivityChipsRefiner {
 
+    private val _chipsFlow = MutableStateFlow(MultipleOngoingActivityChipsModel())
+    val chipsFlow: StateFlow<MultipleOngoingActivityChipsModel> = _chipsFlow.asStateFlow()
+
     override fun transform(input: MultipleOngoingActivityChipsModel): MultipleOngoingActivityChipsModel {
+        _chipsFlow.value = input
         if (!settings.isEnabled.value) return input
 
         return input.copy(
