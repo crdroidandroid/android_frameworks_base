@@ -192,10 +192,7 @@ internal fun ExpandedEventContent(
     hapticsViewModelFactory: SliderHapticsViewModel.Factory,
 ) {
     when (event) {
-        is IslandEvent.ScreenRecording -> ScreenRecordExpanded(event, interactor)
-        is IslandEvent.MicCamActive -> MicCamExpanded(event)
         is IslandEvent.AudioRecording -> AudioRecordingExpanded(event, interactor)
-        is IslandEvent.Casting -> CastingExpanded(event)
         is IslandEvent.PromotedOngoing -> PromotedOngoingExpanded(event, interactor)
         is IslandEvent.Sports -> SportsExpanded(event, interactor)
         is IslandEvent.NowPlaying -> NowPlayingExpanded(event, interactor)
@@ -213,7 +210,8 @@ internal fun ExpandedEventContent(
         is IslandEvent.AppSwitch -> AppHistoryExpanded(event, interactor)
         is IslandEvent.Torch -> TorchExpanded(event, interactor, hapticsViewModelFactory)
         is IslandEvent.BiometricUnlock -> BiometricUnlockExpanded(event)
-        is IslandEvent.KeyguardIndication -> {} 
+        is IslandEvent.KeyguardIndication -> {}
+        is IslandEvent.AospChip -> {}
     }
 }
 

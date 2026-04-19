@@ -17,7 +17,6 @@ import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Stop
-import androidx.compose.material.icons.filled.Videocam
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -41,57 +40,6 @@ import com.android.systemui.res.R
 import androidx.compose.ui.platform.LocalContext
 import com.android.systemui.axdynamicbar.shared.*
 import kotlinx.coroutines.delay
-
-@Composable
-internal fun ScreenRecordExpanded(
-    event: IslandEvent.ScreenRecording,
-    interactor: IslandActions,
-) {
-    if (event.isCountdown) {
-        ScreenRecordCountdownExpanded(event)
-        return
-    }
-    var elapsedMs by remember(event.startTimeMs) {
-        mutableLongStateOf((System.currentTimeMillis() - event.startTimeMs).coerceAtLeast(0L))
-    }
-    LaunchedEffect(event.startTimeMs) {
-        while (true) {
-            delay(1000)
-            elapsedMs = (System.currentTimeMillis() - event.startTimeMs).coerceAtLeast(0L)
-        }
-    }
-    ExpandedCardLayout(
-        accentColor = RedAccent,
-        icon = { PulsingDot(color = RedAccent, size = 14.dp, durationMs = 550, minAlpha = AlphaTrack) },
-        title = {
-            Text(stringResource(R.string.ax_dynamic_bar_screen_recording), color = SubtleGray, style = MaterialTheme.typography.labelMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
-            Text(formatElapsedTime(elapsedMs), color = RedAccent, style = MaterialTheme.typography.headlineMedium)
-        },
-        trailing = { StatusChip(stringResource(R.string.ax_dynamic_bar_recording), RedAccent) },
-        actions = {
-            ActionChip(
-                label = stringResource(R.string.ax_dynamic_bar_stop_recording),
-                icon = Icons.Filled.Stop,
-                color = OnDestructiveText,
-                bg = DestructiveBg,
-                modifier = Modifier.fillMaxWidth(),
-                onClick = { interactor.stopScreenRecording() },
-            )
-        },
-    )
-}
-
-@Composable
-private fun ScreenRecordCountdownExpanded(event: IslandEvent.ScreenRecording) {
-    ExpandedCardLayout(
-        accentColor = RedAccent,
-        icon = { Icon(Icons.Filled.Videocam, null, tint = RedAccent, modifier = Modifier.size(22.dp)) },
-        title = {
-            Text(stringResource(R.string.ax_dynamic_bar_screen_recording), color = SubtleGray, style = MaterialTheme.typography.labelMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
-            Text(formatCountdownSeconds(event.countdownSeconds), color = RedAccent, style = MaterialTheme.typography.headlineMedium)
-        },
-    )
-}
 
 @Composable
 internal fun AudioRecordingExpanded(
@@ -148,24 +96,25 @@ internal fun AudioRecordingExpanded(
                     horizontalArrangement = Arrangement.spacedBy(SpaceLg),
                 ) {
                     event.actions.forEach { notifAction ->
-                        val lower = notifAction.label.toString().lowercase()
+                        val pkg = notifAction.action.actionIntent?.creatorPackage ?: context.packageName
+                        val kind = notifAction.action.classify(context, pkg)
                         val btnColor =
-                            when {
-                                lower.contains("stop") || lower.contains("delete") -> DestructiveBg
-                                lower.contains("resume") || lower.contains("play") -> GreenAccent
+                            when (kind) {
+                                NotificationActionType.STOP, NotificationActionType.DELETE -> DestructiveBg
+                                NotificationActionType.RESUME -> GreenAccent
                                 else -> ActionBg
                             }
                         val textColor =
-                            when {
-                                lower.contains("stop") || lower.contains("delete") -> OnDestructiveText
-                                lower.contains("resume") || lower.contains("play") -> chipContentColorOn(GreenAccent)
+                            when (kind) {
+                                NotificationActionType.STOP, NotificationActionType.DELETE -> OnDestructiveText
+                                NotificationActionType.RESUME -> chipContentColorOn(GreenAccent)
                                 else -> OnActionText
                             }
                         val btnIcon =
-                            when {
-                                lower.contains("stop") || lower.contains("delete") -> Icons.Filled.Stop
-                                lower.contains("resume") || lower.contains("play") -> Icons.Filled.PlayArrow
-                                lower.contains("pause") -> Icons.Filled.Pause
+                            when (kind) {
+                                NotificationActionType.STOP, NotificationActionType.DELETE -> Icons.Filled.Stop
+                                NotificationActionType.RESUME -> Icons.Filled.PlayArrow
+                                NotificationActionType.PAUSE -> Icons.Filled.Pause
                                 else -> null
                             }
                         ActionChip(
@@ -188,90 +137,6 @@ internal fun AudioRecordingExpanded(
     )
 }
 
-@Composable
-internal fun MicCamExpanded(event: IslandEvent.MicCamActive) {
-    val accent = if (event.isCam) RedAccent else OrangeAccent
-    ExpandedCardLayout(
-        accentColor = accent,
-        icon = {
-            Row(horizontalArrangement = Arrangement.spacedBy(SpaceSm)) {
-                if (event.isCam) Icon(Icons.Filled.Videocam, null, tint = RedAccent, modifier = Modifier.size(28.dp))
-                if (event.isMic) Icon(Icons.Filled.Mic, null, tint = OrangeAccent, modifier = Modifier.size(28.dp))
-            }
-        },
-        title = {
-            Text(
-                when {
-                    event.isCam && event.isMic -> stringResource(R.string.ax_dynamic_bar_camera_mic)
-                    event.isCam -> stringResource(R.string.ax_dynamic_bar_camera)
-                    else -> stringResource(R.string.ax_dynamic_bar_microphone)
-                },
-                color = OnCardText,
-                style = MaterialTheme.typography.titleMedium,
-            )
-            if (event.apps.size > 1) {
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(SpaceSm),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    event.apps.take(4).forEach { app ->
-                        app.appIcon?.let {
-                            Image(
-                                bitmap = it.toScaledBitmap(28.dp),
-                                contentDescription = app.appName,
-                                modifier = Modifier.size(28.dp).clip(ShapeIconMedium),
-                            )
-                        }
-                    }
-                }
-                StatusChip(stringResource(R.string.ax_dynamic_bar_apps_count, event.apps.size), accent)
-            } else if (event.appName.isNotEmpty()) {
-                StatusChip(event.appName, accent)
-            }
-        },
-        trailing = { PulsingDot(color = accent, size = SpaceMd) },
-    )
-}
-
-@Composable
-internal fun RowScope.CompactRecordingRow(event: IslandEvent.ScreenRecording) {
-    if (event.isCountdown) {
-        Box(
-            modifier =
-                Modifier.size(SizeCompactIcon).clip(ShapeCompact).background(RedAccent.copy(alpha = AlphaIconBg)),
-            contentAlignment = Alignment.Center,
-        ) {
-            Icon(Icons.Filled.Videocam, null, tint = RedAccent, modifier = Modifier.size(16.dp))
-        }
-        Spacer(Modifier.width(SpaceLg))
-        Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(SpaceXxs)) {
-            Text(stringResource(R.string.ax_dynamic_bar_screen_recording), color = OnCardText, style = MaterialTheme.typography.bodySmall)
-            Text(formatCountdownSeconds(event.countdownSeconds), color = SubtleGray, style = MaterialTheme.typography.labelSmall)
-        }
-        return
-    }
-    var elapsedMs by remember(event.startTimeMs) {
-        mutableLongStateOf((System.currentTimeMillis() - event.startTimeMs).coerceAtLeast(0L))
-    }
-    LaunchedEffect(event.startTimeMs) {
-        while (true) {
-            delay(1000)
-            elapsedMs = (System.currentTimeMillis() - event.startTimeMs).coerceAtLeast(0L)
-        }
-    }
-    Box(
-        modifier =
-            Modifier.size(SizeCompactIcon).clip(ShapeCompact).background(RedAccent.copy(alpha = AlphaIconBg)),
-        contentAlignment = Alignment.Center,
-    ) {
-        PulsingDot(color = RedAccent, size = 12.dp, durationMs = 550, minAlpha = AlphaTrack)
-    }
-    Spacer(Modifier.width(SpaceLg))
-    Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(SpaceXxs)) {
-        Text(stringResource(R.string.ax_dynamic_bar_screen_recording), color = OnCardText, style = MaterialTheme.typography.bodySmall)
-        Text(formatElapsedTime(elapsedMs), color = SubtleGray, style = MaterialTheme.typography.labelSmall)
-    }
-}
 
 @Composable
 internal fun RowScope.CompactAudioRecordingRow(event: IslandEvent.AudioRecording) {
@@ -327,45 +192,6 @@ internal fun RowScope.CompactAudioRecordingRow(event: IslandEvent.AudioRecording
                     overflow = TextOverflow.Ellipsis,
                 )
             }
-        }
-    }
-}
-
-@Composable
-internal fun RowScope.CompactMicCamRow(event: IslandEvent.MicCamActive) {
-    val color = if (event.isCam) RedAccent else OrangeAccent
-    Box(
-        modifier = Modifier.size(SizeCompactIcon).clip(ShapeCompact).background(color.copy(alpha = AlphaIconBg)),
-        contentAlignment = Alignment.Center,
-    ) {
-        Icon(
-            if (event.isCam) Icons.Filled.Videocam else Icons.Filled.Mic,
-            null,
-            tint = color,
-            modifier = Modifier.size(18.dp),
-        )
-    }
-    Spacer(Modifier.width(SpaceLg))
-    Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(SpaceXxs)) {
-        Text(
-            when {
-                event.isCam && event.isMic -> stringResource(R.string.ax_dynamic_bar_camera_mic_short)
-                event.isCam -> stringResource(R.string.ax_dynamic_bar_camera)
-                else -> stringResource(R.string.ax_dynamic_bar_microphone)
-            },
-            color = OnCardText,
-            style = MaterialTheme.typography.bodySmall,
-        )
-        if (event.apps.size > 1) {
-            Text(stringResource(R.string.ax_dynamic_bar_apps_count, event.apps.size), color = SubtleGray, style = MaterialTheme.typography.labelSmall)
-        } else if (event.appName.isNotEmpty()) {
-            Text(
-                event.appName,
-                color = SubtleGray,
-                style = MaterialTheme.typography.labelSmall,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
         }
     }
 }
