@@ -17,10 +17,7 @@
 package com.android.systemui.axdynamicbar.ui.compose
 
 import android.app.Notification
-import android.app.RemoteInput
 import android.content.Context
-import android.content.Intent
-import android.os.Bundle
 import android.service.notification.StatusBarNotification
 import android.util.Log
 import android.util.Size
@@ -42,14 +39,10 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
@@ -67,9 +60,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -116,44 +106,22 @@ internal fun NotificationExpanded(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(SpaceXxs),
             ) {
-                if (event.isConversation && event.senderName != null) {
-                    val subtitle = if (event.isGroupConversation && event.conversationTitle != null)
-                        "${event.appName} · ${event.conversationTitle}"
-                    else
-                        "${event.appName} · ${event.senderName}"
+                if (event.appName.isNotEmpty()) {
                     Text(
-                        subtitle,
+                        event.appName,
                         color = SubtleGray,
                         style = MaterialTheme.typography.labelSmall,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                     )
-                    Text(
-                        if (event.isGroupConversation) event.senderName
-                        else event.title ?: event.senderName,
-                        color = OnCardText,
-                        style = MaterialTheme.typography.titleSmall,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
-                } else {
-                    if (event.appName.isNotEmpty()) {
-                        Text(
-                            event.appName,
-                            color = SubtleGray,
-                            style = MaterialTheme.typography.labelSmall,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-                    }
-                    Text(
-                        event.title ?: event.appName.ifEmpty { event.sbn.packageName.substringAfterLast('.') },
-                        color = OnCardText,
-                        style = MaterialTheme.typography.titleSmall,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
                 }
+                Text(
+                    event.title ?: event.appName.ifEmpty { event.sbn.packageName.substringAfterLast('.') },
+                    color = OnCardText,
+                    style = MaterialTheme.typography.titleSmall,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
             }
 
             event.appIcon?.let {
@@ -182,18 +150,6 @@ internal fun NotificationExpanded(
             event.text?.let {
                 Text(it, color = SubtleGray, style = MaterialTheme.typography.bodySmall, maxLines = 4, overflow = TextOverflow.Ellipsis)
             }
-        }
-
-        event.notificationImage?.let { img ->
-            Image(
-                bitmap = img.toScaledBitmap(200.dp),
-                contentDescription = null,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(max = 200.dp)
-                    .clip(ShapeSm),
-                contentScale = ContentScale.Crop,
-            )
         }
 
         Row(
@@ -235,31 +191,20 @@ internal fun NotificationExpanded(
                 }
         }
 
-        event.replyAction?.let { reply ->
-            NotificationReplyField(
-                reply = reply,
-                sbn = event.sbn,
-                interactor = interactor,
-                eventId = event.id,
-            )
-        }
     }
 }
 
 @Composable
 private fun NotifExpandedAvatar(event: IslandEvent.Notification, size: Dp) {
-    val icon = event.senderIcon ?: event.appIcon
-    val isRound = event.isConversation && event.senderIcon != null
-    val hasBadge = event.isConversation && event.senderIcon != null && event.appIcon != null
-
-    when {
-        hasBadge && icon != null -> BadgedContactIcon(icon, event.appIcon!!, size, SpaceXxl, true)
-        icon != null -> Image(
+    val icon = event.appIcon
+    if (icon != null) {
+        Image(
             bitmap = icon.toScaledBitmap(size),
             contentDescription = null,
-            modifier = Modifier.size(size).clip(if (isRound) CircleShape else ShapeIconMedium),
+            modifier = Modifier.size(size).clip(ShapeIconMedium),
         )
-        else -> Box(
+    } else {
+        Box(
             modifier = Modifier.size(size).clip(ShapeIconMedium).background(BlueAccent.copy(alpha = AlphaSubtle)),
             contentAlignment = Alignment.Center,
         ) {
@@ -377,81 +322,6 @@ private fun NotificationProgressFallback(event: IslandEvent.Notification) {
     }
 }
 
-@Composable
-private fun NotificationReplyField(
-    reply: IslandEvent.ReplyAction,
-    sbn: StatusBarNotification,
-    interactor: IslandActions,
-    eventId: String,
-) {
-    var replyText by remember { mutableStateOf("") }
-
-    Row(
-        modifier =
-            Modifier.fillMaxWidth()
-                .height(40.dp)
-                .clip(ShapeLg)
-                .background(DarkCard),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        BasicTextField(
-            value = replyText,
-            onValueChange = { replyText = it },
-            modifier =
-                Modifier.weight(1f).padding(horizontal = SpaceLg).onFocusChanged { focusState ->
-                    interactor.onFocusableRequested?.invoke(focusState.isFocused)
-                    if (focusState.isFocused) {
-                        interactor.onNotificationInteraction(eventId)
-                    }
-                },
-            textStyle = MaterialTheme.typography.bodySmall.copy(color = OnCardText),
-            singleLine = true,
-            cursorBrush = SolidColor(BlueAccent),
-            decorationBox = { inner ->
-                if (replyText.isEmpty()) {
-                    Text(reply.label.toString(), color = SubtleGray, style = MaterialTheme.typography.bodySmall)
-                }
-                inner()
-            },
-        )
-        if (replyText.isNotEmpty()) {
-            val context = LocalContext.current
-            Icon(
-                Icons.AutoMirrored.Filled.Send,
-                null,
-                tint = BlueAccent,
-                modifier =
-                    Modifier.size(32.dp)
-                        .clip(CircleShape)
-                        .clickable {
-                            sendReply(context, reply, replyText, sbn)
-                            replyText = ""
-                            interactor.onFocusableRequested?.invoke(false)
-                        }
-                        .padding(SpaceSm),
-            )
-        }
-    }
-}
-
-private fun sendReply(
-    context: Context,
-    reply: IslandEvent.ReplyAction,
-    text: String,
-    sbn: StatusBarNotification,
-) {
-    val intent =
-        Intent().apply {
-            val results = Bundle().apply { putCharSequence(reply.remoteInput.resultKey, text) }
-            RemoteInput.addResultsToIntent(arrayOf(reply.remoteInput), this, results)
-        }
-    try {
-        reply.action.actionIntent?.sendWithBal(context, intent)
-    } catch (e: Exception) {
-        Log.w("NotificationReply", "Failed to send reply", e)
-    }
-}
-
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 internal fun NotificationGroupCard(
@@ -490,10 +360,7 @@ internal fun NotificationGroupCard(
                 if (!isExpanded) {
                     val latest = notifications.first()
                     Text(
-                        buildString {
-                            latest.senderName?.let { append("$it: ") }
-                            append(latest.text ?: latest.title ?: "")
-                        },
+                        latest.text ?: latest.title ?: "",
                         color = SubtleGray,
                         style = MaterialTheme.typography.labelSmall,
                         maxLines = 1,
@@ -583,22 +450,18 @@ private fun GroupedNotificationRow(
                     modifier = Modifier.weight(1f),
                     verticalArrangement = Arrangement.spacedBy(SpaceXxs),
                 ) {
-                    val displayName = event.senderName
-                        ?: event.title
+                    val displayName = event.title
                         ?: event.appName.ifEmpty {
                             event.sbn.packageName.substringAfterLast('.')
                         }
-                    val nameWithGroup = if (event.isGroupConversation && event.conversationTitle != null && event.senderName != null)
-                        "$displayName · ${event.conversationTitle}" else displayName
                     Text(
-                        nameWithGroup,
+                        displayName,
                         color = OnCardText,
                         style = MaterialTheme.typography.titleSmall,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                     )
-                    val body = event.text ?: if (event.senderName != null) event.title else null
-                    body?.let {
+                    event.text?.let {
                         Text(
                             it,
                             color = SubtleGray,
@@ -662,16 +525,6 @@ private fun GroupedNotificationRow(
                 }
             }
 
-            if (childExpanded) {
-                event.replyAction?.let { reply ->
-                    NotificationReplyField(
-                        reply = reply,
-                        sbn = event.sbn,
-                        interactor = interactor,
-                        eventId = event.id,
-                    )
-                }
-            }
         }
     }
 }

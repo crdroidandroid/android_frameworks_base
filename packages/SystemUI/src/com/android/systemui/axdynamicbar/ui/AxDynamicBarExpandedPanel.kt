@@ -14,14 +14,11 @@ import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.BiasAlignment
@@ -48,9 +45,7 @@ import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import com.android.compose.theme.PlatformTheme
 import com.android.systemui.shared.recents.utilities.Utilities
 import com.android.systemui.axdynamicbar.model.IslandEvent
-import com.android.systemui.axdynamicbar.shared.ExpandedMaxWidth
 import com.android.systemui.axdynamicbar.ui.compose.ExpandedIslandContent
-import com.android.systemui.axdynamicbar.ui.compose.NotificationAlertCard
 import com.android.systemui.dagger.SysUISingleton
 import com.android.systemui.dagger.qualifiers.Application
 import com.android.systemui.dagger.qualifiers.Main
@@ -62,7 +57,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import android.view.WindowInsets
@@ -85,16 +79,15 @@ constructor(
     private var hideOverlayJob: Job? = null
 
     fun init() {
-        viewModel.interactor.onCollapseRequested = { viewModel.collapsePanel() }
+        viewModel.interactor.onCollapseRequested = { viewModel.statusBarExpansion.collapse() }
         viewModel.interactor.onFocusableRequested = { focusable -> setOverlayFocusable(focusable) }
 
         val needsOverlay =
             combine(
                 viewModel.isExpanded,
-                viewModel.interactor.uiState.map { it.notificationAlert },
                 viewModel.isOnKeyguard,
-            ) { expanded, alert, onKeyguard ->
-                !onKeyguard && (expanded || alert != null)
+            ) { expanded, onKeyguard ->
+                !onKeyguard && expanded
             }
 
         needsOverlay
@@ -243,28 +236,17 @@ private fun OverlayContent(viewModel: AxDynamicBarChipViewModel, statusBarHeight
     val isLargeScreen = Utilities.isLargeScreen(LocalContext.current)
 
     val largeScreenExtra = if (isLargeScreen) 4.dp else 0.dp
-    val topPad = if (hasCutout) largeScreenExtra
+    val baseTopPad = 4.dp
+    val topPad = baseTopPad + if (hasCutout) largeScreenExtra
         else with(density) { statusBarHeightPx.toDp() } + largeScreenExtra
     val chipState by viewModel.chipState.collectAsStateWithLifecycle()
     val isExpanded by viewModel.isExpanded.collectAsStateWithLifecycle()
-    val uiState by viewModel.interactor.uiState.collectAsStateWithLifecycle()
-    val isOnKeyguard by viewModel.isOnKeyguard.collectAsStateWithLifecycle()
     val chipX by viewModel.chipCenterXFraction.collectAsStateWithLifecycle()
-    val notifAlert = uiState.notificationAlert
-    val compactNotifs by viewModel.interactor.settings.compactNotifications.collectAsStateWithLifecycle()
-
-    val lastAlert = remember { mutableStateOf<IslandEvent.Notification?>(null) }
-    if (notifAlert != null) lastAlert.value = notifAlert
 
     val expandedVisible = remember { MutableTransitionState(false) }
-    val showNotif = !isExpanded && notifAlert != null
-    val notifVisible = remember { MutableTransitionState(false) }
 
     LaunchedEffect(isExpanded) {
         expandedVisible.targetState = isExpanded
-    }
-    LaunchedEffect(showNotif) {
-        notifVisible.targetState = showNotif
     }
 
     val originX = chipX
@@ -312,7 +294,7 @@ private fun OverlayContent(viewModel: AxDynamicBarChipViewModel, statusBarHeight
                                     val dx = change.position.x - downPos.x
                                     val dy = change.position.y - downPos.y
                                     if (dx * dx + dy * dy <= slop * slop) {
-                                        viewModel.collapsePanel()
+                                        viewModel.statusBarExpansion.collapse()
                                     }
                                 }
                                 break
@@ -324,47 +306,14 @@ private fun OverlayContent(viewModel: AxDynamicBarChipViewModel, statusBarHeight
             contentAlignment = chipAlignment,
         ) {
             chipState?.let { state ->
+                val filtered = state.allEvents.filter { it !is IslandEvent.AospChip }
+                if (filtered.isEmpty()) return@let
                 ExpandedIslandContent(
-                    events = state.allEvents,
+                    events = filtered,
                     interactor = viewModel.interactor,
-                    onCollapse = { viewModel.collapsePanel() },
+                    onCollapse = { viewModel.statusBarExpansion.collapse() },
                     pinnedEventId = state.event.id,
                     hapticsViewModelFactory = viewModel.interactor.sliderHapticsViewModelFactory,
-                )
-            }
-        }
-    }
-
-    AnimatedVisibility(
-        visibleState = notifVisible,
-        enter = fadeIn(tween(300)) + scaleIn(
-            animationSpec = tween(300),
-            initialScale = 0.4f,
-            transformOrigin = origin,
-        ),
-        exit = fadeOut(tween(250)) + scaleOut(
-            animationSpec = tween(250),
-            targetScale = 0.4f,
-            transformOrigin = origin,
-        ),
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = topPad),
-            contentAlignment = chipAlignment,
-        ) {
-            val alert = lastAlert.value
-            if (alert != null) {
-                NotificationAlertCard(
-                    notification = alert,
-                    interactor = viewModel.interactor,
-                    onDismiss = { viewModel.interactor.dismissNotificationAlert() },
-                    initiallyCompact = compactNotifs,
-                    modifier =
-                        Modifier.widthIn(max = ExpandedMaxWidth)
-                            .fillMaxWidth()
-                            .padding(horizontal = 12.dp),
                 )
             }
         }

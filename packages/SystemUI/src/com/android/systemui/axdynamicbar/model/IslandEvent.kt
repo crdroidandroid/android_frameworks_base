@@ -1,18 +1,16 @@
 package com.android.systemui.axdynamicbar.model
 
 import android.app.Notification
-import android.app.RemoteInput
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.service.notification.StatusBarNotification
+import com.android.systemui.statusbar.chips.ui.model.OngoingActivityChipModel
 
 enum class RecordingState {
     RECORDING,
     PAUSED,
     SAVED,
 }
-
-data class MicCamApp(val packageName: String, val appName: String, val appIcon: Drawable? = null)
 
 const val NOTIFICATION_DECAY_MS = 5000L
 const val NOTIFICATION_FRESH_PRIORITY = 75
@@ -33,21 +31,9 @@ sealed class IslandEvent(open val priority: Int, val id: String) : Comparable<Is
 
     open fun withoutDrawables(): IslandEvent = this
 
-    data class ScreenRecording(
-        val startTimeMs: Long = System.currentTimeMillis(),
-        val countdownSeconds: Long = 0,
-    ) : IslandEvent(priority = 90, id = "screen_recording") {
-        val isCountdown: Boolean get() = countdownSeconds > 0
-    }
-
-    data class MicCamActive(
-        val isMic: Boolean,
-        val isCam: Boolean,
-        val appName: String = "",
-        val apps: List<MicCamApp> = emptyList(),
-    ) : IslandEvent(priority = 85, id = "mic_cam") {
-        override fun withoutDrawables() = copy(apps = apps.map { it.copy(appIcon = null) })
-    }
+    data class AospChip(
+        val active: OngoingActivityChipModel.Active,
+    ) : IslandEvent(priority = priorityForAospChipKey(active.key), id = "aosp_${active.key}")
 
     data class AudioRecording(
         val appName: String = "",
@@ -59,9 +45,6 @@ sealed class IslandEvent(open val priority: Int, val id: String) : Comparable<Is
     ) : IslandEvent(priority = 84, id = "audio_recording") {
         override fun withoutDrawables() = copy(appIcon = null)
     }
-
-    data class Casting(val deviceName: String = "Screen", val description: String? = null) :
-        IslandEvent(priority = 80, id = "casting")
 
     data class Media(
         val track: String,
@@ -270,12 +253,6 @@ sealed class IslandEvent(open val priority: Int, val id: String) : Comparable<Is
 
     data class NotificationAction(val label: CharSequence, val action: Notification.Action)
 
-    data class ReplyAction(
-        val label: CharSequence,
-        val action: Notification.Action,
-        val remoteInput: RemoteInput,
-    )
-
     data class MediaCustomAction(
         val label: String,
         val action: String,
@@ -292,16 +269,8 @@ sealed class IslandEvent(open val priority: Int, val id: String) : Comparable<Is
         val progressMax: Int = 100,
         val isProgressIndeterminate: Boolean = false,
         val actions: List<NotificationAction> = emptyList(),
-        val replyAction: ReplyAction? = null,
-        val isConversation: Boolean = false,
-        val isGroupConversation: Boolean = false,
-        val conversationTitle: String? = null,
-        val senderIcon: Drawable? = null,
-        val senderName: String? = null,
         val groupKey: String? = null,
         val isGroupSummary: Boolean = false,
-        val notificationImage: Drawable? = null,
-        val callStartTimeMs: Long = 0L,
         val createdAt: Long = System.currentTimeMillis(),
     ) : IslandEvent(priority = NOTIFICATION_STALE_PRIORITY, id = "notification_${sbn.key}") {
         override val behavior = EventBehavior(autoDismissMs = null)
@@ -317,15 +286,13 @@ sealed class IslandEvent(open val priority: Int, val id: String) : Comparable<Is
 
         val ONGOING_TYPES: Set<Class<out IslandEvent>> =
             setOf(
-                ScreenRecording::class.java,
-                MicCamActive::class.java,
                 AudioRecording::class.java,
-                Casting::class.java,
                 PromotedOngoing::class.java,
                 Sports::class.java,
                 Media::class.java,
                 Timer::class.java,
                 Stopwatch::class.java,
+                AospChip::class.java,
             )
     }
 
@@ -338,5 +305,13 @@ sealed class IslandEvent(open val priority: Int, val id: String) : Comparable<Is
 enum class IslandState {
     HIDDEN,
     CHIP,
+}
+
+internal fun priorityForAospChipKey(key: String): Int = when {
+    key.startsWith("callChip-") -> 88
+    key == "ScreenRecord" -> 90
+    key == "ShareToApp" -> 86
+    key == "CastToOtherDevice" -> 82
+    else -> 70
 }
 

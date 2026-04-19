@@ -152,47 +152,6 @@ private fun hideCollapseButtons(view: View) {
 }
 
 @Composable
-internal fun CastingExpanded(event: IslandEvent.Casting) {
-    val style = eventStyleFor(event)
-    ExpandedCardLayout(
-        accentColor = style.accent,
-        icon = { style.icon?.let { Icon(it, null, tint = style.accent, modifier = Modifier.size(28.dp)) } },
-        title = {
-            Text(stringResource(style.labelRes), color = SubtleGray, style = MaterialTheme.typography.labelMedium)
-            Text(event.deviceName, color = OnCardText, style = MaterialTheme.typography.titleMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
-            if (!event.description.isNullOrEmpty()) {
-                Text(event.description, color = SubtleGray, style = MaterialTheme.typography.labelMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
-            }
-        },
-        trailing = { PulsingDot(color = style.accent, size = SpaceMd) },
-    )
-}
-
-@Composable
-internal fun RowScope.CompactCastingRow(event: IslandEvent.Casting) {
-    val style = eventStyleFor(event)
-    Box(
-        modifier =
-            Modifier.size(SizeCompactIcon).clip(ShapeCompact).background(style.accent.copy(alpha = AlphaIconBg)),
-        contentAlignment = Alignment.Center,
-    ) {
-        style.icon?.let { Icon(it, null, tint = style.accent, modifier = Modifier.size(20.dp)) }
-    }
-    Spacer(Modifier.width(SpaceLg))
-    Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(SpaceXxs)) {
-        Text(stringResource(style.labelRes), color = SubtleGray, style = MaterialTheme.typography.labelSmall)
-        Text(
-            event.deviceName,
-            color = OnCardText,
-            style = MaterialTheme.typography.bodySmall,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-        )
-    }
-    PulsingDot(color = style.accent, size = 7.dp)
-}
-
-@Composable
 internal fun PromotedOngoingExpanded(
     event: IslandEvent.PromotedOngoing,
     interactor: IslandActions,
