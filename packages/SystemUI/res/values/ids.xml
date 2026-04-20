@@ -314,4 +314,5 @@
 
     <!-- Clock face -->
     <item type="id" name="original_text_color" />
+    <item type="id" name="original_typeface" />
 </resources>
