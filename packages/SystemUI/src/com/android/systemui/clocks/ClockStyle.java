@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
@@ -314,7 +315,11 @@ public class ClockStyle extends RelativeLayout implements TunerService.Tunable {
             }
         }
         if (view instanceof TextClock) {
-            ((TextClock) view).refreshTime();
+            TextClock tc = (TextClock) view;
+            if (tc.getTag(R.id.original_typeface) != null) {
+                tc.setTypeface((Typeface) tc.getTag(R.id.original_typeface));
+            }
+            tc.refreshTime();
         }
     }
 
@@ -327,8 +332,29 @@ public class ClockStyle extends RelativeLayout implements TunerService.Tunable {
 
     private void forceTimeUpdate() {
         if (currentClockView != null) {
+            restoreAllFonts(currentClockView);
             updateTextClockViews(currentClockView);
             lastUpdateTimeMillis = System.currentTimeMillis();
+        }
+    }
+
+    private void restoreAllFonts(View view) {
+        if (view instanceof ViewGroup) {
+            ViewGroup vg = (ViewGroup) view;
+            for (int i = 0; i < vg.getChildCount(); i++) {
+                restoreAllFonts(vg.getChildAt(i));
+            }
+        }
+        if (view instanceof TextClock) {
+            TextClock tc = (TextClock) view;
+            if (tc.getTag(R.id.original_typeface) != null) {
+                tc.setTypeface((Typeface) tc.getTag(R.id.original_typeface));
+            }
+        } else if (view instanceof TextView) {
+            TextView tv = (TextView) view;
+            if (tv.getTag(R.id.original_typeface) != null) {
+                tv.setTypeface((Typeface) tv.getTag(R.id.original_typeface));
+            }
         }
     }
 
@@ -424,6 +450,30 @@ public class ClockStyle extends RelativeLayout implements TunerService.Tunable {
         }
     }
 
+    private void preloadFonts(View view) {
+        if (view instanceof ViewGroup) {
+            ViewGroup vg = (ViewGroup) view;
+            for (int i = 0; i < vg.getChildCount(); i++) {
+                preloadFonts(vg.getChildAt(i));
+            }
+        }
+        if (view instanceof TextClock) {
+            TextClock tc = (TextClock) view;
+            Typeface tf = tc.getTypeface();
+            if (tf != null) {
+                tc.setTag(R.id.original_typeface, tf);
+                tc.setTypeface(tf);
+            }
+        } else if (view instanceof TextView) {
+            TextView tv = (TextView) view;
+            Typeface tf = tv.getTypeface();
+            if (tf != null) {
+                tv.setTag(R.id.original_typeface, tf);
+                tv.setTypeface(tf);
+            }
+        }
+    }
+
     private void applyTextClockColor(View view) {
         if (view == null) return;
         if (isNoColorClock(mClockStyle)) return;
@@ -435,9 +485,19 @@ public class ClockStyle extends RelativeLayout implements TunerService.Tunable {
         }
         if (!(view instanceof TextClock)) return;
         TextClock tc = (TextClock) view;
+        
+        if (tc.getTag(R.id.original_typeface) == null && tc.getTypeface() != null) {
+            tc.setTag(R.id.original_typeface, tc.getTypeface());
+        }
+        
         if (tc.getTag(R.id.original_text_color) == null) {
             tc.setTag(R.id.original_text_color, tc.getCurrentTextColor());
         }
+        
+        if (tc.getTag(R.id.original_typeface) != null) {
+            tc.setTypeface((Typeface) tc.getTag(R.id.original_typeface));
+        }
+        
         int originalColor = (Integer) tc.getTag(R.id.original_text_color);
         int whiteColor = mContext.getColor(android.R.color.white);
         boolean isWhiteOriginal = (originalColor & 0x00FFFFFF) == (whiteColor & 0x00FFFFFF);
@@ -482,6 +542,11 @@ public class ClockStyle extends RelativeLayout implements TunerService.Tunable {
                         .inflate(CLOCK_LAYOUTS[mClockStyle], mClockContainer, false);
                 mClockContainer.addView(currentClockView);
             }
+
+            if (currentClockView != null) {
+                preloadFonts(currentClockView);
+            }
+            
             if (currentClockView != null) {
                 ImageView userProfileIcon = currentClockView.findViewById(R.id.user_profile_icon);
                 if (userProfileIcon != null) {
