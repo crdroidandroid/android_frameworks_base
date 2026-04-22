@@ -33,6 +33,7 @@ import static com.android.systemui.DejankUtils.whitelistIpcs;
 import android.annotation.SuppressLint;
 import android.annotation.UserIdInt;
 import android.app.ActivityOptions;
+import android.app.AxSandboxManager;
 import android.app.KeyguardManager;
 import android.app.admin.DevicePolicyManager;
 import android.content.BroadcastReceiver;
@@ -367,6 +368,7 @@ public class NotificationLockscreenUserManagerImpl implements
         mFeatureFlags = featureFlags;
         mDeviceUnlockedInteractorLazy = deviceUnlockedInteractorLazy;
         mAxAppLockerHelper = axAppLockerHelper;
+        mAxAppLockerHelper.addRefreshListener(this::notifyNotificationStateChanged);
 
         mLockScreenUris.add(SHOW_LOCKSCREEN);
         mLockScreenUris.add(SHOW_PRIVATE_LOCKSCREEN);
@@ -733,7 +735,10 @@ public class NotificationLockscreenUserManagerImpl implements
     public @RedactionType int getRedactionType(NotificationEntry ent) {
         int userId = ent.getSbn().getUserId();
 
-        if (mAxAppLockerHelper.isAppLocked(ent.getSbn().getPackageName())) {
+        if (ent.getSbn().getNotification().extras
+                        .getBoolean(AxSandboxManager.EXTRA_NOTIFICATION_APP_LOCKED, false)
+                && mAxAppLockerHelper.needsAuth(
+                        ent.getSbn().getPackageName(), ent.getSbn().getUserId())) {
             return REDACTION_TYPE_PUBLIC;
         }
 
@@ -965,6 +970,11 @@ public class NotificationLockscreenUserManagerImpl implements
     @Override
     public void removeNotificationStateChangedListener(NotificationStateChangedListener listener) {
         mNotifStateChangedListeners.remove(listener);
+    }
+
+    @Override
+    public void onAppLockRefresh() {
+        notifyNotificationStateChanged();
     }
 
     private void notifyNotificationStateChanged() {

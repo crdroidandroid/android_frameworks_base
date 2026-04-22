@@ -7471,19 +7471,19 @@ public class NotificationStackScrollLayout
     }
 
     public void onAppLockerUpdate(String packageName) {
+        boolean hideSensitive = mAmbientState.isHideSensitive();
         int childCount = getChildCount();
         for (int i = 0; i < childCount; i++) {
             ExpandableView child = getChildAtIndex(i);
             if (child instanceof ExpandableNotificationRow row) {
                 NotificationEntry entry = row.getEntry();
-                if (entry != null) {
-                    StatusBarNotification sbn = entry.getSbn();
-                    if (packageName != null && !packageName.equals(sbn.getPackageName())) {
-                        continue;
-                    }
-                    row.setHeadsUpAnimatingAway(row.isHeadsUpAnimatingAway());
-                    onChildHeightChanged(child, true);
+                if (entry == null) continue;
+                StatusBarNotification sbn = entry.getSbn();
+                if (packageName != null && !packageName.equals(sbn.getPackageName())) {
+                    continue;
                 }
+                row.setHideSensitive(hideSensitive, false, 0, 0);
+                onChildHeightChanged(child, true);
             }
         }
         updateContentHeight();

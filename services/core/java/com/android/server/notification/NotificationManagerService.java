@@ -218,6 +218,7 @@ import android.app.ActivityTaskManager;
 import android.app.AlarmManager;
 import android.app.AppGlobals;
 import android.app.AppOpsManager;
+import android.app.AxSandboxManager;
 import android.app.AutomaticZenRule;
 import android.app.IActivityManager;
 import android.app.IBinderSession;
@@ -8914,6 +8915,11 @@ public class NotificationManagerService extends SystemService {
         fixNotificationWithChannel(notification, channel, notificationUid, pkg);
 
         final NotificationRecord r = new NotificationRecord(getContext(), n, channel);
+        if (AxSandboxService.get().hasAppLock(pkg)) {
+            notification.extras.putBoolean(AxSandboxManager.EXTRA_NOTIFICATION_APP_LOCKED, true);
+        } else {
+            notification.extras.remove(AxSandboxManager.EXTRA_NOTIFICATION_APP_LOCKED);
+        }
         r.setIsAppImportanceLocked(mPermissionHelper.isPermissionUserSet(pkg, userId));
         r.setPostSilently(postSilently);
         r.setFlagBubbleRemoved(false);

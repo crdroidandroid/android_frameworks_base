@@ -275,7 +275,7 @@ public class StatusBarNotificationActivityStarter implements NotificationActivit
     public void onNotificationClicked(@NonNull NotificationEntry entry,
             @NonNull ExpandableNotificationRow row) {
         String packageName = entry.getSbn().getPackageName();
-        if (mAxAppLockerHelper.isAppLockedWithoutCache(packageName)) {
+        if (mAxAppLockerHelper.getState(packageName).needsAuth()) {
             int userId = entry.getSbn().getUserId();
             mAxAppLockerHelper.promptUnlock(packageName, userId);
             return;

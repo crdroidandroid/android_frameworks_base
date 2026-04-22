@@ -21,6 +21,7 @@ import android.os.RemoteException;
 
 
 import com.android.internal.app.IAppLockStateListener;
+import com.android.internal.app.IAppSessionListener;
 import com.android.internal.app.IAxSandboxManager;
 import com.android.internal.app.IHiddenNotificationListener;
 import com.android.internal.app.HiddenNotificationInfo;
@@ -56,9 +57,32 @@ public class AxSandboxManager {
     public static final String EXTRA_LOCKED_UID = "LOCKED_UID";
     /** @hide */
     public static final String EXTRA_LOCKED_COMPONENT = "LOCKED_COMPONENT";
+    /** @hide */
+    public static final String EXTRA_NOTIFICATION_APP_LOCKED = "android.app.extra.AX_APP_LOCKED";
 
     /** @hide */
     public static final int DEFAULT_LOCK_TIMEOUT = 30;
+
+    /** @hide */
+    public enum AppLockState {
+        NONE,
+        UNLOCKED,
+        LOCKED;
+
+        public boolean hasAppLock() {
+            return this != NONE;
+        }
+
+        public boolean needsAuth() {
+            return this == LOCKED;
+        }
+
+        public static AppLockState fromOrdinal(int ordinal) {
+            AppLockState[] values = values();
+            if (ordinal < 0 || ordinal >= values.length) return NONE;
+            return values[ordinal];
+        }
+    }
 
     private final Context mContext;
     private final IAxSandboxManager mService;
@@ -72,9 +96,9 @@ public class AxSandboxManager {
     /**
      * @hide
      */
-    public boolean isAppLocked(@NonNull String packageName) {
+    public AppLockState getAppLockState(@NonNull String packageName) {
         try {
-            return mService.isAppLocked(packageName);
+            return AppLockState.fromOrdinal(mService.getAppLockState(packageName));
         } catch (RemoteException e) {
             throw e.rethrowFromSystemServer();
         }
@@ -213,6 +237,22 @@ public class AxSandboxManager {
     public void unregisterAppLockStateListener(IAppLockStateListener listener) {
         try {
             mService.unregisterAppLockStateListener(listener);
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
+    }
+
+    public void registerAppSessionListener(IAppSessionListener listener) {
+        try {
+            mService.registerAppSessionListener(listener);
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
+    }
+
+    public void unregisterAppSessionListener(IAppSessionListener listener) {
+        try {
+            mService.unregisterAppSessionListener(listener);
         } catch (RemoteException e) {
             throw e.rethrowFromSystemServer();
         }

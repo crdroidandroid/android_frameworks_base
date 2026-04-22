@@ -1,6 +1,7 @@
 package com.android.internal.app;
 
 import com.android.internal.app.IAppLockStateListener;
+import com.android.internal.app.IAppSessionListener;
 import com.android.internal.app.IHiddenNotificationListener;
 import com.android.internal.app.HiddenNotificationInfo;
 
@@ -8,7 +9,7 @@ import com.android.internal.app.HiddenNotificationInfo;
  * @hide
  */
 interface IAxSandboxManager {
-    boolean isAppLocked(String packageName);
+    int getAppLockState(String packageName);
     boolean isPackageHidden(String packageName);
 
     void addLockedApp(String packageName);
@@ -26,6 +27,8 @@ interface IAxSandboxManager {
 
     void registerAppLockStateListener(IAppLockStateListener listener);
     void unregisterAppLockStateListener(IAppLockStateListener listener);
+    void registerAppSessionListener(IAppSessionListener listener);
+    void unregisterAppSessionListener(IAppSessionListener listener);
     void registerHiddenNotificationListener(IHiddenNotificationListener listener);
     void unregisterHiddenNotificationListener(IHiddenNotificationListener listener);
 

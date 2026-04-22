@@ -419,7 +419,7 @@ public class CustomTile extends QSTileImpl<State> implements TileChangeListener,
             return;
         }
 
-        if (mAxAppLockerHelper.isAppLocked(mComponent.getPackageName())) {
+        if (mAxAppLockerHelper.getState(mComponent.getPackageName()).needsAuth()) {
             mAxAppLockerHelper.promptUnlock(mComponent.getPackageName(), mUser);
             return;
         }

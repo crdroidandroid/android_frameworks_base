@@ -34,6 +34,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator.AnimatorUpdateListener;
+import android.app.AxSandboxManager;
 import android.app.Notification;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -49,6 +50,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.service.notification.StatusBarNotification;
 import android.os.SystemProperties;
 import android.os.Trace;
 import android.os.UserHandle;
@@ -413,7 +415,7 @@ public class ExpandableNotificationRow extends ActivatableNotificationView
     }
 
     private void toggleExpansionState(View v, boolean shouldLogExpandClickMetric) {
-        if (isNotificationAppLocked()) {
+        if (doesNotificationNeedAuth()) {
             promptAppUnlock();
             return;
         }
@@ -476,17 +478,33 @@ public class ExpandableNotificationRow extends ActivatableNotificationView
         }
     }
 
+    private StatusBarNotification getAppLockSbn() {
+        if (NotificationBundleUi.isEnabled()) {
+            return mEntryAdapter != null ? mEntryAdapter.getSbn() : null;
+        }
+        return mEntry != null ? mEntry.getSbn() : null;
+    }
+
     private boolean isNotificationAppLocked() {
-        if (mEntry == null || mEntry.getSbn() == null) return false;
-        String packageName = mEntry.getSbn().getPackageName();
-        return mAxAppLockerHelper.isAppLocked(packageName);
+        StatusBarNotification sbn = getAppLockSbn();
+        if (sbn == null) return false;
+        if (!sbn.getNotification().extras
+                .getBoolean(AxSandboxManager.EXTRA_NOTIFICATION_APP_LOCKED, false)) {
+            return false;
+        }
+        return mAxAppLockerHelper.needsAuth(sbn.getPackageName(), sbn.getUserId());
+    }
+
+    private boolean doesNotificationNeedAuth() {
+        StatusBarNotification sbn = getAppLockSbn();
+        if (sbn == null) return false;
+        return mAxAppLockerHelper.getState(sbn.getPackageName()).needsAuth();
     }
 
     private void promptAppUnlock() {
-        if (mEntry == null || mEntry.getSbn() == null) return;
-        String packageName = mEntry.getSbn().getPackageName();
-        int userId = mEntry.getSbn().getUserId();
-        mAxAppLockerHelper.promptUnlock(packageName, userId);
+        StatusBarNotification sbn = getAppLockSbn();
+        if (sbn == null) return;
+        mAxAppLockerHelper.promptUnlock(sbn.getPackageName(), sbn.getUserId());
     }
 
     private boolean mKeepInParentForDismissAnimation;
@@ -3333,7 +3351,7 @@ public class ExpandableNotificationRow extends ActivatableNotificationView
             return mGuts.getIntrinsicHeight();
         }
         if (NotificationBundleUi.isEnabled()) {
-            if (mSensitive && mHideSensitiveForIntrinsicHeight) {
+            if ((mSensitive && mHideSensitiveForIntrinsicHeight) || isNotificationAppLocked()) {
                 return getMinHeight();
             }
             if (mIsSummaryWithChildren) {
