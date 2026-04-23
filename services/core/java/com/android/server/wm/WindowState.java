@@ -598,6 +598,8 @@ class WindowState extends WindowContainer<WindowState> implements WindowManagerP
 
     /** The time when the window was last requested to redraw for orientation change. */
     private long mOrientationChangeRedrawRequestTime;
+    private int mLastOverlappingWithNavBarSeq = -1;
+    private boolean mIsOverlappingWithNavBar;
 
     /** Is this window now (or just being) removed? */
     boolean mRemoved;
@@ -6118,6 +6120,18 @@ class WindowState extends WindowContainer<WindowState> implements WindowManagerP
         updateScaleIfNeeded();
         scheduleAnimation();
         return true;
+    }
+
+    boolean isOverlappingWithNavBar() {
+        if (!isVisible()) {
+            return false;
+        }
+        if (mLastOverlappingWithNavBarSeq == mDisplayContent.mLayoutSeq) {
+            return mIsOverlappingWithNavBar;
+        }
+        mIsOverlappingWithNavBar = DisplayPolicy.isOverlappingWithNavBar(this);
+        mLastOverlappingWithNavBarSeq = mDisplayContent.mLayoutSeq;
+        return mIsOverlappingWithNavBar;
     }
 
     boolean isTrustedOverlay() {
