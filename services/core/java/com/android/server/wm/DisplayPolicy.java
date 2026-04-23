@@ -1616,7 +1616,7 @@ public class DisplayPolicy {
 
         // Check if the freeform window overlaps with the navigation bar area.
         if (!mIsFreeformWindowOverlappingWithNavBar && win.inFreeformWindowingMode()
-                && win.mActivityRecord != null && isOverlappingWithNavBar(win)) {
+                && win.mActivityRecord != null && win.isOverlappingWithNavBar()) {
             mIsFreeformWindowOverlappingWithNavBar = true;
         }
 
@@ -1731,7 +1731,7 @@ public class DisplayPolicy {
             // mode; if it's in gesture navigation mode, the navigation bar will be
             // NAV_BAR_FORCE_TRANSPARENT and its appearance won't be decided by overlapping
             // windows.
-            if (isOverlappingWithNavBar(win)) {
+            if (win.isOverlappingWithNavBar()) {
                 if (mNavBarColorWindowCandidate == null) {
                     mNavBarColorWindowCandidate = win;
                     addSystemBarColorApp(win);
@@ -1764,7 +1764,7 @@ public class DisplayPolicy {
                     addSystemBarColorApp(win);
                 }
             }
-            if (isOverlappingWithNavBar(win) && mNavBarColorWindowCandidate == null) {
+            if (win.isOverlappingWithNavBar() && mNavBarColorWindowCandidate == null) {
                 mNavBarColorWindowCandidate = win;
                 addSystemBarColorApp(win);
             }
