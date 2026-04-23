@@ -66,6 +66,8 @@ class AppCompatLetterboxPolicy {
     private final Rect mTmpRect = new Rect();
 
     private boolean mLastShouldShowLetterboxUi;
+    private boolean mLastWallpaperShouldBeShown;
+    private int mLastLetterboxBackgroundType = -1;
 
     // Whether the activity is eligible to be letterboxed for fixed orientation with respect to its
     // requested orientation, even when it's letterbox for another reason (e.g., size compat mode)
@@ -278,6 +280,7 @@ class AppCompatLetterboxPolicy {
                 .mAppCompatController.getLetterboxOverrides();
         final @LetterboxBackgroundType int letterboxBackgroundType =
                 letterboxOverrides.getLetterboxBackgroundType();
+
         boolean wallpaperShouldBeShown =
                 letterboxBackgroundType == LETTERBOX_BACKGROUND_WALLPAPER
                         // Don't use wallpaper as a background if letterboxed for display cutout.
@@ -288,6 +291,15 @@ class AppCompatLetterboxPolicy {
                         // Check that blur is supported by a device if blur radius is provided.
                         && (letterboxOverrides.getLetterboxWallpaperBlurRadiusPx() <= 0
                         || letterboxOverrides.isLetterboxWallpaperBlurSupported());
+
+        if (letterboxBackgroundType == mLastLetterboxBackgroundType
+                && wallpaperShouldBeShown == mLastWallpaperShouldBeShown) {
+            return;
+        }
+
+        mLastLetterboxBackgroundType = letterboxBackgroundType;
+        mLastWallpaperShouldBeShown = wallpaperShouldBeShown;
+
         if (letterboxOverrides.checkWallpaperBackgroundForLetterbox(wallpaperShouldBeShown)) {
             mActivityRecord.requestUpdateWallpaperIfNeeded();
         }
