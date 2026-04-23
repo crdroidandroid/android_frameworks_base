@@ -244,6 +244,15 @@ public final class PlayIntegritySpoofService {
             Log.i(TAG, "PIF config loaded, fields=" + mBuildFields.size()
                 + ", props=" + mSystemProps.size());
 
+            // Sync SECURITY_PATCH to system props so apps reading these directly
+            // see the spoofed date, matching what the upstream module does via resetprop.
+            String secPatch = mBuildFields.get("SECURITY_PATCH");
+            if (secPatch != null && !secPatch.isEmpty()) {
+                mSystemProps.put("ro.build.version.security_patch", secPatch);
+                mSystemProps.put("ro.vendor.build.security_patch", secPatch);
+                mSystemProps.put("ro.system.build.version.security_patch", secPatch);
+                mSystemProps.put("ro.product.build.version.security_patch", secPatch);
+            }
         } catch (Throwable e) {
             Log.e(TAG, "Failed to load PIF config", e);
         }
@@ -370,14 +379,13 @@ public final class PlayIntegritySpoofService {
         if (!isDroidGuard && !isVending) return;
 
         if (isVending) {
-            if (mSpoofVendingSdk) {
-                spoofSdkInt();
+            if (!mSpoofVendingBuild) {
+                if (mVerboseLogs > 0) Log.d(TAG, "Vending build spoofing disabled");
+                return;
             }
-            if (mSpoofVendingBuild && !mSpoofVendingSdk) {
-                for (Map.Entry<String, String> entry : mBuildFields.entrySet()) {
-                    if ("SDK_INT".equals(entry.getKey())) continue;
-                    spoofField(entry.getKey(), entry.getValue(), "PS");
-                }
+            for (Map.Entry<String, String> entry : mBuildFields.entrySet()) {
+                if ("SDK_INT".equals(entry.getKey())) continue;
+                spoofField(entry.getKey(), entry.getValue(), "PS");
             }
             return;
         }
@@ -389,6 +397,13 @@ public final class PlayIntegritySpoofService {
 
         for (Map.Entry<String, String> entry : mBuildFields.entrySet()) {
             spoofField(entry.getKey(), entry.getValue(), "DG");
+        }
+
+        // spoofVendingSdk when enabled applies an additional SDK_INT override
+        // specifically for DroidGuard to match legacy attestation paths.
+        // It has no effect on Vending.
+        if (mSpoofVendingSdk) {
+            spoofSdkInt();
         }
     }
 
@@ -459,14 +474,23 @@ public final class PlayIntegritySpoofService {
     }
 
     private void spoofSdkInt() {
+        // Only called for DroidGuard. Reads SDK_INT from config so it stays
+        // consistent with the spoofed fingerprint. Falls back to 32 if unset.
+        String configSdk = mBuildFields.get("SDK_INT");
+        int targetSdk;
+        try {
+            targetSdk = (configSdk != null) ? Integer.parseInt(configSdk) : 32;
+        } catch (NumberFormatException e) {
+            targetSdk = 32;
+        }
+
         try {
             Field field = Build.VERSION.class.getDeclaredField("SDK_INT");
             field.setAccessible(true);
             int oldValue = field.getInt(null);
-            int targetSdk = Math.min(oldValue, 32);
             if (oldValue != targetSdk) {
                 field.set(null, targetSdk);
-                Log.d(TAG + "/Java:PS", "[SDK_INT]: " + oldValue + " -> " + targetSdk);
+                Log.d(TAG + "/Java:DG", "[SDK_INT]: " + oldValue + " -> " + targetSdk);
             }
             field.setAccessible(false);
         } catch (Exception e) {
@@ -481,8 +505,8 @@ public final class PlayIntegritySpoofService {
         }
 
         try {
-            Field field = null;
-            String oldValue = null;
+            Field field;
+            String oldValue;
 
             if (hasField(Build.class, fieldName)) {
                 field = Build.class.getDeclaredField(fieldName);
