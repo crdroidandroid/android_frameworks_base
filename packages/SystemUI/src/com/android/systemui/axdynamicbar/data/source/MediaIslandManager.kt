@@ -102,6 +102,12 @@ constructor(
             val current = _mediaEvent.value ?: return
             _mediaEvent.value = current.copy(appIcon = drawable)
         }
+
+        override fun onMetadataChanged(track: String, artist: String) {
+            val current = _mediaEvent.value ?: return
+            if (current.track == track && current.artist == artist) return
+            _mediaEvent.value = current.copy(track = track, artist = artist)
+        }
     }
 
     private fun bindController(controllers: List<MediaController>?) {
