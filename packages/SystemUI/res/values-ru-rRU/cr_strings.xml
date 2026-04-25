@@ -205,7 +205,6 @@
     <string name="ax_dynamic_bar_wireless_charging">Беспроводная зарядка</string>
     <string name="ax_dynamic_bar_until_full">до полного</string>
     <string name="ax_dynamic_bar_battery_saver">Экономия заряда</string>
-    <string name="ax_dynamic_bar_call">Вызов</string>
     <string name="ax_dynamic_bar_incoming_call">Входящий вызов</string>
     <string name="ax_dynamic_bar_connected">Подключен</string>
     <string name="ax_dynamic_bar_disconnect">Отключить</string>
