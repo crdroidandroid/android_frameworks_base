@@ -167,6 +167,7 @@ import com.android.systemui.shade.ShadeDisplayAware;
 import com.android.systemui.shared.system.TaskStackChangeListener;
 import com.android.systemui.shared.system.TaskStackChangeListeners;
 import com.android.systemui.statusbar.StatusBarState;
+import com.android.systemui.statusbar.phone.DozeParameters;
 import com.android.systemui.statusbar.phone.KeyguardBypassController;
 import com.android.systemui.statusbar.policy.DevicePostureController;
 import com.android.systemui.statusbar.policy.DevicePostureController.DevicePostureInt;
@@ -330,6 +331,7 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, CoreSt
         }
     };
     private final FaceWakeUpTriggersConfig mFaceWakeUpTriggersConfig;
+    private final Provider<DozeParameters> mDozeParameters;
 
     private final Object mSimDataLockObject = new Object();
     HashMap<Integer, SimData> mSimDatasBySlotId = new HashMap<>();
@@ -2159,23 +2161,26 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, CoreSt
                 cb.onStartedGoingToSleep(arg1);
             }
         }
-        mGoingToSleep = true;
         // Resetting assistant visibility state as the device is going to sleep now.
         // TaskStackChangeListener gets triggered a little late when we transition to AoD,
         // which results in face auth running once on AoD.
         mAssistantVisible = false;
-        mLogger.d("Started going to sleep, mGoingToSleep=true, mAssistantVisible=false");
+        mLogger.d("Started going to sleep, mAssistantVisible=false");
         updateFingerprintListeningState(BIOMETRIC_ACTION_UPDATE);
     }
 
     protected void handleFinishedGoingToSleep(int arg1) {
         Assert.isMainThread();
-        mGoingToSleep = false;
         for (int i = 0; i < mCallbacks.size(); i++) {
             KeyguardUpdateMonitorCallback cb = mCallbacks.get(i).get();
             if (cb != null) {
                 cb.onFinishedGoingToSleep(arg1);
             }
+        }
+        final int userId = mSelectedUserInteractor.getSelectedUserId();
+        final boolean canFpUnlock = isUnlockWithFingerprintPossible(userId);
+        if (canFpUnlock && mDozeParameters.get().getAlwaysOn()) {
+            mGoingToSleep = false;
         }
         updateFingerprintListeningState(BIOMETRIC_ACTION_UPDATE);
     }
@@ -2183,7 +2188,9 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, CoreSt
     private void handleScreenTurnedOff() {
         Assert.isMainThread();
         mHardwareFingerprintUnavailableRetryCount = 0;
+        mGoingToSleep = false;
         ScrimUtils.get().onScreenTurnedOff();
+        updateFingerprintListeningState(BIOMETRIC_ACTION_UPDATE);
     }
 
     private void handleDreamingStateChanged(int dreamStart) {
@@ -2296,7 +2303,8 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, CoreSt
             Provider<CommunalSceneInteractor> communalSceneInteractor,
             Provider<KeyguardServiceShowLockscreenInteractor>
                     keyguardServiceShowLockscreenInteractor,
-            Provider<DeviceUnlockedInteractor> deviceUnlockedInteractor) {
+            Provider<DeviceUnlockedInteractor> deviceUnlockedInteractor,
+            Provider<DozeParameters> dozeParameters) {
         mContext = context;
         mSubscriptionManager = subscriptionManager;
         mUserTracker = userTracker;
@@ -2356,6 +2364,7 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, CoreSt
         if (mPocketManager != null) {
             mPocketManager.addCallback(mPocketCallback);
         }
+        mDozeParameters = dozeParameters;
 
         mHandler = new Handler(mainLooper) {
             @Override
@@ -3191,7 +3200,8 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, CoreSt
 
         boolean shouldListen = shouldListenKeyguardState && shouldListenUserState
                 && shouldListenBouncerState && shouldListenUdfpsState && !mBiometricPromptShowing
-                && shouldListenSecureLockDeviceState && shouldListenFpsState && !mIsDeviceInPocket;
+                && shouldListenSecureLockDeviceState && shouldListenFpsState && !mIsDeviceInPocket
+                && (!mGoingToSleep || !isUdfps);
         logListenerModelData(
                 new KeyguardFingerprintListenModel(
                     System.currentTimeMillis(),
@@ -4181,11 +4191,15 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, CoreSt
     public void dispatchStartedWakingUp(@PowerManager.WakeReason int pmWakeReason) {
         synchronized (this) {
             mDeviceInteractive = true;
+            mGoingToSleep = false;
         }
         mHandler.sendMessage(mHandler.obtainMessage(MSG_STARTED_WAKING_UP, pmWakeReason, 0));
     }
 
     public void dispatchStartedGoingToSleep(int why) {
+        synchronized (this) {
+            mGoingToSleep = true;
+        }
         mHandler.sendMessage(mHandler.obtainMessage(MSG_STARTED_GOING_TO_SLEEP, why, 0));
     }
 
