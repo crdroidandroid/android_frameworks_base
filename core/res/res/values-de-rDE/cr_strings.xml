@@ -12,8 +12,6 @@
     <string name="gesture_locked_warning">Erneut wischen, um Gesten zu verwenden</string>
     <!-- GameSpace -->
     <string name="gamespace_new_game_added"><xliff:g id="name" example="MyApp">%s</xliff:g> wurde dem Spielmodus hinzugefügt</string>
-    <!-- App lock -->
-    <string name="unlock_application"><xliff:g id="label" example="Telegram">%1$s</xliff:g> entsperren</string>
     <!-- Pocket Lock -->
     <string name="pocket_mode_title">Taschenmodus aktiv</string>
     <string name="pocket_mode_illustration_description">Abbildung des Telefons in der Tasche</string>
