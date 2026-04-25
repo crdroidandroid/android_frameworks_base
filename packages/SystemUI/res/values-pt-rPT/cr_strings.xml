@@ -203,7 +203,6 @@
     <string name="ax_dynamic_bar_wireless_charging">Carregamento sem fio</string>
     <string name="ax_dynamic_bar_until_full">até encher</string>
     <string name="ax_dynamic_bar_battery_saver">Poupança de Bateria</string>
-    <string name="ax_dynamic_bar_call">Call</string>
     <string name="ax_dynamic_bar_incoming_call">Chamada Recebida</string>
     <string name="ax_dynamic_bar_connected">Conectado</string>
     <string name="ax_dynamic_bar_disconnect">Desconectar</string>
