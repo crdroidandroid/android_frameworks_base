@@ -2157,18 +2157,16 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, CoreSt
                 cb.onStartedGoingToSleep(arg1);
             }
         }
-        mGoingToSleep = true;
         // Resetting assistant visibility state as the device is going to sleep now.
         // TaskStackChangeListener gets triggered a little late when we transition to AoD,
         // which results in face auth running once on AoD.
         mAssistantVisible = false;
-        mLogger.d("Started going to sleep, mGoingToSleep=true, mAssistantVisible=false");
+        mLogger.d("Started going to sleep, mAssistantVisible=false");
         updateFingerprintListeningState(BIOMETRIC_ACTION_UPDATE);
     }
 
     protected void handleFinishedGoingToSleep(int arg1) {
         Assert.isMainThread();
-        mGoingToSleep = false;
         for (int i = 0; i < mCallbacks.size(); i++) {
             KeyguardUpdateMonitorCallback cb = mCallbacks.get(i).get();
             if (cb != null) {
@@ -2181,7 +2179,9 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, CoreSt
     private void handleScreenTurnedOff() {
         Assert.isMainThread();
         mHardwareFingerprintUnavailableRetryCount = 0;
+        mGoingToSleep = false;
         ScrimUtils.get().onScreenTurnedOff();
+        updateFingerprintListeningState(BIOMETRIC_ACTION_UPDATE);
     }
 
     private void handleDreamingStateChanged(int dreamStart) {
@@ -3196,7 +3196,8 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, CoreSt
 
         boolean shouldListen = shouldListenKeyguardState && shouldListenUserState
                 && shouldListenBouncerState && shouldListenUdfpsState && !mBiometricPromptShowing
-                && shouldListenSecureLockDeviceState && shouldListenFpsState && !mIsDeviceInPocket;
+                && shouldListenSecureLockDeviceState && shouldListenFpsState && !mIsDeviceInPocket
+                && (!mGoingToSleep || !isUdfps);
         logListenerModelData(
                 new KeyguardFingerprintListenModel(
                     System.currentTimeMillis(),
@@ -4178,11 +4179,15 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, CoreSt
     public void dispatchStartedWakingUp(@PowerManager.WakeReason int pmWakeReason) {
         synchronized (this) {
             mDeviceInteractive = true;
+            mGoingToSleep = false;
         }
         mHandler.sendMessage(mHandler.obtainMessage(MSG_STARTED_WAKING_UP, pmWakeReason, 0));
     }
 
     public void dispatchStartedGoingToSleep(int why) {
+        synchronized (this) {
+            mGoingToSleep = true;
+        }
         mHandler.sendMessage(mHandler.obtainMessage(MSG_STARTED_GOING_TO_SLEEP, why, 0));
     }
 
