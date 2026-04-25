@@ -203,7 +203,6 @@
     <string name="ax_dynamic_bar_wireless_charging">Vezeték nélküli töltés</string>
     <string name="ax_dynamic_bar_until_full">a teljes feltöltésig</string>
     <string name="ax_dynamic_bar_battery_saver">Akkumulátorkímélő</string>
-    <string name="ax_dynamic_bar_call">Hívás</string>
     <string name="ax_dynamic_bar_incoming_call">Bejövő hívás</string>
     <string name="ax_dynamic_bar_connected">Csatlakozva</string>
     <string name="ax_dynamic_bar_disconnect">Kapcsolat bontása</string>
