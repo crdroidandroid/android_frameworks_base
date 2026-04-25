@@ -203,7 +203,6 @@
     <string name="ax_dynamic_bar_wireless_charging">Kabelloses Laden</string>
     <string name="ax_dynamic_bar_until_full">bis voll</string>
     <string name="ax_dynamic_bar_battery_saver">Energiesparmodus</string>
-    <string name="ax_dynamic_bar_call">Anruf</string>
     <string name="ax_dynamic_bar_incoming_call">Eingehender Anruf</string>
     <string name="ax_dynamic_bar_connected">Verbunden</string>
     <string name="ax_dynamic_bar_disconnect">Verbindung trennen</string>
