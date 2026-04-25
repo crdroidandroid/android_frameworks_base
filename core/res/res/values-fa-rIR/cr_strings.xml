@@ -12,8 +12,6 @@
     <string name="gesture_locked_warning">با کشیدن دوباره، حرکات را فعال کنید</string>
     <!-- GameSpace -->
     <string name="gamespace_new_game_added"><xliff:g id="name" example="MyApp">%s</xliff:g> به فضای بازی اضافه شد</string>
-    <!-- App lock -->
-    <string name="unlock_application">بازگشایی <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
     <!-- Pocket Lock -->
     <string name="pocket_mode_title">حالت جیب فعال است</string>
     <string name="pocket_mode_illustration_description">تصویر گوشی در جیب</string>
