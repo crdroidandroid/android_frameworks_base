@@ -116,12 +116,12 @@ constructor(
                 if (charging) {
                     flow {
                         while (true) {
-                            emit(keyguardIndicationController.powerChargingString)
+                            emit(formatChargingString(keyguardIndicationController.powerChargingString))
                             delay(BATTERY_STRING_REFRESH_MS)
                         }
                     }
                 } else {
-                    flowOf(keyguardIndicationController.powerChargingString)
+                    flowOf(formatChargingString(keyguardIndicationController.powerChargingString))
                 }
             }
             .distinctUntilChanged()
@@ -191,5 +191,10 @@ constructor(
     companion object {
         private const val LOW_UDFPS_THRESHOLD = 0.93f
         private const val BATTERY_STRING_REFRESH_MS = 2_000L
+    }
+
+    private fun formatChargingString(text: String?): String {
+        val cleaned = text?.trim()
+        return if (cleaned.isNullOrEmpty()) "" else cleaned
     }
 }
