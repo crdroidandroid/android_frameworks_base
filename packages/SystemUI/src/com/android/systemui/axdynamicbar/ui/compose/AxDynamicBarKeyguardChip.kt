@@ -34,6 +34,8 @@ import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -77,6 +79,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.android.systemui.axdynamicbar.model.IslandEvent
 import com.android.systemui.axdynamicbar.model.RecordingState
 import com.android.systemui.axdynamicbar.shared.*
@@ -96,6 +99,13 @@ private val ActionSize = SpacePanel
 private val ActionIconSize = SizeBadge
 private val BatteryIconSize = ChipHeight - SpaceXxl
 private val CountBadgeHeight = ChipHeight / 2
+
+@Composable
+private fun rememberChargingParts(batteryString: String): List<String> {
+    return remember(batteryString) {
+        batteryString.split("\n", limit = 3).map { it.trim() }.filter { it.isNotEmpty() }
+    }
+}
 
 @Composable
 fun AxDynamicBarKeyguardChip(
@@ -229,6 +239,7 @@ fun AxDynamicBarKeyguardChip(
                         progress = progress,
                         eventCount = chipState.eventCount,
                         viewModel = viewModel,
+                        batteryString = batteryString,
                     )
                 }
             } else {
@@ -251,15 +262,20 @@ private fun KeyguardChipBody(
     progress: Float?,
     eventCount: Int,
     viewModel: AxDynamicBarChipViewModel,
+    batteryString: String = "",
 ) {
     val context = LocalContext.current
     val motionScheme = MaterialTheme.motionScheme
 
+    val parts = rememberChargingParts(batteryString)
+    val isMultiLineCharging = event is IslandEvent.Charging && parts.size >= 2
+    val dynamicHeight = if (isMultiLineCharging) 48.dp else ChipHeight
+
     Box(contentAlignment = Alignment.Center) {
         Row(
             modifier = Modifier
-                .height(ChipHeight)
-                .widthIn(max = 178.dp)
+                .height(dynamicHeight)
+                .widthIn(min = 48.dp, max = 260.dp)
                 .clip(ChipShape)
                 .background(accent)
                 .animateContentSize(motionScheme.defaultSpatialSpec())
@@ -436,7 +452,7 @@ private fun KeyguardChipBody(
                     modifier = Modifier.weight(1f, fill = false),
                 ) { ev ->
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        KeyguardPrimaryText(ev, contentColor, Modifier.weight(1f, fill = false))
+                        KeyguardPrimaryText(ev, contentColor, Modifier.weight(1f, fill = false), batteryString)
                         val secondary = secondaryTextFor(ev)
                         if (secondary != null) {
                             Text(
@@ -516,14 +532,19 @@ private fun KeyguardBatteryChip(
     }
     val contentColor = chipContentColorOn(accent)
 
+    val parts = rememberChargingParts(batteryString)
+    val isMultiLine = info.isCharging && parts.size >= 2
+    val dynamicHeight = if (isMultiLine) 48.dp else ChipHeight
+
     Box(contentAlignment = Alignment.Center) {
         Row(
             modifier = modifier
-                .height(ChipHeight)
+                .height(dynamicHeight)
                 .clip(ChipShape)
                 .background(accent)
-                .widthIn(max = 260.dp)
-                .padding(horizontal = SpaceMd),
+                .widthIn(min = 48.dp, max = 260.dp)
+                .padding(horizontal = SpaceMd)
+                .animateContentSize(MaterialTheme.motionScheme.defaultSpatialSpec()),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             
@@ -534,14 +555,36 @@ private fun KeyguardBatteryChip(
             }
             Spacer(Modifier.width(SpaceXs))
             if (info.isCharging) {
-                Text(
-                    batteryString,
-                    style = PillPrimary,
-                    color = contentColor.copy(alpha = AlphaSecondary),
-                    maxLines = 2,
-                    overflow = TextOverflow.Clip,
-                    modifier = modifier.basicMarquee(),
-                )
+                if (isMultiLine) {
+                    Column(
+                        modifier = Modifier.weight(1f, fill = false),
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            parts[0],
+                            style = PillPrimary,
+                            color = contentColor,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                        Text(
+                            parts[1],
+                            style = PillPrimary.copy(fontSize = 10.sp),
+                            color = contentColor.copy(alpha = AlphaSecondary),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                    }
+                } else {
+                    Text(
+                        if (parts.isNotEmpty()) parts[0] else batteryString,
+                        style = PillPrimary,
+                        color = contentColor.copy(alpha = AlphaSecondary),
+                        maxLines = 1,
+                        overflow = TextOverflow.Clip,
+                        modifier = Modifier.basicMarquee(),
+                    )
+                }
                 return
             }
             Text(
@@ -656,7 +699,7 @@ private fun AnimatedBatteryFillIcon(level: Int, color: Color, iconSize: Dp = Bat
 }
 
 @Composable
-private fun KeyguardPrimaryText(event: IslandEvent, color: Color, modifier: Modifier) {
+private fun KeyguardPrimaryText(event: IslandEvent, color: Color, modifier: Modifier, batteryString: String = "") {
     when (event) {
         is IslandEvent.AudioRecording -> when (event.state) {
             RecordingState.RECORDING -> ElapsedTimeText(
@@ -672,7 +715,29 @@ private fun KeyguardPrimaryText(event: IslandEvent, color: Color, modifier: Modi
         }
         is IslandEvent.Stopwatch -> StopwatchTimeText(event, color, modifier)
         is IslandEvent.Notification -> MarqueeText(event.title ?: event.appName, color, modifier)
-        is IslandEvent.Charging -> MarqueeText("${event.level}%", color, modifier)
+        is IslandEvent.Charging -> {
+            val parts = rememberChargingParts(batteryString)
+            if (parts.size >= 2) {
+                Column(modifier = modifier, verticalArrangement = Arrangement.Center) {
+                    Text(
+                        parts[0],
+                        style = PillPrimary,
+                        color = color,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                    Text(
+                        parts[1],
+                        style = PillPrimary.copy(fontSize = 10.sp),
+                        color = color.copy(alpha = AlphaSecondary),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
+            } else {
+                MarqueeText(if (parts.isNotEmpty()) parts[0] else "${event.level}%", color, modifier)
+            }
+        }
         is IslandEvent.Bluetooth -> MarqueeText(event.deviceName.take(12), color, modifier)
         is IslandEvent.Hotspot -> {
             val hotspotLabel = stringResource(R.string.ax_dynamic_bar_hotspot)
