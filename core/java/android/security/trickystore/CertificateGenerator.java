@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
-import android.content.pm.SigningInfo;
 import android.util.Log;
 
 import com.android.internal.org.bouncycastle.asn1.ASN1Boolean;
@@ -279,17 +278,6 @@ public final class CertificateGenerator {
         }
     }
 
-    private static Signature[] extractSignatures(PackageInfo info) {
-        SigningInfo signingInfo = info.signingInfo;
-        if (signingInfo != null) {
-            if (signingInfo.hasMultipleSigners()) {
-                return signingInfo.getApkContentsSigners();
-            }
-            return signingInfo.getSigningCertificateHistory();
-        }
-        return info.signatures;
-    }
-
     private static DEROctetString createApplicationId(int uid) throws Throwable {
         Context context = ActivityThread.currentApplication();
         if (context == null) {
@@ -306,23 +294,33 @@ public final class CertificateGenerator {
             throw new IllegalStateException("No packages found for UID: " + uid);
         }
 
-        int size = packages.length;
-        ASN1Encodable[] packageInfoAA = new ASN1Encodable[size];
+        List<ASN1Encodable> packageInfoList = new ArrayList<>(packages.length);
         Set<ByteBuffer> signatures = new HashSet<>();
         MessageDigest dg = MessageDigest.getInstance("SHA-256");
 
-        for (int i = 0; i < size; i++) {
-            String name = packages[i];
-            PackageInfo info = pm.getPackageInfo(name, PackageManager.GET_SIGNING_CERTIFICATES);
+        for (String name : packages) {
+            PackageInfo info;
+            try {
+                info = pm.getPackageInfo(name, PackageManager.GET_SIGNING_CERTIFICATES);
+            } catch (PackageManager.NameNotFoundException e) {
+                Log.w(TAG, "Package not found: " + name);
+                continue;
+            }
+            if (info == null) continue;
+
             ASN1Encodable[] arr = new ASN1Encodable[2];
             arr[0] = new DEROctetString(name.getBytes(StandardCharsets.UTF_8));
             arr[1] = new ASN1Integer(info.getLongVersionCode());
-            packageInfoAA[i] = new DERSequence(arr);
+            packageInfoList.add(new DERSequence(arr));
 
-            Signature[] pkgSigs = extractSignatures(info);
-            if (pkgSigs != null) {
-                for (Signature s : pkgSigs) {
-                    signatures.add(ByteBuffer.wrap(dg.digest(s.toByteArray())));
+            if (info.signingInfo != null) {
+                Signature[] signers = info.signingInfo.hasMultipleSigners()
+                        ? info.signingInfo.getApkContentsSigners()
+                        : info.signingInfo.getSigningCertificateHistory();
+                if (signers != null) {
+                    for (Signature s : signers) {
+                        signatures.add(ByteBuffer.wrap(dg.digest(s.toByteArray())));
+                    }
                 }
             }
         }
@@ -334,7 +332,7 @@ public final class CertificateGenerator {
         }
 
         ASN1Encodable[] applicationIdAA = new ASN1Encodable[2];
-        applicationIdAA[0] = new DERSet(packageInfoAA);
+        applicationIdAA[0] = new DERSet(packageInfoList.toArray(new ASN1Encodable[0]));
         applicationIdAA[1] = new DERSet(signaturesAA);
 
         return new DEROctetString(new DERSequence(applicationIdAA).getEncoded());
