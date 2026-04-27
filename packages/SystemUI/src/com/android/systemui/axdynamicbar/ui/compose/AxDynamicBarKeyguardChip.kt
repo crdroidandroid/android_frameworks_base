@@ -68,6 +68,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
@@ -549,7 +550,7 @@ private fun KeyguardBatteryChip(
         ) {
             
             if (info.isCharging) {
-                AnimatedChargingBoltIcon(contentColor, BatteryIconSize)
+                AnimatedChargingBoltIcon(info.level, contentColor, BatteryIconSize)
             } else {
                 AnimatedBatteryFillIcon(info.level, contentColor, BatteryIconSize)
             }
@@ -633,7 +634,11 @@ private fun KeyguardBatteryChip(
 }
 
 @Composable
-private fun AnimatedChargingBoltIcon(color: Color, iconSize: Dp = BatteryIconSize) {
+private fun AnimatedChargingBoltIcon(level: Int, color: Color, iconSize: Dp = BatteryIconSize) {
+    if (level == 100) {
+        ChargingBoltIcon(color, iconSize)
+        return
+    }
     val transition = rememberInfiniteTransition(label = "kg_bolt")
     val glow by transition.animateFloat(
         initialValue = 0.5f,
@@ -644,8 +649,15 @@ private fun AnimatedChargingBoltIcon(color: Color, iconSize: Dp = BatteryIconSiz
         ),
         label = "kg_bolt_glow",
     )
+    ChargingBoltIcon(color, iconSize, Modifier.graphicsLayer {
+        this.alpha = glow
+    })
+}
+
+@Composable
+private fun ChargingBoltIcon(color: Color, iconSize: Dp = BatteryIconSize, modifier: Modifier = Modifier) {
     val boltPath = remember { Path() }
-    Canvas(modifier = Modifier.size(iconSize)) {
+    Canvas(modifier = modifier.size(iconSize)) {
         val w = size.width
         val h = size.height
         boltPath.rewind()
@@ -656,7 +668,7 @@ private fun AnimatedChargingBoltIcon(color: Color, iconSize: Dp = BatteryIconSiz
         boltPath.lineTo(w * 0.75f, h * 0.42f)
         boltPath.lineTo(w * 0.55f, h * 0.42f)
         boltPath.close()
-        drawPath(boltPath, color.copy(alpha = glow))
+        drawPath(boltPath, color)
     }
 }
 
