@@ -662,12 +662,12 @@ private fun ChargingBoltIcon(level: Int, color: Color, iconSize: Dp = BatteryIco
         val w = size.width
         val h = size.height
         boltPath.rewind()
-        boltPath.moveTo(w * 0.55f, h * 0.05f)
-        boltPath.lineTo(w * 0.25f, h * 0.50f)
-        boltPath.lineTo(w * 0.45f, h * 0.50f)
-        boltPath.lineTo(w * 0.40f, h * 0.95f)
-        boltPath.lineTo(w * 0.75f, h * 0.42f)
-        boltPath.lineTo(w * 0.55f, h * 0.42f)
+        boltPath.moveTo(w * 0.55f, 0f)
+        boltPath.lineTo(w * 0.20f, h * 0.63f)
+        boltPath.lineTo(w * 0.45f, h * 0.63f)
+        boltPath.lineTo(w * 0.45f, h)
+        boltPath.lineTo(w * 0.80f, h * 0.47f)
+        boltPath.lineTo(w * 0.55f, h * 0.47f)
         boltPath.close()
 
         // Draw the empty battery capacity
