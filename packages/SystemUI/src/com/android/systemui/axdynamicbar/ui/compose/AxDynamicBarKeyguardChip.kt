@@ -68,6 +68,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.input.pointer.PointerEventPass
@@ -636,7 +637,7 @@ private fun KeyguardBatteryChip(
 @Composable
 private fun AnimatedChargingBoltIcon(level: Int, color: Color, iconSize: Dp = BatteryIconSize) {
     if (level == 100) {
-        ChargingBoltIcon(color, iconSize)
+        ChargingBoltIcon(level, color, iconSize)
         return
     }
     val transition = rememberInfiniteTransition(label = "kg_bolt")
@@ -649,13 +650,13 @@ private fun AnimatedChargingBoltIcon(level: Int, color: Color, iconSize: Dp = Ba
         ),
         label = "kg_bolt_glow",
     )
-    ChargingBoltIcon(color, iconSize, Modifier.graphicsLayer {
+    ChargingBoltIcon(level, color, iconSize, Modifier.graphicsLayer {
         this.alpha = glow
     })
 }
 
 @Composable
-private fun ChargingBoltIcon(color: Color, iconSize: Dp = BatteryIconSize, modifier: Modifier = Modifier) {
+private fun ChargingBoltIcon(level: Int, color: Color, iconSize: Dp = BatteryIconSize, modifier: Modifier = Modifier) {
     val boltPath = remember { Path() }
     Canvas(modifier = modifier.size(iconSize)) {
         val w = size.width
@@ -668,7 +669,16 @@ private fun ChargingBoltIcon(color: Color, iconSize: Dp = BatteryIconSize, modif
         boltPath.lineTo(w * 0.75f, h * 0.42f)
         boltPath.lineTo(w * 0.55f, h * 0.42f)
         boltPath.close()
-        drawPath(boltPath, color)
+
+        // Draw the empty battery capacity
+        drawPath(boltPath, color.copy(alpha = AlphaSecondary))
+
+        // Draw the remaining battery capacity
+        clipRect(
+            top = h * (1f - (level / 100f).coerceIn(0f, 1f))
+        ) {
+            drawPath(boltPath, color)
+        }
     }
 }
 
