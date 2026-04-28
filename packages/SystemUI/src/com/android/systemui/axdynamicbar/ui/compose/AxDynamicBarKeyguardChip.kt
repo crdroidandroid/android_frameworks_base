@@ -68,6 +68,8 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.drawscope.clipRect
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
@@ -549,7 +551,7 @@ private fun KeyguardBatteryChip(
         ) {
             
             if (info.isCharging) {
-                AnimatedChargingBoltIcon(contentColor, BatteryIconSize)
+                AnimatedChargingBoltIcon(info.level, contentColor, BatteryIconSize)
             } else {
                 AnimatedBatteryFillIcon(info.level, contentColor, BatteryIconSize)
             }
@@ -633,7 +635,11 @@ private fun KeyguardBatteryChip(
 }
 
 @Composable
-private fun AnimatedChargingBoltIcon(color: Color, iconSize: Dp = BatteryIconSize) {
+private fun AnimatedChargingBoltIcon(level: Int, color: Color, iconSize: Dp = BatteryIconSize) {
+    if (level == 100) {
+        ChargingBoltIcon(level, color, iconSize)
+        return
+    }
     val transition = rememberInfiniteTransition(label = "kg_bolt")
     val glow by transition.animateFloat(
         initialValue = 0.5f,
@@ -644,19 +650,35 @@ private fun AnimatedChargingBoltIcon(color: Color, iconSize: Dp = BatteryIconSiz
         ),
         label = "kg_bolt_glow",
     )
+    ChargingBoltIcon(level, color, iconSize, Modifier.graphicsLayer {
+        this.alpha = glow
+    })
+}
+
+@Composable
+private fun ChargingBoltIcon(level: Int, color: Color, iconSize: Dp = BatteryIconSize, modifier: Modifier = Modifier) {
     val boltPath = remember { Path() }
-    Canvas(modifier = Modifier.size(iconSize)) {
+    Canvas(modifier = modifier.size(iconSize)) {
         val w = size.width
         val h = size.height
         boltPath.rewind()
-        boltPath.moveTo(w * 0.55f, h * 0.05f)
-        boltPath.lineTo(w * 0.25f, h * 0.50f)
-        boltPath.lineTo(w * 0.45f, h * 0.50f)
-        boltPath.lineTo(w * 0.40f, h * 0.95f)
-        boltPath.lineTo(w * 0.75f, h * 0.42f)
-        boltPath.lineTo(w * 0.55f, h * 0.42f)
+        boltPath.moveTo(w * 0.55f, 0f)
+        boltPath.lineTo(w * 0.20f, h * 0.63f)
+        boltPath.lineTo(w * 0.45f, h * 0.63f)
+        boltPath.lineTo(w * 0.45f, h)
+        boltPath.lineTo(w * 0.80f, h * 0.47f)
+        boltPath.lineTo(w * 0.55f, h * 0.47f)
         boltPath.close()
-        drawPath(boltPath, color.copy(alpha = glow))
+
+        // Draw the empty battery capacity
+        drawPath(boltPath, color.copy(alpha = AlphaSecondary))
+
+        // Draw the remaining battery capacity
+        clipRect(
+            top = h * (1f - (level / 100f).coerceIn(0f, 1f))
+        ) {
+            drawPath(boltPath, color)
+        }
     }
 }
 
