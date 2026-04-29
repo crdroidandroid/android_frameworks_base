@@ -106,9 +106,12 @@
     <string name="qs_data_switch_label">החלפת כרטיס נתונים</string>
     <!-- Volume panel QS tile -->
     <string name="quick_settings_volume_panel_label">לוח עוצמת קול</string>
-    <!-- Smart Pixels QS Tile -->
-    <string name="quick_settings_smart_pixels">פיקסלים חכמים</string>
-    <string name="quick_settings_smart_pixels_on_power_save">פיקסלים חכמים מופעלים אוטומטית</string>
+    <!-- Smart Pixels -->
+    <string name="quick_settings_smart_pixels_label">פיקסלים חכמים</string>
+    <string name="quick_settings_smart_pixels_on">On</string>
+    <string name="quick_settings_smart_pixels_off">Off</string>
+    <string name="smart_pixels_percent_label">Pixel percentage</string>
+    <string name="smart_pixels_percent_format"><xliff:g id="percent" example="25">%d</xliff:g>%%</string>
     <!-- Weather Tile -->
     <string name="omnijaws_service_error">שגיאה בטעינת נתוני מזג האויר</string>
     <string name="omnijaws_service_unknown">אין נתוני מזג אוויר</string>
@@ -205,6 +208,7 @@
     <string name="ax_dynamic_bar_wireless_charging">Wireless Charging</string>
     <string name="ax_dynamic_bar_until_full">until full</string>
     <string name="ax_dynamic_bar_battery_saver">Battery Saver</string>
+    <string name="ax_dynamic_bar_call">Call</string>
     <string name="ax_dynamic_bar_incoming_call">Incoming Call</string>
     <string name="ax_dynamic_bar_connected">Connected</string>
     <string name="ax_dynamic_bar_disconnect">Disconnect</string>
