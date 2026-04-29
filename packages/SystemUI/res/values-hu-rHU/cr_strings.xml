@@ -108,9 +108,9 @@
     <string name="quick_settings_volume_panel_label">Hangerőpanel</string>
     <!-- Smart Pixels -->
     <string name="quick_settings_smart_pixels_label">Intelligens pixelek</string>
-    <string name="quick_settings_smart_pixels_on">On</string>
-    <string name="quick_settings_smart_pixels_off">Off</string>
-    <string name="smart_pixels_percent_label">Pixel percentage</string>
+    <string name="quick_settings_smart_pixels_on">Be</string>
+    <string name="quick_settings_smart_pixels_off">Ki</string>
+    <string name="smart_pixels_percent_label">Pixel százalék</string>
     <string name="smart_pixels_percent_format"><xliff:g id="percent" example="25">%d</xliff:g>%%</string>
     <!-- Weather Tile -->
     <string name="omnijaws_service_error">Hiba az időjárásadatok betöltésekor</string>
