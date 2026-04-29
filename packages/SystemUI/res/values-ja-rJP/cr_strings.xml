@@ -106,9 +106,12 @@
     <string name="qs_data_switch_label">SIM の切り替え</string>
     <!-- Volume panel QS tile -->
     <string name="quick_settings_volume_panel_label">音量パネル</string>
-    <!-- Smart Pixels QS Tile -->
-    <string name="quick_settings_smart_pixels">スマートピクセル</string>
-    <string name="quick_settings_smart_pixels_on_power_save">スマートピクセルを自動的に有効にする</string>
+    <!-- Smart Pixels -->
+    <string name="quick_settings_smart_pixels_label">スマートピクセル</string>
+    <string name="quick_settings_smart_pixels_on">On</string>
+    <string name="quick_settings_smart_pixels_off">Off</string>
+    <string name="smart_pixels_percent_label">Pixel percentage</string>
+    <string name="smart_pixels_percent_format"><xliff:g id="percent" example="25">%d</xliff:g>%%</string>
     <!-- Weather Tile -->
     <string name="omnijaws_service_error">気象データの読み込みエラー</string>
     <string name="omnijaws_service_unknown">気象データがありません</string>
@@ -202,6 +205,7 @@
     <string name="ax_dynamic_bar_wireless_charging">Wireless Charging</string>
     <string name="ax_dynamic_bar_until_full">until full</string>
     <string name="ax_dynamic_bar_battery_saver">Battery Saver</string>
+    <string name="ax_dynamic_bar_call">Call</string>
     <string name="ax_dynamic_bar_incoming_call">Incoming Call</string>
     <string name="ax_dynamic_bar_connected">Connected</string>
     <string name="ax_dynamic_bar_disconnect">Disconnect</string>
