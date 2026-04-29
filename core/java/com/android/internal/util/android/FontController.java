@@ -40,12 +40,20 @@ public class FontController {
 
     private volatile String sFontFamily = "sans-serif";
 
+    private static final String DEFAULT_FONT_ROOT = "google-sans-flex";
+
+    private static final String[] DEFAULT_FONT_FALLBACKS = {
+            "google-sans-flex",
+            "google-sans",
+            "sans-serif"
+    };
+
     private static final Set<String> OVERRIDE_FONTS = new HashSet<>(Arrays.asList(
-            "google", "sans-serif", "gsf-"
+            "google", "sans-serif", "gsf-", "variable"
     ));
 
     private static final Set<String> SYS_OVERRIDE_FONTS = new HashSet<>(Arrays.asList(
-            "serif", "monospace", "variable"
+            "serif", "monospace"
     ));
 
     private static final Set<String> EXCLUDED_APPS = new HashSet<>(Arrays.asList(
@@ -166,7 +174,15 @@ public class FontController {
             return null;
         }
 
-        boolean override = OVERRIDE_FONTS.stream().anyMatch(fontToOverride::contains) 
+        // Don't remap variable-* families when the default Google Sans Flex
+        // font stack is active; let them pass through so optical sizing and
+        // ROND axis values in fonts_customization.xml render correctly.
+        if (fontToOverride.contains("variable") && currentFont.contains(DEFAULT_FONT_ROOT)) {
+            logger("Default font active, passing through variable family: " + fontToOverride);
+            return null;
+        }
+
+        boolean override = OVERRIDE_FONTS.stream().anyMatch(fontToOverride::contains)
             || (isSysPkg && SYS_OVERRIDE_FONTS.stream().anyMatch(fontToOverride::contains));
         if (!override) {
             logger("Not on override list, skipping override: " + fontToOverride);
@@ -174,7 +190,24 @@ public class FontController {
         }
 
         int adjustment = getFontWeightAdjustment();
-        return TypefaceFactory.create(fontToOverride, currentFont, adjustment);
+        Typeface resolvedBase = resolveDefaultTypeface();
+        return TypefaceFactory.create(fontToOverride, resolvedBase, adjustment);
+    }
+
+    public static Typeface resolveBaseTypeface() {
+        return get().resolveDefaultTypeface();
+    }
+
+    private Typeface resolveDefaultTypeface() {
+        for (String family : DEFAULT_FONT_FALLBACKS) {
+            Typeface tf = Typeface.getSystemDefaultTypeface(family);
+            if (tf != null && tf != Typeface.DEFAULT) {
+                logger("resolveDefaultTypeface: resolved via '" + family + "'");
+                return tf;
+            }
+        }
+        logger("resolveDefaultTypeface: all fallbacks failed, using DEFAULT");
+        return Typeface.DEFAULT;
     }
 
     private void handleOnConfiguration(Resources res) {
@@ -214,7 +247,7 @@ public class FontController {
 
     private static class TypefaceFactory {
 
-        public static Typeface create(String fontToOverride, String currentFont, int fontWeightAdjustment) {
+        public static Typeface create(String fontToOverride, Typeface base, int fontWeightAdjustment) {
             int weight = resolveWeightByName(fontToOverride);
 
             if (fontWeightAdjustment != 0) {
@@ -229,7 +262,8 @@ public class FontController {
             else if (isBold) style = Typeface.BOLD;
             else if (isItalic) style = Typeface.ITALIC;
 
-            Typeface base = Typeface.getSystemDefaultTypeface(currentFont);
+            if (base == null) base = Typeface.DEFAULT;
+
             Typeface result = Typeface.create(base, style);
             result = Typeface.create(result, weight, isItalic);
 
