@@ -106,9 +106,12 @@
     <string name="qs_data_switch_label">Datenkarte wechseln</string>
     <!-- Volume panel QS tile -->
     <string name="quick_settings_volume_panel_label">Lautstärkeregler</string>
-    <!-- Smart Pixels QS Tile -->
-    <string name="quick_settings_smart_pixels">Smart Pixels</string>
-    <string name="quick_settings_smart_pixels_on_power_save">„Smart Pixels” automatisch einschalten</string>
+    <!-- Smart Pixels -->
+    <string name="quick_settings_smart_pixels_label">Smart Pixels</string>
+    <string name="quick_settings_smart_pixels_on">On</string>
+    <string name="quick_settings_smart_pixels_off">Off</string>
+    <string name="smart_pixels_percent_label">Pixel percentage</string>
+    <string name="smart_pixels_percent_format"><xliff:g id="percent" example="25">%d</xliff:g>%%</string>
     <!-- Weather Tile -->
     <string name="omnijaws_service_error">Fehler beim Laden der Wetterdaten</string>
     <string name="omnijaws_service_unknown">Keine Wetterdaten</string>
@@ -203,6 +206,7 @@
     <string name="ax_dynamic_bar_wireless_charging">Kabelloses Laden</string>
     <string name="ax_dynamic_bar_until_full">bis voll</string>
     <string name="ax_dynamic_bar_battery_saver">Energiesparmodus</string>
+    <string name="ax_dynamic_bar_call">Anruf</string>
     <string name="ax_dynamic_bar_incoming_call">Eingehender Anruf</string>
     <string name="ax_dynamic_bar_connected">Verbunden</string>
     <string name="ax_dynamic_bar_disconnect">Verbindung trennen</string>
