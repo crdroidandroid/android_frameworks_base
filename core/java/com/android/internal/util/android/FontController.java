@@ -166,20 +166,6 @@ public class FontController {
             return null;
         }
 
-        // Skip overriding variable- font role families and google-sans-flex
-        // weight aliases when the current font is already Google Sans / Google
-        // Sans Flex, as these are defined in fonts_customization.xml with
-        // precise optical size (opsz), width (wdth), grade (GRAD), and
-        // rounding (ROND) axis values that would be lost if recreated via
-        // TypefaceFactory.
-        if ((currentFont.contains("google-sans") || currentFont.startsWith("gsf-")) &&
-                (fontToOverride.startsWith("variable-") ||
-                fontToOverride.equals("google-sans-flex-medium") ||
-                fontToOverride.equals("google-sans-flex-bold"))) {
-            logger("Skipping font override, axes preserved via XML: " + fontToOverride);
-            return null;
-        }
-
         boolean override = OVERRIDE_FONTS.stream().anyMatch(fontToOverride::contains) 
             || (isSysPkg && SYS_OVERRIDE_FONTS.stream().anyMatch(fontToOverride::contains));
         if (!override) {
