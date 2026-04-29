@@ -108,10 +108,10 @@
     <string name="quick_settings_volume_panel_label">Ses paneli</string>
     <!-- Smart Pixels -->
     <string name="quick_settings_smart_pixels_label">Akıllı pikseller</string>
-    <string name="quick_settings_smart_pixels_on">On</string>
-    <string name="quick_settings_smart_pixels_off">Off</string>
-    <string name="smart_pixels_percent_label">Pixel percentage</string>
-    <string name="smart_pixels_percent_format"><xliff:g id="percent" example="25">%d</xliff:g>%%</string>
+    <string name="quick_settings_smart_pixels_on">Açık</string>
+    <string name="quick_settings_smart_pixels_off">Kapalı</string>
+    <string name="smart_pixels_percent_label">Piksel yüzdesi</string>
+    <string name="smart_pixels_percent_format">%%<xliff:g id="percent" example="25">%d</xliff:g></string>
     <!-- Weather Tile -->
     <string name="omnijaws_service_error">Hava durumu verisi yüklenemedi</string>
     <string name="omnijaws_service_unknown">Hava durumu verisi yok</string>
