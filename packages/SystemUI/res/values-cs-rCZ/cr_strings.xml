@@ -108,10 +108,10 @@
     <string name="quick_settings_volume_panel_label">Panel hlasitosti</string>
     <!-- Smart Pixels -->
     <string name="quick_settings_smart_pixels_label">Smart Pixels</string>
-    <string name="quick_settings_smart_pixels_on">On</string>
-    <string name="quick_settings_smart_pixels_off">Off</string>
+    <string name="quick_settings_smart_pixels_on">Zap.</string>
+    <string name="quick_settings_smart_pixels_off">Vyp.</string>
     <string name="smart_pixels_percent_label">Pixel percentage</string>
-    <string name="smart_pixels_percent_format"><xliff:g id="percent" example="25">%d</xliff:g>%%</string>
+    <string name="smart_pixels_percent_format"><xliff:g id="percent" example="25">%d</xliff:g> %%</string>
     <!-- Weather Tile -->
     <string name="omnijaws_service_error">Chyba při načítání údajů o\u00a0počasí</string>
     <string name="omnijaws_service_unknown">Žádné údaje o\u00a0počasí</string>
@@ -208,7 +208,7 @@
     <string name="ax_dynamic_bar_wireless_charging">Wireless Charging</string>
     <string name="ax_dynamic_bar_until_full">until full</string>
     <string name="ax_dynamic_bar_battery_saver">Battery Saver</string>
-    <string name="ax_dynamic_bar_call">Call</string>
+    <string name="ax_dynamic_bar_call">Volat</string>
     <string name="ax_dynamic_bar_incoming_call">Incoming Call</string>
     <string name="ax_dynamic_bar_connected">Connected</string>
     <string name="ax_dynamic_bar_disconnect">Disconnect</string>
