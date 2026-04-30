@@ -1112,7 +1112,11 @@ class DisplayContent extends RootDisplayArea implements WindowManagerPolicy.Disp
 
         final ActivityRecord activity = w.mActivityRecord;
         if (activity != null && activity.isVisibleRequested()) {
-            activity.updateLetterboxSurfaceIfNeeded(w);
+            final int type = w.mAttrs.type;
+            if (!w.mAnimatingExit
+                    && (type == TYPE_BASE_APPLICATION || type == TYPE_APPLICATION_STARTING)) {
+                activity.updateLetterboxSurfaceIfNeeded(w);
+            }
             final boolean updateAllDrawn = activity.updateDrawnWindowStates(w);
             if (updateAllDrawn && !mTmpUpdateAllDrawn.contains(activity)) {
                 mTmpUpdateAllDrawn.add(activity);
