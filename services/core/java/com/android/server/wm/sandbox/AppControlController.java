@@ -224,6 +224,12 @@ public class AppControlController {
         }
     }
 
+    public boolean hasLockedPackages() {
+        synchronized (this) {
+            return !mLockedPackages.isEmpty();
+        }
+    }
+
     public boolean isPackageHidden(String packageName) {
         if (TextUtils.isEmpty(packageName)) return false;
         synchronized (this) {
