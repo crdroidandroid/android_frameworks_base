@@ -16,4 +16,6 @@
     <string name="pocket_mode_instruction_step2">2. Appuyez et maintenez le bouton d\'alimentation pour sortir du mode poche.</string>
     <!-- Cycle through ringer modes -->
     <string name="volume_dialog_ringer_guidance_normal">Les appels et les notifications sonnent</string>
+    <!-- GameSpace -->
+    <string name="gamespace_new_game_added"><xliff:g id="name" example="MyApp">%s</xliff:g> ajouté au mode immersif</string>
 </resources>
