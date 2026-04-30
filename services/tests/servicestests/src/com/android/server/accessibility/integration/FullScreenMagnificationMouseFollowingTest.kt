@@ -157,6 +157,8 @@ class FullScreenMagnificationMouseFollowingTest {
     fun cleanUp() {
         activityScenario?.close()
 
+        instrumentation.waitForIdleSync()
+
         uiAutomation
             .executeShellCommand("setprop debug.wm.disable_deprecated_target_sdk_dialog 0")
             .close()
