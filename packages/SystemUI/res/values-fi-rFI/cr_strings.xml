@@ -106,9 +106,12 @@
     <string name="qs_data_switch_label">Vaihda datakorttia</string>
     <!-- Volume panel QS tile -->
     <string name="quick_settings_volume_panel_label">Äänenvoimakkuuspaneeli</string>
-    <!-- Smart Pixels QS Tile -->
-    <string name="quick_settings_smart_pixels">Älykkäät Pikselit</string>
-    <string name="quick_settings_smart_pixels_on_power_save">Älykkäät Pikselit otettiin käyttöön automaattisesti</string>
+    <!-- Smart Pixels -->
+    <string name="quick_settings_smart_pixels_label">Älykkäät Pikselit</string>
+    <string name="quick_settings_smart_pixels_on">On</string>
+    <string name="quick_settings_smart_pixels_off">Off</string>
+    <string name="smart_pixels_percent_label">Pixel percentage</string>
+    <string name="smart_pixels_percent_format"><xliff:g id="percent" example="25">%d</xliff:g>%%</string>
     <!-- Weather Tile -->
     <string name="omnijaws_service_error">Virhe ladattaessa säätietoja</string>
     <string name="omnijaws_service_unknown">Ei säätietoja</string>
