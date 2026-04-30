@@ -26,6 +26,7 @@ import android.os.UserHandle;
 import android.provider.Settings;
 import android.widget.Toast;
 
+import com.android.internal.R;
 import com.android.server.UiThread;
 
 class GamePackageHandler {
@@ -103,6 +104,10 @@ class GamePackageHandler {
     }
 
     private void showGameAddedToast(String appLabel) {
-        Toast.makeText(mContext, "Added " + appLabel + " to GameSpace", Toast.LENGTH_LONG).show();
+        Toast.makeText(
+                mContext,
+                mContext.getString(R.string.gamespace_new_game_added, appLabel),
+                Toast.LENGTH_LONG
+            ).show();
     }
 }
