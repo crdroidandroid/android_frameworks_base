@@ -106,9 +106,12 @@
     <string name="qs_data_switch_label">切換上網 SIM 卡</string>
     <!-- Volume panel QS tile -->
     <string name="quick_settings_volume_panel_label">音量面板</string>
-    <!-- Smart Pixels QS Tile -->
-    <string name="quick_settings_smart_pixels">智慧像素</string>
-    <string name="quick_settings_smart_pixels_on_power_save">自動啟用智慧像素</string>
+    <!-- Smart Pixels -->
+    <string name="quick_settings_smart_pixels_label">智慧像素</string>
+    <string name="quick_settings_smart_pixels_on">On</string>
+    <string name="quick_settings_smart_pixels_off">Off</string>
+    <string name="smart_pixels_percent_label">Pixel percentage</string>
+    <string name="smart_pixels_percent_format"><xliff:g id="percent" example="25">%d</xliff:g>%%</string>
     <!-- Weather Tile -->
     <string name="omnijaws_service_error">載入天氣資訊時發生錯誤</string>
     <string name="omnijaws_service_unknown">沒有天氣資訊</string>

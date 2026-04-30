@@ -106,9 +106,12 @@
     <string name="qs_data_switch_label">Veri kartını değiştir</string>
     <!-- Volume panel QS tile -->
     <string name="quick_settings_volume_panel_label">Ses paneli</string>
-    <!-- Smart Pixels QS Tile -->
-    <string name="quick_settings_smart_pixels">Akıllı pikseller</string>
-    <string name="quick_settings_smart_pixels_on_power_save">Otomatik olarak akıllı pikselleri etkinleştir</string>
+    <!-- Smart Pixels -->
+    <string name="quick_settings_smart_pixels_label">Akıllı pikseller</string>
+    <string name="quick_settings_smart_pixels_on">Açık</string>
+    <string name="quick_settings_smart_pixels_off">Kapalı</string>
+    <string name="smart_pixels_percent_label">Piksel yüzdesi</string>
+    <string name="smart_pixels_percent_format">%%<xliff:g id="percent" example="25">%d</xliff:g></string>
     <!-- Weather Tile -->
     <string name="omnijaws_service_error">Hava durumu verisi yüklenemedi</string>
     <string name="omnijaws_service_unknown">Hava durumu verisi yok</string>

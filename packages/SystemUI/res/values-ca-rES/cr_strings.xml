@@ -106,9 +106,12 @@
     <string name="qs_data_switch_label">Cambiar tarjeta de dades</string>
     <!-- Volume panel QS tile -->
     <string name="quick_settings_volume_panel_label">Panell de volum</string>
-    <!-- Smart Pixels QS Tile -->
-    <string name="quick_settings_smart_pixels">Píxels intel·ligents</string>
-    <string name="quick_settings_smart_pixels_on_power_save">Activa automàticament els píxels intel·ligents</string>
+    <!-- Smart Pixels -->
+    <string name="quick_settings_smart_pixels_label">Píxels intel·ligents</string>
+    <string name="quick_settings_smart_pixels_on">On</string>
+    <string name="quick_settings_smart_pixels_off">Off</string>
+    <string name="smart_pixels_percent_label">Pixel percentage</string>
+    <string name="smart_pixels_percent_format"><xliff:g id="percent" example="25">%d</xliff:g>%%</string>
     <!-- Weather Tile -->
     <string name="omnijaws_service_error">Error carregant la informació de l\'oratge</string>
     <string name="omnijaws_service_unknown">No hi ha informació de l\'oratge</string>
