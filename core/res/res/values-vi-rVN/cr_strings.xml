@@ -16,4 +16,6 @@
     <string name="pocket_mode_instruction_step2">2. Ấn giữ nút nguồn để tiếp tục.</string>
     <!-- Cycle through ringer modes -->
     <string name="volume_dialog_ringer_guidance_normal">Cuộc gọi &amp; thông báo sẽ đổ chuông</string>
+    <!-- GameSpace -->
+    <string name="gamespace_new_game_added"><xliff:g id="name" example="MyApp">%s</xliff:g> đã thêm vào không gian trò chơi</string>
 </resources>
