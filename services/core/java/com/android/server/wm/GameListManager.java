@@ -25,8 +25,10 @@ import android.provider.Settings;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 class GameListManager {
 
@@ -35,14 +37,19 @@ class GameListManager {
     }
 
     private static final String GAME_LIST_KEY = "gamespace_game_list";
+    private static final String DENIED_LIST_KEY = "gamespace_denied_list";
 
     private final Context mContext;
     private final Map<String, String> mGameList = Collections.synchronizedMap(new HashMap<>());
     private final List<GameListChangeListener> mListeners = new ArrayList<>();
 
+    private final Set<String> mDeniedList =
+            Collections.synchronizedSet(new HashSet<>());
+
     GameListManager(Context context) {
         mContext = context;
         loadGameList();
+        loadDeniedList();
     }
 
     void loadGameList() {
@@ -54,6 +61,60 @@ class GameListManager {
             mGameList.putAll(parsed);
         }
         notifyListeners();
+    }
+
+    void loadDeniedList() {
+        String raw = Settings.System.getStringForUser(mContext.getContentResolver(),
+                DENIED_LIST_KEY, UserHandle.USER_CURRENT);
+        Set<String> parsed = parseDeniedList(raw);
+        synchronized (mDeniedList) {
+            mDeniedList.clear();
+            mDeniedList.addAll(parsed);
+        }
+    }
+
+    private Set<String> parseDeniedList(String raw) {
+        Set<String> set = new HashSet<>();
+        if (raw == null || raw.isEmpty()) return set;
+        for (String pkg : raw.split(";")) {
+            String trimmed = pkg.trim();
+            if (!trimmed.isEmpty() && trimmed.matches("[a-zA-Z0-9_.]+")) {
+                set.add(trimmed);
+            }
+        }
+        return set;
+    }
+
+    private void writeDeniedList() {
+        StringBuilder sb = new StringBuilder();
+        synchronized (mDeniedList) {
+            for (String pkg : mDeniedList) {
+                if (sb.length() > 0) sb.append(';');
+                sb.append(pkg);
+            }
+        }
+        Settings.System.putStringForUser(mContext.getContentResolver(),
+                DENIED_LIST_KEY, sb.toString(), UserHandle.USER_CURRENT);
+    }
+
+    boolean isDenied(String packageName) {
+        synchronized (mDeniedList) {
+            return mDeniedList.contains(packageName);
+        }
+    }
+
+    void addDenied(String packageName) {
+        synchronized (mDeniedList) {
+            if (!mDeniedList.add(packageName)) return;
+        }
+        writeDeniedList();
+    }
+
+    void removeDenied(String packageName) {
+        synchronized (mDeniedList) {
+            if (!mDeniedList.remove(packageName)) return;
+        }
+        writeDeniedList();
     }
 
     boolean isGame(String packageName) {
@@ -76,6 +137,18 @@ class GameListManager {
                     @Override
                     public void onChange(boolean selfChange) {
                         loadGameList();
+                    }
+                },
+                UserHandle.USER_ALL
+        );
+
+        mContext.getContentResolver().registerContentObserver(
+                Settings.System.getUriFor(DENIED_LIST_KEY),
+                false,
+                new ContentObserver(handler) {
+                    @Override
+                    public void onChange(boolean selfChange) {
+                        loadDeniedList();
                     }
                 },
                 UserHandle.USER_ALL
