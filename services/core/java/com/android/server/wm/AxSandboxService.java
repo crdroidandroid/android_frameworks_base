@@ -493,15 +493,18 @@ public class AxSandboxService extends IAxSandboxManager.Stub implements IAxSandb
     @Override
     public String getSpoofedSetting(String callingPackage, String settingName) {
         if (mAppControlController == null) return null;
+        final String spoofedValue = SettingsSpoofController.getSpoofedValue(settingName);
+        if (spoofedValue == null) return null;
         if (!mAppControlController.isSpoofSettingEnabled(callingPackage, settingName)) {
             return null;
         }
-        return SettingsSpoofController.getSpoofedValue(settingName);
+        return spoofedValue;
     }
 
     @Override
     public boolean isAppLocked(ActivityRecord r) {
-        if (r == null || r.isNoDisplay() || r.isActivityTypeHomeOrRecents()) {
+        if (r == null || !hasLockedPackages() || r.isNoDisplay()
+                || r.isActivityTypeHomeOrRecents()) {
             return false;
         }
 
@@ -530,6 +533,7 @@ public class AxSandboxService extends IAxSandboxManager.Stub implements IAxSandb
 
     @Override
     public boolean isAppLocked(String packageName, int uid, ComponentName component) {
+        if (mAppControlController == null) return false;
         if (BLACKLISTED_PACKAGES.contains(packageName)) return false;
 
         int userId = UserHandle.getUserId(uid);
@@ -560,7 +564,7 @@ public class AxSandboxService extends IAxSandboxManager.Stub implements IAxSandb
 
     @Override
     public void lockTopApp(Task task, String reason) {
-        if (task == null) return;
+        if (task == null || !hasLockedPackages()) return;
 
         ActivityRecord r = task.topRunningActivityLocked();
         if (!isAppLocked(r)) return;
@@ -763,6 +767,11 @@ public class AxSandboxService extends IAxSandboxManager.Stub implements IAxSandb
 
     @Override
     public void onAppFocusChanged(ActivityRecord newFocus, Task newTask) {
+        if (!hasLockedPackages()) {
+            mLastFocusedAppKey = null;
+            return;
+        }
+
         String newKey = (newFocus != null) ? sessionKey(newFocus) : null;
 
         if (mLastFocusedAppKey != null && !mLastFocusedAppKey.equals(newKey)) {
@@ -921,6 +930,10 @@ public class AxSandboxService extends IAxSandboxManager.Stub implements IAxSandb
 
     private static String sessionKey(ActivityRecord r) {
         return sessionKey(r.mUserId, r.packageName);
+    }
+
+    private boolean hasLockedPackages() {
+        return mAppControlController != null && mAppControlController.hasLockedPackages();
     }
 
     private void markSessionUnlocked(String packageName, int userId) {
