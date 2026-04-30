@@ -16,4 +16,6 @@
     <string name="pocket_mode_instruction_step2">2. Πατήστε και κρατήστε πατημένο το κουμπί τροφοδοσίας για να βγείτε από τη λειτουργία τσέπης.</string>
     <!-- Cycle through ringer modes -->
     <string name="volume_dialog_ringer_guidance_normal">Οι κλήσεις και οι ειδοποιήσεις θα ηχούν</string>
+    <!-- GameSpace -->
+    <string name="gamespace_new_game_added"><xliff:g id="name" example="MyApp">%s</xliff:g> προστέθηκε στο Χώρο Παιχνιδιού</string>
 </resources>
