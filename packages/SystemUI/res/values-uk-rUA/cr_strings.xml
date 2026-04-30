@@ -106,9 +106,12 @@
     <string name="qs_data_switch_label">Змінити картку для передачі даних</string>
     <!-- Volume panel QS tile -->
     <string name="quick_settings_volume_panel_label">Панель гучності</string>
-    <!-- Smart Pixels QS Tile -->
-    <string name="quick_settings_smart_pixels">Смарт Пікселі</string>
-    <string name="quick_settings_smart_pixels_on_power_save">Автоматичне ввімкнення Смарт Пікселів</string>
+    <!-- Smart Pixels -->
+    <string name="quick_settings_smart_pixels_label">Смарт Пікселі</string>
+    <string name="quick_settings_smart_pixels_on">Увімкнути</string>
+    <string name="quick_settings_smart_pixels_off">Вимкнено</string>
+    <string name="smart_pixels_percent_label">Відсоток пікселів</string>
+    <string name="smart_pixels_percent_format"><xliff:g id="percent" example="25">%d</xliff:g>%%</string>
     <!-- Weather Tile -->
     <string name="omnijaws_service_error">Помилка завантаження даних про погоду</string>
     <string name="omnijaws_service_unknown">Немає даних про погоду</string>
