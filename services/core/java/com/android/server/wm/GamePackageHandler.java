@@ -22,6 +22,8 @@ import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Handler;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.widget.Toast;
 
 import com.android.server.UiThread;
@@ -40,6 +42,12 @@ class GamePackageHandler {
         mBgHandler = bgHandler;
     }
 
+    private boolean isAutoDetectEnabled() {
+        return Settings.System.getIntForUser(mContext.getContentResolver(),
+                "gamespace_auto_game_detect", 1,
+                UserHandle.USER_CURRENT) != 0;
+    }
+
     void registerPackageReceiver() {
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_PACKAGE_ADDED);
@@ -56,6 +64,9 @@ class GamePackageHandler {
                 mBgHandler.post(() -> {
                     String action = intent.getAction();
                     if (Intent.ACTION_PACKAGE_ADDED.equals(action)) {
+                        if (!isAutoDetectEnabled()) return;
+                        if (mGameListManager.isDenied(pkg)) return;
+                        if (mGameListManager.isGame(pkg)) return;
                         if (isGame(pkg)) {
                             String label = getAppLabel(pkg);
                             mGameListManager.addGame(pkg);
