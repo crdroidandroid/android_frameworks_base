@@ -16,4 +16,6 @@
     <string name="pocket_mode_instruction_step2">2. ליחצו והחזיקו את כפתור ההפעלה ליציאה ממצב כיס.</string>
     <!-- Cycle through ringer modes -->
     <string name="volume_dialog_ringer_guidance_normal">שיחות והתראות יצלצלו</string>
+    <!-- GameSpace -->
+    <string name="gamespace_new_game_added"><xliff:g id="name" example="MyApp">%s</xliff:g> התווסף ל-GameSpace</string>
 </resources>
