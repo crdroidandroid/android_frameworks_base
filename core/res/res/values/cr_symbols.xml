@@ -73,4 +73,7 @@
     <java-symbol type="dimen" format="float" name="presentation_clock_text_size" />
     <java-symbol type="dimen" format="float" name="large_clock_text_size" />
     <java-symbol type="dimen" format="float" name="small_clock_text_size" />
+
+    <!-- GameSpace -->
+    <java-symbol type="string" name="gamespace_new_game_added" />
 </resources>
