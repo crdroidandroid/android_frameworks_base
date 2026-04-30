@@ -16,4 +16,6 @@
     <string name="pocket_mode_instruction_step2">2. Pressione e segure o botão liga/desliga para sair do modo de bolso.</string>
     <!-- Cycle through ringer modes -->
     <string name="volume_dialog_ringer_guidance_normal">Chamadas e notificações irão tocar</string>
+    <!-- GameSpace -->
+    <string name="gamespace_new_game_added"><xliff:g id="name" example="MyApp">%s</xliff:g> adicionado ao GameSpace</string>
 </resources>
