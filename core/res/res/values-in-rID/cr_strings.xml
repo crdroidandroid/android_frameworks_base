@@ -16,4 +16,6 @@
     <string name="pocket_mode_instruction_step2">2. Tekan dan tahan tombol daya untuk keluar dari mode saku.</string>
     <!-- Cycle through ringer modes -->
     <string name="volume_dialog_ringer_guidance_normal">Panggilan dan notifikasi akan berdering</string>
+    <!-- GameSpace -->
+    <string name="gamespace_new_game_added"><xliff:g id="name" example="MyApp">%s</xliff:g> ditambahkan ke Ruang Game</string>
 </resources>
