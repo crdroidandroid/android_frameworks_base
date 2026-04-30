@@ -36,6 +36,12 @@ class AppCompatRoundedCorners {
     private final ActivityRecord mActivityRecord;
     @NonNull
     private final Predicate<WindowState> mRoundedCornersWindowCondition;
+    @NonNull
+    private final Rect mLastCropBounds = new Rect();
+    @Nullable
+    private SurfaceControl mLastSurfaceControl;
+    private boolean mLastCropBoundsValid;
+    private int mLastCornerRadius = Integer.MIN_VALUE;
 
     AppCompatRoundedCorners(@NonNull ActivityRecord  activityRecord,
             @NonNull Predicate<WindowState> roundedCornersWindowCondition) {
@@ -44,21 +50,51 @@ class AppCompatRoundedCorners {
     }
 
     void updateRoundedCornersIfNeeded(@NonNull final WindowState mainWindow) {
+        updateRoundedCornersIfNeeded(mainWindow, mRoundedCornersWindowCondition.test(mainWindow));
+    }
+
+    void updateRoundedCornersIfNeeded(@NonNull final WindowState mainWindow,
+            boolean roundedCornersWindowCondition) {
         final SurfaceControl windowSurface = mainWindow.getSurfaceControl();
         if (windowSurface == null || !windowSurface.isValid()) {
             return;
         }
 
         // cropBounds must be non-null for the cornerRadius to be ever applied.
-        mActivityRecord.getSyncTransaction()
-                .setCrop(windowSurface, getCropBoundsIfNeeded(mainWindow))
-                .setCornerRadius(windowSurface, getRoundedCornersRadius(mainWindow));
+        final boolean requiresRoundedCorners = requiresRoundedCorners(mainWindow,
+                roundedCornersWindowCondition);
+        final Rect cropBounds = getCropBoundsIfNeeded(mainWindow, requiresRoundedCorners);
+        final int cornerRadius = getRoundedCornersRadius(mainWindow, requiresRoundedCorners);
+        final boolean surfaceChanged = mLastSurfaceControl != windowSurface;
+        final SurfaceControl.Transaction transaction = mActivityRecord.getSyncTransaction();
+
+        if (surfaceChanged || !cropBoundsEquals(cropBounds)) {
+            transaction.setCrop(windowSurface, cropBounds);
+            mLastSurfaceControl = windowSurface;
+            if (cropBounds == null) {
+                mLastCropBoundsValid = false;
+            } else {
+                mLastCropBounds.set(cropBounds);
+                mLastCropBoundsValid = true;
+            }
+        }
+        if (surfaceChanged || mLastCornerRadius != cornerRadius) {
+            transaction.setCornerRadius(windowSurface, cornerRadius);
+            mLastSurfaceControl = windowSurface;
+            mLastCornerRadius = cornerRadius;
+        }
     }
 
     @VisibleForTesting
     @Nullable
     Rect getCropBoundsIfNeeded(@NonNull final WindowState mainWindow) {
-        if (!requiresRoundedCorners(mainWindow)) {
+        return getCropBoundsIfNeeded(mainWindow, requiresRoundedCorners(mainWindow));
+    }
+
+    @Nullable
+    private Rect getCropBoundsIfNeeded(@NonNull final WindowState mainWindow,
+            boolean requiresRoundedCorners) {
+        if (!requiresRoundedCorners) {
             // We don't want corner radius on the window.
             // In the case the ActivityRecord requires a letterboxed animation we never want
             // rounded corners on the window because rounded corners are applied at the
@@ -108,7 +144,12 @@ class AppCompatRoundedCorners {
      * @param mainWindow    The {@link WindowState} to consider for rounded corners calculation.
      */
     int getRoundedCornersRadius(@NonNull final WindowState mainWindow) {
-        if (!requiresRoundedCorners(mainWindow)) {
+        return getRoundedCornersRadius(mainWindow, requiresRoundedCorners(mainWindow));
+    }
+
+    private int getRoundedCornersRadius(@NonNull final WindowState mainWindow,
+            boolean requiresRoundedCorners) {
+        if (!requiresRoundedCorners) {
             return 0;
         }
         final AppCompatLetterboxOverrides letterboxOverrides = mActivityRecord
@@ -134,6 +175,14 @@ class AppCompatRoundedCorners {
     }
 
     private boolean requiresRoundedCorners(@NonNull final WindowState mainWindow) {
+        return requiresRoundedCorners(mainWindow, mRoundedCornersWindowCondition.test(mainWindow));
+    }
+
+    private boolean requiresRoundedCorners(@NonNull final WindowState mainWindow,
+            boolean roundedCornersWindowCondition) {
+        if (!roundedCornersWindowCondition) {
+            return false;
+        }
         if (com.android.wm.shell.Flags.enableCreateAnyBubble()) {
             final Task task = mActivityRecord.getTask();
             if (task != null && task.mLaunchNextToBubble) {
@@ -144,8 +193,14 @@ class AppCompatRoundedCorners {
         }
         final AppCompatLetterboxOverrides letterboxOverrides = mActivityRecord
                 .mAppCompatController.getLetterboxOverrides();
-        return mRoundedCornersWindowCondition.test(mainWindow)
-                && letterboxOverrides.isLetterboxActivityCornersRounded();
+        return letterboxOverrides.isLetterboxActivityCornersRounded();
+    }
+
+    private boolean cropBoundsEquals(@Nullable Rect cropBounds) {
+        if (cropBounds == null) {
+            return !mLastCropBoundsValid;
+        }
+        return mLastCropBoundsValid && mLastCropBounds.equals(cropBounds);
     }
 
 }
