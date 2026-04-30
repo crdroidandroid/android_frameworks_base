@@ -7289,12 +7289,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 && mUserManagerInternal.getUserAssignedToDisplay(displayId) != mCurrentUserId) {
             return;
         }
-        if (allow) {
-            mAllowLockscreenWhenOnDisplays.add(displayId);
-        } else {
-            mAllowLockscreenWhenOnDisplays.remove(displayId);
+        final boolean changed = allow
+                ? mAllowLockscreenWhenOnDisplays.add(displayId)
+                : mAllowLockscreenWhenOnDisplays.remove(displayId);
+        if (changed) {
+            updateLockScreenTimeout();
         }
-        updateLockScreenTimeout();
     }
 
     private void updateLockScreenTimeout() {
