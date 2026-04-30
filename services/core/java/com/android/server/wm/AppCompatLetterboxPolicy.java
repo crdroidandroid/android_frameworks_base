@@ -194,9 +194,14 @@ class AppCompatLetterboxPolicy {
         if (shouldNotLayoutLetterbox(w)) {
             return;
         }
-        mAppCompatRoundedCorners.updateRoundedCornersIfNeeded(w);
-        updateWallpaperForLetterbox(w);
-        if (shouldShowLetterboxUi(w)) {
+        final boolean shouldShowLetterboxUi = shouldShowLetterboxUi(w);
+        final boolean isLetterboxedNotForDisplayCutout = shouldShowLetterboxUi
+                && !w.isLetterboxedForDisplayCutout();
+        mAppCompatRoundedCorners.updateRoundedCornersIfNeeded(w,
+                isLetterboxedNotForDisplayCutout
+                        && !isFreeformActivityMatchParentAppBoundsHeight());
+        updateWallpaperForLetterbox(w, isLetterboxedNotForDisplayCutout);
+        if (shouldShowLetterboxUi) {
             mLetterboxPolicyState.layoutLetterboxIfNeeded(w);
         }  else {
             mLetterboxPolicyState.hide();
@@ -275,7 +280,8 @@ class AppCompatLetterboxPolicy {
         mAppCompatConfiguration.dump(pw, prefix);
     }
 
-    private void updateWallpaperForLetterbox(@NonNull WindowState mainWindow) {
+    private void updateWallpaperForLetterbox(@NonNull WindowState mainWindow,
+            boolean isLetterboxedNotForDisplayCutout) {
         final AppCompatLetterboxOverrides letterboxOverrides = mActivityRecord
                 .mAppCompatController.getLetterboxOverrides();
         final @LetterboxBackgroundType int letterboxBackgroundType =
@@ -284,7 +290,7 @@ class AppCompatLetterboxPolicy {
         boolean wallpaperShouldBeShown =
                 letterboxBackgroundType == LETTERBOX_BACKGROUND_WALLPAPER
                         // Don't use wallpaper as a background if letterboxed for display cutout.
-                        && isLetterboxedNotForDisplayCutout(mainWindow)
+                        && isLetterboxedNotForDisplayCutout
                         // Check that dark scrim alpha or blur radius are provided
                         && (letterboxOverrides.getLetterboxWallpaperBlurRadiusPx() > 0
                         || letterboxOverrides.getLetterboxWallpaperDarkScrimAlpha() > 0)
