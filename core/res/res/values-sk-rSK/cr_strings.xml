@@ -16,4 +16,6 @@
     <string name="pocket_mode_instruction_step2">2. Stlačte a podržte tlačidlo napájania, pre vypnutie režimu detekcie nosenia vo vrecku.</string>
     <!-- Cycle through ringer modes -->
     <string name="volume_dialog_ringer_guidance_normal">Telefonáty a upozornenia budú zvoniť</string>
+    <!-- GameSpace -->
+    <string name="gamespace_new_game_added"><xliff:g id="name" example="MyApp">%s</xliff:g> pridané do GameSpace</string>
 </resources>
