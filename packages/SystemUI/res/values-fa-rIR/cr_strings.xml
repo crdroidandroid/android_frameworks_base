@@ -106,9 +106,12 @@
     <string name="qs_data_switch_label">تعویض سیم کارت دیتا</string>
     <!-- Volume panel QS tile -->
     <string name="quick_settings_volume_panel_label">پنل صدا</string>
-    <!-- Smart Pixels QS Tile -->
-    <string name="quick_settings_smart_pixels">پیکسل های هوشمند</string>
-    <string name="quick_settings_smart_pixels_on_power_save">پیکسل های هوشمند درحالت خودکار</string>
+    <!-- Smart Pixels -->
+    <string name="quick_settings_smart_pixels_label">پیکسل های هوشمند</string>
+    <string name="quick_settings_smart_pixels_on">On</string>
+    <string name="quick_settings_smart_pixels_off">Off</string>
+    <string name="smart_pixels_percent_label">Pixel percentage</string>
+    <string name="smart_pixels_percent_format"><xliff:g id="percent" example="25">%d</xliff:g>%%</string>
     <!-- Weather Tile -->
     <string name="omnijaws_service_error">خطا در بارگیری اطلاعات آب و هوا</string>
     <string name="omnijaws_service_unknown">بدون اطلاعات آب و هوا</string>
