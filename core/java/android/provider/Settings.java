@@ -7592,6 +7592,12 @@ public final class Settings {
         public static final String QS_TILE_ICON_SHAPE = "qs_tile_icon_shape";
 
         /**
+         * Select QS tile animation style
+         * @hide
+         */
+        public static final String QS_TILE_ANIMATION_STYLE = "qs_tile_animation_style";
+
+        /**
          * Gesture navbar length mode.
          * Supported modes: 0 for short length, 1 for normal and 2 for long.
          * @hide
