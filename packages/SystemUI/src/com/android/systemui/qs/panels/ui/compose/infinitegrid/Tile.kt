@@ -210,6 +210,7 @@ fun ContentScope.Tile(
         }
 
         val shapeMode = rememberTileShapeMode()
+        val animationStyle = rememberQSTileAnimationStyle()
         val wantCircle = shapeMode == 4 && iconOnly
         val tileShape =
             if (wantCircle && !classicStyle) CircleShape
@@ -278,6 +279,7 @@ fun ContentScope.Tile(
                         .sysuiResTag("tile_expandable")
                         .fillMaxWidth()
                         .height(tileHeight)
+                        .tileToggleAnimation(animationStyle, uiState.visualState)
                         .bounceable(
                             currentBounceableInfo.bounceable,
                             currentBounceableInfo.previousTile,
