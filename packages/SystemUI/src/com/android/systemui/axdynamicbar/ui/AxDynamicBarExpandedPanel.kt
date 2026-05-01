@@ -162,8 +162,7 @@ constructor(
             WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR or
             WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
             if (isCurrentlyExpanded) 0
-            else (WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
-                  WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+            else WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
 
         val params =
             WindowManager.LayoutParams(
@@ -209,12 +208,10 @@ constructor(
         val params = view.layoutParams as? WindowManager.LayoutParams ?: return@ensureMainThread
         if (expanded) {
             params.flags = params.flags and WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE.inv()
-            params.flags = params.flags and WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE.inv()
             params.height = WindowManager.LayoutParams.MATCH_PARENT
             windowManager.updateViewLayout(view, params)
         } else {
             params.flags = params.flags or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-            params.flags = params.flags or WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
             windowManager.updateViewLayout(view, params)
             val runnable = Runnable {
                 val v = overlayView ?: return@Runnable
