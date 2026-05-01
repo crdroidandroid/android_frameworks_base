@@ -725,6 +725,7 @@ public class Transitions implements RemoteCallable<Transitions>,
             if (existing != null) {
                 Log.e(TAG, "Got duplicate transitionReady for " + transitionToken);
                 // The transition is already somewhere else in the pipeline, so just return here.
+                info.releaseAnimSurfaces();
                 t.apply();
                 if (existing.mFinishT != null) {
                     existing.mFinishT.merge(finishT);
