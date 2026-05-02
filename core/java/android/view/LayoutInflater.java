@@ -39,6 +39,7 @@ import android.util.Xml;
 import android.widget.FrameLayout;
 
 import com.android.internal.R;
+import com.android.internal.util.ViewCacheManager;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -455,6 +456,35 @@ public abstract class LayoutInflater {
         if (DEBUG) {
             Log.d(TAG, "INFLATING from resource: \"" + res.getResourceName(resource) + "\" ("
                   + Integer.toHexString(resource) + ")");
+        }
+
+        ViewCacheManager cache = ViewCacheManager.getInstance();
+        cache.recordLayoutRes(resource);
+        if (cache.isEnable()) {
+            View cached = cache.tryGet(resource);
+            if (cached != null) {
+                if (root != null) {
+                    try {
+                        XmlResourceParser parser = res.getLayout(resource);
+                        try {
+                            AttributeSet attrs = Xml.asAttributeSet(parser);
+                            advanceToRootNode(parser);
+                            ViewGroup.LayoutParams params = root.generateLayoutParams(attrs);
+                            if (!attachToRoot) {
+                                cached.setLayoutParams(params);
+                                return cached;
+                            }
+                            root.addView(cached, params);
+                            return root;
+                        } finally {
+                            parser.close();
+                        }
+                    } catch (Exception e) {
+                    }
+                } else {
+                    return cached;
+                }
+            }
         }
 
         XmlResourceParser parser = res.getLayout(resource);
