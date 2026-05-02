@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 package com.android.server.wm;
+import android.os.Environment;
+import android.os.UserHandle;
+import android.system.Os;
+import java.io.File;
 
 import static android.app.AxSandboxManager.AppLockState.LOCKED;
 import static android.app.AxSandboxManager.AppLockState.NONE;
@@ -1144,5 +1148,18 @@ public class AxSandboxService extends IAxSandboxManager.Stub implements IAxSandb
         return componentName != null &&
                SANDBOX_PACKAGE.equals(componentName.getPackageName()) &&
                SANDBOX_ACTIVITY.equals(componentName.getClassName());
+    }
+    @Override
+    public String getFileVaultPath() {
+        File vaultDir = new File(Environment.getDataSystemCeDirectory(UserHandle.getCallingUserId()), "sandbox/vault");
+        if (!vaultDir.exists()) {
+            vaultDir.mkdirs();
+            try {
+                Os.chmod(vaultDir.getPath(), 0700);
+            } catch (Exception e) {
+                Slog.e(TAG, "Failed to set vault permissions", e);
+            }
+        }
+        return vaultDir.getAbsolutePath();
     }
 }
