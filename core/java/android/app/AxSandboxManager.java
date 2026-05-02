@@ -459,4 +459,14 @@ public class AxSandboxManager {
             throw e.rethrowFromSystemServer();
         }
     }
+
+    /** @hide */
+    @Nullable
+    public String getFileVaultPath() {
+        try {
+            return mService.getFileVaultPath();
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
+    }
 }
