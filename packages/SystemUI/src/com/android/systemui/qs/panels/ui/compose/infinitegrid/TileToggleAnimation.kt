@@ -42,13 +42,16 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import com.android.compose.theme.LocalAndroidColorScheme
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.launch
 
 fun Modifier.tileToggleAnimation(animationStyle: Int, state: Int): Modifier =
     composed {
@@ -79,6 +82,12 @@ fun Modifier.tileToggleAnimation(animationStyle: Int, state: Int): Modifier =
             4 -> fadeAnimation(toggleCount.intValue)
             5 -> pulseAnimation(toggleCount.intValue, lastToggleState.intValue == STATE_ACTIVE)
             6 -> shakeAnimation(toggleCount.intValue)
+            7 -> wobbleAnimation(toggleCount.intValue)
+            8 -> spinAnimation(toggleCount.intValue)
+            9 -> squishAnimation(toggleCount.intValue)
+            10 -> tiltAnimation(toggleCount.intValue)
+            11 -> heartbeatAnimation(toggleCount.intValue)
+            12 -> swingAnimation(toggleCount.intValue)
             else -> this
         }
     }
@@ -284,6 +293,197 @@ private fun Modifier.shakeAnimation(toggleCount: Int): Modifier {
     }
 
     return this.graphicsLayer { translationX = offsetX.value }
+}
+
+@Composable
+private fun Modifier.wobbleAnimation(toggleCount: Int): Modifier {
+    val rotation = remember { Animatable(0f, visibilityThreshold = 0.01f) }
+    val currentToggleCount by rememberUpdatedState(toggleCount)
+
+    LaunchedEffect(Unit) {
+        snapshotFlow { currentToggleCount }
+            .drop(1)
+            .collectLatest { count ->
+                if (count <= 0) return@collectLatest
+                rotation.snapTo(0f)
+                rotation.animateTo(
+                    targetValue = 0f,
+                    animationSpec = keyframes {
+                        durationMillis = 450
+                        8f at 75 using FastOutSlowInEasing
+                        -8f at 150
+                        6f at 225
+                        -6f at 300
+                        3f at 375
+                        0f at 450
+                    },
+                )
+            }
+    }
+
+    return this.graphicsLayer { rotationZ = rotation.value }
+}
+
+@Composable
+private fun Modifier.spinAnimation(toggleCount: Int): Modifier {
+    val rotation = remember { Animatable(0f, visibilityThreshold = 0.01f) }
+    val currentToggleCount by rememberUpdatedState(toggleCount)
+
+    LaunchedEffect(Unit) {
+        snapshotFlow { currentToggleCount }
+            .drop(1)
+            .collectLatest { count ->
+                if (count <= 0) return@collectLatest
+                rotation.snapTo(0f)
+                rotation.animateTo(
+                    targetValue = 360f,
+                    animationSpec = tween(durationMillis = 600, easing = FastOutSlowInEasing),
+                )
+                rotation.snapTo(0f)
+            }
+    }
+
+    return this.graphicsLayer { rotationZ = rotation.value }
+}
+
+@Composable
+private fun Modifier.squishAnimation(toggleCount: Int): Modifier {
+    val scaleX = remember { Animatable(1f, visibilityThreshold = 0.01f) }
+    val scaleY = remember { Animatable(1f, visibilityThreshold = 0.01f) }
+    val currentToggleCount by rememberUpdatedState(toggleCount)
+
+    LaunchedEffect(Unit) {
+        snapshotFlow { currentToggleCount }
+            .drop(1)
+            .collectLatest { count ->
+                if (count <= 0) return@collectLatest
+                scaleX.snapTo(1f)
+                scaleY.snapTo(1f)
+                // Animate both axes in parallel — squash horizontally, stretch vertically.
+                coroutineScope {
+                    launch {
+                        scaleX.animateTo(
+                            targetValue = 1f,
+                            animationSpec = keyframes {
+                                durationMillis = 500
+                                1.18f at 150 using FastOutSlowInEasing
+                                0.92f at 300
+                                1f at 500
+                            },
+                        )
+                    }
+                    scaleY.animateTo(
+                        targetValue = 1f,
+                        animationSpec = keyframes {
+                            durationMillis = 500
+                            0.85f at 150 using FastOutSlowInEasing
+                            1.08f at 300
+                            1f at 500
+                        },
+                    )
+                }
+            }
+    }
+
+    return this.graphicsLayer {
+        this.scaleX = scaleX.value
+        this.scaleY = scaleY.value
+    }
+}
+
+@Composable
+private fun Modifier.tiltAnimation(toggleCount: Int): Modifier {
+    val rotation = remember { Animatable(0f, visibilityThreshold = 0.01f) }
+    val density = LocalDensity.current
+    val currentToggleCount by rememberUpdatedState(toggleCount)
+
+    LaunchedEffect(Unit) {
+        snapshotFlow { currentToggleCount }
+            .drop(1)
+            .collectLatest { count ->
+                if (count <= 0) return@collectLatest
+                rotation.snapTo(0f)
+                rotation.animateTo(
+                    targetValue = 0f,
+                    animationSpec = keyframes {
+                        durationMillis = 500
+                        25f at 150 using FastOutSlowInEasing
+                        -10f at 300
+                        0f at 500
+                    },
+                )
+            }
+    }
+
+    return this.graphicsLayer {
+        rotationX = rotation.value
+        cameraDistance = 12f * density.density
+    }
+}
+
+@Composable
+private fun Modifier.heartbeatAnimation(toggleCount: Int): Modifier {
+    val scale = remember { Animatable(1f, visibilityThreshold = 0.01f) }
+    val currentToggleCount by rememberUpdatedState(toggleCount)
+
+    LaunchedEffect(Unit) {
+        snapshotFlow { currentToggleCount }
+            .drop(1)
+            .collectLatest { count ->
+                if (count <= 0) return@collectLatest
+                scale.snapTo(1f)
+                scale.animateTo(
+                    targetValue = 1f,
+                    animationSpec = keyframes {
+                        durationMillis = 600
+                        // First beat (lub)
+                        1.15f at 100 using FastOutSlowInEasing
+                        1f at 200
+                        // Second beat (dub) — slightly smaller, classic heartbeat rhythm
+                        1.12f at 320 using FastOutSlowInEasing
+                        1f at 450
+                        1f at 600
+                    },
+                )
+            }
+    }
+
+    return this.graphicsLayer {
+        scaleX = scale.value
+        scaleY = scale.value
+    }
+}
+
+@Composable
+private fun Modifier.swingAnimation(toggleCount: Int): Modifier {
+    val rotation = remember { Animatable(0f, visibilityThreshold = 0.01f) }
+    val currentToggleCount by rememberUpdatedState(toggleCount)
+
+    LaunchedEffect(Unit) {
+        snapshotFlow { currentToggleCount }
+            .drop(1)
+            .collectLatest { count ->
+                if (count <= 0) return@collectLatest
+                rotation.snapTo(0f)
+                rotation.animateTo(
+                    targetValue = 0f,
+                    animationSpec = keyframes {
+                        durationMillis = 600
+                        15f at 120 using FastOutSlowInEasing
+                        -12f at 240 using FastOutSlowInEasing
+                        8f at 360
+                        -5f at 480
+                        0f at 600
+                    },
+                )
+            }
+    }
+
+    return this.graphicsLayer {
+        rotationZ = rotation.value
+        // Pivot from the top-center so the tile swings like a pendant.
+        transformOrigin = TransformOrigin(0.5f, 0f)
+    }
 }
 
 @Composable
