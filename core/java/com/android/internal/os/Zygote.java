@@ -859,6 +859,7 @@ public final class Zygote {
                         throw new RuntimeException(ex);
                     }
                 }
+                IoUtils.closeQuietly(sessionSocket);
             }
 
             if (writePipe != null) {
