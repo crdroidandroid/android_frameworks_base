@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2025 The AxionAOSP Project
+ *           (C) 2026 crDroid Android Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,6 +40,7 @@ class PulseViewController @Inject constructor(
     private var bouncerShowingOrKeyguardDismissing = false
     private var keyguardShowing = false
     private var isDozing = false
+    private var isScreenOff = false
 
     private val settingsRepository: PulseSettingsRepository =
         PulseSettingsRepository(context)
@@ -63,8 +65,8 @@ class PulseViewController @Inject constructor(
     private val isCollapsed: Boolean
         get() = ScrimUtils.get().isPanelFullyCollapsed()
 
-    private val isHapticsEnabled: Boolean
-        get() = settingsRepository.isPulseHapticsEnabled()
+    private val hapticsMode: Int
+        get() = settingsRepository.getPulseHapticsMode()
 
     var pulseRunning: Boolean = false
         set(value) {
@@ -92,6 +94,7 @@ class PulseViewController @Inject constructor(
         pulseRunning = isMediaPlaying 
                 && !bouncerShowingOrKeyguardDismissing
                 && isCollapsed
+                && !isScreenOff
                 && ((keyguardShowing && !isDozing)
                 || (isDozing && ambientEnabled))
     }
@@ -113,12 +116,14 @@ class PulseViewController @Inject constructor(
             }
         }
         updateState()
+        // Force update
+        updatePulse(pulseRunning)
     }
 
     private fun updatePulse(show: Boolean) {
         mainScope.launch {
             view.setVisibility(show)
-            if (pulseEnabled && (show || isHapticsEnabled)) {
+            if (pulseEnabled && (show || hapticsMode > 1)) {
                 audioProcessor.startCapture()
             } else {
                 audioProcessor.stopCapture()
@@ -128,7 +133,7 @@ class PulseViewController @Inject constructor(
     }
 
     override fun onDataUpdate(data: PulseData) {
-        if (isHapticsEnabled) {
+        if (hapticsMode > 0) {
             bassHaptics.process(data.fftBytes)
         }
         if (pulseRunning) {
@@ -185,10 +190,12 @@ class PulseViewController @Inject constructor(
     }
 
     override fun onScreenTurnedOff() {
-        pulseRunning = false
+        isScreenOff = true
+        updateState()
     }
 
     override fun onStartedWakingUp() {
+        isScreenOff = false
         updateState()
     }
 
