@@ -32,12 +32,10 @@
 
             <com.android.systemui.weather.WeatherImageView
                 android:id="@+id/weather_image"
-                android:layout_width="20sp"
-                android:layout_height="20sp"
-                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="4dp"
-                android:scaleType="fitCenter"
                 android:visibility="gone" />
 
             <com.android.systemui.weather.WeatherTextView
@@ -45,6 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
+                android:layout_marginEnd="8dp"
                 android:textColor="@android:color/white"
                 android:textSize="20dp"
                 android:visibility="gone" />
@@ -55,7 +54,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:alpha="0.9"
-            android:layout_marginTop="9dp"
+            android:layout_marginTop="7dp"
             android:fontFamily="@font/subway"
             android:includeFontPadding="false"
             android:format12Hour="hmm"
