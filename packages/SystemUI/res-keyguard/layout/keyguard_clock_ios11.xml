@@ -13,33 +13,33 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:orientation="vertical">
-        
+
         <TextClock
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:format12Hour="EEE, MM dd"
-            android:format24Hour="EEE, dd MM"
+            android:fontFamily="@font/Kenyen"
+            android:layout_marginBottom="-10dp"
+            android:format12Hour="hh:mm"
+            android:format24Hour="HH:mm"
             android:gravity="center"
             android:singleLine="true"
-            android:tag="text1|nolineheight"
             android:textAlignment="center"
             android:textColor="@android:color/white"
-            android:textSize="20dp" 
+            android:textSize="130dp" />
+
+        <TextClock
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:format12Hour="dd MMM yyyy"
+            android:format24Hour="dd MMM yyyy"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="16dp" 
             android:textStyle="bold" />
-        <TextClock
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/tallclock"
-            android:layout_marginTop="4dp"
-            android:format12Hour="hhmm"
-            android:format24Hour="HHmm"
-            android:gravity="center"
-            android:singleLine="true"
-            android:tag="text1"
-            android:textAlignment="center"
-            android:textColor="@android:color/white"
-            android:textSize="280dp" />
 
     </LinearLayout>
 
 </LinearLayout>
+
