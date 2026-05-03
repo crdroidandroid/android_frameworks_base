@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/clock_frame"
+    android:orientation="vertical"
+    android:gravity="center_horizontal|top"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextClock
+        android:id="@+id/date_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="@android:color/white"
+        android:fontFamily="@font/Bebas"
+        android:singleLine="true"
+        android:textAllCaps="true"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:format12Hour="EEEE, MMMM d"
+        android:format24Hour="EEEE, MMMM d"/>
+
+    <TextClock
+        android:id="@+id/hour_text"
+        android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+        android:includeFontPadding="false"
+        android:textSize="140dp"
+        android:textColor="@android:color/white"
+        android:fontFamily="@font/Blackout"
+        android:layout_gravity="center"
+        android:format12Hour="hh"
+        android:format24Hour="HH"/>
+
+    <TextClock
+        android:id="@+id/minute_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:includeFontPadding="false"
+        android:layout_marginTop="8dp"
+        android:textSize="140dp"
+        android:textColor="@android:color/white"
+        android:fontFamily="@font/Blackout"
+        android:layout_gravity="center"
+        android:singleLine="true"
+        android:format12Hour="mm"
+        android:format24Hour="mm"/>
+
+</LinearLayout>
