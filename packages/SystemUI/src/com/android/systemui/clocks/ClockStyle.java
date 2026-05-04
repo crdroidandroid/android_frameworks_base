@@ -395,6 +395,22 @@ public class ClockStyle extends RelativeLayout implements TunerService.Tunable {
         return clamped / 100f;
     }
 
+    private void disableClippingOnParents(View view) {
+        setClipChildren(false);
+        setClipToPadding(false);
+
+        View current = view;
+        while (current != null && current != ClockStyle.this) {
+            if (current instanceof ViewGroup) {
+                ((ViewGroup) current).setClipChildren(false);
+                ((ViewGroup) current).setClipToPadding(false);
+            }
+            ViewParent parent = current.getParent();
+            if (!(parent instanceof View)) break;
+            current = (View) parent;
+        }
+    }
+
     private void applyClockScale() {
         if (currentClockView == null) return;
         float scale = getScaleFactor();
@@ -402,6 +418,7 @@ public class ClockStyle extends RelativeLayout implements TunerService.Tunable {
         currentClockView.setScaleY(scale);
         currentClockView.setPivotX(currentClockView.getWidth() / 2f);
         currentClockView.setPivotY(0f);
+        disableClippingOnParents(currentClockView);
     }
 
     private void animateAodTransition(boolean toAod) {
@@ -545,6 +562,7 @@ public class ClockStyle extends RelativeLayout implements TunerService.Tunable {
 
             if (currentClockView != null) {
                 preloadFonts(currentClockView);
+                disableClippingOnParents(currentClockView);
             }
             
             if (currentClockView != null) {
