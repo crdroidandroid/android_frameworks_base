@@ -1956,6 +1956,8 @@ public final class InputMethodManagerService implements IInputMethodManagerImpl.
         session.mMethod.startInput(startInputToken, userData.mCurInputConnection,
                 userData.mCurEditorInfo, restarting, navButtonFlags,
                 userData.mCurImeBackCallbackReceiver);
+        final boolean isStale = focusedWindow != null &&
+                mWindowManagerInternal.isImeInputTargetStaleForUpdate(focusedWindow);
         if (Flags.optimizeImeInputTargetUpdate()) {
             if (focusedWindow != null) {
                 mWindowManagerInternal.updateImeTargetWindow(focusedWindow);
@@ -1970,6 +1972,11 @@ public final class InputMethodManagerService implements IInputMethodManagerImpl.
                             SoftInputShowHideReason.ATTACH_NEW_INPUT, userId);
             userData.mCurStatsToken = null;
             showCurrentInputInternal(focusedWindow, statsToken);
+        } else if (isStale) {
+            var statsToken = createStatsTokenForFocusedClient(false,
+                    SoftInputShowHideReason.HIDE_SOFT_INPUT, userId);
+            hideCurrentInputLocked(focusedWindow, statsToken,
+                    SoftInputShowHideReason.HIDE_SOFT_INPUT, userId);
         }
 
         final var curId = bindingController.getCurId();
