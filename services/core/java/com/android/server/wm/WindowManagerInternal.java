@@ -919,6 +919,8 @@ public abstract class WindowManagerInternal {
      */
     public abstract boolean isHomeSupportedOnDisplay(int displayId);
 
+    public abstract boolean isImeInputTargetStaleForUpdate(IBinder windowToken);
+
     /**
      * Sets whether the relevant display content ignores fixed orientation, aspect ratio
      * and resizability of apps.
