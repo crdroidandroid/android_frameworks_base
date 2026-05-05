@@ -8930,6 +8930,22 @@ public class WindowManagerService extends IWindowManager.Stub
        }
 
         @Override
+        public boolean isImeInputTargetStaleForUpdate(IBinder windowToken) {
+            synchronized (mGlobalLock) {
+                InputTarget target = getInputTargetFromWindowTokenLocked(windowToken);
+                if (target != null && target.getDisplayContent() != null
+                        && target.getDisplayContent().getImeInputTarget() != null
+                        && target.getDisplayContent().getImeInputTarget() != target) {
+                    WindowState ws = target.getDisplayContent().getImeInputTarget().getWindowState();
+                    if (ws != null && (ws.mRemoved || ws.mDestroying)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        @Override
         public void addTrustedTaskOverlay(int taskId,
                 SurfaceControlViewHost.SurfacePackage overlay) {
             if (overlay == null) {
