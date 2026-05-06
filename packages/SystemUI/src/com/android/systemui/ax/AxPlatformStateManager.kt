@@ -74,13 +74,18 @@ class AxPlatformStateManager @Inject constructor(
     }
 
     fun broadcastState(key: String, state: Bundle) {
-        enrichBundle(key, state)
-        stateCache[key] = state
+        val normalizedState = Bundle(state)
+        enrichBundle(key, normalizedState)
+        val oldState = stateCache[key]
+        if (oldState != null && bundlesEqual(oldState, normalizedState)) {
+            return
+        }
+        stateCache[key] = normalizedState
         synchronized(callbacks) {
             val count = callbacks.beginBroadcast()
             for (i in 0 until count) {
                 try {
-                    callbacks.getBroadcastItem(i).onStateChanged(key, state)
+                    callbacks.getBroadcastItem(i).onStateChanged(key, normalizedState)
                 } catch (e: RemoteException) {
                     Log.w(TAG, "Callback failed for key=$key", e)
                 }
@@ -116,6 +121,25 @@ class AxPlatformStateManager @Inject constructor(
             }
         }
     }
+
+    private fun bundlesEqual(first: Bundle, second: Bundle): Boolean {
+        if (first.size() != second.size()) return false
+        for (key in first.keySet()) {
+            if (!second.containsKey(key)) return false
+            if (!bundleValueEquals(first.get(key), second.get(key))) return false
+        }
+        return true
+    }
+
+    private fun bundleValueEquals(first: Any?, second: Any?): Boolean =
+        when {
+            first is Bundle && second is Bundle -> bundlesEqual(first, second)
+            first is IntArray && second is IntArray -> first.contentEquals(second)
+            first is LongArray && second is LongArray -> first.contentEquals(second)
+            first is BooleanArray && second is BooleanArray -> first.contentEquals(second)
+            first is Array<*> && second is Array<*> -> first.contentDeepEquals(second)
+            else -> first == second
+        }
 
     fun getSecureBool(key: String, def: Boolean = false): Boolean =
         secureSettings.getIntForUser(key, if (def) 1 else 0, UserHandle.USER_CURRENT) == 1
