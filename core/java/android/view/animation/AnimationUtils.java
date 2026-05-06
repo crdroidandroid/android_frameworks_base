@@ -60,6 +60,10 @@ public class AnimationUtils {
      */
     private static final int TOGETHER = 0;
     private static final int SEQUENTIALLY = 1;
+    
+    /** @hide **/
+    public static final boolean sPerfAnimEnabled = SystemProperties.getBoolean(
+            "persist.sys.activity_anim_perf_override", false);
 
     private static boolean sExpectedPresentationTimeFlagValue;
     static {
@@ -230,16 +234,18 @@ public class AnimationUtils {
     public static Animation loadAnimation(Context context, @AnimRes int id)
             throws NotFoundException {
 
-        if (ActivityAnimations.sPerfAnimEnabled) {
+        if (sPerfAnimEnabled) {
             switch (id) {
                 case R.anim.activity_open_enter:
-                    return ActivityAnimations.getOpenEnter(context);
+                    return ActivityAnimations.getOpenEnter();
                 case R.anim.activity_open_exit:
-                    return ActivityAnimations.getOpenExit(context);
+                    return ActivityAnimations.getOpenExit();
                 case R.anim.activity_close_enter:
-                    return ActivityAnimations.getCloseEnter(context);
+                    return ActivityAnimations.getCloseEnter();
                 case R.anim.activity_close_exit:
-                    return ActivityAnimations.getCloseExit(context);
+                    return ActivityAnimations.getCloseExit();
+                case R.anim.app_starting_exit:
+                    return ActivityAnimations.getAppStartingExit();
             }
         }
 
@@ -527,55 +533,52 @@ public class AnimationUtils {
     /** @hide */
     public final class ActivityAnimations {
 
-        public static final boolean sPerfAnimEnabled = SystemProperties.getBoolean(
-                "persist.sys.activity_anim_perf_override", false);
-
         private static Animation sOpenEnter;
         private static Animation sOpenExit;
         private static Animation sCloseEnter;
         private static Animation sCloseExit;
+        private static Animation sAppStartingExit;
 
         private static SpringInterpolator sSpatialSpec;
         private static SpringInterpolator sEffectsSpec;
 
         private static final float DISTANCE = 0.333f;
+        private static final long APP_STARTING_EXIT_DURATION_MS = 150L;
 
         private ActivityAnimations() {}
 
         /** @hide */
-        public static void preload(Context context) {
+        public static void preload() {
             sSpatialSpec = new SpringInterpolator(0.8f, 380f);
             sEffectsSpec = new SpringInterpolator(1.0f, 3800f);
             sOpenEnter = new ActivityAnimFactory()
                     .fromX(1.0f)
                     .toX(0.0f)
-                    .fade(0.0f, 1.0f)
                     .build();
             sOpenExit = new ActivityAnimFactory()
                     .fromX(0.0f)
                     .toX(-DISTANCE)
-                    .fade(1.0f, 0.0f)
                     .build();
             sCloseEnter = new ActivityAnimFactory()
                         .fromX(-DISTANCE)
                         .toX(0.0f)
-                        .fade(0.0f, 1.0f)
                         .build();
             sCloseExit = new ActivityAnimFactory()
                         .fromX(0.0f)
                         .toX(1.0f)
-                        .fade(1.0f, 0.0f)
                         .build();
+            sAppStartingExit = buildAppStartingExit();
         }
 
-        private static int loadBackdropColor(Context context) {
-            return context.getColor(
-                    com.android.internal.R.color.materialColorSurfaceContainer);
+        private static Animation buildAppStartingExit() {
+            Animation animation = new AlphaAnimation(1.0f, 0.0f);
+            animation.setDuration(APP_STARTING_EXIT_DURATION_MS);
+            animation.setInterpolator(new LinearInterpolator());
+            return animation;
         }
 
         private static class ActivityAnimFactory {
             private float fromX = 0f, toX = 0f;
-            private float fromAlpha = 1f, toAlpha = 1f;
 
             public ActivityAnimFactory fromX(float ratio) {
                 this.fromX = ratio;
@@ -584,12 +587,6 @@ public class AnimationUtils {
 
             public ActivityAnimFactory toX(float ratio) {
                 this.toX = ratio;
-                return this;
-            }
-
-            public ActivityAnimFactory fade(float from, float to) {
-                this.fromAlpha = from;
-                this.toAlpha = to;
                 return this;
             }
 
@@ -604,39 +601,33 @@ public class AnimationUtils {
                 slide.setDuration(sSpatialSpec.getDurationMs());
                 slide.setInterpolator(sSpatialSpec);
                 animationSet.addAnimation(slide);
-                if (fromAlpha != toAlpha) {
-                    AlphaAnimation fade = new AlphaAnimation(fromAlpha, toAlpha);
-                    fade.setDuration(sEffectsSpec.getDurationMs());
-                    fade.setInterpolator(sEffectsSpec);
-                    animationSet.addAnimation(fade);
-                }
-                animationSet.setShowBackdrop(true);
                 return animationSet;
             }
         }
 
         /** @hide */
-        public static Animation getOpenEnter(Context context) {
-            sOpenEnter.setBackdropColor(loadBackdropColor(context));
+        public static Animation getOpenEnter() {
             return sOpenEnter;
         }
 
         /** @hide */
-        public static Animation getOpenExit(Context context) {
-            sOpenExit.setBackdropColor(loadBackdropColor(context));
+        public static Animation getOpenExit() {
             return sOpenExit;
         }
 
         /** @hide */
-        public static Animation getCloseEnter(Context context) {
-            sCloseEnter.setBackdropColor(loadBackdropColor(context));
+        public static Animation getCloseEnter() {
             return sCloseEnter;
         }
 
         /** @hide */
-        public static Animation getCloseExit(Context context) {
-            sCloseExit.setBackdropColor(loadBackdropColor(context));
+        public static Animation getCloseExit() {
             return sCloseExit;
+        }
+
+        /** @hide */
+        public static Animation getAppStartingExit() {
+            return sAppStartingExit;
         }
     }
 
