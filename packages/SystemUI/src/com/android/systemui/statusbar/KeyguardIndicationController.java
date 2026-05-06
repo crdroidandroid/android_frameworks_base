@@ -131,6 +131,7 @@ import com.android.systemui.util.AlarmTimeout;
 import com.android.systemui.util.concurrency.DelayableExecutor;
 import com.android.systemui.util.wakelock.SettableWakeLock;
 import com.android.systemui.util.wakelock.WakeLock;
+import com.android.systemui.util.ScrimUtils;
 
 import dagger.Lazy;
 
@@ -242,6 +243,7 @@ public class KeyguardIndicationController {
     private int mBatteryLevel = -1;
     private boolean mBatteryPresent = true;
     protected long mChargingTimeRemaining;
+    private long mLastChargeTimeComputeMs;
     private float mChargingCurrent;
     private float mChargingVoltage;
     private float mTemperature;
@@ -1591,12 +1593,22 @@ public class KeyguardIndicationController {
             // when the battery is overheated, device doesn't charge so only guard on pluggedIn:
             mEnableBatteryDefender = mBatteryDefender && status.isPluggedIn();
             mIncompatibleCharger = status.incompatibleCharger.orElse(false);
-            try {
-                mChargingTimeRemaining = mPowerPluggedIn
-                        ? mBatteryInfo.computeChargeTimeRemaining() : -1;
-            } catch (RemoteException e) {
-                mKeyguardLogger.log(TAG, ERROR, "Error calling IBatteryStats", e);
-                mChargingTimeRemaining = -1;
+            if (ScrimUtils.get().isKeyguardShowing()) {
+                try {
+                    if (mPowerPluggedIn) {
+                        long now = SystemClock.elapsedRealtime();
+                        if (mChargingTimeRemaining < 0 || !wasPluggedIn
+                                || now - mLastChargeTimeComputeMs >= 3000) {
+                            mChargingTimeRemaining = mBatteryInfo.computeChargeTimeRemaining();
+                            mLastChargeTimeComputeMs = now;
+                        }
+                    } else {
+                        mChargingTimeRemaining = -1;
+                    }
+                } catch (RemoteException e) {
+                    mKeyguardLogger.log(TAG, ERROR, "Error calling IBatteryStats", e);
+                    mChargingTimeRemaining = -1;
+                }
             }
             if (mAlternateFastchargeInfoUpdate && (wasPluggedIn != mPowerPluggedIn)) {
                 if (mPowerPluggedIn) {
@@ -1608,7 +1620,9 @@ public class KeyguardIndicationController {
 
             mKeyguardLogger.logRefreshBatteryInfo(isChargingOrFull, mPowerPluggedIn, mBatteryLevel,
                     mBatteryDefender);
-            updateDeviceEntryIndication(!wasPluggedIn && mPowerPluggedInWired);
+            if (ScrimUtils.get().isKeyguardShowing()) {
+                updateDeviceEntryIndication(!wasPluggedIn && mPowerPluggedInWired);
+            }
         }
 
         @Override
