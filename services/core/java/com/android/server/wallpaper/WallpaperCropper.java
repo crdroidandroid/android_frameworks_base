@@ -31,6 +31,7 @@ import static com.android.server.wallpaper.WallpaperUtils.getWallpaperDir;
 import static com.android.window.flags.Flags.multiCrop;
 
 import android.app.WallpaperManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageDecoder;
@@ -45,6 +46,7 @@ import android.view.DisplayInfo;
 import android.view.View;
 import android.window.DesktopExperienceFlags;
 
+import com.android.internal.R;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.server.utils.TimingsTraceAndSlog;
 
@@ -93,9 +95,12 @@ public class WallpaperCropper {
 
     private final WallpaperDefaultDisplayInfo mDefaultDisplayInfo;
 
-    WallpaperCropper(WallpaperDisplayHelper wallpaperDisplayHelper) {
+    private final float mMaxWallpaperScale;
+
+    WallpaperCropper(WallpaperDisplayHelper wallpaperDisplayHelper, Resources resources) {
         mWallpaperDisplayHelper = wallpaperDisplayHelper;
         mDefaultDisplayInfo = mWallpaperDisplayHelper.getDefaultDisplayInfo();
+        mMaxWallpaperScale = Math.max(1f, resources.getFloat(R.dimen.config_wallpaperMaxScale));
     }
 
     /**
@@ -641,15 +646,17 @@ public class WallpaperCropper {
                             (float) crop.height() / displayForThisOrientation.y));
                     sampleSize = Math.min(sampleSize, sampleSizeForThisOrientation);
                 }
-                // If the total crop has more width or height than either the max texture size
-                // or twice the largest display dimension, downsample the image
+                // If the total crop has more width or height than either the max texture size,
+                // twice the largest display dimension, or the largest useful runtime zoomed
+                // display size, downsample the image.
                 int maxCropSize = Math.min(
                         2 * mWallpaperDisplayHelper.getDefaultDisplayLargestDimension(),
                         GLHelper.getMaxTextureSize());
                 float minimumSampleSize = Math.max(1f, Math.max(
                         (float) cropHint.height() / maxCropSize,
-                        (float) cropHint.width()) / maxCropSize);
-                sampleSize = Math.max(sampleSize, minimumSampleSize);
+                        (float) cropHint.width() / maxCropSize));
+                float runtimeSampleSize = getMaxZoomCropSampleSize(cropHint);
+                sampleSize = Math.max(sampleSize, Math.max(minimumSampleSize, runtimeSampleSize));
                 needScale = sampleSize > 1f;
             }
 
@@ -843,6 +850,29 @@ public class WallpaperCropper {
                 Slog.v(TAG, "restorecon() of crop file returned " + didRestorecon);
             }
         }
+    }
+
+    private float getMaxZoomCropSampleSize(Rect cropHint) {
+        int maxDisplayWidth = 0;
+        int maxDisplayHeight = 0;
+        SparseArray<Point> displaySizes = mWallpaperDisplayHelper.getDefaultDisplaySizes();
+        for (int i = 0; i < displaySizes.size(); i++) {
+            Point size = displaySizes.valueAt(i);
+            maxDisplayWidth = Math.max(maxDisplayWidth, size.x);
+            maxDisplayHeight = Math.max(maxDisplayHeight, size.y);
+        }
+
+        if (maxDisplayWidth <= 0 || maxDisplayHeight <= 0) {
+            return 1f;
+        }
+
+        final int cropWidth = cropHint.width();
+        final int cropHeight = cropHint.height();
+        final float maxRuntimeWidth = maxDisplayWidth * mMaxWallpaperScale;
+        final float maxRuntimeHeight = maxDisplayHeight * mMaxWallpaperScale;
+
+        return Math.max(1f,
+                Math.max(cropWidth / maxRuntimeWidth, cropHeight / maxRuntimeHeight));
     }
 
     private static Rect getCropForExternalDisplay(
