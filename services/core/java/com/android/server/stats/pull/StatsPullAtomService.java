@@ -564,6 +564,9 @@ public class StatsPullAtomService extends SystemService {
     private class StatsPullAtomCallbackImpl implements StatsManager.StatsPullAtomCallback {
         @Override
         public int onPullAtom(int atomTag, List<StatsEvent> data) {
+            if (!Build.IS_ENG) {
+                return StatsManager.PULL_SKIP;
+            }
             if (Trace.isTagEnabled(Trace.TRACE_TAG_SYSTEM_SERVER)) {
                 Trace.traceBegin(Trace.TRACE_TAG_SYSTEM_SERVER, "StatsPull-" + atomTag);
             }
