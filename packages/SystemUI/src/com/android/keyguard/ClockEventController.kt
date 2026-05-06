@@ -74,6 +74,7 @@ import com.android.systemui.statusbar.policy.BatteryController.BatteryStateChang
 import com.android.systemui.statusbar.policy.ConfigurationController
 import com.android.systemui.statusbar.policy.ZenModeController
 import com.android.systemui.statusbar.policy.domain.interactor.ZenModeInteractor
+import com.android.systemui.util.ScrimUtils
 import com.android.systemui.util.annotations.DeprecatedSysuiVisibleForTesting
 import com.android.systemui.util.concurrency.DelayableExecutor
 import dagger.Lazy
@@ -394,7 +395,9 @@ constructor(
             }
 
             override fun onTimeChanged() {
-                refreshTime()
+                if (ScrimUtils.get().isKeyguardShowing()) {
+                    refreshTime()
+                }
             }
 
             private fun refreshTime() {
