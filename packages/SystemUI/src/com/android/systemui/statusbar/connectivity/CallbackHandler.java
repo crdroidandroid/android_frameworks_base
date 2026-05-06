@@ -26,7 +26,6 @@ import com.android.systemui.dagger.qualifiers.Main;
 import com.android.systemui.statusbar.connectivity.NetworkController.EmergencyListener;
 
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +47,6 @@ public class CallbackHandler extends Handler implements EmergencyListener, Signa
     private static final int MSG_ADD_REMOVE_EMERGENCY        = 6;
     private static final int MSG_ADD_REMOVE_SIGNAL           = 7;
     private static final int HISTORY_SIZE = 64;
-    private static final SimpleDateFormat SSDF = new SimpleDateFormat("MM-dd HH:mm:ss.SSS");
 
     // All the callbacks.
     private final ArrayList<EmergencyListener> mEmergencyListeners = new ArrayList<>();
@@ -120,7 +118,7 @@ public class CallbackHandler extends Handler implements EmergencyListener, Signa
     @Override
     public void setWifiIndicators(final WifiIndicators indicators) {
         String log = new StringBuilder()
-                .append(SSDF.format(System.currentTimeMillis())).append(",")
+                .append(System.currentTimeMillis()).append(",")
                 .append(indicators)
                 .toString();
         recordLastCallback(log);
@@ -134,7 +132,7 @@ public class CallbackHandler extends Handler implements EmergencyListener, Signa
     @Override
     public void setMobileDataIndicators(final MobileDataIndicators indicators) {
         String log = new StringBuilder()
-                .append(SSDF.format(System.currentTimeMillis())).append(",")
+                .append(System.currentTimeMillis()).append(",")
                 .append(indicators)
                 .toString();
         recordLastCallback(log);
@@ -157,7 +155,7 @@ public class CallbackHandler extends Handler implements EmergencyListener, Signa
         if (!currentCallback.equals(mLastCallback)) {
             mLastCallback = currentCallback;
             String log = new StringBuilder()
-                    .append(SSDF.format(System.currentTimeMillis())).append(",")
+                    .append(System.currentTimeMillis()).append(",")
                     .append(currentCallback).append(",")
                     .toString();
             recordLastCallback(log);
@@ -179,7 +177,7 @@ public class CallbackHandler extends Handler implements EmergencyListener, Signa
         if (!currentCallback.equals(mLastCallback)) {
             mLastCallback = currentCallback;
             String log = new StringBuilder()
-                    .append(SSDF.format(System.currentTimeMillis())).append(",")
+                    .append(System.currentTimeMillis()).append(",")
                     .append(currentCallback).append(",")
                     .toString();
             recordLastCallback(log);
@@ -205,7 +203,7 @@ public class CallbackHandler extends Handler implements EmergencyListener, Signa
     @Override
     public void setEthernetIndicators(IconState icon) {
         String log = new StringBuilder()
-                .append(SSDF.format(System.currentTimeMillis())).append(",")
+                .append(System.currentTimeMillis()).append(",")
                 .append("setEthernetIndicators: ")
                 .append("icon=").append(icon)
                 .toString();
@@ -222,7 +220,7 @@ public class CallbackHandler extends Handler implements EmergencyListener, Signa
         if (!currentCallback.equals(mLastCallback)) {
             mLastCallback = currentCallback;
             String log = new StringBuilder()
-                    .append(SSDF.format(System.currentTimeMillis())).append(",")
+                    .append(System.currentTimeMillis()).append(",")
                     .append(currentCallback).append(",")
                     .toString();
             recordLastCallback(log);
