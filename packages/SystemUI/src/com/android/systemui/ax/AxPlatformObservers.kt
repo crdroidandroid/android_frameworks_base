@@ -70,6 +70,8 @@ import com.android.systemui.statusbar.policy.ZenModeController
 import com.android.wifitrackerlib.WifiEntry
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
@@ -120,6 +122,27 @@ class AxPlatformObservers @Inject constructor(
     private var lastMediaTrack: String? = null
     private var lastMediaArtist: String? = null
     private var lastMediaPackage: String? = null
+    private var lastMobileDataEnabled: Boolean? = null
+
+    private val wifiStateFlow = MutableSharedFlow<Bundle>(
+        replay = 0, extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+    private val mobileStateFlow = MutableSharedFlow<Bundle>(
+        replay = 0, extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+
+    init {
+        scope.launch(bgDispatcher) {
+            wifiStateFlow.collect { bundle ->
+                stateManager.broadcastState(AxPlatformClient.FEATURE_WIFI, bundle)
+            }
+        }
+        scope.launch(bgDispatcher) {
+            mobileStateFlow.collect { bundle ->
+                stateManager.broadcastState(AxPlatformClient.FEATURE_MOBILE_DATA, bundle)
+            }
+        }
+    }
 
     fun registerAll() {
         registerControllerCallbacks()
@@ -324,7 +347,7 @@ class AxPlatformObservers @Inject constructor(
         override fun setWifiIndicators(wifiIndicators: WifiIndicators) {
             val connected = wifiIndicators.statusIcon?.visible == true
             val enabled = wifiIndicators.enabled
-            stateManager.broadcastState(AxPlatformClient.FEATURE_WIFI, Bundle().apply {
+            wifiStateFlow.tryEmit(Bundle().apply {
                 putBoolean("enabled", enabled)
                 putBoolean("active", enabled)
                 putBoolean("connected", connected)
@@ -335,25 +358,28 @@ class AxPlatformObservers @Inject constructor(
         }
 
         override fun setMobileDataIndicators(mobileDataIndicators: MobileDataIndicators) {
-            val isEnabled = networkController.mobileDataController?.isMobileDataEnabled == true
-            stateManager.broadcastState(
-                AxPlatformClient.FEATURE_MOBILE_DATA,
-                Bundle().apply {
-                    putBoolean("enabled", isEnabled)
-                    putBoolean("active", isEnabled)
-                    putString(
-                        "type",
-                        mobileDataIndicators.typeContentDescription?.toString() ?: ""
-                    )
-                    putString("description", mobileDataIndicators.qsDescription?.toString() ?: "")
-                    putBoolean("roaming", mobileDataIndicators.roaming)
-                    putBoolean("isDefault", mobileDataIndicators.isDefault)
-                    putInt("subId", mobileDataIndicators.subId)
-                    putBoolean("activityIn", mobileDataIndicators.activityIn)
-                    putBoolean("activityOut", mobileDataIndicators.activityOut)
-                    putInt("level", mobileDataIndicators.level)
-                }
-            )
+            val isEnabled = lastMobileDataEnabled ?: (
+                networkController.mobileDataController?.isMobileDataEnabled == true
+            ).also { lastMobileDataEnabled = it }
+            mobileStateFlow.tryEmit(Bundle().apply {
+                putBoolean("enabled", isEnabled)
+                putBoolean("active", isEnabled)
+                putString(
+                    "type",
+                    mobileDataIndicators.typeContentDescription?.toString() ?: ""
+                )
+                putString("description", mobileDataIndicators.qsDescription?.toString() ?: "")
+                putBoolean("roaming", mobileDataIndicators.roaming)
+                putBoolean("isDefault", mobileDataIndicators.isDefault)
+                putInt("subId", mobileDataIndicators.subId)
+                putBoolean("activityIn", mobileDataIndicators.activityIn)
+                putBoolean("activityOut", mobileDataIndicators.activityOut)
+                putInt("level", mobileDataIndicators.level)
+            })
+        }
+
+        override fun setMobileDataEnabled(enabled: Boolean) {
+            lastMobileDataEnabled = enabled
         }
 
         override fun setNoSims(show: Boolean, simDetected: Boolean) {
