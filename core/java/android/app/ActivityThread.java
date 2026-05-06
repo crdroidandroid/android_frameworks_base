@@ -8202,8 +8202,8 @@ public final class ActivityThread extends ClientTransactionHandler
 
         if (!Process.isIsolated()) {
             try {
-                if (AnimationUtils.ActivityAnimations.sPerfAnimEnabled) {
-                    AnimationUtils.ActivityAnimations.preload(appContext);
+                if (AnimationUtils.sPerfAnimEnabled) {
+                    AnimationUtils.ActivityAnimations.preload();
                 }
             } catch (Exception e) {
                 Slog.e(TAG, "Failed to preload animations", e);
