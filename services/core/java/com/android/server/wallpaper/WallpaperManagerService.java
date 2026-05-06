@@ -1523,7 +1523,7 @@ public class WallpaperManagerService extends IWallpaperManager.Stub
         WindowManager windowManager = mContext.getSystemService(WindowManager.class);
         mWallpaperDisplayHelper = new WallpaperDisplayHelper(
                 displayManager, windowManager, mWindowManagerInternal, mContext.getResources());
-        mWallpaperCropper = new WallpaperCropper(mWallpaperDisplayHelper);
+        mWallpaperCropper = new WallpaperCropper(mWallpaperDisplayHelper, mContext.getResources());
         mActivityManager = mContext.getSystemService(ActivityManager.class);
 
         if (mContext.getResources().getBoolean(
