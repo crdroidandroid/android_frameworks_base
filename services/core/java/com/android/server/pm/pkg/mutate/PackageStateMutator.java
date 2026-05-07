@@ -113,8 +113,12 @@ public class PackageStateMutator {
     }
 
     public void onFinished() {
-        for (int index = 0; index < mChangedStates.size(); index++) {
-            mChangedStates.valueAt(index).onChanged();
+        try {
+            for (int index = 0; index < mChangedStates.size(); index++) {
+                mChangedStates.valueAt(index).onChanged();
+            }
+        } finally {
+            mChangedStates.clear();
         }
     }
 
