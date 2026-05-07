@@ -173,15 +173,20 @@ public final class ExternalDisplayStatsService {
          */
         @Override
         public void onReceive(Context context, Intent intent) {
+            final SparseIntArray externalDisplayStatesSnapshot;
             int interactiveDisplaysCount = 0;
             synchronized (mExternalDisplayStates) {
                 if (mExternalDisplayStates.size() == 0) {
                     return;
                 }
-                for (var i = 0; i < mExternalDisplayStates.size(); i++) {
-                    if (mInjector.isInteractive(mExternalDisplayStates.keyAt(i))) {
-                        interactiveDisplaysCount++;
-                    }
+                // Snapshot display IDs while holding the lock, and call isInteractive()
+                // outside the lock to avoid lock inversion with DisplayManagerService.
+                externalDisplayStatesSnapshot = mExternalDisplayStates.clone();
+            }
+
+            for (var i = 0; i < externalDisplayStatesSnapshot.size(); i++) {
+                if (mInjector.isInteractive(externalDisplayStatesSnapshot.keyAt(i))) {
+                    interactiveDisplaysCount++;
                 }
             }
 
