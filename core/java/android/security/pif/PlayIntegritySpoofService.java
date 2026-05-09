@@ -12,6 +12,7 @@ import android.os.Parcelable;
 import android.os.RemoteException;
 import android.os.SystemProperties;
 import android.text.TextUtils;
+import android.util.ArraySet;
 import android.util.Base64;
 import android.util.JsonReader;
 import android.util.Log;
@@ -20,6 +21,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -44,37 +46,77 @@ public final class PlayIntegritySpoofService {
         "FINGERPRINT", "google/marlin/marlin:10/QP1A.191005.007.A3/5972272:user/release-keys"
     );
 
-    private static final Set<String> NEXUS_FEATURES = Set.of(
-        "com.google.android.apps.photos.NEXUS_PRELOAD",
-        "com.google.android.apps.photos.nexus_preload",
-        "com.google.android.feature.PIXEL_EXPERIENCE",
-        "com.google.android.feature.GOOGLE_BUILD",
-        "com.google.android.feature.GOOGLE_EXPERIENCE"
-    );
+    private static final ArraySet<String> PRIV_PKGS = new ArraySet<>();
+    private static final ArraySet<String> FEATURES_PIXEL = new ArraySet<>();
+    private static final ArraySet<String> FEATURES_PIXEL_OTHERS = new ArraySet<>();
+    private static final ArraySet<String> FEATURES_TENSOR = new ArraySet<>();
+    private static final ArraySet<String> FEATURES_NEXUS = new ArraySet<>();
 
-    private static final Set<String> PIXEL_FEATURES = Set.of(
-        "com.google.android.feature.PIXEL_2022_EXPERIENCE",
-        "com.google.android.feature.PIXEL_2022_MIDYEAR_EXPERIENCE",
-        "com.google.android.feature.PIXEL_2023_EXPERIENCE",
-        "com.google.android.feature.PIXEL_2023_MIDYEAR_EXPERIENCE",
-        "com.google.android.feature.PIXEL_2024_EXPERIENCE",
-        "com.google.android.feature.PIXEL_2024_MIDYEAR_EXPERIENCE",
-        "com.google.android.feature.PIXEL_2025_EXPERIENCE",
-        "com.google.android.feature.PIXEL_2025_MIDYEAR_EXPERIENCE",
-        "com.google.android.feature.PIXEL_2026_EXPERIENCE",
-        "com.google.android.feature.PIXEL_2026_MIDYEAR_EXPERIENCE",
-        "com.google.android.feature.PIXEL_2021_EXPERIENCE",
-        "com.google.android.feature.PIXEL_2021_MIDYEAR_EXPERIENCE",
-        "com.google.android.feature.PIXEL_2020_EXPERIENCE",
-        "com.google.android.feature.PIXEL_2020_MIDYEAR_EXPERIENCE",
-        "PIXEL_2017_PRELOAD",
-        "PIXEL_2018_PRELOAD",
-        "PIXEL_2019_MIDYEAR_PRELOAD",
-        "PIXEL_2019_PRELOAD",
-        "PIXEL_2020_EXPERIENCE",
-        "PIXEL_2020_MIDYEAR_EXPERIENCE",
-        "PIXEL_EXPERIENCE"
-    );
+    static {
+        Collections.addAll(FEATURES_PIXEL,
+                "com.google.android.apps.photos.PIXEL_2019_PRELOAD",
+                "com.google.android.apps.photos.PIXEL_2019_MIDYEAR_PRELOAD",
+                "com.google.android.apps.photos.PIXEL_2018_PRELOAD",
+                "com.google.android.apps.photos.PIXEL_2017_PRELOAD",
+                "com.google.android.feature.PIXEL_2021_MIDYEAR_EXPERIENCE",
+                "com.google.android.feature.PIXEL_2020_EXPERIENCE",
+                "com.google.android.feature.PIXEL_2020_MIDYEAR_EXPERIENCE",
+                "com.google.android.feature.PIXEL_2019_EXPERIENCE",
+                "com.google.android.feature.PIXEL_2019_MIDYEAR_EXPERIENCE",
+                "com.google.android.feature.PIXEL_2018_EXPERIENCE",
+                "com.google.android.feature.PIXEL_2017_EXPERIENCE",
+                "com.google.android.feature.PIXEL_EXPERIENCE",
+                "com.google.android.feature.GOOGLE_BUILD",
+                "com.google.android.feature.GOOGLE_EXPERIENCE"
+        );
+
+        Collections.addAll(FEATURES_PIXEL_OTHERS,
+                "com.google.android.feature.ASI",
+                "com.google.android.feature.ANDROID_ONE_EXPERIENCE",
+                "com.google.android.feature.GOOGLE_FI_BUNDLED",
+                "com.google.android.feature.LILY_EXPERIENCE",
+                "com.google.android.feature.TURBO_PRELOAD",
+                "com.google.android.feature.WELLBEING",
+                "com.google.lens.feature.IMAGE_INTEGRATION",
+                "com.google.lens.feature.CAMERA_INTEGRATION",
+                "com.google.photos.trust_debug_certs",
+                "com.google.android.feature.AER_OPTIMIZED",
+                "com.google.android.feature.NEXT_GENERATION_ASSISTANT",
+                "android.software.game_service",
+                "com.google.android.feature.EXCHANGE_6_2",
+                "com.google.android.apps.dialer.call_recording_audio",
+                "com.google.android.apps.dialer.SUPPORTED"
+        );
+
+        Collections.addAll(FEATURES_TENSOR,
+                "com.google.android.feature.PIXEL_2026_EXPERIENCE",
+                "com.google.android.feature.PIXEL_2026_MIDYEAR_EXPERIENCE",
+                "com.google.android.feature.PIXEL_2025_EXPERIENCE",
+                "com.google.android.feature.PIXEL_2025_MIDYEAR_EXPERIENCE",
+                "com.google.android.feature.PIXEL_2024_EXPERIENCE",
+                "com.google.android.feature.PIXEL_2024_MIDYEAR_EXPERIENCE",
+                "com.google.android.feature.PIXEL_2023_EXPERIENCE",
+                "com.google.android.feature.PIXEL_2023_MIDYEAR_EXPERIENCE",
+                "com.google.android.feature.PIXEL_2022_EXPERIENCE",
+                "com.google.android.feature.PIXEL_2022_MIDYEAR_EXPERIENCE",
+                "com.google.android.feature.PIXEL_2021_EXPERIENCE"
+        );
+
+        Collections.addAll(FEATURES_NEXUS,
+                "com.google.android.apps.photos.NEXUS_PRELOAD",
+                "com.google.android.apps.photos.nexus_preload",
+                "com.google.android.feature.PIXEL_EXPERIENCE",
+                "com.google.android.feature.GOOGLE_BUILD",
+                "com.google.android.feature.GOOGLE_EXPERIENCE"
+        );
+
+        Collections.addAll(PRIV_PKGS,
+                "com.google.android.googlequicksearchbox",
+                "com.google.android.apps.photos",
+                "com.google.android.apps.pixel.agent",
+                "com.google.android.apps.pixel.creativeassistant"
+        );
+    }
 
     private static final String ROM_SIGNATURE_DATA = "MIIFyTCCA7GgAwIBAgIVALyxxl+zDS9SL68SzOr48309eAZyMA0GCSqGSIb3DQEBCwUAMHQxCzAJ" +
             "BgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYwFAYDVQQHEw1Nb3VudGFpbiBWaWV3MRQw" +
@@ -122,6 +164,8 @@ public final class PlayIntegritySpoofService {
     private volatile boolean mConfigLoaded = false;
     private volatile boolean mSignatureSpoofed = false;
 
+    private final Object mLoadLock = new Object();
+
     private PlayIntegritySpoofService() {}
 
     public static synchronized PlayIntegritySpoofService getInstance() {
@@ -129,34 +173,65 @@ public final class PlayIntegritySpoofService {
             sInstance = new PlayIntegritySpoofService();
             sInstance.loadConfig();
         }
+        sInstance.ensureLoaded();
         return sInstance;
     }
 
-    public void loadConfig() {
-        mBuildFields.clear();
-        mSystemProps.clear();
-        mConfigLoaded = false;
+    private void ensureLoaded() {
+        if (mConfigLoaded) return;
+        synchronized (mLoadLock) {
+            if (mConfigLoaded) return;
+            loadConfigInternal();
+        }
+    }
 
+    private void loadConfig() {
+        synchronized (mLoadLock) {
+            loadConfigInternal();
+        }
+    }
+
+    private void loadConfigInternal() {
         IActivityManager am = ActivityManager.getService();
         if (am == null) {
-            Log.w(TAG, "ActivityManager not ready, skipping PIF config load");
+            if (mVerboseLogs > 0) Log.w(TAG, "ActivityManager not ready, skipping PIF config load");
             return;
         }
 
         String content;
         try {
             content = am.getSpoofPifConfig();
+            String spoofPhotos = am.getSpoofPifSpoofPhotos();
+            mSpoofPhotos = "1".equals(spoofPhotos) || "true".equalsIgnoreCase(spoofPhotos);
         } catch (Throwable e) {
             Log.e(TAG, "Failed to fetch PIF config from system_server", e);
             return;
         }
 
+        Map<String, String> newBuildFields = new ConcurrentHashMap<>();
+        Map<String, String> newSystemProps = new ConcurrentHashMap<>();
+
         if (content == null || content.isEmpty()) {
-            Log.w(TAG, "No PIF config in Settings.Secure");
+            mBuildFields.clear();
+            mSystemProps.clear();
+            mConfigLoaded = false;
+            if (mVerboseLogs > 0) Log.w(TAG, "No PIF config in Settings.Secure");
             return;
         }
 
+        mVerboseLogs = 0;
+        mSpoofBuild = true;
+        mSpoofProps = true;
+        mSpoofProvider = true;
+        mSpoofSignature = false;
+        mSpoofVendingBuild = true;
+        mSpoofVendingSdk = false;
+        mDebug = false;
+
         try {
+            mBuildFields.clear();
+            mSystemProps.clear();
+
             String trimmed = content.trim();
             if (trimmed.startsWith("{")) {
                 parseJson(content);
@@ -252,9 +327,6 @@ public final class PlayIntegritySpoofService {
             case "spoofVendingSdk":
                 mSpoofVendingSdk = "1".equals(value) || "true".equalsIgnoreCase(value);
                 break;
-            case "spoofPhotos":
-                mSpoofPhotos = "1".equals(value) || "true".equalsIgnoreCase(value);
-                break;
             case "DEBUG":
                 mDebug = "1".equals(value) || "true".equalsIgnoreCase(value);
                 break;
@@ -269,6 +341,7 @@ public final class PlayIntegritySpoofService {
     }
 
     public boolean shouldSpoof(String processName) {
+        ensureLoaded();
         if (!mConfigLoaded) return false;
         return DROIDGUARD_PACKAGE.equals(processName) || VENDING_PACKAGE.equals(processName);
     }
@@ -287,6 +360,7 @@ public final class PlayIntegritySpoofService {
     }
 
     public void spoofBuildFields(String processName) {
+        ensureLoaded();
         if (!mConfigLoaded) return;
 
         boolean isVending = isVending(processName);
@@ -462,6 +536,7 @@ public final class PlayIntegritySpoofService {
     }
 
     public String getSpoofedProperty(String key) {
+        ensureLoaded();
         if (key == null || !mSpoofProps || !mConfigLoaded) return null;
 
         String value = mSystemProps.get(key);
@@ -478,10 +553,12 @@ public final class PlayIntegritySpoofService {
     }
 
     public boolean isSpoofSignatureEnabled() {
+        ensureLoaded();
         return mSpoofSignature && mConfigLoaded;
     }
 
     public boolean isSpoofProviderEnabled() {
+        ensureLoaded();
         return mSpoofProvider && mConfigLoaded;
     }
 
@@ -506,7 +583,8 @@ public final class PlayIntegritySpoofService {
     }
 
     public boolean shouldSpoofPhotos(String packageName) {
-        return mConfigLoaded && mSpoofPhotos && TextUtils.equals(GPHOTOS_PACKAGE, packageName);
+        if (!TextUtils.equals(GPHOTOS_PACKAGE, packageName)) return false;
+        return mSpoofPhotos;
     }
 
     public void spoofPhotosProps() {
@@ -517,16 +595,27 @@ public final class PlayIntegritySpoofService {
     }
 
     public Boolean hasSystemFeature(String name, int version) {
-        final String pkgName = ActivityThread.currentPackageName();
-        if (shouldSpoofPhotos(pkgName)) {
-            if (!isPixelDevice() && PIXEL_FEATURES.contains(name)) return false;
-            return NEXUS_FEATURES.contains(name);
-        }
-        return null;
-    }
+        if (name == null) return null;
 
-    private static boolean isPixelDevice() {
-        return SystemProperties.get("ro.soc.manufacturer", "").equalsIgnoreCase("google");
+        final String pkgName = ActivityThread.currentPackageName();
+        if (pkgName != null && PRIV_PKGS.contains(pkgName)) {
+            if (shouldSpoofPhotos(pkgName)) {
+                if (FEATURES_PIXEL.contains(name)) return false;
+                if (FEATURES_PIXEL_OTHERS.contains(name)) return true;
+                if (FEATURES_TENSOR.contains(name)) return false;
+                if (FEATURES_NEXUS.contains(name)) return true;
+            } else {
+                if (FEATURES_PIXEL.contains(name)) return true;
+                if (FEATURES_PIXEL_OTHERS.contains(name)) return true;
+                if (FEATURES_TENSOR.contains(name)) return true;
+                if (FEATURES_NEXUS.contains(name)) return true;
+            }
+        }
+
+        if (FEATURES_PIXEL.contains(name)) return true;
+        if (FEATURES_PIXEL_OTHERS.contains(name)) return true;
+
+        return null;
     }
 
     public void logBuildFields() {
