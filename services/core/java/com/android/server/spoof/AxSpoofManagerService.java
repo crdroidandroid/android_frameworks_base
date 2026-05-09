@@ -34,6 +34,7 @@ public final class AxSpoofManagerService extends SystemService {
 
     private static final String[] WATCHED_KEYS = {
             Settings.Secure.SPOOF_PIF_CONFIG,
+            Settings.Secure.SPOOF_PIF_PHOTOS,
             Settings.Secure.SPOOF_GAMEPROPS_CONFIG,
             Settings.Secure.SPOOF_TRICKYSTORE_TARGET,
             Settings.Secure.SPOOF_TRICKYSTORE_KEYBOX,
@@ -125,6 +126,11 @@ public final class AxSpoofManagerService extends SystemService {
         @Override
         public String getPifConfig() {
             return getCached(Settings.Secure.SPOOF_PIF_CONFIG);
+        }
+
+       @Override
+        public String getPifSpoofPhotos() {
+            return getCached(Settings.Secure.SPOOF_PIF_PHOTOS);
         }
 
         @Override
