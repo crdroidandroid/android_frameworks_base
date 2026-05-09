@@ -1071,6 +1071,8 @@ interface IActivityManager {
 
     String getSpoofPifConfig();
 
+    String getSpoofPifSpoofPhotos();
+
     String getSpoofGamePropsConfig();
 
     String getSpoofTrickyStoreTarget();
