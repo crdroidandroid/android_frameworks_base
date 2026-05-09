@@ -1485,9 +1485,11 @@ public final class JobServiceContext implements ServiceConnection {
                     } else {
                         Slog.i(TAG, "JS was waiting to stop this job."
                                 + " Sending onStop: " + getRunningJobNameLocked());
-                        mParams.setStopReason(mPendingStopReason, mPendingInternalStopReason,
-                                mPendingDebugStopReason);
-                        sendStopMessageLocked(mPendingDebugStopReason);
+                        if (mParams != null) {
+                            mParams.setStopReason(mPendingStopReason, mPendingInternalStopReason,
+                                    mPendingDebugStopReason);
+                            sendStopMessageLocked(mPendingDebugStopReason);
+                        }
                         mAnrTimer.discard();
                         break;
                     }
