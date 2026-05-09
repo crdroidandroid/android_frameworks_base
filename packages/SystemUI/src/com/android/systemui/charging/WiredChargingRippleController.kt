@@ -201,9 +201,13 @@ class WiredChargingRippleController @Inject constructor(
 
             override fun onViewAttachedToWindow(view: View) {
                 layoutRipple()
+                var cleanupInvoked = false
                 rippleView.startRipple(Runnable {
-                    container.removeView(rippleView)
-                    windowManager.removeView(container)
+                    if (cleanupInvoked) {
+                        return@Runnable
+                    }
+                    cleanupInvoked = true
+                    removeRippleContainer(container)
                 })
                 val fadeIn = ObjectAnimator.ofFloat(percentText, "alpha", 0f, 1f).apply {
                     duration = 300
@@ -246,8 +250,13 @@ class WiredChargingRippleController @Inject constructor(
             override fun onViewDetachedFromWindow(view: View) {}
 
             override fun onViewAttachedToWindow(view: View) {
+                var cleanupInvoked = false
                 axRippleView.startRipple(Runnable {
-                    windowManager.removeView(axRippleView)
+                    if (cleanupInvoked) {
+                        return@Runnable
+                    }
+                    cleanupInvoked = true
+                    removeWindowViewIfAttached(axRippleView)
                 })
                 axRippleView.removeOnAttachStateChangeListener(this)
             }
@@ -270,8 +279,13 @@ class WiredChargingRippleController @Inject constructor(
             override fun onViewDetachedFromWindow(view: View) {}
 
             override fun onViewAttachedToWindow(view: View) {
+                var cleanupInvoked = false
                 axChargingCircleView.startAnimation(Runnable {
-                    windowManager.removeView(axChargingCircleView)
+                    if (cleanupInvoked) {
+                        return@Runnable
+                    }
+                    cleanupInvoked = true
+                    removeWindowViewIfAttached(axChargingCircleView)
                 })
                 axChargingCircleView.removeOnAttachStateChangeListener(this)
             }
@@ -282,6 +296,19 @@ class WiredChargingRippleController @Inject constructor(
 
     companion object {
         private const val CHARGING_ANIM_MODE_CIRCLE = 1
+    }
+
+    private fun removeRippleContainer(container: FrameLayout) {
+        if (rippleView.parent === container) {
+            container.removeView(rippleView)
+        }
+        removeWindowViewIfAttached(container)
+    }
+
+    private fun removeWindowViewIfAttached(view: View) {
+        if (view.isAttachedToWindow) {
+            windowManager.removeView(view)
+        }
     }
 
     private fun layoutRipple() {
