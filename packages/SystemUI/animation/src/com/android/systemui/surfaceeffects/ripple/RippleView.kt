@@ -42,6 +42,8 @@ open class RippleView(context: Context?, attrs: AttributeSet?) : View(context, a
 
     private val ripplePaint = Paint()
     protected val animator: ValueAnimator = ValueAnimator.ofFloat(0f, 1f)
+    private var rippleAnimatorListener: Animator.AnimatorListener? = null
+    private var rippleAnimatorUpdateListener: ValueAnimator.AnimatorUpdateListener? = null
 
     var duration: Long = 1750
 
@@ -185,8 +187,11 @@ open class RippleView(context: Context?, attrs: AttributeSet?) : View(context, a
         if (animator.isRunning) {
             return // Ignore if ripple effect is already playing
         }
+        rippleAnimatorUpdateListener?.let(animator::removeUpdateListener)
+        rippleAnimatorListener?.let(animator::removeListener)
+
         animator.duration = duration
-        animator.addUpdateListener { updateListener ->
+        val updateListener = ValueAnimator.AnimatorUpdateListener { updateListener ->
             val now = updateListener.currentPlayTime
             val progress = updateListener.animatedValue as Float
             rippleShader.rawProgress = progress
@@ -194,13 +199,31 @@ open class RippleView(context: Context?, attrs: AttributeSet?) : View(context, a
             rippleShader.time = now.toFloat()
             invalidate()
         }
-        animator.addListener(
+        val endListener =
             object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator) {
+                private var callbackInvoked = false
+
+                private fun runOnAnimationFinished() {
+                    if (callbackInvoked) {
+                        return
+                    }
+                    callbackInvoked = true
                     onAnimationEnd?.run()
                 }
+
+                override fun onAnimationEnd(animation: Animator) {
+                    runOnAnimationFinished()
+                }
+
+                override fun onAnimationCancel(animation: Animator) {
+                    runOnAnimationFinished()
+                }
             }
-        )
+
+        rippleAnimatorUpdateListener = updateListener
+        rippleAnimatorListener = endListener
+        animator.addUpdateListener(updateListener)
+        animator.addListener(endListener)
         animator.start()
     }
 
