@@ -63,6 +63,10 @@ class AXRippleView @JvmOverloads constructor(
         duration = 800L
         interpolator = PathInterpolator(0.2f, 0f, 0f, 1f)
     }
+    private var rippleAnimatorListener: Animator.AnimatorListener? = null
+    private var rippleAnimatorUpdateListener: ValueAnimator.AnimatorUpdateListener? = null
+    private var darkOverlayUpdateListener: ValueAnimator.AnimatorUpdateListener? = null
+    private var darkOverlayReverseUpdateListener: ValueAnimator.AnimatorUpdateListener? = null
 
     private var currentAlpha = 0f
     private var currentIndex = 0
@@ -110,25 +114,41 @@ class AXRippleView @JvmOverloads constructor(
     fun startRipple(onAnimationEnd: Runnable? = null) {
         if (animator.isRunning) return
 
-        animator.addUpdateListener {
+        rippleAnimatorUpdateListener?.let(animator::removeUpdateListener)
+        rippleAnimatorListener?.let(animator::removeListener)
+        darkOverlayUpdateListener?.let(darkOverlayAnimator::removeUpdateListener)
+        darkOverlayReverseUpdateListener?.let(darkOverlayReverseAnimator::removeUpdateListener)
+
+        val updateListener = ValueAnimator.AnimatorUpdateListener {
             currentIndex = it.animatedValue as Int
             invalidate()
             if (currentIndex > 0) {
                 images.getOrNull(currentIndex - 1)?.recycle()
             }
         }
+        animator.addUpdateListener(updateListener)
 
-        animator.addListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator) {
+        val endListener = object : AnimatorListenerAdapter() {
+            private var callbackInvoked = false
+
+            private fun runOnAnimationFinished() {
+                if (callbackInvoked) {
+                    return
+                }
+                callbackInvoked = true
                 onAnimationEnd?.run()
                 releaseRes()
+            }
+
+            override fun onAnimationEnd(animation: Animator) {
+                runOnAnimationFinished()
             }
 
             override fun onAnimationCancel(animation: Animator) {
-                onAnimationEnd?.run()
-                releaseRes()
+                runOnAnimationFinished()
             }
-        })
+        }
+        animator.addListener(endListener)
 
         val alphaUpdateListener = ValueAnimator.AnimatorUpdateListener {
             currentAlpha = it.animatedValue as Float
@@ -137,6 +157,10 @@ class AXRippleView @JvmOverloads constructor(
 
         darkOverlayAnimator.addUpdateListener(alphaUpdateListener)
         darkOverlayReverseAnimator.addUpdateListener(alphaUpdateListener)
+        rippleAnimatorUpdateListener = updateListener
+        rippleAnimatorListener = endListener
+        darkOverlayUpdateListener = alphaUpdateListener
+        darkOverlayReverseUpdateListener = alphaUpdateListener
 
         currentIndex = 0
         currentAlpha = 0f
