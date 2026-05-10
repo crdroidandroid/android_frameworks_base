@@ -119,7 +119,7 @@ public final class AxSpoofManagerService extends SystemService {
     }
 
     private String readSetting(String key) {
-        return Settings.Secure.getStringForUser(mResolver, key, UserHandle.USER_SYSTEM);
+        return Settings.Secure.getStringForUser(mResolver, key, UserHandle.USER_CURRENT);
     }
 
     private final class LocalService implements AxSpoofManagerInternal {
