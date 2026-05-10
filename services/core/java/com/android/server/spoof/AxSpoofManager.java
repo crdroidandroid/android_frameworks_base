@@ -93,7 +93,7 @@ public class AxSpoofManager implements IAxSpoofManager {
     private void refreshKey(String key) {
         if (mResolver == null) return;
         final String value = Settings.Secure.getStringForUser(
-                mResolver, key, UserHandle.USER_SYSTEM);
+                mResolver, key, UserHandle.USER_CURRENT);
         if (value == null) {
             mCache.remove(key);
         } else {
