@@ -24,6 +24,7 @@ import com.android.systemui.volume.panel.component.mediaoutput.domain.interactor
 import com.android.systemui.volume.panel.component.mediaoutput.shared.model.MediaDeviceSession
 import com.android.systemui.volume.panel.component.volume.domain.interactor.AudioSlidersInteractor
 import com.android.systemui.volume.panel.component.volume.domain.model.SliderType
+import com.android.systemui.volume.panel.component.volume.slider.ui.viewmodel.AppVolumeSliderViewModel
 import com.android.systemui.volume.panel.component.volume.slider.ui.viewmodel.AudioSharingStreamSliderViewModel
 import com.android.systemui.volume.panel.component.volume.slider.ui.viewmodel.AudioStreamSliderViewModel
 import com.android.systemui.volume.panel.component.volume.slider.ui.viewmodel.CastVolumeSliderViewModel
@@ -61,6 +62,7 @@ constructor(
     private val streamSliderViewModelFactory: AudioStreamSliderViewModel.Factory,
     private val castVolumeSliderViewModelFactory: CastVolumeSliderViewModel.Factory,
     private val audioSharingStreamSliderViewModelFactory: AudioSharingStreamSliderViewModel.Factory,
+    private val appVolumeSliderViewModelFactory: AppVolumeSliderViewModel.Factory,
     audioModeInteractor: AudioModeInteractor,
     streamsInteractor: AudioSlidersInteractor,
 ) {
@@ -109,6 +111,8 @@ constructor(
                                 is SliderType.MediaDeviceCast ->
                                     createSessionViewModel(type.session)
                                 is SliderType.AudioSharingStream -> createAudioSharingViewModel()
+                                is SliderType.AppVolume ->
+                                    createAppVolumeViewModel(type.packageName)
                             }
                         }
                     emit(viewModels)
@@ -149,5 +153,9 @@ constructor(
 
     private fun CoroutineScope.createAudioSharingViewModel(): AudioSharingStreamSliderViewModel {
         return audioSharingStreamSliderViewModelFactory.create(this)
+    }
+
+    private fun CoroutineScope.createAppVolumeViewModel(packageName: String): AppVolumeSliderViewModel {
+        return appVolumeSliderViewModelFactory.create(packageName, this)
     }
 }

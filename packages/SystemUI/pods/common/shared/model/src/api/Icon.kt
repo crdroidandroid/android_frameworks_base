@@ -56,6 +56,7 @@ public sealed class Icon {
          */
         @DrawableRes override val resId: Int? = null,
         val packageName: String? = null,
+        val isBitmapImage: Boolean = false,
     ) : Icon() {
         init {
             if (packageName != null) {
@@ -75,21 +76,23 @@ public sealed class Icon {
             if (this.resId != null && other.resId != null) {
                 return this.resId == other.resId &&
                     this.packageName == other.packageName &&
-                    this.contentDescription == other.contentDescription
+                    this.contentDescription == other.contentDescription &&
+                    this.isBitmapImage == other.isBitmapImage
             }
 
             // Otherwise, compare everything.
             return this.resId == other.resId &&
                 this.packageName == other.packageName &&
                 this.drawable == other.drawable &&
-                this.contentDescription == other.contentDescription
+                this.contentDescription == other.contentDescription &&
+                this.isBitmapImage == other.isBitmapImage
         }
 
         override fun hashCode(): Int {
             return if (resId != null) {
-                Objects.hash(resId, packageName, contentDescription)
+                Objects.hash(resId, packageName, contentDescription, isBitmapImage)
             } else {
-                Objects.hash(drawable, contentDescription)
+                Objects.hash(drawable, contentDescription, isBitmapImage)
             }
         }
     }
@@ -116,7 +119,8 @@ public fun Drawable.asIcon(
     contentDescription: ContentDescription? = null,
     @DrawableRes resId: Int? = null,
     resPackage: String? = null,
-): Loaded = Loaded(this, contentDescription, resId, resPackage)
+    isBitmapImage: Boolean = false,
+): Loaded = Loaded(this, contentDescription, resId, resPackage, isBitmapImage)
 
 /**
  * Creates [ImageBitmap] for a given [Icon.Loaded]. It avoids IllegalArgumentException by providing
