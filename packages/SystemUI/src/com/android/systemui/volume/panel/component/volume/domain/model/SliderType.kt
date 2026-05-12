@@ -30,4 +30,7 @@ sealed interface SliderType {
 
     /** Represents the audio sharing volume stream. */
     data object AudioSharingStream : SliderType
+
+    /** Represents the per-app volume for a specific package. */
+    data class AppVolume(val packageName: String) : SliderType
 }

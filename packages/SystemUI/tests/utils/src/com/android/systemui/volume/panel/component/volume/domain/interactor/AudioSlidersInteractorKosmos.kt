@@ -18,6 +18,8 @@ package com.android.systemui.volume.panel.component.volume.domain.interactor
 
 import com.android.systemui.kosmos.Kosmos
 import com.android.systemui.kosmos.applicationCoroutineScope
+import com.android.systemui.shared.settings.data.repository.systemSettingsRepository
+import com.android.systemui.volume.data.repository.audioRepository
 import com.android.systemui.volume.data.repository.audioSystemRepository
 import com.android.systemui.volume.domain.interactor.audioModeInteractor
 import com.android.systemui.volume.domain.interactor.audioSharingInteractor
@@ -31,5 +33,7 @@ val Kosmos.audioSlidersInteractor by
             audioModeInteractor,
             audioSystemRepository,
             audioSharingInteractor,
+            audioRepository,
+            systemSettingsRepository,
         )
     }

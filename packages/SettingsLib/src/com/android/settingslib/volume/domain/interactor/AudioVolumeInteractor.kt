@@ -16,6 +16,7 @@
 
 package com.android.settingslib.volume.domain.interactor
 
+import android.media.AppVolume
 import android.media.AudioManager
 import com.android.settingslib.notification.domain.interactor.NotificationsSoundPolicyInteractor
 import com.android.settingslib.volume.data.repository.AudioRepository
@@ -80,6 +81,20 @@ class AudioVolumeInteractor(
                 }
             }
         }
+    }
+
+    fun getAppVolume(packageName: String): Flow<AppVolume?> =
+        audioRepository.appVolumeSessions
+            .map { appVolumes ->
+                appVolumes.find { it.packageName == packageName }
+            }
+
+    suspend fun setAppVolume(packageName: String, volume: Float) {
+        audioRepository.setAppVolume(packageName, volume)
+    }
+
+    suspend fun setAppMuted(packageName: String, mute: Boolean) {
+        audioRepository.setAppMuted(packageName, mute)
     }
 
     /** Checks if the volume can be changed via the UI. */
