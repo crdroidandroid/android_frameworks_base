@@ -24,6 +24,7 @@ import com.android.systemui.volume.mediaOutputInteractor
 import com.android.systemui.volume.panel.component.volume.domain.interactor.audioSlidersInteractor
 import com.android.systemui.volume.panel.component.volume.slider.ui.viewmodel.audioSharingStreamSliderViewModelFactory
 import com.android.systemui.volume.panel.component.volume.slider.ui.viewmodel.audioStreamSliderViewModelFactory
+import com.android.systemui.volume.panel.component.volume.slider.ui.viewmodel.appVolumeSliderViewModelFactory
 import com.android.systemui.volume.panel.component.volume.slider.ui.viewmodel.castVolumeSliderViewModelFactory
 
 val Kosmos.audioVolumeComponentViewModel by
@@ -35,6 +36,7 @@ val Kosmos.audioVolumeComponentViewModel by
             audioStreamSliderViewModelFactory,
             castVolumeSliderViewModelFactory,
             audioSharingStreamSliderViewModelFactory,
+            appVolumeSliderViewModelFactory,
             audioModeInteractor,
             audioSlidersInteractor,
         )
