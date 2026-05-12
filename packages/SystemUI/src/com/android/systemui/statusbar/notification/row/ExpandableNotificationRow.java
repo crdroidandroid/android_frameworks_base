@@ -498,7 +498,7 @@ public class ExpandableNotificationRow extends ActivatableNotificationView
     private boolean doesNotificationNeedAuth() {
         StatusBarNotification sbn = getAppLockSbn();
         if (sbn == null) return false;
-        return mAxAppLockerHelper.getState(sbn.getPackageName()).needsAuth();
+        return mAxAppLockerHelper.needsAuth(sbn.getPackageName(), sbn.getUserId());
     }
 
     private void promptAppUnlock() {
@@ -3649,6 +3649,20 @@ public class ExpandableNotificationRow extends ActivatableNotificationView
         } else if (notificationsRedesignTemplates()) {
             // Just request the correct layout, even if the height hasn't changed
             getShowingLayout().requestSelectLayout(/* needsAnimation= */ true);
+        }
+        updateAppLockedShowingState();
+    }
+
+    private void updateAppLockedShowingState() {
+        boolean wasPublic = mShowingPublic;
+        mShowingPublic = (mSensitive && mHideSensitiveForIntrinsicHeight)
+                || isNotificationAppLocked();
+        if (wasPublic != mShowingPublic) {
+            if (mShowingPublicInitialized) {
+                mPublicLayout.setVisibility(mShowingPublic ? View.VISIBLE : View.INVISIBLE);
+                updateChildrenVisibility();
+            }
+            notifyHeightChanged(true);
         }
     }
 

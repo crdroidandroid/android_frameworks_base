@@ -270,12 +270,6 @@ public class StatusBarNotificationActivityStarter implements NotificationActivit
     @Override
     public void onNotificationClicked(@NonNull NotificationEntry entry,
             @NonNull ExpandableNotificationRow row) {
-        String packageName = entry.getSbn().getPackageName();
-        if (mAxAppLockerHelper.getState(packageName).needsAuth()) {
-            int userId = entry.getSbn().getUserId();
-            mAxAppLockerHelper.promptUnlock(packageName, userId);
-            return;
-        }
         mLogger.logStartingActivityFromClick(entry, row.isHeadsUpState(),
                 mKeyguardStateController.isVisible(),
                 mNotificationShadeWindowController.getPanelExpanded());

@@ -65,12 +65,10 @@ class AxAppLockerHelper @Inject constructor(
     private val keyguardCallback = object : KeyguardStateController.Callback {
         override fun onKeyguardShowingChanged() {
             if (keyguardStateController.isShowing) {
-                val hadEntries = notifUnlocks.isNotEmpty() || pendingNotifOnly.isNotEmpty()
                 notifUnlocks.clear()
                 pendingNotifOnly.clear()
-                if (hadEntries) {
-                    mainExecutor.execute { refreshState() }
-                }
+                sessionAuthCache.clear()
+                mainExecutor.execute { refreshState() }
             }
         }
     }
@@ -79,11 +77,10 @@ class AxAppLockerHelper @Inject constructor(
         override fun onAppLockStateChanged(packageName: String, locked: Boolean) {
             if (packageName.isBlank()) return
             hasLockCache[packageName] = locked
+            clearSessionCacheFor(packageName)
             if (!locked) {
-                val prefix = ":$packageName"
-                sessionAuthCache.keys.removeAll { it.endsWith(prefix) }
-                notifUnlocks.removeAll { it.endsWith(prefix) }
-                pendingNotifOnly.keys.removeAll { it.endsWith(prefix) }
+                notifUnlocks.removeAll { it.endsWith(":$packageName") }
+                pendingNotifOnly.keys.removeAll { it.endsWith(":$packageName") }
             }
             mainExecutor.execute {
                 qsController.get().onAppLockerUpdated(packageName)
@@ -105,15 +102,21 @@ class AxAppLockerHelper @Inject constructor(
                 if (notifOnly) {
                     shadeController.get().animateExpandShade()
                 }
+                qsController.get().onAppLockerUpdated(packageName)
                 refreshState()
             }
         }
         override fun onAppLocked(packageName: String, userId: Int) {
             if (packageName.isBlank()) return
-            val key = sessionKey(userId, packageName)
-            sessionAuthCache[key] = true
-            if (notifUnlocks.contains(key)) return
-            mainExecutor.execute { refreshState() }
+            sessionKey(userId, packageName).let { k ->
+                if (notifUnlocks.contains(k)) return@let
+                sessionAuthCache[k]?.let { if (!it) return@onAppLocked }
+                sessionAuthCache[k] = true
+            }
+            mainExecutor.execute {
+                qsController.get().onAppLockerUpdated(packageName)
+                refreshState()
+            }
         }
     }
 
@@ -155,6 +158,10 @@ class AxAppLockerHelper @Inject constructor(
         } catch (e: RemoteException) {
             Log.w(TAG, "Failed to register listeners", e)
         }
+    }
+
+    private fun clearSessionCacheFor(packageName: String) {
+        sessionAuthCache.keys.removeAll { it.endsWith(":$packageName") }
     }
 
     override fun start() {
