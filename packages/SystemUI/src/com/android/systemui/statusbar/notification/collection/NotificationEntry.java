@@ -981,7 +981,9 @@ public final class NotificationEntry extends ListEntry {
      * @param deviceSensitive true if the device in general is sensitive right now
      */
     public void setSensitive(boolean sensitive, boolean deviceSensitive) {
-        getRow().setSensitive(sensitive, deviceSensitive);
+        if (getRow() != null) {
+            getRow().setSensitive(sensitive, deviceSensitive);
+        }
         if (sensitive != mSensitive.getValue()) {
             mSensitive.setValue(sensitive);
             for (PipelineEntry.OnSensitivityChangedListener listener :
