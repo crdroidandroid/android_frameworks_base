@@ -73,6 +73,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class AxSandboxService extends IAxSandboxManager.Stub implements IAxSandboxService {
     private static final String TAG = "AxSandbox";
@@ -116,7 +117,7 @@ public class AxSandboxService extends IAxSandboxManager.Stub implements IAxSandb
     private final RemoteCallbackList<IAppSessionListener> mAppSessionListeners =
             new RemoteCallbackList<>();
 
-    private Set<String> mUnlockedApps = new HashSet<>();
+    private final Set<String> mUnlockedApps = ConcurrentHashMap.newKeySet();
     private final Set<String> mPendingUnlocks = new HashSet<>();
     private final Map<String, Long> mUnlockTimestamps = new HashMap<>();
     private final Map<String, Runnable> mTimeoutRunnables = new HashMap<>();
@@ -232,7 +233,6 @@ public class AxSandboxService extends IAxSandboxManager.Stub implements IAxSandb
         }
 
         mRequestCode = getConfirmIntent().toString().hashCode() & 0x0FFFFFFF;
-        mUnlockedApps = new HashSet<>();
         mExcludedComponents = new ArrayList<>();
         mSettingsObserver = new SettingsObserver(mAtms.mH);
         mSettingsObserver.onChange(true);
@@ -369,6 +369,7 @@ public class AxSandboxService extends IAxSandboxManager.Stub implements IAxSandb
         Intent intent = new Intent(getConfirmIntent());
         intent.putExtra(EXTRA_LOCKED_PACKAGE, packageName);
         intent.putExtra(EXTRA_LOCKED_UID, userId);
+        intent.putExtra("app_label", resolveAppLabel(packageName, userId));
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
 
         long identity = Binder.clearCallingIdentity();
@@ -569,8 +570,8 @@ public class AxSandboxService extends IAxSandboxManager.Stub implements IAxSandb
         ActivityRecord r = task.topRunningActivityLocked();
         if (!isAppLocked(r)) return;
 
-        if (mUnlockedApps.contains(sessionKey(r))
-                && mLockBehavior != LOCK_BEHAVIOR_ON_LEAVE) {
+        String key = sessionKey(r);
+        if (mUnlockedApps.contains(key)) {
             return;
         }
 
@@ -602,9 +603,16 @@ public class AxSandboxService extends IAxSandboxManager.Stub implements IAxSandb
         if (target == null) return false;
 
         String pendingKey = sessionKey(target);
+
+        if (mUnlockedApps.contains(pendingKey)) {
+            Slog.d(TAG, "startAuthPrompt: skip, already unlocked for " + pendingKey);
+            return true;
+        }
+
         synchronized (mPendingUnlocks) {
             if (!mPendingUnlocks.add(pendingKey)) {
-                Slog.d(TAG, "startAuthPrompt: re-launching prompt for " + pendingKey);
+                Slog.d(TAG, "startAuthPrompt: skip, already pending for " + pendingKey);
+                return true;
             }
         }
 

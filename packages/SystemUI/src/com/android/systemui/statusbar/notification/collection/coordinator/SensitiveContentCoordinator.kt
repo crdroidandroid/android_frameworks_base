@@ -104,6 +104,10 @@ constructor(
             }
         }
 
+    private val onAppLockStateChanged = Runnable {
+        invalidateList("applock-state-changed")
+    }
+
     override fun attach(pipeline: NotifPipeline) {
         if (!SceneContainerFlag.isEnabled) {
             dynamicPrivacyController.addListener(this)
@@ -113,6 +117,7 @@ constructor(
                 onSensitiveStateChanged
             )
         }
+        axAppLockerHelper.addRefreshListener(onAppLockStateChanged)
         pipeline.addOnBeforeRenderListListener(this)
         pipeline.addPreRenderInvalidator(this)
         if (screenshareNotificationHiding()) {
