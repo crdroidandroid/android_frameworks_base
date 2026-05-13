@@ -110,7 +110,10 @@ internal fun KeyguardExpandedContent(
     onCollapse: () -> Unit,
     hapticsViewModelFactory: SliderHapticsViewModel.Factory,
 ) {
-    if (event is IslandEvent.KeyguardIndication || event is IslandEvent.AppSwitch) {
+    if (event is IslandEvent.KeyguardIndication ||
+        event is IslandEvent.AppSwitch ||
+        event is IslandEvent.AospChip
+    ) {
         LaunchedEffect(Unit) { onCollapse() }
         return
     }
@@ -920,7 +923,18 @@ private fun KeyguardAudioRecordingPanel(event: IslandEvent.AudioRecording, inter
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(SpaceLg),
         ) {
-            val pauseResume = event.actions.firstOrNull()
+            val classifiedActions = remember(event.actions, context) {
+                event.actions.map { action ->
+                    val pkg = action.action.actionIntent?.creatorPackage ?: context.packageName
+                    action to action.action.classify(context, pkg)
+                }
+            }
+            val pauseResume = classifiedActions.firstOrNull { (_, kind) ->
+                kind == NotificationActionType.PAUSE || kind == NotificationActionType.RESUME
+            }?.first
+            val stop = classifiedActions.firstOrNull { (_, kind) ->
+                kind == NotificationActionType.STOP || kind == NotificationActionType.DELETE
+            }?.first
             if (pauseResume != null) {
                 ExpressivePillButton(
                     label = if (isRecording) stringResource(R.string.ax_dynamic_bar_pause) else stringResource(R.string.ax_dynamic_bar_resume),
@@ -937,7 +951,14 @@ private fun KeyguardAudioRecordingPanel(event: IslandEvent.AudioRecording, inter
                 contentColor = colors.accent,
                 backgroundColor = colors.tonal,
                 modifier = Modifier.weight(1f),
-                onClick = { interactor.dismissEvent(event) },
+                onClick = {
+                    if (stop != null) {
+                        stop.action.actionIntent?.sendWithBal(context)
+                        interactor.collapseIsland()
+                    } else {
+                        interactor.dismissEvent(event)
+                    }
+                },
             )
         }
     }
