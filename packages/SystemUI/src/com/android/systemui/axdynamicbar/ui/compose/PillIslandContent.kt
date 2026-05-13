@@ -2,9 +2,7 @@ package com.android.systemui.axdynamicbar.ui.compose
 
 import android.graphics.drawable.Drawable
 import android.media.AudioManager
-import android.os.SystemClock
 import androidx.compose.ui.platform.LocalContext
-import java.text.NumberFormat
 import com.android.internal.R as InternalR
 import com.android.systemui.common.shared.model.Icon as SysUISharedIcon
 import com.android.systemui.common.ui.compose.Icon as SysUIIcon
@@ -74,6 +72,7 @@ import com.android.systemui.axdynamicbar.shared.*
 import androidx.compose.ui.graphics.graphicsLayer
 import com.android.systemui.res.R
 import kotlin.math.PI
+import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.sin
 import java.lang.Math.toRadians
@@ -1171,7 +1170,7 @@ private fun AospChipText(event: IslandEvent.AospChip, modifier: Modifier, overri
         is OngoingActivityChipModel.Content.ShortTimeDelta -> AospChipDeltaText(c, color, modifier)
         is OngoingActivityChipModel.Content.Countdown ->
             Text(
-                NumberFormat.getIntegerInstance().format(c.secondsUntilStarted),
+                formatCountdownLong(c.secondsUntilStarted * 1000L),
                 color = color,
                 style = PillMono,
                 modifier = modifier,
@@ -1182,42 +1181,49 @@ private fun AospChipText(event: IslandEvent.AospChip, modifier: Modifier, overri
 
 @Composable
 private fun AospChipTimerText(content: OngoingActivityChipModel.Content.Timer, color: Color, modifier: Modifier) {
-    var elapsedMs by remember(content.startTimeMs) {
-        mutableLongStateOf((SystemClock.elapsedRealtime() - content.startTimeMs).coerceAtLeast(0L))
+    var elapsedMs by remember(content.startTimeMs, content.isEventInFuture, content.timeSource) {
+        mutableLongStateOf(aospTimerElapsedMs(content))
     }
-    LaunchedEffect(content.startTimeMs, content.isEventInFuture) {
+    LaunchedEffect(content.startTimeMs, content.isEventInFuture, content.timeSource) {
         while (true) {
-            elapsedMs = if (content.isEventInFuture) {
-                (content.startTimeMs - SystemClock.elapsedRealtime()).coerceAtLeast(0L)
-            } else {
-                (SystemClock.elapsedRealtime() - content.startTimeMs).coerceAtLeast(0L)
-            }
-            delay(1000)
+            elapsedMs = aospTimerElapsedMs(content)
+            delay(1000L - abs(content.startTimeMs - content.timeSource.getCurrentTime()) % 1000L)
         }
     }
-    Text(formatElapsedTime(elapsedMs), color = color, style = PillMono, modifier = modifier)
+    Text(formatCountdownLong(elapsedMs), color = color, style = PillMono, modifier = modifier)
+}
+
+private fun aospTimerElapsedMs(content: OngoingActivityChipModel.Content.Timer): Long {
+    val now = content.timeSource.getCurrentTime()
+    return if (content.isEventInFuture) {
+        (content.startTimeMs - now).coerceAtLeast(0L)
+    } else {
+        (now - content.startTimeMs).coerceAtLeast(0L)
+    }
 }
 
 @Composable
 private fun AospChipDeltaText(content: OngoingActivityChipModel.Content.ShortTimeDelta, color: Color, modifier: Modifier) {
-    var text by remember(content.time) { mutableStateOf(formatShortDelta(System.currentTimeMillis() - content.time)) }
+    var deltaMs by remember(content.time) {
+        mutableLongStateOf(System.currentTimeMillis() - content.time)
+    }
     LaunchedEffect(content.time) {
         while (true) {
-            text = formatShortDelta(System.currentTimeMillis() - content.time)
+            deltaMs = System.currentTimeMillis() - content.time
             delay(30_000)
         }
     }
-    MarqueeLabel(text, color, modifier)
+    MarqueeLabel(aospShortDeltaText(deltaMs), color, modifier)
 }
 
-private fun formatShortDelta(deltaMs: Long): String {
-    val absMs = kotlin.math.abs(deltaMs)
-    val mins = absMs / 60_000L
+@Composable
+private fun aospShortDeltaText(deltaMs: Long): String {
+    val mins = abs(deltaMs) / 60_000L
     return when {
-        mins < 1L -> "now"
-        mins < 60L -> "${mins}m"
-        mins < 1440L -> "${mins / 60L}h"
-        else -> "${mins / 1440L}d"
+        mins < 1L -> stringResource(R.string.ax_dynamic_bar_just_now)
+        mins < 60L -> stringResource(R.string.ax_dynamic_bar_mins_ago, mins.toInt())
+        mins < 1440L -> stringResource(R.string.ax_dynamic_bar_hours_ago, (mins / 60L).toInt())
+        else -> stringResource(R.string.ax_dynamic_bar_days_ago, (mins / 1440L).toInt())
     }
 }
 
@@ -1284,7 +1290,7 @@ private fun AudioRecText(event: IslandEvent.AudioRecording, modifier: Modifier, 
                 }
             }
             val color = overrideColor ?: eventStyleFor(event).accent
-            Text(formatElapsedTime(elapsedMs), color = color, style = PillMono, modifier = modifier)
+            Text(formatCountdownLong(elapsedMs), color = color, style = PillMono, modifier = modifier)
         }
         RecordingState.SAVED -> MarqueeLabel(stringResource(R.string.ax_dynamic_bar_saved), overrideColor ?: GreenAccent, modifier)
     }
