@@ -3,6 +3,9 @@
 package com.android.systemui.axdynamicbar.ui.compose
 
 import com.android.systemui.statusbar.chips.ui.model.OngoingActivityChipModel
+import com.android.compose.animation.Expandable
+import com.android.compose.animation.rememberExpandableController
+import com.android.systemui.animation.Expandable as SystemUiExpandable
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.SizeTransform
@@ -88,7 +91,6 @@ import com.android.systemui.axdynamicbar.shared.*
 import com.android.systemui.axdynamicbar.ui.AxDynamicBarChipViewModel
 import com.android.systemui.axdynamicbar.ui.KeyguardBatteryInfo
 import com.android.systemui.res.R
-import kotlin.math.abs
 import kotlinx.coroutines.delay
 import android.content.Context
 import android.graphics.drawable.Drawable
@@ -125,6 +127,7 @@ fun AxDynamicBarKeyguardChip(
     val batteryString by viewModel.batteryString.collectAsStateWithLifecycle()
 
     val motionScheme = MaterialTheme.motionScheme
+    val expandableController = rememberExpandableController(color = Color.Transparent, shape = ChipShape)
 
     Box(modifier = modifier) {
 
@@ -234,15 +237,22 @@ fun AxDynamicBarKeyguardChip(
                     }
                     val progress = if (rawProgress != null) progressAnim.value else null
 
-                    KeyguardChipBody(
-                        event = event,
-                        accent = accent,
-                        contentColor = contentColor,
-                        progress = progress,
-                        eventCount = chipState.eventCount,
-                        viewModel = viewModel,
-                        batteryString = batteryString,
-                    )
+                    Expandable(
+                        controller = expandableController,
+                        onClick = null,
+                        defaultMinSize = false,
+                    ) { expandable ->
+                        KeyguardChipBody(
+                            event = event,
+                            accent = accent,
+                            contentColor = contentColor,
+                            progress = progress,
+                            eventCount = chipState.eventCount,
+                            viewModel = viewModel,
+                            batteryString = batteryString,
+                            aospChipExpandable = expandable,
+                        )
+                    }
                 }
             } else {
                 KeyguardBatteryChip(
@@ -265,6 +275,7 @@ private fun KeyguardChipBody(
     eventCount: Int,
     viewModel: AxDynamicBarChipViewModel,
     batteryString: String = "",
+    aospChipExpandable: SystemUiExpandable,
 ) {
     val context = LocalContext.current
     val motionScheme = MaterialTheme.motionScheme
@@ -299,6 +310,10 @@ private fun KeyguardChipBody(
                         is IslandEvent.Notification ->
                             viewModel.launchNotificationFromKeyguard(event)
 
+                        is IslandEvent.AospChip -> {
+                            viewModel.handleAospChipTap(event, aospChipExpandable)
+                        }
+
                         is IslandEvent.KeyguardIndication,
                         is IslandEvent.AppSwitch -> { }
                         else -> viewModel.keyguardExpansion.toggle()
@@ -330,7 +345,7 @@ private fun KeyguardChipBody(
                             contentScale = ContentScale.Crop,
                         )
                     } else {
-                        PillEventIcon(event, tint = contentColor)
+                        PillEventIcon(event, tint = contentColor, animated = false)
                     }
                 }
                 Spacer(Modifier.width(SpaceXs))
@@ -437,7 +452,7 @@ private fun KeyguardChipBody(
                     contentKey = { iconKeyFor(it) },
                     label = "kg_chip_icon",
                 ) { ev ->
-                    PillEventIcon(ev, tint = contentColor)
+                    PillEventIcon(ev, tint = contentColor, animated = false)
                 }
                 Spacer(Modifier.width(SpaceXs))
                 AnimatedContent(
@@ -795,10 +810,85 @@ private fun KeyguardPrimaryText(event: IslandEvent, color: Color, modifier: Modi
             "${event.songTitle} · ${event.artist}".trimEnd(' ', '·', ' '), color, modifier,
         )
         is IslandEvent.KeyguardIndication -> MarqueeText(event.text, color, modifier)
-        is IslandEvent.AospChip -> {
-            val text = (event.active.content as? OngoingActivityChipModel.Content.Text)?.text
-            if (!text.isNullOrEmpty()) MarqueeText(text, color, modifier)
+        is IslandEvent.AospChip -> AospKeyguardChipText(event, color, modifier)
+    }
+}
+
+@Composable
+private fun AospKeyguardChipText(
+    event: IslandEvent.AospChip,
+    color: Color,
+    modifier: Modifier,
+) {
+    when (val content = event.active.content) {
+        is OngoingActivityChipModel.Content.Text -> {
+            if (content.text.isNotBlank()) MarqueeText(content.text, color, modifier)
         }
+        is OngoingActivityChipModel.Content.Timer -> AospKeyguardTimerText(content, color, modifier)
+        is OngoingActivityChipModel.Content.ShortTimeDelta -> AospKeyguardDeltaText(content, color, modifier)
+        is OngoingActivityChipModel.Content.Countdown -> Text(
+            formatCountdownLong(content.secondsUntilStarted * 1000L),
+            color = color,
+            style = PillMono,
+            modifier = modifier,
+        )
+        is OngoingActivityChipModel.Content.IconOnly -> Unit
+    }
+}
+
+@Composable
+private fun AospKeyguardTimerText(
+    content: OngoingActivityChipModel.Content.Timer,
+    color: Color,
+    modifier: Modifier,
+) {
+    var elapsedMs by remember(content.startTimeMs, content.isEventInFuture, content.timeSource) {
+        mutableLongStateOf(aospTimerElapsedMs(content))
+    }
+    LaunchedEffect(content.startTimeMs, content.isEventInFuture, content.timeSource) {
+        while (true) {
+            elapsedMs = aospTimerElapsedMs(content)
+            delay(1000L - abs(content.startTimeMs - content.timeSource.getCurrentTime()) % 1000L)
+        }
+    }
+    Text(formatCountdownLong(elapsedMs), color = color, style = PillMono, modifier = modifier)
+}
+
+private fun aospTimerElapsedMs(content: OngoingActivityChipModel.Content.Timer): Long {
+    val now = content.timeSource.getCurrentTime()
+    return if (content.isEventInFuture) {
+        (content.startTimeMs - now).coerceAtLeast(0L)
+    } else {
+        (now - content.startTimeMs).coerceAtLeast(0L)
+    }
+}
+
+@Composable
+private fun AospKeyguardDeltaText(
+    content: OngoingActivityChipModel.Content.ShortTimeDelta,
+    color: Color,
+    modifier: Modifier,
+) {
+    var deltaMs by remember(content.time) {
+        mutableLongStateOf(System.currentTimeMillis() - content.time)
+    }
+    LaunchedEffect(content.time) {
+        while (true) {
+            deltaMs = System.currentTimeMillis() - content.time
+            delay(30_000)
+        }
+    }
+    MarqueeText(aospShortDeltaText(deltaMs), color, modifier)
+}
+
+@Composable
+private fun aospShortDeltaText(deltaMs: Long): String {
+    val mins = abs(deltaMs) / 60_000L
+    return when {
+        mins < 1L -> stringResource(R.string.ax_dynamic_bar_just_now)
+        mins < 60L -> stringResource(R.string.ax_dynamic_bar_mins_ago, mins.toInt())
+        mins < 1440L -> stringResource(R.string.ax_dynamic_bar_hours_ago, (mins / 60L).toInt())
+        else -> stringResource(R.string.ax_dynamic_bar_days_ago, (mins / 1440L).toInt())
     }
 }
 
@@ -806,23 +896,32 @@ private fun KeyguardPrimaryText(event: IslandEvent, color: Color, modifier: Modi
 private fun secondaryTextFor(event: IslandEvent): String? = when (event) {
     is IslandEvent.Media -> event.artist.takeIf { it.isNotBlank() }
     is IslandEvent.AudioRecording -> event.appName.takeIf { it.isNotBlank() }
-    is IslandEvent.Timer -> event.label.takeIf { it.isNotBlank() }
-    is IslandEvent.Stopwatch -> event.label.takeIf { it.isNotBlank() }
+    is IslandEvent.Timer,
+    is IslandEvent.Stopwatch,
+    is IslandEvent.Hotspot,
+    is IslandEvent.Vpn,
+    is IslandEvent.AppSwitch -> null
     is IslandEvent.Charging -> event.timeRemaining
     is IslandEvent.Bluetooth -> if (event.batteryLevel >= 0) "${event.batteryLevel}%" else null
-    is IslandEvent.Hotspot -> if (event.numDevices > 0) stringResource(R.string.ax_dynamic_bar_hotspot_devices, event.numDevices) else null
     is IslandEvent.Alarm -> {
         if (event.triggerTimeMs > 0) {
             val cal = Calendar.getInstance().apply { timeInMillis = event.triggerTimeMs }
-            "%d:%02d".format(cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE))
+            val triggerTime = "%d:%02d".format(cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE))
+            triggerTime.takeIfDistinctFrom(event.label)
         } else null
     }
     is IslandEvent.Call -> event.callerName
-    is IslandEvent.Vpn -> stringResource(R.string.ax_dynamic_bar_active)
     is IslandEvent.BiometricUnlock -> event.sourceName
-    is IslandEvent.AppSwitch -> null
-    is IslandEvent.Notification -> event.text?.take(30)
-    is IslandEvent.PromotedOngoing -> event.text.takeIf { it.isNotBlank() }?.take(20)
+    is IslandEvent.Notification ->
+        event.text
+            ?.takeIf { it.isNotBlank() }
+            ?.takeIfDistinctFrom(event.title, event.appName)
+            ?.take(30)
+    is IslandEvent.PromotedOngoing ->
+        event.text
+            .takeIf { it.isNotBlank() }
+            ?.takeIfDistinctFrom(event.shortText, event.title, event.appName)
+            ?.take(20)
     is IslandEvent.Sports -> "${event.team1Name} ${stringResource(R.string.ax_dynamic_bar_sports_vs)} ${event.team2Name}"
     is IslandEvent.KeyguardIndication -> when (event.indicationType) {
         IslandEvent.KeyguardIndication.IndicationType.BIOMETRIC -> stringResource(R.string.ax_dynamic_bar_biometric)
@@ -832,7 +931,6 @@ private fun secondaryTextFor(event: IslandEvent): String? = when (event) {
     }
     else -> null
 }
-
 
 @Composable
 private fun CallTimerText(event: IslandEvent.Call, modifier: Modifier, overrideColor: Color? = null) {
@@ -851,6 +949,14 @@ private fun CallTimerText(event: IslandEvent.Call, modifier: Modifier, overrideC
         Text(formatElapsedTime(elapsedMs), color = color, style = PillMono, modifier = modifier)
     } else {
         MarqueeText(stringResource(R.string.ax_dynamic_bar_incoming_call), overrideColor ?: BlueAccent, modifier)
+    }
+}
+
+private fun String.takeIfDistinctFrom(vararg others: String?): String? {
+    val value = trim()
+    if (value.isEmpty()) return null
+    return value.takeIf { candidate ->
+        others.none { other -> candidate.equals(other?.trim(), ignoreCase = true) }
     }
 }
 
@@ -1000,7 +1106,7 @@ private fun ElapsedTimeText(
                 .coerceAtLeast(0L)
         }
     }
-    Text(formatElapsedTime(elapsedMs), color = color, style = PillMono, modifier = modifier)
+    Text(formatCountdownLong(elapsedMs), color = color, style = PillMono, modifier = modifier)
 }
 
 @Composable
