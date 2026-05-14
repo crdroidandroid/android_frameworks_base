@@ -3979,7 +3979,9 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
         final int count = mChildrenCount;
         final View[] children = mChildren;
         for (int i = 0; i < count; i++) {
-            children[i].dispatchDetachedFromWindow();
+            if (children[i] != null) {
+                children[i].dispatchDetachedFromWindow();
+            }
         }
         clearDisappearingChildren();
         final int transientCount = mTransientViews == null ? 0 : mTransientIndices.size();
