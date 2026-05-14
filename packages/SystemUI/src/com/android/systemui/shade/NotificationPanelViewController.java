@@ -269,6 +269,10 @@ public final class NotificationPanelViewController implements
             "lineagesystem:" + LineageSettings.System.DOUBLE_TAP_SLEEP_GESTURE;
      private static final String DOUBLE_TAP_SLEEP_LOCKSCREEN =
              "system:" + Settings.System.DOUBLE_TAP_SLEEP_LOCKSCREEN;
+     private static final String STATUS_BAR_BRIGHTNESS_CONTROL =
+             "system:" + Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL;
+     private static final String STATUS_BAR_BRIGHTNESS_CONTROL_LOCKSCREEN =
+             "system:" + Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL_LOCKSCREEN;
 
     private static final Rect M_DUMMY_DIRTY_RECT = new Rect(0, 0, 1, 1);
     private static final Rect EMPTY_RECT = new Rect();
@@ -520,6 +524,9 @@ public final class NotificationPanelViewController implements
     private int mSplitShadeFullTransitionDistance;
     /** The drag distance required to fully transition scrims. */
     private int mSplitShadeScrimTransitionDistance;
+
+    private boolean mBrightnessControl;
+    private boolean mBrightnessControlLockscreen;
 
     private final NotificationListContainer mNotificationListContainer;
     private final NPVCDownEventState.Buffer mLastDownEvents;
@@ -3687,6 +3694,8 @@ public final class NotificationPanelViewController implements
             mConfigurationController.addCallback(mConfigurationListener);
             mTunerService.addTunable(this, DOUBLE_TAP_SLEEP_GESTURE);
             mTunerService.addTunable(this, DOUBLE_TAP_SLEEP_LOCKSCREEN);
+            mTunerService.addTunable(this, STATUS_BAR_BRIGHTNESS_CONTROL);
+            mTunerService.addTunable(this, STATUS_BAR_BRIGHTNESS_CONTROL_LOCKSCREEN);
             // Theme might have changed between inflating this view and attaching it to the
             // window, so
             // force a call to onThemeChanged
@@ -3719,6 +3728,14 @@ public final class NotificationPanelViewController implements
                             TunerService.parseIntegerSwitch(newValue,
                                 mResources.getBoolean(org.lineageos.platform.internal.R.bool.
                                 config_dt2sGestureEnabledByDefault));
+                    break;
+                case STATUS_BAR_BRIGHTNESS_CONTROL:
+                    mBrightnessControl =
+                            TunerService.parseIntegerSwitch(newValue, false);
+                    break;
+                case STATUS_BAR_BRIGHTNESS_CONTROL_LOCKSCREEN:
+                    mBrightnessControlLockscreen =
+                            TunerService.parseIntegerSwitch(newValue, false);
                     break;
                 default:
                     break;
@@ -4098,6 +4115,20 @@ public final class NotificationPanelViewController implements
                     && event.getDownTime() == mStatusBarLongPressDowntime) {
                 mShadeLog.d("Touch has same down time as Status Bar long press. Ignoring.");
                 return false;
+            }
+            if (mBrightnessControl) {
+                final int actionIndex = event.getActionIndex();
+                final float swipeY = event.getY(actionIndex);
+                if (swipeY < mStatusBarMinHeight &&
+                        (mBarState != KEYGUARD || mBrightnessControlLockscreen)) {
+                    mCentralSurfaces.brightnessControl(event);
+                    final int action = event.getActionMasked();
+                    if (action == MotionEvent.ACTION_UP
+                            || action == MotionEvent.ACTION_CANCEL) {
+                        mCentralSurfaces.onBrightnessChanged(true);
+                    }
+                    return true;
+                }
             }
             if (!mHeadsUpTouchHelper.isTrackingHeadsUp() && mQsController.handleTouch(
                     event, isFullyCollapsed(), isShadeOrQsHeightAnimationRunning())) {
