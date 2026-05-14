@@ -1521,6 +1521,31 @@ public class Process {
 
     /**
      * @hide
+     * PID-reuse-safe variant of {@link #killProcessQuiet(int)} backed by
+     * pidfd_open + pidfd_send_signal. Pass {@code expectedUid < 0} to skip
+     * the uid check. Falls back to the legacy path on kernels without pidfd.
+     */
+    public static final void killProcessByPidfdQuiet(int pid, int expectedUid) {
+        if (pid <= 0) {
+            return;
+        }
+        if (supportsPidFd()) {
+            int rc = nativeKillProcessByPidfdQuiet(pid, SIGNAL_KILL, expectedUid);
+            if (rc >= 0) {
+                return;
+            }
+        }
+        // Fallback: re-check uid via /proc to avoid killing a recycled pid.
+        if (expectedUid >= 0 && getUidForPid(pid) != expectedUid) {
+            return;
+        }
+        sendSignalQuiet(pid, SIGNAL_KILL);
+    }
+
+    private static native int nativeKillProcessByPidfdQuiet(int pid, int signal, int expectedUid);
+
+    /**
+     * @hide
      * Private impl for avoiding a log message...  DO NOT USE without doing
      * your own log, or the Android Illuminati will find you some night and
      * beat you up.
