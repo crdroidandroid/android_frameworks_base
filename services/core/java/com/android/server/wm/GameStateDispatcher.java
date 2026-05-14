@@ -33,6 +33,8 @@ class GameStateDispatcher {
     private static final String TAG = "GameStateDispatcher";
     private static final String KEY_GAMING_MODE_ACTIVE = "ax_gaming_mode_active";
     private static final String KEY_BYPASS_CHARGE_ENABLED = "bypass_charge_enabled";
+    private static final String KEY_POWER_MODE_PERF = "persist.sys.power_mode_perf";
+    private static final String KEY_POWER_MODE_PERF_BY_USER = "persist.sys.power_mode_perf_by_user";
 
     private final Context mContext;
     private final List<IGameSpaceCallback> mCallbacks;
@@ -78,14 +80,14 @@ class GameStateDispatcher {
 
     void boostGame(boolean enable) {
         int perfByUser = Settings.System.getIntForUser(
-                mContext.getContentResolver(), "power_mode_perf_by_user", 0,
+                mContext.getContentResolver(), KEY_POWER_MODE_PERF_BY_USER, 0,
                 UserHandle.USER_CURRENT);
         if (perfByUser == 1) return;
 
         Settings.System.putIntForUser(mContext.getContentResolver(),
-                "persist.sys.power_mode_perf", enable ? 1 : 0,
+                KEY_POWER_MODE_PERF, enable ? 1 : 0,
                 UserHandle.USER_CURRENT);
-        SystemProperties.set("persist.sys.power_mode_perf", enable ? "1" : "0");
+        SystemProperties.set(KEY_POWER_MODE_PERF, enable ? "1" : "0");
     }
 
     void setBypassCharge(boolean enable) {
