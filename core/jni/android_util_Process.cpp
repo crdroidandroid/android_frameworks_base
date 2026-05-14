@@ -1337,6 +1337,47 @@ static jint android_os_Process_nativePidFdOpen(JNIEnv* env, jobject, jint pid, j
     return fd;
 }
 
+// Kill via pidfd to defeat PID-reuse races.
+// Returns: 0=delivered, 1=target gone, 2=uid mismatch (suppressed), -1=error.
+static jint android_os_Process_killProcessByPidfdQuiet(JNIEnv* /*env*/, jobject /*clazz*/,
+        jint pid, jint signal, jint expectedUid) {
+    if (pid <= 0) {
+        return -1;
+    }
+
+    int pfd = pidfd_open(pid, 0);
+    if (pfd < 0) {
+        if (errno == ESRCH) return 1;
+        if (errno == ENOSYS) {
+            ALOGW("pidfd_open(%d) ENOSYS, kernel too old for pidfd guard", pid);
+            return -1;
+        }
+        ALOGW("pidfd_open(%d) failed: %s", pid, strerror(errno));
+        return -1;
+    }
+
+    if (expectedUid >= 0) {
+        const int actualUid = uid_from_pid(pid);
+        if (actualUid != expectedUid) {
+            ALOGW("Skip kill: pid %d uid mismatch, expected=%d actual=%d (likely pid reuse)",
+                    pid, expectedUid, actualUid);
+            close(pfd);
+            return 2;
+        }
+    }
+
+    int rc = pidfd_send_signal(pfd, signal, nullptr, 0);
+    int saved_errno = errno;
+    close(pfd);
+
+    if (rc == 0) return 0;
+    if (saved_errno == ESRCH) return 1;
+    ALOGW("pidfd_send_signal(pid=%d, sig=%d) failed: %s",
+            pid, signal, strerror(saved_errno));
+    errno = saved_errno;
+    return -1;
+}
+
 void android_os_Process_freezeCgroupUID(JNIEnv* env, jobject clazz, jint uid, jboolean freeze) {
     if (uid < 0) {
         jniThrowExceptionFmt(env, "java/lang/IllegalArgumentException", "uid is negative: %d", uid);
@@ -1403,6 +1444,8 @@ static const JNINativeMethod methods[] = {
         {"sendSignalToProcessGroup", "(III)Z", (void*)android_os_Process_sendSignalToProcessGroup},
         {"removeAllProcessGroups", "()V", (void*)android_os_Process_removeAllProcessGroups},
         {"nativePidFdOpen", "(II)I", (void*)android_os_Process_nativePidFdOpen},
+        {"nativeKillProcessByPidfdQuiet", "(III)I",
+         (void*)android_os_Process_killProcessByPidfdQuiet},
         {"freezeCgroupUid", "(IZ)V", (void*)android_os_Process_freezeCgroupUID},
 };
 
