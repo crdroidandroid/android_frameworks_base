@@ -22,7 +22,7 @@
     <string name="global_action_restart_more">אתחול\u2026</string>
     <string name="global_action_restart_system">מערכת</string>
     <string name="global_action_restart_recovery">Recovery</string>
-    <string name="global_action_restart_bootloader">Bootloader</string>
+    <string name="global_action_restart_bootloader">מנהל האתחול</string>
     <string name="global_action_restart_download">הורדה</string>
     <string name="global_action_restart_fastboot">Fastboot</string>
     <string name="global_action_restart_progress">מפעיל מחדש\u2026</string>

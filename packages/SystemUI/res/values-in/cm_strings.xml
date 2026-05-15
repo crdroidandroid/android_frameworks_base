@@ -71,4 +71,5 @@
     <string name="screenrecord_hevc_switch_summary">Gunakan HEVC encoder yang lebih efisien</string>
     <string name="battery_notification_channel_tv">Peringatan baterai</string>
     <string name="screenshot_delete_label">Hapus</string>
+    <string name="screenshot_delete_description">Hapus tangkapan layar</string>
 </resources>
