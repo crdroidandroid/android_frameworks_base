@@ -598,6 +598,7 @@ android_library {
         "FadingEdgeLayoutLib",
         "ax_compose",
         "axquicklook-client",
+        "commonutils",
     ],
     javacflags: [
         "-Aroom.schemaLocation=frameworks/base/packages/SystemUI/schemas",
