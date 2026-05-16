@@ -36,24 +36,12 @@ object SettingsThemeHelper {
     @ChecksSdkIntAtLeast(Build.VERSION_CODES.BAKLAVA)
     @JvmStatic
     fun isExpressiveTheme(context: Context): Boolean {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.BAKLAVA) {
-            return false
-        }
-        // Enable if overridden by system property
-        if (getPropBoolean(context, IS_EXPRESSIVE_DESIGN_ENABLED, false)) {
-            return true
-        }
-        // Allow the activity to override.
-        val activity = getActivityFromContext(context)
-        if (activity is ExpressiveDesignEnabledProvider) {
-            return activity.isExpressiveDesignEnabled()
-        }
-        return isExpressiveDesignEnabled()
+        return true
     }
 
     @JvmStatic
     fun isExpressiveDesignEnabled(): Boolean {
-        return Flags.isExpressiveDesignEnabled()
+        return true
     }
 
     private fun getActivityFromContext(context: Context): Activity? {
