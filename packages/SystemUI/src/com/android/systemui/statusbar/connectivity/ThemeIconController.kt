@@ -20,21 +20,21 @@ import android.content.Context
 import android.content.res.ThemeEngine
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Rect
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import com.android.systemui.qs.tileimpl.QSTileImpl
+import com.android.systemui.res.R
+import com.android.systemui.statusbar.core.NewStatusBarIcons
 import java.util.concurrent.CopyOnWriteArrayList
+import kotlin.math.min
+import kotlin.math.roundToInt
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 object ThemeIconController {
-
-    private const val NEW_SIGNAL_WIDTH_DP = 17f
-    private const val NEW_SIGNAL_HEIGHT_DP = 12f
-    private const val NEW_WIFI_WIDTH_DP = 17f
-    private const val NEW_WIFI_HEIGHT_DP = 12.58f
 
     private val SIGNAL_4BAR_NAMES = arrayOf(
         "ic_signal_cellular_0_4_bar",
@@ -97,7 +97,7 @@ object ThemeIconController {
         val names = if (numLevels > 5) SIGNAL_5BAR_NAMES else SIGNAL_4BAR_NAMES
         if (level < 0 || level >= names.size) return null
         val d = engine.getSystemThemeIconDrawable(names[level]) ?: return null
-        return scaleDrawable(context, d, NEW_SIGNAL_WIDTH_DP, NEW_SIGNAL_HEIGHT_DP)
+        return scaleDrawable(context, d, getSignalIconSize(context))
     }
 
     @JvmStatic
@@ -112,7 +112,7 @@ object ThemeIconController {
         if (level < 0) return null
         val engine = ThemeEngine.getInstance(context) ?: return null
         val d = engine.getSystemThemeIconDrawable(WIFI_ICON_NAMES[level]) ?: return null
-        return scaleDrawable(context, d, NEW_WIFI_WIDTH_DP, NEW_WIFI_HEIGHT_DP)
+        return scaleDrawable(context, d, getWifiIconSize(context))
     }
 
     @JvmStatic
@@ -153,16 +153,97 @@ object ThemeIconController {
         return -1
     }
 
-    private fun scaleDrawable(
-        context: Context, d: Drawable, widthDp: Float, heightDp: Float
-    ): Drawable {
-        val density = context.resources.displayMetrics.density
-        val w = (widthDp * density).toInt()
-        val h = (heightDp * density).toInt()
-        val bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
-        d.setBounds(0, 0, w, h)
-        d.draw(canvas)
-        return BitmapDrawable(context.resources, bitmap)
+    private fun getSignalIconSize(context: Context): IconSize {
+        if (NewStatusBarIcons.isEnabled) {
+            return getIconSize(
+                context,
+                R.dimen.status_bar_signal_overlay_width,
+                R.dimen.status_bar_signal_overlay_height,
+            )
+        }
+        val size = context.resources.getDimensionPixelSize(R.dimen.status_bar_mobile_signal_size)
+        return IconSize(size, size)
     }
+
+    private fun getWifiIconSize(context: Context): IconSize {
+        if (NewStatusBarIcons.isEnabled) {
+            return getIconSize(
+                context,
+                R.dimen.status_bar_wifi_overlay_width,
+                R.dimen.status_bar_wifi_overlay_height,
+            )
+        }
+        val size = context.resources.getDimensionPixelSize(R.dimen.status_bar_wifi_signal_size)
+        return IconSize(size, size)
+    }
+
+    private fun getIconSize(context: Context, widthRes: Int, heightRes: Int): IconSize =
+        IconSize(
+            context.resources.getDimensionPixelSize(widthRes),
+            context.resources.getDimensionPixelSize(heightRes),
+        )
+
+    private fun scaleDrawable(context: Context, d: Drawable, size: IconSize): Drawable {
+        val width = size.width.coerceAtLeast(1)
+        val height = size.height.coerceAtLeast(1)
+        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        val intrinsicWidth = if (d.intrinsicWidth > 0) d.intrinsicWidth else width
+        val intrinsicHeight = if (d.intrinsicHeight > 0) d.intrinsicHeight else height
+        val scale = min(width.toFloat() / intrinsicWidth, height.toFloat() / intrinsicHeight)
+        val scaledWidth = (intrinsicWidth * scale).roundToInt().coerceIn(1, width)
+        val scaledHeight = (intrinsicHeight * scale).roundToInt().coerceIn(1, height)
+        val left = (width - scaledWidth) / 2
+        val top = (height - scaledHeight) / 2
+        val oldBounds = Rect(d.bounds)
+        d.setBounds(left, top, left + scaledWidth, top + scaledHeight)
+        d.draw(canvas)
+        d.setBounds(oldBounds)
+        return BitmapDrawable(context.resources, bitmap.trimTransparentPadding())
+    }
+
+    private fun Bitmap.trimTransparentPadding(): Bitmap {
+        val bounds = findOpaqueBounds() ?: return this
+        if (
+            bounds.left == 0 &&
+                bounds.top == 0 &&
+                bounds.right == width &&
+                bounds.bottom == height
+        ) {
+            return this
+        }
+        return Bitmap.createBitmap(
+            this,
+            bounds.left,
+            bounds.top,
+            bounds.width(),
+            bounds.height(),
+        )
+    }
+
+    private fun Bitmap.findOpaqueBounds(): Rect? {
+        var left = width
+        var top = height
+        var right = -1
+        var bottom = -1
+        val pixels = IntArray(width)
+        for (y in 0 until height) {
+            getPixels(pixels, 0, width, 0, y, width, 1)
+            for (x in 0 until width) {
+                if ((pixels[x] ushr 24) == 0) {
+                    continue
+                }
+                if (x < left) left = x
+                if (x > right) right = x
+                if (y < top) top = y
+                if (y > bottom) bottom = y
+            }
+        }
+        if (right < left || bottom < top) {
+            return null
+        }
+        return Rect(left, top, right + 1, bottom + 1)
+    }
+
+    private data class IconSize(val width: Int, val height: Int)
 }
