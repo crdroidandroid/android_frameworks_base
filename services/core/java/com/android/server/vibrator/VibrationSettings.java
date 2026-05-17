@@ -791,14 +791,16 @@ final class VibrationSettings {
                 com.android.internal.R.array.config_longPressVibePattern);
         VibrationEffect tickEffect = createEffectFromResource(resources,
                 com.android.internal.R.array.config_clockTickVibePattern);
+        VibrationEffect textureTickEffect = createEffectFromResource(resources,
+                com.android.internal.R.array.config_textureTickVibePattern);
 
         SparseArray<VibrationEffect> effects = new SparseArray<>();
         effects.put(VibrationEffect.EFFECT_CLICK, clickEffect);
         effects.put(VibrationEffect.EFFECT_DOUBLE_CLICK, doubleClickEffect);
         effects.put(VibrationEffect.EFFECT_TICK, tickEffect);
         effects.put(VibrationEffect.EFFECT_HEAVY_CLICK, heavyClickEffect);
-        effects.put(VibrationEffect.EFFECT_TEXTURE_TICK,
-                VibrationEffect.get(VibrationEffect.EFFECT_TICK, false));
+        effects.put(VibrationEffect.EFFECT_TEXTURE_TICK, textureTickEffect != null
+                ? textureTickEffect : VibrationEffect.get(VibrationEffect.EFFECT_TICK, false));
 
         return effects;
     }
