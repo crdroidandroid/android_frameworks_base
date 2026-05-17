@@ -119,6 +119,11 @@ public class ThemeEngineManagerService extends SystemService {
     private static final long PERSIST_DEBOUNCE_MS = 500;
     private final Runnable mPersistPerAppRunnable = this::persistPerAppIconPacksNow;
 
+    private final Object mThemeChangeLock = new Object();
+    private boolean mThemeChangeDispatching;
+    private boolean mThemeChangePending;
+    @Nullable
+    private String mPendingThemeChangeCategory;
 
     private final RemoteCallbackList<IThemeEngineCallback> mCallbacks =
             new RemoteCallbackList<>();
@@ -544,19 +549,76 @@ public class ThemeEngineManagerService extends SystemService {
     }
 
     private void notifyThemeChangedInternal(@Nullable String category) {
+        String dispatchCategory = category;
+        boolean clearDispatching = true;
+        synchronized (mThemeChangeLock) {
+            if (mThemeChangeDispatching) {
+                queuePendingThemeChangeLocked(category);
+                return;
+            }
+            mThemeChangeDispatching = true;
+        }
+
+        try {
+            while (true) {
+                dispatchThemeChanged(dispatchCategory);
+
+                synchronized (mThemeChangeLock) {
+                    if (!mThemeChangePending) {
+                        mThemeChangeDispatching = false;
+                        clearDispatching = false;
+                        return;
+                    }
+                    dispatchCategory = mPendingThemeChangeCategory;
+                    mPendingThemeChangeCategory = null;
+                    mThemeChangePending = false;
+                }
+            }
+        } finally {
+            if (clearDispatching) {
+                synchronized (mThemeChangeLock) {
+                    mThemeChangeDispatching = false;
+                }
+            }
+        }
+    }
+
+    private void queuePendingThemeChangeLocked(@Nullable String category) {
+        if (!mThemeChangePending) {
+            mPendingThemeChangeCategory = category;
+        } else {
+            mPendingThemeChangeCategory =
+                    mergeThemeChangeCategories(mPendingThemeChangeCategory, category);
+        }
+        mThemeChangePending = true;
+    }
+
+    @Nullable
+    private static String mergeThemeChangeCategories(
+            @Nullable String current, @Nullable String next) {
+        if (current == null || next == null) {
+            return null;
+        }
+        return current.equals(next) ? current : null;
+    }
+
+    private void dispatchThemeChanged(@Nullable String category) {
         final long ident = Binder.clearCallingIdentity();
         try {
             loadThemeConfig();
 
             int count = mCallbacks.beginBroadcast();
-            for (int i = 0; i < count; i++) {
-                try {
-                    mCallbacks.getBroadcastItem(i).onThemeChanged(category);
-                } catch (RemoteException e) {
-                    Slog.w(TAG, "Failed to notify theme callback", e);
+            try {
+                for (int i = 0; i < count; i++) {
+                    try {
+                        mCallbacks.getBroadcastItem(i).onThemeChanged(category);
+                    } catch (RemoteException | RuntimeException e) {
+                        Slog.w(TAG, "Failed to notify theme callback", e);
+                    }
                 }
+            } finally {
+                mCallbacks.finishBroadcast();
             }
-            mCallbacks.finishBroadcast();
 
             if (category == null || CATEGORY_ICON_PACK.equals(category)) {
                 Intent intent = new Intent(ThemeEngine.ACTION_THEME_CHANGED);
