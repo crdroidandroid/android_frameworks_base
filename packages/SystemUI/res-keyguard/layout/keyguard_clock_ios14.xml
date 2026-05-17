@@ -21,25 +21,26 @@
             android:format24Hour="dd MMM yyyy"
             android:gravity="center"
             android:singleLine="true"
-            android:tag="text1|nolineheight"
             android:textAlignment="center"
+            android:includeFontPadding="false"
             android:textColor="@android:color/white"
-            android:textSize="20dp" 
+            android:textSize="20dp"
             android:textStyle="bold" />
 
         <TextClock
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/Hollow"
-            android:layout_marginTop="-5dp"
-            android:format12Hour="hhmm"
-            android:format24Hour="HHmm"
+            android:fontFamily="@font/Varino"
+            android:includeFontPadding="false"
+            android:format12Hour="hh:mm"
+            android:format24Hour="HH:mm"
             android:gravity="center"
             android:singleLine="true"
             android:textAlignment="center"
             android:textColor="@android:color/white"
-            android:textSize="130dp" />
+            android:textSize="80dp" />
 
     </LinearLayout>
 
 </LinearLayout>
+
