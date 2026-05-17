@@ -95,4 +95,17 @@
 
     <!-- Whether to cancel fingerprint operation if not idle -->
     <bool name="config_fpCancelIfNotIdle">false</bool>
+
+    <!-- Vibrator pattern for feedback meant to replicate soft ticks (feels like texture underneath
+         the user's fingers), in gestures called repeatedly (such as dragging a slider thumb).
+
+         This is supposed to be used as a fallback pattern when hardware-specific implementation of
+         the effect does not exist, but it will still take over if the timings array is not empty.
+    -->
+    <integer-array name="config_textureTickVibePattern">
+        <!--
+        <item>0</item>
+        <item>10</item>
+        -->
+    </integer-array>
 </resources>
