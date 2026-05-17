@@ -5,6 +5,7 @@ package com.android.systemui.axdynamicbar.ui.compose
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
 import android.util.TypedValue
+import android.view.MotionEvent
 import android.widget.SeekBar
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.SizeTransform
@@ -74,9 +75,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.changedToDownIgnoreConsumed
+import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.platform.LocalViewConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -118,13 +124,48 @@ internal fun KeyguardExpandedContent(
         return
     }
 
+    val view = LocalView.current
+    val touchSlop = LocalViewConfiguration.current.touchSlop
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null,
-            ) { onCollapse() },
+            .pointerInteropFilter {
+                when (it.actionMasked) {
+                    MotionEvent.ACTION_DOWN,
+                    MotionEvent.ACTION_MOVE -> view.parent?.requestDisallowInterceptTouchEvent(true)
+                    MotionEvent.ACTION_UP,
+                    MotionEvent.ACTION_CANCEL -> view.parent?.requestDisallowInterceptTouchEvent(false)
+                }
+                false
+            }
+            .pointerInput(onCollapse, touchSlop) {
+                awaitEachGesture {
+                    var downEvent = awaitPointerEvent(PointerEventPass.Final)
+                    while (downEvent.changes.none { it.changedToDownIgnoreConsumed() }) {
+                        downEvent = awaitPointerEvent(PointerEventPass.Final)
+                    }
+                    val down = downEvent.changes.first { it.changedToDownIgnoreConsumed() }
+                    val downPosition = down.position
+                    val downConsumed = down.isConsumed
+                    while (true) {
+                        val event = awaitPointerEvent(PointerEventPass.Final)
+                        val change = event.changes.firstOrNull { it.id == down.id }
+                            ?: event.changes.firstOrNull()
+                            ?: break
+                        if (!change.pressed) {
+                            if (!downConsumed && !change.isConsumed) {
+                                val dx = change.position.x - downPosition.x
+                                val dy = change.position.y - downPosition.y
+                                if (dx * dx + dy * dy <= touchSlop * touchSlop) {
+                                    change.consume()
+                                    onCollapse()
+                                }
+                            }
+                            break
+                        }
+                    }
+                }
+            },
         contentAlignment = Alignment.Center,
     ) {
         when (event) {

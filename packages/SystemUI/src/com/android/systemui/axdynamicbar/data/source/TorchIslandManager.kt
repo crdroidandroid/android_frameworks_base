@@ -108,7 +108,12 @@ constructor(
     }
 
     fun toggleTorch() {
-        flashlightController.setFlashlight(!flashlightController.isEnabled)
+        val enabled = !flashlightController.isEnabled
+        if (FlashlightStrength.isEnabled) {
+            flashlightInteractor.setEnabled(enabled)
+        } else {
+            flashlightController.setFlashlight(enabled)
+        }
     }
 
     fun setLevel(level: Int) {
