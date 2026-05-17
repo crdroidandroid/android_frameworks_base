@@ -38,7 +38,7 @@
             android:singleLine="true"
             android:textAlignment="center"
             android:textColor="@android:color/white"
-            android:textSize="150dp" />
+            android:textSize="130dp" />
 
     </LinearLayout>
 
