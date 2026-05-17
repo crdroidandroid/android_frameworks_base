@@ -30,7 +30,7 @@
                 android:includeFontPadding="false"
                 android:singleLine="true"
                 android:textColor="@android:color/white"
-                android:textSize="340dp" />
+                android:textSize="290dp" />
 
             <TextClock
                 android:layout_width="wrap_content"
@@ -41,7 +41,7 @@
                 android:includeFontPadding="false"
                 android:singleLine="true"
                 android:textColor="#fefefe"
-                android:textSize="340dp" />
+                android:textSize="290dp" />
         </LinearLayout>
     </LinearLayout>
 
@@ -58,5 +58,5 @@
         android:textAlignment="viewStart"
         android:textAllCaps="true"
         android:textColor="#fefefe"
-        android:textSize="16dp" />
+        android:textSize="15dp" />
 </LinearLayout>

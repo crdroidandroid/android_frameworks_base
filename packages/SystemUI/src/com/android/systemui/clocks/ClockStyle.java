@@ -106,13 +106,17 @@ public class ClockStyle extends RelativeLayout implements TunerService.Tunable {
             R.layout.keyguard_clock_ios10, // 54
             R.layout.keyguard_clock_ios11, // 55
             R.layout.keyguard_clock_ios12, // 56
-            R.layout.keyguard_clock_big1, // 57
-            R.layout.keyguard_clock_big2, // 58
-            R.layout.keyguard_clock_big3, // 59
-            R.layout.keyguard_clock_sweet, // 60
-            R.layout.keyguard_clock_pixel, // 61
-            R.layout.keyguard_clock_samurai, // 62
-            R.layout.keyguard_clock_gateway, // 63
+            R.layout.keyguard_clock_ios13, // 57
+            R.layout.keyguard_clock_ios14, // 58
+            R.layout.keyguard_clock_big1, // 59
+            R.layout.keyguard_clock_big2, // 60
+            R.layout.keyguard_clock_big3, // 61
+            R.layout.keyguard_clock_big4, // 62
+            R.layout.keyguard_clock_sweet, // 63
+            R.layout.keyguard_clock_pixel, // 64
+            R.layout.keyguard_clock_samurai, // 65
+            R.layout.keyguard_clock_gateway, // 66
+            R.layout.keyguard_clock_tall, // 67
     };
 
     private static final int[] mCenterClocks = {
