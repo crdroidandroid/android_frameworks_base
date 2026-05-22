@@ -707,8 +707,9 @@ public class CarrierTextManager {
         }
 
         void updateSettings() {
-            mShowCarrierText = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.LOCKSCREEN_SHOW_CARRIER, 1, UserHandle.USER_CURRENT) != 0;
+            int showCarrier = Settings.System.getIntForUser(mContext.getContentResolver(),
+                    Settings.System.LOCKSCREEN_SHOW_CARRIER, 1, UserHandle.USER_CURRENT);
+            mShowCarrierText = (showCarrier == 1 || showCarrier == 3);
 
             String customText = Settings.System.getStringForUser(mContext.getContentResolver(),
                     Settings.System.LOCKSCREEN_SHOW_CUSTOM_CARRIER_TEXT, UserHandle.USER_CURRENT);

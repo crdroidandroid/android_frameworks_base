@@ -16,6 +16,7 @@
 
 package com.android.systemui.statusbar.pipeline.shared.domain.interactor
 
+import android.provider.Settings
 import com.android.systemui.display.dagger.SystemUIDisplaySubcomponent.DisplayAware
 import com.android.systemui.display.dagger.SystemUIDisplaySubcomponent.DisplayId
 import com.android.systemui.display.dagger.SystemUIDisplaySubcomponent.PerDisplaySingleton
@@ -24,9 +25,9 @@ import com.android.systemui.keyguard.domain.interactor.KeyguardOcclusionInteract
 import com.android.systemui.log.table.EnumDiffable
 import com.android.systemui.log.table.TableLogBufferFactory
 import com.android.systemui.log.table.logDiffsForTable
+import com.android.systemui.shared.settings.data.repository.SystemSettingsRepository
 import com.android.systemui.statusbar.disableflags.domain.interactor.DisableFlagsInteractor
 import com.android.systemui.statusbar.pipeline.airplane.domain.interactor.AirplaneModeInteractor
-import com.android.systemui.statusbar.pipeline.mobile.domain.interactor.CarrierConfigInteractor
 import com.android.systemui.statusbar.pipeline.shared.domain.model.StatusBarDisableFlagsVisibilityModel
 import com.android.systemui.statusbar.window.data.repository.StatusBarWindowStatePerDisplayRepository
 import com.android.systemui.statusbar.window.shared.model.StatusBarWindowState
@@ -35,8 +36,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.stateIn
@@ -53,11 +52,11 @@ constructor(
     @DisplayAware backgroundScope: CoroutineScope,
     @DisplayAware statusBarWindowStateRepository: StatusBarWindowStatePerDisplayRepository,
     airplaneModeInteractor: AirplaneModeInteractor,
-    carrierConfigInteractor: CarrierConfigInteractor,
     @DisplayAware disableFlagsInteractor: DisableFlagsInteractor,
     keyguardInteractor: KeyguardInteractor,
     keyguardOcclusionInteractor: KeyguardOcclusionInteractor,
     tableLoggerFactory: TableLogBufferFactory,
+    settingsRepository: SystemSettingsRepository,
 ) {
     private val tableLogger =
         tableLoggerFactory.getOrCreate("HomeStatusBarInteractor[$thisDisplayId]", 100)
@@ -76,21 +75,20 @@ constructor(
             )
         }
 
-    private val defaultDataSubConfigShowOperatorView =
-        carrierConfigInteractor.defaultDataSubscriptionCarrierConfig.flatMapLatest {
-            it?.showOperatorNameInStatusBar ?: flowOf(false)
-        }
+    private val showCarrierInStatusBar: Flow<Boolean> =
+        settingsRepository
+            .intSetting(name = Settings.System.LOCKSCREEN_SHOW_CARRIER, defaultValue = 1)
+            .map { it == 2 || it == 3 }
 
     /**
-     * True if the carrier config for the default data subscription has
-     * [SystemUiCarrierConfig.showOperatorNameInStatusBar] set and the device is not in airplane
-     * mode
+     * True if the user enabled the operator name for the home status bar and the device is not in
+     * airplane mode.
      */
     val shouldShowOperatorName: Flow<Boolean> =
-        combine(defaultDataSubConfigShowOperatorView, airplaneModeInteractor.isAirplaneMode) {
-            showOperatorName,
-            isAirplaneMode ->
-            showOperatorName && !isAirplaneMode
+        combine(airplaneModeInteractor.isAirplaneMode, showCarrierInStatusBar) {
+            isAirplaneMode,
+            showCarrier ->
+            showCarrier && !isAirplaneMode
         }
 
     private val windowState =
