@@ -17,6 +17,8 @@
 package com.android.systemui.statusbar;
 
 import android.os.Bundle;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.telephony.ServiceState;
 import android.telephony.SubscriptionInfo;
 import android.telephony.TelephonyManager;
@@ -39,7 +41,9 @@ import javax.inject.Inject;
 
 /** Controller for {@link OperatorNameView}. */
 public class OperatorNameViewController extends ViewController<OperatorNameView> {
-    private static final String KEY_SHOW_OPERATOR_NAME = "show_operator_name";
+
+    private static final String LOCKSCREEN_SHOW_CARRIER =
+            "system:" + Settings.System.LOCKSCREEN_SHOW_CARRIER;
 
     private final DarkIconDispatcher mDarkIconDispatcher;
     private final TunerService mTunerService;
@@ -79,7 +83,7 @@ public class OperatorNameViewController extends ViewController<OperatorNameView>
                 mJavaAdapter.alwaysCollectFlow(
                         mAirplaneModeInteractor.isAirplaneMode(),
                         (isAirplaneMode) -> update());
-        mTunerService.addTunable(mTunable, KEY_SHOW_OPERATOR_NAME);
+        mTunerService.addTunable(mTunable, LOCKSCREEN_SHOW_CARRIER);
         mKeyguardUpdateMonitor.registerCallback(mKeyguardUpdateMonitorCallback);
     }
 
@@ -92,17 +96,10 @@ public class OperatorNameViewController extends ViewController<OperatorNameView>
     }
 
     private void update() {
-        SubInfo defaultSubInfo = getDefaultSubInfo();
-        boolean showOperatorName =
-                mCarrierConfigTracker
-                        .getShowOperatorNameInStatusBarConfig(defaultSubInfo.getSubId())
-                        && (mTunerService.getValue(
-                                KEY_SHOW_OPERATOR_NAME,
-                                mView.getResources()
-                                        .getInteger(
-                                                com.android.internal.R.integer
-                                                        .config_showOperatorNameDefault))
-                                != 0);
+        int showCarrier = Settings.System.getIntForUser(
+                mView.getContext().getContentResolver(),
+                Settings.System.LOCKSCREEN_SHOW_CARRIER, 1, UserHandle.USER_CURRENT);
+        boolean showOperatorName = (showCarrier == 2 || showCarrier == 3);
         mView.update(
                 showOperatorName,
                 mTelephonyManager.isDataCapable(),
@@ -180,7 +177,6 @@ public class OperatorNameViewController extends ViewController<OperatorNameView>
                     mView.setTextColor(DarkIconDispatcher.getTint(area, mView, tint));
 
     private final TunerService.Tunable mTunable = (key, newValue) -> update();
-
 
     private final KeyguardUpdateMonitorCallback mKeyguardUpdateMonitorCallback =
             new KeyguardUpdateMonitorCallback() {
