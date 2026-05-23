@@ -27,6 +27,7 @@
         android:textSize="101sp"
         android:textColor="@android:color/white"
         android:fontFamily="@font/EncodeSansLight"
+        android:layout_marginTop="-4dp"
         android:layout_gravity="center"
         android:format12Hour="mm"
         android:format24Hour="mm"/>
@@ -39,7 +40,7 @@
         android:textSize="24sp"
         android:textColor="@android:color/white"
         android:fontFamily="@font/EncodeSansLight"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:layout_gravity="center"
         android:format12Hour="a - EEE, MMM d"
         android:format24Hour="a - EEE, MMM d"/>
