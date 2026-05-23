@@ -549,6 +549,24 @@ public class DisplayRotation {
         final int lastOrientation = mLastOrientation;
         @Surface.Rotation
         int rotation = rotationForOrientation(lastOrientation, oldRotation);
+
+        // Preserve locked user rotation across screen off/on and keyguard
+        if (mUserRotationMode == WindowManagerPolicy.USER_ROTATION_LOCKED) {
+            final WindowContainer<?> source = mDisplayContent.getLastOrientationSource();
+            final boolean isAppRequest = source != null &&
+                    (source.asActivityRecord() != null ||
+                    (source.asWindowState() != null && source.asWindowState().mActivityRecord != null));
+
+            // If an app explicitly requests a fixed orientation (e.g., a landscape game),
+            // allow it to override the user lock. Otherwise, preserve the user's locked rotation.
+            if (!isAppRequest || !ActivityInfo.isFixedOrientation(lastOrientation)) {
+                rotation = mUserRotation;
+                ProtoLog.v(WM_DEBUG_ORIENTATION,
+                        "Preserving locked user rotation=%s (%d)",
+                        Surface.rotationToString(rotation), rotation);
+            }
+        }
+
         // Use the saved rotation for tabletop mode, if set.
         if (mFoldController != null && mFoldController.shouldRevertOverriddenRotation()) {
             int prevRotation = rotation;
