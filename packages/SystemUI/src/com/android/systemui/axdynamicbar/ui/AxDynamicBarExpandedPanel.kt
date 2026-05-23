@@ -293,17 +293,34 @@ private fun OverlayContent(viewModel: AxDynamicBarChipViewModel, statusBarHeight
             modifier = Modifier
                 .fillMaxSize()
                 .pointerInput(Unit) {
-                   awaitEachGesture {
-                     val ev = awaitPointerEvent(PointerEventPass.Final)
-                     if (ev.changes.any { it.changedToDownIgnoreConsumed() }) {
+                    val slop = viewConfiguration.touchSlop
+                    awaitEachGesture {
+                        
+                        var ev: PointerEvent
+                        do {
+                            ev = awaitPointerEvent(PointerEventPass.Final)
+                        } while (!ev.changes.any { it.changedToDownIgnoreConsumed() })
+                        val downPos = ev.changes[0].position
+                        
                         val downConsumed = ev.changes[0].isConsumed
-                        if (!downConsumed) {
-                        viewModel.statusBarExpansion.collapse()
+                        
+                        while (true) {
+                            val event = awaitPointerEvent(PointerEventPass.Final)
+                            val change = event.changes.firstOrNull() ?: break
+                            if (!change.pressed) {
+                                if (!downConsumed && !change.isConsumed) {
+                                    val dx = change.position.x - downPos.x
+                                    val dy = change.position.y - downPos.y
+                                    if (dx * dx + dy * dy <= slop * slop) {
+                                        viewModel.statusBarExpansion.collapse()
+                                    }
+                                }
+                                break
+                            }
                         }
-                     }
-                  }
+                    }
                 }
-             .padding(top = topPad),
+                .padding(top = topPad),
             contentAlignment = Alignment.TopCenter,
         ) {
             chipState?.let { state ->
