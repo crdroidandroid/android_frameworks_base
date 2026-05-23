@@ -1,114 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/clock_frame"
-    android:gravity="center"
-    android:layout_gravity="center"
-    android:orientation="horizontal"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-        <LinearLayout
-        android:layout_gravity="center_horizontal"
-        android:orientation="vertical"
-        android:id="@+id/clock_view"
+    android:layout_gravity="center_horizontal|top"
+    android:gravity="center_horizontal|top"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layoutDirection="ltr">
+        android:layout_height="wrap_content">
+
+        <FrameLayout
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_width="100.0dip"
+            android:layout_height="150.0dip">
+
+            <ImageView
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:src="@drawable/SparkCircleClock_bg"
+                android:alpha="0.5" />
+
+            <LinearLayout
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+                <TextClock
+                    android:textSize="30.0sp"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/white"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@*android:string/config_clockFontFamily"
+                    android:singleLine="true"
+                    android:textAllCaps="true"
+                    android:format12Hour="EEE"
+                    android:format24Hour="EEE" />
+
+                <TextClock
+                    android:textSize="30.0sp"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/white"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@*android:string/config_clockFontFamily"
+                    android:singleLine="true"
+                    android:textAllCaps="true"
+                    android:format12Hour="dd"
+                    android:format24Hour="dd" />
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <View
+            android:layout_width="6.0dip"
+            android:layout_height="0.0dip" />
+
         <LinearLayout
             android:gravity="center"
             android:layout_gravity="start|center"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-            <FrameLayout
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:layout_width="100.0dip"
-                android:layout_height="150.0dip">
-                <ImageView
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:src="@drawable/SparkCircleClock_bg"
-                    android:alpha="0.5" />
-                <LinearLayout
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:orientation="vertical"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent">
-                    <TextClock
-                        android:textSize="30.0sp"
-                        android:textStyle="bold"
-                        android:textColor="?android:textColorPrimary"
-                        android:gravity="center"
-                        android:layout_gravity="center"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:singleLine="true"
-                        android:textAllCaps="true"
-                        android:format12Hour="EEE"
-                        android:format24Hour="EEE" />
-                    <TextClock
-                        android:textSize="30.0sp"
-                        android:textStyle="bold"
-                        android:textColor="?android:textColorPrimary"
-                        android:gravity="center"
-                        android:layout_gravity="center"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:singleLine="true"
-                        android:textAllCaps="true"
-                        android:format12Hour="dd"
-                        android:format24Hour="dd" />
-                </LinearLayout>
-            </FrameLayout>
-            <View
-                android:layout_width="6.0dip"
-                android:layout_height="0.0dip" />
-            <LinearLayout
+
+            <TextClock
+                android:textSize="26.0sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/system_accent1_100"
                 android:gravity="center"
                 android:layout_gravity="start|center"
-                android:orientation="vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <TextClock
-                    android:textSize="26.0sp"
-                    android:textStyle="bold"
-                    android:textColor="@android:color/system_accent1_100"
-                    android:gravity="center"
-                    android:layout_gravity="start|center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:textAllCaps="true"
-                    android:format12Hour="MMMM"
-                    android:format24Hour="MMMM" />
-                <TextClock
-                    android:textSize="26.0sp"
-                    android:textStyle="bold"
-                    android:textColor="@android:color/system_accent1_100"
-                    android:gravity="center"
-                    android:layout_gravity="start|center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:format12Hour="yyyy"
-                    android:format24Hour="yyyy" />
-                <TextClock
-                    android:textSize="23.0sp"
-                    android:textStyle="bold"
-                    android:textColor="@android:color/system_accent2_100"
-                    android:gravity="center"
-                    android:layout_gravity="start|center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:format12Hour="hh:mm"
-                    android:format24Hour="kk:mm" />
-            </LinearLayout>
+                android:layout_height="wrap_content"
+                android:fontFamily="@*android:string/config_clockFontFamily"
+                android:singleLine="true"
+                android:textAllCaps="true"
+                android:format12Hour="MMMM"
+                android:format24Hour="MMMM" />
+
+            <TextClock
+                android:textSize="26.0sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/system_accent1_100"
+                android:gravity="center"
+                android:layout_gravity="start|center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@*android:string/config_clockFontFamily"
+                android:singleLine="true"
+                android:format12Hour="yyyy"
+                android:format24Hour="yyyy" />
+
+            <TextClock
+                android:textSize="23.0sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/system_accent2_100"
+                android:gravity="center"
+                android:layout_gravity="start|center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@*android:string/config_clockFontFamily"
+                android:singleLine="true"
+                android:format12Hour="hh:mm"
+                android:format24Hour="kk:mm" />
+
         </LinearLayout>
+
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_marginTop="4dp">
+
+        <com.android.systemui.weather.WeatherImageView
+            android:id="@+id/weather_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="4dp"
+            android:visibility="gone" />
+
+        <com.android.systemui.weather.WeatherTextView
+            android:id="@+id/weather_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="8dp"
+            android:fontFamily="@*android:string/config_clockFontFamily"
+            android:textColor="@android:color/white"
+            android:textSize="20dp"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
 </LinearLayout>
