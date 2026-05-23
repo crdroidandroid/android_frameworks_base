@@ -146,10 +146,17 @@ constructor(
             .getInsets(WindowInsets.Type.displayCutout())
             .top > 0
 
-        val view =
-            ComposeView(context).apply {
-                setContent { PlatformTheme { OverlayContent(viewModel, statusBarTop, hasCutout) } }
+        val view = ComposeView(context).apply {
+            setContent { PlatformTheme { OverlayContent(viewModel, statusBarTop, hasCutout) } }
+            setOnTouchListener { _, event ->
+                if (event.action == android.view.MotionEvent.ACTION_OUTSIDE) {
+                    viewModel.statusBarExpansion.collapse()
+                    true
+                } else {
+                    false
+                }
             }
+        }
 
         view.setViewTreeLifecycleOwner(lifecycleOwner)
         view.setViewTreeSavedStateRegistryOwner(lifecycleOwner)
@@ -161,6 +168,7 @@ constructor(
             WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or
             WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR or
             WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
+            WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH or
             if (isCurrentlyExpanded) 0
             else WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
 
