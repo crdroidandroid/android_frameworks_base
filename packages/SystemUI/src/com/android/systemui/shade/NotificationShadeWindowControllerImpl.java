@@ -36,7 +36,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.os.Trace;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.Display;
 import android.view.IWindow;
@@ -287,17 +286,14 @@ public class NotificationShadeWindowControllerImpl implements NotificationShadeW
         }
     }
 
-    private boolean shouldEnableKeyguardScreenRotation() {
-        boolean enableAccelerometerRotation =
-                Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.ACCELEROMETER_ROTATION, 0) != 0;
+    private boolean shouldUseKeyguardUserOrientation() {
         boolean enableLockScreenRotation =
                 LineageSettings.System.getInt(mContext.getContentResolver(),
                 LineageSettings.System.LOCKSCREEN_ROTATION,
                 mContext.getResources().getBoolean(org.lineageos.platform.internal.R.bool.
                         config_lockScreenRotationEnabledByDefault) ? 1 : 0) != 0;
         return mKeyguardStateController.isKeyguardScreenRotationAllowed()
-                && (enableLockScreenRotation && enableAccelerometerRotation);
+                && enableLockScreenRotation;
     }
 
     /**
@@ -491,7 +487,7 @@ public class NotificationShadeWindowControllerImpl implements NotificationShadeW
                 && state.isOnOrGoingToDream;
         if (state.bouncerShowing || (state.isKeyguardShowingAndNotOccluded()
                 && !dreamShowingAndRotationAllowed) || state.dozing) {
-            if (shouldEnableKeyguardScreenRotation()) {
+            if (shouldUseKeyguardUserOrientation()) {
                 mLpChanged.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_USER;
             } else {
                 mLpChanged.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR;
@@ -1155,9 +1151,6 @@ public class NotificationShadeWindowControllerImpl implements NotificationShadeW
         }
 
         public void observe(Context context) {
-            context.getContentResolver().registerContentObserver(
-                    Settings.System.getUriFor(Settings.System.ACCELEROMETER_ROTATION),
-                    false, this);
             context.getContentResolver().registerContentObserver(
                     LineageSettings.System.getUriFor(LineageSettings.System.LOCKSCREEN_ROTATION),
                     false, this);
