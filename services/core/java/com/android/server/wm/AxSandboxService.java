@@ -46,6 +46,7 @@ import android.net.Uri;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Process;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 import android.os.ServiceManager;
@@ -68,7 +69,6 @@ import com.android.server.wm.sandbox.HiddenNotificationController;
 import com.android.server.wm.sandbox.SettingsSpoofController;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -84,6 +84,7 @@ public class AxSandboxService extends IAxSandboxManager.Stub implements IAxSandb
     private static final String EXTRA_LOCKED_UID = AxSandboxManager.EXTRA_LOCKED_UID;
     private static final String EXTRA_LOCKED_PACKAGE = AxSandboxManager.EXTRA_LOCKED_PACKAGE;
     private static final String EXTRA_LOCKED_COMPONENT = AxSandboxManager.EXTRA_LOCKED_COMPONENT;
+    private static final String EXTRA_USER_ID = "user_id";
 
     private static final String ACTION_SYSTEM_UNLOCK = "com.android.applocker.action.SYSTEM_UNLOCK";
 
@@ -119,8 +120,8 @@ public class AxSandboxService extends IAxSandboxManager.Stub implements IAxSandb
 
     private final Set<String> mUnlockedApps = ConcurrentHashMap.newKeySet();
     private final Set<String> mPendingUnlocks = new HashSet<>();
-    private final Map<String, Long> mUnlockTimestamps = new HashMap<>();
-    private final Map<String, Runnable> mTimeoutRunnables = new HashMap<>();
+    private final Map<String, Long> mUnlockTimestamps = new ConcurrentHashMap<>();
+    private final Map<String, Runnable> mTimeoutRunnables = new ConcurrentHashMap<>();
     private String mLastFocusedAppKey = null;
     private ArrayList<String> mExcludedComponents = new ArrayList<>();
 
@@ -267,14 +268,21 @@ public class AxSandboxService extends IAxSandboxManager.Stub implements IAxSandb
 
     @Override
     public int getAppLockState(String packageName) {
-        return computeAppLockState(packageName).ordinal();
+        return computeAppLockState(packageName, UserHandle.getUserId(Binder.getCallingUid()))
+                .ordinal();
+    }
+
+    @Override
+    public int getAppLockStateForUser(String packageName, int userId) {
+        return computeAppLockState(packageName, userId).ordinal();
     }
 
     public boolean hasAppLock(String packageName) {
-        return computeAppLockState(packageName).hasAppLock();
+        return computeAppLockState(packageName, UserHandle.getUserId(Binder.getCallingUid()))
+                .hasAppLock();
     }
 
-    private AppLockState computeAppLockState(String packageName) {
+    private AppLockState computeAppLockState(String packageName, int userId) {
         if (mAppControlController == null) return NONE;
         if (BLACKLISTED_PACKAGES.contains(packageName)) {
             return NONE;
@@ -286,7 +294,6 @@ public class AxSandboxService extends IAxSandboxManager.Stub implements IAxSandb
             return LOCKED;
         }
 
-        int userId = UserHandle.getUserId(Binder.getCallingUid());
         String key = sessionKey(userId, packageName);
         boolean sessionUnlocked = mUnlockedApps.contains(key);
 
@@ -355,9 +362,7 @@ public class AxSandboxService extends IAxSandboxManager.Stub implements IAxSandb
         if (TextUtils.isEmpty(packageName)) return;
         markSessionUnlocked(packageName, userId);
 
-        synchronized (mPendingUnlocks) {
-            mPendingUnlocks.remove(sessionKey(userId, packageName));
-        }
+        clearPendingUnlock(packageName, userId);
 
         Slog.d(TAG, "unlockApp: " + packageName + " for user " + userId);
     }
@@ -369,6 +374,7 @@ public class AxSandboxService extends IAxSandboxManager.Stub implements IAxSandb
         Intent intent = new Intent(getConfirmIntent());
         intent.putExtra(EXTRA_LOCKED_PACKAGE, packageName);
         intent.putExtra(EXTRA_LOCKED_UID, userId);
+        intent.putExtra(EXTRA_USER_ID, userId);
         intent.putExtra("app_label", resolveAppLabel(packageName, userId));
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
 
@@ -611,8 +617,11 @@ public class AxSandboxService extends IAxSandboxManager.Stub implements IAxSandb
 
         synchronized (mPendingUnlocks) {
             if (!mPendingUnlocks.add(pendingKey)) {
-                Slog.d(TAG, "startAuthPrompt: skip, already pending for " + pendingKey);
-                return true;
+                if (hasAppLockerActivity(target.getTask())) {
+                    Slog.d(TAG, "startAuthPrompt: skip, already pending for " + pendingKey);
+                    return true;
+                }
+                Slog.d(TAG, "startAuthPrompt: retry stale pending for " + pendingKey);
             }
         }
 
@@ -620,6 +629,7 @@ public class AxSandboxService extends IAxSandboxManager.Stub implements IAxSandb
             Intent intent = new Intent(getConfirmIntent());
             intent.putExtra(EXTRA_LOCKED_UID, target.getUid());
             intent.putExtra(EXTRA_LOCKED_PACKAGE, target.packageName);
+            intent.putExtra(EXTRA_USER_ID, target.mUserId);
             intent.putExtra(EXTRA_LOCKED_COMPONENT,
                     target.intent.getComponent() != null
                             ? target.intent.getComponent().flattenToString() : "");
@@ -650,10 +660,11 @@ public class AxSandboxService extends IAxSandboxManager.Stub implements IAxSandb
             return true;
         } catch (Exception e) {
             Slog.w(TAG, "startAuthPrompt: failed for " + target, e);
-            synchronized (mPendingUnlocks) {
-                mPendingUnlocks.remove(pendingKey);
+            lockSession(target.packageName, target.mUserId);
+            if (!target.finishing) {
+                target.finishIfPossible("applock-prompt-failed", false);
             }
-            return false;
+            return true;
         }
     }
 
@@ -670,35 +681,79 @@ public class AxSandboxService extends IAxSandboxManager.Stub implements IAxSandb
 
     @Override
     public boolean checkUnlockApp(ActivityRecord r, int resultCode, Intent data) {
-        if (r.requestCode != mRequestCode) {
+        if (r.requestCode != mRequestCode || r.intent == null
+                || !isAppLockerActivity(r.intent.getComponent())) {
             return false;
         }
+        String packageName = getResultPackageName(r, data);
+        int userId = getResultUserId(r, data, packageName);
         if (data == null) {
+            ActivityRecord target = r.resultTo;
+            lockSession(packageName, userId);
+            if (target != null && !target.finishing) {
+                Slog.d(TAG, "checkUnlockApp: finishing target " + target + " on cancel");
+                target.finishIfPossible("applock-canceled", false);
+            }
             return true;
         }
         try {
-            int userId = UserHandle.getUserId(data.getIntExtra(EXTRA_LOCKED_UID, 0));
-            String packageName = data.getStringExtra(EXTRA_LOCKED_PACKAGE);
-            String pendingKey = sessionKey(userId, packageName);
-
             Slog.d(TAG, "checkUnlockApp: unlocking pkg=" + packageName
                     + " userId=" + userId + " resultCode=" + resultCode);
 
-            synchronized (mPendingUnlocks) {
-                mPendingUnlocks.remove(pendingKey);
-            }
-
-            if (resultCode == Activity.RESULT_OK && packageName != null) {
+            if (resultCode == Activity.RESULT_OK && !TextUtils.isEmpty(packageName)) {
+                clearPendingUnlock(packageName, userId);
                 markSessionUnlocked(packageName, userId);
             } else if (r.resultTo != null) {
                 Slog.d(TAG, "checkUnlockApp: finishing target " + r.resultTo + " on cancel");
+                lockSession(packageName, userId);
                 r.resultTo.finishIfPossible("applock-canceled", false);
+            } else {
+                lockSession(packageName, userId);
             }
             return true;
         } catch (Exception e) {
             Slog.w(TAG, "checkUnlockApp: failed", e);
             return false;
         }
+    }
+
+    private String getResultPackageName(ActivityRecord authRecord, Intent data) {
+        ActivityRecord target = authRecord.resultTo;
+        if (target != null) {
+            return target.packageName;
+        }
+        if (data != null) {
+            String packageName = data.getStringExtra(EXTRA_LOCKED_PACKAGE);
+            if (!TextUtils.isEmpty(packageName)) {
+                return packageName;
+            }
+        }
+        return authRecord.intent != null
+                ? authRecord.intent.getStringExtra(EXTRA_LOCKED_PACKAGE) : null;
+    }
+
+    private int getResultUserId(ActivityRecord authRecord, Intent data, String packageName) {
+        ActivityRecord target = authRecord.resultTo;
+        if (target != null && TextUtils.equals(target.packageName, packageName)) {
+            return target.mUserId;
+        }
+        if (data != null && data.hasExtra(EXTRA_USER_ID)) {
+            return data.getIntExtra(EXTRA_USER_ID, UserHandle.USER_SYSTEM);
+        }
+        Intent intent = authRecord.intent;
+        if (intent != null && intent.hasExtra(EXTRA_USER_ID)) {
+            return intent.getIntExtra(EXTRA_USER_ID, UserHandle.USER_SYSTEM);
+        }
+        Intent source = data != null ? data : intent;
+        return source != null
+                ? getUserIdFromLockedUidExtra(source)
+                : UserHandle.USER_SYSTEM;
+    }
+
+    private static int getUserIdFromLockedUidExtra(Intent intent) {
+        int value = intent.getIntExtra(EXTRA_LOCKED_UID, UserHandle.USER_SYSTEM);
+        return value >= Process.FIRST_APPLICATION_UID || value == Process.SYSTEM_UID
+                ? UserHandle.getUserId(value) : value;
     }
 
     @Override
@@ -894,26 +949,15 @@ public class AxSandboxService extends IAxSandboxManager.Stub implements IAxSandb
 
     @Override
     public void removeTask(Task task, String reason) {
-        if (task == null || !"remove-task".equals(reason)
-                || mLockBehavior != LOCK_BEHAVIOR_ON_LEAVE || mUnlockedApps.size() <= 0) {
+        if (task == null) {
             return;
         }
 
-        if (WindowConfiguration.inMultiWindowMode(task.getWindowingMode())
-                || WindowConfiguration.isFloating(task.getWindowingMode())) {
-            ActivityRecord r = task.topRunningActivityLocked();
-            if (r != null) {
-                markSessionLocked(r.packageName, r.mUserId);
-            }
-            ActivityRecord lastPaused = task.mLastPausedActivity;
-            if (lastPaused != null) {
-                markSessionLocked(lastPaused.packageName, lastPaused.mUserId);
-            }
-            ComponentName realActivity = task.realActivity;
-            if (realActivity != null) {
-                markSessionLocked(realActivity.getPackageName(), task.effectiveUid);
-            }
-        }
+        boolean lockUnlocked = mLockBehavior == LOCK_BEHAVIOR_ON_LEAVE;
+        updateTaskSession(task.topRunningActivityLocked(), lockUnlocked);
+        updateTaskSession(task.mLastPausedActivity, lockUnlocked);
+        updateTaskComponent(task.realActivity, task.effectiveUid, lockUnlocked);
+        updateTaskComponent(task.origActivity, task.effectiveUid, lockUnlocked);
     }
 
     @Override
@@ -927,9 +971,52 @@ public class AxSandboxService extends IAxSandboxManager.Stub implements IAxSandb
             }
             return;
         }
-        if (mLockBehavior == LOCK_BEHAVIOR_ON_KILL) {
-            markSessionLocked(packageName, userId);
+        updateSession(packageName, userId, mLockBehavior == LOCK_BEHAVIOR_ON_KILL);
+    }
+
+    private void updateTaskSession(ActivityRecord r, boolean lockUnlocked) {
+        if (r != null) {
+            updateSession(r.packageName, r.mUserId, lockUnlocked);
         }
+    }
+
+    private void updateTaskComponent(ComponentName component, int uid, boolean lockUnlocked) {
+        if (component != null && uid >= 0) {
+            updateSession(component.getPackageName(), UserHandle.getUserId(uid), lockUnlocked);
+        }
+    }
+
+    private void lockSession(String packageName, int userId) {
+        updateSession(packageName, userId, true);
+    }
+
+    private void updateSession(String packageName, int userId, boolean lockUnlocked) {
+        if (TextUtils.isEmpty(packageName)) return;
+        boolean pending = clearPendingUnlock(packageName, userId);
+        if (lockUnlocked && markSessionLocked(packageName, userId)) {
+            return;
+        }
+        if (pending) {
+            notifyAppLocked(packageName, userId);
+        }
+    }
+
+    private boolean clearPendingUnlock(String packageName, int userId) {
+        if (TextUtils.isEmpty(packageName)) return false;
+        synchronized (mPendingUnlocks) {
+            if (mPendingUnlocks.remove(sessionKey(userId, packageName))) {
+                Slog.d(TAG, "clearPendingUnlock: " + packageName + " userId=" + userId);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean hasAppLockerActivity(Task task) {
+        return task != null && task.getActivity(r ->
+                !r.finishing
+                        && isAppLockerActivity(r.intent != null
+                                ? r.intent.getComponent() : null)) != null;
     }
 
     private static String sessionKey(int userId, String packageName) {
@@ -965,14 +1052,16 @@ public class AxSandboxService extends IAxSandboxManager.Stub implements IAxSandb
         mAppSessionListeners.finishBroadcast();
     }
 
-    private void markSessionLocked(String packageName, int userId) {
+    private boolean markSessionLocked(String packageName, int userId) {
         String key = sessionKey(userId, packageName);
         if (mUnlockedApps.remove(key)) {
             mUnlockTimestamps.remove(key);
             cancelTimeoutLock(key);
             Slog.d(TAG, "markSessionLocked: " + packageName + " userId=" + userId);
             notifyAppLocked(packageName, userId);
+            return true;
         }
+        return false;
     }
 
     private void notifyAppLocked(String packageName, int userId) {
