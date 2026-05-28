@@ -21,6 +21,7 @@ import android.os.IBinder
 import android.os.RemoteException
 import android.os.ServiceManager
 import android.os.SystemClock
+import android.os.UserHandle
 import android.util.Log
 import com.android.internal.app.IAppLockStateListener
 import com.android.internal.app.IAppSessionListener
@@ -108,10 +109,10 @@ class AxAppLockerHelper @Inject constructor(
         }
         override fun onAppLocked(packageName: String, userId: Int) {
             if (packageName.isBlank()) return
-            sessionKey(userId, packageName).let { k ->
-                if (notifUnlocks.contains(k)) return@let
-                sessionAuthCache[k]?.let { if (!it) return@onAppLocked }
-                sessionAuthCache[k] = true
+            val key = sessionKey(userId, packageName)
+            pendingNotifOnly.remove(key)
+            if (!notifUnlocks.contains(key)) {
+                sessionAuthCache[key] = true
             }
             mainExecutor.execute {
                 qsController.get().onAppLockerUpdated(packageName)
@@ -169,11 +170,13 @@ class AxAppLockerHelper @Inject constructor(
         getService()
     }
 
-    fun getState(packageName: String): AppLockState {
+    fun getState(packageName: String): AppLockState = getState(packageName, UserHandle.USER_SYSTEM)
+
+    private fun getState(packageName: String, userId: Int): AppLockState {
         if (packageName.isBlank()) return AppLockState.NONE
         val manager = getService() ?: return AppLockState.NONE
         return try {
-            AppLockState.fromOrdinal(manager.getAppLockState(packageName))
+            AppLockState.fromOrdinal(manager.getAppLockStateForUser(packageName, userId))
         } catch (e: RemoteException) {
             Log.w(TAG, "getState RemoteException: ${e.message}")
             AppLockState.NONE
@@ -194,18 +197,20 @@ class AxAppLockerHelper @Inject constructor(
         val key = sessionKey(userId, packageName)
         if (notifUnlocks.contains(key)) return false
         sessionAuthCache[key]?.let { return it }
-        val authoritative = getState(packageName).needsAuth()
+        val authoritative = getState(packageName, userId).needsAuth()
         sessionAuthCache[key] = authoritative
         return authoritative
     }
 
     fun promptUnlock(packageName: String, userId: Int) {
-        pendingNotifOnly[sessionKey(userId, packageName)] = SystemClock.elapsedRealtime()
-        shadeController.get().collapseShade()
         val manager = getService() ?: return
+        val key = sessionKey(userId, packageName)
+        pendingNotifOnly[key] = SystemClock.elapsedRealtime()
+        shadeController.get().collapseShade()
         try {
             manager.promptUnlock(packageName, userId)
         } catch (e: RemoteException) {
+            pendingNotifOnly.remove(key)
             Log.e(TAG, "Failed to prompt unlock", e)
         }
     }
