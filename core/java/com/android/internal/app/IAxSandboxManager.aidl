@@ -10,6 +10,7 @@ import com.android.internal.app.HiddenNotificationInfo;
  */
 interface IAxSandboxManager {
     int getAppLockState(String packageName);
+    int getAppLockStateForUser(String packageName, int userId);
     boolean isPackageHidden(String packageName);
 
     void addLockedApp(String packageName);
