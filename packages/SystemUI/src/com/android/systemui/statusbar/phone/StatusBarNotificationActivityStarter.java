@@ -25,6 +25,7 @@ import static com.android.systemui.statusbar.phone.CentralSurfaces.getActivityOp
 
 import android.app.ActivityManager;
 import android.app.ActivityOptions;
+import android.app.AxSandboxManager;
 import android.app.KeyguardManager;
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -83,6 +84,7 @@ import com.android.systemui.statusbar.notification.headsup.HeadsUpUtil;
 import com.android.systemui.statusbar.notification.row.ExpandableNotificationRow;
 import com.android.systemui.statusbar.notification.row.ExpandableNotificationRowDragController;
 import com.android.systemui.statusbar.notification.row.OnUserInteractionCallback;
+import com.android.systemui.statusbar.notification.shared.NotificationBundleUi;
 import com.android.systemui.statusbar.policy.KeyguardStateController;
 import com.android.systemui.wmshell.BubblesManager;
 
@@ -273,11 +275,36 @@ public class StatusBarNotificationActivityStarter implements NotificationActivit
         mLogger.logStartingActivityFromClick(entry, row.isHeadsUpState(),
                 mKeyguardStateController.isVisible(),
                 mNotificationShadeWindowController.getPanelExpanded());
+        if (shouldOpenLockedShadeForAppLockedNotification(entry, row)) {
+            openLockedShadeForAppLockedNotification(entry, row);
+            return;
+        }
         OnKeyguardDismissedAction action =
                 (intent, isActivityIntent, animate, showOverTheLockScreen) ->
                         performActionOnKeyguardDismissed(entry, row, intent, isActivityIntent,
                                 animate, showOverTheLockScreen);
         performActionAfterKeyguardDismissed(entry, action);
+    }
+
+    private boolean shouldOpenLockedShadeForAppLockedNotification(
+            NotificationEntry entry,
+            ExpandableNotificationRow row) {
+        StatusBarNotification sbn = entry.getSbn();
+        return mKeyguardStateController.isShowing()
+                && row.isOnKeyguard()
+                && sbn.getNotification().extras.getBoolean(
+                        AxSandboxManager.EXTRA_NOTIFICATION_APP_LOCKED, false)
+                && mAxAppLockerHelper.needsAuth(sbn.getPackageName(), sbn.getUserId());
+    }
+
+    private void openLockedShadeForAppLockedNotification(
+            NotificationEntry entry,
+            ExpandableNotificationRow row) {
+        if (NotificationBundleUi.isEnabled()) {
+            mPresenter.onExpandClicked(row, row.getEntryAdapter(), true);
+        } else {
+            mPresenter.onExpandClicked(entry, row, true);
+        }
     }
 
     private void performActionAfterKeyguardDismissed(NotificationEntry entry,
