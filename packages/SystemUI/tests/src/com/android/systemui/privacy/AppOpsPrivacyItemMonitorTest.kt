@@ -279,6 +279,7 @@ class AppOpsPrivacyItemMonitorTest : SysuiTestCase() {
                 listOf(
                     AppOpItem(AppOpsManager.OP_CAMERA, TEST_UID, TEST_PACKAGE_NAME, 0),
                     AppOpItem(AppOpsManager.OP_FINE_LOCATION, TEST_UID, TEST_PACKAGE_NAME, 0),
+                    AppOpItem(AppOpsManager.OP_COARSE_LOCATION, TEST_UID, TEST_PACKAGE_NAME, 0),
                 )
             )
             .`when`(appOpsController)
@@ -287,6 +288,53 @@ class AppOpsPrivacyItemMonitorTest : SysuiTestCase() {
         val privacyItems = appOpsPrivacyItemMonitor.getActivePrivacyItems()
         assertEquals(1, privacyItems.size)
         assertEquals(PrivacyType.TYPE_CAMERA, privacyItems[0].privacyType)
+    }
+
+    @Test
+    fun testCoarseLocationOpForeground() {
+        // Set to non system.
+        doReturn(512)
+            .`when`(packageManager)
+            .getPermissionFlags(
+                "android.permission.ACCESS_COARSE_LOCATION",
+                "com.google.android.apps.maps",
+                UserHandle.getUserHandleForUid(TEST_UID),
+            )
+        // Default is foreground.
+        val process = ActivityManager.RunningAppProcessInfo()
+        process.uid = TEST_UID
+        doReturn(listOf(process)).`when`(activityManager).runningAppProcesses
+
+        doReturn(
+                listOf(
+                    AppOpItem(
+                        AppOpsManager.OP_COARSE_LOCATION,
+                        TEST_UID,
+                        "com.google.android.apps.maps",
+                        0,
+                    )
+                )
+            )
+            .`when`(appOpsController)
+            .getActiveAppOps(anyBoolean())
+
+        val result = appOpsPrivacyItemMonitor.getActivePrivacyItems()
+
+        assertEquals(result.size, 1)
+        assertEquals(PrivacyType.TYPE_LOCATION, result[0].privacyType)
+        assertEquals(result[0].application.packageName, "com.google.android.apps.maps")
+        // Expect logs for NON_SYSTEM_APP, SYSTEM_APP, BACKGROUND_APP, and ALL_APP when location
+        // is first used.
+        assertEquals(uiEventLogger.numLogs(), 4)
+        Truth.assertThat(
+                uiEventLogger.logs.any { log ->
+                    log.eventId ==
+                        AppOpsPrivacyItemMonitor.LocationIndicatorEvent
+                            .LOCATION_INDICATOR_NON_SYSTEM_APP
+                            .id
+                }
+            )
+            .isTrue()
     }
 
     @Test
@@ -809,6 +857,31 @@ class AppOpsPrivacyItemMonitorTest : SysuiTestCase() {
         verify(logger)
             .logUpdatedItemFromAppOps(
                 AppOpsManager.OP_FINE_LOCATION,
+                TEST_UID,
+                TEST_PACKAGE_NAME,
+                true,
+            )
+    }
+
+    @Test
+    fun testLogCoarseLocationActiveChanged() {
+        appOpsPrivacyItemMonitor.startListening(callback)
+        executor.runAllReady()
+        reset(callback)
+
+        verify(appOpsController).addCallback(any(), capture(argCaptorCallback))
+        argCaptorCallback.value.onActiveStateChanged(
+            AppOpsManager.OP_COARSE_LOCATION,
+            TEST_UID,
+            TEST_PACKAGE_NAME,
+            true,
+        )
+        executor.runAllReady()
+
+        verify(callback).onPrivacyItemsChanged()
+        verify(logger)
+            .logUpdatedItemFromAppOps(
+                AppOpsManager.OP_COARSE_LOCATION,
                 TEST_UID,
                 TEST_PACKAGE_NAME,
                 true,
