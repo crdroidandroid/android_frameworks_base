@@ -51,7 +51,7 @@
     <string name="accessibility_smartspace_page">Trang %1$d trên %2$d</string>
     <string name="active_mode_content_description">%1$s đang bật</string>
     <string name="music_controls_no_title">Không có tiêu đề</string>
-    <string name="smartspace_content_desc">Xem nhanh</string>
+    <string name="smartspace_content_desc">Nhìn thoáng qua</string>
     <string name="smartspace_flight_qr_code">Mã QR</string>
     <string name="smartspace_role_desc">Xem</string>
     <!-- Button to restart SystemUI, within the Restart Options dialog -->
