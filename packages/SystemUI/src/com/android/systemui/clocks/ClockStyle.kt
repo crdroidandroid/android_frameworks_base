@@ -422,6 +422,23 @@ class ClockStyle @JvmOverloads constructor(
                 }
             )
         }
+
+        for (i in styledTextViews.indices) {
+            val tv = styledTextViews[i]
+            if (tv is TextClock) continue
+            if (tv.getTag(R.id.original_text_color) == null) {
+                tv.setTag(R.id.original_text_color, tv.currentTextColor)
+            }
+            val originalColor = tv.getTag(R.id.original_text_color) as Int
+            val isWhiteOriginal = (originalColor and 0x00FFFFFF) == (whiteColor and 0x00FFFFFF)
+            tv.setTextColor(
+                when {
+                    isDozing -> whiteColor
+                    !isWhiteOriginal -> originalColor
+                    else -> resolveClockColor()
+                }
+            )
+        }
     }
 
     private fun getScaleFactor(): Float =
