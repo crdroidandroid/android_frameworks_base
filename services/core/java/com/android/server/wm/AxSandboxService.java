@@ -685,8 +685,11 @@ public class AxSandboxService extends IAxSandboxManager.Stub implements IAxSandb
         int userId = getResultUserId(r, data, packageName);
         if (data == null) {
             ActivityRecord target = r.resultTo;
+            if (target == null) {
+                return true;
+            }
             lockSession(packageName, userId);
-            if (target != null && !target.finishing) {
+            if (!target.finishing) {
                 Slog.d(TAG, "checkUnlockApp: finishing target " + target + " on cancel");
                 target.finishIfPossible("applock-canceled", false);
             }
