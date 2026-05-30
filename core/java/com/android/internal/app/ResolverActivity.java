@@ -862,6 +862,12 @@ public class ResolverActivity extends Activity implements
         return getCloneProfileUserHandle() != null;
     }
 
+    protected boolean shouldQueryCloneProfileTargets() {
+        // Keep cloned app targets out of the regular "Open with" resolver so defaults can
+        // be stored safely for the personal profile. Chooser/share flows still include them.
+        return !mIsIntentPicker || isLaunchedAsCloneProfile();
+    }
+
     protected final boolean isLaunchedAsCloneProfile() {
         return hasCloneProfile()
                 && (UserHandle.myUserId() == getCloneProfileUserHandle().getIdentifier());
@@ -1297,10 +1303,11 @@ public class ResolverActivity extends Activity implements
             mAlwaysButton.setEnabled(false);
             return;
         }
-        // In case of clonedProfile being active, we do not allow the 'Always' option in the
-        // disambiguation dialog of Personal Profile as the package manager cannot distinguish
-        // between cross-profile preferred activities.
-        if (hasCloneProfile() && !mMultiProfilePagerAdapter
+        // In case clonedProfile targets are present, do not allow the 'Always' option in
+        // the personal profile disambiguation dialog because the package manager cannot
+        // distinguish between cross-profile preferred activities.
+        if (hasCloneProfile() && shouldQueryCloneProfileTargets()
+                && !mMultiProfilePagerAdapter
                 .getCurrentUserHandle().equals(mWorkProfileUserHandle)) {
             mAlwaysButton.setEnabled(false);
             return;
@@ -1755,7 +1762,8 @@ public class ResolverActivity extends Activity implements
                 mLaunchedFromUid,
                 userHandle,
                 resolverComparator,
-                queryIntentsUser);
+                queryIntentsUser,
+                shouldQueryCloneProfileTargets());
     }
 
     /**
@@ -2692,7 +2700,8 @@ public class ResolverActivity extends Activity implements
         // Add clonedProfileUserHandle to the list only if we are:
         // a. Building the Personal Tab.
         // b. CloneProfile exists on the device.
-        if (userHandle.equals(getPersonalProfileUserHandle())
+        if (shouldQueryCloneProfileTargets()
+                && userHandle.equals(getPersonalProfileUserHandle())
                 && getCloneProfileUserHandle() != null) {
             userList.add(getCloneProfileUserHandle());
         }
