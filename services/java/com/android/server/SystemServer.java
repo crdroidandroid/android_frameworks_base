@@ -1448,7 +1448,18 @@ public final class SystemServer implements Dumpable {
 
         t.traceBegin("InitVBMetaDigest");
         try {
-            android.security.trickystore.AttestationUtils.initBootHash();
+            final boolean hasTrickyStoreConfig =
+                    !TextUtils.isEmpty(Settings.Secure.getString(mSystemContext.getContentResolver(),
+                            Settings.Secure.SPOOF_TRICKYSTORE_TARGET))
+                    || !TextUtils.isEmpty(Settings.Secure.getString(mSystemContext.getContentResolver(),
+                            Settings.Secure.SPOOF_TRICKYSTORE_KEYBOX))
+                    || !TextUtils.isEmpty(Settings.Secure.getString(mSystemContext.getContentResolver(),
+                            Settings.Secure.SPOOF_TRICKYSTORE_PATCH));
+            if (hasTrickyStoreConfig) {
+                android.security.trickystore.AttestationUtils.initBootHash();
+            } else {
+                Slog.i(TAG, "Skipping VBMeta digest init; Trickystore spoofing is not configured");
+            }
         } catch (Throwable e) {
             Slog.e(TAG, "Failed to init VBMeta digest", e);
         }
