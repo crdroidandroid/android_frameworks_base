@@ -210,22 +210,6 @@ final class ProgramInfoCache {
             mProgramInfoMap.clear();
         }
 
-        Set<RadioManager.ProgramInfo> modified = new ArraySet<>();
-        for (int i = 0; i < chunk.modified.length; i++) {
-            RadioManager.ProgramInfo info =
-                    ConversionUtils.programInfoFromHalProgramInfo(chunk.modified[i]);
-            if (info == null) {
-                Slogf.w(TAG, "Program info %s in program list chunk is not valid",
-                        chunk.modified[i]);
-                continue;
-            }
-            Identifier primaryId = info.getSelector().getPrimaryId();
-            if (!passesFilter(primaryId) || !shouldIncludeInModified(info)) {
-                continue;
-            }
-            putInfo(info);
-            modified.add(info);
-        }
         Set<UniqueProgramIdentifier> removed = new ArraySet<>();
         if (chunk.removed != null) {
             for (int i = 0; i < chunk.removed.length; i++) {
@@ -241,6 +225,22 @@ final class ProgramInfoCache {
                     mProgramInfoMap.remove(removedId);
                 }
             }
+        }
+        Set<RadioManager.ProgramInfo> modified = new ArraySet<>();
+        for (int i = 0; i < chunk.modified.length; i++) {
+            RadioManager.ProgramInfo info =
+                    ConversionUtils.programInfoFromHalProgramInfo(chunk.modified[i]);
+            if (info == null) {
+                Slogf.w(TAG, "Program info %s in program list chunk is not valid",
+                        chunk.modified[i]);
+                continue;
+            }
+            Identifier primaryId = info.getSelector().getPrimaryId();
+            if (!passesFilter(primaryId) || !shouldIncludeInModified(info)) {
+                continue;
+            }
+            putInfo(info);
+            modified.add(info);
         }
         if (modified.isEmpty() && removed.isEmpty() && mComplete == chunk.complete
                 && !chunk.purge) {
