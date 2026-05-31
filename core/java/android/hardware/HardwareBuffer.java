@@ -402,6 +402,19 @@ public final class HardwareBuffer implements Parcelable, AutoCloseable {
         mCloseGuard.open("HardwareBuffer.close");
     }
 
+    /**
+     * Private use only. Called from JNI (ImageReader$SurfaceImage#nativeGetOplusHardwareBuffer)
+     * with a native object that is an {@code sp<GraphicBuffer>} holder rather than an
+     * {@code AHardwareBuffer}. Mirrors the stock OnePlus framework's {@code (JZ)V} constructor:
+     * it intentionally skips nEstimateSize()/registerNativeAllocation(), which assume an
+     * AHardwareBuffer; the native holder's lifetime is managed by the OnePlus camera (APS) side.
+     * The boolean argument only selects this overload.
+     */
+    private HardwareBuffer(long nativeObject, boolean isGraphicBufferHolder) {
+        mNativeObject = nativeObject;
+        mCloseGuard.open("HardwareBuffer.close");
+    }
+
     @Override
     protected void finalize() throws Throwable {
         try {
@@ -524,8 +537,13 @@ public final class HardwareBuffer implements Parcelable, AutoCloseable {
         if (!isClosed()) {
             mCloseGuard.close();
             mNativeObject = 0;
-            mCleaner.run();
-            mCleaner = null;
+            // mCleaner is null for buffers created via the HardwareBuffer(long, boolean)
+            // ctor (OnePlus sp<GraphicBuffer> holder); their native lifetime is owned by
+            // the caller, so there is nothing to free here.
+            if (mCleaner != null) {
+                mCleaner.run();
+                mCleaner = null;
+            }
         }
     }
 
