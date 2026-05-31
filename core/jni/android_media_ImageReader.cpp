@@ -1015,6 +1015,32 @@ static jobject Image_getHardwareBuffer(JNIEnv* env, jobject thiz) {
     // to link against libandroid.so
     return android_hardware_HardwareBuffer_createFromAHardwareBuffer(env, b);
 }
+
+// OnePlus camera (APS) extension. Mirrors stock libandroid_runtime's
+// nativeGetOplusHardwareBuffer: hands back a HardwareBuffer whose native object is a
+// heap-allocated sp<GraphicBuffer> holder (NOT an AHardwareBuffer*), constructed via the
+// HardwareBuffer(long, boolean) ctor which skips AHardwareBuffer-based size/finalizer setup.
+// The OnePlus camera SDK reads mNativeObject expecting this sp<GraphicBuffer> layout; the
+// standard getHardwareBuffer() layout makes APS read a malformed camera_metadata size.
+static jobject Image_getOplusHardwareBuffer(JNIEnv* env, jobject thiz) {
+    BufferItem* buffer = Image_getBufferItem(env, thiz);
+    if (buffer == nullptr || buffer->mGraphicBuffer == nullptr) {
+        jniThrowException(env, "java/lang/IllegalStateException",
+                "Image is not initialized");
+        return NULL;
+    }
+    static jclass sHbClass = nullptr;
+    static jmethodID sHbHolderCtor = nullptr;
+    if (sHbClass == nullptr) {
+        jclass c = env->FindClass("android/hardware/HardwareBuffer");
+        sHbClass = (jclass) env->NewGlobalRef(c);
+        sHbHolderCtor = env->GetMethodID(sHbClass, "<init>", "(JZ)V");
+    }
+    // Strong-ref'd holder; lifetime owned by the OnePlus APS side (matches stock behavior).
+    sp<GraphicBuffer>* holder = new sp<GraphicBuffer>(buffer->mGraphicBuffer);
+    return env->NewObject(sHbClass, sHbHolderCtor,
+            reinterpret_cast<jlong>(holder), JNI_TRUE);
+}
 #endif
 
 } // extern "C"
@@ -1048,6 +1074,8 @@ static const JNINativeMethod gImageMethods[] = {
 #ifdef __ANDROID__
         {"nativeGetHardwareBuffer", "()Landroid/hardware/HardwareBuffer;",
          (void*)Image_getHardwareBuffer},
+        {"nativeGetOplusHardwareBuffer", "()Landroid/hardware/HardwareBuffer;",
+         (void*)Image_getOplusHardwareBuffer},
 #endif
 };
 
