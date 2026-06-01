@@ -4116,6 +4116,13 @@ public final class NotificationPanelViewController implements
                 mShadeLog.d("Touch has same down time as Status Bar long press. Ignoring.");
                 return false;
             }
+            if (!mHeadsUpTouchHelper.isTrackingHeadsUp() && mQsController.handleTouch(
+                    event, isFullyCollapsed(), isShadeOrQsHeightAnimationRunning())) {
+                if (event.getActionMasked() != MotionEvent.ACTION_MOVE) {
+                    mShadeLog.logMotionEvent(event, "onTouch: handleQsTouch handled event");
+                }
+                return true;
+            }
             if (mBrightnessControl) {
                 final int actionIndex = event.getActionIndex();
                 final float swipeY = event.getY(actionIndex);
@@ -4129,13 +4136,6 @@ public final class NotificationPanelViewController implements
                     }
                     return true;
                 }
-            }
-            if (!mHeadsUpTouchHelper.isTrackingHeadsUp() && mQsController.handleTouch(
-                    event, isFullyCollapsed(), isShadeOrQsHeightAnimationRunning())) {
-                if (event.getActionMasked() != MotionEvent.ACTION_MOVE) {
-                    mShadeLog.logMotionEvent(event, "onTouch: handleQsTouch handled event");
-                }
-                return true;
             }
             if (event.getActionMasked() == MotionEvent.ACTION_DOWN && isFullyCollapsed()) {
                 mMetricsLogger.count(COUNTER_PANEL_OPEN, 1);
