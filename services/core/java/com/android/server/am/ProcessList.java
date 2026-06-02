@@ -2067,7 +2067,7 @@ public final class ProcessList implements ProcessStateController.ProcessLruUpdat
             }
 
             String useAppImageCache = SystemProperties.get(
-                    PROPERTY_USE_APP_IMAGE_STARTUP_CACHE, "");
+                    PROPERTY_USE_APP_IMAGE_STARTUP_CACHE, "true");
             // Property defaults to true currently.
             if (!TextUtils.isEmpty(useAppImageCache) && !useAppImageCache.equals("false")) {
                 runtimeFlags |= Zygote.USE_APP_IMAGE_STARTUP_CACHE;
