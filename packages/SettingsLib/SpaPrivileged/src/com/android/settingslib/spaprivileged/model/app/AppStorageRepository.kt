@@ -18,6 +18,7 @@ package com.android.settingslib.spaprivileged.model.app
 
 import android.content.Context
 import android.content.pm.ApplicationInfo
+import android.os.Process
 import android.util.Log
 import com.android.settingslib.spaprivileged.framework.common.BytesFormatter
 import com.android.settingslib.spaprivileged.framework.common.storageStatsManager
@@ -80,11 +81,15 @@ class AppStorageRepositoryImpl(context: Context) : AppStorageRepository {
                     app.packageName,
                     app.userHandle,
                 )
-            stats.codeBytes + stats.dataBytes
+            val codeBytes = if (shouldIgnoreCodeBytes(app)) 0L else stats.codeBytes
+            codeBytes + stats.dataBytes
         } catch (e: Exception) {
             Log.w(TAG, "Failed to query stats", e)
             null
         }
+
+    private fun shouldIgnoreCodeBytes(app: ApplicationInfo) =
+        app.isSystemApp && !app.isUpdatedSystemApp && !Process.isApplicationUid(app.uid)
 
     companion object {
         private const val TAG = "AppStorageRepository"
