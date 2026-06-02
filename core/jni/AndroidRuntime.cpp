@@ -262,6 +262,7 @@ static const char* PROFILE_BOOT_CLASS_PATH = "profilebootclasspath";
 static const char* ENABLE_JITZYGOTE_IMAGE = "enable_apex_image";
 // Flag to pass to the runtime when using the JIT Zygote image.
 static const char* kJitZygoteImageOption = "-Xforcejitzygote";
+static const char* kJitZygotePthreadPriorityOption = "-Xjitzygotepthreadpriority:9";
 
 // Feature flag name for disabling lock profiling.
 static const char* DISABLE_LOCK_PROFILING = "disable_lock_profiling";
@@ -781,6 +782,7 @@ int AndroidRuntime::startVm(JavaVM** pJavaVM, JNIEnv** pEnv, bool zygote, bool p
     if (use_apex_image) {
         ALOGI("Using JIT Zygote image: '%s'\n", kJitZygoteImageOption);
         addOption(kJitZygoteImageOption);
+        addOption(kJitZygotePthreadPriorityOption);
     } else if (parseRuntimeOption("dalvik.vm.boot-image", bootImageBuf, "-Ximage:")) {
         ALOGI("Using dalvik.vm.boot-image: '%s'\n", bootImageBuf);
     } else {
