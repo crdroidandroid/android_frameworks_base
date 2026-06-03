@@ -201,9 +201,9 @@
     <string name="ax_dynamic_bar_camera_mic">Camera &amp; Microphone</string>
     <string name="ax_dynamic_bar_camera">Camera</string>
     <string name="ax_dynamic_bar_microphone">Microphone</string>
-    <string name="ax_dynamic_bar_camera_mic_short">Camera &amp; Mic</string>
-    <string name="ax_dynamic_bar_hotspot_devices"><xliff:g id="count" example="3">%d</xliff:g> devices</string>
-    <string name="ax_dynamic_bar_wireless_charging">Wireless Charging</string>
+    <string name="ax_dynamic_bar_camera_mic_short">Камера &amp; Микрофон</string>
+    <string name="ax_dynamic_bar_hotspot_devices"><xliff:g id="count" example="3">%d</xliff:g> устройства</string>
+    <string name="ax_dynamic_bar_wireless_charging">Безжично зареждане</string>
     <string name="ax_dynamic_bar_until_full">until full</string>
     <string name="ax_dynamic_bar_battery_saver">Battery Saver</string>
     <string name="ax_dynamic_bar_call">Call</string>
@@ -244,7 +244,7 @@
     <string name="ax_dynamic_bar_sports_live">LIVE</string>
     <string name="ax_dynamic_bar_sports_final">Final</string>
     <string name="ax_dynamic_bar_sports_halftime">Halftime</string>
-    <string name="ax_dynamic_bar_sports_upcoming">Upcoming</string>
+    <string name="ax_dynamic_bar_sports_upcoming">Предстоящо</string>
     <!-- Screenshot -->
     <string name="quick_settings_screenshot_label">Екранна снимка</string>
 </resources>
