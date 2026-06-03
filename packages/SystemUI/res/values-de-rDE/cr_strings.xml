@@ -194,7 +194,6 @@
     <string name="ax_dynamic_bar_running">Läuft</string>
     <string name="ax_dynamic_bar_on">AN</string>
     <string name="ax_dynamic_bar_recents">App-Verlauf</string>
-    <string name="ax_dynamic_bar_kill_app">App beenden</string>
     <string name="ax_dynamic_bar_unlocked">Entsperrt</string>
     <string name="ax_dynamic_bar_device_unlocked">Gerät entsperrt</string>
     <string name="ax_dynamic_bar_progress">Fortschritt</string>

@@ -196,7 +196,6 @@
     <string name="ax_dynamic_bar_running">Running</string>
     <string name="ax_dynamic_bar_on">ON</string>
     <string name="ax_dynamic_bar_recents">Recents</string>
-    <string name="ax_dynamic_bar_kill_app">Kill app</string>
     <string name="ax_dynamic_bar_unlocked">Unlocked</string>
     <string name="ax_dynamic_bar_device_unlocked">Device Unlocked</string>
     <string name="ax_dynamic_bar_progress">Progress</string>

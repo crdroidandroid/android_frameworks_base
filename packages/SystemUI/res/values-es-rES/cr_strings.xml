@@ -108,9 +108,9 @@
     <string name="quick_settings_volume_panel_label">Panel de volumen</string>
     <!-- Smart Pixels -->
     <string name="quick_settings_smart_pixels_label">Píxeles inteligentes</string>
-    <string name="quick_settings_smart_pixels_on">Activado</string>
-    <string name="quick_settings_smart_pixels_off">Desactivado</string>
-    <string name="smart_pixels_percent_label">Porcentaje de píxeles</string>
+    <string name="quick_settings_smart_pixels_on">On</string>
+    <string name="quick_settings_smart_pixels_off">Off</string>
+    <string name="smart_pixels_percent_label">Pixel percentage</string>
     <string name="smart_pixels_percent_format"><xliff:g id="percent" example="25">%d</xliff:g>%%</string>
     <!-- Weather Tile -->
     <string name="omnijaws_service_error">Error al cargar datos del clima</string>
@@ -151,101 +151,100 @@
     <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
     <string name="screenrecord_delete_description">Grabación de pantalla eliminada</string>
     <!-- AxDynamicBar strings [CHAR LIMIT=NONE] -->
-    <string name="ax_dynamic_bar_timer">Temporizador</string>
-    <string name="ax_dynamic_bar_stopwatch">Cronómetro</string>
-    <string name="ax_dynamic_bar_alarm">Alarma</string>
-    <string name="ax_dynamic_bar_flashlight">Linterna</string>
-    <string name="ax_dynamic_bar_hotspot">Punto de acceso</string>
-    <string name="ax_dynamic_bar_hotspot_active">Punto de acceso activo</string>
-    <string name="ax_dynamic_bar_vpn_active">VPN activa</string>
-    <string name="ax_dynamic_bar_screen_recording">Grabación de pantalla</string>
-    <string name="ax_dynamic_bar_now_playing">Reproduciendo</string>
-    <string name="ax_dynamic_bar_media_output">Salida multimedia</string>
-    <string name="ax_dynamic_bar_sound_mode">Modo de sonido</string>
+    <string name="ax_dynamic_bar_timer">Timer</string>
+    <string name="ax_dynamic_bar_stopwatch">Stopwatch</string>
+    <string name="ax_dynamic_bar_alarm">Alarm</string>
+    <string name="ax_dynamic_bar_flashlight">Flashlight</string>
+    <string name="ax_dynamic_bar_hotspot">Hotspot</string>
+    <string name="ax_dynamic_bar_hotspot_active">Hotspot Active</string>
+    <string name="ax_dynamic_bar_vpn_active">VPN Active</string>
+    <string name="ax_dynamic_bar_screen_recording">Screen Recording</string>
+    <string name="ax_dynamic_bar_now_playing">Now Playing</string>
+    <string name="ax_dynamic_bar_media_output">Media output</string>
+    <string name="ax_dynamic_bar_sound_mode">Sound Mode</string>
     <string name="ax_dynamic_bar_silent"></string>
     <string name="ax_dynamic_bar_vibrate">Vibrar</string>
     <string name="ax_dynamic_bar_ring">Timbre</string>
-    <string name="ax_dynamic_bar_charging">Cargando</string>
-    <string name="ax_dynamic_bar_wireless">Inalámbrico</string>
-    <string name="ax_dynamic_bar_saver">Ahorro</string>
-    <string name="ax_dynamic_bar_music">Música</string>
-    <string name="ax_dynamic_bar_copied">Copiado</string>
-    <string name="ax_dynamic_bar_copied_feedback">¡Copiado!</string>
-    <string name="ax_dynamic_bar_image_copied">Imagen copiada</string>
-    <string name="ax_dynamic_bar_copy_image">Copiar imagen</string>
-    <string name="ax_dynamic_bar_clipboard_image_desc">Imagen del portapapeles</string>
-    <string name="ax_dynamic_bar_image">Imagen</string>
+    <string name="ax_dynamic_bar_charging">Charging</string>
+    <string name="ax_dynamic_bar_wireless">Wireless</string>
+    <string name="ax_dynamic_bar_saver">Saver</string>
+    <string name="ax_dynamic_bar_music">Music</string>
+    <string name="ax_dynamic_bar_copied">Copied</string>
+    <string name="ax_dynamic_bar_copied_feedback">Copied!</string>
+    <string name="ax_dynamic_bar_image_copied">Image copied</string>
+    <string name="ax_dynamic_bar_copy_image">Copy Image</string>
+    <string name="ax_dynamic_bar_clipboard_image_desc">Clipboard image</string>
+    <string name="ax_dynamic_bar_image">Image</string>
     <string name="ax_dynamic_bar_url">URL</string>
-    <string name="ax_dynamic_bar_dismiss">Descartar</string>
-    <string name="ax_dynamic_bar_open">Abrir</string>
+    <string name="ax_dynamic_bar_dismiss">Dismiss</string>
+    <string name="ax_dynamic_bar_open">Open</string>
     <string name="ax_dynamic_bar_stop">Detener</string>
-    <string name="ax_dynamic_bar_stop_recording">Detener grabación</string>
-    <string name="ax_dynamic_bar_reset">Reiniciar</string>
-    <string name="ax_dynamic_bar_clear_all">Borrar todo</string>
-    <string name="ax_dynamic_bar_show_more">Mostrar más</string>
-    <string name="ax_dynamic_bar_show_less">Mostrar menos</string>
-    <string name="ax_dynamic_bar_play">Reproducir</string>
-    <string name="ax_dynamic_bar_pause">Pausar</string>
-    <string name="ax_dynamic_bar_paused">En pausa</string>
-    <string name="ax_dynamic_bar_saved">Guardado</string>
-    <string name="ax_dynamic_bar_recording">Grabando</string>
-    <string name="ax_dynamic_bar_done">Hecho</string>
-    <string name="ax_dynamic_bar_ringing">Sonando</string>
-    <string name="ax_dynamic_bar_running">En ejecución</string>
-    <string name="ax_dynamic_bar_on">ACTIVADO</string>
-    <string name="ax_dynamic_bar_recents">Recientes</string>
-    <string name="ax_dynamic_bar_kill_app">Finalizar aplicación</string>
-    <string name="ax_dynamic_bar_unlocked">Desbloqueado</string>
-    <string name="ax_dynamic_bar_device_unlocked">Dispositivo desbloqueado</string>
-    <string name="ax_dynamic_bar_progress">Progreso</string>
-    <string name="ax_dynamic_bar_casting_to">Transmitiendo a</string>
-    <string name="ax_dynamic_bar_camera_mic">Cámara &amp; Micrófono</string>
-    <string name="ax_dynamic_bar_camera">Cámara</string>
-    <string name="ax_dynamic_bar_microphone">Micrófono</string>
-    <string name="ax_dynamic_bar_camera_mic_short">Cámara &amp; Micro</string>
-    <string name="ax_dynamic_bar_hotspot_devices"><xliff:g id="count" example="3">%d</xliff:g> dispositivos</string>
-    <string name="ax_dynamic_bar_wireless_charging">Carga inalámbrica</string>
-    <string name="ax_dynamic_bar_until_full">hasta que se complete</string>
-    <string name="ax_dynamic_bar_battery_saver">Ahorro de batería</string>
-    <string name="ax_dynamic_bar_call">Llamada</string>
-    <string name="ax_dynamic_bar_incoming_call">Llamada entrante</string>
-    <string name="ax_dynamic_bar_connected">Conectado</string>
-    <string name="ax_dynamic_bar_disconnect">Desconectar</string>
-    <string name="ax_dynamic_bar_no_devices">No hay dispositivos</string>
-    <string name="ax_dynamic_bar_one_device_connected">1 dispositivo conectado</string>
-    <string name="ax_dynamic_bar_devices_connected"><xliff:g id="count" example="3">%d</xliff:g> dispositivos conectados</string>
-    <string name="ax_dynamic_bar_vpn_connected">VPN Conectada</string>
-    <string name="ax_dynamic_bar_secured">Seguro</string>
-    <string name="ax_dynamic_bar_connecting">Conectando\u2026</string>
-    <string name="ax_dynamic_bar_one_device">1 dispositivo</string>
-    <string name="ax_dynamic_bar_bluetooth_device">Dispositivo Bluetooth</string>
-    <string name="ax_dynamic_bar_apps_count"><xliff:g id="count" example="2">%d</xliff:g> aplicaciones</string>
-    <string name="ax_dynamic_bar_just_now">Justo ahora</string>
-    <string name="ax_dynamic_bar_mins_ago"><xliff:g id="count" example="5">%d</xliff:g> minutos atrás</string>
-    <string name="ax_dynamic_bar_hours_ago"><xliff:g id="count" example="2">%d</xliff:g>horas atrás</string>
-    <string name="ax_dynamic_bar_days_ago"><xliff:g id="count" example="3">%d</xliff:g>días atrás</string>
-    <string name="ax_dynamic_bar_weeks_ago"><xliff:g id="count" example="1">%d</xliff:g>semanas atrás</string>
-    <string name="ax_dynamic_bar_resume">Reanudar</string>
-    <string name="ax_dynamic_bar_clipboard">Portapapeles</string>
-    <string name="ax_dynamic_bar_previous">Anterior</string>
-    <string name="ax_dynamic_bar_next">Siguiente</string>
-    <string name="ax_dynamic_bar_shuffle">Aleatorio</string>
-    <string name="ax_dynamic_bar_output">Salida</string>
-    <string name="ax_dynamic_bar_rec_short">Grabar</string>
-    <string name="ax_dynamic_bar_cast_short">Transmitir</string>
-    <string name="ax_dynamic_bar_active">Activo</string>
-    <string name="ax_dynamic_bar_biometric">Biométrico</string>
-    <string name="ax_dynamic_bar_trust">Confianza</string>
-    <string name="ax_dynamic_bar_alignment">Alineación</string>
-    <string name="ax_dynamic_bar_cam_short">Cámara</string>
-    <string name="ax_dynamic_bar_mic_short">Micrófono</string>
-    <string name="ax_dynamic_bar_recent_apps">Aplicaciones recientes</string>
-    <string name="ax_dynamic_bar_count_running"><xliff:g id="count" example="3">%d</xliff:g> en ejecución</string>
-    <string name="ax_dynamic_bar_sports_vs">contra</string>
-    <string name="ax_dynamic_bar_sports_live">EN VIVO</string>
+    <string name="ax_dynamic_bar_stop_recording">Stop Recording</string>
+    <string name="ax_dynamic_bar_reset">Reset</string>
+    <string name="ax_dynamic_bar_clear_all">Clear All</string>
+    <string name="ax_dynamic_bar_show_more">Show more</string>
+    <string name="ax_dynamic_bar_show_less">Show less</string>
+    <string name="ax_dynamic_bar_play">Play</string>
+    <string name="ax_dynamic_bar_pause">Pause</string>
+    <string name="ax_dynamic_bar_paused">Paused</string>
+    <string name="ax_dynamic_bar_saved">Saved</string>
+    <string name="ax_dynamic_bar_recording">Recording</string>
+    <string name="ax_dynamic_bar_done">Done</string>
+    <string name="ax_dynamic_bar_ringing">Ringing</string>
+    <string name="ax_dynamic_bar_running">Running</string>
+    <string name="ax_dynamic_bar_on">ON</string>
+    <string name="ax_dynamic_bar_recents">Recents</string>
+    <string name="ax_dynamic_bar_unlocked">Unlocked</string>
+    <string name="ax_dynamic_bar_device_unlocked">Device Unlocked</string>
+    <string name="ax_dynamic_bar_progress">Progress</string>
+    <string name="ax_dynamic_bar_casting_to">Casting to</string>
+    <string name="ax_dynamic_bar_camera_mic">Camera &amp; Microphone</string>
+    <string name="ax_dynamic_bar_camera">Camera</string>
+    <string name="ax_dynamic_bar_microphone">Microphone</string>
+    <string name="ax_dynamic_bar_camera_mic_short">Camera &amp; Mic</string>
+    <string name="ax_dynamic_bar_hotspot_devices"><xliff:g id="count" example="3">%d</xliff:g> devices</string>
+    <string name="ax_dynamic_bar_wireless_charging">Wireless Charging</string>
+    <string name="ax_dynamic_bar_until_full">until full</string>
+    <string name="ax_dynamic_bar_battery_saver">Battery Saver</string>
+    <string name="ax_dynamic_bar_call">Call</string>
+    <string name="ax_dynamic_bar_incoming_call">Incoming Call</string>
+    <string name="ax_dynamic_bar_connected">Connected</string>
+    <string name="ax_dynamic_bar_disconnect">Disconnect</string>
+    <string name="ax_dynamic_bar_no_devices">No devices</string>
+    <string name="ax_dynamic_bar_one_device_connected">1 device connected</string>
+    <string name="ax_dynamic_bar_devices_connected"><xliff:g id="count" example="3">%d</xliff:g> devices connected</string>
+    <string name="ax_dynamic_bar_vpn_connected">VPN Connected</string>
+    <string name="ax_dynamic_bar_secured">Secured</string>
+    <string name="ax_dynamic_bar_connecting">Connecting\u2026</string>
+    <string name="ax_dynamic_bar_one_device">1 device</string>
+    <string name="ax_dynamic_bar_bluetooth_device">Bluetooth device</string>
+    <string name="ax_dynamic_bar_apps_count"><xliff:g id="count" example="2">%d</xliff:g> apps</string>
+    <string name="ax_dynamic_bar_just_now">Just now</string>
+    <string name="ax_dynamic_bar_mins_ago"><xliff:g id="count" example="5">%d</xliff:g>m ago</string>
+    <string name="ax_dynamic_bar_hours_ago"><xliff:g id="count" example="2">%d</xliff:g>h ago</string>
+    <string name="ax_dynamic_bar_days_ago"><xliff:g id="count" example="3">%d</xliff:g>d ago</string>
+    <string name="ax_dynamic_bar_weeks_ago"><xliff:g id="count" example="1">%d</xliff:g>w ago</string>
+    <string name="ax_dynamic_bar_resume">Resume</string>
+    <string name="ax_dynamic_bar_clipboard">Clipboard</string>
+    <string name="ax_dynamic_bar_previous">Previous</string>
+    <string name="ax_dynamic_bar_next">Next</string>
+    <string name="ax_dynamic_bar_shuffle">Shuffle</string>
+    <string name="ax_dynamic_bar_output">Output</string>
+    <string name="ax_dynamic_bar_rec_short">Rec</string>
+    <string name="ax_dynamic_bar_cast_short">Cast</string>
+    <string name="ax_dynamic_bar_active">Active</string>
+    <string name="ax_dynamic_bar_biometric">Biometric</string>
+    <string name="ax_dynamic_bar_trust">Trust</string>
+    <string name="ax_dynamic_bar_alignment">Alignment</string>
+    <string name="ax_dynamic_bar_cam_short">Cam</string>
+    <string name="ax_dynamic_bar_mic_short">Mic</string>
+    <string name="ax_dynamic_bar_recent_apps">Recent Apps</string>
+    <string name="ax_dynamic_bar_count_running"><xliff:g id="count" example="3">%d</xliff:g> running</string>
+    <string name="ax_dynamic_bar_sports_vs">vs</string>
+    <string name="ax_dynamic_bar_sports_live">LIVE</string>
     <string name="ax_dynamic_bar_sports_final">Final</string>
-    <string name="ax_dynamic_bar_sports_halftime">Medio tiempo</string>
-    <string name="ax_dynamic_bar_sports_upcoming">Próximamente</string>
+    <string name="ax_dynamic_bar_sports_halftime">Halftime</string>
+    <string name="ax_dynamic_bar_sports_upcoming">Upcoming</string>
     <!-- Screenshot -->
     <string name="quick_settings_screenshot_label">Captura de pantalla</string>
 </resources>

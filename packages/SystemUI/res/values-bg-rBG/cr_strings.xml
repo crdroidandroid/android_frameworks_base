@@ -194,7 +194,6 @@
     <string name="ax_dynamic_bar_running">Бягане</string>
     <string name="ax_dynamic_bar_on">Включено</string>
     <string name="ax_dynamic_bar_recents">Скорошни</string>
-    <string name="ax_dynamic_bar_kill_app">Kill app</string>
     <string name="ax_dynamic_bar_unlocked">Отключено</string>
     <string name="ax_dynamic_bar_device_unlocked">Устройството е отключено</string>
     <string name="ax_dynamic_bar_progress">Прогрес</string>

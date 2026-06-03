@@ -159,7 +159,7 @@
     <string name="ax_dynamic_bar_hotspot_active">Kişisel Erişim Noktası Etkin</string>
     <string name="ax_dynamic_bar_vpn_active">VPN Etkin</string>
     <string name="ax_dynamic_bar_screen_recording">Ekran Kaydı</string>
-    <string name="ax_dynamic_bar_now_playing">Şimdi çalınıyor</string>
+    <string name="ax_dynamic_bar_now_playing">Şu An Çalan</string>
     <string name="ax_dynamic_bar_media_output">Medya çıkışı</string>
     <string name="ax_dynamic_bar_sound_mode">Ses Modu</string>
     <string name="ax_dynamic_bar_silent">Sessiz</string>
@@ -194,7 +194,6 @@
     <string name="ax_dynamic_bar_running">Çalışıyor</string>
     <string name="ax_dynamic_bar_on">AÇIK</string>
     <string name="ax_dynamic_bar_recents">Son Kullanılanlar</string>
-    <string name="ax_dynamic_bar_kill_app">Uygulamayı kapat</string>
     <string name="ax_dynamic_bar_unlocked">Kilidi Açıldı</string>
     <string name="ax_dynamic_bar_device_unlocked">Cihaz Kilidi Açıldı</string>
     <string name="ax_dynamic_bar_progress">İlerleme</string>
