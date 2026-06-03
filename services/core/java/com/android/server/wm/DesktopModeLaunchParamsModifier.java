@@ -28,6 +28,7 @@ import static android.content.pm.ActivityInfo.LAUNCH_SINGLE_TASK;
 import static android.window.DesktopExperienceFlags.ENABLE_FREEFORM_DISPLAY_LAUNCH_PARAMS;
 import static android.window.DesktopExperienceFlags.ENABLE_MULTIPLE_DESKTOPS_BACKEND;
 
+import static com.android.internal.protolog.common.LogLevel.VERBOSE;
 import static com.android.server.wm.DesktopModeHelper.canEnterDesktopMode;
 import static com.android.server.wm.LaunchParamsUtil.getPreferredLaunchTaskDisplayArea;
 
@@ -86,6 +87,10 @@ class DesktopModeLaunchParamsModifier implements LaunchParamsModifier {
                 currentParams, outParams);
         outputLog();
         return result;
+    }
+
+    private static boolean isLaunchParamsLoggingEnabled() {
+        return ProtoLog.isEnabled(WmProtoLogGroups.WM_DEBUG_TASKS_LAUNCH_PARAMS, VERBOSE);
     }
 
     private int calculate(@Nullable Task task, @Nullable ActivityInfo.WindowLayout layout,
@@ -568,15 +573,21 @@ class DesktopModeLaunchParamsModifier implements LaunchParamsModifier {
     }
 
     private void initLogBuilder(int phase, Task task, ActivityRecord activity) {
+        if (!isLaunchParamsLoggingEnabled()) {
+            mLogBuilder = null;
+            return;
+        }
         mLogBuilder = new StringBuilder("DesktopModeLaunchParamsModifier: phase= " + phase
                 + " task=" + task + " activity=" + activity);
     }
 
     private void appendLog(String format, Object... args) {
+        if (mLogBuilder == null) return;
         mLogBuilder.append(" ").append(String.format(format, args));
     }
 
     private void outputLog() {
+        if (mLogBuilder == null) return;
         ProtoLog.v(WmProtoLogGroups.WM_DEBUG_TASKS_LAUNCH_PARAMS, "%s", mLogBuilder.toString());
     }
 }

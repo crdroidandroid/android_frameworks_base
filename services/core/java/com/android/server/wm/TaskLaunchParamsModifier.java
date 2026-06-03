@@ -35,6 +35,7 @@ import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT;
 import static android.util.DisplayMetrics.DENSITY_DEFAULT;
 import static android.window.DisplayAreaOrganizer.FEATURE_UNDEFINED;
 
+import static com.android.internal.protolog.common.LogLevel.VERBOSE;
 import static com.android.server.wm.ActivityStarter.Request;
 import static com.android.server.wm.DesktopModeHelper.canEnterDesktopMode;
 import static com.android.server.wm.LaunchParamsUtil.getPreferredLaunchTaskDisplayArea;
@@ -104,6 +105,10 @@ class TaskLaunchParamsModifier implements LaunchParamsModifier {
                 currentParams, outParams);
         outputLog();
         return result;
+    }
+
+    private static boolean isLaunchParamsLoggingEnabled() {
+        return ProtoLog.isEnabled(WmProtoLogGroups.WM_DEBUG_TASKS_LAUNCH_PARAMS, VERBOSE);
     }
 
     @Result
@@ -845,15 +850,21 @@ class TaskLaunchParamsModifier implements LaunchParamsModifier {
     }
 
     private void initLogBuilder(int phase, Task task, ActivityRecord activity) {
+        if (!isLaunchParamsLoggingEnabled()) {
+            mLogBuilder = null;
+            return;
+        }
         mLogBuilder = new StringBuilder("TaskLaunchParamsModifier:phase=" + phase
                 + " task=" + task + " activity=" + activity);
     }
 
     private void appendLog(String log) {
+        if (mLogBuilder == null) return;
         mLogBuilder.append(" ").append(log);
     }
 
     private void outputLog() {
+        if (mLogBuilder == null) return;
         ProtoLog.v(WmProtoLogGroups.WM_DEBUG_TASKS_LAUNCH_PARAMS, "%s", mLogBuilder.toString());
     }
 
