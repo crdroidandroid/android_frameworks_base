@@ -42,7 +42,7 @@ public enum WmProtoLogGroups implements IProtoLogGroup {
     WM_DEBUG_STATES(Consts.ENABLE_DEBUG, false, Consts.TAG_WM),
     WM_DEBUG_TASKS(Consts.ENABLE_DEBUG, false, Consts.TAG_WM),
   // TODO: b/420917959 - Disable launch params logging this once the bug is fixed.
-    WM_DEBUG_TASKS_LAUNCH_PARAMS(Consts.ENABLE_DEBUG, true, Consts.TAG_WM),
+    WM_DEBUG_TASKS_LAUNCH_PARAMS(Consts.ENABLE_DEBUG, false, Consts.TAG_WM),
     WM_DEBUG_STARTING_WINDOW(Consts.ENABLE_DEBUG, false, Consts.TAG_WM),
     WM_SHOW_TRANSACTIONS(Consts.ENABLE_DEBUG, false, Consts.TAG_WM),
     WM_SHOW_SURFACE_ALLOC(Consts.ENABLE_DEBUG, false, Consts.TAG_WM),
