@@ -979,7 +979,10 @@ public class UdfpsController implements DozeReceiver, Dumpable {
         final int requestReason = overlay.getRequestReason();
 
         if (mUdfpsAnimation != null) {
-            mUdfpsAnimation.setIsKeyguard(requestReason == REASON_AUTH_KEYGUARD);
+            mUdfpsAnimation.setIsKeyguard(
+                    requestReason == REASON_AUTH_KEYGUARD
+                            || mKeyguardStateController.isShowing()
+                            || mStatusBarStateController.isDozing());
         }
 
         if (requestReason == REASON_AUTH_KEYGUARD
