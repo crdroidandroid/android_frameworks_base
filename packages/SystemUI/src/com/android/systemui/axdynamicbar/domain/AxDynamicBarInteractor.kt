@@ -206,6 +206,10 @@ constructor(
 
         indicationController.addIndicationListener { type, text ->
             val indicationType = mapIndicationType(type) ?: return@addIndicationListener
+            if (indicationType == IslandEvent.KeyguardIndication.IndicationType.BIOMETRIC &&
+                !settings.isKeyguardBiometricUnlockEventsActive()) {
+                return@addIndicationListener
+            }
             if (text != null && text.isNotEmpty()) {
                 val event = IslandEvent.KeyguardIndication(
                     text = text.toString(),
