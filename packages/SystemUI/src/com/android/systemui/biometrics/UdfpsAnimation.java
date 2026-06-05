@@ -237,33 +237,51 @@ public class UdfpsAnimation extends ImageView {
     }
 
     public void show() {
-        if (mShowing || !mIsKeyguard || recognizingAnim == null) return;
+        if (!mIsKeyguard || recognizingAnim == null) {
+            return;
+        }
+
+        if (mShowing && !isAttachedToWindow()) {
+            mShowing = false;
+        }
+
+        if (mShowing && isAttachedToWindow()) {
+            return;
+        }
+
         try {
-            if (getWindowToken() == null) {
+            if (!isAttachedToWindow()) {
                 mWindowManager.addView(this, mAnimParams);
             } else {
                 mWindowManager.updateViewLayout(this, mAnimParams);
             }
+
             mShowing = true;
+            recognizingAnim.stop();
+            recognizingAnim.selectDrawable(0);
             recognizingAnim.start();
         } catch (RuntimeException e) {
-            Log.e(LOG_TAG, "Error adding view to WindowManager", e);
+            mShowing = false;
+            Log.e(LOG_TAG, "Error adding animation window", e);
         }
     }
 
     public void hide() {
-        if (!mShowing && getWindowToken() == null) return;
         try {
             if (recognizingAnim != null) {
                 recognizingAnim.stop();
                 recognizingAnim.selectDrawable(0);
                 clearAnimation();
             }
-            mWindowManager.removeView(this);
-            mShowing = false;
+
+            if (isAttachedToWindow()) {
+                mWindowManager.removeViewImmediate(this);
+            }
         } catch (RuntimeException e) {
-            Log.e(LOG_TAG, "Error removing view from WindowManager", e);
+            Log.e(LOG_TAG, "Error removing animation window", e);
         }
+
+        mShowing = false;
     }
 
     public void removeAnimation() {
