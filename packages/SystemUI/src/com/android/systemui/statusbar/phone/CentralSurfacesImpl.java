@@ -31,6 +31,7 @@ import static androidx.lifecycle.Lifecycle.State.RESUMED;
 
 import static com.android.settingslib.display.BrightnessUtils.GAMMA_SPACE_MAX;
 import static com.android.settingslib.display.BrightnessUtils.convertGammaToLinearFloat;
+import static com.android.settingslib.display.BrightnessUtils.convertLinearToGammaFloat;
 
 import static com.android.systemui.Dependency.TIME_TICK_HANDLER_NAME;
 import static com.android.systemui.Flags.keyboardShortcutHelperRewrite;
@@ -647,6 +648,7 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
     private int mQuickQsOffsetHeight;
     private boolean mBrightnessChanged;
     private float mCurrentBrightness;
+    private float mBrightnessAtTouchStart = -1f;
 
     /**
      * Public constructor for CentralSurfaces.
@@ -1799,17 +1801,17 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
 
     private void adjustBrightness(int x) {
         mBrightnessChanged = true;
-        float raw = ((float) x) / getDisplayWidth();
-
-        // Add a padding to the brightness control on both sides to
-        // make it easier to reach min/max brightness
-        float padded = Math.min(1.0f - BRIGHTNESS_CONTROL_PADDING,
-                Math.max(BRIGHTNESS_CONTROL_PADDING, raw));
-        float value = (padded - BRIGHTNESS_CONTROL_PADDING) /
-                (1 - (2.0f * BRIGHTNESS_CONTROL_PADDING));
+        if (mBrightnessAtTouchStart < 0f) {
+            mBrightnessAtTouchStart = mCurrentBrightness;
+            mInitialTouchX = x;
+            return;
+        }
+        float delta = ((float) (x - mInitialTouchX)) / getDisplayWidth();
+        float gamma = convertLinearToGammaFloat(mBrightnessAtTouchStart,
+                mMinimumBacklight, mMaximumBacklight) / (float) GAMMA_SPACE_MAX;
+        float value = Math.min(1f, Math.max(0f, gamma + delta));
         final float val = convertGammaToLinearFloat(
-                Math.round(value * GAMMA_SPACE_MAX),
-                mMinimumBacklight, mMaximumBacklight);
+                Math.round(value * GAMMA_SPACE_MAX), mMinimumBacklight, mMaximumBacklight);
         mCurrentBrightness = val;
         mDisplayManager.setTemporaryBrightness(mDisplayId, val);
         AsyncTask.execute(new Runnable() {
@@ -1835,6 +1837,7 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
                 mLinger = 0;
                 mInitialTouchX = x;
                 mInitialTouchY = y;
+                mBrightnessAtTouchStart = -1f;
                 mMessageRouter.cancelMessages(MSG_LONG_PRESS_BRIGHTNESS_CHANGE);
                 mMessageRouter.sendMessageDelayed(MSG_LONG_PRESS_BRIGHTNESS_CHANGE,
                         BRIGHTNESS_CONTROL_LONG_PRESS_TIMEOUT);
@@ -1847,7 +1850,10 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
                     final int xDiff = Math.abs(x - mInitialTouchX);
                     final int yDiff = Math.abs(y - mInitialTouchY);
                     final int touchSlop = ViewConfiguration.get(mContext).getScaledTouchSlop();
-                    if (xDiff > yDiff) {
+                    if (yDiff > xDiff && yDiff > touchSlop) {
+                        mMessageRouter.cancelMessages(MSG_LONG_PRESS_BRIGHTNESS_CHANGE);
+                        mLinger = 0;
+                    } else if (xDiff > yDiff) {
                         mLinger++;
                     }
                     if (xDiff > touchSlop || yDiff > touchSlop) {
@@ -1855,6 +1861,7 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
                     }
                 }
             } else {
+                mLinger = 0;
                 mMessageRouter.cancelMessages(MSG_LONG_PRESS_BRIGHTNESS_CHANGE);
             }
         } else if (action == MotionEvent.ACTION_UP
@@ -1872,6 +1879,14 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
             }
             mDisplayManager.setBrightness(mDisplayId, mCurrentBrightness);
         }
+    }
+
+    @Override
+    public void cancelBrightnessControl() {
+        mMessageRouter.cancelMessages(MSG_LONG_PRESS_BRIGHTNESS_CHANGE);
+        mLinger = 0;
+        mBrightnessChanged = false;
+        mBrightnessAtTouchStart = -1f;
     }
 
     void onLongPressBrightnessChange() {
