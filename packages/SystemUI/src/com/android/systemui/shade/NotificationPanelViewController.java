@@ -4211,6 +4211,10 @@ public final class NotificationPanelViewController implements
             if (event.getAction() == MotionEvent.ACTION_UP
                     || event.getAction() == MotionEvent.ACTION_CANCEL) {
                 mBlockingExpansionForCurrentTouch = false;
+                if (mBrightnessControl) {
+                    mCentralSurfaces.onBrightnessChanged(true);
+                    mCentralSurfaces.cancelBrightnessControl();
+                }
             }
             // When touch focus transfer happens, ACTION_DOWN->ACTION_UP may happen immediately
             // without any ACTION_MOVE event.
@@ -4251,6 +4255,9 @@ public final class NotificationPanelViewController implements
             }
             if (!mHeadsUpTouchHelper.isTrackingHeadsUp() && mQsController.handleTouch(
                     event, isFullyCollapsed(), isShadeOrQsHeightAnimationRunning())) {
+                if (mBrightnessControl) {
+                    mCentralSurfaces.cancelBrightnessControl();
+                }
                 if (event.getActionMasked() != MotionEvent.ACTION_MOVE) {
                     mShadeLog.logMotionEvent(event, "onTouch: handleQsTouch handled event");
                 }
