@@ -7556,6 +7556,22 @@ public final class Settings {
         public static final String QS_BRIGHTNESS_SLIDER_HAPTIC = "qs_brightness_slider_haptic";
 
         /**
+         * Volume slider in the QS brightness row
+         * 0 - brightness only
+         * 1 - volume beside brightness (default)
+         * 2 - volume only
+         * 3 - volume below brightness
+         * @hide
+         */
+        public static final String QS_SHOW_VOLUME_SLIDER = "qs_show_volume_slider";
+
+        /**
+         * Ringer mode with volume slider
+         * @hide
+         */
+        public static final String QS_SHOW_RINGER_MODE = "qs_show_ringer_mode";
+
+        /**
          * Customize QS tile shape.
          * @hide
          */
