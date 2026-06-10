@@ -37,9 +37,9 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class OmniJawsClient {
 
@@ -75,14 +75,14 @@ public class OmniJawsClient {
 
     private static OmniJawsClient sInstance;
 
-    private WeatherInfo mCachedInfo;
+    private volatile WeatherInfo mCachedInfo;
     private Resources mRes;
     private String mPackageName;
     private String mIconPrefix;
     private String mSettingIconPackage;
     private boolean mMetric;
 
-    private final List<WeakReference<OmniJawsObserver>> mObservers = new ArrayList<>();
+    private final List<WeakReference<OmniJawsObserver>> mObservers = new CopyOnWriteArrayList<>();
     private WeatherUpdateReceiver mReceiver;
     private boolean mWeatherReceiverRegistered = false;
 
@@ -143,40 +143,42 @@ public class OmniJawsClient {
             return;
         }
 
+        WeatherInfo info = null;
+
         try (Cursor weatherCursor = context.getContentResolver().query(
                 WEATHER_URI, WEATHER_PROJECTION, null, null, null)) {
 
             if (weatherCursor != null && weatherCursor.getCount() > 0) {
-                mCachedInfo = new WeatherInfo();
+                info = new WeatherInfo();
                 List<DayForecast> forecasts = new ArrayList<>();
 
                 for (int i = 0; i < weatherCursor.getCount(); i++) {
                     weatherCursor.moveToPosition(i);
                     if (i == 0) {
-                        mCachedInfo.city = weatherCursor.getString(0);
-                        mCachedInfo.windSpeed = getFormattedValue(weatherCursor.getFloat(1));
-                        mCachedInfo.windDirection = weatherCursor.getInt(2) + "\u00b0";
-                        mCachedInfo.conditionCode = weatherCursor.getInt(3);
-                        mCachedInfo.temp = getFormattedValue(weatherCursor.getFloat(4));
-                        mCachedInfo.humidity = weatherCursor.getString(5);
-                        mCachedInfo.condition = weatherCursor.getString(6);
-                        mCachedInfo.timeStamp = Long.parseLong(weatherCursor.getString(11));
-                        mCachedInfo.pinWheel = weatherCursor.getString(13);
+                        info.city = weatherCursor.getString(0);
+                        info.windSpeed = getFormattedValue(weatherCursor.getFloat(1));
+                        info.windDirection = weatherCursor.getInt(2) + "\u00b0";
+                        info.conditionCode = weatherCursor.getInt(3);
+                        info.temp = getFormattedValue(weatherCursor.getFloat(4));
+                        info.humidity = weatherCursor.getString(5);
+                        info.condition = weatherCursor.getString(6);
+                        info.timeStamp = Long.parseLong(weatherCursor.getString(11));
+                        info.pinWheel = weatherCursor.getString(13);
 
                         int colFeelsLike = weatherCursor.getColumnIndex("feels_like");
-                        if (colFeelsLike != -1) mCachedInfo.feelsLike = weatherCursor.getFloat(colFeelsLike);
+                        if (colFeelsLike != -1) info.feelsLike = weatherCursor.getFloat(colFeelsLike);
                         int colPressure = weatherCursor.getColumnIndex("pressure");
-                        if (colPressure != -1) mCachedInfo.pressure = weatherCursor.getFloat(colPressure);
+                        if (colPressure != -1) info.pressure = weatherCursor.getFloat(colPressure);
                         int colUvi = weatherCursor.getColumnIndex("uvi");
-                        if (colUvi != -1) mCachedInfo.uvi = weatherCursor.getFloat(colUvi);
+                        if (colUvi != -1) info.uvi = weatherCursor.getFloat(colUvi);
                         int colVisibility = weatherCursor.getColumnIndex("visibility");
-                        if (colVisibility != -1) mCachedInfo.visibility = weatherCursor.getFloat(colVisibility);
+                        if (colVisibility != -1) info.visibility = weatherCursor.getFloat(colVisibility);
                         int colDewPoint = weatherCursor.getColumnIndex("dew_point");
-                        if (colDewPoint != -1) mCachedInfo.dewPoint = weatherCursor.getFloat(colDewPoint);
+                        if (colDewPoint != -1) info.dewPoint = weatherCursor.getFloat(colDewPoint);
                         int colSunrise = weatherCursor.getColumnIndex("sunrise");
-                        if (colSunrise != -1) mCachedInfo.sunrise = weatherCursor.getLong(colSunrise);
+                        if (colSunrise != -1) info.sunrise = weatherCursor.getLong(colSunrise);
                         int colSunset = weatherCursor.getColumnIndex("sunset");
-                        if (colSunset != -1) mCachedInfo.sunset = weatherCursor.getLong(colSunset);
+                        if (colSunset != -1) info.sunset = weatherCursor.getLong(colSunset);
                     } else {
                         DayForecast day = new DayForecast();
                         day.low = getFormattedValue(weatherCursor.getFloat(7));
@@ -187,10 +189,11 @@ public class OmniJawsClient {
                         forecasts.add(day);
                     }
                 }
-                mCachedInfo.forecasts = forecasts;
+                info.forecasts = forecasts;
             }
         } catch (Exception e) {
             Log.e(TAG, "queryWeather: weather", e);
+            info = null;
         }
 
         try (Cursor settingsCursor = context.getContentResolver().query(
@@ -198,18 +201,18 @@ public class OmniJawsClient {
 
             if (settingsCursor != null && settingsCursor.moveToFirst()) {
                 mMetric = settingsCursor.getInt(1) == 0;
-                if (mCachedInfo != null) {
-                    mCachedInfo.tempUnits = getTemperatureUnit();
-                    mCachedInfo.windUnits = getWindUnit();
-                    mCachedInfo.provider = settingsCursor.getString(2);
-                    mCachedInfo.iconPack = settingsCursor.getString(4);
+                if (info != null) {
+                    info.tempUnits = getTemperatureUnit();
+                    info.windUnits = getWindUnit();
+                    info.provider = settingsCursor.getString(2);
+                    info.iconPack = settingsCursor.getString(4);
                 }
             }
         } catch (Exception e) {
             Log.e(TAG, "queryWeather: settings", e);
         }
 
-        if (mCachedInfo != null) {
+        if (info != null) {
             try (Cursor hourlyCursor = context.getContentResolver().query(
                     HOURLY_URI, null, null, null, null)) {
                 if (hourlyCursor != null && hourlyCursor.getCount() > 0) {
@@ -224,18 +227,21 @@ public class OmniJawsClient {
                         h.windSpeed = hourlyCursor.getFloat(hourlyCursor.getColumnIndex("hourly_wind_speed"));
                         hourly.add(h);
                     }
-                    mCachedInfo.hourlyForecasts = hourly;
+                    info.hourlyForecasts = hourly;
                 }
             } catch (Exception e) {
                 Log.e(TAG, "queryWeather: hourly", e);
             }
         }
 
+        mCachedInfo = info;
+
         updateSettings(context);
     }
 
     private void updateSettings(Context context) {
-        String iconPack = (mCachedInfo != null) ? mCachedInfo.iconPack : null;
+        WeatherInfo info = mCachedInfo;
+        String iconPack = (info != null) ? info.iconPack : null;
         if (iconPack == null || TextUtils.isEmpty(iconPack)) {
             loadDefaultIconsPackage(context);
         } else if (!iconPack.equals(mSettingIconPackage)) {
@@ -315,13 +321,10 @@ public class OmniJawsClient {
 
     public void removeObserver(Context context, OmniJawsObserver observer) {
         if (observer == null) return;
-        Iterator<WeakReference<OmniJawsObserver>> it = mObservers.iterator();
-        while (it.hasNext()) {
-            OmniJawsObserver o = it.next().get();
-            if (o == null || o == observer) {
-                it.remove();
-            }
-        }
+        mObservers.removeIf(ref -> {
+            OmniJawsObserver o = ref.get();
+            return o == null || o == observer;
+        });
         if (mObservers.isEmpty()) {
             unregisterReceiver(context);
         }
