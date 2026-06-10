@@ -522,28 +522,28 @@ fun rememberSliderShapeMode(): Int {
 }
 
 @Composable
-private fun rememberShowVolumeSlider(): Boolean {
+private fun rememberVolumeSliderMode(): Int {
     val context = LocalContext.current
     val contentResolver = context.contentResolver
 
-    fun readEnabled(): Boolean {
+    fun readMode(): Int {
         return try {
             Settings.System.getIntForUser(
                 contentResolver, Settings.System.QS_SHOW_VOLUME_SLIDER, 1,
                 UserHandle.USER_CURRENT
-            ) != 0
+            ).coerceIn(0, 2)
         } catch (_: Throwable) {
-            true
+            1
         }
     }
 
-    var enabled by remember { mutableStateOf(readEnabled()) }
+    var mode by remember { mutableIntStateOf(readMode()) }
 
     DisposableEffect(contentResolver) {
         val observer = object : ContentObserver(null) {
             override fun onChange(selfChange: Boolean) {
                 context.mainExecutor.execute {
-                    enabled = readEnabled()
+                    mode = readMode()
                 }
             }
         }
@@ -558,7 +558,7 @@ private fun rememberShowVolumeSlider(): Boolean {
         }
     }
 
-    return enabled
+    return mode
 }
 
 @Composable
@@ -1029,7 +1029,7 @@ fun BrightnessSliderContainer(
             if (dragging) containerColors.mirrorColor else containerColors.idleColor
         )
 
-    val showVolumeSlider = rememberShowVolumeSlider()
+    val volumeSliderMode = rememberVolumeSliderMode()
 
     val brightnessModifier =
         Modifier.borderOnFocus(
@@ -1081,6 +1081,14 @@ fun BrightnessSliderContainer(
         )
     }
 
+    val volumeSlider: @Composable () -> Unit = {
+        VolumeSlider(
+            hapticsViewModelFactory = viewModel.hapticsViewModelFactory,
+            containerColors = containerColors,
+            modifier = Modifier.fillMaxWidth(),
+        )
+    }
+
     Box(
         modifier =
             modifier
@@ -1088,25 +1096,22 @@ fun BrightnessSliderContainer(
                 .fillMaxWidth()
                 .sysuiResTag("brightness_slider")
     ) {
-        if (showVolumeSlider) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                Box(modifier = Modifier.weight(1f)) { brightnessSlider() }
+        when (volumeSliderMode) {
+            1 ->
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Box(modifier = Modifier.weight(1f)) { brightnessSlider() }
 
-                Spacer(modifier = Modifier.width(12.dp))
+                    Spacer(modifier = Modifier.width(12.dp))
 
-                Box(modifier = Modifier.weight(1f)) {
-                    VolumeSlider(
-                        hapticsViewModelFactory = viewModel.hapticsViewModelFactory,
-                        containerColors = containerColors,
-                        modifier = Modifier.fillMaxWidth(),
-                    )
+                    Box(modifier = Modifier.weight(1f)) { volumeSlider() }
                 }
-            }
-        } else {
-            brightnessSlider()
+
+            2 -> volumeSlider()
+
+            else -> brightnessSlider()
         }
     }
 }
