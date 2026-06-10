@@ -1084,7 +1084,6 @@ fun BrightnessSliderContainer(
     val volumeSlider: @Composable () -> Unit = {
         VolumeSlider(
             hapticsViewModelFactory = viewModel.hapticsViewModelFactory,
-            containerColors = containerColors,
             modifier = Modifier.fillMaxWidth(),
         )
     }
@@ -1120,7 +1119,6 @@ fun BrightnessSliderContainer(
 @Composable
 private fun VolumeSlider(
     hapticsViewModelFactory: SliderHapticsViewModel.Factory,
-    containerColors: ContainerColors,
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
@@ -1150,13 +1148,6 @@ private fun VolumeSlider(
             3 -> 0.dp /* Square */
             else -> Dimensions.SliderTrackRoundedCorner
         }
-    val bgCornerDp: Dp =
-        when (shapeMode) {
-            1 -> 50.dp /* Circle */
-            2 -> 24.dp /* Rounded Square */
-            3 -> 0.dp /* Square */
-            else -> Dimensions.SliderBackgroundRoundedCorner
-        }
     val trackShape = RoundedCornerShape(trackCornerDp)
     val gradient = brightnessSliderGradient()
     val colors = colors(gradient)
@@ -1183,12 +1174,6 @@ private fun VolumeSlider(
     }
     val animatedValue by
         animateFloatAsState(targetValue = value.toFloat(), label = "VolumeSliderAnimatedValue")
-
-    val containerColor by
-        animateColorAsState(
-            if (dragging) containerColors.mirrorColor else containerColors.idleColor,
-            label = "VolumeSliderContainerColor",
-        )
 
     DisposableEffect(Unit) {
         val receiver =
@@ -1279,7 +1264,6 @@ private fun VolumeSlider(
                     color = MaterialTheme.colorScheme.secondary,
                     cornerSize = CornerSize(trackCornerDp),
                 )
-                .sliderBackground(containerColor, bgCornerDp)
                 .fillMaxWidth(),
     ) {
         Slider(
