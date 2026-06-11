@@ -24117,10 +24117,6 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
 
                     mPrivateFlags4 |= PFLAG4_HAS_DRAWN;
 
-		             // Treat as a move for preferred frame rate purposes
-		             // This solves refresh rate drops during any stretch effects
-                    mPrivateFlags4 |= PFLAG4_HAS_MOVED;
-
                     // Fast path for layouts with no backgrounds
                     if ((mPrivateFlags & PFLAG_SKIP_DRAW) == PFLAG_SKIP_DRAW) {
                         dispatchDraw(canvas);
