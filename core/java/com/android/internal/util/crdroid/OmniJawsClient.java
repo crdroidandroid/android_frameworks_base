@@ -71,6 +71,11 @@ public class OmniJawsClient {
             "enabled", "units", "provider", "setup", "icon_pack"
     };
 
+    public static final String[] HOURLY_PROJECTION = {
+            "hourly_temperature", "hourly_condition_code", "hourly_condition",
+            "hourly_timestamp", "hourly_humidity", "hourly_wind_speed"
+    };
+
     private static final DecimalFormat sNoDigitsFormat = new DecimalFormat("0");
 
     private static OmniJawsClient sInstance;
@@ -214,20 +219,32 @@ public class OmniJawsClient {
 
         if (info != null) {
             try (Cursor hourlyCursor = context.getContentResolver().query(
-                    HOURLY_URI, null, null, null, null)) {
+                    HOURLY_URI, HOURLY_PROJECTION, null, null, null)) {
                 if (hourlyCursor != null && hourlyCursor.getCount() > 0) {
-                    List<HourlyForecast> hourly = new ArrayList<>();
-                    while (hourlyCursor.moveToNext()) {
-                        HourlyForecast h = new HourlyForecast();
-                        h.temperature = hourlyCursor.getFloat(hourlyCursor.getColumnIndex("hourly_temperature"));
-                        h.conditionCode = hourlyCursor.getInt(hourlyCursor.getColumnIndex("hourly_condition_code"));
-                        h.condition = hourlyCursor.getString(hourlyCursor.getColumnIndex("hourly_condition"));
-                        h.timestamp = hourlyCursor.getLong(hourlyCursor.getColumnIndex("hourly_timestamp"));
-                        h.humidity = hourlyCursor.getFloat(hourlyCursor.getColumnIndex("hourly_humidity"));
-                        h.windSpeed = hourlyCursor.getFloat(hourlyCursor.getColumnIndex("hourly_wind_speed"));
-                        hourly.add(h);
+                    final int colTemp = hourlyCursor.getColumnIndex("hourly_temperature");
+                    final int colCode = hourlyCursor.getColumnIndex("hourly_condition_code");
+                    final int colCondition = hourlyCursor.getColumnIndex("hourly_condition");
+                    final int colTimestamp = hourlyCursor.getColumnIndex("hourly_timestamp");
+                    final int colHumidity = hourlyCursor.getColumnIndex("hourly_humidity");
+                    final int colWindSpeed = hourlyCursor.getColumnIndex("hourly_wind_speed");
+
+                    if (colTemp == -1 || colCode == -1 || colCondition == -1
+                            || colTimestamp == -1 || colHumidity == -1 || colWindSpeed == -1) {
+                        Log.w(TAG, "queryWeather: hourly columns missing, skipping hourly forecasts");
+                    } else {
+                        List<HourlyForecast> hourly = new ArrayList<>();
+                        while (hourlyCursor.moveToNext()) {
+                            HourlyForecast h = new HourlyForecast();
+                            h.temperature = hourlyCursor.getFloat(colTemp);
+                            h.conditionCode = hourlyCursor.getInt(colCode);
+                            h.condition = hourlyCursor.getString(colCondition);
+                            h.timestamp = hourlyCursor.getLong(colTimestamp);
+                            h.humidity = hourlyCursor.getFloat(colHumidity);
+                            h.windSpeed = hourlyCursor.getFloat(colWindSpeed);
+                            hourly.add(h);
+                        }
+                        info.hourlyForecasts = hourly;
                     }
-                    info.hourlyForecasts = hourly;
                 }
             } catch (Exception e) {
                 Log.e(TAG, "queryWeather: hourly", e);
