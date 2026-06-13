@@ -491,13 +491,12 @@ constructor(
         keyguardUpdateMonitor.registerCallback(keyguardUpdateMonitorCallback)
         zenModeController.addCallback(zenModeCallback)
         if (SceneContainerFlag.isEnabled) {
-            handleDoze(
-                when (AOD) {
-                    keyguardTransitionInteractor.getCurrentState() -> 1f
-                    keyguardTransitionInteractor.getStartedState() -> 1f
-                    else -> 0f
-                }
-            )
+            val currentState = keyguardTransitionInteractor.getCurrentState()
+            val startedState = keyguardTransitionInteractor.getStartedState()
+            val isDozing =
+                currentState == AOD || startedState == AOD ||
+                    currentState == DOZING || startedState == DOZING
+            handleDoze(if (isDozing) 1f else 0f)
         }
         smallTimeListener?.update(shouldTimeListenerRun)
         largeTimeListener?.update(shouldTimeListenerRun)
@@ -613,12 +612,23 @@ constructor(
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun listenForDozeAmountTransition(scope: CoroutineScope): Job {
         return scope.launch {
-            merge(
+            val transitions = buildList {
+                add(
                     keyguardTransitionInteractor.transition(Edge.create(AOD, LOCKSCREEN)).map {
                         it.copy(value = 1f - it.value)
-                    },
-                    keyguardTransitionInteractor.transition(Edge.create(LOCKSCREEN, AOD)),
+                    }
                 )
+                add(keyguardTransitionInteractor.transition(Edge.create(LOCKSCREEN, AOD)))
+                add(keyguardTransitionInteractor.transition(Edge.create(LOCKSCREEN, DOZING)))
+                if (!com.android.systemui.Flags.newDozingKeyguardStates()) {
+                    add(
+                        keyguardTransitionInteractor.transition(Edge.create(DOZING, LOCKSCREEN)).map {
+                            it.copy(value = 1f - it.value)
+                        }
+                    )
+                }
+            }
+            merge(*transitions.toTypedArray())
                 .filter { it.transitionState != TransitionState.FINISHED }
                 .collect { handleDoze(it.value) }
         }
@@ -646,10 +656,7 @@ constructor(
             keyguardTransitionInteractor
                 .transition(Edge.create(to = LOCKSCREEN))
                 .filter { it.transitionState == TransitionState.STARTED }
-                .filter { it.from != AOD }
-                .filter {
-                    !com.android.systemui.Flags.newDozingKeyguardStates() || it.from != DOZING
-                }
+                .filter { it.from != AOD && it.from != DOZING }
                 .collect { handleDoze(0f) }
         }
     }
