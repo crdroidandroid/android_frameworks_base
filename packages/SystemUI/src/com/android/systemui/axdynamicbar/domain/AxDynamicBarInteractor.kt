@@ -541,6 +541,8 @@ constructor(
 
     override fun switchToApp(taskId: Int) = repository.appTracking.switchToApp(taskId)
 
+    override fun killApp(taskId: Int) = repository.appTracking.killApp(taskId)
+
     fun onPanelExpandedChanged(expanded: Boolean) {
         panelBlocking = expanded
         _isPanelExpanded.value = expanded
