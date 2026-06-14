@@ -112,7 +112,10 @@ public final class AxSandboxService extends SystemService implements IAxSandboxS
     private final Map<String, Long> mUnlockTimestamps = new ConcurrentHashMap<>();
     private final Map<String, Runnable> mTimeoutRunnables = new ConcurrentHashMap<>();
     private String mLastFocusedAppKey = null;
+    private int mLastFocusedTaskId = INVALID_TASK_ID;
     private ArrayList<String> mExcludedComponents = new ArrayList<>();
+
+    private static final int INVALID_TASK_ID = -1;
 
     private int mLockBehavior = LOCK_BEHAVIOR_ON_LEAVE;
     private int mLockTimeout = 30;
@@ -836,10 +839,27 @@ public final class AxSandboxService extends SystemService implements IAxSandboxS
     public void onAppFocusChanged(ActivityRecord newFocus, Task newTask) {
         if (!hasLockedPackages()) {
             mLastFocusedAppKey = null;
+            mLastFocusedTaskId = INVALID_TASK_ID;
             return;
         }
 
         String newKey = (newFocus != null) ? sessionKey(newFocus) : null;
+        int newTaskId = (newTask != null) ? newTask.mTaskId : INVALID_TASK_ID;
+
+        boolean stayingInUnlockedTask = mLockBehavior == LOCK_BEHAVIOR_ON_LEAVE
+                && mLastFocusedAppKey != null
+                && !mLastFocusedAppKey.equals(newKey)
+                && newTaskId != INVALID_TASK_ID
+                && newTaskId == mLastFocusedTaskId
+                && mUnlockedApps.contains(mLastFocusedAppKey);
+
+        if (stayingInUnlockedTask) {
+            if (newKey != null) {
+                cancelTimeoutLock(newKey);
+            }
+            mUnlockTimestamps.put(mLastFocusedAppKey, SystemClock.elapsedRealtime());
+            return;
+        }
 
         if (mLastFocusedAppKey != null && !mLastFocusedAppKey.equals(newKey)) {
             scheduleTimeoutLock(mLastFocusedAppKey);
@@ -862,6 +882,7 @@ public final class AxSandboxService extends SystemService implements IAxSandboxS
         }
 
         mLastFocusedAppKey = newKey;
+        mLastFocusedTaskId = newTaskId;
         lockTopApp(newTask, "onAppFocusChanged");
     }
 
