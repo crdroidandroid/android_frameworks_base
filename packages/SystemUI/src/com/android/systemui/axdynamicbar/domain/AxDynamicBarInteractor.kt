@@ -404,7 +404,9 @@ constructor(
             is IslandEvent.Notification -> repository.notification.dismissNotification(event)
             is IslandEvent.AppSwitch -> repository.appTracking.clear()
             is IslandEvent.Torch -> {
-                repository.torch.toggleTorch()
+                if (repository.torch.isEnabled) {
+                    repository.torch.toggleTorch()
+                }
                 repository.torch.clear()
             }
             is IslandEvent.BiometricUnlock -> repository.biometric.clear()

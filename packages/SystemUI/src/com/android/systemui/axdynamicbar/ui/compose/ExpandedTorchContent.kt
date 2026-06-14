@@ -79,7 +79,7 @@ internal fun TorchExpanded(
             CircleButton(
                 color = RedAccent.copy(alpha = AlphaSubtle),
                 size = SizeButton,
-                onClick = { interactor.toggleTorch() },
+                onClick = { interactor.dismissEvent(event) },
             ) {
                 Icon(Icons.Filled.FlashlightOff, null, tint = RedAccent, modifier = Modifier.size(22.dp))
             }
@@ -91,7 +91,7 @@ internal fun TorchExpanded(
                     contentAlignment = Alignment.Center,
                 ) {
                     VerticalFlashlightSlider(
-                        valueRange = 1..event.maxLevel,
+                        valueRange = 0..event.maxLevel,
                         onValueChange = {
                             isDragging = true
                             localLevel = it
