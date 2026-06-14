@@ -48,6 +48,7 @@ interface IslandActions {
     fun openUrl(url: String)
     fun removeClipboardItem(id: Long)
     fun switchToApp(taskId: Int)
+    fun killApp(taskId: Int)
     fun onNotificationInteraction(eventId: String)
     fun onNotificationInteractionEnd(eventId: String)
     fun onNotificationAlertInteractionStart()
