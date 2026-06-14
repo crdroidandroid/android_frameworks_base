@@ -28,28 +28,34 @@ constructor(
 
     private var listening = false
     private var levelJob: Job? = null
+    private var isRetainingOffFromSlider = false
+
+    val isEnabled: Boolean
+        get() = flashlightController.isEnabled
 
     private val listener =
         object : FlashlightController.FlashlightListener {
             override fun onFlashlightChanged(enabled: Boolean) {
                 if (enabled) {
+                    isRetainingOffFromSlider = false
                     _torchEvent.value = IslandEvent.Torch()
                     startLevelObserver()
                 } else {
-                    stopLevelObserver()
-                    _torchEvent.value = null
+                    if (isRetainingOffFromSlider) {
+                        // Keep the event so the user can slide it back up
+                    } else {
+                        clear()
+                    }
                 }
             }
 
             override fun onFlashlightError() {
-                stopLevelObserver()
-                _torchEvent.value = null
+                clear()
             }
 
             override fun onFlashlightAvailabilityChanged(available: Boolean) {
                 if (!available) {
-                    stopLevelObserver()
-                    _torchEvent.value = null
+                    clear()
                 }
             }
         }
@@ -65,6 +71,13 @@ constructor(
                             if (model.enabled) {
                                 _torchEvent.value =
                                     IslandEvent.Torch(level = model.level, maxLevel = model.max)
+                            } else {
+                                if (isRetainingOffFromSlider) {
+                                    _torchEvent.value =
+                                        IslandEvent.Torch(level = 0, maxLevel = model.max)
+                                } else {
+                                    _torchEvent.value = null
+                                }
                             }
                         }
                         is FlashlightModel.Available.Binary -> {
@@ -89,6 +102,7 @@ constructor(
         listening = true
         flashlightController.addCallback(listener)
         if (flashlightController.isEnabled) {
+            isRetainingOffFromSlider = false
             _torchEvent.value = IslandEvent.Torch()
             startLevelObserver()
         }
@@ -103,11 +117,13 @@ constructor(
     }
 
     fun clear() {
+        isRetainingOffFromSlider = false
         stopLevelObserver()
         _torchEvent.value = null
     }
 
     fun toggleTorch() {
+        isRetainingOffFromSlider = false
         val enabled = !flashlightController.isEnabled
         if (FlashlightStrength.isEnabled) {
             flashlightInteractor.setEnabled(enabled)
@@ -117,11 +133,40 @@ constructor(
     }
 
     fun setLevel(level: Int) {
-        if (FlashlightStrength.isEnabled) flashlightInteractor.setLevel(level)
+        if (FlashlightStrength.isEnabled) {
+            setSliderLevel(level, persist = true)
+        }
     }
 
     fun setLevelTemporary(level: Int) {
-        if (FlashlightStrength.isEnabled) flashlightInteractor.setTemporaryLevel(level)
+        if (FlashlightStrength.isEnabled) {
+            setSliderLevel(level, persist = false)
+        }
+    }
+
+    private fun setSliderLevel(level: Int, persist: Boolean) {
+        if (level == 0) {
+            isRetainingOffFromSlider = true
+            flashlightInteractor.setEnabled(false)
+            return
+        }
+
+        isRetainingOffFromSlider = false
+        if (shouldEnableTorchForCurrentLevel(level)) {
+            flashlightInteractor.setEnabled(true)
+        } else if (persist) {
+            flashlightInteractor.setLevel(level)
+        } else {
+            flashlightInteractor.setTemporaryLevel(level)
+        }
+    }
+
+    private fun shouldEnableTorchForCurrentLevel(level: Int): Boolean {
+        if (flashlightController.isEnabled) return false
+        // setLevel() enables the torch unless this matches the disabled state's remembered level.
+        val currentLevel =
+            (flashlightInteractor.state.value as? FlashlightModel.Available.Level)?.level
+                ?: return false
+        return currentLevel == level
     }
 }
-
