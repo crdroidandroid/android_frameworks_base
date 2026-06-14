@@ -105,7 +105,7 @@ sealed class IslandEvent(open val priority: Int, val id: String) : Comparable<Is
         IslandEvent(priority = 97, id = "torch") {
         override val behavior = EventBehavior(suppressOnDismiss = false)
         val supportsLevel: Boolean
-            get() = level >= 1 && maxLevel > 1
+            get() = level >= 0 && maxLevel > 1
     }
 
     data class Vpn(val isBranded: Boolean = false, val isValidated: Boolean = false) :
