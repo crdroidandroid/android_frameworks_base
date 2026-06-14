@@ -54,6 +54,6 @@ public interface FlashlightController extends CallbackController<FlashlightListe
         void onFlashlightAvailabilityChanged(boolean available);
 
         /** Called when the flashlight strength changes (if supported). */
-        void onFlashlightStrengthChanged(int level);
+        default void onFlashlightStrengthChanged(int level) {}
     }
 }
