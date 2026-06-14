@@ -13,9 +13,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Apps
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -62,6 +65,9 @@ internal fun AppHistoryExpanded(event: IslandEvent.AppSwitch, interactor: Island
                             interactor.switchToApp(app.taskId)
                             interactor.collapseIsland()
                         },
+                        onKill = {
+                            interactor.killApp(app.taskId)
+                        },
                         modifier = Modifier.weight(1f),
                     )
                 }
@@ -76,41 +82,62 @@ internal fun AppHistoryExpanded(event: IslandEvent.AppSwitch, interactor: Island
 private fun AppGridItem(
     app: IslandEvent.RecentApp,
     onClick: () -> Unit,
+    onKill: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier =
-            modifier
-                .clip(ShapeLg)
-                .clickable(onClick = onClick)
-                .background(BlueAccent.copy(alpha = AlphaFaint), ShapeLg),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(SpaceMd),
-    ) {
-        Spacer(Modifier.size(SpaceMd))
-        app.appIcon?.let { icon ->
-            Image(
-                bitmap = icon.toScaledBitmap(48.dp),
-                contentDescription = app.appName,
-                modifier = Modifier.size(48.dp).clip(ShapeIconLarge),
-                contentScale = ContentScale.Crop,
+    Box(modifier = modifier) {
+        Column(
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .clip(ShapeLg)
+                    .clickable(onClick = onClick)
+                    .background(BlueAccent.copy(alpha = AlphaFaint), ShapeLg),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(SpaceMd),
+        ) {
+            Spacer(Modifier.size(SpaceMd))
+            app.appIcon?.let { icon ->
+                Image(
+                    bitmap = icon.toScaledBitmap(48.dp),
+                    contentDescription = app.appName,
+                    modifier = Modifier.size(48.dp).clip(ShapeIconLarge),
+                    contentScale = ContentScale.Crop,
+                )
+            }
+                ?: Box(
+                    modifier = Modifier.size(48.dp).clip(ShapeIconLarge).background(CardBg),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Icon(Icons.Filled.Apps, null, tint = SubtleGray, modifier = Modifier.size(24.dp))
+                }
+
+            Text(
+                app.appName,
+                color = SubtleGray,
+                style = MaterialTheme.typography.labelSmall,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
             )
         }
-            ?: Box(
-                modifier = Modifier.size(48.dp).clip(ShapeIconLarge).background(CardBg),
-                contentAlignment = Alignment.Center,
-            ) {
-                Icon(Icons.Filled.Apps, null, tint = SubtleGray, modifier = Modifier.size(24.dp))
+        Surface(
+            onClick = onKill,
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(SpaceXs)
+                .size(20.dp),
+            shape = CircleShape,
+            color = RedAccent.copy(alpha = AlphaIconBg),
+        ) {
+            Box(contentAlignment = Alignment.Center, modifier = Modifier.size(20.dp)) {
+                Icon(
+                    Icons.Filled.Close,
+                    contentDescription = stringResource(R.string.ax_dynamic_bar_kill_app),
+                    tint = RedAccent,
+                    modifier = Modifier.size(12.dp),
+                )
             }
-
-        Text(
-            app.appName,
-            color = SubtleGray,
-            style = MaterialTheme.typography.labelSmall,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-        )
-        Spacer(Modifier.size(SpaceSm))
+        }
     }
 }
 
