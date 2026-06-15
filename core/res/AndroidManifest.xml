@@ -1390,6 +1390,9 @@
     <permission android:name="android.permission.MANAGE_MEDIA"
         android:protectionLevel="signature|appop|preinstalled" />
 
+    <permission android:name="android.permission.MANAGE_CLOUD_MEDIA_PROVIDERS"
+        android:protectionLevel="signature|privileged" />
+
     <!-- ====================================================================== -->
     <!-- Permissions for accessing the device location                          -->
     <!-- ====================================================================== -->

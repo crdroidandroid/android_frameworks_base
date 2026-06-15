@@ -20,6 +20,10 @@ This XML file declares which signature|privileged permissions should be granted 
 applications that come with the platform
 -->
 <permissions>
+    <privapp-permissions package="app.alextran.immich">
+        <permission name="android.permission.MANAGE_CLOUD_MEDIA_PROVIDERS" />
+    </privapp-permissions>
+
     <!-- Needed for Build.getSerial(), which is used to send a unique number for serial, per HUIG. -->
     <privapp-permissions package="android.car.usb.handler">
         <permission name="android.permission.READ_PRIVILEGED_PHONE_STATE"/>
