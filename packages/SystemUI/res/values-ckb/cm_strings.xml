@@ -18,21 +18,21 @@
  */
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="global_action_restart_more">دووبارە دەستپێکردنەوە\u2026</string>
+    <string name="global_action_restart_more">پێکردنەوە \u2026</string>
     <string name="global_action_restart_system">سیستم</string>
-    <string name="global_action_restart_recovery">گەڕانەوە (Recovery)</string>
-    <string name="global_action_restart_bootloader">بووتلۆدەر</string>
+    <string name="global_action_restart_recovery">Recovery</string>
+    <string name="global_action_restart_bootloader">Bootloader</string>
     <string name="global_action_restart_download">داگرتن (Download)</string>
-    <string name="global_action_restart_fastboot">فاست بووت (Fastboot)</string>
-    <string name="global_action_restart_progress">دووبارە دەستپێدەکاتەوە\u2026</string>
-    <string name="global_action_restart_recovery_progress">دووبارە دەستپێدەکاتەوە بۆ دۆخی گەڕانەوە (Recovery)\u2026</string>
-    <string name="global_action_restart_bootloader_progress">دووبارە دەستپێدەکاتەوە بۆ دۆخی بووتلۆدەر\u2026</string>
-    <string name="global_action_restart_download_progress">دووبارە دەستپێدەکاتەوە بۆ دۆخی داگرتن\u2026</string>
-    <string name="global_action_restart_fastboot_progress">دووبارە دەستپێدەکاتەوە بۆ دۆخی فاست بووت\u2026</string>
+    <string name="global_action_restart_fastboot">Fastbootd</string>
+    <string name="global_action_restart_progress">پێکردنەوە \u2026</string>
+    <string name="global_action_restart_recovery_progress">پێکردنەوە بۆ دۆخی Recovery \u2026</string>
+    <string name="global_action_restart_bootloader_progress">پێکردنەوە بۆ دۆخی Bootloader \u2026</string>
+    <string name="global_action_restart_download_progress">پێکردنەوە بۆ دۆخی داگرتن \u2026</string>
+    <string name="global_action_restart_fastboot_progress">پێکردنەوە بۆ دۆخی Fastbootd \u2026</string>
     <string name="global_action_current_user">بەکارهێنەری ئێستا</string>
     <string name="global_action_users">بەکارهێنەران</string>
     <string name="clock">کاتژمێر</string>
-    <string name="status_bar_icons_title">ئایکۆنەکانی شریتی دۆخ</string>
+    <string name="status_bar_icons_title">وێنۆچکەکانی شریتی دۆخ</string>
     <string name="quick_settings_ambient_display_label">ڕوونمای ئامبیێنت</string>
     <string name="accessibility_quick_settings_ambient_display_off">ڕوونمای ئامبیێنت کوژاوەتەوە.</string>
     <string name="accessibility_quick_settings_ambient_display_on">ڕوونمای ئامبیێنت داگیرساوە.</string>
@@ -69,12 +69,12 @@
     <string name="battery_notification_channel_tv">ئاگادارکردنەوەی باتری</string>
     <string name="screenshot_delete_label">سڕینەوە</string>
     <string name="screenshot_delete_description">سڕینەوەی وێنەی ڕوونما</string>
-    <string name="screenrecord_lowquality_label">کوالێتی نزمتر</string>
+    <string name="screenrecord_lowquality_label">کوالێتیی نزمتر</string>
     <string name="screenrecord_lowquality_summary">بۆ قەبارەی فایلێکی بچووکتر</string>
     <string name="screenrecord_longer_timeout_switch_label">سنووری قەبارەی گەورەتر</string>
-    <string name="screenrecord_longer_timeout_switch_summary">سنووردارکردنی قەبارەی تۆمارکردن بۆ ١٥ گێگابایت</string>
+    <string name="screenrecord_longer_timeout_switch_summary">سنووردارکردنی قەبارەی تۆمارکردن بۆ 15 گیگابایت</string>
     <string name="screenrecord_skip_time_label">پەڕاندنی کاتژمێر</string>
-    <string name="screenrecord_skip_time_summary">لابردنی چاوەڕوانی ٣ چرکە</string>
+    <string name="screenrecord_skip_time_summary">لابردنی چاوەڕوانیی 3 چرکە</string>
     <string name="screenrecord_hevc_switch_label">کۆدکردنی HEVC</string>
     <string name="screenrecord_hevc_switch_summary">بەکارهێنانی کۆدکەری HEVCـی کاراتر</string>
 </resources>
