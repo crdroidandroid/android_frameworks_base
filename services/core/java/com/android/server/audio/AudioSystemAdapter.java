@@ -755,16 +755,22 @@ public class AudioSystemAdapter implements AudioSystem.RoutingUpdateCallback,
      * otherwise.
      */
     public List<AudioProductStrategy> getAudioProductStrategies(boolean filterInternal) {
-        if (filterInternal) {
-            synchronized (sAudioProductStrategiesLock) {
-                if (sAudioProductStrategiesWithoutInternal == null) {
-                    sAudioProductStrategiesWithoutInternal = AudioProductStrategy
-                            .filterNonInternalStrategies(getAllProductStrategies());
+        if (!filterInternal) {
+            return getAllProductStrategies();
+        }
+
+        synchronized (sAudioProductStrategiesLock) {
+            if (sAudioProductStrategiesWithoutInternal == null) {
+                final List<AudioProductStrategy> allStrategies = getAllProductStrategies();
+                if (sAudioProductStrategies == null) {
+                    Log.w(TAG, "The list of audio product strategies is not initialized.");
+                    return Collections.emptyList();
                 }
+                sAudioProductStrategiesWithoutInternal = AudioProductStrategy
+                        .filterNonInternalStrategies(allStrategies);
             }
             return sAudioProductStrategiesWithoutInternal;
         }
-        return getAllProductStrategies();
     }
 
     /**
