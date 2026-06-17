@@ -28,11 +28,7 @@ class TileSquishinessRepository @Inject constructor() {
     val squishiness = _squishiness.asStateFlow()
 
     fun setSquishinessValue(value: Float) {
-        _squishiness.value =
-            value.takeIf { !it.isNaN() }
-                ?: DEFAULT_SQUISHINESS.also {
-                    Log.w(TAG, "Received NaN value for squishiness, defaulting to $it")
-                }
+        _squishiness.value = DEFAULT_SQUISHINESS
     }
 
     private companion object {
