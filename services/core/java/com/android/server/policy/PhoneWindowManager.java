@@ -5508,8 +5508,15 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 break;
             }
             case KeyEvent.KEYCODE_ASSIST: {
-                if (!keyguardOn()) {
-                    if (down) {
+                if (down) {
+                    if (!interactive) {
+                        isWakeKey = mWakeOnAssistKeyPress;
+                        if (!isWakeKey) {
+                            useHapticFeedback = false;
+                        }
+                    }
+
+                    if (!keyguardOn()) {
                         if (mAssistPressAction == Action.APP_SWITCH
                                 || mAssistLongPressAction == Action.APP_SWITCH) {
                             preloadRecentApps();
