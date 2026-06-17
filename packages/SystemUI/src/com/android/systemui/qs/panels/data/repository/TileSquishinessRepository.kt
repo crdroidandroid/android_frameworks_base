@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2024 The Android Open Source Project
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Licensed under the Apache License, Version 2.0 (the "License");TileSquishinessRepository
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -28,11 +28,7 @@ class TileSquishinessRepository @Inject constructor() {
     val squishiness = _squishiness.asStateFlow()
 
     fun setSquishinessValue(value: Float) {
-        _squishiness.value =
-            value.takeIf { !it.isNaN() }
-                ?: DEFAULT_SQUISHINESS.also {
-                    Log.w(TAG, "Received NaN value for squishiness, defaulting to $it")
-                }
+        _squishiness.value = DEFAULT_SQUISHINESS
     }
 
     private companion object {
