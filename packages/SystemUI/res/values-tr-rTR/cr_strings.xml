@@ -194,7 +194,7 @@
     <string name="ax_dynamic_bar_running">Çalışıyor</string>
     <string name="ax_dynamic_bar_on">AÇIK</string>
     <string name="ax_dynamic_bar_recents">Son Kullanılanlar</string>
-    <string name="ax_dynamic_bar_kill_app">Kill app</string>
+    <string name="ax_dynamic_bar_kill_app">Uygulamayı kapat</string>
     <string name="ax_dynamic_bar_unlocked">Kilidi Açıldı</string>
     <string name="ax_dynamic_bar_device_unlocked">Cihaz Kilidi Açıldı</string>
     <string name="ax_dynamic_bar_progress">İlerleme</string>
