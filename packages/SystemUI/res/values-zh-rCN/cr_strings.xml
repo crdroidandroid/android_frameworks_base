@@ -108,9 +108,9 @@
     <string name="quick_settings_volume_panel_label">音量面板</string>
     <!-- Smart Pixels -->
     <string name="quick_settings_smart_pixels_label">智能像素</string>
-    <string name="quick_settings_smart_pixels_on">On</string>
-    <string name="quick_settings_smart_pixels_off">Off</string>
-    <string name="smart_pixels_percent_label">Pixel percentage</string>
+    <string name="quick_settings_smart_pixels_on">开启</string>
+    <string name="quick_settings_smart_pixels_off">关闭</string>
+    <string name="smart_pixels_percent_label">像素百分比</string>
     <string name="smart_pixels_percent_format"><xliff:g id="percent" example="25">%d</xliff:g>%%</string>
     <!-- Weather Tile -->
     <string name="omnijaws_service_error">加载天气数据时出错</string>
@@ -193,6 +193,7 @@
     <string name="ax_dynamic_bar_running">正在运行</string>
     <string name="ax_dynamic_bar_on">开启</string>
     <string name="ax_dynamic_bar_recents">最近应用</string>
+    <string name="ax_dynamic_bar_kill_app">Kill app</string>
     <string name="ax_dynamic_bar_unlocked">已解锁</string>
     <string name="ax_dynamic_bar_device_unlocked">设备已解锁</string>
     <string name="ax_dynamic_bar_progress">进度</string>
