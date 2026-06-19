@@ -31,6 +31,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.android.systemui.axdynamicbar.shared.IslandActions
@@ -120,9 +121,15 @@ private fun AppGridItem(
                 app.appName,
                 color = SubtleGray,
                 style = MaterialTheme.typography.labelSmall,
-                maxLines = 1,
+                textAlign = TextAlign.Center,
+                minLines = 2,
+                maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = SpaceXs),
             )
+            Spacer(Modifier.size(SpaceXs))
         }
 
         Surface(
