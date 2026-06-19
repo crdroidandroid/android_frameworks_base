@@ -108,9 +108,9 @@
     <string name="quick_settings_volume_panel_label">لوحة تحكم الصوت</string>
     <!-- Smart Pixels -->
     <string name="quick_settings_smart_pixels_label">الدقة الذكية</string>
-    <string name="quick_settings_smart_pixels_on">On</string>
-    <string name="quick_settings_smart_pixels_off">Off</string>
-    <string name="smart_pixels_percent_label">Pixel percentage</string>
+    <string name="quick_settings_smart_pixels_on">تشغيل</string>
+    <string name="quick_settings_smart_pixels_off">إيقاف</string>
+    <string name="smart_pixels_percent_label">نسبة البكسل</string>
     <string name="smart_pixels_percent_format"><xliff:g id="percent" example="25">%d</xliff:g>%%</string>
     <!-- Weather Tile -->
     <string name="omnijaws_service_error">حدث خطأ أثناء تحميل بيانات الطقس</string>
@@ -132,7 +132,7 @@
     <string name="qs_preferred_network_nr">5G / NR</string>
     <string name="qs_preferred_network_unsupported">غير مدعوم</string>
     <!-- VPN tethering QS tile -->
-    <string name="vpn_tethering_label">VPN tethering</string>
+    <string name="vpn_tethering_label">ربط VPN</string>
     <!-- Text while recognizing face -->
     <string name="face_unlock_recognizing">يتم التعرف على الوجه...</string>
     <!-- Flashlight Strength -->
@@ -155,7 +155,7 @@
     <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
     <string name="screenrecord_delete_description">تم حذف تسجيل الشاشة</string>
     <!-- AxDynamicBar strings [CHAR LIMIT=NONE] -->
-    <string name="ax_dynamic_bar_timer">Timer</string>
+    <string name="ax_dynamic_bar_timer">المؤقت</string>
     <string name="ax_dynamic_bar_stopwatch">Stopwatch</string>
     <string name="ax_dynamic_bar_alarm">Alarm</string>
     <string name="ax_dynamic_bar_flashlight">Flashlight</string>
