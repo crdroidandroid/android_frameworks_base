@@ -193,6 +193,7 @@
     <string name="ax_dynamic_bar_running">運行中</string>
     <string name="ax_dynamic_bar_on">開啟</string>
     <string name="ax_dynamic_bar_recents">總覽</string>
+    <string name="ax_dynamic_bar_kill_app">Kill app</string>
     <string name="ax_dynamic_bar_unlocked">未鎖定</string>
     <string name="ax_dynamic_bar_device_unlocked">裝置已解鎖</string>
     <string name="ax_dynamic_bar_progress">進度</string>
