@@ -194,6 +194,7 @@
     <string name="ax_dynamic_bar_running">Bezig</string>
     <string name="ax_dynamic_bar_on">AAN</string>
     <string name="ax_dynamic_bar_recents">Recente</string>
+    <string name="ax_dynamic_bar_kill_app">Kill app</string>
     <string name="ax_dynamic_bar_unlocked">Ontgrendeld</string>
     <string name="ax_dynamic_bar_device_unlocked">Apparaat ontgrendeld</string>
     <string name="ax_dynamic_bar_progress">Voortgang</string>
