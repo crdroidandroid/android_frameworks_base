@@ -198,6 +198,7 @@
     <string name="ax_dynamic_bar_running">قيد التشغيل</string>
     <string name="ax_dynamic_bar_on">تشغيل</string>
     <string name="ax_dynamic_bar_recents">التطبيقات الأخيرة</string>
+    <string name="ax_dynamic_bar_kill_app">Kill app</string>
     <string name="ax_dynamic_bar_unlocked">مفتوح</string>
     <string name="ax_dynamic_bar_device_unlocked">تم فتح الجهاز</string>
     <string name="ax_dynamic_bar_progress">التقدم</string>
