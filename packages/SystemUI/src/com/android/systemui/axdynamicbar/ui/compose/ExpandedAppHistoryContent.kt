@@ -1,5 +1,6 @@
 package com.android.systemui.axdynamicbar.ui.compose
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -9,7 +10,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -25,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -120,21 +124,28 @@ private fun AppGridItem(
                 overflow = TextOverflow.Ellipsis,
             )
         }
+
         Surface(
             onClick = onKill,
             modifier = Modifier
                 .align(Alignment.TopEnd)
-                .padding(SpaceXs)
-                .size(20.dp),
+                .offset(x = 4.dp, y = (-4).dp)
+                .size(22.dp),
             shape = CircleShape,
-            color = RedAccent.copy(alpha = AlphaIconBg),
+            color = RedAccent,
+            contentColor = Color.White,
+            border = BorderStroke(1.5.dp, Color.White.copy(alpha = 0.9f)),
+            shadowElevation = 3.dp,
         ) {
-            Box(contentAlignment = Alignment.Center, modifier = Modifier.size(20.dp)) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.fillMaxSize(),
+            ) {
                 Icon(
                     Icons.Filled.Close,
                     contentDescription = stringResource(R.string.ax_dynamic_bar_kill_app),
-                    tint = RedAccent,
-                    modifier = Modifier.size(12.dp),
+                    tint = Color.White,
+                    modifier = Modifier.size(13.dp),
                 )
             }
         }
@@ -164,4 +175,3 @@ internal fun RowScope.CompactAppSwitchRow(event: IslandEvent.AppSwitch) {
         Text(stringResource(R.string.ax_dynamic_bar_count_running, event.recentApps.size), color = SubtleGray, style = MaterialTheme.typography.labelSmall)
     }
 }
-
