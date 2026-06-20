@@ -196,7 +196,7 @@
     <string name="ax_dynamic_bar_running">Uruchamianie</string>
     <string name="ax_dynamic_bar_on">WŁ.</string>
     <string name="ax_dynamic_bar_recents">Ostatnio używane</string>
-    <string name="ax_dynamic_bar_kill_app">Kill app</string>
+    <string name="ax_dynamic_bar_kill_app">Zakończ aplikację</string>
     <string name="ax_dynamic_bar_unlocked">Odblokowano</string>
     <string name="ax_dynamic_bar_device_unlocked">Odblokowano urządzenie</string>
     <string name="ax_dynamic_bar_progress">Postęp</string>
