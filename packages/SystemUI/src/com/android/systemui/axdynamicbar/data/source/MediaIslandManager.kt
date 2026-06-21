@@ -17,6 +17,7 @@ import android.util.Log
 import com.android.systemui.axdynamicbar.model.IslandEvent
 import com.android.systemui.dagger.SysUISingleton
 import com.android.systemui.dagger.qualifiers.Application
+import com.android.systemui.dagger.qualifiers.Background
 import com.android.systemui.dagger.qualifiers.Main
 import com.android.systemui.media.MediaSessionManager
 import com.android.systemui.media.NotificationMediaManager
@@ -26,6 +27,7 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
 @SysUISingleton
 class MediaIslandManager
@@ -33,13 +35,15 @@ class MediaIslandManager
 constructor(
     @Application private val context: Context,
     @Main private val mainHandler: Handler,
-    @Main private val mainExecutor: RepeatableExecutor,
+    @Background private val backgroundExecutor: RepeatableExecutor,
     private val notificationMediaManager: NotificationMediaManager,
     private val mediaOutputDialogManager: MediaOutputDialogManager,
 ) {
     companion object {
         private const val TAG = "MediaIslandManager"
         private const val POSITION_UPDATE_INTERVAL_MS = 1000L
+
+        private const val UNKNOWN_DURATION = 0L
     }
 
     private val _mediaEvent = MutableStateFlow<IslandEvent.Media?>(null)
@@ -57,7 +61,7 @@ constructor(
     private val systemMediaSessionManager: SystemMediaSessionManager by lazy {
         context.getSystemService(SystemMediaSessionManager::class.java)
     }
-    private var activeMediaController: MediaController? = null
+    @Volatile private var activeMediaController: MediaController? = null
 
     private val mediaControllerCallback =
         object : MediaController.Callback() {
@@ -68,9 +72,7 @@ constructor(
             }
 
             override fun onAudioInfoChanged(info: MediaController.PlaybackInfo) {
-
-                val current = _mediaEvent.value ?: return
-                _mediaEvent.value = current.copy(outputDeviceName = getOutputDeviceName())
+                _mediaEvent.update { event -> event?.copy(outputDeviceName = getOutputDeviceName()) }
             }
 
             override fun onSessionDestroyed() {
@@ -87,26 +89,30 @@ constructor(
     private val mediaSessionListener = object : MediaSessionManager.MediaDataListener {
         override fun onMediaColorsChanged(color: Int) {
             sessionMediaColor = color
-            val current = _mediaEvent.value ?: return
-            _mediaEvent.value = current.copy(mediaColor = color)
+            _mediaEvent.update { event -> event?.copy(mediaColor = color) }
         }
 
         override fun onAlbumArtChanged(drawable: Drawable) {
             sessionAlbumArt = drawable
-            val current = _mediaEvent.value ?: return
-            _mediaEvent.value = current.copy(albumArt = drawable)
+            _mediaEvent.update { event -> event?.copy(albumArt = drawable) }
         }
 
         override fun onAppIconChanged(drawable: Drawable) {
             sessionAppIcon = drawable
-            val current = _mediaEvent.value ?: return
-            _mediaEvent.value = current.copy(appIcon = drawable)
+            _mediaEvent.update { event -> event?.copy(appIcon = drawable) }
         }
 
         override fun onMetadataChanged(track: String, artist: String) {
-            val current = _mediaEvent.value ?: return
-            if (current.track == track && current.artist == artist) return
-            _mediaEvent.value = current.copy(track = track, artist = artist)
+            _mediaEvent.update { event ->
+                if (event == null) return@update event
+                val normalizedTrack = track.takeUnless { it == "Unknown" } ?: event.track
+                val normalizedArtist = artist.takeUnless { it == "Unknown" } ?: event.artist
+                if (event.track == normalizedTrack && event.artist == normalizedArtist) {
+                    event
+                } else {
+                    event.copy(track = normalizedTrack, artist = normalizedArtist)
+                }
+            }
         }
     }
 
@@ -128,35 +134,38 @@ constructor(
             state.state == PlaybackState.STATE_FAST_FORWARDING ||
             state.state == PlaybackState.STATE_REWINDING
 
-    private fun computeAccuratePosition(state: PlaybackState): Long {
+    private fun computeAccuratePosition(
+        state: PlaybackState,
+        duration: Long = _mediaEvent.value?.duration?.takeIf { it > 0L } ?: Long.MAX_VALUE,
+    ): Long {
+        val maxPosition = duration.takeIf { it > 0L } ?: Long.MAX_VALUE
         val basePos = state.position.coerceAtLeast(0L)
-        if (!isInMotion(state)) return basePos
+        if (!isInMotion(state)) return basePos.coerceAtMost(maxPosition)
         val updateTime = state.lastPositionUpdateTime
-        if (updateTime <= 0) return basePos
-        val elapsed = SystemClock.elapsedRealtime() - updateTime
+        if (updateTime <= 0) return basePos.coerceAtMost(maxPosition)
+        val elapsed = (SystemClock.elapsedRealtime() - updateTime).coerceAtLeast(0L)
         val speed = state.playbackSpeed.takeIf { it > 0f } ?: 1f
-        val rawDuration = _mediaEvent.value?.duration ?: Long.MAX_VALUE
-        val safeDuration = if (rawDuration > 0L) rawDuration else Long.MAX_VALUE
-
-        return (basePos + (elapsed * speed).toLong())
-            .coerceIn(0L, safeDuration)
+        return (basePos + (elapsed * speed).toLong()).coerceIn(0L, maxPosition)
     }
 
     private var cancelProgressPolling: Runnable? = null
 
     private fun tickProgress() {
-        val ev = _mediaEvent.value ?: return
-        if (!ev.isPlaying || ev.duration <= 0L) return
-        val now = SystemClock.elapsedRealtime()
-        val elapsed = now - ev.positionUpdateTime
-        val pos = (ev.position + (elapsed * ev.playbackSpeed).toLong()).coerceIn(0L, ev.duration)
-        val prog = (pos.toFloat() / ev.duration).coerceIn(0f, 1f)
-        _mediaEvent.value = ev.copy(progress = prog, position = pos, positionUpdateTime = now)
+        _mediaEvent.update { event ->
+            if (event == null || !event.isPlaying || event.duration <= 0L) return@update event
+            val now = SystemClock.elapsedRealtime()
+            val elapsed = now - event.positionUpdateTime
+            val position =
+                (event.position + (elapsed * event.playbackSpeed).toLong())
+                    .coerceIn(0L, event.duration)
+            val progress = (position.toFloat() / event.duration).coerceIn(0f, 1f)
+            event.copy(progress = progress, position = position, positionUpdateTime = now)
+        }
     }
 
     fun startProgressPolling() {
         if (cancelProgressPolling != null) return
-        cancelProgressPolling = mainExecutor.executeRepeatedly(
+        cancelProgressPolling = backgroundExecutor.executeRepeatedly(
             ::tickProgress, 0L, POSITION_UPDATE_INTERVAL_MS,
         )
     }
@@ -167,27 +176,38 @@ constructor(
     }
 
     private fun updatePosition(state: PlaybackState) {
-        val current = _mediaEvent.value ?: return
-        val duration = current.duration.takeIf { it > 0L } ?: return
-        val posMs = computeAccuratePosition(state)
-        val progress = (posMs.toFloat() / duration.toFloat()).coerceIn(0f, 1f)
+        val now = SystemClock.elapsedRealtime()
         val speed = state.playbackSpeed.takeIf { it > 0f } ?: 1f
         val playing = isInMotion(state)
-        _mediaEvent.value = current.copy(
-            isPlaying = playing,
-            position = posMs,
-            progress = progress,
-            playbackSpeed = speed,
-            positionUpdateTime = state.lastPositionUpdateTime,
-        )
+        _mediaEvent.update { event ->
+            val duration = event?.duration?.takeIf { it > 0L } ?: return@update event
+            val posMs = computeAccuratePosition(state, duration)
+            val progress = (posMs.toFloat() / duration.toFloat()).coerceIn(0f, 1f)
+            event.copy(
+                isPlaying = playing,
+                position = posMs,
+                progress = progress,
+                playbackSpeed = speed,
+                positionUpdateTime = now,
+            )
+        }
     }
 
     private fun getActiveController(): MediaController? =
-        try {
+        activeMediaController ?: try {
             systemMediaSessionManager.getActiveSessions(null).firstOrNull()
         } catch (_: Exception) {
             null
         }
+
+    private fun resolveAlbumArt(track: String, artist: String, albumArt: Drawable?): Drawable? {
+        val current = _mediaEvent.value ?: return albumArt
+        return if (current.track == track && current.artist == artist) {
+            current.albumArt ?: albumArt
+        } else {
+            albumArt
+        }
+    }
 
     private val mediaListener =
         object : NotificationMediaManager.MediaListener {
@@ -201,19 +221,20 @@ constructor(
                         ?: metadata?.getString(MediaMetadata.METADATA_KEY_TITLE)
                         ?: ""
                 val artist = metadata?.getString(MediaMetadata.METADATA_KEY_ARTIST) ?: ""
-                val durationRaw = metadata?.getLong(MediaMetadata.METADATA_KEY_DURATION) ?: 0L
-                val duration = if (durationRaw > 0L) durationRaw else 0L
+                val rawDuration = metadata?.getLong(MediaMetadata.METADATA_KEY_DURATION) ?: 0L
+                val duration = if (rawDuration > 0L) rawDuration else UNKNOWN_DURATION
 
                 val albumArt = sessionAlbumArt ?: run {
                     val bmp = metadata?.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART)
                         ?: metadata?.getBitmap(MediaMetadata.METADATA_KEY_ART)
                     bmp?.let { BitmapDrawable(context.resources, it) }
                 }
+                val resolvedAlbumArt = resolveAlbumArt(track, artist, albumArt)
 
                 val controller = getActiveController()
                 val ps = controller?.playbackState
                 val existingPos = _mediaEvent.value?.position ?: 0L
-                val posMs = if (ps != null) computeAccuratePosition(ps) else existingPos
+                val posMs = if (ps != null) computeAccuratePosition(ps, duration) else existingPos
                 val progress =
                     if (duration > 0L) (posMs.toFloat() / duration.toFloat()).coerceIn(0f, 1f)
                     else 0f
@@ -236,7 +257,7 @@ constructor(
                 val appIcon = sessionAppIcon
 
                 val speed = ps?.playbackSpeed?.takeIf { it > 0f } ?: 1f
-                val updateTime = ps?.lastPositionUpdateTime ?: 0L
+                val updateTime = SystemClock.elapsedRealtime()
 
                 if (isPlaying) {
                     activeMediaPackage = pkg
@@ -245,7 +266,7 @@ constructor(
                             track = track,
                             artist = artist,
                             isPlaying = true,
-                            albumArt = albumArt,
+                            albumArt = resolvedAlbumArt,
                             progress = progress,
                             duration = duration,
                             position = posMs,
@@ -258,17 +279,16 @@ constructor(
                             mediaColor = sessionMediaColor,
                         )
                 } else {
-                    val current = _mediaEvent.value
-                    if (current != null) {
-                        _mediaEvent.value =
-                            current.copy(
-                                isPlaying = false,
-                                albumArt = albumArt ?: current.albumArt,
-                                progress = progress,
-                                position = posMs,
-                                playbackSpeed = speed,
-                                positionUpdateTime = updateTime,
-                            )
+                    _mediaEvent.update { event ->
+                        event?.copy(
+                            isPlaying = false,
+                            albumArt = resolvedAlbumArt ?: event.albumArt,
+                            progress = progress,
+                            duration = duration.takeIf { it > 0L } ?: event.duration,
+                            position = posMs,
+                            playbackSpeed = speed,
+                            positionUpdateTime = updateTime,
+                        )
                     }
                 }
             }
@@ -286,8 +306,9 @@ constructor(
                 null,
                 mainHandler,
             )
-        } catch (_: Exception) {}
-
+        } catch (e: Exception) {
+            Log.w(TAG, "Failed to bind initial media sessions", e)
+        }
     }
 
     fun stopListening() {
@@ -311,18 +332,26 @@ constructor(
     fun clear() {
         stopProgressPolling()
         _mediaEvent.value = null
+        activeMediaPackage = null
     }
 
     fun togglePlayPause() {
         val c = getActiveController() ?: return
-        val playing = c.playbackState?.state == PlaybackState.STATE_PLAYING
+        val playbackState = c.playbackState
+        val playing = playbackState?.state == PlaybackState.STATE_PLAYING
         if (playing) {
             c.transportControls.pause()
         } else {
             c.transportControls.play()
         }
-        val current = _mediaEvent.value ?: return
-        _mediaEvent.value = current.copy(isPlaying = !playing)
+        val now = SystemClock.elapsedRealtime()
+        _mediaEvent.update { event ->
+            if (event == null) return@update null
+            val duration = event.duration.takeIf { it > 0L } ?: Long.MAX_VALUE
+            val position =
+                playbackState?.let { computeAccuratePosition(it, duration) } ?: event.position
+            event.copy(isPlaying = !playing, position = position, positionUpdateTime = now)
+        }
     }
 
     fun skipNext() {
@@ -341,14 +370,19 @@ constructor(
         getActiveController()?.transportControls?.sendCustomAction(action, null)
     }
 
-    fun openMediaApp() {
-        val pkg = getActiveController()?.packageName ?: return
-        val intent = context.packageManager.getLaunchIntentForPackage(pkg) ?: return
+    fun getMediaAppIntent(): Intent? {
+        val pkg = getActiveController()?.packageName ?: return null
+        val intent = context.packageManager.getLaunchIntentForPackage(pkg) ?: return null
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        return intent
+    }
+
+    fun openMediaApp() {
+        val intent = getMediaAppIntent() ?: return
         try {
             context.startActivity(intent)
         } catch (e: Exception) {
-            Log.w(TAG, "Failed to open media app: $pkg", e)
+            Log.w(TAG, "Failed to open media app", e)
         }
     }
 
@@ -391,4 +425,3 @@ constructor(
         }
     }
 }
-
