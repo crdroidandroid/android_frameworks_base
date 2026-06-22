@@ -39,10 +39,9 @@ constructor(
     lateinit var alarmImage: Drawable
     val smartspaceViews = mutableSetOf<BcSmartspaceDataPlugin.SmartspaceView>()
 
-    private val nextAlarmCallback =
-        NextAlarmController.NextAlarmChangeCallback {
-            applicationScope.launch { updateNextAlarm() }
-        }
+    private val nextAlarmCallback = NextAlarmController.NextAlarmChangeCallback {
+        applicationScope.launch { updateNextAlarm() }
+    }
 
     private val showNextAlarm = AlarmManager.OnAlarmListener { showAlarm(null) }
 
@@ -92,34 +91,35 @@ constructor(
         }
     }
 
-    fun showAlarm(alarmTime: Long?): Job =
-        applicationScope.launch {
-            val time = alarmTime ?: getNextAlarmTime()
-            val alarmString =
-                if (time > 0 && time <= System.currentTimeMillis() + TimeUnit.HOURS.toMillis(12L)) {
-                    val pattern =
-                        if (DateFormat.is24HourFormat(context, ActivityManager.getCurrentUser()))
-                            "HH:mm"
-                        else "h:mm"
-                    DateFormat.format(pattern, time).toString()
-                } else null
+    fun showAlarm(alarmTime: Long?): Job = applicationScope.launch {
+        val time = alarmTime ?: getNextAlarmTime()
+        val alarmString =
+            if (time > 0 && time <= System.currentTimeMillis() + TimeUnit.HOURS.toMillis(12L)) {
+                val pattern =
+                    if (DateFormat.is24HourFormat(context, ActivityManager.getCurrentUser()))
+                        "HH:mm"
+                    else "h:mm"
+                DateFormat.format(pattern, time).toString()
+            } else null
 
-            smartspaceViews.forEach { view ->
-                if (alarmString != null) {
-                    view.setNextAlarm(alarmImage, alarmString)
-                    //StateFlowImpl stateFlowImpl = this.this$0.zenModeInteractor.zenModeRepository.hasNextAlarm;
-                    //Boolean bool = Boolean.TRUE;
-                    //stateFlowImpl.getClass();
-                    //stateFlowImpl.updateState(null, bool);
-                } else {
-                    view.setNextAlarm(null, null)
-                    //StateFlowImpl stateFlowImpl2 = this.this$0.zenModeInteractor.zenModeRepository.hasNextAlarm;
-                    //Boolean bool2 = Boolean.FALSE;
-                    //stateFlowImpl2.getClass();
-                    //stateFlowImpl2.updateState(null, bool2);
-                }
+        smartspaceViews.forEach { view ->
+            if (alarmString != null) {
+                view.setNextAlarm(alarmImage, alarmString)
+                // StateFlowImpl stateFlowImpl =
+                // this.this$0.zenModeInteractor.zenModeRepository.hasNextAlarm;
+                // Boolean bool = Boolean.TRUE;
+                // stateFlowImpl.getClass();
+                // stateFlowImpl.updateState(null, bool);
+            } else {
+                view.setNextAlarm(null, null)
+                // StateFlowImpl stateFlowImpl2 =
+                // this.this$0.zenModeInteractor.zenModeRepository.hasNextAlarm;
+                // Boolean bool2 = Boolean.FALSE;
+                // stateFlowImpl2.getClass();
+                // stateFlowImpl2.updateState(null, bool2);
             }
         }
+    }
 
     private suspend fun getNextAlarmTime(): Long =
         withContext(bgDispatcher) {
