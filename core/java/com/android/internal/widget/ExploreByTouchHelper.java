@@ -437,6 +437,7 @@ public abstract class ExploreByTouchHelper extends View.AccessibilityDelegate {
 
         // Ensure the client has good defaults.
         node.setEnabled(true);
+        node.setFocusable(true);
         node.setClassName(DEFAULT_CLASS_NAME);
         node.setBoundsInParent(INVALID_PARENT_BOUNDS);
 
