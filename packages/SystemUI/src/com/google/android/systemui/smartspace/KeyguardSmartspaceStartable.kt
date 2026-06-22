@@ -21,9 +21,7 @@ constructor(
 
             zenController.applicationScope.launch { zenController.updateNextAlarm() }
 
-            mediaController.plugin.addOnAttachStateChangeListener(
-                mediaController.attachStateChangeListener
-            )
+            mediaController.mediaManager.addCallback(mediaController.mediaListener)
         }
     }
 }
