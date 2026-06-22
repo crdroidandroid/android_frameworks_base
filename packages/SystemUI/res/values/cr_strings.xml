@@ -173,5 +173,4 @@
     <string name="smartspace_content_desc">At a glance</string>
     <string name="smartspace_flight_qr_code">QR code</string>
     <string name="smartspace_icu_date_pattern" translatable="false">EEEMMMd</string>
-    <string name="smartspace_role_desc">View</string>
 </resources>

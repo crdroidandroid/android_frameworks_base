@@ -107,7 +107,7 @@ public final class BcSmartspaceCardLoggingInfo {
                 && mReceivedLatency == other.mReceivedLatency
                 && mUid == other.mUid
                 && Objects.equals(mSubcardInfo, other.mSubcardInfo)
-                && Objects.equals(mDimensionalInfo, other.mDimensionalInfo);
+                && mDimensionalInfo == other.mDimensionalInfo;
     }
 
     public final int hashCode() {

@@ -7,10 +7,9 @@ import android.content.Context
 import android.media.MediaMetadata
 import android.os.UserHandle
 import android.text.TextUtils
-import android.view.View
 import com.android.systemui.media.NotificationMediaManager
-import com.android.systemui.plugins.BcSmartspaceDataPlugin
 import com.android.systemui.settings.UserTracker
+import com.android.systemui.statusbar.lockscreen.LockscreenSmartspaceController
 import com.android.systemui.util.concurrency.DelayableExecutor
 import com.android.systemui.res.R
 import javax.inject.Inject
@@ -20,13 +19,12 @@ class KeyguardMediaViewController
 constructor(
     val context: Context,
     val mediaManager: NotificationMediaManager,
-    val plugin: BcSmartspaceDataPlugin,
+    val smartspaceController: LockscreenSmartspaceController,
     val userTracker: UserTracker,
     val uiExecutor: DelayableExecutor,
 ) {
     var title: CharSequence? = null
     var artist: CharSequence? = null
-    var smartspaceView: BcSmartspaceDataPlugin.SmartspaceView? = null
     lateinit var mediaComponent: ComponentName
 
     val mediaListener =
@@ -36,34 +34,22 @@ constructor(
             }
         }
 
-    val attachStateChangeListener =
-        object : View.OnAttachStateChangeListener {
-            override fun onViewAttachedToWindow(view: View) {
-                smartspaceView = view as? BcSmartspaceDataPlugin.SmartspaceView
-                mediaManager.addCallback(mediaListener)
-            }
-
-            override fun onViewDetachedFromWindow(view: View) {
-                smartspaceView = null
-                mediaManager.removeCallback(mediaListener)
-            }
-        }
-
     private fun updateMediaInfo(metadata: MediaMetadata?, state: Int) {
         if (!NotificationMediaManager.isPlayingState(state)) {
-            clearMedia()
+            title = null
+            artist = null
+            smartspaceController.setMediaTarget(null)
             return
         }
 
-        val newTitle =
-            metadata?.let {
-                val displayTitle = it.getText(MediaMetadata.METADATA_KEY_DISPLAY_TITLE)
-                if (TextUtils.isEmpty(displayTitle)) {
-                    it.getText(MediaMetadata.METADATA_KEY_TITLE)
-                } else {
-                    displayTitle
-                } ?: context.resources.getString(R.string.music_controls_no_title)
-            }
+        val newTitle = metadata?.let {
+            val displayTitle = it.getText(MediaMetadata.METADATA_KEY_DISPLAY_TITLE)
+            if (TextUtils.isEmpty(displayTitle)) {
+                it.getText(MediaMetadata.METADATA_KEY_TITLE)
+            } else {
+                displayTitle
+            } ?: context.resources.getString(R.string.music_controls_no_title)
+        }
 
         val newArtist = metadata?.getText(MediaMetadata.METADATA_KEY_ARTIST)
 
@@ -90,15 +76,12 @@ constructor(
                     )
                     .build()
 
-            smartspaceView?.setMediaTarget(target) ?: clearMedia()
+            smartspaceController.setMediaTarget(target)
+            return
         } else {
-            clearMedia()
+            title = null
+            artist = null
+            smartspaceController.setMediaTarget(null)
         }
-    }
-
-    private fun clearMedia() {
-        title = null
-        artist = null
-        smartspaceView?.setMediaTarget(null)
     }
 }
