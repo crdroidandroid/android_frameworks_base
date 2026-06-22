@@ -436,31 +436,6 @@ public class BcSmartspaceCard extends ConstraintLayout implements SmartspaceCard
         updateIconTint();
     }
 
-    public final void setSecondaryCard(BcSmartspaceCardSecondary secondaryCard) {
-        if (mSecondaryCardGroup == null) {
-            return;
-        }
-        mSecondaryCard = secondaryCard;
-        BcSmartspaceTemplateDataUtils.updateVisibility(mSecondaryCardGroup, View.GONE);
-        mSecondaryCardGroup.removeAllViews();
-        if (secondaryCard != null) {
-            ConstraintLayout.LayoutParams params =
-                    new ConstraintLayout.LayoutParams(
-                            ViewGroup.LayoutParams.WRAP_CONTENT,
-                            getResources()
-                                    .getDimensionPixelSize(
-                                            R.dimen.enhanced_smartspace_card_height));
-            params.setMarginStart(
-                    getResources()
-                            .getDimensionPixelSize(
-                                    R.dimen.enhanced_smartspace_secondary_card_start_margin));
-            params.startToStart = 0;
-            params.topToTop = 0;
-            params.bottomToBottom = 0;
-            mSecondaryCardGroup.addView(secondaryCard, params);
-        }
-    }
-
     public final void setSubtitle(
             CharSequence text, CharSequence contentDescription, boolean useIcon) {
         if (mSubtitleTextView == null) {

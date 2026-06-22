@@ -63,6 +63,7 @@ import com.android.systemui.temporarydisplay.chipbar.ChipbarCoordinator
 import com.android.systemui.usb.StorageNotification
 import com.android.systemui.util.NotificationChannels
 import com.android.systemui.wmshell.WMShell
+import com.google.android.systemui.smartspace.KeyguardSmartspaceStartable
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.ClassKey
@@ -355,4 +356,10 @@ abstract class SystemUICoreStartableModule {
     @IntoMap
     @ClassKey(AxPlatformServiceImpl::class)
     abstract fun bindAxPlatformService(impl: AxPlatformServiceImpl): CoreStartable
+
+    /** Inject into KeyguardSmartspaceStartable. */
+    @Binds
+    @IntoMap
+    @ClassKey(KeyguardSmartspaceStartable::class)
+    abstract fun bindKeyguardSmartspaceStartable(impl: KeyguardSmartspaceStartable): CoreStartable
 }

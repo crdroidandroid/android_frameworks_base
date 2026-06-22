@@ -18,11 +18,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.AdapterListUpdateCallback;
 import androidx.recyclerview.widget.AsyncDifferConfig;
 import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.android.internal.graphics.ColorUtils;
 import com.android.launcher3.icons.GraphicsUtils;
@@ -37,14 +39,13 @@ import com.google.android.systemui.smartspace.uitemplate.BaseTemplateCard;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 /* compiled from: go/retraceme af8e0b46c0cb0ee2c99e9b6d0c434e5c0b686fd9230eaab7fb9a40e3a9d0cf6f */
 /* loaded from: classes2.dex */
 public final class CardRecyclerViewAdapter
-        extends RecyclerView.Adapter<CardRecyclerViewAdapter.ViewHolder> implements CardAdapter {
+        extends RecyclerView.Adapter<CardRecyclerViewAdapter.ViewHolder> {
     public static final Set<Integer> legacySecondaryCardResourceIdSet =
             BcSmartSpaceUtil.FEATURE_TYPE_TO_SECONDARY_CARD_RESOURCE_MAP.values().stream()
                     .collect(Collectors.toSet());
@@ -76,10 +77,12 @@ public final class CardRecyclerViewAdapter
     public final BcSmartspaceView root;
     public List<SmartspaceTarget> smartspaceTargets;
     public final GradientDrawable solidBackgroundDrawable;
+    public final int textColorOnBg;
     public BcSmartspaceDataPlugin.TimeChangedDelegate timeChangedDelegate;
     public TransitionType transitioningTo;
     public String uiSurface;
     public final SparseArray<ViewHolder> viewHolders;
+    public final ViewPager2 viewPager2;
 
     /* compiled from: go/retraceme af8e0b46c0cb0ee2c99e9b6d0c434e5c0b686fd9230eaab7fb9a40e3a9d0cf6f */
     public final class DiffUtilItemCallback extends DiffUtil.ItemCallback<SmartspaceTarget> {
@@ -122,13 +125,15 @@ public final class CardRecyclerViewAdapter
 
     /* JADX DEBUG: Don't trust debug lines info. Lines numbers was adjusted: min line is 1 */
     public CardRecyclerViewAdapter(BcSmartspaceView root, BcSmartspaceConfigPlugin configProvider) {
-        GradientDrawable gradientDrawable;
         DiffUtilItemCallback diffUtilItemCallback = new DiffUtilItemCallback();
         AsyncDifferConfig<SmartspaceTarget> asyncDifferConfig =
                 new AsyncDifferConfig.Builder<SmartspaceTarget>(diffUtilItemCallback).build();
         mDiffer = new AsyncListDiffer<>(new AdapterListUpdateCallback(this), asyncDifferConfig);
         mDiffer.addListListener((previousList, currentList) -> {});
         this.root = root;
+        View view = root.findViewById(R.id.smartspace_card_pager);
+        GradientDrawable gradientDrawable = null;
+        viewPager2 = view instanceof ViewPager2 ? (ViewPager2) view : null;
         viewHolders = new SparseArray<>();
         backgroundOutlineDrawable =
                 root.getContext().getDrawable(R.drawable.bg_non_remoteviews_card_outline);
@@ -137,7 +142,6 @@ public final class CardRecyclerViewAdapter
             gradientDrawable = getSolidBackgroundDrawable();
         } catch (IllegalStateException e) {
             Log.w("SsCardRecyclerViewAdapter", "Failed to get solid background drawable", e);
-            gradientDrawable = null;
         }
         solidBackgroundDrawable = gradientDrawable;
         smartspaceTargets = new ArrayList<>();
@@ -148,7 +152,8 @@ public final class CardRecyclerViewAdapter
         int attrColor =
                 GraphicsUtils.getAttrColor(root.getContext(), android.R.attr.textColorPrimary);
         primaryTextColor = attrColor;
-        currentTextColor = attrColor;
+        textColorOnBg = -1;
+        currentTextColor = _isBackgroundEnabled ? -1 : attrColor;
         configProvider = configProvider;
         bgNonRemoteViewsHorizontalPadding =
                 root.getContext()
@@ -178,35 +183,6 @@ public final class CardRecyclerViewAdapter
                             .setTemplateData(new BaseTemplateData.Builder(1).build())
                             .build());
         }
-    }
-
-    @Override
-    public final SmartspaceCard getCardAtPosition(int position) {
-        ViewHolder holder = viewHolders.get(position);
-        if (holder != null) {
-            return holder.card;
-        }
-        return null;
-    }
-
-    @Override
-    public final int getCount() {
-        return smartspaceTargets.size();
-    }
-
-    @Override
-    public final float getDozeAmount() {
-        return dozeAmount;
-    }
-
-    @Override
-    public final boolean getHasAodLockscreenTransition() {
-        return hasAodLockscreenTransition;
-    }
-
-    @Override
-    public final boolean getHasDifferentTargets() {
-        return hasDifferentTargets;
     }
 
     @Override
@@ -246,17 +222,10 @@ public final class CardRecyclerViewAdapter
         return layoutId != null ? layoutId : R.layout.smartspace_base_template_card;
     }
 
-    @Override
     public BcSmartspaceCard getLegacyCardAtPosition(int position) {
-        SmartspaceCard card = getCardAtPosition(position);
+        SmartspaceCard card =
+                viewHolders.get(position) != null ? viewHolders.get(position).card : null;
         return card instanceof BcSmartspaceCard ? (BcSmartspaceCard) card : null;
-    }
-
-    @Override
-    public List<SmartspaceTarget> getLockscreenTargets() {
-        return (mediaTargets.isEmpty() || !keyguardBypassEnabled)
-                ? _lockscreenTargets
-                : mediaTargets;
     }
 
     public final int getNonRemoteViewsPaddingEnd() {
@@ -277,19 +246,6 @@ public final class CardRecyclerViewAdapter
             return defaultNonRemoteViewsPaddingStart;
         }
         return nonRemoteViewsHorizontalPadding;
-    }
-
-    @Override
-    public BcSmartspaceRemoteViewsCard getRemoteViewsCardAtPosition(int position) {
-        SmartspaceCard card = getCardAtPosition(position);
-        return card instanceof BcSmartspaceRemoteViewsCard
-                ? (BcSmartspaceRemoteViewsCard) card
-                : null;
-    }
-
-    @Override
-    public List<SmartspaceTarget> getSmartspaceTargets() {
-        return smartspaceTargets;
     }
 
     public final GradientDrawable getSolidBackgroundDrawable() {
@@ -313,7 +269,6 @@ public final class CardRecyclerViewAdapter
         throw new IllegalStateException("Solid background drawable isn't a LayerDrawable");
     }
 
-    @Override
     public SmartspaceTarget getTargetAtPosition(int position) {
         if (position < 0 || position >= getItemCount()) {
             return null;
@@ -321,15 +276,10 @@ public final class CardRecyclerViewAdapter
         return mDiffer.getCurrentList().get(position);
     }
 
-    @Override
     public BaseTemplateCard getTemplateCardAtPosition(int position) {
-        SmartspaceCard card = getCardAtPosition(position);
+        SmartspaceCard card =
+                viewHolders.get(position) != null ? viewHolders.get(position).card : null;
         return card instanceof BaseTemplateCard ? (BaseTemplateCard) card : null;
-    }
-
-    @Override
-    public String getUiSurface() {
-        return uiSurface;
     }
 
     public final boolean needToSetToLockscreenTargets() {
@@ -337,13 +287,6 @@ public final class CardRecyclerViewAdapter
             return true;
         }
         return 1.0f - dozeAmount >= 0.36f && transitioningTo == TransitionType.TO_LOCKSCREEN;
-    }
-
-    @Override
-    public final void onBackgroundToggled(boolean z) {
-        _isBackgroundEnabled = z;
-        refreshCardBackground();
-        refreshCardPaddings();
     }
 
     /* JADX DEBUG: Don't trust debug lines info. Lines numbers was adjusted: min line is 1 */
@@ -461,7 +404,33 @@ public final class CardRecyclerViewAdapter
                                 inflater.inflate(
                                         secondaryCardResId, (ViewGroup) templateCard, false);
                 Log.i("SsCardRecyclerViewAdapter", "Secondary card is found");
-                templateCard.setSecondaryCard(bcSmartspaceCardSecondary);
+                ViewGroup viewGroup = templateCard.mSecondaryCardPane;
+
+                if (viewGroup != null) {
+                    templateCard.mSecondaryCard = bcSmartspaceCardSecondary;
+                    BcSmartspaceTemplateDataUtils.updateVisibility(viewGroup, View.GONE);
+                    templateCard.mSecondaryCardPane.removeAllViews();
+                    if (bcSmartspaceCardSecondary != null) {
+                        ConstraintLayout.LayoutParams layoutParams =
+                                new ConstraintLayout.LayoutParams(
+                                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                                        templateCard
+                                                .getResources()
+                                                .getDimensionPixelSize(
+                                                        R.dimen.enhanced_smartspace_card_height));
+                        layoutParams.setMarginStart(
+                                templateCard
+                                        .getResources()
+                                        .getDimensionPixelSize(
+                                                R.dimen
+                                                        .enhanced_smartspace_secondary_card_start_margin));
+                        layoutParams.startToStart = 0;
+                        layoutParams.topToTop = 0;
+                        layoutParams.bottomToBottom = 0;
+                        templateCard.mSecondaryCardPane.addView(
+                                bcSmartspaceCardSecondary, layoutParams);
+                    }
+                }
             }
             card = templateCard;
         } else {
@@ -480,10 +449,37 @@ public final class CardRecyclerViewAdapter
                                 ViewGroup.LayoutParams.MATCH_PARENT,
                                 ViewGroup.LayoutParams.MATCH_PARENT));
                 if (secondaryCardResId != null) {
-                    legacyCard.setSecondaryCard(
+                    BcSmartspaceCardSecondary bcSmartspaceCardSecondary =
                             (BcSmartspaceCardSecondary)
                                     inflater.inflate(
-                                            secondaryCardResId, (ViewGroup) legacyCard, false));
+                                            secondaryCardResId, (ViewGroup) legacyCard, false);
+                    ViewGroup viewGroup = legacyCard.mSecondaryCardGroup;
+                    if (viewGroup != null) {
+                        legacyCard.mSecondaryCard = bcSmartspaceCardSecondary;
+                        BcSmartspaceTemplateDataUtils.updateVisibility(viewGroup, View.GONE);
+                        legacyCard.mSecondaryCardGroup.removeAllViews();
+                        if (bcSmartspaceCardSecondary != null) {
+                            ConstraintLayout.LayoutParams layoutParams =
+                                    new ConstraintLayout.LayoutParams(
+                                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                                            legacyCard
+                                                    .getResources()
+                                                    .getDimensionPixelSize(
+                                                            R.dimen
+                                                                    .enhanced_smartspace_card_height));
+                            layoutParams.setMarginStart(
+                                    legacyCard
+                                            .getResources()
+                                            .getDimensionPixelSize(
+                                                    R.dimen
+                                                            .enhanced_smartspace_secondary_card_start_margin));
+                            layoutParams.startToStart = 0;
+                            layoutParams.topToTop = 0;
+                            layoutParams.bottomToBottom = 0;
+                            legacyCard.mSecondaryCardGroup.addView(
+                                    bcSmartspaceCardSecondary, layoutParams);
+                        }
+                    }
                 }
                 card = legacyCard;
             } else {
@@ -511,11 +507,11 @@ public final class CardRecyclerViewAdapter
                             ViewGroup.LayoutParams.MATCH_PARENT,
                             ViewGroup.LayoutParams.MATCH_PARENT);
             marginLayoutParams.topMargin =
-                    parent.getContext()
+                    view.getContext()
                             .getResources()
                             .getDimensionPixelSize(R.dimen.background_top_padding);
             marginLayoutParams.bottomMargin =
-                    parent.getContext()
+                    view.getContext()
                             .getResources()
                             .getDimensionPixelSize(R.dimen.background_bottom_padding);
             view.setLayoutParams(marginLayoutParams);
@@ -560,81 +556,6 @@ public final class CardRecyclerViewAdapter
         }
     }
 
-    public final void resetListIfNeeded() {
-        if (root != null && root.getSelectedPage() != 0) {
-            return;
-        }
-        if ((root != null ? root.mScrollState : 0) != 0) {
-            return;
-        }
-        if (mDiffer.getCurrentList().size() == 1 && smartspaceTargets.size() == 1) {
-            return;
-        }
-        String smartspaceTargetId =
-                mDiffer.getCurrentList().stream()
-                        .findFirst()
-                        .map(SmartspaceTarget::getSmartspaceTargetId)
-                        .orElse(null);
-        String smartspaceTargetId2 =
-                smartspaceTargets.stream()
-                        .findFirst()
-                        .map(SmartspaceTarget::getSmartspaceTargetId)
-                        .orElse(null);
-        if (Objects.equals(smartspaceTargetId, smartspaceTargetId2)) {
-            return;
-        }
-        mDiffer.submitList(null, null);
-    }
-
-    @Override
-    public final void setBgHandler(Handler handler) {
-        bgHandler = handler;
-    }
-
-    @Override
-    public final void setConfigProvider(BcSmartspaceConfigPlugin configProvider) {
-        this.configProvider = configProvider;
-    }
-
-    @Override
-    public final void setDataProvider(BcSmartspaceDataPlugin dataProvider) {
-        this.dataProvider = dataProvider;
-    }
-
-    @Override
-    public final void setDozeAmount(float dozeAmount) {
-        this.dozeAmount = dozeAmount;
-        transitioningTo =
-                previousDozeAmount > dozeAmount
-                        ? TransitionType.TO_LOCKSCREEN
-                        : previousDozeAmount < dozeAmount
-                                ? TransitionType.TO_AOD
-                                : TransitionType.NOT_IN_TRANSITION;
-        previousDozeAmount = dozeAmount;
-        updateTargetVisibility(null, false);
-
-        if (dozeAmount == 1.0f
-                || (dozeAmount >= 0.36f && transitioningTo == TransitionType.TO_AOD)) {
-            if (currentBackgroundDrawable != backgroundOutlineDrawable) {
-                currentBackgroundDrawable = backgroundOutlineDrawable;
-                refreshCardBackground();
-            }
-        } else if (currentBackgroundDrawable != backgroundDrawable
-                && needToSetToLockscreenTargets()) {
-            currentBackgroundDrawable = backgroundDrawable;
-            refreshCardBackground();
-        }
-
-        updateCurrentTextColor();
-    }
-
-    @Override
-    public final void setKeyguardBypassEnabled(boolean enabled) {
-        keyguardBypassEnabled = enabled;
-        updateTargetVisibility(null, false);
-    }
-
-    @Override
     public void setMediaTarget(SmartspaceTarget target) {
         mediaTargets.clear();
         if (target != null) {
@@ -643,47 +564,12 @@ public final class CardRecyclerViewAdapter
         updateTargetVisibility(null, true);
     }
 
-    @Override
-    public final void setNonRemoteViewsHorizontalPadding(Integer padding) {
-        nonRemoteViewsHorizontalPadding = padding;
-        if (!_isBackgroundEnabled) {
-            refreshCardPaddings();
-        }
-    }
-
-    @Override
-    public final void setPrimaryTextColor(int color) {
-        primaryTextColor = color;
-        updateCurrentTextColor();
-    }
-
-    @Override
-    public void setScreenOn(boolean screenOn) {
-        for (int i = 0; i < viewHolders.size(); i++) {
-            ViewHolder holder = viewHolders.get(viewHolders.keyAt(i));
-            if (holder != null) {
-                holder.card.setScreenOn(screenOn);
-            }
-        }
-    }
-
-    @Override
-    public final void setTargets(List<SmartspaceTarget> targets) {
-        setTargets(targets, null);
-    }
-
-    @Override
-    public final void setTimeChangedDelegate(BcSmartspaceDataPlugin.TimeChangedDelegate delegate) {
-        timeChangedDelegate = delegate;
-    }
-
-    @Override
-    public final void setUiSurface(String uiSurface) {
-        this.uiSurface = uiSurface;
-    }
-
     public void updateCurrentTextColor() {
-        currentTextColor = ColorUtils.blendARGB(primaryTextColor, dozeColor, dozeAmount);
+        currentTextColor =
+                ColorUtils.blendARGB(
+                        _isBackgroundEnabled ? textColorOnBg : primaryTextColor,
+                        dozeColor,
+                        dozeAmount);
         for (int i = 0; i < viewHolders.size(); i++) {
             ViewHolder holder = viewHolders.get(viewHolders.keyAt(i));
             if (holder != null) {
@@ -693,60 +579,49 @@ public final class CardRecyclerViewAdapter
         }
     }
 
-    /* JADX DEBUG: Don't trust debug lines info. Lines numbers was adjusted: min line is 1 */
-    /* JADX WARN: Removed duplicated region for block: B:19:0x0048  */
-    /* JADX WARN: Removed duplicated region for block: B:24:0x0075  */
-    /* JADX WARN: Removed duplicated region for block: B:38:0x0050  */
-    /*
-        Code decompiled incorrectly, please refer to instructions dump.
-    */
-    public final void updateTargetVisibility(Runnable runnable, boolean z) {
-        boolean z2;
-        List<SmartspaceTarget> targets =
+    public final void updateTargetVisibility(Runnable runnable, boolean force) {
+        List<SmartspaceTarget> aodTargets =
                 !mediaTargets.isEmpty()
                         ? mediaTargets
-                        : hasDifferentTargets ? _aodTargets : getLockscreenTargets();
-        List<SmartspaceTarget> lockscreenTargets = getLockscreenTargets();
-        if (smartspaceTargets != targets) {
-            if (dozeAmount == 1.0f
-                    || (dozeAmount >= 0.36f && transitioningTo == TransitionType.TO_AOD)) {
-                z2 = true;
-                boolean z3 =
-                        smartspaceTargets == lockscreenTargets && needToSetToLockscreenTargets();
-                if (!z2) {
-                    Log.d(
-                            "SsCardRecyclerViewAdapter",
-                            "Updating Smartspace targets to targets for AOD");
-                    smartspaceTargets = targets;
-                } else if (z3) {
-                    Log.d(
-                            "SsCardRecyclerViewAdapter",
-                            "Updating Smartspace targets to targets for Lockscreen");
-                    smartspaceTargets = lockscreenTargets;
-                }
-                if (!z || z2 || z3) {
-                    viewHolders.clear();
-                    resetListIfNeeded();
-                    mDiffer.submitList(
-                            smartspaceTargets.stream().collect(Collectors.toList()), runnable);
-                }
-                hasAodLockscreenTransition = targets != lockscreenTargets;
-                if (configProvider.isDefaultDateWeatherDisabled()
-                        || BcSmartspaceDataPlugin.UI_SURFACE_HOME_SCREEN.equals(uiSurface)) {}
-                BcSmartspaceTemplateDataUtils.updateVisibility(
-                        root, smartspaceTargets.isEmpty() ? View.GONE : View.VISIBLE);
-                return;
+                        : (hasDifferentTargets ? _aodTargets : _lockscreenTargets);
+
+        List<SmartspaceTarget> lockscreenTargets =
+                (mediaTargets.isEmpty() || !keyguardBypassEnabled)
+                        ? _lockscreenTargets
+                        : mediaTargets;
+
+        List<SmartspaceTarget> currentTargets = smartspaceTargets;
+
+        boolean showAodTargets =
+                dozeAmount == 1.0f
+                        || (dozeAmount >= 0.36f && transitioningTo == TransitionType.TO_AOD);
+
+        List<SmartspaceTarget> newTargets = currentTargets;
+        if (showAodTargets) {
+            if (currentTargets != aodTargets) {
+                Log.d(
+                        "SsCardRecyclerViewAdapter",
+                        "Updating Smartspace targets to targets for AOD");
+                newTargets = aodTargets;
+            }
+        } else if (needToSetToLockscreenTargets()) {
+            if (currentTargets != lockscreenTargets) {
+                Log.d(
+                        "SsCardRecyclerViewAdapter",
+                        "Updating Smartspace targets to targets for Lockscreen");
+                newTargets = lockscreenTargets;
             }
         }
-        z2 = false;
-        if (smartspaceTargets == lockscreenTargets) {}
-        if (!z2) {}
-        if (!z) {}
-        viewHolders.clear();
-        resetListIfNeeded();
-        mDiffer.submitList(smartspaceTargets.stream().collect(Collectors.toList()), runnable);
-        hasAodLockscreenTransition = targets != lockscreenTargets;
-        if (configProvider.isDefaultDateWeatherDisabled()) {}
+
+        if (newTargets != currentTargets || force) {
+            smartspaceTargets = newTargets;
+            viewHolders.clear();
+            mDiffer.submitList(new ArrayList<>(smartspaceTargets), runnable);
+        }
+
+        hasAodLockscreenTransition = aodTargets != lockscreenTargets;
+        BcSmartspaceTemplateDataUtils.updateVisibility(
+                root, smartspaceTargets.isEmpty() ? View.GONE : View.VISIBLE);
     }
 
     public final void setTargets(List<SmartspaceTarget> list, Runnable runnable) {
@@ -784,7 +659,7 @@ public final class CardRecyclerViewAdapter
             }
         }
 
-        if (!configProvider.isDefaultDateWeatherDisabled()) {
+        if (BcSmartspaceDataPlugin.UI_SURFACE_HOME_SCREEN.equals(uiSurface)) {
             addDefaultDateCardIfEmpty(_aodTargets);
             addDefaultDateCardIfEmpty(_lockscreenTargets);
         }
