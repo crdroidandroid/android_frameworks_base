@@ -75,6 +75,7 @@ import com.android.systemui.keyguard.ui.viewmodel.AlternateBouncerToGoneTransiti
 import com.android.systemui.keyguard.ui.viewmodel.LockscreenToDreamingTransitionViewModel;
 import com.android.systemui.keyguard.ui.viewmodel.PrimaryBouncerToDreamingTransitionViewModel;
 import com.android.systemui.keyguard.ui.viewmodel.PrimaryBouncerToGoneTransitionViewModel;
+import com.android.systemui.qs.flags.QSComposeFragment;
 import com.android.systemui.res.R;
 import com.android.systemui.scene.shared.flag.SceneContainerFlag;
 import com.android.systemui.scene.shared.model.Scenes;
@@ -241,6 +242,7 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener, Dump
 
     private final GradientColors mColors;
     private boolean mNeedsDrawableColorUpdate;
+    private boolean mAllowScrimColorsSwitch = true; // allowed initially to not miss onThemeChanged
 
     private float mAdditionalScrimBehindAlphaKeyguard = 0f;
     // Combined scrim behind keyguard alpha of default scrim + additional scrim
@@ -694,6 +696,9 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener, Dump
         // Showing/hiding the keyguard means that scrim colors have to be switched, not necessary
         // to do the same when you're just showing the brightness mirror.
         mNeedsDrawableColorUpdate = state != ScrimState.BRIGHTNESS_MIRROR;
+
+        mAllowScrimColorsSwitch = !QSComposeFragment.isEnabled()
+            || (oldState != ScrimState.BRIGHTNESS_MIRROR && mNeedsDrawableColorUpdate);
 
         // The device might sleep if it's entering AOD, we need to make sure that
         // the animation plays properly until the last frame.
@@ -1613,7 +1618,7 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener, Dump
         final boolean wantsAlphaUpdate = alpha != currentAlpha;
         final boolean wantsTintUpdate = scrim.getTint() != getCurrentScrimTint(scrim);
 
-        if (wantsAlphaUpdate || wantsTintUpdate) {
+        if (mAllowScrimColorsSwitch && (wantsAlphaUpdate || wantsTintUpdate)) {
             if (mAnimateChange) {
                 startScrimAnimation(scrim, currentAlpha);
             } else {
