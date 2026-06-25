@@ -32,7 +32,6 @@ import com.android.internal.logging.UiEventLogger
 import com.android.keyguard.BouncerPanelExpansionCalculator
 import com.android.systemui.Dumpable
 import com.android.systemui.Flags
-import com.android.systemui.Flags.qsComposeFragmentEarlyExpansion
 import com.android.systemui.animation.ShadeInterpolation
 import com.android.systemui.classifier.Classifier
 import com.android.systemui.classifier.domain.interactor.FalsingInteractor
@@ -645,11 +644,9 @@ constructor(
     data class QSExpansionState(@FloatRange(0.0, 1.0) val progress: Float)
 
     companion object {
-        private val EARLY_EXPANSION
-            get() = if (qsComposeFragmentEarlyExpansion()) 1.0E-6F else 0f
+        private const val EARLY_EXPANSION = 1.0E-6F
 
-        val QS_LISTENING_THRESHOLD
-            get() = EARLY_EXPANSION * 2
+        val QS_LISTENING_THRESHOLD = EARLY_EXPANSION * 2
     }
 }
 
