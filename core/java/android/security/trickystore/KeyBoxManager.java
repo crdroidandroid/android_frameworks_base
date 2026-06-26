@@ -44,6 +44,7 @@ import java.util.regex.Pattern;
 public class KeyBoxManager {
     private static final String TAG = "KeyBoxManager";
     private static final Pattern PEM_HEADER = Pattern.compile("-----BEGIN ([^-]+)-----");
+    private static final Pattern XML_COMMENT = Pattern.compile("<!--.*?-->", Pattern.DOTALL);
 
     private final Map<String, KeyBox> mKeyboxes = new ConcurrentHashMap<>();
 
@@ -279,6 +280,7 @@ public class KeyBoxManager {
                 content = content.substring(bom.length());
             }
         }
+        content = XML_COMMENT.matcher(content).replaceAll("");
         return content.trim();
     }
 }
