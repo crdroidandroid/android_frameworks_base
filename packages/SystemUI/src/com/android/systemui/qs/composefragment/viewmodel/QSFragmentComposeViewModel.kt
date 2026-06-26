@@ -239,7 +239,7 @@ constructor(
             QSExpansionState(1f)
         } else {
             QSExpansionState(
-                if (Flags.noExpansionOnOverscroll() && isStackScrollerOverscrolling) 0f
+                if (isStackScrollerOverscrolling) 0f
                 else
                     qsExpansion.coerceIn(
                         // Only apply early expansion if we are not collapsing QQS, measured by
