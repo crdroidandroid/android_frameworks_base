@@ -25,6 +25,7 @@ import static com.android.systemui.statusbar.phone.ActivityStarterUtilsKt.create
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.ActivityOptions;
+import android.app.AxSandboxManager;
 import android.app.KeyguardManager;
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -90,6 +91,8 @@ import com.android.systemui.statusbar.notification.row.OnUserInteractionCallback
 import com.android.systemui.statusbar.policy.KeyguardStateController;
 import com.android.systemui.wmshell.BubblesManager;
 import com.android.wm.shell.shared.bubbles.logging.BubbleLog;
+
+import com.axion.applocker.AxAppLockerHelper;
 
 import dagger.Lazy;
 
@@ -164,6 +167,7 @@ public class StatusBarNotificationActivityStarter implements NotificationActivit
     private final UserTracker mUserTracker;
     private final FrameworkStatsLogWrapper mFrameworkStatsLogWrapper;
     private final OnUserInteractionCallback mOnUserInteractionCallback;
+    private final AxAppLockerHelper mAxAppLockerHelper;
 
     private boolean mIsCollapsingToShowActivityOverLockscreen;
 
@@ -205,7 +209,8 @@ public class StatusBarNotificationActivityStarter implements NotificationActivit
             LaunchFullScreenIntentProvider launchFullScreenIntentProvider,
             PowerInteractor powerInteractor,
             UserTracker userTracker,
-            FrameworkStatsLogWrapper frameworkStatsLogWrapper) {
+            FrameworkStatsLogWrapper frameworkStatsLogWrapper,
+            AxAppLockerHelper axAppLockerHelper) {
         mContext = context;
         mContextInteractor = contextInteractor;
         mMainThreadHandler = mainThreadHandler;
@@ -242,6 +247,7 @@ public class StatusBarNotificationActivityStarter implements NotificationActivit
         mPowerInteractor = powerInteractor;
         mUserTracker = userTracker;
         mFrameworkStatsLogWrapper = frameworkStatsLogWrapper;
+        mAxAppLockerHelper = axAppLockerHelper;
 
         launchFullScreenIntentProvider.registerListener(entry -> launchFullScreenIntent(entry));
     }
@@ -284,11 +290,32 @@ public class StatusBarNotificationActivityStarter implements NotificationActivit
         mLogger.logStartingActivityFromClick(entry, row.isHeadsUpState(),
                 mKeyguardStateController.isVisible(),
                 mNotificationShadeWindowController.getPanelExpanded());
+        if (shouldOpenLockedShadeForAppLockedNotification(entry, row)) {
+            openLockedShadeForAppLockedNotification(entry, row);
+            return;
+        }
         OnKeyguardDismissedAction action =
                 (intent, isActivityIntent, animate, showOverTheLockScreen) ->
                         performActionOnKeyguardDismissed(entry, row, intent, isActivityIntent,
                                 animate, showOverTheLockScreen);
         performActionAfterKeyguardDismissed(entry, action);
+    }
+
+    private boolean shouldOpenLockedShadeForAppLockedNotification(
+            NotificationEntry entry,
+            ExpandableNotificationRow row) {
+        StatusBarNotification sbn = entry.getSbn();
+        return mKeyguardStateController.isShowing()
+                && row.isOnKeyguard()
+                && sbn.getNotification().extras.getBoolean(
+                        AxSandboxManager.EXTRA_NOTIFICATION_APP_LOCKED, false)
+                && mAxAppLockerHelper.needsAuth(sbn.getPackageName(), sbn.getUserId());
+    }
+
+    private void openLockedShadeForAppLockedNotification(
+            NotificationEntry entry,
+            ExpandableNotificationRow row) {
+        mPresenter.onExpandClicked(row, row.getEntryAdapter(), true);
     }
 
     private void performActionAfterKeyguardDismissed(NotificationEntry entry,

@@ -64,6 +64,8 @@ import dagger.Module
 import dagger.multibindings.ClassKey
 import dagger.multibindings.IntoMap
 
+import com.axion.applocker.AxAppLockerHelper
+
 /**
  * DEPRECATED: DO NOT ADD THINGS TO THIS FILE. b/427499553
  *
@@ -329,4 +331,9 @@ abstract class SystemUICoreStartableModule {
     abstract fun bindSysUIKeyGestureEventInitializer(
         keyGestureEventInitializer: SysUIKeyGestureEventInitializer
     ): CoreStartable
+
+    @Binds
+    @IntoMap
+    @ClassKey(AxAppLockerHelper::class)
+    abstract fun bindAxAppLockerHelper(impl: AxAppLockerHelper): CoreStartable
 }
