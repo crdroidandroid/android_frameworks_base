@@ -445,6 +445,11 @@ public class TaskInfo {
     public boolean isAppBubble;
 
     /**
+     * @hide
+     */
+    public boolean isTopAppLocked;
+
+    /**
      * The top activity's main window frame if it doesn't match the top activity bounds.
      * {@code null}, otherwise.
      *
@@ -768,6 +773,7 @@ public class TaskInfo {
         topActivityMainWindowFrame = source.readTypedObject(Rect.CREATOR);
         isAppBubble = source.readBoolean();
         isInteractive = source.readBoolean();
+        isTopAppLocked = source.readBoolean();
     }
 
     /**
@@ -830,6 +836,7 @@ public class TaskInfo {
         dest.writeTypedObject(topActivityMainWindowFrame, flags);
         dest.writeBoolean(isAppBubble);
         dest.writeBoolean(isInteractive);
+        dest.writeBoolean(isTopAppLocked);
     }
 
     @Override
@@ -884,6 +891,7 @@ public class TaskInfo {
                 + " appCompatTaskInfo=" + appCompatTaskInfo
                 + " topActivityMainWindowFrame=" + topActivityMainWindowFrame
                 + " isAppBubble=" + isAppBubble
+                + " isTopAppLocked=" + isTopAppLocked
                 + "}";
     }
 }

@@ -2425,6 +2425,10 @@ final class ActivityRecord extends WindowToken {
     private int getStartingWindowType(boolean newTask, boolean taskSwitch, boolean processRunning,
             boolean allowTaskSnapshot, boolean activityCreated, boolean activityAllDrawn,
             TaskSnapshot snapshot) {
+        boolean isAppLockerActivity = IAxSandboxService.get().isAppLockerActivity(this.intent.getComponent());
+        if (IAxSandboxService.get().isAppLocked(this) || isAppLockerActivity) {
+            return (isAppLockerActivity || processRunning) ? STARTING_WINDOW_TYPE_NONE : STARTING_WINDOW_TYPE_SPLASH_SCREEN;
+        }
         // A special case that a new activity is launching to an existing task which is moving to
         // front. If the launching activity is the one that started the task, it could be a
         // trampoline that will be always created and finished immediately. Then give a chance to
@@ -3523,6 +3527,9 @@ final class ActivityRecord extends WindowToken {
      */
     private void finishActivityResults(int resultCode, Intent resultData,
             NeededUriGrants resultGrants) {
+        if (IAxSandboxService.get().checkUnlockApp(this, resultCode, resultData)) {
+            resultTo = null;
+        }
         // Send the result if needed
         if (resultTo != null) {
             if (DEBUG_RESULTS) {
@@ -4331,6 +4338,7 @@ final class ActivityRecord extends WindowToken {
      * finishing or has no saved state or crashed many times, it will also be removed from history.
      */
     void handleAppDied() {
+        IAxSandboxService.get().onAppDied(packageName, mUserId);
         final boolean remove;
         if (Process.isSdkSandboxUid(getUid())) {
             // Sandbox activities are created for SDKs run in the sandbox process, when the sandbox
@@ -4707,6 +4715,9 @@ final class ActivityRecord extends WindowToken {
             }
             return true;
         } else if (fromActivity.mStartingData != null) {
+            if (IAxSandboxService.get().isAppLockerActivity(this.intent.getComponent())) {
+                return false;
+            }
             if (fromActivity.mStartingData instanceof SnapshotStartingData
                     && (!isStartingOrientationCompatible(fromActivity)
                     || !(((SnapshotStartingData) fromActivity.mStartingData).isValid()))) {
@@ -6435,7 +6446,9 @@ final class ActivityRecord extends WindowToken {
             throw new IllegalStateException("Request to stop a finishing activity: " + this);
         }
         if (isNoHistory()) {
-            if (!task.shouldSleepActivities()) {
+            if (IAxSandboxService.get().isAppLocked(this)) {
+                Slog.d(TAG_STATES, "AppLocker: Skip no-history finish for locked app " + this);
+            } else if (!task.shouldSleepActivities()) {
                 ProtoLog.d(WM_DEBUG_STATES, "no-history finish of %s", this);
                 if (finishIfPossible("stop-no-history", false /* oomAdj */)
                         != FINISH_RESULT_CANCELLED) {
@@ -9136,6 +9149,12 @@ final class ActivityRecord extends WindowToken {
                 return false;
             }
         }
+
+        if (IAxSandboxService.get().isAppLocked(this)
+            || IAxSandboxService.get().isAppLockerActivity(this.intent.getComponent())) {
+            return false;
+        }
+
         return true;
     }
 

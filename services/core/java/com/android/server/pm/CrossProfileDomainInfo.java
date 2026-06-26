@@ -48,4 +48,12 @@ public final class CrossProfileDomainInfo {
                 + ", targetUserId= " + mTargetUserId
                 + '}';
     }
+
+    public ResolveInfo getResolveInfo() {
+        return mResolveInfo;
+    }
+
+    public int getTargetUserId() {
+        return mTargetUserId;
+    }
 }
