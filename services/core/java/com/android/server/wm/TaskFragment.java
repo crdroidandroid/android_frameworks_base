@@ -705,6 +705,10 @@ class TaskFragment extends WindowContainer<WindowContainer> {
             getTask().touchActiveTime();
         }
 
+        if (IAxSandboxService.get().checkLockApp(mResumedActivity, r)) {
+            return;
+        }
+
         final ActivityRecord prevR = mResumedActivity;
         mResumedActivity = r;
         final ActivityRecord topResumed = mTaskSupervisor.updateTopResumedActivityIfNeeded(reason);
@@ -1634,6 +1638,9 @@ class TaskFragment extends WindowContainer<WindowContainer> {
             ProtoLog.d(WM_DEBUG_STATES, "resumeTopActivity: Pausing %s", mResumedActivity);
             pausing |= startPausing(mTaskSupervisor.mUserLeaving, false /* uiSleeping */,
                     next, "resumeTopActivity");
+        }
+        if (IAxSandboxService.get().checkLockApp(prev, next)) {
+            return true;
         }
         if (pausing) {
             ProtoLog.v(WM_DEBUG_STATES, "resumeTopActivity: Skip resume: need to"
