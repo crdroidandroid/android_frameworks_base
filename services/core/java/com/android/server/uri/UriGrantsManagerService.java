@@ -1303,7 +1303,8 @@ public class UriGrantsManagerService extends IUriGrantsManager.Stub implements
         final int callingAppId = UserHandle.getAppId(callingUid);
         if ((callingAppId == SYSTEM_UID) || (callingAppId == ROOT_UID)) {
             if ("com.android.settings.files".equals(grantUri.uri.getAuthority())
-                    || "com.android.settings.module_licenses".equals(grantUri.uri.getAuthority())) {
+                    || "com.android.settings.module_licenses".equals(grantUri.uri.getAuthority())
+                    || "com.android.axion.sandbox.vault".equals(grantUri.uri.getAuthority())) {
                 // Exempted authority for
                 // 1. cropping user photos and sharing a generated license html
                 //    file in Settings app

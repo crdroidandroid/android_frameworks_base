@@ -952,6 +952,13 @@ public final class SystemServiceRegistry {
                 return new AppOpsManager(ctx, service);
             }});
 
+        registerService(Context.AX_SANDBOX_SERVICE, AxSandboxManager.class,
+                new CachedServiceFetcher<AxSandboxManager>() {
+            @Override
+            public AxSandboxManager createService(ContextImpl ctx) {
+                return new AxSandboxManager(ctx.getOuterContext());
+            }});
+
         registerService(Context.CAMERA_SERVICE, CameraManager.class,
                 new CachedServiceFetcher<CameraManager>() {
             @Override
