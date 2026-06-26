@@ -194,7 +194,7 @@
     <string name="ax_dynamic_bar_running">Em execução</string>
     <string name="ax_dynamic_bar_on">LIGADO</string>
     <string name="ax_dynamic_bar_recents">Recentes</string>
-    <string name="ax_dynamic_bar_kill_app">Kill app</string>
+    <string name="ax_dynamic_bar_kill_app">Terminar aplicação</string>
     <string name="ax_dynamic_bar_unlocked">Desbloqueado</string>
     <string name="ax_dynamic_bar_device_unlocked">Dispositivo desbloqueado</string>
     <string name="ax_dynamic_bar_progress">Progresso</string>
