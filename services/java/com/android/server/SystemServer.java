@@ -322,6 +322,7 @@ import com.android.server.wallpapereffectsgeneration.WallpaperEffectsGenerationM
 import com.android.server.wearable.WearableSensingManagerService;
 import com.android.server.webkit.WebViewUpdateService;
 import com.android.server.wm.ActivityTaskManagerService;
+import com.android.server.wm.AxSandboxService;
 import com.android.server.wm.WindowManagerGlobalLock;
 import com.android.server.wm.WindowManagerService;
 
@@ -1323,6 +1324,10 @@ public final class SystemServer implements Dumpable {
 
         t.traceBegin("StartThermalManager");
         mSystemServiceManager.startService(ThermalManagerService.class);
+        t.traceEnd();
+
+        t.traceBegin("StartAxSandboxService");
+        mSystemServiceManager.startService(new AxSandboxService(mSystemContext, atm));
         t.traceEnd();
 
         // Now that the power manager has been started, let the activity manager
