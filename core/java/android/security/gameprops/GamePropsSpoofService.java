@@ -19,7 +19,6 @@ package android.security.gameprops;
 import android.app.ActivityManager;
 import android.app.IActivityManager;
 import android.os.Build;
-import android.os.RemoteException;
 import android.util.JsonReader;
 import android.util.Log;
 
@@ -64,11 +63,16 @@ public final class GamePropsSpoofService {
         mEnabled = false;
         mConfigLoaded = false;
 
+        IActivityManager service = ActivityManager.getService();
+        if (service == null) {
+            Log.w(TAG, "ActivityManager not ready, skipping gameprops config load");
+            return;
+        }
+
         String content;
         try {
-            IActivityManager service = ActivityManager.getService();
-            content = service != null ? service.getSpoofGamePropsConfig() : null;
-        } catch (RemoteException e) {
+            content = service.getSpoofGamePropsConfig();
+        } catch (Throwable e) {
             Log.e(TAG, "Failed to fetch gameprops config from system_server", e);
             return;
         }
@@ -83,7 +87,7 @@ public final class GamePropsSpoofService {
             mConfigLoaded = true;
             Log.i(TAG, "Game props config loaded, games=" + mGameConfigs.size()
                     + ", enabled=" + mEnabled);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             Log.e(TAG, "Failed to parse game props config", e);
         }
     }
