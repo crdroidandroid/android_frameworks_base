@@ -539,6 +539,7 @@ import com.android.server.power.stats.BatteryStatsImpl;
 import com.android.server.privatecompute.PccSandboxManagerInternal;
 import com.android.server.privatecompute.PrivateComputeStatsLogUtil;
 import com.android.server.sdksandbox.SdkSandboxManagerLocal;
+import com.android.server.spoof.AxSpoofManagerInternal;
 import com.android.server.stats.pull.StatsPullAtomService;
 import com.android.server.stats.pull.StatsPullAtomServiceInternal;
 import com.android.server.uri.GrantUri;
@@ -21212,6 +21213,40 @@ public class ActivityManagerService extends IActivityManager.Stub
             return;
         }
         r.getWindowProcessController().setOptimizationInfo(compilerFilter, compilationReason);
+    }
+
+    private AxSpoofManagerInternal getAxSpoofManager() {
+        return LocalServices.getService(AxSpoofManagerInternal.class);
+    }
+
+    @Override
+    public String getSpoofPifConfig() {
+        final AxSpoofManagerInternal service = getAxSpoofManager();
+        return service != null ? service.getPifConfig() : null;
+    }
+
+    @Override
+    public String getSpoofGamePropsConfig() {
+        final AxSpoofManagerInternal service = getAxSpoofManager();
+        return service != null ? service.getGamePropsConfig() : null;
+    }
+
+    @Override
+    public String getSpoofTrickyStoreTarget() {
+        final AxSpoofManagerInternal service = getAxSpoofManager();
+        return service != null ? service.getTrickyStoreTarget() : null;
+    }
+
+    @Override
+    public String getSpoofTrickyStoreKeyBox() {
+        final AxSpoofManagerInternal service = getAxSpoofManager();
+        return service != null ? service.getTrickyStoreKeyBox() : null;
+    }
+
+    @Override
+    public String getSpoofTrickyStorePatch() {
+        final AxSpoofManagerInternal service = getAxSpoofManager();
+        return service != null ? service.getTrickyStorePatch() : null;
     }
 
     // uid indexed collection of lists of ANR warning callback.
