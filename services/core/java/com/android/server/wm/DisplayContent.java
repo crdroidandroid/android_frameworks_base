@@ -271,6 +271,7 @@ import com.android.internal.protolog.ProtoLog;
 import com.android.internal.util.ToBooleanFunction;
 import com.android.internal.util.function.pooled.PooledLambda;
 import com.android.internal.util.function.pooled.PooledPredicate;
+import com.android.server.LocalServices;
 import com.android.server.input.InputManagerService;
 import com.android.server.inputmethod.InputMethodManagerInternal;
 import com.android.server.policy.WindowManagerPolicy;
@@ -4527,6 +4528,13 @@ class DisplayContent extends RootDisplayArea implements WindowManagerPolicy.Disp
             IAxSandboxService.get().onAppFocusChanged(newFocus, newTask);
         }
 
+        if (newFocus != null && isDefaultDisplay) {
+            final GameSpaceService gameSpaceService =
+                    LocalServices.getService(GameSpaceService.class);
+            if (gameSpaceService != null) {
+                gameSpaceService.onAppFocusChanged(newFocus, newTask);
+            }
+        }
         getInputMonitor().setFocusedAppLw(newFocus);
         return true;
     }

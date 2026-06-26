@@ -55,6 +55,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.os.SystemClock;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.service.notification.NotificationListenerService.Ranking;
 import android.service.notification.SnoozeCriterion;
 import android.service.notification.StatusBarNotification;
@@ -911,6 +913,12 @@ public final class NotificationEntry extends ListEntry {
     }
 
     private boolean shouldSuppressVisualEffect(int effect) {
+        if (effect == SUPPRESSED_EFFECT_FULL_SCREEN_INTENT
+                && row != null
+                && Settings.Secure.getIntForUser(row.getContext().getContentResolver(),
+                        KEY_GAMING_MODE_ACTIVE, 0, UserHandle.USER_CURRENT) == 1) {
+            return true;
+        }
         if (isExemptFromDndVisualSuppression()) {
             return false;
         }
@@ -1167,4 +1175,5 @@ public final class NotificationEntry extends ListEntry {
     private static final int COLOR_INVALID = 1;
 
     private static final String TAG = "NotificationEntry";
+    private static final String KEY_GAMING_MODE_ACTIVE = "ax_gaming_mode_active";
 }

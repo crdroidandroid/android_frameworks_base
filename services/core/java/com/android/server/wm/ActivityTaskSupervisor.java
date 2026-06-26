@@ -1908,6 +1908,11 @@ public class ActivityTaskSupervisor implements RecentTasks.Callbacks {
             if (sandboxService != null) {
                 sandboxService.removeTask(task, reason);
             }
+            final GameSpaceService gameSpaceService =
+                    LocalServices.getService(GameSpaceService.class);
+            if (gameSpaceService != null) {
+                gameSpaceService.removeTask(task);
+            }
         } finally {
             task.mInRemoveTask = false;
             mService.mChainTracker.endPartial();

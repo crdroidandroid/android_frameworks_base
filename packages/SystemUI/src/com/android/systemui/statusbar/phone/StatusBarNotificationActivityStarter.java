@@ -809,6 +809,9 @@ public class StatusBarNotificationActivityStarter implements NotificationActivit
 
     @VisibleForTesting
     void launchFullScreenIntent(NotificationEntry entry) {
+        if (entry.shouldSuppressFullScreenIntent()) {
+            return;
+        }
         // Skip if device is in VR mode.
         if (mPresenter.isDeviceInVrMode()) {
             mLogger.logFullScreenIntentSuppressedByVR(entry);
