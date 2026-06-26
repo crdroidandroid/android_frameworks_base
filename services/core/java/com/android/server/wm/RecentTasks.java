@@ -2124,6 +2124,7 @@ class RecentTasks {
         if (!getTasksAllowed) {
             Task.trimIneffectiveInfo(tr, rti);
         }
+        IAxSandboxService.get().isTopAppLocked(rti, tr.effectiveUid);
         return rti;
     }
 
