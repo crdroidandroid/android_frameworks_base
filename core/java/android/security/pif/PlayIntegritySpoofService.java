@@ -9,7 +9,6 @@ import android.content.pm.Signature;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.RemoteException;
 import android.os.SystemProperties;
 import android.text.TextUtils;
 import android.util.Base64;
@@ -137,11 +136,16 @@ public final class PlayIntegritySpoofService {
         mSystemProps.clear();
         mConfigLoaded = false;
 
+        IActivityManager service = ActivityManager.getService();
+        if (service == null) {
+            Log.w(TAG, "ActivityManager not ready, skipping PIF config load");
+            return;
+        }
+
         String content;
         try {
-            IActivityManager service = ActivityManager.getService();
-            content = service != null ? service.getSpoofPifConfig() : null;
-        } catch (RemoteException e) {
+            content = service.getSpoofPifConfig();
+        } catch (Throwable e) {
             Log.e(TAG, "Failed to fetch PIF config from system_server", e);
             return;
         }
@@ -162,7 +166,7 @@ public final class PlayIntegritySpoofService {
             mConfigLoaded = true;
             Log.i(TAG, "PIF config loaded, fields=" + mBuildFields.size()
                     + ", props=" + mSystemProps.size());
-        } catch (Exception e) {
+        } catch (Throwable e) {
             Log.e(TAG, "Failed to load PIF config", e);
         }
     }
@@ -441,7 +445,7 @@ public final class PlayIntegritySpoofService {
     }
 
     public String getSpoofedProperty(String key) {
-        if (!mSpoofProps || !mConfigLoaded) return null;
+        if (key == null || !mSpoofProps || !mConfigLoaded) return null;
 
         String value = mSystemProps.get(key);
         if (value != null) return value;
