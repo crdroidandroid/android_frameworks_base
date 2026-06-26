@@ -283,6 +283,7 @@ import com.android.server.smartspace.SmartspaceManagerService;
 import com.android.server.soundtrigger.SoundTriggerService;
 import com.android.server.soundtrigger_middleware.SoundTriggerMiddlewareService;
 import com.android.server.speech.SpeechRecognitionManagerService;
+import com.android.server.spoof.AxSpoofManagerService;
 import com.android.server.stats.binder.BinderStatsConsumerService;
 import com.android.server.stats.bootstrap.StatsBootstrapAtomService;
 import com.android.server.stats.pull.StatsPullAtomService;
@@ -1439,15 +1440,8 @@ public final class SystemServer implements Dumpable {
         mSystemServiceManager.startService(new OverlayManagerService(mSystemContext));
         t.traceEnd();
 
-        // latency test ONLY
-        // this is probably no-op, intializes the tricky store instance for system server
-        // for system use cases - nte: maybe not needed at all, since keystore/cert requests are per-app context
-        t.traceBegin("StartTrickyStoreService");
-        try {
-            android.security.trickystore.TrickyStoreService.getInstance().initialize();
-        } catch (Throwable e) {
-            Slog.e(TAG, "Failed to initialize TrickyStoreService", e);
-        }
+        t.traceBegin("StartAxSpoofManagerService");
+        mSystemServiceManager.startService(AxSpoofManagerService.class);
         t.traceEnd();
 
         t.traceBegin("InitVBMetaDigest");
