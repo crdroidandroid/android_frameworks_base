@@ -332,10 +332,14 @@ public class TrickyStoreService {
     }
 
     private String fetchFromAms(Fetcher fetcher) {
+        IActivityManager service = ActivityManager.getService();
+        if (service == null) {
+            Log.w(TAG, "ActivityManager not ready, skipping trickystore fetch");
+            return null;
+        }
         try {
-            IActivityManager service = ActivityManager.getService();
-            return service != null ? fetcher.fetch(service) : null;
-        } catch (RemoteException e) {
+            return fetcher.fetch(service);
+        } catch (Throwable e) {
             Log.e(TAG, "Failed to fetch trickystore config from system_server", e);
             return null;
         }
