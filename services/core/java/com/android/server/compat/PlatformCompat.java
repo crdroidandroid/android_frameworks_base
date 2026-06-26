@@ -57,6 +57,7 @@ import com.android.internal.compat.IOverrideValidator;
 import com.android.internal.compat.IPlatformCompat;
 import com.android.internal.util.DumpUtils;
 import com.android.server.LocalServices;
+import com.android.server.wm.IAxSandboxService;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -183,6 +184,12 @@ public class PlatformCompat extends IPlatformCompat.Stub {
         // Fetch the CompatChange. This is done here instead of in mCompatConfig to avoid multiple
         // fetches.
         CompatChange c = mCompatConfig.getCompatChange(changeId);
+
+        if (changeId == 143937733L && appInfo != null) {
+            if (IAxSandboxService.get().isPackageSandboxed(appInfo.packageName)) {
+                return true;
+            }
+        }
 
         boolean enabled = mCompatConfig.isChangeEnabled(c, appInfo);
         int state = enabled ? ChangeReporter.STATE_ENABLED : ChangeReporter.STATE_DISABLED;

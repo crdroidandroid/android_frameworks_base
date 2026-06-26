@@ -145,6 +145,9 @@ import com.android.systemui.util.ListenerSet;
 import com.android.systemui.util.state.DownstreamObservableState;
 import com.android.systemui.util.state.ObservableState;
 
+import com.axion.applocker.AxAppLockerHelper;
+import android.service.notification.StatusBarNotification;
+
 import com.google.errorprone.annotations.CompileTimeConstant;
 
 import kotlin.Unit;
@@ -7643,5 +7646,24 @@ public class NotificationStackScrollLayout
         if (SPEW) {
             Log.v(TAG, logMsg);
         }
+    }
+
+    public void onAppLockerUpdate(String packageName) {
+        boolean hideSensitive = mAmbientState.isHideSensitive();
+        int childCount = getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            ExpandableView child = getChildAtIndex(i);
+            if (child instanceof ExpandableNotificationRow row) {
+                StatusBarNotification sbn = row.getEntryAdapter() != null
+                        ? row.getEntryAdapter().getSbn() : null;
+                if (sbn == null) continue;
+                if (packageName != null && !packageName.equals(sbn.getPackageName())) {
+                    continue;
+                }
+                row.setHideSensitive(hideSensitive, false, 0, 0);
+                onChildHeightChanged(child, true, "applocker-update");
+            }
+        }
+        updateContentHeight();
     }
 }
