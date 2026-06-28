@@ -108,9 +108,9 @@
     <string name="quick_settings_volume_panel_label">音量面板</string>
     <!-- Smart Pixels -->
     <string name="quick_settings_smart_pixels_label">智慧像素</string>
-    <string name="quick_settings_smart_pixels_on">On</string>
-    <string name="quick_settings_smart_pixels_off">Off</string>
-    <string name="smart_pixels_percent_label">Pixel percentage</string>
+    <string name="quick_settings_smart_pixels_on">已啟用</string>
+    <string name="quick_settings_smart_pixels_off">停用</string>
+    <string name="smart_pixels_percent_label">螢幕省電像素比例</string>
     <string name="smart_pixels_percent_format"><xliff:g id="percent" example="25">%d</xliff:g>%%</string>
     <!-- Weather Tile -->
     <string name="omnijaws_service_error">載入天氣資訊時發生錯誤</string>
@@ -193,6 +193,7 @@
     <string name="ax_dynamic_bar_running">運行中</string>
     <string name="ax_dynamic_bar_on">開啟</string>
     <string name="ax_dynamic_bar_recents">總覽</string>
+    <string name="ax_dynamic_bar_kill_app">結束應用程式</string>
     <string name="ax_dynamic_bar_unlocked">未鎖定</string>
     <string name="ax_dynamic_bar_device_unlocked">裝置已解鎖</string>
     <string name="ax_dynamic_bar_progress">進度</string>
@@ -205,7 +206,7 @@
     <string name="ax_dynamic_bar_wireless_charging">無線充電</string>
     <string name="ax_dynamic_bar_until_full">直至充飽</string>
     <string name="ax_dynamic_bar_battery_saver">省電模式</string>
-    <string name="ax_dynamic_bar_call">Call</string>
+    <string name="ax_dynamic_bar_call">呼叫</string>
     <string name="ax_dynamic_bar_incoming_call">來電</string>
     <string name="ax_dynamic_bar_connected">已連線</string>
     <string name="ax_dynamic_bar_disconnect">中斷連線</string>
