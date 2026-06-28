@@ -194,6 +194,7 @@
     <string name="ax_dynamic_bar_running">Folyamatban</string>
     <string name="ax_dynamic_bar_on">BE</string>
     <string name="ax_dynamic_bar_recents">Előzmények</string>
+    <string name="ax_dynamic_bar_kill_app">Alkalmazás kilövése</string>
     <string name="ax_dynamic_bar_unlocked">Feloldva</string>
     <string name="ax_dynamic_bar_device_unlocked">A készülék feloldva</string>
     <string name="ax_dynamic_bar_progress">Folyamat</string>
