@@ -252,4 +252,6 @@
     <string name="ax_dynamic_bar_sports_upcoming">القادمة</string>
     <!-- Screenshot -->
     <string name="quick_settings_screenshot_label">لقطة الشاشة</string>
+    <!-- Blur QS tile -->
+    <string name="quick_settings_blur_label">Blur</string>
 </resources>
