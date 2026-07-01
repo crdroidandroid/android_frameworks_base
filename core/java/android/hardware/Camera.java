@@ -2025,19 +2025,19 @@ public class Camera {
         public Point mouth = null;
 
         /**
-         * {@hide}
+         * @hide
          */
         public int smileDegree = 0;
         /**
-         * {@hide}
+         * @hide
          */
         public int smileScore = 0;
         /**
-         * {@hide}
+         * @hide
          */
         public int blinkDetected = 0;
         /**
-         * {@hide}
+         * @hide
          */
         public int faceRecognised = 0;
     }
