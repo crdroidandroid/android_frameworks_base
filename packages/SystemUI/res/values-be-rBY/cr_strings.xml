@@ -250,4 +250,6 @@
     <string name="ax_dynamic_bar_sports_upcoming">Upcoming</string>
     <!-- Screenshot -->
     <string name="quick_settings_screenshot_label">Здымак экрана</string>
+    <!-- Blur QS tile -->
+    <string name="quick_settings_blur_label">Blur</string>
 </resources>
