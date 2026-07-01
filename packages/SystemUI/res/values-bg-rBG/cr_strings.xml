@@ -248,4 +248,6 @@
     <string name="ax_dynamic_bar_sports_upcoming">Предстоящо</string>
     <!-- Screenshot -->
     <string name="quick_settings_screenshot_label">Екранна снимка</string>
+    <!-- Blur QS tile -->
+    <string name="quick_settings_blur_label">Blur</string>
 </resources>
