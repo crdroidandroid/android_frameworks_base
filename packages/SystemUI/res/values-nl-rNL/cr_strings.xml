@@ -249,5 +249,5 @@
     <!-- Screenshot -->
     <string name="quick_settings_screenshot_label">Schermafbeelding</string>
     <!-- Blur QS tile -->
-    <string name="quick_settings_blur_label">Blur</string>
+    <string name="quick_settings_blur_label">Vervaag</string>
 </resources>
