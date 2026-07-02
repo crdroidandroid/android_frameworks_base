@@ -251,5 +251,5 @@
     <!-- Screenshot -->
     <string name="quick_settings_screenshot_label">Снимок экрана</string>
     <!-- Blur QS tile -->
-    <string name="quick_settings_blur_label">Blur</string>
+    <string name="quick_settings_blur_label">Размытие</string>
 </resources>
