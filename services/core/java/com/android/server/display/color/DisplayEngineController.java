@@ -17,6 +17,7 @@ import android.util.Slog;
 
 import com.android.server.LocalServices;
 
+import java.io.PrintWriter;
 import java.util.Arrays;
 
 /** Controls color transformation for display engine modes. */
@@ -275,5 +276,20 @@ final class DisplayEngineController extends TintController {
             0, 0, 0, 1
         };
         preMultiply(matrix, saturationMatrix);
+    }
+
+    @Override
+    public void dump(PrintWriter pw) {
+        pw.println("    DisplayEngineController:");
+        pw.println("      mDisplayMode = " + mDisplayMode);
+        pw.println("      mIsActivated = " + isActivated());
+        pw.println("      mNeedsLinear = " + mNeedsLinear);
+        pw.println("      rgb = (" + mRed + ", " + mGreen + ", " + mBlue + ")"
+                + " sat = " + mSaturation
+                + " cont = " + mContrast
+                + " val = " + mValue
+                + " hue = " + mHue);
+        pw.println("      mNormalization = " + mNormalization);
+        pw.println("      mMatrix = " + TintController.matrixToString(mMatrix, 4));
     }
 }
