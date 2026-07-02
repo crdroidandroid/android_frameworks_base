@@ -758,6 +758,10 @@ public final class ColorDisplayService extends SystemService {
         if (mDisplayWhiteBalanceTintController.isAvailable(getContext())) {
             updateDisplayWhiteBalanceStatus();
         }
+
+        if (mDisplayEngineController.isAvailable(getContext())) {
+            mHandler.sendEmptyMessage(MSG_APPLY_UPDATE_DISPLAY_ENGINE);
+        }
     }
 
     private void onAccessibilityActivated() {
