@@ -248,5 +248,5 @@
     <!-- Screenshot -->
     <string name="quick_settings_screenshot_label">屏幕截图</string>
     <!-- Blur QS tile -->
-    <string name="quick_settings_blur_label">Blur</string>
+    <string name="quick_settings_blur_label">模糊</string>
 </resources>
