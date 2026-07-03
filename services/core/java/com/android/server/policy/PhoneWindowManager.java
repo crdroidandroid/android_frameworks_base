@@ -8247,6 +8247,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     }
 
     private void releaseMemoryAtScreenOn() {
+        if (Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.SCREEN_ON_MEMORY_RECLAIM, 1, UserHandle.USER_CURRENT) == 0) {
+            return;
+        }
         long currentTime = System.currentTimeMillis();
         if (lastMemoryReleaseTime == 0L || currentTime - lastMemoryReleaseTime > MEMORY_RELEASE_INTERVAL_MS) {
             try {

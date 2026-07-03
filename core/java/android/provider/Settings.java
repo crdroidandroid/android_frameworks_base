@@ -7408,6 +7408,14 @@ public final class Settings {
         public static final String POCKET_JUDGE = "pocket_judge";
 
         /**
+         * Whether to reclaim memory by killing cached apps shortly after screen on.
+         *   0 = disabled
+         *   1 = enabled
+         * @hide
+         */
+        public static final String SCREEN_ON_MEMORY_RECLAIM = "screen_on_memory_reclaim";
+
+        /**
          * Whether to show heads up only for dialer and sms apps
          * @hide
          */
