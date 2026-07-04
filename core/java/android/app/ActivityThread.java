@@ -5614,8 +5614,25 @@ public final class ActivityThread extends ClientTransactionHandler
             } else {
                 cl = packageInfo.getClassLoader();
             }
-            service = packageInfo.getAppFactory()
-                    .instantiateService(cl, data.info.name, data.intent);
+            try {
+                service = packageInfo.getAppFactory()
+                        .instantiateService(cl, data.info.name, data.intent);
+            } catch (ClassNotFoundException e) {
+                // NativeOnlySandboxedProcessService* is declared android:nativeService="true"
+                // and has no Java class by design: it is meant to run as a native-only service
+                // under the native app zygote prototype. That prototype is disabled here, so the
+                // service falls through to normal Java instantiation and there is no class to
+                // create. Substitute the equivalent regular SandboxedProcessService*, which the
+                // browser is already prepared to fall back to, so the sandboxed renderer starts
+                // instead of crash-looping.
+                final String fallbackName = data.info.name.replace(
+                        ".NativeOnlySandboxedProcessService", ".SandboxedProcessService");
+                if (fallbackName.equals(data.info.name)) {
+                    throw e;
+                }
+                service = packageInfo.getAppFactory()
+                        .instantiateService(cl, fallbackName, data.intent);
+            }
             ContextImpl context = ContextImpl.getImpl(service
                     .createServiceBaseContext(this, packageInfo));
             if (data.info.splitName != null) {
