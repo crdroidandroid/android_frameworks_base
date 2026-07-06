@@ -269,6 +269,16 @@ public class Typeface {
         }
     }
 
+    // Runtime re-point of an initialized placeholder (e.g. DEFAULT): the static final field
+    // can't be reassigned, so swap what the placeholder resolves to instead.
+    private void updatePendingTypeface(@NonNull Typeface resolvedTypeface) {
+        if (mPendingTypeface == null) {
+            throw new IllegalStateException(
+                    "Do not call this method other than placeholder Typeface.");
+        }
+        mPendingTypeface.set(resolvedTypeface);
+    }
+
     /** @hide */
     @IntDef(value = {NORMAL, BOLD, ITALIC, BOLD_ITALIC})
     @Retention(RetentionPolicy.SOURCE)
@@ -1610,9 +1620,9 @@ public class Typeface {
         Typeface tfItalic = create(tf, ITALIC);
         Typeface tfItalicBold = create(tf, BOLD_ITALIC);
 
-        nativeForceSetStaticFinalField("DEFAULT", tf);
-        nativeForceSetStaticFinalField("DEFAULT_BOLD", tfBold);
-        nativeForceSetStaticFinalField("SANS_SERIF", tf);
+        DEFAULT.updatePendingTypeface(tf);
+        DEFAULT_BOLD.updatePendingTypeface(tfBold);
+        SANS_SERIF.updatePendingTypeface(tf);
 
         changeDefaultFontForTest(
                 Arrays.asList(
