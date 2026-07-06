@@ -132,7 +132,10 @@ public class QuickAccessWalletTile extends QSTileImpl<QSTile.State> {
                 Log.i(TAG, "QAW service is unavailable, recreating the wallet client.");
                 mController.reCreateWalletClient();
             }
-            mController.queryWalletCards(mCardRetriever);
+            if (mSelectedCard == null) {
+                mIsWalletUpdating = true;
+                mController.queryWalletCards(mCardRetriever);
+            }
         }
     }
 
