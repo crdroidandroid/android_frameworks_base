@@ -71,11 +71,10 @@ public final class FontManagerService extends IFontManager.Stub {
 
     private static final String FONT_FILES_DIR = "/data/fonts/files";
     private static final String CONFIG_XML_FILE = "/data/fonts/config/config.xml";
-    
+
     public static final boolean axFontFeatureSupport = true;
 
-    @android.annotation.EnforcePermission(android.Manifest.permission.UPDATE_FONTS)
-    @RequiresPermission(Manifest.permission.UPDATE_FONTS)
+    @android.annotation.EnforcePermission("UPDATE_FONTS")
     @Override
     public FontConfig getFontConfig() {
         super.getFontConfig_enforcePermission();
@@ -208,7 +207,9 @@ public final class FontManagerService extends IFontManager.Stub {
 
         @Override
         public boolean isFromTrustedProvider(String fontPath, byte[] pkcs7Signature) {
-            if (axFontFeatureSupport) return true;
+            if (axFontFeatureSupport && (pkcs7Signature == null || pkcs7Signature.length == 0)) {
+                return true;
+            }
             final byte[] digest = VerityUtils.getFsverityDigest(fontPath);
             if (digest == null) {
                 Log.w(TAG, "Failed to get fs-verity digest for " + fontPath);
@@ -399,8 +400,12 @@ public final class FontManagerService extends IFontManager.Stub {
      * <p>CAUTION: this method is not safe. Existing processes may crash due to missing font files.
      * This method is only for {@link FontManagerShellCommand}.
      */
+    @android.annotation.EnforcePermission(android.Manifest.permission.UPDATE_FONTS)
+    @RequiresPermission(Manifest.permission.UPDATE_FONTS)
     @Override
     public void clearUpdates() {
+        getContext().enforceCallingOrSelfPermission(
+                android.Manifest.permission.UPDATE_FONTS, "clearUpdates");
         UpdatableFontDir.deleteAllFiles(new File(FONT_FILES_DIR), new File(CONFIG_XML_FILE));
         initialize();
     }

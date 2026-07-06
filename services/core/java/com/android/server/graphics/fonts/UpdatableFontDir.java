@@ -602,7 +602,8 @@ final class UpdatableFontDir {
                         FontManager.RESULT_ERROR_FAILED_TO_WRITE_FONT_FILE,
                         "Failed to write font file to storage.", e);
             }
-            if (!axFontFeatureSupport) {
+            boolean isUnsignedCustomFont = axFontFeatureSupport && pkcs7Signature.length == 0;
+            if (!isUnsignedCustomFont) {
                 try {
                     // Do not parse font file before setting up fs-verity.
                     // setUpFsverity throws IOException if failed.

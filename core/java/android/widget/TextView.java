@@ -882,6 +882,7 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
     private int mFontWeightAdjustment;
     private Typeface mOriginalTypeface;
     private String mFontFamily;
+    private String mLastResolvedSystemFont;
 
     // True if setKeyListener() has been explicitly called
     private boolean mListenerChanged = false;
@@ -4540,10 +4541,6 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
             setFontVariationSettings(attributes.mFontVariationSettings);
         }
 
-        if (Typeface.getFontName().equals("inter")) {
-            setFontFeatureSettings("'ss01'");
-        }
-
         if (attributes.mHasLineBreakStyle || attributes.mHasLineBreakWordStyle) {
             updateLineBreakConfigFromTextAppearance(attributes.mHasLineBreakStyle,
                     attributes.mHasLineBreakWordStyle, attributes.mLineBreakStyle,
@@ -4686,10 +4683,10 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
             }
         }
 
-        if (!TextUtils.equals(mFontFamily, Typeface.getFontName())) {
+        if (!TextUtils.equals(mLastResolvedSystemFont, Typeface.getFontName())) {
             Typeface tf = Typeface.getOverrideTypeface(mFontFamily);
             setTypeface(tf);
-            mFontFamily = Typeface.getFontName();
+            mLastResolvedSystemFont = Typeface.getFontName();
         }
 
         if (mFontWeightAdjustment != newConfig.fontWeightAdjustment) {
