@@ -509,7 +509,6 @@ public final class SystemServer implements Dumpable {
             com.android.internal.R.style.Theme_DeviceDefault_System;
 
     private final int mFactoryTestMode;
-    private Timer mProfilerSnapshotTimer;
 
     private Context mSystemContext;
     private SystemServiceManager mSystemServiceManager;
