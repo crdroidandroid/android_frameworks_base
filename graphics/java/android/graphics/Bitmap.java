@@ -947,6 +947,11 @@ public final class Bitmap implements Parcelable {
         }
         src.checkRecycled("Can't copy a recycled bitmap");
 
+        if (src.getConfig() == Config.HARDWARE) {
+            src.noteHardwareBitmapSlowCall();
+            src = nativeCopyPreserveInternalConfig(src.mNativePtr);
+        }
+
         Matrix m = new Matrix();
         final int width = src.getWidth();
         final int height = src.getHeight();
