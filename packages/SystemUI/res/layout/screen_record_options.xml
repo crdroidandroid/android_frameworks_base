@@ -277,6 +277,8 @@
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:minHeight="48dp"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:text="@string/screenrecord_resolution_label"
             android:textAppearance="@style/TextAppearance.ScreenRecord.SwitchLabel"
             android:contentDescription="@string/screenrecord_resolution_label"/>
@@ -284,6 +286,7 @@
             android:id="@+id/screenrecord_resolution_spinner"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
+            android:maxWidth="120dp"
             android:dropDownWidth="wrap_content"
             android:popupBackground="@drawable/screenrecord_spinner_background"
             android:importantForAccessibility="yes"/>
@@ -427,3 +430,4 @@
             android:importantForAccessibility="yes" />
     </LinearLayout>
 </LinearLayout>
+
