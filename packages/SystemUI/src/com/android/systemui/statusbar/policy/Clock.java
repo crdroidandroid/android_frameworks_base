@@ -26,6 +26,7 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.icu.lang.UCharacter;
 import android.icu.text.DateTimePatternGenerator;
 import android.os.Bundle;
@@ -99,6 +100,10 @@ public class Clock extends TextView implements
             "system:" + Settings.System.STATUS_BAR_CLOCK_DATE_POSITION;
     public static final String STATUS_BAR_CLOCK_DATE_FORMAT =
             "system:" + Settings.System.STATUS_BAR_CLOCK_DATE_FORMAT;
+    public static final String STATUS_BAR_CLOCK_PERIOD_SEPARATOR =
+            "system:" + Settings.System.STATUS_BAR_CLOCK_PERIOD_SEPARATOR;
+    public static final String STATUS_BAR_CLOCK_BOLD =
+            "system:" + Settings.System.STATUS_BAR_CLOCK_BOLD;
 
     private final UserTracker mUserTracker;
     private final CommandQueue mCommandQueue;
@@ -138,6 +143,8 @@ public class Clock extends TextView implements
     private int mClockDateStyle = CLOCK_DATE_STYLE_REGULAR;
     private int mClockDatePosition;
     private String mClockDateFormat = null;
+    private boolean mPeriodHourMinuteSeparator;
+    private boolean mBoldStatusBarClock;
 
     private boolean mIsStatusBar;
     private boolean useStaticColor = false;
@@ -251,7 +258,9 @@ public class Clock extends TextView implements
                     STATUS_BAR_CLOCK_DATE_DISPLAY,
                     STATUS_BAR_CLOCK_DATE_STYLE,
                     STATUS_BAR_CLOCK_DATE_POSITION,
-                    STATUS_BAR_CLOCK_DATE_FORMAT);
+                    STATUS_BAR_CLOCK_DATE_FORMAT,
+                    STATUS_BAR_CLOCK_PERIOD_SEPARATOR,
+                    STATUS_BAR_CLOCK_BOLD);
             mCommandQueue.addCallback(this);
             mUserTracker.addCallback(mUserChangedCallback, mContext.getMainExecutor());
             mCurrentUserId = mUserTracker.getUserId();
@@ -268,6 +277,7 @@ public class Clock extends TextView implements
             updateClockVisibility();
         }
         updateShowSeconds();
+        applyBoldClockStyle();
     }
 
     @Override
@@ -319,6 +329,7 @@ public class Clock extends TextView implements
                         // Force refresh of dependent variables.
                         mContentDescriptionFormatString = "";
                         mDateTimePatternGenerator = null;
+                        applyBoldClockStyle();
                     }
                 });
             }
@@ -407,6 +418,15 @@ public class Clock extends TextView implements
             case STATUS_BAR_CLOCK_DATE_FORMAT:
                 mClockDateFormat = newValue;
                 break;
+            case STATUS_BAR_CLOCK_PERIOD_SEPARATOR:
+                mPeriodHourMinuteSeparator =
+                        TunerService.parseIntegerSwitch(newValue, false);
+                break;
+            case STATUS_BAR_CLOCK_BOLD:
+                mBoldStatusBarClock =
+                        TunerService.parseIntegerSwitch(newValue, false);
+                applyBoldClockStyle();
+                break;
             default:
                 break;
         }
@@ -414,6 +434,21 @@ public class Clock extends TextView implements
         mContentDescriptionFormatString = "";
         mDateTimePatternGenerator = null;
         updateClock(true);
+    }
+
+    private void applyBoldClockStyle() {
+        if (!mIsStatusBar) {
+            return;
+        }
+        Typeface tf = getTypeface();
+        if (tf == null) {
+            tf = Typeface.DEFAULT;
+        }
+        final int base = tf.getStyle() & ~Typeface.BOLD;
+        final int target = mBoldStatusBarClock ? (base | Typeface.BOLD) : base;
+        if (tf.getStyle() != target) {
+            setTypeface(Typeface.create(tf, target));
+        }
     }
 
     @Override
@@ -474,6 +509,7 @@ public class Clock extends TextView implements
                 mContext.getResources().getDimensionPixelSize(
                         R.dimen.status_bar_clock_end_padding),
                 0);
+        applyBoldClockStyle();
     }
 
 
@@ -572,7 +608,8 @@ public class Clock extends TextView implements
         CharSequence dateString = null;
 
         String result = "";
-        String timeResult = mClockFormat.format(mCalendar.getTime());
+        String timeResult = applyPeriodToFormattedTimeIfNeeded(
+                mClockFormat.format(mCalendar.getTime()));
         String dateResult = "";
 
         if (mIsStatusBar && mClockDateDisplay != CLOCK_DATE_DISPLAY_GONE) {
@@ -638,6 +675,13 @@ public class Clock extends TextView implements
         }
 
         return formatted;
+    }
+
+    private String applyPeriodToFormattedTimeIfNeeded(String time) {
+        if (!mPeriodHourMinuteSeparator) {
+            return time;
+        }
+        return time.replace(':', '.').replace('\uFF1A', '.');
     }
 
     private boolean mDemoMode;
