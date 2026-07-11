@@ -6885,6 +6885,19 @@ public final class Settings {
         public static final String STATUS_BAR_CLOCK_DATE_FORMAT = "status_bar_clock_date_format";
 
         /**
+         * Replace colon with period in for the time.
+         * @hide
+         */
+        public static final String STATUS_BAR_CLOCK_PERIOD_SEPARATOR =
+                "status_bar_clock_period_separator";
+
+        /**
+         * Use bold typeface for the status bar clock.
+         * @hide
+         */
+        public static final String STATUS_BAR_CLOCK_BOLD = "status_bar_clock_bold";
+
+        /**
          * Statusbar clock background
          * 0 - hide accented chip  (default)
          * 1 - show accented chip
@@ -7406,6 +7419,14 @@ public final class Settings {
          * @hide
          */
         public static final String POCKET_JUDGE = "pocket_judge";
+
+        /**
+         * Whether to reclaim memory by killing cached apps shortly after screen on.
+         *   0 = disabled
+         *   1 = enabled
+         * @hide
+         */
+        public static final String SCREEN_ON_MEMORY_RECLAIM = "screen_on_memory_reclaim";
 
         /**
          * Whether to show heads up only for dialer and sms apps
