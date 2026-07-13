@@ -327,7 +327,7 @@ public final class BackgroundBlurDrawable extends Drawable {
                 }
                 frameRtUpdates.add(update);
 
-                if (mLastFrameNumber == frameNumber) {
+                if (mLastFrameNumber == frameNumber && mLastFrameBlurRegions != null) {
                     // The transaction for this frame has already been sent, so we have to manually
                     // trigger sending a transaction here in order to apply this position update
                     handleDispatchBlurTransactionLocked(frameNumber, mLastFrameBlurRegions, true);
