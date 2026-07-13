@@ -127,6 +127,7 @@ object WindowRootViewBinder {
                                     blurRadius,
                                 )
                                 lastScheduledBlurRadius = newBlurRadius
+                                lastScheduledBlurScale = newBlurScale
                                 lastScheduleSurfaceOpaqueness = isOpaque
                                 wasUpdateScheduledForThisFrame = true
                                 blurUtils.prepareBlur(lastScheduledBlurRadius)
