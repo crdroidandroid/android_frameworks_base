@@ -43,10 +43,11 @@ import java.util.regex.Pattern;
  */
 public class KeyBoxManager {
     private static final String TAG = "KeyBoxManager";
+
+    private volatile Map<String, KeyBox> mKeyboxes = new ConcurrentHashMap<>();
+
     private static final Pattern PEM_HEADER = Pattern.compile("-----BEGIN ([^-]+)-----");
     private static final Pattern XML_COMMENT = Pattern.compile("<!--.*?-->", Pattern.DOTALL);
-
-    private final Map<String, KeyBox> mKeyboxes = new ConcurrentHashMap<>();
 
     /** @hide */
     public static class KeyBox {
@@ -72,11 +73,26 @@ public class KeyBoxManager {
         return mKeyboxes.get(algorithm);
     }
 
-    public void parseKeybox(String xmlContent) {
-        mKeyboxes.clear();
+    /**
+     * Parses [xmlContent] and, if it is acceptable, replaces the loaded keyboxes.
+     * A truncated or keyless document leaves the previously loaded keyboxes untouched,
+     * so one bad refresh can't take attestation down.
+     *
+     * @return false if the document was rejected as incomplete, true otherwise
+     */
+    public boolean parseKeybox(String xmlContent) {
+        // Parse into a private map and publish it at the end, so a concurrent
+        // attestation never sees a half-filled or empty keybox mid-refresh.
+        Map<String, KeyBox> next = new ConcurrentHashMap<>();
         if (xmlContent == null || xmlContent.isEmpty()) {
-            return;
+            mKeyboxes = next;
+            return true;
         }
+
+        // Truncation is detected by well-formedness, not by NumberOfKeyboxes: the root
+        // element must have closed for a parse failure to still be usable.
+        int depth = 0;
+        boolean rootClosed = false;
 
         try {
             xmlContent = sanitizeXml(xmlContent);
@@ -95,14 +111,31 @@ public class KeyBoxManager {
             boolean inPrivateKey = false;
             boolean inCertificateChain = false;
             boolean inCertificate = false;
+            boolean inNumberOfKeyboxes = false;
+            StringBuilder numberOfKeyboxesBuilder = null;
+            Integer declaredKeyboxCount = null;
+            // NumberOfKeyboxes counts <Keybox> elements, each of which normally holds
+            // both an ECDSA and an RSA <Key>, so count boxes and not keys.
+            int parsedKeyboxCount = 0;
+            boolean sawKeyboxTag = false;
+            boolean boxHasKey = false;
+            int parsedKeyCount = 0;
 
             int eventType = parser.getEventType();
             while (eventType != XmlPullParser.END_DOCUMENT) {
                 String tagName = parser.getName();
+                if (eventType == XmlPullParser.START_TAG) {
+                    depth++;
+                } else if (eventType == XmlPullParser.END_TAG && --depth == 0) {
+                    rootClosed = true;
+                }
 
                 switch (eventType) {
                     case XmlPullParser.START_TAG:
-                        if ("Key".equals(tagName)) {
+                        if ("Keybox".equals(tagName)) {
+                            sawKeyboxTag = true;
+                            boxHasKey = false;
+                        } else if ("Key".equals(tagName)) {
                             inKey = true;
                             currentKeyIndex++;
                             currentAlgorithm = parser.getAttributeValue(null, "algorithm");
@@ -118,6 +151,9 @@ public class KeyBoxManager {
                         } else if ("Certificate".equals(tagName) && inCertificateChain) {
                             inCertificate = true;
                             certBuilder = new StringBuilder();
+                        } else if ("NumberOfKeyboxes".equals(tagName) && !inKey) {
+                            inNumberOfKeyboxes = true;
+                            numberOfKeyboxesBuilder = new StringBuilder();
                         }
                         break;
 
@@ -128,6 +164,8 @@ public class KeyBoxManager {
                                 privateKeyBuilder.append(text);
                             } else if (inCertificate && certBuilder != null) {
                                 certBuilder.append(text);
+                            } else if (inNumberOfKeyboxes && numberOfKeyboxesBuilder != null) {
+                                numberOfKeyboxesBuilder.append(text);
                             }
                         }
                         break;
@@ -153,11 +191,26 @@ public class KeyBoxManager {
                             inCertificate = false;
                         } else if ("CertificateChain".equals(tagName)) {
                             inCertificateChain = false;
+                        } else if ("NumberOfKeyboxes".equals(tagName)) {
+                            if (numberOfKeyboxesBuilder != null) {
+                                try {
+                                    declaredKeyboxCount =
+                                            Integer.parseInt(numberOfKeyboxesBuilder.toString().trim());
+                                } catch (NumberFormatException ignored) {
+                                }
+                                numberOfKeyboxesBuilder = null;
+                            }
+                            inNumberOfKeyboxes = false;
                         } else if ("Key".equals(tagName)) {
                             inKey = false;
                             if (currentAlgorithm != null && privateKeyPem != null && !certificatePems.isEmpty()) {
-                                processKeybox(currentAlgorithm, privateKeyPem, certificatePems);
+                                processKeybox(next, currentAlgorithm, privateKeyPem, certificatePems);
+                                parsedKeyCount++;
+                                boxHasKey = true;
                             }
+                        } else if ("Keybox".equals(tagName)) {
+                            if (boxHasKey) parsedKeyboxCount++;
+                            boxHasKey = false;
                         }
                         break;
                 }
@@ -165,13 +218,48 @@ public class KeyBoxManager {
                 eventType = parser.next();
             }
 
-            Log.i(TAG, "Parsed " + mKeyboxes.size() + " keyboxes");
+            // A document without <Keybox> wrappers holds a single implicit box.
+            if (!sawKeyboxTag && parsedKeyCount > 0) parsedKeyboxCount = 1;
+            // NumberOfKeyboxes is advisory. Generators disagree on what it counts (the
+            // <Keybox> wrappers or the <Key> elements) and some write a value that matches
+            // neither, which TEESimulator-RS and AlwaysStrong accept as well: they iterate
+            // every <Key> they find. So a mismatch is only logged. A truncated download is
+            // caught by the parse failure below, and a document that yields no key at all
+            // is still rejected so it can't wipe the loaded keyboxes.
+            if (declaredKeyboxCount != null && declaredKeyboxCount > 0 && parsedKeyCount == 0) {
+                Log.e(TAG, "Keybox XML declares " + declaredKeyboxCount
+                        + " keybox(es) but no complete key parsed — rejecting, keeping the"
+                        + " current keyboxes");
+                return false;
+            }
+            if (declaredKeyboxCount != null
+                    && declaredKeyboxCount != parsedKeyboxCount
+                    && declaredKeyboxCount != parsedKeyCount) {
+                Log.w(TAG, "Keybox XML declares " + declaredKeyboxCount + " keybox(es), parsed "
+                        + parsedKeyboxCount + " box(es) / " + parsedKeyCount
+                        + " key(s); NumberOfKeyboxes is advisory, using what parsed");
+            }
+
+            mKeyboxes = next;
+            Log.i(TAG, "Parsed " + next.size() + " keyboxes");
+            return true;
         } catch (Exception e) {
             Log.e(TAG, "Failed to parse keybox XML", e);
+            if (!rootClosed || next.isEmpty()) {
+                // Cut off before the root element closed (an interrupted download), or
+                // nothing usable came out: keep what is loaded instead of publishing a
+                // partial or empty set.
+                Log.e(TAG, "Keybox XML looks truncated or unusable — keeping the current keyboxes");
+                return false;
+            }
+            // Complete document with trailing garbage: everything before it parsed.
+            mKeyboxes = next;
+            return true;
         }
     }
 
-    private void processKeybox(String algorithm, String privateKeyPem, List<String> certificatePems) {
+    private void processKeybox(Map<String, KeyBox> target, String algorithm, String privateKeyPem,
+            List<String> certificatePems) {
         try {
             String normalizedAlgorithm;
             switch (algorithm.toLowerCase()) {
@@ -199,7 +287,7 @@ public class KeyBoxManager {
             if (!certificates.isEmpty()) {
                 PublicKey publicKey = ((X509Certificate) certificates.get(0)).getPublicKey();
                 KeyPair keyPair = new KeyPair(publicKey, privateKey);
-                mKeyboxes.put(normalizedAlgorithm, new KeyBox(keyPair, certificates));
+                target.put(normalizedAlgorithm, new KeyBox(keyPair, certificates));
                 Log.i(TAG, "Added keybox for algorithm: " + normalizedAlgorithm);
             }
         } catch (Exception e) {
@@ -280,8 +368,8 @@ public class KeyBoxManager {
 
     private String detectPemType(String pem) {
         if (pem == null) return null;
-        Matcher matcher = PEM_HEADER.matcher(pem);
-        return matcher.find() ? matcher.group(1).trim().toUpperCase() : null;
+        Matcher m = PEM_HEADER.matcher(pem);
+        return m.find() ? m.group(1).trim().toUpperCase() : null;
     }
 
     private byte[] parsePemContent(String pem) {
@@ -294,7 +382,7 @@ public class KeyBoxManager {
 
     private String sanitizeXml(String content) {
         content = content.trim();
-        String[] boms = {"\uFEFF", "\uFFFE", "\u0000\uFEFF"};
+        String[] boms = {"﻿", "￾", "\u0000﻿"};
         for (String bom : boms) {
             if (content.startsWith(bom)) {
                 content = content.substring(bom.length());
