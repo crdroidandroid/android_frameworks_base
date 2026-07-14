@@ -57,7 +57,7 @@ public final class CertificateGenerator {
     private static final String TAG = "CertificateGenerator";
     private static final int MAX_ATTESTATION_CHALLENGE_SIZE = 128;
 
-    public static final ASN1ObjectIdentifier ATTESTATION_OID = 
+    public static final ASN1ObjectIdentifier ATTESTATION_OID =
         new ASN1ObjectIdentifier("1.3.6.1.4.1.11129.2.1.17");
 
     private CertificateGenerator() {}
@@ -76,6 +76,8 @@ public final class CertificateGenerator {
         public List<Integer> purpose = new ArrayList<>();
         public List<Integer> digest = new ArrayList<>();
         public List<Integer> rsaOaepMgfDigest = new ArrayList<>();
+        public List<Integer> padding = new ArrayList<>();
+        public String[] packages;
         public byte[] attestationChallenge;
         public byte[] brand;
         public byte[] device;
@@ -104,7 +106,7 @@ public final class CertificateGenerator {
             } else if (params.algorithm == 1) {
                 kpg = KeyPairGenerator.getInstance("RSA");
                 kpg.initialize(new RSAKeyGenParameterSpec(
-                    params.keySize, 
+                    params.keySize,
                     params.rsaPublicExponent != null ? params.rsaPublicExponent : RSAKeyGenParameterSpec.F4
                 ));
             } else {
@@ -134,7 +136,7 @@ public final class CertificateGenerator {
         KeyBoxManager keyboxManager = TrickyStoreService.getInstance().getKeyBoxManager();
         String algorithm = params.algorithm == 3 ? "EC" : "RSA";
         KeyBoxManager.KeyBox keybox = keyboxManager.getKeybox(algorithm);
-        
+
         if (keybox == null) {
             Log.e(TAG, "No keybox found for algorithm: " + algorithm);
             return null;
@@ -165,14 +167,14 @@ public final class CertificateGenerator {
             int securityLevel,
             int uid) throws Exception {
 
-        BigInteger serial = params.certificateSerial != null ? 
+        BigInteger serial = params.certificateSerial != null ?
             params.certificateSerial : BigInteger.ONE;
-        Date notBefore = params.certificateNotBefore != null ? 
+        Date notBefore = params.certificateNotBefore != null ?
             params.certificateNotBefore : new Date();
-        Date notAfter = params.certificateNotAfter != null ? 
-            params.certificateNotAfter : 
+        Date notAfter = params.certificateNotAfter != null ?
+            params.certificateNotAfter :
             ((X509Certificate) keybox.certificates.get(0)).getNotAfter();
-        X500Name subject = params.certificateSubject != null ? 
+        X500Name subject = params.certificateSubject != null ?
             X500Name.getInstance(params.certificateSubject.getEncoded()) : new X500Name("CN=Android Keystore Key");
 
         SubjectPublicKeyInfo publicKeyInfo = SubjectPublicKeyInfo.getInstance(
@@ -187,7 +189,10 @@ public final class CertificateGenerator {
             publicKeyInfo
         );
 
-        builder.addExtension(Extension.keyUsage, true, new KeyUsage(KeyUsage.keyCertSign));
+        int keyUsage = keyUsageFromPurposes(params.purpose);
+        if (keyUsage != 0) {
+            builder.addExtension(Extension.keyUsage, true, new KeyUsage(keyUsage));
+        }
         builder.addExtension(buildAttestExtension(params, securityLevel, uid));
 
         String sigAlg = params.algorithm == 3 ? "SHA256withECDSA" : "SHA256withRSA";
@@ -223,64 +228,61 @@ public final class CertificateGenerator {
             };
             DERSequence rootOfTrust = new DERSequence(rootOfTrustElements);
 
-            ASN1EncodableVector teeEnforced = new ASN1EncodableVector();
-
-            ASN1Integer[] purposes = new ASN1Integer[params.purpose.size()];
-            for (int i = 0; i < params.purpose.size(); i++) {
-                purposes[i] = new ASN1Integer(params.purpose.get(i));
+            // AuthorizationList entries must be emitted in ascending tag order,
+            // exactly as KeyMint does, so collect them in a TreeMap first.
+            java.util.TreeMap<Integer, ASN1Encodable> tee = new java.util.TreeMap<>();
+            if (!params.purpose.isEmpty()) {
+                tee.put(1, toIntegerSet(params.purpose));
             }
-            teeEnforced.add(new DERTaggedObject(true, 1, new DERSet(purposes)));
-            teeEnforced.add(new DERTaggedObject(true, 2, new ASN1Integer(params.algorithm)));
-            teeEnforced.add(new DERTaggedObject(true, 3, new ASN1Integer(params.keySize)));
-
-            ASN1Integer[] digests = new ASN1Integer[params.digest.size()];
-            for (int i = 0; i < params.digest.size(); i++) {
-                digests[i] = new ASN1Integer(params.digest.get(i));
+            tee.put(2, new ASN1Integer(params.algorithm));
+            tee.put(3, new ASN1Integer(params.keySize));
+            if (!params.digest.isEmpty()) {
+                tee.put(5, toIntegerSet(params.digest));
             }
-            teeEnforced.add(new DERTaggedObject(true, 5, new DERSet(digests)));
-
-            // Tag 203 = RSA_OAEP_MGF_DIGEST (KeyMint 3+)
-            if (params.algorithm == 1 && !params.rsaOaepMgfDigest.isEmpty()) {
-                ASN1Integer[] mgfDigests = new ASN1Integer[params.rsaOaepMgfDigest.size()];
-                for (int i = 0; i < params.rsaOaepMgfDigest.size(); i++) {
-                    mgfDigests[i] = new ASN1Integer(params.rsaOaepMgfDigest.get(i));
+            if (!params.padding.isEmpty()) {
+                tee.put(6, toIntegerSet(params.padding));
+            }
+            if (params.algorithm == 3) {
+                // EC_CURVE is only reported for EC keys.
+                tee.put(10, new ASN1Integer(params.ecCurve));
+            } else if (params.algorithm == 1) {
+                tee.put(200, new ASN1Integer(params.rsaPublicExponent != null
+                        ? params.rsaPublicExponent : java.security.spec.RSAKeyGenParameterSpec.F4));
+                // Tag 203 = RSA_OAEP_MGF_DIGEST (KeyMint 3+)
+                if (!params.rsaOaepMgfDigest.isEmpty()) {
+                    tee.put(203, toIntegerSet(params.rsaOaepMgfDigest));
                 }
-                teeEnforced.add(new DERTaggedObject(true, 203, new DERSet(mgfDigests)));
             }
-
-            teeEnforced.add(new DERTaggedObject(true, 10, new ASN1Integer(params.ecCurve)));
-            teeEnforced.add(new DERTaggedObject(true, 503, DERNull.INSTANCE));
-            teeEnforced.add(new DERTaggedObject(true, 702, new ASN1Integer(0)));
-            teeEnforced.add(new DERTaggedObject(true, 704, rootOfTrust));
-            teeEnforced.add(new DERTaggedObject(true, 705, new ASN1Integer(AttestationUtils.getOsVersion())));
-            teeEnforced.add(new DERTaggedObject(true, 706, new ASN1Integer(AttestationUtils.getPatchLevel(false))));
-            teeEnforced.add(new DERTaggedObject(true, 718, new ASN1Integer(AttestationUtils.getVendorPatchLevel(true))));
-            teeEnforced.add(new DERTaggedObject(true, 719, new ASN1Integer(AttestationUtils.getBootPatchLevel(true))));
-
+            tee.put(503, DERNull.INSTANCE);
+            tee.put(702, new ASN1Integer(0));
+            tee.put(704, rootOfTrust);
+            tee.put(705, new ASN1Integer(AttestationUtils.getOsVersion()));
+            tee.put(706, new ASN1Integer(AttestationUtils.getPatchLevel(false, params.packages)));
             if (params.brand != null) {
-                teeEnforced.add(new DERTaggedObject(true, 710, new DEROctetString(params.brand)));
+                tee.put(710, new DEROctetString(params.brand));
             }
             if (params.device != null) {
-                teeEnforced.add(new DERTaggedObject(true, 711, new DEROctetString(params.device)));
+                tee.put(711, new DEROctetString(params.device));
             }
             if (params.product != null) {
-                teeEnforced.add(new DERTaggedObject(true, 712, new DEROctetString(params.product)));
+                tee.put(712, new DEROctetString(params.product));
             }
             if (params.manufacturer != null) {
-                teeEnforced.add(new DERTaggedObject(true, 716, new DEROctetString(params.manufacturer)));
+                tee.put(716, new DEROctetString(params.manufacturer));
             }
             if (params.model != null) {
-                teeEnforced.add(new DERTaggedObject(true, 717, new DEROctetString(params.model)));
+                tee.put(717, new DEROctetString(params.model));
             }
+            tee.put(718, new ASN1Integer(AttestationUtils.getVendorPatchLevel(true, params.packages)));
+            tee.put(719, new ASN1Integer(AttestationUtils.getBootPatchLevel(true, params.packages)));
 
-            ASN1EncodableVector softwareEnforced = new ASN1EncodableVector();
+            java.util.TreeMap<Integer, ASN1Encodable> sw = new java.util.TreeMap<>();
+            sw.put(701, new ASN1Integer(System.currentTimeMillis()));
             try {
-                ASN1OctetString applicationId = createApplicationId(uid);
-                softwareEnforced.add(new DERTaggedObject(true, 709, applicationId));
+                sw.put(709, createApplicationId(uid));
             } catch (Throwable e) {
-                 Log.w(TAG, "Failed to create application ID", e);
+                Log.w(TAG, "Failed to create application ID", e);
             }
-            softwareEnforced.add(new DERTaggedObject(true, 701, new ASN1Integer(System.currentTimeMillis())));
 
             ASN1Encodable[] keyDescriptionElements = new ASN1Encodable[] {
                 new ASN1Integer(AttestationUtils.getAttestVersion()),
@@ -289,8 +291,8 @@ public final class CertificateGenerator {
                 new ASN1Enumerated(securityLevel),
                 new DEROctetString(params.attestationChallenge != null ? params.attestationChallenge : new byte[0]),
                 new DEROctetString(new byte[0]),
-                new DERSequence(softwareEnforced),
-                new DERSequence(teeEnforced)
+                toAuthorizationList(sw),
+                toAuthorizationList(tee)
             };
 
             DERSequence keyDescription = new DERSequence(keyDescriptionElements);
@@ -301,6 +303,41 @@ public final class CertificateGenerator {
             Log.e(TAG, "Failed to build attestation extension", e);
             throw new RuntimeException(e);
         }
+    }
+
+    private static DERSet toIntegerSet(List<Integer> values) {
+        ASN1Integer[] arr = new ASN1Integer[values.size()];
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = new ASN1Integer(values.get(i));
+        }
+        return new DERSet(arr);
+    }
+
+    private static DERSequence toAuthorizationList(java.util.TreeMap<Integer, ASN1Encodable> fields) {
+        ASN1EncodableVector vector = new ASN1EncodableVector();
+        for (java.util.Map.Entry<Integer, ASN1Encodable> e : fields.entrySet()) {
+            vector.add(new DERTaggedObject(true, e.getKey(), e.getValue()));
+        }
+        return new DERSequence(vector);
+    }
+
+    /**
+     * Same purpose -> KeyUsage mapping stock KeyMint uses. keyCertSign is only
+     * correct for ATTEST_KEY; using it for every key is a fingerprint.
+     */
+    private static int keyUsageFromPurposes(List<Integer> purposes) {
+        int bits = 0;
+        for (int purpose : purposes) {
+            switch (purpose) {
+                case 2: bits |= KeyUsage.digitalSignature; break;  // SIGN
+                case 1: bits |= KeyUsage.dataEncipherment; break;  // DECRYPT
+                case 5: bits |= KeyUsage.keyEncipherment; break;   // WRAP_KEY
+                case 6: bits |= KeyUsage.keyAgreement; break;      // AGREE_KEY
+                case 7: bits |= KeyUsage.keyCertSign; break;       // ATTEST_KEY
+                default: break;
+            }
+        }
+        return bits;
     }
 
     private static DEROctetString createApplicationId(int uid) throws Throwable {
