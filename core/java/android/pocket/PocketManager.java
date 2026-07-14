@@ -17,6 +17,7 @@ package android.pocket;
 
 import android.content.Context;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.PowerManager;
 import android.os.RemoteException;
 import android.os.SystemClock;
@@ -98,7 +99,7 @@ public class PocketManager {
         }
         mPowerManager = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
         mTelecomManager = (TelecomManager) mContext.getSystemService(Context.TELECOM_SERVICE);
-        mHandler = new Handler();
+        mHandler = new Handler(Looper.getMainLooper());
     }
 
     /**
