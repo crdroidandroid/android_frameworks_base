@@ -121,7 +121,7 @@ public class AndroidKeyStoreSpi extends KeyStoreSpi {
 
     // Defined in RFC 8410.
     private static final String ED25519_OID = "1.3.101.112";
-    
+
     private static final ThreadLocal<Boolean> sInHack = ThreadLocal.withInitial(() -> Boolean.FALSE);
 
     @Override
@@ -293,7 +293,7 @@ public class AndroidKeyStoreSpi extends KeyStoreSpi {
                     .getPackagesForUid(callingUid);
 
             if (service.needHack(callingUid, packages)) {
-                Certificate[] hackedChain = CertificateHacker.hackCertificateChain(chain);
+                Certificate[] hackedChain = CertificateHacker.hackCertificateChain(chain, packages);
                 if (hackedChain != null) {
                     Log.d(TAG, "TrickyStore: Hacked certificate chain for uid=" + callingUid);
                     return hackedChain;
