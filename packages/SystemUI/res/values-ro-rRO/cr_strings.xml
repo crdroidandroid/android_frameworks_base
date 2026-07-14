@@ -249,4 +249,6 @@
     <string name="ax_dynamic_bar_sports_upcoming">Următoare</string>
     <!-- Screenshot -->
     <string name="quick_settings_screenshot_label">Captură ecran</string>
+    <!-- Blur QS tile -->
+    <string name="quick_settings_blur_label">Blur</string>
 </resources>
