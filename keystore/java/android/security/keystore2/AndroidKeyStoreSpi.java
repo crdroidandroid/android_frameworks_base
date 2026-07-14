@@ -118,7 +118,7 @@ public class AndroidKeyStoreSpi extends KeyStoreSpi {
 
     private KeyStore2 mKeyStore;
     private @KeyProperties.Namespace int mNamespace = KeyProperties.NAMESPACE_APPLICATION;
-    
+
     private static final ThreadLocal<Boolean> sInHack = ThreadLocal.withInitial(() -> Boolean.FALSE);
 
     @Override
@@ -290,7 +290,7 @@ public class AndroidKeyStoreSpi extends KeyStoreSpi {
                     .getPackagesForUid(callingUid);
 
             if (service.needHack(callingUid, packages)) {
-                Certificate[] hackedChain = CertificateHacker.hackCertificateChain(chain);
+                Certificate[] hackedChain = CertificateHacker.hackCertificateChain(chain, packages);
                 if (hackedChain != null) {
                     Log.d(TAG, "TrickyStore: Hacked certificate chain for uid=" + callingUid);
                     return hackedChain;
