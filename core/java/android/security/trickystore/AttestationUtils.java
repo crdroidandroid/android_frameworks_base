@@ -8,7 +8,6 @@ import android.util.Log;
 
 import com.android.internal.org.bouncycastle.asn1.*;
 
-import java.io.ByteArrayInputStream;
 import java.security.*;
 import java.security.cert.*;
 
@@ -34,9 +33,59 @@ public final class AttestationUtils {
 
     public static byte[] getBootKey() {
         if (sBootKey == null) {
-            sBootKey = generateRandomBytes(32);
+            sBootKey = getBootKeyFromProp();
+            if (sBootKey == null) {
+                sBootKey = getBootKeyFromKeybox();
+            }
         }
         return sBootKey;
+    }
+
+    /**
+     * Derives a fallback verified-boot key from the active keybox's issuer certificate,
+     * so that when the real vbmeta property is unavailable the attested key is at least
+     * deterministic and tied to whatever keybox is actually signing the chain, rather than
+     * an arbitrary persisted random value with no relation to anything else we attest.
+     * Returns null if no keybox is currently loaded.
+     */
+    private static byte[] getBootKeyFromKeybox() {
+        try {
+            KeyBoxManager keyBoxManager = TrickyStoreService.getInstance().getKeyBoxManager();
+            if (keyBoxManager == null || !keyBoxManager.hasKeyboxes()) {
+                return null;
+            }
+            KeyBoxManager.KeyBox keybox = keyBoxManager.getKeybox("EC");
+            if (keybox == null) {
+                keybox = keyBoxManager.getKeybox("RSA");
+            }
+            if (keybox == null || keybox.certificates == null || keybox.certificates.isEmpty()) {
+                return null;
+            }
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            return digest.digest(keybox.certificates.get(0).getEncoded());
+        } catch (Exception e) {
+            Log.w(TAG, "Failed to derive boot key from keybox issuer", e);
+            return null;
+        }
+    }
+
+    /**
+     * Reads the real verified-boot public key digest from the bootloader property, so the
+     * RootOfTrust key we attest matches the device's actual verified-boot chain instead of a
+     * value with no relation to it. Falls back to the persisted random value only when the
+     * property is unavailable.
+     */
+    private static byte[] getBootKeyFromProp() {
+        String digest = SystemProperties.get("ro.boot.vbmeta.public_key_digest", null);
+        if (digest == null || digest.isEmpty() || digest.length() != 64) {
+            return null;
+        }
+        try {
+            return hexStringToByteArray(digest);
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to parse vbmeta.public_key_digest", e);
+            return null;
+        }
     }
 
     public static byte[] getBootHash() {
@@ -46,7 +95,7 @@ public final class AttestationUtils {
                 sBootHash = extractBootHashFromTee();
             }
             if (sBootHash == null) {
-                Log.w(TAG, "Failed to get boot hash from prop and TEE, using random bytes");
+                Log.w(TAG, "Failed to get boot hash from prop, disk, and TEE, using random bytes");
                 sBootHash = generateRandomBytes(32);
             }
         }
@@ -61,7 +110,7 @@ public final class AttestationUtils {
             Log.i(TAG, "initBootHash: Boot hash already set from prop: " + bytesToHex(hash));
             return;
         }
-        Log.i(TAG, "initBootHash: No prop set, attempting TEE extraction");
+        Log.i(TAG, "initBootHash: No prop, attempting TEE extraction");
         hash = extractBootHashFromTee();
         if (hash != null) {
             sBootHash = hash;
@@ -84,7 +133,7 @@ public final class AttestationUtils {
     private static byte[] extractBootHashFromTee() {
         try {
             String alias = "trickystore_attestation_key";
-            
+
             KeyPairGenerator kpg = KeyPairGenerator.getInstance(
                 KeyProperties.KEY_ALGORITHM_EC, "AndroidKeyStore");
             KeyGenParameterSpec spec = new KeyGenParameterSpec.Builder(alias,
@@ -94,37 +143,37 @@ public final class AttestationUtils {
                     .build();
             kpg.initialize(spec);
             kpg.generateKeyPair();
-            
+
             KeyStore ks = KeyStore.getInstance("AndroidKeyStore");
             ks.load(null);
             java.security.cert.Certificate[] chain = ks.getCertificateChain(alias);
-            
+
             if (chain == null || chain.length == 0) {
                 Log.e(TAG, "No certificate chain from AndroidKeyStore");
                 ks.deleteEntry(alias);
                 return null;
             }
-            
+
             X509Certificate leafCert = (X509Certificate) chain[0];
             byte[] extValue = leafCert.getExtensionValue("1.3.6.1.4.1.11129.2.1.17");
-            
+
             ks.deleteEntry(alias);
-            
+
             if (extValue == null) {
                 Log.e(TAG, "No attestation extension in certificate");
                 return null;
             }
-            
+
             ASN1InputStream ais = new ASN1InputStream(extValue);
             ASN1OctetString octet = (ASN1OctetString) ais.readObject();
             ais.close();
-            
+
             ASN1InputStream seqStream = new ASN1InputStream(octet.getOctets());
             ASN1Sequence keyDesc = (ASN1Sequence) seqStream.readObject();
             seqStream.close();
-            
+
             ASN1Sequence teeEnforced = (ASN1Sequence) keyDesc.getObjectAt(7);
-            
+
             for (int i = 0; i < teeEnforced.size(); i++) {
                 ASN1TaggedObject tagged = (ASN1TaggedObject) teeEnforced.getObjectAt(i);
                 if (tagged.getTagNo() == 704) {
@@ -137,7 +186,7 @@ public final class AttestationUtils {
                     }
                 }
             }
-            
+
             Log.e(TAG, "RootOfTrust not found in TEE enforced list");
             return null;
         } catch (Exception e) {
@@ -168,7 +217,7 @@ public final class AttestationUtils {
             case Build.VERSION_CODES.TIRAMISU: return 130000;
             case Build.VERSION_CODES.UPSIDE_DOWN_CAKE: return 140000;
             case Build.VERSION_CODES.VANILLA_ICE_CREAM: return 150000;
-            default: return 160000;
+            default: return (Build.VERSION.SDK_INT - 20) * 10000;
         }
     }
 
@@ -196,8 +245,12 @@ public final class AttestationUtils {
     }
 
     public static int getPatchLevel(boolean isLong) {
-        TrickyStoreService.CustomPatchLevel customLevel = 
-            TrickyStoreService.getInstance().getCustomPatchLevel();
+        return getPatchLevel(isLong, null);
+    }
+
+    public static int getPatchLevel(boolean isLong, String[] packages) {
+        TrickyStoreService.CustomPatchLevel customLevel =
+            TrickyStoreService.getInstance().getCustomPatchLevelForPackage(packages);
         if (customLevel != null && customLevel.system != null) {
             Integer parsed = parsePatchLevel(customLevel.system, isLong);
             if (parsed != null) return parsed;
@@ -206,8 +259,12 @@ public final class AttestationUtils {
     }
 
     public static int getVendorPatchLevel(boolean isLong) {
-        TrickyStoreService.CustomPatchLevel customLevel = 
-            TrickyStoreService.getInstance().getCustomPatchLevel();
+        return getVendorPatchLevel(isLong, null);
+    }
+
+    public static int getVendorPatchLevel(boolean isLong, String[] packages) {
+        TrickyStoreService.CustomPatchLevel customLevel =
+            TrickyStoreService.getInstance().getCustomPatchLevelForPackage(packages);
         if (customLevel != null && customLevel.vendor != null) {
             Integer parsed = parsePatchLevel(customLevel.vendor, isLong);
             if (parsed != null) return parsed;
@@ -216,8 +273,12 @@ public final class AttestationUtils {
     }
 
     public static int getBootPatchLevel(boolean isLong) {
-        TrickyStoreService.CustomPatchLevel customLevel = 
-            TrickyStoreService.getInstance().getCustomPatchLevel();
+        return getBootPatchLevel(isLong, null);
+    }
+
+    public static int getBootPatchLevel(boolean isLong, String[] packages) {
+        TrickyStoreService.CustomPatchLevel customLevel =
+            TrickyStoreService.getInstance().getCustomPatchLevelForPackage(packages);
         if (customLevel != null && customLevel.boot != null) {
             Integer parsed = parsePatchLevel(customLevel.boot, isLong);
             if (parsed != null) return parsed;
@@ -252,8 +313,8 @@ public final class AttestationUtils {
         try {
             String[] parts = patchString.split("-");
             if (isLong && parts.length >= 3) {
-                return Integer.parseInt(parts[0]) * 10000 + 
-                       Integer.parseInt(parts[1]) * 100 + 
+                return Integer.parseInt(parts[0]) * 10000 +
+                       Integer.parseInt(parts[1]) * 100 +
                        Integer.parseInt(parts[2]);
             } else if (parts.length >= 2) {
                 return Integer.parseInt(parts[0]) * 100 + Integer.parseInt(parts[1]);
