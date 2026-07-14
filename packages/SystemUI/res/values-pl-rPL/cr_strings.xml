@@ -249,4 +249,6 @@
     <string name="ax_dynamic_bar_sports_upcoming">Wkrótce</string>
     <!-- Screenshot -->
     <string name="quick_settings_screenshot_label">Zrzut ekranu</string>
+    <!-- Blur QS tile -->
+    <string name="quick_settings_blur_label">Rozmycie</string>
 </resources>
