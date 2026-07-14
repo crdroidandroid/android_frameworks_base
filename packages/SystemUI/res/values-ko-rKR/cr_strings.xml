@@ -247,4 +247,6 @@
     <string name="ax_dynamic_bar_sports_upcoming">다음</string>
     <!-- Screenshot -->
     <string name="quick_settings_screenshot_label">스크린샷</string>
+    <!-- Blur QS tile -->
+    <string name="quick_settings_blur_label">Blur</string>
 </resources>
