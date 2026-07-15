@@ -73,7 +73,8 @@
     <string name="screenrecord_lowquality_summary">Le haghaidh méid comhaid níos lú</string>
     <string name="screenrecord_longer_timeout_switch_label">Teorainn méid comhaid níos mó</string>
     <string name="screenrecord_longer_timeout_switch_summary">Teorainn méid taifeadta go 15 GB</string>
-    <string name="screenrecord_skip_time_label">Scipeáil amadóir</string>
+    <string name="screenrecord_skip_time_label">Scipeáil amadóir
+</string>
     <string name="screenrecord_skip_time_summary">Bain an 3 soicind fanacht</string>
     <string name="screenrecord_hevc_switch_label">Ionchódú HEVC</string>
     <string name="screenrecord_hevc_switch_summary">Bain úsáid as an ionchódóir HEVC níos éifeachtaí</string>
