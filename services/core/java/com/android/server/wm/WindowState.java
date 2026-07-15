@@ -2406,7 +2406,12 @@ class WindowState extends WindowContainer<WindowState> implements WindowManagerP
                 // usually unnoticeable (e.g. covered by rotation animation) and the animation
                 // bounds could be inconsistent, such as depending on when the window applies
                 // its draw transaction with new rotation.
-                final boolean allowExitAnimation = !displayContent.inTransition()
+                final boolean allowExitAnimation =
+                        !(startingWindow
+                                && mActivityRecord != null
+                                && !mActivityRecord.isVisibleRequested()
+                                && mTransitionController.isTransitionOnDisplay(displayContent))
+                        && !displayContent.inTransition()
                         // There will be a new window so the exit animation may not be visible or
                         // look weird if its orientation is changed.
                         && !inRelaunchingActivity();
