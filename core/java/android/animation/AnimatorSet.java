@@ -444,7 +444,7 @@ public final class AnimatorSet extends Animator implements AnimationHandler.Anim
      * @param consumer The method to call on every Animator of mPlayingSet.
      */
     private void callOnPlayingSet(Consumer<Animator> consumer) {
-        final ArrayList<Node> list = mPlayingSet;
+        final ArrayList<Node> list = new ArrayList<>(mPlayingSet);
         final int size = list.size();
         //noinspection ForLoopReplaceableByForEach
         for (int i = 0; i < size; i++) {
