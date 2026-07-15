@@ -50,7 +50,7 @@
     <string name="accessibility_next_alarm">Next alarm at %s</string>
     <string name="accessibility_smartspace_page">Page %1$d of %2$d</string>
     <string name="active_mode_content_description">%1$s is on</string>
-    <string name="music_controls_no_title">No title</string>
+    <string name="music_controls_no_title">無題</string>
     <string name="smartspace_content_desc">At a glance</string>
     <string name="smartspace_flight_qr_code">QRコード</string>
     <string name="smartspace_role_desc">View</string>
@@ -127,7 +127,7 @@
     <!-- AI Assistant affordance [CHAR LIMIT=32] -->
     <string name="accessibility_assistant_button">AI アシスタント</string>
     <!-- Preferred network tile -->
-    <string name="qs_preferred_network_label">Preferred network</string>
+    <string name="qs_preferred_network_label">優先するネットワーク</string>
     <string name="qs_preferred_network_lte">4G / LTE</string>
     <string name="qs_preferred_network_nr">5G / NR</string>
     <string name="qs_preferred_network_unsupported">Unsupported</string>
@@ -189,7 +189,7 @@
     <string name="ax_dynamic_bar_saved">保存しました</string>
     <string name="ax_dynamic_bar_recording">レコーディング中</string>
     <string name="ax_dynamic_bar_done">完了</string>
-    <string name="ax_dynamic_bar_ringing">Ringing</string>
+    <string name="ax_dynamic_bar_ringing">鳴動中</string>
     <string name="ax_dynamic_bar_running">実行中</string>
     <string name="ax_dynamic_bar_on">ON</string>
     <string name="ax_dynamic_bar_recents">最近</string>
@@ -248,5 +248,5 @@
     <!-- Screenshot -->
     <string name="quick_settings_screenshot_label">スクリーンショット</string>
     <!-- Blur QS tile -->
-    <string name="quick_settings_blur_label">Blur</string>
+    <string name="quick_settings_blur_label">ぼかし</string>
 </resources>
