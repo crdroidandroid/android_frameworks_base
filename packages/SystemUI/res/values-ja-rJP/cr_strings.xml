@@ -216,7 +216,7 @@
     <string name="ax_dynamic_bar_vpn_connected">VPN 接続済み</string>
     <string name="ax_dynamic_bar_secured">セキュア</string>
     <string name="ax_dynamic_bar_connecting">接続中\u2026</string>
-    <string name="ax_dynamic_bar_one_device">1台のデバイス</string>
+    <string name="ax_dynamic_bar_one_device">1 デバイス</string>
     <string name="ax_dynamic_bar_bluetooth_device">Bluetoothデバイス</string>
     <string name="ax_dynamic_bar_apps_count"><xliff:g id="count" example="2">%d</xliff:g>個のアプリ</string>
     <string name="ax_dynamic_bar_just_now">たった今</string>
