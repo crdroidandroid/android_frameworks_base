@@ -102,6 +102,11 @@ public class ScreenMediaRecorder extends MediaProjection.Callback {
     private boolean mLowQuality;
     private boolean mLongerDuration;
     private boolean mHEVC;
+    private int mResolutionMode;
+    private int mRequestedFps;
+    private int mTimeLimitMs;
+    private long mFileSizeBytes;
+    private float mBitrateMultiplier = 1.0f;
 
     private Context mContext;
     ScreenMediaRecorderListener mListener;
@@ -157,6 +162,26 @@ public class ScreenMediaRecorder extends MediaProjection.Callback {
         mHEVC = hevc;
     }
 
+    public void setResolutionMode(int resolutionMode) {
+        mResolutionMode = resolutionMode;
+    }
+
+    public void setRequestedFps(int fps) {
+        mRequestedFps = fps;
+    }
+
+    public void setTimeLimitMs(int timeLimitMs) {
+        mTimeLimitMs = timeLimitMs;
+    }
+
+    public void setFileSizeBytes(long fileSizeBytes) {
+        mFileSizeBytes = fileSizeBytes;
+    }
+
+    public void setBitrateMultiplier(float multiplier) {
+        mBitrateMultiplier = multiplier;
+    }
+
     private void prepare() throws IOException, RemoteException, RuntimeException {
         //Setup media projection
         IBinder b = ServiceManager.getService(MEDIA_PROJECTION_SERVICE);
@@ -198,16 +223,35 @@ public class ScreenMediaRecorder extends MediaProjection.Callback {
         DisplayManager dm = mContext.getSystemService(DisplayManager.class);
         Display display = dm.getDisplay(mDisplayId);
         display.getRealMetrics(metrics);
-        int refreshRate = mLowQuality ? LOW_VIDEO_FRAME_RATE : (int) display.getRefreshRate();
+        int refreshRate;
+        if (mRequestedFps > 0) {
+            refreshRate = mRequestedFps;
+        } else {
+            refreshRate = mLowQuality ? LOW_VIDEO_FRAME_RATE : (int) display.getRefreshRate();
+        }
         if (mMaxRefreshRate != 0 && refreshRate > mMaxRefreshRate) refreshRate = mMaxRefreshRate;
-        int[] dimens = getSupportedSize(metrics.widthPixels, metrics.heightPixels, refreshRate);
+        int targetWidth = metrics.widthPixels;
+        int targetHeight = metrics.heightPixels;
+        if (mResolutionMode > 0) {
+            int longEdge = Math.max(targetWidth, targetHeight);
+            if (longEdge > mResolutionMode) {
+                double scale = (double) mResolutionMode / longEdge;
+                targetWidth = (int) (targetWidth * scale);
+                targetHeight = (int) (targetHeight * scale);
+            }
+        } else if (mResolutionMode == -1) {
+            targetWidth = targetWidth * 3 / 4;
+            targetHeight = targetHeight * 3 / 4;
+        }
+        int[] dimens = getSupportedSize(targetWidth, targetHeight, refreshRate);
         int width = dimens[0];
         int height = dimens[1];
         refreshRate = dimens[2];
         int resRatio = mLowQuality ? LOW_VIDEO_FRAME_RATE_TO_RESOLUTION_RATIO
                 : VIDEO_FRAME_RATE_TO_RESOLUTION_RATIO;
-        int vidBitRate = width * height * refreshRate / VIDEO_FRAME_RATE * resRatio;
-        long maxFilesize = mLongerDuration ? MAX_FILESIZE_BYTES_LONGER : MAX_FILESIZE_BYTES;
+        int vidBitRate = (int) (width * height * refreshRate / VIDEO_FRAME_RATE * resRatio * mBitrateMultiplier);
+        long maxFilesize = mFileSizeBytes > 0 ? mFileSizeBytes
+                : (mLongerDuration ? MAX_FILESIZE_BYTES_LONGER : MAX_FILESIZE_BYTES);
         if (!mHEVC) {
             mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
             mMediaRecorder.setVideoEncodingProfileLevel(
@@ -224,7 +268,8 @@ public class ScreenMediaRecorder extends MediaProjection.Callback {
         mMediaRecorder.setVideoSize(width, height);
         mMediaRecorder.setVideoFrameRate(refreshRate);
         mMediaRecorder.setVideoEncodingBitRate(vidBitRate);
-        mMediaRecorder.setMaxDuration(mLongerDuration ? 0 : MAX_DURATION_MS);
+        int maxDurationMs = mTimeLimitMs > 0 ? mTimeLimitMs : (mLongerDuration ? 0 : MAX_DURATION_MS);
+        mMediaRecorder.setMaxDuration(maxDurationMs);
         mMediaRecorder.setMaxFileSize(maxFilesize);
 
         // Set up audio

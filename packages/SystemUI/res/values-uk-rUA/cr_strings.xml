@@ -196,7 +196,6 @@
     <string name="ax_dynamic_bar_running">Виконується</string>
     <string name="ax_dynamic_bar_on">УВІМК</string>
     <string name="ax_dynamic_bar_recents">Меню \"Нещодавніх завдань\"</string>
-    <string name="ax_dynamic_bar_kill_app">Закрити програму</string>
     <string name="ax_dynamic_bar_unlocked">Розблоковано</string>
     <string name="ax_dynamic_bar_device_unlocked">Пристрій розблоковано</string>
     <string name="ax_dynamic_bar_progress">Прогрес</string>

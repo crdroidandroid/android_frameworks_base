@@ -27,4 +27,9 @@ data class ScreenRecordingParameters(
     val lowQuality: Boolean,
     val longerDuration: Boolean,
     val hevc: Boolean,
+    val resolutionMode: Int = 0,
+    val fpsMode: Int = 0,
+    val timeLimitMs: Int = 0,
+    val fileSizeBytes: Long = 0L,
+    val bitrateMultiplier: Float = 1.0f,
 )

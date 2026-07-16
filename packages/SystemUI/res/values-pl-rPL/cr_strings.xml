@@ -108,9 +108,9 @@
     <string name="quick_settings_volume_panel_label">Panel głośności</string>
     <!-- Smart Pixels -->
     <string name="quick_settings_smart_pixels_label">Inteligentne piksele</string>
-    <string name="quick_settings_smart_pixels_on">Włącz</string>
-    <string name="quick_settings_smart_pixels_off">Wyłącz</string>
-    <string name="smart_pixels_percent_label">Procent pikseli</string>
+    <string name="quick_settings_smart_pixels_on">On</string>
+    <string name="quick_settings_smart_pixels_off">Off</string>
+    <string name="smart_pixels_percent_label">Pixel percentage</string>
     <string name="smart_pixels_percent_format"><xliff:g id="percent" example="25">%d</xliff:g>%%</string>
     <!-- Weather Tile -->
     <string name="omnijaws_service_error">Błąd wczytywania danych o pogodzie</string>
@@ -196,7 +196,6 @@
     <string name="ax_dynamic_bar_running">Uruchamianie</string>
     <string name="ax_dynamic_bar_on">WŁ.</string>
     <string name="ax_dynamic_bar_recents">Ostatnio używane</string>
-    <string name="ax_dynamic_bar_kill_app">Zakończ aplikację</string>
     <string name="ax_dynamic_bar_unlocked">Odblokowano</string>
     <string name="ax_dynamic_bar_device_unlocked">Odblokowano urządzenie</string>
     <string name="ax_dynamic_bar_progress">Postęp</string>

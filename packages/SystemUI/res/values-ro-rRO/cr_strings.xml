@@ -195,7 +195,6 @@
     <string name="ax_dynamic_bar_running">Rulează</string>
     <string name="ax_dynamic_bar_on">PORNITĂ</string>
     <string name="ax_dynamic_bar_recents">Recente</string>
-    <string name="ax_dynamic_bar_kill_app">Kill app</string>
     <string name="ax_dynamic_bar_unlocked">Deblocat</string>
     <string name="ax_dynamic_bar_device_unlocked">Dispozitiv deblocat</string>
     <string name="ax_dynamic_bar_progress">Progres</string>
