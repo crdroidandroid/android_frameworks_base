@@ -239,13 +239,13 @@
     <string name="ax_dynamic_bar_alignment">Alignment</string>
     <string name="ax_dynamic_bar_cam_short">Cam</string>
     <string name="ax_dynamic_bar_mic_short">Mic</string>
-    <string name="ax_dynamic_bar_recent_apps">Recent Apps</string>
-    <string name="ax_dynamic_bar_count_running"><xliff:g id="count" example="3">%d</xliff:g> running</string>
-    <string name="ax_dynamic_bar_sports_vs">vs</string>
-    <string name="ax_dynamic_bar_sports_live">LIVE</string>
-    <string name="ax_dynamic_bar_sports_final">Final</string>
-    <string name="ax_dynamic_bar_sports_halftime">Halftime</string>
-    <string name="ax_dynamic_bar_sports_upcoming">Upcoming</string>
+    <string name="ax_dynamic_bar_recent_apps">برنامه‌های اخیر</string>
+    <string name="ax_dynamic_bar_count_running"><xliff:g id="count" example="3">%d</xliff:g>در حال اجرا</string>
+    <string name="ax_dynamic_bar_sports_vs">در برابر</string>
+    <string name="ax_dynamic_bar_sports_live">در حال پخش</string>
+    <string name="ax_dynamic_bar_sports_final">پایان‌یافته</string>
+    <string name="ax_dynamic_bar_sports_halftime">نیمه‌وقت</string>
+    <string name="ax_dynamic_bar_sports_upcoming">پیش‌رو</string>
     <!-- Screenshot -->
     <string name="quick_settings_screenshot_label">عکس گرفتن از صفحه</string>
     <!-- Blur QS tile -->
