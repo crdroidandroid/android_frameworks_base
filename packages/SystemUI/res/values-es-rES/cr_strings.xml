@@ -53,7 +53,7 @@
     <string name="music_controls_no_title">Sin título</string>
     <string name="smartspace_content_desc">De un vistazo</string>
     <string name="smartspace_flight_qr_code">Código QR</string>
-    <string name="smartspace_role_desc">Ver</string>
+    <string name="smartspace_role_desc">Vista</string>
     <!-- Button to restart SystemUI, within the Restart Options dialog -->
     <string name="global_action_restart_systemui">Interfaz del Sistema</string>
     <!-- On The Go -->
@@ -189,7 +189,7 @@
     <string name="ax_dynamic_bar_paused">En pausa</string>
     <string name="ax_dynamic_bar_saved">Guardado</string>
     <string name="ax_dynamic_bar_recording">Grabando</string>
-    <string name="ax_dynamic_bar_done">Hecho</string>
+    <string name="ax_dynamic_bar_done">Listo</string>
     <string name="ax_dynamic_bar_ringing">Sonando</string>
     <string name="ax_dynamic_bar_running">En ejecución</string>
     <string name="ax_dynamic_bar_on">ACTIVADO</string>
