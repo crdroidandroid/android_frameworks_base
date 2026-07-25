@@ -456,8 +456,6 @@ class AxPlatformObservers @Inject constructor(
                 })
             }
         }
-
-        override fun onFlashlightStrengthChanged(level: Int) {}
     }
 
     private val rotationCallback =
