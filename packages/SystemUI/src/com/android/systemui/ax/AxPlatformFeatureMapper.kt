@@ -130,7 +130,7 @@ class AxPlatformFeatureMapper @Inject constructor(
             AxPlatformClient.FEATURE_MIC_PRIVACY to R.string.quick_settings_mic_label,
             AxPlatformClient.FEATURE_WORK_PROFILE to R.string.quick_settings_work_mode_label,
             AxPlatformClient.FEATURE_USB_TETHER to R.string.quick_settings_usb_tether_label,
-            AxPlatformClient.FEATURE_DREAM to R.string.quick_settings_screensaver_label,
+            AxPlatformClient.FEATURE_DREAM to R.string.start_dreams,
             AxPlatformClient.FEATURE_READING_MODE to R.string.quick_settings_reading_mode,
             AxPlatformClient.FEATURE_POWER_SHARE to R.string.quick_settings_powershare_label,
             AxPlatformClient.FEATURE_CAFFEINE to R.string.quick_settings_caffeine_label,
