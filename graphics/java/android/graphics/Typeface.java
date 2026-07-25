@@ -270,13 +270,18 @@ public class Typeface {
     }
 
     // Runtime re-point of an initialized placeholder (e.g. DEFAULT): the static final field
-    // can't be reassigned, so swap what the placeholder resolves to instead.
-    private void updatePendingTypeface(@NonNull Typeface resolvedTypeface) {
+    // can't be reassigned, so swap what the placeholder resolves to instead. If this instance
+    // is not (or is no longer) a placeholder — e.g. setSystemFontMap() took the non-Zygote
+    // fallback branch and force-replaced the static field with a concrete Typeface — there is
+    // nothing to repoint; the caller falls back to updating sSystemFontMap instead.
+    private boolean updatePendingTypeface(@NonNull Typeface resolvedTypeface) {
         if (mPendingTypeface == null) {
-            throw new IllegalStateException(
-                    "Do not call this method other than placeholder Typeface.");
+            Log.w(TAG, "updatePendingTypeface: " + this
+                    + " is not a placeholder Typeface, cannot repoint in place.");
+            return false;
         }
         mPendingTypeface.set(resolvedTypeface);
+        return true;
     }
 
     /** @hide */
@@ -1620,9 +1625,25 @@ public class Typeface {
         Typeface tfItalic = create(tf, ITALIC);
         Typeface tfItalicBold = create(tf, BOLD_ITALIC);
 
-        DEFAULT.updatePendingTypeface(tf);
-        DEFAULT_BOLD.updatePendingTypeface(tfBold);
-        SANS_SERIF.updatePendingTypeface(tf);
+        boolean repointed = DEFAULT.updatePendingTypeface(tf);
+        repointed &= DEFAULT_BOLD.updatePendingTypeface(tfBold);
+        repointed &= SANS_SERIF.updatePendingTypeface(tf);
+
+        if (!repointed) {
+            // DEFAULT/DEFAULT_BOLD/SANS_SERIF are concrete (non-placeholder) Typeface
+            // instances in this process — most likely because setSystemFontMap() took
+            // the non-Zygote fallback branch. We cannot mutate them in place; fall back
+            // to updating sSystemFontMap and sDefaultTypeface so subsequent lookups by
+            // name still resolve to the new font.
+            synchronized (SYSTEM_FONT_MAP_LOCK) {
+                sSystemFontMap.put(DEFAULT_FAMILY, tf);
+                sSystemFontMap.put("sans-serif", tf);
+                sSystemFontMap.put("sans-serif-bold", tfBold);
+                sDefaultTypeface = tf;
+            }
+            Log.w(TAG, "changeFont: DEFAULT typefaces are not placeholders in this "
+                    + "process; updated sSystemFontMap instead of repointing statics.");
+        }
 
         changeDefaultFontForTest(
                 Arrays.asList(
