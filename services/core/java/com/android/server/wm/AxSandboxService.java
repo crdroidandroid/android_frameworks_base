@@ -67,15 +67,15 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class AxSandboxService extends SystemService implements IAxSandboxService {
     private static final String TAG = "AxSandbox";
 
-    public static final String SANDBOX_PACKAGE = "com.android.applocker";
-    private static final String SANDBOX_ACTIVITY = "com.android.applocker.AuthenticateActivity";
+    public static final String SANDBOX_PACKAGE = "com.android.axion.sandbox";
+    private static final String SANDBOX_ACTIVITY = "com.android.axion.sandbox.AuthenticateActivity";
 
     private static final String EXTRA_LOCKED_UID = AxSandboxManager.EXTRA_LOCKED_UID;
     private static final String EXTRA_LOCKED_PACKAGE = AxSandboxManager.EXTRA_LOCKED_PACKAGE;
     private static final String EXTRA_LOCKED_COMPONENT = AxSandboxManager.EXTRA_LOCKED_COMPONENT;
     private static final String EXTRA_USER_ID = "user_id";
 
-    private static final String ACTION_SYSTEM_UNLOCK = "com.android.applocker.action.SYSTEM_UNLOCK";
+    private static final String ACTION_SYSTEM_UNLOCK = "com.android.axion.sandbox.action.SYSTEM_UNLOCK";
 
     private static final String SETTING_LOCK_BEHAVIOR = AxSandboxManager.SETTING_LOCK_BEHAVIOR;
     private static final String SETTING_LOCK_TIMEOUT = AxSandboxManager.SETTING_LOCK_TIMEOUT;
@@ -87,7 +87,6 @@ public final class AxSandboxService extends SystemService implements IAxSandboxS
 
     public static final Set<String> BLACKLISTED_PACKAGES = Set.of(
             "android",
-            SANDBOX_PACKAGE,
             "com.android.axion.sandbox",
             "com.android.settings"
     );
@@ -297,6 +296,12 @@ public final class AxSandboxService extends SystemService implements IAxSandboxS
     }
 
     @Override
+    public boolean isPackageHiddenFromLauncher(String packageName) {
+        if (mAppControlController == null) return false;
+        return mAppControlController.isPackageHiddenFromLauncher(packageName);
+    }
+
+    @Override
     public void addLockedApp(String packageName) {
         mAppControlController.addLockedApp(packageName);
         notifyAppLockStateChanged(packageName, true);
@@ -320,6 +325,12 @@ public final class AxSandboxService extends SystemService implements IAxSandboxS
     }
 
     @Override
+    public void setPackageHiddenFromLauncher(String packageName, boolean hidden) {
+        mAppControlController.setPackageHiddenFromLauncher(packageName, hidden);
+        broadcastPackageChanged(packageName);
+    }
+
+    @Override
     public List<String> getLockedPackages() {
         return mAppControlController.getLockedPackages();
     }
@@ -327,6 +338,11 @@ public final class AxSandboxService extends SystemService implements IAxSandboxS
     @Override
     public List<String> getHiddenPackages() {
         return mAppControlController.getHiddenPackages();
+    }
+
+    @Override
+    public List<String> getHiddenFromLauncherPackages() {
+        return mAppControlController.getHiddenFromLauncherPackages();
     }
 
     @Override
