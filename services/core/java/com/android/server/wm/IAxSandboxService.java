@@ -219,4 +219,15 @@ public interface IAxSandboxService {
 
     default void onAppDied(String packageName, int userId) {
     }
+
+    default boolean isPackageHiddenFromLauncher(String packageName) {
+        return false;
+    }
+
+    default void setPackageHiddenFromLauncher(String packageName, boolean hidden) {
+    }
+
+    default List<String> getHiddenFromLauncherPackages() {
+        return Collections.emptyList();
+    }
 }
