@@ -1052,6 +1052,17 @@ public class LauncherAppsService extends SystemService {
             boolean isCallerSandboxApp = callingPackage != null
                 && callingPackage.contains(AxSandboxService.SANDBOX_PACKAGE);
 
+            List<String> hiddenPkgs = Collections.emptyList();
+            List<String> launcherHiddenPkgs = Collections.emptyList();
+            if (!isCallerSandboxApp) {
+                try {
+                    hiddenPkgs = IAxSandboxService.get().getHiddenPackages();
+                    launcherHiddenPkgs = IAxSandboxService.get().getHiddenFromLauncherPackages();
+                } catch (Exception e) {
+                    Slog.e(TAG, "Failed to retrieve hidden package lists from AxSandboxService", e);
+                }
+            }
+
             for (int i = 0; i < numResolveInfos; i++) {
                 final ResolveInfo ri = apps.get(i);
                 final String packageName = ri.activityInfo.packageName;
@@ -1060,7 +1071,8 @@ public class LauncherAppsService extends SystemService {
                     continue;
                 }
 
-                if (!isCallerSandboxApp && IAxSandboxService.get().isPackageHidden(packageName)) {
+                if (!isCallerSandboxApp && (hiddenPkgs.contains(packageName)
+                        || launcherHiddenPkgs.contains(packageName))) {
                     continue;
                 }
 

@@ -161,9 +161,27 @@ public class AxSandboxManager {
     }
 
     /** @hide */
+    public boolean isPackageHiddenFromLauncher(@NonNull String packageName) {
+        try {
+            return getService().isSandboxPackageHiddenFromLauncher(packageName);
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
+    }
+
+    /** @hide */
     public void setPackageHidden(@NonNull String packageName, boolean hidden) {
         try {
             getService().setSandboxPackageHidden(packageName, hidden);
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
+    }
+
+    /** @hide */
+    public void setPackageHiddenFromLauncher(@NonNull String packageName, boolean hidden) {
+        try {
+            getService().setSandboxPackageHiddenFromLauncher(packageName, hidden);
         } catch (RemoteException e) {
             throw e.rethrowFromSystemServer();
         }
@@ -185,6 +203,17 @@ public class AxSandboxManager {
     public List<String> getHiddenPackages() {
         try {
             List<String> result = getService().getSandboxHiddenPackages();
+            return result != null ? result : Collections.emptyList();
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
+    }
+
+    /** @hide */
+    @NonNull
+    public List<String> getHiddenFromLauncherPackages() {
+        try {
+            List<String> result = getService().getSandboxHiddenFromLauncherPackages();
             return result != null ? result : Collections.emptyList();
         } catch (RemoteException e) {
             throw e.rethrowFromSystemServer();

@@ -1082,11 +1082,14 @@ interface IActivityManager {
     int getSandboxAppLockState(String packageName);
     int getSandboxAppLockStateForUser(String packageName, int userId);
     boolean isSandboxPackageHidden(String packageName);
+    boolean isSandboxPackageHiddenFromLauncher(String packageName);
     void addSandboxLockedApp(String packageName);
     void removeSandboxLockedApp(String packageName);
     void setSandboxPackageHidden(String packageName, boolean hidden);
+    void setSandboxPackageHiddenFromLauncher(String packageName, boolean hidden);
     List<String> getSandboxLockedPackages();
     List<String> getSandboxHiddenPackages();
+    List<String> getSandboxHiddenFromLauncherPackages();
     List<String> getSandboxLockablePackages();
     boolean isSandboxPackageLockable(String packageName);
     void unlockSandboxApp(String packageName, int userId);

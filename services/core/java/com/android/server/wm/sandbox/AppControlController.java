@@ -50,6 +50,7 @@ public class AppControlController {
     public static final String SETTING_SANDBOX_CONFIG = AxSandboxManager.SETTING_SANDBOX_CONFIG;
 
     private static final String KEY_HIDDEN_PKGS = "hidden_pkgs";
+    private static final String KEY_LAUNCHER_HIDDEN_PKGS = "launcher_hidden_pkgs";
     private static final String KEY_LOCKED_PKGS = "locked_pkgs";
     private static final String KEY_SANDBOXED_PKGS = "sandboxed_pkgs";
     private static final String KEY_HIDEDEVOPTS_PKGS = "hidedevopts_pkgs";
@@ -65,6 +66,7 @@ public class AppControlController {
 
     private final Set<String> mLockedPackages = new HashSet<>();
     private final Set<String> mHiddenPackages = new HashSet<>();
+    private final Set<String> mLauncherHiddenPackages = new HashSet<>();
     private final Set<String> mSandboxedPackages = new HashSet<>();
     private final Set<String> mHideDevOptsPackages = new HashSet<>();
     private final Map<String, int[]> mGidRestrictions = new HashMap<>();
@@ -119,6 +121,7 @@ public class AppControlController {
         synchronized (this) {
             mLockedPackages.clear();
             mHiddenPackages.clear();
+            mLauncherHiddenPackages.clear();
             mSandboxedPackages.clear();
             mHideDevOptsPackages.clear();
             mGidRestrictions.clear();
@@ -131,6 +134,7 @@ public class AppControlController {
 
                     loadPackageSet(config, KEY_LOCKED_PKGS, mLockedPackages);
                     loadPackageSet(config, KEY_HIDDEN_PKGS, mHiddenPackages);
+                    loadPackageSet(config, KEY_LAUNCHER_HIDDEN_PKGS, mLauncherHiddenPackages);
                     loadPackageSet(config, KEY_SANDBOXED_PKGS, mSandboxedPackages);
                     loadPackageSet(config, KEY_HIDEDEVOPTS_PKGS, mHideDevOptsPackages);
                     loadSpoofSettingsMap(config);
@@ -145,6 +149,7 @@ public class AppControlController {
 
         Slog.i(TAG, "Loaded config: locked=" + mLockedPackages.size()
                 + " hidden=" + mHiddenPackages.size()
+                + " launcherHidden=" + mLauncherHiddenPackages.size()
                 + " sandboxed=" + mSandboxedPackages.size()
                 + " hideDevOpts=" + mHideDevOptsPackages.size());
     }
@@ -168,6 +173,7 @@ public class AppControlController {
             synchronized (this) {
                 config.put(KEY_LOCKED_PKGS, new JSONArray(mLockedPackages));
                 config.put(KEY_HIDDEN_PKGS, new JSONArray(mHiddenPackages));
+                config.put(KEY_LAUNCHER_HIDDEN_PKGS, new JSONArray(mLauncherHiddenPackages));
                 config.put(KEY_SANDBOXED_PKGS, new JSONArray(mSandboxedPackages));
                 config.put(KEY_HIDEDEVOPTS_PKGS, new JSONArray(mHideDevOptsPackages));
                 saveSpoofSettingsMap(config);
@@ -186,6 +192,7 @@ public class AppControlController {
         Set<String> allPackages = new HashSet<>();
         synchronized (this) {
             allPackages.addAll(mHiddenPackages);
+            allPackages.addAll(mLauncherHiddenPackages);
         }
 
         for (String packageName : allPackages) {
@@ -235,6 +242,13 @@ public class AppControlController {
         synchronized (this) {
             final boolean hidden = mHiddenPackages.contains(packageName);
             return hidden;
+        }
+    }
+
+    public boolean isPackageHiddenFromLauncher(String packageName) {
+        if (TextUtils.isEmpty(packageName)) return false;
+        synchronized (this) {
+            return mLauncherHiddenPackages.contains(packageName);
         }
     }
 
@@ -304,6 +318,26 @@ public class AppControlController {
         Slog.d(TAG, "setPackageHidden: " + packageName + " hidden=" + hidden);
     }
 
+    public void setPackageHiddenFromLauncher(String packageName, boolean hidden) {
+        if (TextUtils.isEmpty(packageName)) return;
+        if (hidden && !isPackageLockable(packageName)) {
+            Slog.w(TAG, "Cannot hide package from launcher - not lockable: " + packageName);
+            return;
+        }
+        int uid = getPackageUid(packageName);
+        synchronized (this) {
+            boolean changed = hidden ? mLauncherHiddenPackages.add(packageName)
+                                     : mLauncherHiddenPackages.remove(packageName);
+            if (changed) {
+                saveConfigToSettings();
+                if (uid >= 0) {
+                    broadcastPackageChange(packageName, uid);
+                }
+            }
+        }
+        Slog.d(TAG, "setPackageHiddenFromLauncher: " + packageName + " hidden=" + hidden);
+    }
+
     public void setPackageSandboxed(String packageName, boolean sandboxed) {
         if (TextUtils.isEmpty(packageName)) return;
         synchronized (this) {
@@ -337,6 +371,12 @@ public class AppControlController {
     public List<String> getHiddenPackages() {
         synchronized (this) {
             return new ArrayList<>(mHiddenPackages);
+        }
+    }
+
+    public List<String> getHiddenFromLauncherPackages() {
+        synchronized (this) {
+            return new ArrayList<>(mLauncherHiddenPackages);
         }
     }
 
