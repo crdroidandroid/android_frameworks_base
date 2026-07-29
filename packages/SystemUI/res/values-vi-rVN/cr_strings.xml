@@ -110,7 +110,7 @@
     <string name="quick_settings_smart_pixels_label">Điểm ảnh thông minh</string>
     <string name="quick_settings_smart_pixels_on">Bật</string>
     <string name="quick_settings_smart_pixels_off">Tắt</string>
-    <string name="smart_pixels_percent_label">Tỷ lệ phần trăm điểm ảnh</string>
+    <string name="smart_pixels_percent_label">Tỉ lệ phần trăm điểm ảnh</string>
     <string name="smart_pixels_percent_format"><xliff:g id="percent" example="25">%d</xliff:g>%%</string>
     <!-- Weather Tile -->
     <string name="omnijaws_service_error">Lỗi khi tải dữ liệu thời tiết</string>
@@ -248,5 +248,5 @@
     <!-- Screenshot -->
     <string name="quick_settings_screenshot_label">Chụp ảnh màn hình</string>
     <!-- Blur QS tile -->
-    <string name="quick_settings_blur_label">Blur</string>
+    <string name="quick_settings_blur_label">Làm mờ</string>
 </resources>
