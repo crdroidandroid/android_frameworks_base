@@ -1610,10 +1610,6 @@ public class Typeface {
         Typeface tfItalic = create(tf, ITALIC);
         Typeface tfItalicBold = create(tf, BOLD_ITALIC);
 
-        nativeForceSetStaticFinalField("DEFAULT", tf);
-        nativeForceSetStaticFinalField("DEFAULT_BOLD", tfBold);
-        nativeForceSetStaticFinalField("SANS_SERIF", tf);
-
         changeDefaultFontForTest(
                 Arrays.asList(
                         tf, tfBold, tfItalic, tfItalicBold),
