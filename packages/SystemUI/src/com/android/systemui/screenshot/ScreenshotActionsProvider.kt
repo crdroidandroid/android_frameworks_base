@@ -161,20 +161,22 @@ constructor(
             }
         }
 
-        actionsCallback.provideActionButton(
-            ActionButtonAppearance(
-                AppCompatResources.getDrawable(context, R.drawable.ic_screenshot_lens),
-                context.resources.getString(R.string.screenshot_lens_label),
-                context.resources.getString(R.string.screenshot_lens_label),
-            ),
-            showDuringEntrance = true,
-        ) {
-            debugLog(LogConfig.DEBUG_ACTIONS) { "Lens tapped" }
-            uiEventLogger.log(SCREENSHOT_LENS_TAPPED, 0, request.packageNameString)
-            onDeferrableActionTapped { result ->
-                actionExecutor.sendPendingIntent(
-                    actionIntentCreator.createLens(result.uri, context, result.user)
-                )
+        if (LensScreenshotReceiver.isGSAEnabled(context)) {
+            actionsCallback.provideActionButton(
+                ActionButtonAppearance(
+                    AppCompatResources.getDrawable(context, R.drawable.ic_screenshot_lens),
+                    context.resources.getString(R.string.screenshot_lens_label),
+                    context.resources.getString(R.string.screenshot_lens_label),
+                ),
+                showDuringEntrance = true,
+            ) {
+                debugLog(LogConfig.DEBUG_ACTIONS) { "Lens tapped" }
+                uiEventLogger.log(SCREENSHOT_LENS_TAPPED, 0, request.packageNameString)
+                onDeferrableActionTapped { result ->
+                    actionExecutor.sendPendingIntent(
+                        actionIntentCreator.createLens(result.uri, context, result.user)
+                    )
+                }
             }
         }
     }
