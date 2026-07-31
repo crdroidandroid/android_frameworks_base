@@ -6545,7 +6545,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
     }
 
-    private final Runnable mMemoryOpt = new Runnable() {
+    @VisibleForTesting
+    final Runnable mMemoryOpt = new Runnable() {
         @Override
         public void run() {
             if (isScreenOnMemoryReclaimEnabled()) {
@@ -8263,7 +8264,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 Settings.System.SCREEN_ON_MEMORY_RECLAIM,
                 1, UserHandle.USER_CURRENT) == 1;
     }
-    
+
     private void releaseMemoryAtScreenOn() {
         long currentTime = System.currentTimeMillis();
         if (lastMemoryReleaseTime == 0L || currentTime - lastMemoryReleaseTime > MEMORY_RELEASE_INTERVAL_MS) {
