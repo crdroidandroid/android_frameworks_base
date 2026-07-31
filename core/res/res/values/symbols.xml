@@ -6084,10 +6084,10 @@
   <java-symbol type="string" name="config_pluginsProviderJarPath" />
 
   <java-symbol type="bool" name="config_watchlistUseFileHashesCache" />
-  <java-symbol type="string" name="config_defaultContextualSearchPackageName" />
-  <java-symbol type="string" name="config_defaultContextualSearchKey" />
-  <java-symbol type="string" name="config_defaultContextualSearchEnabled" />
-  <java-symbol type="string" name="config_defaultContextualSearchLegacyEnabled" />
+  <java-symbol type="string" name="config_defaultContextualSearchPackageName" id="0x01040241" />
+  <java-symbol type="string" name="config_defaultContextualSearchKey" id="0x0104023f" />
+  <java-symbol type="string" name="config_defaultContextualSearchEnabled" id="0x0104023e" />
+  <java-symbol type="string" name="config_defaultContextualSearchLegacyEnabled" id="0x01040240" />
 
   <java-symbol type="string" name="unarchival_session_app_label" />
 
