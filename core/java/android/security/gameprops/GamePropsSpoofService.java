@@ -78,7 +78,9 @@ public final class GamePropsSpoofService {
         }
 
         if (content == null || content.isEmpty()) {
-            Log.w(TAG, "No gameprops config in Settings.Secure");
+            // Empty config is terminal for this process, same as a successful load.
+            mConfigLoaded = true;
+            Log.d(TAG, "No gameprops config in Settings.Secure");
             return;
         }
 
