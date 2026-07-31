@@ -859,7 +859,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private ThreeFingersSwipeListener mThreeFingersSwipe;
     private boolean mThreeFingersSwipeHasAction;
 
-    private boolean mScreenOnReclaim;
+    private volatile boolean mScreenOnReclaim;
 
     private PocketManager mPocketManager;
     private PocketLock mPocketLock;
@@ -3706,8 +3706,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Settings.System.LOCKSCREEN_ENABLE_POWER_MENU, 1,
                     UserHandle.USER_CURRENT) != 0;
 
-            mScreenOnReclaim = Settings.System.getIntForUser(resolver,
-                    Settings.System.SCREEN_ON_MEMORY_RECLAIM, 1, UserHandle.USER_CURRENT) == 1;
+            mScreenOnReclaim = isScreenOnMemoryReclaimEnabled();
 
             kidsModeEnabled = Settings.Secure.getIntForUser(resolver,
                     Settings.Secure.NAV_BAR_KIDS_MODE, 0, UserHandle.USER_CURRENT) == 1;
@@ -6549,10 +6548,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private final Runnable mMemoryOpt = new Runnable() {
         @Override
         public void run() {
-            releaseMemoryAtScreenOn();
+            if (isScreenOnMemoryReclaimEnabled()) {
+                releaseMemoryAtScreenOn();
+            }
         }
     };
-
+    
     private final Runnable mSystemServerGcOpt = new Runnable() {
         @Override
         public void run() {
@@ -8256,6 +8257,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
     }
 
+    private boolean isScreenOnMemoryReclaimEnabled() {
+        return Settings.System.getIntForUser(
+                mContext.getContentResolver(),
+                Settings.System.SCREEN_ON_MEMORY_RECLAIM,
+                1, UserHandle.USER_CURRENT) == 1;
+    }
+    
     private void releaseMemoryAtScreenOn() {
         long currentTime = System.currentTimeMillis();
         if (lastMemoryReleaseTime == 0L || currentTime - lastMemoryReleaseTime > MEMORY_RELEASE_INTERVAL_MS) {
