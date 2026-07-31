@@ -353,6 +353,50 @@ public class PhoneWindowManagerTests {
     }
 
     @Test
+    public void screenOnMemoryReclaimDisabledAtExecution_doesNotReleaseMemory()
+            throws Exception {
+        initPhoneWindowManager();
+        final int originalValue = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.SCREEN_ON_MEMORY_RECLAIM, 1);
+        try {
+            doNothing().when(ActivityManager.getService()).releaseMemory(
+                    anyInt(), anyInt(), anyBoolean(), anyBoolean());
+            Settings.System.putInt(mContext.getContentResolver(),
+                    Settings.System.SCREEN_ON_MEMORY_RECLAIM, 0);
+
+            mPhoneWindowManager.mMemoryOpt.run();
+
+            verify(ActivityManager.getService(), never())
+                    .releaseMemory(900, 25, false, false);
+        } finally {
+            Settings.System.putInt(mContext.getContentResolver(),
+                    Settings.System.SCREEN_ON_MEMORY_RECLAIM, originalValue);
+        }
+    }
+
+    @Test
+    public void screenOnMemoryReclaimEnabledAtExecution_releasesMemory()
+            throws Exception {
+        initPhoneWindowManager();
+        final int originalValue = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.SCREEN_ON_MEMORY_RECLAIM, 1);
+        try {
+            doNothing().when(ActivityManager.getService()).releaseMemory(
+                    anyInt(), anyInt(), anyBoolean(), anyBoolean());
+            Settings.System.putInt(mContext.getContentResolver(),
+                    Settings.System.SCREEN_ON_MEMORY_RECLAIM, 1);
+
+            mPhoneWindowManager.mMemoryOpt.run();
+
+            verify(ActivityManager.getService())
+                    .releaseMemory(900, 25, false, false);
+        } finally {
+            Settings.System.putInt(mContext.getContentResolver(),
+                    Settings.System.SCREEN_ON_MEMORY_RECLAIM, originalValue);
+        }
+    }
+
+    @Test
     public void testCheckAddPermission_withoutAccessibilityOverlay_noAccessibilityAppOpLogged() {
         mSetFlagsRule.enableFlags(android.view.contentprotection.flags.Flags.FLAG_CREATE_ACCESSIBILITY_OVERLAY_APP_OP_ENABLED);
         int[] outAppOp = new int[1];
