@@ -6553,7 +6553,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
         }
     };
-    
+
     private final Runnable mSystemServerGcOpt = new Runnable() {
         @Override
         public void run() {
