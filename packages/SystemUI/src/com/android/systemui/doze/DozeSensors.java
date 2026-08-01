@@ -17,7 +17,6 @@
 package com.android.systemui.doze;
 
 import static android.hardware.biometrics.BiometricAuthenticator.TYPE_FINGERPRINT;
-import static android.hardware.biometrics.Flags.screenOffUnlockUdfps;
 
 import static com.android.systemui.doze.DozeLog.REASON_SENSOR_QUICK_PICKUP;
 import static com.android.systemui.doze.DozeLog.REASON_SENSOR_UDFPS_LONG_PRESS;
@@ -257,7 +256,7 @@ public class DozeSensors {
                         dozeParameters.longPressUsesProx(),
                         !dozeParameters.longPressNeedsProximityCheck() /* performsProxCheck */,
                         false /* immediatelyReRegister */,
-                        !screenOffUnlockUdfps() /* requiresAod */
+                        !mConfig.screenOffUdfpsEnabled(mSelectedUserInteractor.getSelectedUserId()) /* requiresAod */
                 ),
                 new PluginSensor(
                         new SensorManagerPlugin.Sensor(TYPE_WAKE_DISPLAY),
