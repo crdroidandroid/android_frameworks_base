@@ -544,7 +544,9 @@ static void com_android_server_am_CachedAppOptimizer_compactNativeProcess(JNIEnv
 
 static jboolean com_android_server_am_CachedAppOptimizer_compactionFlagsValidForMemcg(
         JNIEnv* env, jobject, jint compactionFlags) {
-    static std::array<std::optional<bool>, 3> valid;
+    static constexpr int kMaxCompactionFlags =
+            COMPACT_ACTION_FILE_FLAG | COMPACT_ACTION_ANON_FLAG;
+    static std::array<std::optional<bool>, kMaxCompactionFlags + 1> valid;
 
     if (compactionFlags >= valid.size() || compactionFlags < 0) {
         jniThrowException(env, "java/lang/IllegalArgumentException", "Invalid compaction flags");
