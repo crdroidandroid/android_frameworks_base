@@ -75,6 +75,12 @@ public class AppDataHelper {
     private final ArtManagerService mArtManagerService;
     private final PackageManagerServiceInjector mInjector;
 
+    // vold holds its global lock for the whole duration of a fixupAppDir call,
+    // and its monitor() probe (the watchdog's storage health check) queues
+    // behind the same lock - fire fixups serially so a batch install cannot
+    // stall the probe past the watchdog limit.
+    private final Object mFixupAppDirLock = new Object();
+
     // TODO(b/198166813): remove PMS dependency
     AppDataHelper(PackageManagerService pm) {
         mPm = pm;
@@ -159,7 +165,9 @@ public class AppDataHelper {
                     // Prepare app data on external storage; currently this is used to
                     // setup any OBB dirs that were created by the installer correctly.
                     int uid = UserHandle.getUid(userId, ps.getAppId());
-                    smInternal.prepareAppDataAfterInstall(ps.getPackageName(), uid);
+                    synchronized (mFixupAppDirLock) {
+                        smInternal.prepareAppDataAfterInstall(ps.getPackageName(), uid);
+                    }
                 }
             });
         }
