@@ -419,8 +419,9 @@ public class ExpandableNotificationRow extends ActivatableNotificationView
             promptAppUnlock();
             return;
         }
-        if (isBundle()
-                || (!shouldShowPublic() && (!mIsMinimized || isExpanded()) && isGroupRoot() && !NTForbiddenSwipeDownQSController.get(mContext).getForbiddenSwipeDownQS())) {
+        if ((isBundle()
+                || (!shouldShowPublic() && (!mIsMinimized || isExpanded()) && isGroupRoot()))
+                && !NTForbiddenSwipeDownQSController.get(mContext).getForbiddenSwipeDownQS()) {
             mGroupExpansionChanging = true;
 
             if (NotificationBundleUi.isEnabled()) {
