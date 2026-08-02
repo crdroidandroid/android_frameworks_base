@@ -68,12 +68,12 @@
     <string name="onthego_channel_name">Primär</string>
     <string name="global_action_onthego">On-The-Go</string>
     <string name="onthego_dialog_title">On-The-Go</string>
-    <string name="onthego_opacity_title">Camera opacity</string>
-    <string name="onthego_opacity_default">50%</string>
-    <string name="onthego_restart_title">Restart on camera switch</string>
-    <string name="onthego_restart_summary">Briefly restart the preview when the camera changes</string>
-    <string name="onthego_front_camera_title">Front camera</string>
-    <string name="onthego_front_camera_summary">Use the front camera instead of the rear</string>
+    <string name="onthego_opacity_title">Kamera-Transparenz</string>
+    <string name="onthego_opacity_default">50 %</string>
+    <string name="onthego_restart_title">Beim Kamerawechsel neu starten</string>
+    <string name="onthego_restart_summary">Kurzer Neustart der Vorschau bei Änderung der Kamera</string>
+    <string name="onthego_front_camera_title">Frontkamera</string>
+    <string name="onthego_front_camera_summary">Frontkamera anstelle der Rückkamera verwenden</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">heute verbraucht</string>
     <string name="usage_data_weekly">in dieser Woche verwendet</string>
