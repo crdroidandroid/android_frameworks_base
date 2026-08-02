@@ -64,11 +64,16 @@
     <string name="onthego_notif_error">Pornirea On-The-Go a eșuat</string>
     <string name="onthego_notif_restart">Repornire On-The-Go</string>
     <string name="onthego_notif_camera_changed">Mod cameră schimbat</string>
-    <string name="onthego_transparency">Transparență</string>
-    <string name="onthego_front_camera">Folosește camera frontală</string>
     <string name="onthego_service_toggle">Repornire automată a serviciului</string>
     <string name="onthego_channel_name">Principal</string>
     <string name="global_action_onthego">On-The-Go</string>
+    <string name="onthego_dialog_title">On-The-Go</string>
+    <string name="onthego_opacity_title">Camera opacity</string>
+    <string name="onthego_opacity_default">50%</string>
+    <string name="onthego_restart_title">Restart on camera switch</string>
+    <string name="onthego_restart_summary">Briefly restart the preview when the camera changes</string>
+    <string name="onthego_front_camera_title">Front camera</string>
+    <string name="onthego_front_camera_summary">Use the front camera instead of the rear</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">utilizat azi</string>
     <string name="usage_data_weekly">utilizat în această săptămână</string>
