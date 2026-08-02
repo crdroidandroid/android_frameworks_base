@@ -445,6 +445,9 @@
     <!-- OmniJaws -->
     <uses-permission android:name="org.omnirom.omnijaws.READ_WEATHER" />
 
+    <!-- OnTheGo -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CAMERA" />
+
     <protected-broadcast android:name="com.android.settingslib.action.REGISTER_SLICE_RECEIVER" />
     <protected-broadcast android:name="com.android.settingslib.action.UNREGISTER_SLICE_RECEIVER" />
     <protected-broadcast android:name="com.android.settings.flashlight.action.FLASHLIGHT_CHANGED" />
@@ -623,8 +626,9 @@
                 android:foregroundServiceType="systemExempted"/>
 
         <!-- started from PhoneWindowManager -->
-        <service android:name=".crdroid.onthego.OnTheGoService"
-            android:process=":onthego"
+        <service
+            android:name=".crdroid.onthego.OnTheGoService"
+            android:foregroundServiceType="camera"
             android:exported="true" />
 
         <receiver android:name=".SysuiRestartReceiver"
