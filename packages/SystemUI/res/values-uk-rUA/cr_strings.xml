@@ -68,12 +68,12 @@
     <string name="onthego_channel_name">Основний</string>
     <string name="global_action_onthego">Режим \"На ходу\"</string>
     <string name="onthego_dialog_title">Режим \"На ходу\"</string>
-    <string name="onthego_opacity_title">Camera opacity</string>
+    <string name="onthego_opacity_title">Непрозорість камери</string>
     <string name="onthego_opacity_default">50%</string>
-    <string name="onthego_restart_title">Restart on camera switch</string>
-    <string name="onthego_restart_summary">Briefly restart the preview when the camera changes</string>
-    <string name="onthego_front_camera_title">Front camera</string>
-    <string name="onthego_front_camera_summary">Use the front camera instead of the rear</string>
+    <string name="onthego_restart_title">Перезавантажити при перемиканні камери</string>
+    <string name="onthego_restart_summary">Коротко перезапустити попередній перегляд, коли зміна камери</string>
+    <string name="onthego_front_camera_title">Фронтальна камера</string>
+    <string name="onthego_front_camera_summary">Використовувати передню камеру замість задньої</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">використане сьогодні</string>
     <string name="usage_data_weekly">використано цього тижня</string>
