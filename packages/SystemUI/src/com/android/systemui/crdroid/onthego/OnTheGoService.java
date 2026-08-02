@@ -30,6 +30,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.content.pm.ServiceInfo;
 import android.content.res.Resources;
 import android.graphics.PixelFormat;
 import android.graphics.SurfaceTexture;
@@ -46,6 +47,7 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
+import android.util.Size;
 import android.view.Gravity;
 import android.view.Surface;
 import android.view.TextureView;
@@ -60,7 +62,9 @@ import com.android.systemui.res.R;
 import com.android.internal.util.crdroid.OnTheGoUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class OnTheGoService extends Service {
 
@@ -84,6 +88,11 @@ public class OnTheGoService extends Service {
     private static final int NOTIFICATION_RESTART = 1;
     private static final int NOTIFICATION_ERROR   = 2;
 
+    // Upper bounds for the preview buffer. Anything larger wastes bandwidth
+    // for a full-screen overlay and can stall low-end ISPs.
+    private static final int MAX_PREVIEW_WIDTH  = 1920;
+    private static final int MAX_PREVIEW_HEIGHT = 1080;
+
     private final Handler mHandler = new Handler(Looper.getMainLooper());
     private final Object  mRestartObject = new Object();
 
@@ -99,6 +108,12 @@ public class OnTheGoService extends Service {
     private String mCameraId;
     private TextureView mTextureView;
 
+    // Preview geometry, resolved once a camera is selected.
+    private Size[] mPreviewChoices;
+    private Size   mPreviewSize;
+    private int    mSurfaceWidth;
+    private int    mSurfaceHeight;
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -109,6 +124,7 @@ public class OnTheGoService extends Service {
         super.onDestroy();
         unregisterReceivers();
         resetViews();
+        stopForeground(STOP_FOREGROUND_REMOVE);
     }
 
     private void registerReceivers() {
@@ -197,6 +213,10 @@ public class OnTheGoService extends Service {
         unregisterReceivers();
         resetViews();
 
+        // Detach the ongoing foreground notification before posting any
+        // dismissible follow-up.
+        stopForeground(STOP_FOREGROUND_REMOVE);
+
         // Cancel notification
         if (mNotificationManager != null) {
             mNotificationManager.cancel(ONTHEGO_NOTIFICATION_ID);
@@ -262,6 +282,11 @@ public class OnTheGoService extends Service {
                 if ((preferredFacing == 1 && lensFacing == CameraCharacteristics.LENS_FACING_FRONT) ||
                     (preferredFacing == 0 && lensFacing == CameraCharacteristics.LENS_FACING_BACK)) {
                     mCameraId = cameraId;
+
+                    final StreamConfigurationMap map = characteristics.get(
+                            CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
+                    mPreviewChoices = map != null
+                            ? map.getOutputSizes(SurfaceTexture.class) : null;
                     break;
                 }
             }
@@ -315,11 +340,16 @@ public class OnTheGoService extends Service {
     private final TextureView.SurfaceTextureListener textureListener = new TextureView.SurfaceTextureListener() {
         @Override
         public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+            mSurfaceWidth = width;
+            mSurfaceHeight = height;
             openCamera();
         }
 
         @Override
-        public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {}
+        public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
+            mSurfaceWidth = width;
+            mSurfaceHeight = height;
+        }
 
         @Override
         public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
@@ -375,7 +405,18 @@ public class OnTheGoService extends Service {
                 logDebug("SurfaceTexture is null. Skipping preview.");
                 return;
             }
-            texture.setDefaultBufferSize(1080, 1920);
+
+            int viewWidth  = mSurfaceWidth  > 0 ? mSurfaceWidth  : mTextureView.getWidth();
+            int viewHeight = mSurfaceHeight > 0 ? mSurfaceHeight : mTextureView.getHeight();
+
+            if (mPreviewChoices != null && mPreviewChoices.length > 0
+                    && viewWidth > 0 && viewHeight > 0) {
+                mPreviewSize = chooseOptimalSize(mPreviewChoices, viewWidth, viewHeight);
+            } else {
+                mPreviewSize = new Size(MAX_PREVIEW_WIDTH, MAX_PREVIEW_HEIGHT);
+            }
+
+            texture.setDefaultBufferSize(mPreviewSize.getWidth(), mPreviewSize.getHeight());
 
             Surface surface = new Surface(texture);
             mPreviewRequestBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
@@ -406,6 +447,49 @@ public class OnTheGoService extends Service {
         }
     }
 
+    /**
+     * Picks the supported preview size, under the {@link #MAX_PREVIEW_WIDTH}/
+     * {@link #MAX_PREVIEW_HEIGHT} caps, whose aspect ratio is closest to the
+     * display. Sensor output sizes are landscape, so the target is compared in
+     * landscape-normalised form.
+     */
+    private static Size chooseOptimalSize(Size[] choices, int viewWidth, int viewHeight) {
+        final int targetW = Math.max(viewWidth, viewHeight);
+        final int targetH = Math.min(viewWidth, viewHeight);
+        final double targetRatio = (double) targetW / targetH;
+
+        final List<Size> bigEnough = new ArrayList<>();
+        final List<Size> notBigEnough = new ArrayList<>();
+        for (Size option : choices) {
+            if (option.getWidth() > MAX_PREVIEW_WIDTH
+                    || option.getHeight() > MAX_PREVIEW_HEIGHT) {
+                continue;
+            }
+            if (option.getWidth() >= targetW && option.getHeight() >= targetH) {
+                bigEnough.add(option);
+            } else {
+                notBigEnough.add(option);
+            }
+        }
+
+        final List<Size> pool = !bigEnough.isEmpty() ? bigEnough
+                : (!notBigEnough.isEmpty() ? notBigEnough : Arrays.asList(choices));
+
+        Size best = pool.get(0);
+        double bestDiff = Double.MAX_VALUE;
+        for (Size option : pool) {
+            final double ratio = (double) option.getWidth() / option.getHeight();
+            final double diff = Math.abs(ratio - targetRatio);
+            final long area = (long) option.getWidth() * option.getHeight();
+            final long bestArea = (long) best.getWidth() * best.getHeight();
+            if (diff < bestDiff || (diff == bestDiff && area > bestArea)) {
+                best = option;
+                bestDiff = diff;
+            }
+        }
+        return best;
+    }
+
     private void closeCamera() {
         if (mCaptureSession != null) {
             mCaptureSession.close();
@@ -432,6 +516,14 @@ public class OnTheGoService extends Service {
 
     private void createNotification(final int type) {
         final Resources r = getResources();
+
+        // Channel must exist before we post / go foreground.
+        mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationChannel = new NotificationChannel(ONTHEGO_CHANNEL_ID,
+                r.getString(R.string.onthego_channel_name),
+                NotificationManager.IMPORTANCE_LOW);
+        mNotificationManager.createNotificationChannel(mNotificationChannel);
+
         final Notification.Builder builder = new Notification.Builder(this, ONTHEGO_CHANNEL_ID)
                 .setTicker(r.getString(
                         (type == 1 ? R.string.onthego_notif_camera_changed :
@@ -478,13 +570,13 @@ public class OnTheGoService extends Service {
 
         final Notification notif = builder.build();
 
-        mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationChannel = new NotificationChannel(ONTHEGO_CHANNEL_ID,
-                r.getString(R.string.onthego_channel_name),
-                NotificationManager.IMPORTANCE_LOW);
-        mNotificationManager.createNotificationChannel(mNotificationChannel);
-
-        mNotificationManager.notify(ONTHEGO_NOTIFICATION_ID, notif);
+        if (type == NOTIFICATION_STARTED) {
+            // A camera-holding session must run as a typed foreground service.
+            startForeground(ONTHEGO_NOTIFICATION_ID, notif,
+                    ServiceInfo.FOREGROUND_SERVICE_TYPE_CAMERA);
+        } else {
+            mNotificationManager.notify(ONTHEGO_NOTIFICATION_ID, notif);
+        }
     }
 
     private void logDebug(String msg) {
