@@ -64,11 +64,16 @@
     <string name="onthego_notif_error">امکان فعال شدن ویژگی در حرکت نمی باشد</string>
     <string name="onthego_notif_restart">راه اندازی مجدد ویژگی در حرکت</string>
     <string name="onthego_notif_camera_changed">حالت دوربین تغییر کرد</string>
-    <string name="onthego_transparency">شفافیت</string>
-    <string name="onthego_front_camera">استفاده از دوربین جلو</string>
     <string name="onthego_service_toggle">راه‌اندازی مجدد سرویس به طور خودکار</string>
     <string name="onthego_channel_name">اصلی</string>
     <string name="global_action_onthego">در حرکت</string>
+    <string name="onthego_dialog_title">در حرکت</string>
+    <string name="onthego_opacity_title">Camera opacity</string>
+    <string name="onthego_opacity_default">50%</string>
+    <string name="onthego_restart_title">Restart on camera switch</string>
+    <string name="onthego_restart_summary">Briefly restart the preview when the camera changes</string>
+    <string name="onthego_front_camera_title">Front camera</string>
+    <string name="onthego_front_camera_summary">Use the front camera instead of the rear</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">مصرف امروز</string>
     <string name="usage_data_weekly">مصرفی این هفته</string>
