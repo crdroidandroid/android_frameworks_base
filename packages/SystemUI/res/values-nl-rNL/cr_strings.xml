@@ -64,11 +64,16 @@
     <string name="onthego_notif_error">Niet in staat om On-The-Go te starten</string>
     <string name="onthego_notif_restart">Herstart On-The-Go</string>
     <string name="onthego_notif_camera_changed">Cameramodus gewijzigd</string>
-    <string name="onthego_transparency">Transparantie</string>
-    <string name="onthego_front_camera">Gebruik camera aan de voorzijde</string>
     <string name="onthego_service_toggle">Service automatisch herstarten</string>
     <string name="onthego_channel_name">Algemeen</string>
     <string name="global_action_onthego">On-The-Go</string>
+    <string name="onthego_dialog_title">On-The-Go</string>
+    <string name="onthego_opacity_title">Camera opaciteit</string>
+    <string name="onthego_opacity_default">50%</string>
+    <string name="onthego_restart_title">Herstart bij camera keuze</string>
+    <string name="onthego_restart_summary">Herstart het voorbeeld kort als de camera verandert</string>
+    <string name="onthego_front_camera_title">Camera aan voorzijde</string>
+    <string name="onthego_front_camera_summary">Gebruik de camera aan de voorkant in plaats van achterkant</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">vandaag gebruikt</string>
     <string name="usage_data_weekly">gebruikt deze week</string>
