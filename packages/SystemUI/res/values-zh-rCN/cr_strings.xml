@@ -64,11 +64,16 @@
     <string name="onthego_notif_error">无法启动行走模式</string>
     <string name="onthego_notif_restart">重新启动行走模式</string>
     <string name="onthego_notif_camera_changed">相机模式已更改</string>
-    <string name="onthego_transparency">透明度</string>
-    <string name="onthego_front_camera">使用前置摄像头</string>
     <string name="onthego_service_toggle">自动重启服务</string>
     <string name="onthego_channel_name">主要</string>
     <string name="global_action_onthego">行走模式</string>
+    <string name="onthego_dialog_title">行走模式</string>
+    <string name="onthego_opacity_title">Camera opacity</string>
+    <string name="onthego_opacity_default">50%</string>
+    <string name="onthego_restart_title">Restart on camera switch</string>
+    <string name="onthego_restart_summary">Briefly restart the preview when the camera changes</string>
+    <string name="onthego_front_camera_title">Front camera</string>
+    <string name="onthego_front_camera_summary">Use the front camera instead of the rear</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">今日使用</string>
     <string name="usage_data_weekly">本周使用</string>
