@@ -68,12 +68,12 @@
     <string name="onthego_channel_name">Điều khiển chính</string>
     <string name="global_action_onthego">Trên đường đi</string>
     <string name="onthego_dialog_title">Trên đường đi</string>
-    <string name="onthego_opacity_title">Camera opacity</string>
+    <string name="onthego_opacity_title">Độ mờ của máy ảnh</string>
     <string name="onthego_opacity_default">50%</string>
-    <string name="onthego_restart_title">Restart on camera switch</string>
-    <string name="onthego_restart_summary">Briefly restart the preview when the camera changes</string>
-    <string name="onthego_front_camera_title">Front camera</string>
-    <string name="onthego_front_camera_summary">Use the front camera instead of the rear</string>
+    <string name="onthego_restart_title">Khởi động lại khi chuyển đổi máy ảnh</string>
+    <string name="onthego_restart_summary">Khởi động lại nhanh phần xem trước khi máy ảnh thay đổi</string>
+    <string name="onthego_front_camera_title">Máy ảnh mặt trước</string>
+    <string name="onthego_front_camera_summary">Sử dụng máy ảnh mặt trước thay vì máy ảnh mặt sau</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">hôm nay dùng</string>
     <string name="usage_data_weekly">đã dùng trong tuần</string>
