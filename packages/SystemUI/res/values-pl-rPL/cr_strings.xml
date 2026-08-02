@@ -68,12 +68,12 @@
     <string name="onthego_channel_name">Główny</string>
     <string name="global_action_onthego">W ruchu</string>
     <string name="onthego_dialog_title">W ruchu</string>
-    <string name="onthego_opacity_title">Camera opacity</string>
+    <string name="onthego_opacity_title">Przezroczystość kamery</string>
     <string name="onthego_opacity_default">50%</string>
-    <string name="onthego_restart_title">Restart on camera switch</string>
-    <string name="onthego_restart_summary">Briefly restart the preview when the camera changes</string>
-    <string name="onthego_front_camera_title">Front camera</string>
-    <string name="onthego_front_camera_summary">Use the front camera instead of the rear</string>
+    <string name="onthego_restart_title">Uruchom ponownie po przełączeniu aparatu</string>
+    <string name="onthego_restart_summary">Szybko uruchom ponownie podgląd po zmianie aparatu</string>
+    <string name="onthego_front_camera_title">Przedni aparat</string>
+    <string name="onthego_front_camera_summary">Używaj przedniego aparatu zamiast tylnego</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">użyto dzisiaj</string>
     <string name="usage_data_weekly">użyto w tym tygodniu</string>
