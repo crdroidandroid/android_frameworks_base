@@ -64,11 +64,16 @@
     <string name="onthego_notif_error">Unable to start On-The-Go</string>
     <string name="onthego_notif_restart">Restart On-The-Go</string>
     <string name="onthego_notif_camera_changed">Camera mode changed</string>
-    <string name="onthego_transparency">Transparency</string>
-    <string name="onthego_front_camera">Use front camera</string>
     <string name="onthego_service_toggle">Automatically restart service</string>
     <string name="onthego_channel_name">Main</string>
     <string name="global_action_onthego">On-The-Go</string>
+    <string name="onthego_dialog_title">On-The-Go</string>
+    <string name="onthego_opacity_title">Camera opacity</string>
+    <string name="onthego_opacity_default">50%</string>
+    <string name="onthego_restart_title">Restart on camera switch</string>
+    <string name="onthego_restart_summary">Briefly restart the preview when the camera changes</string>
+    <string name="onthego_front_camera_title">Front camera</string>
+    <string name="onthego_front_camera_summary">Use the front camera instead of the rear</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">used today</string>
     <string name="usage_data_weekly">used this week</string>
