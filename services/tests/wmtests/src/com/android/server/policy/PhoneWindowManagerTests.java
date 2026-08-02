@@ -355,7 +355,12 @@ public class PhoneWindowManagerTests {
     @Test
     public void screenOnMemoryReclaimDisabledAtExecution_doesNotReleaseMemory()
             throws Exception {
-        initPhoneWindowManager();
+        // This runnable only requires the settings context and
+        // the ActivityManager binder. Full policy initialization
+        // activates unrelated device and Lineage subsystems.
+        mNonSpyPhoneWindowManager.mContext = mContext;
+        mNonSpyPhoneWindowManager.mActivityManagerService =
+                ActivityManager.getService();
         final int originalValue = Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.SCREEN_ON_MEMORY_RECLAIM, 1);
         try {
@@ -364,7 +369,7 @@ public class PhoneWindowManagerTests {
             Settings.System.putInt(mContext.getContentResolver(),
                     Settings.System.SCREEN_ON_MEMORY_RECLAIM, 0);
 
-            mPhoneWindowManager.mMemoryOpt.run();
+            mNonSpyPhoneWindowManager.mMemoryOpt.run();
 
             verify(ActivityManager.getService(), never())
                     .releaseMemory(900, 25, false, false);
@@ -377,7 +382,12 @@ public class PhoneWindowManagerTests {
     @Test
     public void screenOnMemoryReclaimEnabledAtExecution_releasesMemory()
             throws Exception {
-        initPhoneWindowManager();
+        // This runnable only requires the settings context and
+        // the ActivityManager binder. Full policy initialization
+        // activates unrelated device and Lineage subsystems.
+        mNonSpyPhoneWindowManager.mContext = mContext;
+        mNonSpyPhoneWindowManager.mActivityManagerService =
+                ActivityManager.getService();
         final int originalValue = Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.SCREEN_ON_MEMORY_RECLAIM, 1);
         try {
@@ -386,7 +396,7 @@ public class PhoneWindowManagerTests {
             Settings.System.putInt(mContext.getContentResolver(),
                     Settings.System.SCREEN_ON_MEMORY_RECLAIM, 1);
 
-            mPhoneWindowManager.mMemoryOpt.run();
+            mNonSpyPhoneWindowManager.mMemoryOpt.run();
 
             verify(ActivityManager.getService())
                     .releaseMemory(900, 25, false, false);
