@@ -64,11 +64,16 @@
     <string name="onthego_notif_error">Nem lehet elindítani a Menet közben módot (On-The-Go)</string>
     <string name="onthego_notif_restart">A Menet közben mód (On-The-Go) újraindítása</string>
     <string name="onthego_notif_camera_changed">A Kameramód megváltoztatva</string>
-    <string name="onthego_transparency">Átlátszóság</string>
-    <string name="onthego_front_camera">Az előlapi kamera használata</string>
     <string name="onthego_service_toggle">Automatikusan indítsa újra a szolgáltatást</string>
     <string name="onthego_channel_name">Elsődleges</string>
     <string name="global_action_onthego">Menet közben (On-The-Go)</string>
+    <string name="onthego_dialog_title">Menet közben (On-The-Go)</string>
+    <string name="onthego_opacity_title">Kamera-átlátszóság</string>
+    <string name="onthego_opacity_default">50%</string>
+    <string name="onthego_restart_title">Újraindítás a kamera gombjával</string>
+    <string name="onthego_restart_summary">A kamera változásakor az előnézet újraindítása</string>
+    <string name="onthego_front_camera_title">Előlapi kamera</string>
+    <string name="onthego_front_camera_summary">A hátlapi kamera helyett az előlapit használja</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">ma elhasználva</string>
     <string name="usage_data_weekly">felhasználva ezen a héten</string>
