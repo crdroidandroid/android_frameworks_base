@@ -64,11 +64,16 @@
     <string name="onthego_notif_error">無法啟動 OTG 模式</string>
     <string name="onthego_notif_restart">重新啟動 OTG 模式</string>
     <string name="onthego_notif_camera_changed">相機模式已變更</string>
-    <string name="onthego_transparency">透明度</string>
-    <string name="onthego_front_camera">使用前置鏡頭</string>
     <string name="onthego_service_toggle">自動重新啟動服務</string>
     <string name="onthego_channel_name">主要</string>
     <string name="global_action_onthego">OTG 模式</string>
+    <string name="onthego_dialog_title">OTG 模式</string>
+    <string name="onthego_opacity_title">Camera opacity</string>
+    <string name="onthego_opacity_default">50%</string>
+    <string name="onthego_restart_title">Restart on camera switch</string>
+    <string name="onthego_restart_summary">Briefly restart the preview when the camera changes</string>
+    <string name="onthego_front_camera_title">Front camera</string>
+    <string name="onthego_front_camera_summary">Use the front camera instead of the rear</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">今日已用</string>
     <string name="usage_data_weekly">本週已使用</string>
