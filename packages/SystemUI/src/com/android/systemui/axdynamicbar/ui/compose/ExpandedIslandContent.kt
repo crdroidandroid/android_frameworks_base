@@ -17,8 +17,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -54,7 +54,7 @@ import com.android.systemui.axdynamicbar.model.IslandEvent
 import com.android.systemui.axdynamicbar.shared.*
 import com.android.systemui.res.R
 
-private val EXPANDED_BOTTOM_PAD = 110.dp
+private val EXPANDED_BOTTOM_PAD = 50.dp
 
 @Composable
 fun ExpandedIslandContent(
@@ -120,7 +120,7 @@ fun ExpandedIslandContent(
     LazyColumn(
         modifier =
             Modifier.widthIn(max = ExpandedMaxWidth)
-                .fillMaxSize(),
+                .wrapContentHeight(),
         verticalArrangement = Arrangement.spacedBy(SpaceMd),
         contentPadding =
             PaddingValues(start = SpaceLg, end = SpaceLg, top = SpaceXxs, bottom = EXPANDED_BOTTOM_PAD),
