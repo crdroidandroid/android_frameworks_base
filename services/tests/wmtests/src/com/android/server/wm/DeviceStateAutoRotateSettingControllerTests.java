@@ -476,11 +476,11 @@ public class DeviceStateAutoRotateSettingControllerTests {
         mTestLooper.dispatchAll();
 
         mDeviceStateAutoRotateSettingController.requestAccelerometerRotationSettingChange(
-                false, getNaturalRotation, "");
+                false, getNaturalRotation(), "");
         mTestLooper.dispatchAll();
 
         verify(mMockDisplayRotation).setUserRotationSetting(
-                eq(WindowManagerPolicy.USER_ROTATION_LOCKED), eq(getNaturalRotation), any());
+                eq(WindowManagerPolicy.USER_ROTATION_LOCKED), eq(getNaturalRotation()), any());
     }
 
     @Test
@@ -576,6 +576,9 @@ public class DeviceStateAutoRotateSettingControllerTests {
         when(mMockResources.getBoolean(
                 com.android.internal.R.bool.config_useCurrentRotationOnRotationLockChange))
                 .thenReturn(false);
+        // Ensure the current rotation is not eligible so the natural-rotation branch is tested.
+        Settings.System.putIntForUser(mMockResolver,
+                Settings.System.ACCELEROMETER_ROTATION_ANGLES, 0, UserHandle.USER_CURRENT);
         setDeviceState(FOLDED);
         setAccelerometerRotationSetting(ACCELEROMETER_ROTATION_ON);
         mAccelerometerRotationSettingObserver.getValue().onChange(false);
@@ -586,7 +589,7 @@ public class DeviceStateAutoRotateSettingControllerTests {
         mTestLooper.dispatchAll();
 
         verify(mMockDisplayRotation).setUserRotationSetting(
-                eq(WindowManagerPolicy.USER_ROTATION_LOCKED), eq(getNaturalRotation), any());
+                eq(WindowManagerPolicy.USER_ROTATION_LOCKED), eq(getNaturalRotation()), any());
     }
 
     private void setDeviceStateAutoRotateSetting(SparseIntArray deviceStateAutoRotateSetting) {
