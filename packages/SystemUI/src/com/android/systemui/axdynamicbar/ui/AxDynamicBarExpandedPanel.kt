@@ -12,8 +12,9 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
@@ -175,8 +176,7 @@ constructor(
         val params =
             WindowManager.LayoutParams(
                 WindowManager.LayoutParams.MATCH_PARENT,
-                if (isCurrentlyExpanded) WindowManager.LayoutParams.MATCH_PARENT
-                else WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.TYPE_STATUS_BAR_SUB_PANEL,
                 flags,
                 PixelFormat.TRANSLUCENT,
@@ -216,7 +216,7 @@ constructor(
         val params = view.layoutParams as? WindowManager.LayoutParams ?: return@ensureMainThread
         if (expanded) {
             params.flags = params.flags and WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE.inv()
-            params.height = WindowManager.LayoutParams.MATCH_PARENT
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT
             windowManager.updateViewLayout(view, params)
         } else {
             params.flags = params.flags or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
@@ -299,7 +299,7 @@ private fun OverlayContent(viewModel: AxDynamicBarChipViewModel, statusBarHeight
         
         Box(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .pointerInput(Unit) {
                     val slop = viewConfiguration.touchSlop
                     awaitEachGesture {
@@ -308,20 +308,34 @@ private fun OverlayContent(viewModel: AxDynamicBarChipViewModel, statusBarHeight
                         do {
                             ev = awaitPointerEvent(PointerEventPass.Final)
                         } while (!ev.changes.any { it.changedToDownIgnoreConsumed() })
-                        val downPos = ev.changes[0].position
                         
-                        val downConsumed = ev.changes[0].isConsumed
-                        
+                        val downChange =
+                            ev.changes.firstOrNull { it.changedToDownIgnoreConsumed() }
+                                ?: ev.changes.firstOrNull()
+                                ?: return@awaitEachGesture
+
+                        val pointerId = downChange.id
+                        val downPos = downChange.position
+                        val downConsumed = downChange.isConsumed
+                        var hasExceededSlop = false
+
                         while (true) {
                             val event = awaitPointerEvent(PointerEventPass.Final)
-                            val change = event.changes.firstOrNull() ?: break
+                            val change =
+                                event.changes.firstOrNull { it.id == pointerId }
+                                    ?: event.changes.firstOrNull()
+                                    ?: break
+
+                            val dx = change.position.x - downPos.x
+                            val dy = change.position.y - downPos.y
+                            if (dx * dx + dy * dy > slop * slop) {
+                                hasExceededSlop = true
+                            }
+
                             if (!change.pressed) {
-                                if (!downConsumed && !change.isConsumed) {
-                                    val dx = change.position.x - downPos.x
-                                    val dy = change.position.y - downPos.y
-                                    if (dx * dx + dy * dy <= slop * slop) {
-                                        viewModel.statusBarExpansion.collapse()
-                                    }
+                                if (!downConsumed && !change.isConsumed && !hasExceededSlop) {
+                                    change.consume()
+                                    viewModel.statusBarExpansion.collapse()
                                 }
                                 break
                             }
@@ -334,13 +348,22 @@ private fun OverlayContent(viewModel: AxDynamicBarChipViewModel, statusBarHeight
             chipState?.let { state ->
                 val filtered = state.allEvents.filter { it !is IslandEvent.AospChip }
                 if (filtered.isEmpty()) return@let
-                ExpandedIslandContent(
+                Box(
+                    modifier =
+                        Modifier.clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null,
+                            onClick = {}
+                        )
+                ) {                
+                   ExpandedIslandContent(
                     events = filtered,
                     interactor = viewModel.interactor,
                     onCollapse = { viewModel.statusBarExpansion.collapse() },
                     pinnedEventId = state.event.id,
                     hapticsViewModelFactory = viewModel.interactor.sliderHapticsViewModelFactory,
-                )
+                  ) 
+                }
             }
         }
     }
