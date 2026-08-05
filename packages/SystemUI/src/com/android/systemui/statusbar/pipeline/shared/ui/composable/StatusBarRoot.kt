@@ -581,6 +581,7 @@ private fun addBatteryComposable(
                     )
                 }
             }
+            setId(R.id.battery_composable_view)
         }
     phoneStatusBarView.findViewById<ViewGroup>(R.id.system_icons).apply {
         addView(batteryComposeView, getChildCount() - 1)
