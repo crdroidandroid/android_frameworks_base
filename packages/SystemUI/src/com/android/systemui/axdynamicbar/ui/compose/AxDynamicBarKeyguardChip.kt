@@ -3,6 +3,7 @@
 package com.android.systemui.axdynamicbar.ui.compose
 
 import com.android.systemui.statusbar.chips.ui.model.OngoingActivityChipModel
+import com.android.systemui.statusbar.chips.ui.model.Chronometer
 import com.android.compose.animation.Expandable
 import com.android.compose.animation.rememberExpandableController
 import com.android.systemui.animation.Expandable as SystemUiExpandable
@@ -833,6 +834,11 @@ private fun AospKeyguardChipText(
             modifier = modifier,
         )
         is OngoingActivityChipModel.Content.IconOnly -> Unit
+        is OngoingActivityChipModel.Content.TextVariants -> {
+            content.textVariants.firstOrNull()?.let { text ->
+                if (text.isNotBlank()) MarqueeText(text, color, modifier)
+            }
+        }
     }
 }
 
@@ -842,24 +848,37 @@ private fun AospKeyguardTimerText(
     color: Color,
     modifier: Modifier,
 ) {
-    var elapsedMs by remember(content.startTimeMs, content.isEventInFuture, content.timeSource) {
+    var elapsedMs by remember(content.value, content.timeSource) {
         mutableLongStateOf(aospTimerElapsedMs(content))
     }
-    LaunchedEffect(content.startTimeMs, content.isEventInFuture, content.timeSource) {
+    LaunchedEffect(content.value, content.timeSource) {
         while (true) {
             elapsedMs = aospTimerElapsedMs(content)
-            delay(1000L - abs(content.startTimeMs - content.timeSource.getCurrentTime()) % 1000L)
+            when (val chronometer = content.value) {
+                is Chronometer.Paused -> break
+                is Chronometer.Running -> {
+                    val zeroMs = chronometer.eventTime.asElapsedRealtime(content.timeSource)
+                    val nowMs = content.timeSource.elapsedRealtime()
+                    delay(1000L - abs(nowMs - zeroMs) % 1000L)
+                }
+            }
         }
     }
     Text(formatCountdownLong(elapsedMs), color = color, style = PillMono, modifier = modifier)
 }
 
 private fun aospTimerElapsedMs(content: OngoingActivityChipModel.Content.Timer): Long {
-    val now = content.timeSource.getCurrentTime()
-    return if (content.isEventInFuture) {
-        (content.startTimeMs - now).coerceAtLeast(0L)
-    } else {
-        (now - content.startTimeMs).coerceAtLeast(0L)
+    return when (val chronometer = content.value) {
+        is Chronometer.Paused -> chronometer.atDuration.toMillis().coerceAtLeast(0L)
+        is Chronometer.Running -> {
+            val zeroMs = chronometer.eventTime.asElapsedRealtime(content.timeSource)
+            val nowMs = content.timeSource.elapsedRealtime()
+            if (chronometer.isCountdown) {
+                (zeroMs - nowMs).coerceAtLeast(0L)
+            } else {
+                (nowMs - zeroMs).coerceAtLeast(0L)
+            }
+        }
     }
 }
 
