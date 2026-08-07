@@ -33,7 +33,7 @@
     <!-- Weather -->
     <string name="weather_condition_clouds">흐림</string>
     <string name="weather_condition_rain">비</string>
-    <string name="weather_condition_clear">Clear Sky</string>
+    <string name="weather_condition_clear">맑은 하늘</string>
     <string name="weather_condition_storm">강풍</string>
     <string name="weather_condition_snow">눈</string>
     <string name="weather_condition_wind">바람</string>
