@@ -47,13 +47,13 @@
     <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • Turbo Charge 中 (充電完了まで残り<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g>)</string>
     <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • Turbo Charge 中</string>
     <!-- Smartspace -->
-    <string name="accessibility_next_alarm">Next alarm at %s</string>
-    <string name="accessibility_smartspace_page">Page %1$d of %2$d</string>
-    <string name="active_mode_content_description">%1$s is on</string>
+    <string name="accessibility_next_alarm">次のアラーム: %s</string>
+    <string name="accessibility_smartspace_page">%1$d/%2$d ページ</string>
+    <string name="active_mode_content_description">%1$sはオンです</string>
     <string name="music_controls_no_title">無題</string>
     <string name="smartspace_content_desc">At a glance</string>
     <string name="smartspace_flight_qr_code">QRコード</string>
-    <string name="smartspace_role_desc">View</string>
+    <string name="smartspace_role_desc">表示</string>
     <!-- Button to restart SystemUI, within the Restart Options dialog -->
     <string name="global_action_restart_systemui">システム UI</string>
     <!-- On The Go -->
@@ -68,12 +68,12 @@
     <string name="onthego_channel_name">メイン</string>
     <string name="global_action_onthego">On-The-Go</string>
     <string name="onthego_dialog_title">On-The-Go</string>
-    <string name="onthego_opacity_title">Camera opacity</string>
+    <string name="onthego_opacity_title">カメラの透明度</string>
     <string name="onthego_opacity_default">50%</string>
-    <string name="onthego_restart_title">Restart on camera switch</string>
-    <string name="onthego_restart_summary">Briefly restart the preview when the camera changes</string>
-    <string name="onthego_front_camera_title">Front camera</string>
-    <string name="onthego_front_camera_summary">Use the front camera instead of the rear</string>
+    <string name="onthego_restart_title">カメラの切り替え時に再起動</string>
+    <string name="onthego_restart_summary">カメラが変更された場合、簡単にプレビューを再起動します</string>
+    <string name="onthego_front_camera_title">前面カメラ</string>
+    <string name="onthego_front_camera_summary">リアの代わりにフロントカメラを使用する</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">今日の使用量</string>
     <string name="usage_data_weekly">今週の使用量</string>
@@ -134,8 +134,8 @@
     <!-- Preferred network tile -->
     <string name="qs_preferred_network_label">優先するネットワーク</string>
     <string name="qs_preferred_network_lte">4G / LTE</string>
-    <string name="qs_preferred_network_nr">5G / NR</string>
-    <string name="qs_preferred_network_unsupported">Unsupported</string>
+    <string name="qs_preferred_network_nr">5G/NR</string>
+    <string name="qs_preferred_network_unsupported">非対応</string>
     <!-- VPN tethering QS tile -->
     <string name="vpn_tethering_label">VPN tethering</string>
     <!-- Text while recognizing face -->
