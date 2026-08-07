@@ -65,6 +65,7 @@ import static android.view.WindowManagerGlobal.ADD_MULTIPLE_SINGLETON;
 import static android.view.WindowManagerGlobal.ADD_OKAY;
 import static android.view.WindowManagerPolicyConstants.ACTION_HDMI_PLUGGED;
 import static android.view.WindowManagerPolicyConstants.EXTRA_HDMI_PLUGGED_STATE;
+import static android.view.WindowManagerPolicyConstants.NAV_BAR_MODE_GESTURAL;
 import static android.window.DesktopExperienceFlags.ENABLE_RESTRICT_FREEFORM_HIDDEN_SYSTEM_BARS_TO_FILLING_TASKS;
 import static android.window.DisplayAreaOrganizer.FEATURE_UNDEFINED;
 
@@ -191,6 +192,13 @@ public class DisplayPolicy {
 
     private static final int INSETS_OVERRIDE_INDEX_INVALID = -1;
 
+    private static final int GESTURE_NAVBAR_SPACE_DEFAULT = 0;
+    private static final int GESTURE_NAVBAR_SPACE_COMPACT = 1;
+    private static final int GESTURE_NAVBAR_SPACE_MINIMAL = 2;
+
+    // Compact uses 50% of the provider's original inset.
+    private static final float GESTURE_NAVBAR_COMPACT_SCALE = 0.50f;
+
     // TODO(b/266197298): Remove this by a more general protocol from the insets providers.
     private static final boolean USE_CACHED_INSETS_FOR_DISPLAY_SWITCH =
             SystemProperties.getBoolean("persist.wm.debug.cached_insets_switch", true);
@@ -260,6 +268,8 @@ public class DisplayPolicy {
     private volatile boolean mHasStatusBar;
     private volatile boolean mHasNavigationBar;
     private volatile boolean mTaskBarEnabled;
+    private volatile int mGestureNavbarSpaceMode =
+            GESTURE_NAVBAR_SPACE_DEFAULT;
     // Can the navigation bar ever move to the side?
     private volatile boolean mNavigationBarCanMove;
     private volatile boolean mNavigationBarAlwaysShowOnSideGesture;
@@ -457,13 +467,23 @@ public class DisplayPolicy {
             resolver.registerContentObserver(LineageSettings.System.getUriFor(
                     LineageSettings.System.ENABLE_TASKBAR), false, this,
                     UserHandle.USER_ALL);
+            resolver.registerContentObserver(
+                    Settings.System.getUriFor(
+                            Settings.System.GESTURE_NAVBAR_SPACE_MODE),
+                    false,
+                    this,
+                    UserHandle.USER_ALL);
 
             updateSettings();
         }
 
         @Override
         public void onChange(boolean selfChange) {
-            updateSettings();
+            synchronized (mLock) {
+                updateSettings();
+                mDisplayContent.setLayoutNeeded();
+                mService.requestTraversal();
+            }
         }
     }
 
@@ -799,6 +819,12 @@ public class DisplayPolicy {
         mTaskBarEnabled = LineageSettings.System.getIntForUser(resolver,
                 LineageSettings.System.ENABLE_TASKBAR, isTablet() ? 1 : 0,
                 UserHandle.USER_CURRENT) != 0;
+
+        mGestureNavbarSpaceMode = Settings.System.getIntForUser(
+                resolver,
+                Settings.System.GESTURE_NAVBAR_SPACE_MODE,
+                GESTURE_NAVBAR_SPACE_DEFAULT,
+                UserHandle.USER_CURRENT);
     }
     
     private boolean isTablet() {
@@ -1328,8 +1354,51 @@ public class DisplayPolicy {
         }
     }
 
+    private static int scaleGestureNavbarInset(int value) {
+        if (value <= 0) {
+            return value;
+        }
+        return Math.max(
+                1,
+                Math.round(value * GESTURE_NAVBAR_COMPACT_SCALE));
+    }
+
+    @Nullable
+    private Insets adjustGestureNavbarInsets(
+            InsetsFrameProvider provider,
+            @Nullable Insets originalInsets) {
+        if (provider.getType() != Type.navigationBars()) {
+            return originalInsets;
+        }
+
+        final int interactionMode = getCurrentUserResources().getInteger(
+                R.integer.config_navBarInteractionMode);
+        if (interactionMode != NAV_BAR_MODE_GESTURAL) {
+            return originalInsets;
+        }
+
+        switch (mGestureNavbarSpaceMode) {
+            case GESTURE_NAVBAR_SPACE_COMPACT:
+                if (originalInsets == null) {
+                    return null;
+                }
+                return Insets.of(
+                        scaleGestureNavbarInset(originalInsets.left),
+                        scaleGestureNavbarInset(originalInsets.top),
+                        scaleGestureNavbarInset(originalInsets.right),
+                        scaleGestureNavbarInset(originalInsets.bottom));
+
+            case GESTURE_NAVBAR_SPACE_MINIMAL:
+                return Insets.NONE;
+
+            case GESTURE_NAVBAR_SPACE_DEFAULT:
+            default:
+                return originalInsets;
+        }
+    }
+
     @NonNull
-    private static TriFunction<DisplayFrames, WindowState, Rect, Integer> getFrameProvider(
+    private TriFunction<DisplayFrames, WindowState, Rect, Integer> getFrameProvider(
             WindowState win, int index, int overrideIndex) {
         return (displayFrames, windowState, inOutFrame) -> {
             final LayoutParams lp = win.mAttrs.forRotation(displayFrames.mRotation);
@@ -1352,9 +1421,11 @@ public class DisplayPolicy {
                     inOutFrame.set(ifp.getArbitraryRectangle());
                     break;
             }
-            final Insets insetsSize = overrideIndex == INSETS_OVERRIDE_INDEX_INVALID
+            Insets insetsSize = overrideIndex == INSETS_OVERRIDE_INDEX_INVALID
                     ? ifp.getInsetsSize()
                     : ifp.getInsetsSizeOverrides()[overrideIndex].getInsetsSize();
+
+            insetsSize = adjustGestureNavbarInsets(ifp, insetsSize);
 
             if (ifp.getMinimalInsetsSizeInDisplayCutoutSafe() != null) {
                 sTmpRect2.set(inOutFrame);

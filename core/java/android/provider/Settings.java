@@ -7413,6 +7413,14 @@ public final class Settings {
         public static final String GESTURE_NAVBAR_HEIGHT_MODE = "gesture_navbar_height_mode";
 
         /**
+         * Controls the amount of space reserved for the gesture navigation bar.
+         * Supported modes: 0 for default, 1 for compact and 2 for minimal.
+         * @hide
+         */
+        public static final String GESTURE_NAVBAR_SPACE_MODE =
+                "gesture_navbar_space_mode";
+
+        /**
          * Whether allowing pocket service to register sensors and dispatch informations.
          *   0 = disabled
          *   1 = enabled
