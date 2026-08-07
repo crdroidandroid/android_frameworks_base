@@ -64,11 +64,16 @@
     <string name="onthego_notif_error">Không thể khởi động trên đường đi</string>
     <string name="onthego_notif_restart">Khởi động lại trên đường đi</string>
     <string name="onthego_notif_camera_changed">Đã thay đổi chế độ máy ảnh</string>
-    <string name="onthego_transparency">Độ trong suốt</string>
-    <string name="onthego_front_camera">Sử dụng máy ảnh trước</string>
     <string name="onthego_service_toggle">Tự khởi động lại dịch vụ</string>
     <string name="onthego_channel_name">Điều khiển chính</string>
     <string name="global_action_onthego">Trên đường đi</string>
+    <string name="onthego_dialog_title">Trên đường đi</string>
+    <string name="onthego_opacity_title">Độ mờ của máy ảnh</string>
+    <string name="onthego_opacity_default">50%</string>
+    <string name="onthego_restart_title">Khởi động lại khi chuyển đổi máy ảnh</string>
+    <string name="onthego_restart_summary">Khởi động lại nhanh phần xem trước khi máy ảnh thay đổi</string>
+    <string name="onthego_front_camera_title">Máy ảnh mặt trước</string>
+    <string name="onthego_front_camera_summary">Sử dụng máy ảnh mặt trước thay vì máy ảnh mặt sau</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">hôm nay dùng</string>
     <string name="usage_data_weekly">đã dùng trong tuần</string>

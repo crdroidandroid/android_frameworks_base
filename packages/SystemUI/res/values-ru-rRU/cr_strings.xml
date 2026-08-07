@@ -64,11 +64,16 @@
     <string name="onthego_notif_error">Не удается включить режим «На ходу»</string>
     <string name="onthego_notif_restart">Перезапустить режим «На ходу»</string>
     <string name="onthego_notif_camera_changed">Режим камеры изменён</string>
-    <string name="onthego_transparency">Прозрачность</string>
-    <string name="onthego_front_camera">Использовать переднюю камеру</string>
     <string name="onthego_service_toggle">Автоматически перезапускать службу</string>
     <string name="onthego_channel_name">Основной</string>
     <string name="global_action_onthego">Режим «На ходу»</string>
+    <string name="onthego_dialog_title">Режим «На ходу»</string>
+    <string name="onthego_opacity_title">Прозрачность камеры</string>
+    <string name="onthego_opacity_default">50%</string>
+    <string name="onthego_restart_title">Перезапуск при переключении камеры</string>
+    <string name="onthego_restart_summary">Кратковременно перезапустить предварительный просмотр при смене камеры</string>
+    <string name="onthego_front_camera_title">Передняя камера</string>
+    <string name="onthego_front_camera_summary">Использовать переднюю камеру вместо задней</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">за сегодня</string>
     <string name="usage_data_weekly">за неделю</string>

@@ -64,11 +64,16 @@
     <string name="onthego_notif_error">Impossible de démarrer On-The-Go</string>
     <string name="onthego_notif_restart">Redémarrer On-The-Go</string>
     <string name="onthego_notif_camera_changed">Mode de caméra modifié</string>
-    <string name="onthego_transparency">Transparence</string>
-    <string name="onthego_front_camera">Utiliser la caméra frontale</string>
     <string name="onthego_service_toggle">Redémarrer automatiquement le service</string>
     <string name="onthego_channel_name">Principal</string>
     <string name="global_action_onthego">On-The-Go</string>
+    <string name="onthego_dialog_title">On-The-Go</string>
+    <string name="onthego_opacity_title">Opacité de la caméra</string>
+    <string name="onthego_opacity_default">50%</string>
+    <string name="onthego_restart_title">Redémarrer sur l\'interrupteur de l\'appareil photo</string>
+    <string name="onthego_restart_summary">Redémarrez brièvement l\'aperçu lorsque l\'appareil photo change</string>
+    <string name="onthego_front_camera_title">Caméra avant</string>
+    <string name="onthego_front_camera_summary">Utiliser la caméra avant au lieu de l\'arrière</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">utilisé aujourd\'hui</string>
     <string name="usage_data_weekly">utilisée cette semaine</string>

@@ -64,11 +64,16 @@
     <string name="onthego_notif_error">Yürüme modu başlatılamıyor</string>
     <string name="onthego_notif_restart">Yürüme modunu yeniden başlat</string>
     <string name="onthego_notif_camera_changed">Kamera modu değiştirildi</string>
-    <string name="onthego_transparency">Şeffaflık</string>
-    <string name="onthego_front_camera">Ön kamerayı kullan</string>
     <string name="onthego_service_toggle">Servisi otomatik yeniden başlat</string>
     <string name="onthego_channel_name">Ana menü</string>
     <string name="global_action_onthego">Yürüme modu</string>
+    <string name="onthego_dialog_title">Yürüme modu</string>
+    <string name="onthego_opacity_title">Camera opacity</string>
+    <string name="onthego_opacity_default">50%</string>
+    <string name="onthego_restart_title">Restart on camera switch</string>
+    <string name="onthego_restart_summary">Briefly restart the preview when the camera changes</string>
+    <string name="onthego_front_camera_title">Front camera</string>
+    <string name="onthego_front_camera_summary">Use the front camera instead of the rear</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">bugün kullanılan</string>
     <string name="usage_data_weekly">bu hafta kullanıldı</string>

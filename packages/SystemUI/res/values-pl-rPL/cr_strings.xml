@@ -64,11 +64,16 @@
     <string name="onthego_notif_error">Nie można uruchomić trybu \"w ruchu\"</string>
     <string name="onthego_notif_restart">Uruchom ponownie tryb \"w ruchu\"</string>
     <string name="onthego_notif_camera_changed">Zmieniono tryb pracy aparatu</string>
-    <string name="onthego_transparency">Przezroczystość</string>
-    <string name="onthego_front_camera">Użyj przedniego aparatu</string>
     <string name="onthego_service_toggle">Automatycznie uruchom ponownie usługę</string>
     <string name="onthego_channel_name">Główny</string>
     <string name="global_action_onthego">W ruchu</string>
+    <string name="onthego_dialog_title">W ruchu</string>
+    <string name="onthego_opacity_title">Przezroczystość kamery</string>
+    <string name="onthego_opacity_default">50%</string>
+    <string name="onthego_restart_title">Uruchom ponownie po przełączeniu aparatu</string>
+    <string name="onthego_restart_summary">Szybko uruchom ponownie podgląd po zmianie aparatu</string>
+    <string name="onthego_front_camera_title">Przedni aparat</string>
+    <string name="onthego_front_camera_summary">Używaj przedniego aparatu zamiast tylnego</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">użyto dzisiaj</string>
     <string name="usage_data_weekly">użyto w tym tygodniu</string>

@@ -64,11 +64,16 @@
     <string name="onthego_notif_error">On‑The‑Go nelze spustit</string>
     <string name="onthego_notif_restart">Restartovat On‑The‑Go</string>
     <string name="onthego_notif_camera_changed">Režim fotoaparátu byl změněn</string>
-    <string name="onthego_transparency">Průhlednost</string>
-    <string name="onthego_front_camera">Použít přední fotoaparát</string>
     <string name="onthego_service_toggle">Automaticky restartovat službu</string>
     <string name="onthego_channel_name">Hlavní</string>
     <string name="global_action_onthego">On‑The‑Go</string>
+    <string name="onthego_dialog_title">On‑The‑Go</string>
+    <string name="onthego_opacity_title">Neprůhlednost fotoaparátu</string>
+    <string name="onthego_opacity_default">50%</string>
+    <string name="onthego_restart_title">Restart on camera switch</string>
+    <string name="onthego_restart_summary">Briefly restart the preview when the camera changes</string>
+    <string name="onthego_front_camera_title">Přední fotoaparát</string>
+    <string name="onthego_front_camera_summary">Použít přední fotoaparát namísto zadního</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">využito dnes</string>
     <string name="usage_data_weekly">využito tento týden</string>
