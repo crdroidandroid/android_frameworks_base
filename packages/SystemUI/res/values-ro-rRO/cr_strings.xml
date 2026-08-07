@@ -68,12 +68,12 @@
     <string name="onthego_channel_name">Principal</string>
     <string name="global_action_onthego">On-The-Go</string>
     <string name="onthego_dialog_title">On-The-Go</string>
-    <string name="onthego_opacity_title">Camera opacity</string>
+    <string name="onthego_opacity_title">Opacitate cameră</string>
     <string name="onthego_opacity_default">50%</string>
-    <string name="onthego_restart_title">Restart on camera switch</string>
-    <string name="onthego_restart_summary">Briefly restart the preview when the camera changes</string>
-    <string name="onthego_front_camera_title">Front camera</string>
-    <string name="onthego_front_camera_summary">Use the front camera instead of the rear</string>
+    <string name="onthego_restart_title">Reporniți la comutatorul camerei</string>
+    <string name="onthego_restart_summary">Reporniți previzualizarea pe scurt atunci când camera se schimbă</string>
+    <string name="onthego_front_camera_title">Camera frontală</string>
+    <string name="onthego_front_camera_summary">Utilizați camera foto din față în loc de spate</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">utilizat azi</string>
     <string name="usage_data_weekly">utilizat în această săptămână</string>
@@ -113,9 +113,9 @@
     <string name="quick_settings_volume_panel_label">Panou de volum</string>
     <!-- Smart Pixels -->
     <string name="quick_settings_smart_pixels_label">Pixeli inteligenți</string>
-    <string name="quick_settings_smart_pixels_on">On</string>
-    <string name="quick_settings_smart_pixels_off">Off</string>
-    <string name="smart_pixels_percent_label">Pixel percentage</string>
+    <string name="quick_settings_smart_pixels_on">Activat</string>
+    <string name="quick_settings_smart_pixels_off">Dezactivat</string>
+    <string name="smart_pixels_percent_label">Procent pixeli</string>
     <string name="smart_pixels_percent_format"><xliff:g id="percent" example="25">%d</xliff:g>%%</string>
     <!-- Weather Tile -->
     <string name="omnijaws_service_error">Eroare la incărcare data vreme</string>
@@ -200,7 +200,7 @@
     <string name="ax_dynamic_bar_running">Rulează</string>
     <string name="ax_dynamic_bar_on">PORNITĂ</string>
     <string name="ax_dynamic_bar_recents">Recente</string>
-    <string name="ax_dynamic_bar_kill_app">Kill app</string>
+    <string name="ax_dynamic_bar_kill_app">Închide aplicația</string>
     <string name="ax_dynamic_bar_unlocked">Deblocat</string>
     <string name="ax_dynamic_bar_device_unlocked">Dispozitiv deblocat</string>
     <string name="ax_dynamic_bar_progress">Progres</string>
@@ -213,7 +213,7 @@
     <string name="ax_dynamic_bar_wireless_charging">Încărcare fără fir</string>
     <string name="ax_dynamic_bar_until_full">până când este plin</string>
     <string name="ax_dynamic_bar_battery_saver">Economisire baterie</string>
-    <string name="ax_dynamic_bar_call">Call</string>
+    <string name="ax_dynamic_bar_call">Apelați</string>
     <string name="ax_dynamic_bar_incoming_call">Apel primit</string>
     <string name="ax_dynamic_bar_connected">Conectat</string>
     <string name="ax_dynamic_bar_disconnect">Deconectare</string>
@@ -255,5 +255,5 @@
     <!-- Screenshot -->
     <string name="quick_settings_screenshot_label">Captură ecran</string>
     <!-- Blur QS tile -->
-    <string name="quick_settings_blur_label">Blur</string>
+    <string name="quick_settings_blur_label">Încețoșează</string>
 </resources>
