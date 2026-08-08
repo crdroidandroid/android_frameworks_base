@@ -31,7 +31,6 @@ import android.hardware.biometrics.BiometricSourceType;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.provider.Settings;
-import android.util.ArraySet;
 import android.util.MathUtils;
 import android.view.DisplayCutout;
 import android.view.View;
@@ -542,10 +541,6 @@ public class KeyguardStatusBarViewController extends ViewController<KeyguardStat
             AlphaOptimizedLinearLayout systemIcons =
                     mSystemIconsContainer.findViewById(R.id.statusIcons);
             SystemStatusIconsLayoutHelper.configurePaddingForNewStatusBarIcons(systemIcons);
-            mSecureSettings.registerContentObserverForUserSync(
-                    StatusBarIconController.ICON_HIDE_LIST,
-                    false, mIconHideListObserver, UserHandle.USER_ALL);
-            mIconHideListObserver.onChange(false, null);
         }
     }
 
@@ -577,7 +572,6 @@ public class KeyguardStatusBarViewController extends ViewController<KeyguardStat
         mStatusBarStateController.removeCallback(mStatusBarStateListener);
         mKeyguardUpdateMonitor.removeCallback(mKeyguardUpdateMonitorCallback);
         mDisableStateTracker.stopTracking(mCommandQueue);
-        mSecureSettings.unregisterContentObserverSync(mIconHideListObserver);
         mSecureSettings.unregisterContentObserverSync(mVolumeSettingObserver);
         if (mTintedIconManager != null) {
             mStatusBarIconController.removeIconGroup(mTintedIconManager);
@@ -805,19 +799,6 @@ public class KeyguardStatusBarViewController extends ViewController<KeyguardStat
         }
     }
 
-    private void updateBatteryVisibility() {
-        ArraySet<String> hideList = StatusBarIconController.getIconHideList(mContext,
-                Settings.Secure.getString(mContext.getContentResolver(),
-                        StatusBarIconController.ICON_HIDE_LIST));
-        mMainExecutor.execute(() -> {
-            if (hideList.contains("battery")) {
-                mSystemIconsContainer.removeView(mBatteryComposeView);
-            } else if (mSystemIconsContainer.indexOfChild(mBatteryComposeView) == -1) {
-                mSystemIconsContainer.addView(mBatteryComposeView, -1);
-            }
-        });
-    }
-
     @VisibleForTesting
     void updateBlockedIcons() {
         List<String> newBlockList = StatusBarIconBlocklistKt
@@ -915,13 +896,6 @@ public class KeyguardStatusBarViewController extends ViewController<KeyguardStat
     private boolean isMigrationEnabled() {
         return SceneContainerFlag.isEnabled();
     }
-
-    private final ContentObserver mIconHideListObserver = new ContentObserver(null) {
-        @Override
-        public void onChange(boolean selfChange) {
-            updateBatteryVisibility();
-        }
-    };
 
     private final ContentObserver mVolumeSettingObserver = new ContentObserver(null) {
         @Override
