@@ -32,6 +32,7 @@ internal class MinimalStyleRenderer(
     private var points = FloatArray(0)
     private var currentHeights = FloatArray(0)
     private var targetHeights = FloatArray(0)
+    private val path = Path()
 
     private var lastColor = 0
     private val smoothing = 0.3f
@@ -108,7 +109,7 @@ internal class MinimalStyleRenderer(
         }
 
         if (count >= 2 && points.size >= 4) {
-            val path = Path()
+            path.reset()
             path.moveTo(points[0], points[1])
 
             for (i in 0 until count - 1) {
