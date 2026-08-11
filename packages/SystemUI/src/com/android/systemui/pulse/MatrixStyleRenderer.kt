@@ -69,6 +69,7 @@ internal class MatrixStyleRenderer(
 
     private val smoothing = 0.22f
     private val numbers = arrayOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9")
+    private val hsvScratch = FloatArray(3).apply { this[1] = 1f; this[2] = 1f }
     
     private var changeCounter = 0
     private val changeInterval = 3
@@ -158,7 +159,8 @@ internal class MatrixStyleRenderer(
         if (currentColorMode == "lavalamp") {
             val time = System.currentTimeMillis()
             val hue = (time / 50) % 360
-            val lavaColor = Color.HSVToColor(255, floatArrayOf(hue.toFloat(), 1f, 1f))
+            hsvScratch[0] = hue.toFloat()
+            val lavaColor = Color.HSVToColor(255, hsvScratch)
             updatePaintColors(lavaColor)
         }
 
