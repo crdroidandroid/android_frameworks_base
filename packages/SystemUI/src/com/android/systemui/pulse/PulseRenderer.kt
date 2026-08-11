@@ -37,6 +37,7 @@ class PulseRenderer(
     private var lastColor = 0
     private var lastBarCount = -1
     private var lastDataSize = -1
+    private val hsvScratch = FloatArray(3).apply { this[1] = 1f; this[2] = 1f }
 
     fun updateHeights(newHeights: FloatArray) {
         ensureStyleUpToDate()
@@ -112,7 +113,8 @@ class PulseRenderer(
             "lavalamp" -> {
                 val time = System.currentTimeMillis()
                 val hue = (time / 50) % 360
-                Color.HSVToColor(alpha, floatArrayOf(hue.toFloat(), 1f, 1f))
+                hsvScratch[0] = hue.toFloat()
+                Color.HSVToColor(alpha, hsvScratch)
             }
             "accent" -> accentColor
             else -> Color.WHITE
