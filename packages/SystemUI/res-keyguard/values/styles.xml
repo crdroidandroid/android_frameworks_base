@@ -137,8 +137,7 @@
         <item name="android:gravity">start</item>
         <item name="android:ellipsize">end</item>
         <item name="android:maxLines">2</item>
-        <item name="android:fontFamily">variable-title-small</item>
-        <item name="android:fontFamily"></item>
+        <item name="android:fontFamily">variable-headline-large-emphasized</item>
         <item name="android:shadowColor">@color/keyguard_shadow_color</item>
         <item name="android:shadowRadius">?attr/shadowRadius</item>
     </style>
@@ -149,6 +148,7 @@
         <item name="android:lines">1</item>
         <item name="android:textSize">@dimen/widget_label_font_size</item>
         <item name="android:lineHeight">@dimen/widget_label_line_height</item>
+        <item name="android:fontFamily">variable-headline-medium-emphasized</item>
     </style>
 
     <style name="TextAppearance.Keyguard.BottomArea">
@@ -158,6 +158,7 @@
         <item name="android:textColor">?attr/wallpaperTextColor</item>
         <item name="android:shadowColor">@color/keyguard_shadow_color</item>
         <item name="android:shadowRadius">?attr/shadowRadius</item>
+        <item name="android:fontFamily">variable-title-small-emphasized</item>
     </style>
 
     <style name="TextAppearance.Keyguard.BottomArea.DoubleShadow">
