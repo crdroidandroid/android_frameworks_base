@@ -64,6 +64,14 @@ constructor(
         )
     }
 
+    val deviceEntryBackgroundViewAlpha: Flow<Float> =
+    transitionAnimation.sharedFlowWithShade(
+        duration = 300.milliseconds,
+        onStep = { step, isShadeExpanded -> if (isShadeExpanded) 0f else 1f - step },
+        onCancel = { 0f },
+        onFinish = { 0f },
+    )
+
     fun notificationAlpha(viewState: ViewStateAccessor): Flow<Float> {
         var startAlpha = 1f
         var leaveShadeOpen = false
