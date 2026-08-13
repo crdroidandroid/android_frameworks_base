@@ -82,6 +82,8 @@ constructor(
             )
         }
 
+    val deviceEntryBackgroundViewAlpha: Flow<Float> = keyguardAlpha
+
     // Show UMO as long as keyguard is not visible.
     val showUmo: Flow<Boolean> = keyguardAlpha.map { alpha -> alpha == 0f }
 
