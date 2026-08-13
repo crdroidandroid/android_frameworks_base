@@ -110,6 +110,8 @@ constructor(private val blurConfig: BlurConfig, animationFlow: KeyguardTransitio
             onFinish = { 0f },
         )
 
+    val deviceEntryBackgroundViewAlpha: Flow<Float> = shortcutsAlpha
+
     override val windowBlurRadius: Flow<Float> =
         transitionAnimation.sharedFlowWithShade(
             duration = FromLockscreenTransitionInteractor.TO_PRIMARY_BOUNCER_DURATION,
