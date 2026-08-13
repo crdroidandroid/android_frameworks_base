@@ -52,6 +52,7 @@ constructor(
     @ShadeDisplayAware configurationInteractor: ConfigurationInteractor,
     alternateBouncerToAodTransitionViewModel: AlternateBouncerToAodTransitionViewModel,
     alternateBouncerToDozingTransitionViewModel: AlternateBouncerToDozingTransitionViewModel,
+    alternateBouncerToGoneTransitionViewModel: AlternateBouncerToGoneTransitionViewModel,
     aodToLockscreenTransitionViewModel: AodToLockscreenTransitionViewModel,
     dozingToLockscreenTransitionViewModel: DozingToLockscreenTransitionViewModel,
     dreamingToAodTransitionViewModel: DreamingToAodTransitionViewModel,
@@ -122,6 +123,7 @@ constructor(
                 setOf(
                         alternateBouncerToAodTransitionViewModel.deviceEntryBackgroundViewAlpha,
                         alternateBouncerToDozingTransitionViewModel.deviceEntryBackgroundViewAlpha,
+                        alternateBouncerToGoneTransitionViewModel.deviceEntryBackgroundViewAlpha,
                         aodToLockscreenTransitionViewModel.deviceEntryBackgroundViewAlpha,
                         dozingToLockscreenTransitionViewModel.deviceEntryBackgroundViewAlpha,
                         dreamingToAodTransitionViewModel.deviceEntryBackgroundViewAlpha,
