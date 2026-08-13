@@ -69,6 +69,7 @@ constructor(
     primaryBouncerToDozingTransitionViewModel: PrimaryBouncerToDozingTransitionViewModel,
     primaryBouncerToLockscreenTransitionViewModel: PrimaryBouncerToLockscreenTransitionViewModel,
     lockscreenToDozingTransitionViewModel: LockscreenToDozingTransitionViewModel,
+    lockscreenToGlanceableHubTransitionViewModel: LockscreenToGlanceableHubTransitionViewModel,
     glanceableHubToAodTransitionViewModel: GlanceableHubToAodTransitionViewModel,
     glanceableHubToLockscreenTransitionViewModel: GlanceableHubToLockscreenTransitionViewModel,
     toLockscreenEndStateTransitionViewModel: ToLockscreenEndStateTransitionViewModel,
@@ -138,6 +139,7 @@ constructor(
                         primaryBouncerToLockscreenTransitionViewModel
                             .deviceEntryBackgroundViewAlpha,
                         lockscreenToDozingTransitionViewModel.deviceEntryBackgroundViewAlpha,
+                        lockscreenToGlanceableHubTransitionViewModel.deviceEntryBackgroundViewAlpha,
                         glanceableHubToAodTransitionViewModel.deviceEntryBackgroundViewAlpha,
                         glanceableHubToLockscreenTransitionViewModel.deviceEntryBackgroundViewAlpha,
                         toLockscreenEndStateTransitionViewModel.deviceEntryBackgroundViewAlpha,
