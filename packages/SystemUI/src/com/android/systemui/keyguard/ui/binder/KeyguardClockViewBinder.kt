@@ -16,6 +16,8 @@
 
 package com.android.systemui.keyguard.ui.binder
 
+import android.os.UserHandle
+import android.provider.Settings
 import android.transition.AutoTransition
 import android.transition.TransitionManager
 import android.transition.TransitionSet
@@ -88,11 +90,19 @@ object KeyguardClockViewBinder {
                                     lastClock = currentClock
                                 }
 
-                                addClockViews(currentClock, keyguardRootView)
+                                val isCustomClockEnabled = Settings.Secure.getIntForUser(
+                                    keyguardRootView.context.contentResolver,
+                                    Settings.Secure.LOCK_SCREEN_CUSTOM_CLOCK_STYLE,
+                                    0,
+                                    UserHandle.USER_CURRENT
+                                ) != 0
+
+                                addClockViews(currentClock, keyguardRootView, isCustomClockEnabled)
                                 updateBurnInLayer(
                                     keyguardRootView,
                                     viewModel,
                                     viewModel.clockSize.value,
+                                    isCustomClockEnabled,
                                 )
                                 applyConstraints(clockSection, keyguardRootView, true)
                                 currentClock?.apply { eventListeners.fire { onChangeComplete() } }
@@ -105,7 +115,13 @@ object KeyguardClockViewBinder {
 
                     launch {
                         viewModel.clockSize.collect { clockSize ->
-                            updateBurnInLayer(keyguardRootView, viewModel, clockSize)
+                            val isCustomClockEnabled = Settings.Secure.getIntForUser(
+                                keyguardRootView.context.contentResolver,
+                                Settings.Secure.LOCK_SCREEN_CUSTOM_CLOCK_STYLE,
+                                0,
+                                UserHandle.USER_CURRENT
+                            ) != 0
+                            updateBurnInLayer(keyguardRootView, viewModel, clockSize, isCustomClockEnabled)
                             blueprintInteractor.refreshBlueprint(Type.ClockSize)
                         }
                     }
@@ -210,7 +226,10 @@ object KeyguardClockViewBinder {
         keyguardRootView: ConstraintLayout,
         viewModel: KeyguardClockViewModel,
         clockSize: ClockSize,
+        isCustomClockEnabled: Boolean,
     ) {
+        if (isCustomClockEnabled) return
+
         val burnInLayer = viewModel.burnInLayer
         val clockController = viewModel.currentClock.value
         // Large clocks won't be added to or removed from burn in layer
@@ -244,7 +263,11 @@ object KeyguardClockViewBinder {
     }
 
     @VisibleForTesting
-    fun addClockViews(clockController: ClockController?, rootView: ConstraintLayout) {
+    fun addClockViews(
+        clockController: ClockController?,
+        rootView: ConstraintLayout,
+        isCustomClockEnabled: Boolean,
+    ) {
         // We'll collect the same clock when exiting wallpaper picker without changing clock
         // so we need to remove clock views from parent before addView again
         clockController?.let { clock ->
@@ -252,13 +275,17 @@ object KeyguardClockViewBinder {
                 if (it.parent != null) {
                     (it.parent as ViewGroup).removeView(it)
                 }
-                rootView.addView(it).apply { it.visibility = INVISIBLE }
+                if (!isCustomClockEnabled) {
+                    rootView.addView(it).apply { it.visibility = INVISIBLE }
+                }
             }
             clock.largeClock.layout.views.forEach {
                 if (it.parent != null) {
                     (it.parent as ViewGroup).removeView(it)
                 }
-                rootView.addView(it).apply { it.visibility = INVISIBLE }
+                if (!isCustomClockEnabled) {
+                    rootView.addView(it).apply { it.visibility = INVISIBLE }
+                }
             }
         }
     }
