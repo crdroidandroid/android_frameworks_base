@@ -29,6 +29,7 @@
     <protected-broadcast android:name="android.intent.action.SCREEN_OFF" />
     <protected-broadcast android:name="android.intent.action.SCREEN_ON" />
     <protected-broadcast android:name="android.intent.action.USER_PRESENT" />
+    <protected-broadcast android:name="android.intent.action.DISPLAY_STATE_CHANGED" />
     <protected-broadcast android:name="android.intent.action.TIME_SET" />
     <protected-broadcast android:name="android.intent.action.TIME_TICK" />
     <protected-broadcast android:name="android.intent.action.TIMEZONE_CHANGED" />
