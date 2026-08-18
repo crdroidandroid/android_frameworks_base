@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="ambient_indication_container_margin_top">10dp</dimen>
+</resources>
