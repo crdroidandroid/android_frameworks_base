@@ -85,9 +85,12 @@ import com.android.systemui.inputmethod.InputMethodModule;
 import com.android.systemui.keyboard.KeyboardModule;
 import com.android.systemui.keyevent.data.repository.KeyEventRepositoryModule;
 import com.android.systemui.keyguard.data.quickaffordance.KeyguardDataQuickAffordanceModule;
+import com.android.systemui.keyguard.domain.interactor.KeyguardInteractor;
+import com.android.systemui.keyguard.shared.model.KeyguardSection;
 import com.android.systemui.keyguard.shared.quickaffordance.KeyguardQuickAffordancesMetricsLogger;
 import com.android.systemui.keyguard.shared.quickaffordance.KeyguardQuickAffordancesMetricsLoggerImpl;
 import com.android.systemui.keyguard.ui.composable.LockscreenContent;
+import com.android.systemui.keyguard.ui.view.layout.sections.KeyguardSectionsModule;
 import com.android.systemui.lineage.LineageModule;
 import com.android.systemui.log.dagger.LogModule;
 import com.android.systemui.log.dagger.MonitorLog;
@@ -196,6 +199,9 @@ import com.android.systemui.wallet.dagger.WalletModule;
 import com.android.systemui.wmshell.BubblesManager;
 import com.android.wm.shell.bubbles.Bubbles;
 
+import com.google.android.systemui.keyguard.data.repository.AmbientIndicationRepository;
+import com.google.android.systemui.keyguard.domain.interactor.AmbientIndicationInteractor;
+import com.google.android.systemui.keyguard.ui.sections.DefaultAmbientIndicationAreaSection;
 import com.google.android.systemui.smartspace.BcSmartspaceDataProvider;
 import com.google.android.systemui.smartspace.DateSmartspaceDataProvider;
 import com.google.android.systemui.smartspace.KeyguardMediaViewController;
@@ -600,4 +606,23 @@ public abstract class SystemUIModule {
     static BcSmartspaceDataPlugin provideWeatherSmartspaceDataPlugin() {
         return new WeatherSmartspaceDataProvider();
     }
+
+    @Provides
+    @SysUISingleton
+    static AmbientIndicationRepository provideAmbientIndicationRepository() {
+        return new AmbientIndicationRepository();
+    }
+
+    @Provides
+    @SysUISingleton
+    static AmbientIndicationInteractor provideAmbientIndicationInteractor(
+            AmbientIndicationRepository repository,
+            KeyguardInteractor keyguardInteractor) {
+        return new AmbientIndicationInteractor(repository, keyguardInteractor);
+    }
+
+    @Binds
+    @Named(KeyguardSectionsModule.KEYGUARD_AMBIENT_INDICATION_AREA_SECTION)
+    abstract KeyguardSection bindDefaultAmbientIndicationAreaSection(
+            DefaultAmbientIndicationAreaSection impl);
 }

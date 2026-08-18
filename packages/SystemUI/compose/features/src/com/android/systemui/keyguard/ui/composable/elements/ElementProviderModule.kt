@@ -17,6 +17,7 @@
 package com.android.systemui.keyguard.ui.composable.elements
 
 import com.android.systemui.plugins.keyguard.ui.composable.elements.LockscreenElementProvider
+import com.google.android.systemui.keyguard.ui.composable.elements.GoogleAmbientIndicationElementProvider
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoSet
@@ -93,5 +94,11 @@ interface ElementProviderModule {
     @IntoSet
     fun ambientIndicationAreaProvider(
         impl: AmbientIndicationAreaProvider
+    ): LockscreenElementProvider
+
+    @Binds
+    @IntoSet
+    fun googleAmbientIndicationElementProvider(
+        impl: GoogleAmbientIndicationElementProvider
     ): LockscreenElementProvider
 }

@@ -64,6 +64,7 @@ import com.android.systemui.temporarydisplay.chipbar.ChipbarCoordinator
 import com.android.systemui.usb.StorageNotification
 import com.android.systemui.util.NotificationChannels
 import com.android.systemui.wmshell.WMShell
+import com.google.android.systemui.keyguard.AmbientIndicationCoreStartable
 import com.google.android.systemui.smartspace.KeyguardSmartspaceStartable
 import dagger.Binds
 import dagger.Module
@@ -363,6 +364,14 @@ abstract class SystemUICoreStartableModule {
     @IntoMap
     @ClassKey(KeyguardSmartspaceStartable::class)
     abstract fun bindKeyguardSmartspaceStartable(impl: KeyguardSmartspaceStartable): CoreStartable
+
+    /** Inject into AmbientIndicationCoreStartable. */
+    @Binds
+    @IntoMap
+    @ClassKey(AmbientIndicationCoreStartable::class)
+    abstract fun bindAmbientIndicationCoreStartable(
+        impl: AmbientIndicationCoreStartable
+    ): CoreStartable
 
     @Binds
     @IntoMap
