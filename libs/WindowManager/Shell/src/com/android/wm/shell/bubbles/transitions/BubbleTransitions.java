@@ -1287,9 +1287,11 @@ public class BubbleTransitions {
             final Rect bounds = new Rect();
             mPositioner.getTaskViewRestBounds(bounds);
             final WindowContainerToken bubbleRootTask =
-                    Objects.requireNonNull(mBubbleHelper.getAppBubbleRootTaskToken());
-            wct.setBounds(bubbleRootTask, bounds);
-            wct.setAlwaysOnTop(bubbleRootTask, true);
+                    mBubbleHelper.getAppBubbleRootTaskToken();
+            if (bubbleRootTask != null) {
+                wct.setBounds(bubbleRootTask, bounds);
+                wct.setAlwaysOnTop(bubbleRootTask, true);
+            }
 
             BubbleLog.d("LaunchOrConvertToBubble.handleRequest(), set root bounds %s", bounds);
             if (BubbleFlagHelper.isBubbleTransitionPlannerEnabled()) {
