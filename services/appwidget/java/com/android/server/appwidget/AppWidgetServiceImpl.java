@@ -4024,21 +4024,19 @@ class AppWidgetServiceImpl extends IAppWidgetService.Stub implements WidgetBacku
             // provide widgets.
             flags |= PackageManager.MATCH_DEBUG_TRIAGED_MISSING;
 
-            // Widget hosts that are non-crypto aware may be hosting widgets
-            // from a profile that is still locked, so let them see those
-            // widgets.
-            if (isProfileWithUnlockedParent(userId)) {
-                flags |= PackageManager.MATCH_DIRECT_BOOT_AWARE
-                        | PackageManager.MATCH_DIRECT_BOOT_UNAWARE;
-            }
+            flags |= PackageManager.MATCH_DIRECT_BOOT_AWARE
+                    | PackageManager.MATCH_DIRECT_BOOT_UNAWARE;
 
             // Widgets referencing shared libraries need to have their
             // dependencies loaded.
             flags |= PackageManager.GET_SHARED_LIBRARY_FILES;
 
-            return mPackageManager.queryIntentReceivers(intent,
+            List<ResolveInfo> receivers = mPackageManager.queryIntentReceivers(intent,
                     intent.resolveTypeIfNeeded(mContext.getContentResolver()),
                     flags, userId).getList();
+            Slog.i(TAG, "queryIntentReceivers for user " + userId + " found: "
+                    + receivers.size() + " receivers.");
+            return receivers;
         } catch (RemoteException re) {
             return Collections.emptyList();
         } finally {
@@ -4069,6 +4067,7 @@ class AppWidgetServiceImpl extends IAppWidgetService.Stub implements WidgetBacku
             Trace.traceEnd(Trace.TRACE_TAG_ACTIVITY_MANAGER);
 
             final int N = mProviders.size();
+            Slog.i(TAG, "handleUserUnlocked: " + userId + " mProviders size: " + N);
             for (int i = 0; i < N; i++) {
                 Provider provider = mProviders.get(i);
 
@@ -5087,18 +5086,6 @@ class AppWidgetServiceImpl extends IAppWidgetService.Stub implements WidgetBacku
             }
         } finally {
             Binder.restoreCallingIdentity(token);
-        }
-        return false;
-    }
-
-    private boolean isProfileWithUnlockedParent(int userId) {
-        UserInfo userInfo = mUserManager.getUserInfo(userId);
-        if (userInfo != null && userInfo.isProfile()) {
-            UserInfo parentInfo = mUserManager.getProfileParent(userId);
-            if (parentInfo != null
-                    && mUserManager.isUserUnlockingOrUnlocked(parentInfo.getUserHandle())) {
-                return true;
-            }
         }
         return false;
     }
