@@ -116,8 +116,15 @@ class FaceAuthenticationClient
 
     @Override
     protected void startHalOperation() {
+        final ISenseService daemon = getFreshDaemon();
+        if (daemon == null) {
+            Slog.e(TAG, "Sense service not connected for user: " + getTargetUserId());
+            onError(BiometricFaceConstants.FACE_ERROR_HW_UNAVAILABLE, 0 /* vendorCode */);
+            mCallback.onClientFinished(this, false /* success */);
+            return;
+        }
         try {
-            getFreshDaemon().authenticate(mOperationId);
+            daemon.authenticate(mOperationId);
         } catch (RemoteException e) {
             Slog.e(TAG, "Remote exception when requesting auth", e);
             onError(BiometricFaceConstants.FACE_ERROR_HW_UNAVAILABLE, 0 /* vendorCode */);
