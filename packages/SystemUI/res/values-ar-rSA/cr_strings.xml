@@ -228,7 +228,7 @@
     <string name="ax_dynamic_bar_connecting">جاري الاتصال\u2026</string>
     <string name="ax_dynamic_bar_one_device">1 جهاز</string>
     <string name="ax_dynamic_bar_bluetooth_device">أجهزة بلوتوث</string>
-    <string name="ax_dynamic_bar_apps_count"><xliff:g id="count" example="2">%d</xliff:g> apps</string>
+    <string name="ax_dynamic_bar_apps_count">‏<xliff:g id="Count_1">%1$d</xliff:g> شريحة Sim</string>
     <string name="ax_dynamic_bar_just_now">الآن</string>
     <string name="ax_dynamic_bar_mins_ago"><xliff:g id="count" example="5">%d</xliff:g> منذ دقيقة</string>
     <string name="ax_dynamic_bar_hours_ago"><xliff:g id="count" example="2">%d</xliff:g> منذ ساعة</string>
@@ -258,5 +258,5 @@
     <!-- Screenshot -->
     <string name="quick_settings_screenshot_label">لقطة الشاشة</string>
     <!-- Blur QS tile -->
-    <string name="quick_settings_blur_label">Blur</string>
+    <string name="quick_settings_blur_label">ضبابي</string>
 </resources>
