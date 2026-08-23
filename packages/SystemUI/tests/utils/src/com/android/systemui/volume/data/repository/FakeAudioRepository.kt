@@ -108,6 +108,10 @@ class FakeAudioRepository : AudioRepository {
 
     override suspend fun setAppVolume(packageName: String, volume: Float) {}
 
+    fun setAppVolumeSessions(sessions: List<AppVolume>) {
+        mutableAppVolumeSessions.value = sessions
+    }
+
     override suspend fun setAppMuted(packageName: String, mute: Boolean) {}
 
     override suspend fun getLastAudibleVolume(audioStream: AudioStream): Int =

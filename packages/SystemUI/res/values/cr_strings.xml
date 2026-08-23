@@ -209,4 +209,8 @@
 
     <!-- Label for UI element which allows to use lens on screenshot [CHAR LIMIT=30] -->
     <string name="screenshot_lens_label">Lens</string>
+
+    <!-- Per-app volume panel -->
+    <string name="app_volume">App volume</string>
+    <string name="app_volume_no_active_apps">No active audio playback</string>
 </resources>
