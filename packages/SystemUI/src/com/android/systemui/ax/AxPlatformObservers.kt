@@ -29,6 +29,8 @@ import android.media.MediaMetadata
 import android.media.session.PlaybackState
 import android.nfc.NfcAdapter
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.os.RemoteException
 import android.os.UserHandle
 import android.provider.Settings
@@ -80,6 +82,7 @@ import lineageos.app.ProfileManager
 import lineageos.hardware.LineageHardwareManager
 import lineageos.providers.LineageSettings
 import java.util.concurrent.Executor
+import java.util.concurrent.Executors
 import javax.inject.Inject
 
 @SysUISingleton
@@ -424,13 +427,31 @@ class AxPlatformObservers @Inject constructor(
 
     private fun getAllBluetoothDevices() = featureController.getAllBluetoothDevices()
 
-    private val bluetoothCallback = object : BluetoothController.Callback {
-        override fun onBluetoothStateChange(enabled: Boolean) = broadcastBluetoothState(enabled)
-        override fun onBluetoothDevicesChanged() =
-            broadcastBluetoothState(bluetoothController.isBluetoothEnabled)
+    private val mainHandler = Handler(Looper.getMainLooper())
+    private val bluetoothExecutor = Executors.newSingleThreadExecutor()
+    private var pendingBluetoothEnabled: Boolean? = null
+
+    private val bluetoothBroadcastRunnable = Runnable {
+        val enabled = pendingBluetoothEnabled ?: return@Runnable
+        pendingBluetoothEnabled = null
+        bluetoothExecutor.execute { broadcastBluetoothStateInternal(enabled) }
     }
 
-    private fun broadcastBluetoothState(enabled: Boolean) {
+    private val bluetoothCallback = object : BluetoothController.Callback {
+        override fun onBluetoothStateChange(enabled: Boolean) =
+            scheduleBluetoothBroadcast(enabled)
+        override fun onBluetoothDevicesChanged() =
+            scheduleBluetoothBroadcast(bluetoothController.isBluetoothEnabled)
+    }
+
+    private fun scheduleBluetoothBroadcast(enabled: Boolean) {
+        pendingBluetoothEnabled = enabled
+        mainHandler.removeCallbacks(bluetoothBroadcastRunnable)
+        mainHandler.postDelayed(bluetoothBroadcastRunnable,
+            BLUETOOTH_BROADCAST_DEBOUNCE_MS)
+    }
+
+    private fun broadcastBluetoothStateInternal(enabled: Boolean) {
         val devices = getAllBluetoothDevices()
         val deviceBundles = ArrayList<Bundle>()
         devices.forEach { device ->
@@ -891,6 +912,8 @@ class AxPlatformObservers @Inject constructor(
 
     companion object {
         private const val TAG = "AxPlatformObservers"
+
+        private const val BLUETOOTH_BROADCAST_DEBOUNCE_MS = 250L
 
         private const val ACTION_AMBIENT_SHOW =
             "com.google.android.ambientindication.action.AMBIENT_INDICATION_SHOW"
