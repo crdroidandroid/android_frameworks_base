@@ -83,11 +83,11 @@ class AudioVolumeInteractor(
         }
     }
 
+    val appVolumeSessions: StateFlow<List<AppVolume>>
+        get() = audioRepository.appVolumeSessions
+
     fun getAppVolume(packageName: String): Flow<AppVolume?> =
-        audioRepository.appVolumeSessions
-            .map { appVolumes ->
-                appVolumes.find { it.packageName == packageName }
-            }
+        appVolumeSessions.map { appVolumes -> appVolumes.find { it.packageName == packageName } }
 
     suspend fun setAppVolume(packageName: String, volume: Float) {
         audioRepository.setAppVolume(packageName, volume)
