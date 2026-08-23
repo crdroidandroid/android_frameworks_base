@@ -25,6 +25,8 @@ import com.android.systemui.statusbar.phone.systemUIDialogFactory
 import com.android.systemui.util.mockito.mock
 import com.android.systemui.volume.VolumePanelDialogManager
 import com.android.systemui.volume.dialog.domain.interactor.expandedAudioTileDetailsFeatureInteractor
+import com.android.systemui.volume.panel.component.appvolume.domain.interactor.appVolumePanelGlobalStateInteractor
+import com.android.systemui.volume.panel.component.appvolume.ui.viewmodel.appVolumePanelViewModelFactory
 import com.android.systemui.volume.panel.domain.interactor.volumePanelGlobalStateInteractor
 import com.android.systemui.volume.panel.ui.viewmodel.volumePanelViewModelFactory
 
@@ -40,5 +42,7 @@ val Kosmos.volumeNavigator by
             uiEventLoggerFake,
             volumePanelGlobalStateInteractor,
             expandedAudioTileDetailsFeatureInteractor,
+            appVolumePanelGlobalStateInteractor,
+            appVolumePanelViewModelFactory,
         )
     }
