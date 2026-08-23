@@ -39,11 +39,20 @@ constructor(
                 TextUtils.equals(Settings.Panel.ACTION_VOLUME, intent.action)
         ) {
             volumeNavigator.openVolumePanel(volumePanelNavigationInteractor.getVolumePanelRoute())
+        } else if (
+            TextUtils.equals(LAUNCH_APP_VOLUME_ACTION, intent.action) ||
+                TextUtils.equals(Settings.Panel.ACTION_APP_VOLUME, intent.action)
+        ) {
+            volumeNavigator.openVolumePanel(
+                volumePanelNavigationInteractor.getAppVolumePanelRoute()
+            )
         }
     }
 
     companion object {
         const val LAUNCH_ACTION = "com.android.systemui.action.LAUNCH_VOLUME_PANEL_DIALOG"
+        const val LAUNCH_APP_VOLUME_ACTION =
+            "com.android.systemui.action.LAUNCH_APP_VOLUME_PANEL_DIALOG"
         const val DISMISS_ACTION = "com.android.systemui.action.DISMISS_VOLUME_PANEL_DIALOG"
     }
 }
