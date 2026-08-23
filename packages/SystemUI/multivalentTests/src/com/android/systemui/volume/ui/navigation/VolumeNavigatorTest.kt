@@ -28,6 +28,8 @@ import com.android.systemui.plugins.activityStarter
 import com.android.systemui.testKosmos
 import com.android.systemui.volume.dialog.domain.interactor.expandedAudioTileDetailsFeatureInteractor
 import com.android.systemui.volume.domain.model.VolumePanelRoute
+import com.android.systemui.volume.panel.component.appvolume.domain.interactor.appVolumePanelGlobalStateInteractor
+import com.android.systemui.volume.panel.component.appvolume.ui.viewmodel.appVolumePanelViewModelFactory
 import com.android.systemui.volume.panel.domain.interactor.volumePanelGlobalStateInteractor
 import com.android.systemui.volume.panel.ui.viewmodel.volumePanelViewModelFactory
 import com.google.common.truth.Truth.assertThat
@@ -72,6 +74,8 @@ class VolumeNavigatorTest : SysuiTestCase() {
                 uiEventLoggerFake,
                 volumePanelGlobalStateInteractor,
                 expandedAudioTileDetailsFeatureInteractor,
+                appVolumePanelGlobalStateInteractor,
+                appVolumePanelViewModelFactory,
             )
         }
 
@@ -97,6 +101,34 @@ class VolumeNavigatorTest : SysuiTestCase() {
                 val panelState by collectLastValue(volumePanelGlobalStateInteractor.globalState)
 
                 underTest.openVolumePanel(VolumePanelRoute.COMPOSE_VOLUME_PANEL)
+                runCurrent()
+
+                assertThat(panelState!!.isVisible).isTrue()
+            }
+        }
+
+    @Test
+    fun showAppVolumePanel_keyguardLocked_notShown() =
+        with(kosmos) {
+            testScope.runTest {
+                val panelState by collectLastValue(appVolumePanelGlobalStateInteractor.globalState)
+
+                underTest.openVolumePanel(VolumePanelRoute.APP_VOLUME_PANEL)
+                runCurrent()
+
+                assertThat(panelState!!.isVisible).isFalse()
+            }
+        }
+
+    @Test
+    fun showAppVolumePanel_keyguardUnlocked_shown() =
+        with(kosmos) {
+            testScope.runTest {
+                whenever(activityStarter.dismissKeyguardThenExecute(any(), any(), anyBoolean()))
+                    .then { (it.arguments[0] as ActivityStarter.OnDismissAction).onDismiss() }
+                val panelState by collectLastValue(appVolumePanelGlobalStateInteractor.globalState)
+
+                underTest.openVolumePanel(VolumePanelRoute.APP_VOLUME_PANEL)
                 runCurrent()
 
                 assertThat(panelState!!.isVisible).isTrue()
