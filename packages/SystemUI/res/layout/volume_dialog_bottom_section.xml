@@ -13,8 +13,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
-       xmlns:androidprv="http://schemas.android.com/apk/prv/res/android">
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
 
     <com.android.systemui.volume.CaptionsToggleImageButton
         android:id="@+id/odi_captions_icon"
@@ -33,11 +32,12 @@
         android:layout_width="@dimen/volume_dialog_button_size"
         android:layout_height="@dimen/volume_dialog_button_size"
         android:layout_gravity="center"
-        android:background="@drawable/volume_dialog_captions_button_transition_bg"
-        android:contentDescription="@string/accessibility_volume_settings"
+        android:background="@drawable/ripple_drawable_20dp"
+        android:contentDescription="@string/app_volume"
         android:scaleType="centerInside"
         android:soundEffectsEnabled="false"
-        android:tint="@androidprv:color/materialColorPrimary"
+        android:padding="4dp"
+        android:tint="@color/materialColorPrimary"
         android:visibility="gone"/>
 
     <ImageButton
