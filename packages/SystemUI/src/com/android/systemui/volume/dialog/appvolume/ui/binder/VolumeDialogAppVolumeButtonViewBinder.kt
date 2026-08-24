@@ -39,13 +39,6 @@ constructor(
             }
             .launchInTraced("VDAVBVB#isVisible", this)
 
-        // Set color filter to match captions button disabled state (theme-aware)
-        appVolumeButton.setColorFilter(
-            appVolumeButton.context.getColor(
-                com.android.internal.R.color.materialColorOnSurface
-            )
-        )
-
         appVolumeButton.setOnClickListener {
             viewModel.onButtonClicked()
             Events.writeEvent(Events.EVENT_SETTINGS_CLICK)
