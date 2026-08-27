@@ -1222,6 +1222,8 @@ public class WallpaperManagerService extends IWallpaperManager.Stub
                     // It's fine to be locked in here since the binder is oneway.
                     if (mWallpaper.primaryColors == null) {
                         connector.mEngine.requestWallpaperColors();
+                    } else {
+                        notifyWallpaperColorsChangedOnDisplay(mWallpaper, displayId);
                     }
                 } catch (RemoteException e) {
                     Slog.w(TAG, "Failed to request wallpaper colors", e);
