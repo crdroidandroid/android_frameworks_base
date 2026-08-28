@@ -26,6 +26,7 @@ import static android.view.MotionEvent.ACTION_UP;
 import static com.android.app.tracing.TrackGroupUtils.trackGroup;
 import static com.android.internal.jank.InteractionJankMonitor.CUJ_NOTIFICATION_SHADE_SCROLL_FLING;
 import static com.android.internal.jank.InteractionJankMonitor.CUJ_SHADE_CLEAR_ALL;
+import static com.android.systemui.Flags.lockscreenBlurForNotifications;
 import static com.android.systemui.Flags.notificationDebugDrawing;
 import static com.android.systemui.Flags.physicalNotificationMovement;
 import static com.android.systemui.Flags.widerLandscapeNotifications;
@@ -627,6 +628,8 @@ public class NotificationStackScrollLayout
      */
     private HeightSuppressionState mSuppressHeightState = HeightSuppressionState.None;
     private boolean mIsOnLockscreen;
+    /** Whether child rows have been told to drop their background blur regions. */
+    private boolean mBlurRegionsSuppressed;
 
     /** Pass splitShadeStateController to view and update split shade */
     public void passSplitShadeStateController(SplitShadeStateController splitShadeStateController) {
@@ -1730,10 +1733,28 @@ public class NotificationStackScrollLayout
     @Override
     public void setAlpha(float alpha) {
         super.setAlpha(alpha);
+        updateChildrenBlurRegionSuppression(alpha);
         if (Trace.isEnabled()) {
             Trace.setCounter(
                     trackGroup(/* groupName= */ "shade", /* trackName= */ "NSSLResultingAlpha"),
                     (int) (alpha * 100));
+        }
+    }
+
+    /** Drop child blur regions while faded out (they ignore ancestor alpha), restore when visible. */
+    private void updateChildrenBlurRegionSuppression(float alpha) {
+        if (!lockscreenBlurForNotifications()) {
+            return;
+        }
+        boolean suppressed = alpha < 0.01f;
+        if (mBlurRegionsSuppressed == suppressed) {
+            return;
+        }
+        mBlurRegionsSuppressed = suppressed;
+        for (int i = 0; i < getChildCount(); i++) {
+            if (getChildAt(i) instanceof ActivatableNotificationView anv) {
+                anv.setBlurRegionSuppressed(suppressed);
+            }
         }
     }
 
@@ -3488,6 +3509,9 @@ public class NotificationStackScrollLayout
                     mOnChildSensitivityChangedListener);
             if (SceneContainerFlag.isEnabled()) {
                 row.setOnKeyguard(mIsOnLockscreen);
+            }
+            if (mBlurRegionsSuppressed) {
+                row.setBlurRegionSuppressed(true);
             }
         }
         generateAddAnimation(child, false /* fromMoreCard */);
