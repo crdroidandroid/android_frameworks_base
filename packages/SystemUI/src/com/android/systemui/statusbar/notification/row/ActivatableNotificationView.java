@@ -894,6 +894,11 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
         }
     }
 
+    /** Suppresses/restores this row's background blur region while the stack is faded out. */
+    public void setBlurRegionSuppressed(boolean suppressed) {
+        mBackgroundNormal.setBlurRegionSuppressed(suppressed);
+    }
+
     /**
      * Whether this row is displayed over the unoccluded lockscreen. Returns false on the
      * locked shade.
