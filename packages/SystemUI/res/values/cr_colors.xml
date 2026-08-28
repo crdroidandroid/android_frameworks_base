@@ -22,4 +22,8 @@
     <!-- Ambient indication -->
     <color name="material_deep_teal_300">@*android:color/material_deep_teal_300</color>
     <color name="material_grey_100">@*android:color/material_grey_100</color>
+
+    <!-- Mobile data enable confirmation dialog: "Don't ask me again" checkbox row -->
+    <color name="mobile_data_dialog_checkbox_bg">@color/materialColorSurfaceContainerHigh</color>
+    <color name="mobile_data_dialog_checkbox_text">@color/materialColorOnSurface</color>
 </resources>
