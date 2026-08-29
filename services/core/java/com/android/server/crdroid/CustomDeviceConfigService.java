@@ -23,6 +23,7 @@ public class CustomDeviceConfigService extends SystemService {
 
     @Override
     public void onStart() {
+        DeviceConfigUtils.setDefaultProperties(null, null);
     }
 
     @Override
