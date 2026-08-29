@@ -82,6 +82,8 @@ import android.content.pm.PackageManagerInternal;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
 import android.content.pm.UserInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -225,6 +227,7 @@ public class WallpaperManagerService extends IWallpaperManager.Stub
      */
     private static final long MIN_WALLPAPER_CRASH_TIME = 10000;
     private static final int MAX_WALLPAPER_COMPONENT_LOG_LENGTH = 128;
+    private static final int WALLPAPER_COLOR_BITMAP_MAX_AREA = 112 * 112;
 
     /**
      * Observes the wallpaper for changes and notifies all IWallpaperServiceCallbacks
@@ -2980,6 +2983,7 @@ public class WallpaperManagerService extends IWallpaperManager.Stub
                 userId, false, true, "getWallpaperColors", null);
 
         WallpaperData wallpaperData = null;
+        boolean shouldExtract;
 
         synchronized (mLock) {
             if (which == FLAG_LOCK) {
@@ -2995,9 +2999,77 @@ public class WallpaperManagerService extends IWallpaperManager.Stub
             if (wallpaperData == null) {
                 return null;
             }
+            shouldExtract = wallpaperData.primaryColors == null;
+        }
+
+        if (shouldExtract && extractStaticWallpaperColors(wallpaperData)) {
+            notifyWallpaperColorsChangedOnDisplay(wallpaperData, displayId);
         }
 
         return getAdjustedWallpaperColorsOnDimming(wallpaperData);
+    }
+
+    /**
+     * Fallback for a static ImageWallpaper engine that did not publish its initial colors.
+     *
+     * @return {@code true} when colors were extracted and stored for the current wallpaper.
+     */
+    private boolean extractStaticWallpaperColors(WallpaperData wallpaper) {
+        final String cropFile;
+        final int wallpaperId;
+        final float dimAmount;
+
+        synchronized (mLock) {
+            if (wallpaper.primaryColors != null) {
+                return false;
+            }
+            final boolean imageWallpaper = mImageWallpaper.equals(wallpaper.getComponent())
+                    || wallpaper.getComponent() == null;
+            if (!imageWallpaper || !wallpaper.getCropFile().exists()) {
+                return false;
+            }
+            cropFile = wallpaper.getCropFile().getAbsolutePath();
+            wallpaperId = wallpaper.wallpaperId;
+            dimAmount = wallpaper.mWallpaperDimAmount;
+        }
+
+        final BitmapFactory.Options bounds = new BitmapFactory.Options();
+        bounds.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(cropFile, bounds);
+        if (bounds.outWidth <= 0 || bounds.outHeight <= 0) {
+            Slog.w(TAG, "Cannot extract colors because static wallpaper bounds are invalid");
+            return false;
+        }
+
+        int sampleSize = 1;
+        while ((long) (bounds.outWidth / sampleSize) * (bounds.outHeight / sampleSize)
+                > WALLPAPER_COLOR_BITMAP_MAX_AREA) {
+            sampleSize *= 2;
+        }
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = sampleSize;
+        final Bitmap bitmap = BitmapFactory.decodeFile(cropFile, options);
+        if (bitmap == null) {
+            Slog.w(TAG, "Cannot extract colors because static wallpaper could not be read");
+            return false;
+        }
+
+        final WallpaperColors colors;
+        try {
+            colors = WallpaperColors.fromBitmap(bitmap, dimAmount);
+        } finally {
+            bitmap.recycle();
+        }
+
+        synchronized (mLock) {
+            if (wallpaper.wallpaperId != wallpaperId || wallpaper.primaryColors != null) {
+                return false;
+            }
+            wallpaper.primaryColors = colors;
+            wallpaper.mIsColorExtractedFromDim = false;
+            saveSettingsLocked(wallpaper.userId);
+            return true;
+        }
     }
 
     /**
