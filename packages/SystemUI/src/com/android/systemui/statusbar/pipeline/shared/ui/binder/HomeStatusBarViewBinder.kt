@@ -36,6 +36,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.android.app.animation.Interpolators
 import com.android.systemui.crdroid.batterybar.BatteryBarController
 import com.android.systemui.crdroid.logo.LogoImage
+import com.android.systemui.display.dagger.SystemUIDisplaySubcomponent.DisplayAware
 import com.android.systemui.display.dagger.SystemUIDisplaySubcomponent.PerDisplaySingleton
 import com.android.systemui.lifecycle.repeatWhenAttached
 import com.android.systemui.res.R
@@ -62,6 +63,7 @@ import com.android.systemui.statusbar.phone.ui.StatusBarIconController
 import com.android.systemui.statusbar.pipeline.shared.ui.model.VisibilityModel
 import com.android.systemui.statusbar.pipeline.shared.ui.viewmodel.HomeStatusBarViewModel
 import com.android.systemui.statusbar.policy.Clock
+import com.android.systemui.statusbar.policy.ConfigurationController
 import javax.inject.Inject
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -98,7 +100,8 @@ interface HomeStatusBarViewBinder {
 class HomeStatusBarViewBinderImpl
 @Inject
 constructor(
-    private val viewStoreFactory: ConnectedDisplaysStatusBarNotificationIconViewStore.Factory
+    private val viewStoreFactory: ConnectedDisplaysStatusBarNotificationIconViewStore.Factory,
+    @DisplayAware private val configurationController: ConfigurationController,
 ) : HomeStatusBarViewBinder {
     private companion object {
         private const val CLOCK_POSITION_RIGHT = 0
@@ -111,6 +114,7 @@ constructor(
         val denyListed: Boolean,
         val hideForHun: Boolean,
         val chipStyle: Int,
+        val themeVersion: Int,
         val position: Int,
         val visibilityModel: VisibilityModel,
     )
@@ -166,6 +170,7 @@ constructor(
                             denyListed = false,
                             hideForHun = false,
                             chipStyle = 0,
+                            themeVersion = 0,
                             position = context.contentResolver.readClockPosition(),
                             visibilityModel = VisibilityModel(View.GONE, true),
                         )
@@ -247,7 +252,12 @@ constructor(
                         }
                     }
 
-                val urisToObserve = listOf(clockAutoHideUri, iconHideListUri, statusBarClockUri, statusBarClockChipUri)
+                val urisToObserve = listOf(
+                    clockAutoHideUri,
+                    iconHideListUri,
+                    statusBarClockUri,
+                    statusBarClockChipUri,
+                )
                 urisToObserve.forEach { uri ->
                     context.contentResolver.registerContentObserver(
                         uri,
@@ -258,11 +268,22 @@ constructor(
                     contentObserver.onChange(false, uri)
                 }
 
+                val configurationListener =
+                    object : ConfigurationController.ConfigurationListener {
+                        override fun onThemeChanged() {
+                            clockState.update { current ->
+                                current.copy(themeVersion = current.themeVersion + 1)
+                            }
+                        }
+                    }
+                configurationController.addCallback(configurationListener)
+
                 // Ensure cleanup when lifecycle ends
                 val job = coroutineContext[Job]
                 job?.invokeOnCompletion {
                     runCatching {
                         context.contentResolver.unregisterContentObserver(contentObserver)
+                        configurationController.removeCallback(configurationListener)
                         TaskStackChangeListeners.getInstance()
                             .unregisterTaskStackListener(taskStackListener)
                     }
@@ -465,6 +486,7 @@ constructor(
                     launch {
                         var lastChipStyle: Int? = null
                         var lastClockPosition: Int? = null
+                        var lastThemeVersion: Int? = null
 
                         clockState.collect { state ->
                             // We only want to hide left clock for HUN
@@ -504,6 +526,7 @@ constructor(
                             // Only touch chip UI when needed
                             val chipNeedsUpdate = (lastChipStyle != state.chipStyle)
                                         || (lastClockPosition != state.position)
+                                        || (lastThemeVersion != state.themeVersion)
                             if (chipNeedsUpdate) {
                                 applyClockChip(
                                     context = context,
@@ -518,6 +541,7 @@ constructor(
                                 )
                                 lastChipStyle = state.chipStyle
                                 lastClockPosition = state.position
+                                lastThemeVersion = state.themeVersion
                             }
                         }
                     }

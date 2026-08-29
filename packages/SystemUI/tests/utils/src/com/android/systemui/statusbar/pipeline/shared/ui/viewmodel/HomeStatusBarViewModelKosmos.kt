@@ -47,11 +47,15 @@ import com.android.systemui.statusbar.pipeline.shared.domain.interactor.homeStat
 import com.android.systemui.statusbar.pipeline.shared.domain.interactor.homeStatusBarInteractor
 import com.android.systemui.statusbar.pipeline.shared.ui.binder.HomeStatusBarViewBinder
 import com.android.systemui.statusbar.pipeline.shared.ui.binder.HomeStatusBarViewBinderImpl
+import com.android.systemui.statusbar.policy.configurationController
 import com.android.systemui.statusbar.systemstatusicons.ui.viewmodel.systemStatusIconsViewModelFactory
 
 var Kosmos.homeStatusBarViewBinder: HomeStatusBarViewBinder by
     Kosmos.Fixture {
-        HomeStatusBarViewBinderImpl(connectedDisplaysStatusBarNotificationIconViewStoreFactory)
+        HomeStatusBarViewBinderImpl(
+            connectedDisplaysStatusBarNotificationIconViewStoreFactory,
+            configurationController,
+        )
     }
 
 var Kosmos.homeStatusBarViewModel: HomeStatusBarViewModel by
