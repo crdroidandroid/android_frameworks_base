@@ -68,12 +68,12 @@
     <string name="onthego_channel_name">Utama</string>
     <string name="global_action_onthego">On-The-Go</string>
     <string name="onthego_dialog_title">On-The-Go</string>
-    <string name="onthego_opacity_title">Camera opacity</string>
+    <string name="onthego_opacity_title">Opasitas kamera</string>
     <string name="onthego_opacity_default">50%</string>
-    <string name="onthego_restart_title">Restart on camera switch</string>
-    <string name="onthego_restart_summary">Briefly restart the preview when the camera changes</string>
-    <string name="onthego_front_camera_title">Front camera</string>
-    <string name="onthego_front_camera_summary">Use the front camera instead of the rear</string>
+    <string name="onthego_restart_title">Mulai ulang saat beralih kamera</string>
+    <string name="onthego_restart_summary">Mulai ulang pratinjau sebentar saat kamera berubah</string>
+    <string name="onthego_front_camera_title">Kamera depan</string>
+    <string name="onthego_front_camera_summary">Gunakan kamera depan, bukan kamera belakang</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">digunakan hari ini</string>
     <string name="usage_data_weekly">digunakan minggu ini</string>
@@ -113,9 +113,9 @@
     <string name="quick_settings_volume_panel_label">Panel volume</string>
     <!-- Smart Pixels -->
     <string name="quick_settings_smart_pixels_label">Piksel Cerdas</string>
-    <string name="quick_settings_smart_pixels_on">On</string>
-    <string name="quick_settings_smart_pixels_off">Off</string>
-    <string name="smart_pixels_percent_label">Pixel percentage</string>
+    <string name="quick_settings_smart_pixels_on">Aktif</string>
+    <string name="quick_settings_smart_pixels_off">Mati</string>
+    <string name="smart_pixels_percent_label">Persentase piksel</string>
     <string name="smart_pixels_percent_format"><xliff:g id="percent" example="25">%d</xliff:g>%%</string>
     <!-- Weather Tile -->
     <string name="omnijaws_service_error">Kesalahan ketika memuat data cuaca</string>
@@ -157,20 +157,20 @@
     <!-- AxDynamicBar strings [CHAR LIMIT=NONE] -->
     <string name="ax_dynamic_bar_timer">Timer</string>
     <string name="ax_dynamic_bar_stopwatch">Stopwatch</string>
-    <string name="ax_dynamic_bar_alarm">Alarm</string>
-    <string name="ax_dynamic_bar_flashlight">Flashlight</string>
+    <string name="ax_dynamic_bar_alarm">Alaram</string>
+    <string name="ax_dynamic_bar_flashlight">Senter</string>
     <string name="ax_dynamic_bar_hotspot">Hotspot</string>
-    <string name="ax_dynamic_bar_hotspot_active">Hotspot Active</string>
-    <string name="ax_dynamic_bar_vpn_active">VPN Active</string>
-    <string name="ax_dynamic_bar_screen_recording">Screen Recording</string>
-    <string name="ax_dynamic_bar_now_playing">Now Playing</string>
-    <string name="ax_dynamic_bar_media_output">Media output</string>
-    <string name="ax_dynamic_bar_sound_mode">Sound Mode</string>
+    <string name="ax_dynamic_bar_hotspot_active">Hotspot Aktif</string>
+    <string name="ax_dynamic_bar_vpn_active">VPN Aktif</string>
+    <string name="ax_dynamic_bar_screen_recording">Perekaman Layar</string>
+    <string name="ax_dynamic_bar_now_playing">Sedang diputar</string>
+    <string name="ax_dynamic_bar_media_output">Keluaran media</string>
+    <string name="ax_dynamic_bar_sound_mode">Mode Suara</string>
     <string name="ax_dynamic_bar_silent">Senyap</string>
     <string name="ax_dynamic_bar_vibrate">Getar</string>
     <string name="ax_dynamic_bar_ring">Dering</string>
-    <string name="ax_dynamic_bar_charging">Charging</string>
-    <string name="ax_dynamic_bar_wireless">Wireless</string>
+    <string name="ax_dynamic_bar_charging">Mengisi</string>
+    <string name="ax_dynamic_bar_wireless">Nirkabel</string>
     <string name="ax_dynamic_bar_saver">Saver</string>
     <string name="ax_dynamic_bar_music">Music</string>
     <string name="ax_dynamic_bar_copied">Copied</string>
