@@ -101,8 +101,6 @@ class HomeStatusBarViewBinderImpl @Inject constructor() : HomeStatusBarViewBinde
         val leftClock: Clock = view.requireViewById(R.id.clock)
         val centerClock: Clock? = view.findViewById(R.id.clock_center)
         val rightClock: Clock? = view.findViewById(R.id.clock_right)
-        val networkTrafficCenterView = view.findViewById<View>(R.id.network_traffic_holder_center)
-        val networkTrafficStartView = view.findViewById<View>(R.id.network_traffic_holder_start)
         val notificationIconsArea = view.requireViewById<View>(R.id.notificationIcons)
         val batteryView = view.findViewById<View>(R.id.battery_composable_view)
 
@@ -369,13 +367,9 @@ class HomeStatusBarViewBinderImpl @Inject constructor() : HomeStatusBarViewBinde
                             // Now apply the animation state, with its animator
                             when (animState) {
                                 AnimatingIn -> {
-                                    systemEventChipAnimateIn?.invoke(networkTrafficCenterView)
-                                    systemEventChipAnimateIn?.invoke(networkTrafficStartView)
                                     systemEventChipAnimateIn?.invoke(systemInfoView)
                                 }
                                 AnimatingOut -> {
-                                    systemEventChipAnimateOut?.invoke(networkTrafficCenterView)
-                                    systemEventChipAnimateOut?.invoke(networkTrafficStartView)
                                     systemEventChipAnimateOut?.invoke(systemInfoView)
                                 }
                                 else -> {
@@ -383,8 +377,6 @@ class HomeStatusBarViewBinderImpl @Inject constructor() : HomeStatusBarViewBinde
                                 }
                             }
                         } else {
-                            networkTrafficCenterView.adjustVisibility(baseVis)
-                            networkTrafficStartView.adjustVisibility(baseVis)
                             systemInfoView.adjustVisibility(baseVis)
                         }
                     }
