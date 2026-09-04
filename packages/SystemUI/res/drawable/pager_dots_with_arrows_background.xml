@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2026 The Android Open Source Project; Apache-2.0 -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="#33000000" />
+    <corners android:radius="@dimen/pagination_arrow_touch_size" />
+</shape>
