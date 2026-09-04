@@ -64,4 +64,10 @@
     <dimen name="weather_dream_complication_text_descent_extra_padding">1.0dip</dimen>
     <dimen name="weather_dream_overlay_complication_line_height">52.0dip</dimen>
     <dimen name="weather_dream_overlay_complication_text_size">45.0dip</dimen>
+
+    <!-- Smartspace pagination arrows (shown beside the page dots) -->
+    <dimen name="pagination_arrow_touch_size">40dp</dimen>
+    <dimen name="pagination_arrow_margin_outer">4dp</dimen>
+    <dimen name="pagination_arrow_margin_inner">2dp</dimen>
+    <dimen name="pager_dots_min_touch_target">48dp</dimen>
 </resources>
