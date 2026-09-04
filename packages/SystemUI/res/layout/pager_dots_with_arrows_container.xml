@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2026 The Android Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/pager_dots_with_arrows_container"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@drawable/pager_dots_with_arrows_background"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:orientation="horizontal">
+
+    <com.google.android.systemui.smartspace.PaginationArrow
+        android:id="@+id/left_pagination_arrow"
+        android:layout_width="@dimen/pagination_arrow_touch_size"
+        android:layout_height="@dimen/pagination_arrow_touch_size"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/pagination_arrow_margin_outer"
+        android:layout_marginEnd="@dimen/pagination_arrow_margin_inner"
+        android:background="@drawable/pagination_arrow_background"
+        android:contentDescription="@string/accessibility_smartspace_previous_page"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_chevron_start_smartspace"
+        android:visibility="gone" />
+
+    <com.google.android.systemui.smartspace.PagerDots
+        android:id="@+id/pager_dots"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical" />
+
+    <com.google.android.systemui.smartspace.PaginationArrow
+        android:id="@+id/right_pagination_arrow"
+        android:layout_width="@dimen/pagination_arrow_touch_size"
+        android:layout_height="@dimen/pagination_arrow_touch_size"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/pagination_arrow_margin_inner"
+        android:layout_marginEnd="@dimen/pagination_arrow_margin_outer"
+        android:background="@drawable/pagination_arrow_background"
+        android:contentDescription="@string/accessibility_smartspace_next_page"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_chevron_end_smartspace"
+        android:visibility="gone" />
+</LinearLayout>
