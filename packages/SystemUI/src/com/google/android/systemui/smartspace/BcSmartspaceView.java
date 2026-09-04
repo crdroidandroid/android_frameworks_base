@@ -16,7 +16,9 @@ import android.util.ArraySet;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseArray;
+import android.graphics.Rect;
 import android.view.MotionEvent;
+import android.view.TouchDelegate;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.FrameLayout;
@@ -63,8 +65,12 @@ public class BcSmartspaceView extends FrameLayout
     public boolean mIsBackgroundEnabled;
     public final Set<String> mLastReceivedTargets;
     public final Runnable mLongPressCallback;
-    public PageIndicator mPageIndicator;
+    /** The dot indicator itself; when {@link #mPagerDotsWithArrows} is used this is its child. */
     public PagerDots mPagerDots;
+    /** Non-null when the layout supplies the arrows variant of the indicator. */
+    public PagerDotsWithArrows mPagerDotsWithArrows;
+    private final Rect mExpandedPagerDotsTouchRect = new Rect();
+    private boolean mInterceptingTouchForPagerDots;
     public RecyclerView.ViewHolder mPreInflatedViewHolder;
     public float mPreviousDozeAmount;
     public final RecyclerView.RecycledViewPool mRecycledViewPool;
@@ -81,6 +87,9 @@ public class BcSmartspaceView extends FrameLayout
             mScrollState = state;
             if (state == ViewPager2.SCROLL_STATE_DRAGGING) {
                 mSwipedCardPosition = mViewPager2.getCurrentItem();
+                if (mPagerDotsWithArrows != null) {
+                    mPagerDotsWithArrows.setArrowsEnabled(false);
+                }
             }
             if (state == ViewPager2.SCROLL_STATE_IDLE) {
                 if (mSwipedCardPosition != null
@@ -234,7 +243,11 @@ public class BcSmartspaceView extends FrameLayout
             mInitialTouchX = event.getX();
             mInitialTouchY = event.getY();
             mHasPerformedLongPress = false;
-            if (mViewPager2.isLongClickable()) {
+            boolean onPagerDots =
+                    mPagerDotsWithArrows != null
+                            && mExpandedPagerDotsTouchRect.contains(
+                                    (int) event.getX(), (int) event.getY());
+            if (!onPagerDots && mViewPager2.isLongClickable()) {
                 cancelScheduledLongPress();
                 mHasPostedLongPress = true;
                 mViewPager2.postDelayed(
@@ -318,7 +331,7 @@ public class BcSmartspaceView extends FrameLayout
         mViewPager2.setAdapter(mAdapter);
         mViewPager2.registerOnPageChangeCallback(mViewPager2OnPageChangeCallback);
         if (mPagerDots != null) {
-            mPagerDots.setNumPages(mAdapter.smartspaceTargets.size(), isLayoutRtl());
+            setIndicatorNumPages(mAdapter.smartspaceTargets.size());
         }
         if (mBgHandler == null) {
             throw new IllegalStateException(
@@ -387,6 +400,10 @@ public class BcSmartspaceView extends FrameLayout
     @Override
     public final void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        if (mPagerDotsWithArrows != null) {
+            mPagerDotsWithArrows.setArrowsEnabled(false);
+        }
+        setTouchDelegate(null);
         if (mBgHandler == null) {
             throw new IllegalStateException(
                     "Must set background handler to avoid making binder calls on main thread");
@@ -422,8 +439,16 @@ public class BcSmartspaceView extends FrameLayout
                             recyclerView, cardRecyclerViewAdapter.getItemViewType(0));
         }
         View indicator = findViewById(R.id.smartspace_page_indicator);
-        if (indicator instanceof PagerDots) {
+        if (indicator instanceof PagerDotsWithArrows) {
+            mPagerDotsWithArrows = (PagerDotsWithArrows) indicator;
+            mPagerDots = mPagerDotsWithArrows.getPagerDots();
+        } else if (indicator instanceof PagerDots) {
             mPagerDots = (PagerDots) indicator;
+        }
+        if (mPagerDotsWithArrows != null) {
+            mPagerDotsWithArrows.setOnArrowClickListener(this::onPaginationArrowClick);
+            mPagerDotsWithArrows.addOnLayoutChangeListener(
+                    (v, l, t, r, b, ol, ot, or, ob) -> updatePagerDotsTouchDelegate());
         }
         if (mPagerDots != null) {
             int paddingStart =
@@ -435,6 +460,91 @@ public class BcSmartspaceView extends FrameLayout
                     mPagerDots.getPaddingEnd(),
                     mPagerDots.getPaddingBottom());
         }
+    }
+
+    /** Updates the page count on whichever indicator variant the layout supplied. */
+    private void setIndicatorNumPages(int numPages) {
+        if (mPagerDotsWithArrows != null) {
+            mPagerDotsWithArrows.setNumPages(numPages, isLayoutRtl());
+        } else if (mPagerDots != null) {
+            mPagerDots.setNumPages(numPages, isLayoutRtl());
+        }
+    }
+
+    /** The indicator view to fade/position: the arrows wrapper when present, else the dots. */
+    private View getIndicatorView() {
+        return mPagerDotsWithArrows != null ? mPagerDotsWithArrows : mPagerDots;
+    }
+
+    /** Pages the carousel one step when a pagination arrow is tapped. */
+    private void onPaginationArrowClick(PagerDotsWithArrows.Direction direction) {
+        int current = mViewPager2.getCurrentItem();
+        if (direction == PagerDotsWithArrows.Direction.START) {
+            if (current > 0) {
+                mViewPager2.setCurrentItem(current - 1, true);
+            }
+        } else if (current < mAdapter.smartspaceTargets.size() - 1) {
+            mViewPager2.setCurrentItem(current + 1, true);
+        }
+    }
+
+    /**
+     * The pagination arrows are drawn outside this view's bounds, so route touches that land in the
+     * expanded indicator rect to them directly. A touch anywhere else collapses the arrows again.
+     */
+    @Override
+    public final boolean dispatchTouchEvent(MotionEvent event) {
+        if (mPagerDotsWithArrows != null && mPagerDotsWithArrows.getVisibility() == View.VISIBLE) {
+            int action = event.getActionMasked();
+            if (action == MotionEvent.ACTION_DOWN) {
+                mInterceptingTouchForPagerDots =
+                        mExpandedPagerDotsTouchRect.contains((int) event.getX(), (int) event.getY());
+                if (!mInterceptingTouchForPagerDots && mPagerDotsWithArrows.areArrowsEnabled()) {
+                    // Consume the press that dismisses the arrows so it does not also open a card.
+                    mPagerDotsWithArrows.setArrowsEnabled(false);
+                    return true;
+                }
+            }
+            if (mInterceptingTouchForPagerDots) {
+                MotionEvent offset = MotionEvent.obtain(event);
+                offset.offsetLocation(
+                        -mPagerDotsWithArrows.getLeft(), -mPagerDotsWithArrows.getTop());
+                boolean handled = mPagerDotsWithArrows.dispatchTouchEvent(offset);
+                offset.recycle();
+                if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL) {
+                    mInterceptingTouchForPagerDots = false;
+                }
+                return handled;
+            }
+        }
+        return super.dispatchTouchEvent(event);
+    }
+
+    /** Grows the indicator hit rect to a minimum touch target and installs a touch delegate. */
+    public final void updatePagerDotsTouchDelegate() {
+        if (mPagerDotsWithArrows == null
+                || mPagerDotsWithArrows.getVisibility() != View.VISIBLE) {
+            mExpandedPagerDotsTouchRect.setEmpty();
+            setTouchDelegate(null);
+            return;
+        }
+        mPagerDotsWithArrows.getHitRect(mExpandedPagerDotsTouchRect);
+        if (mExpandedPagerDotsTouchRect.isEmpty()) {
+            return;
+        }
+        int minTouch = getResources().getDimensionPixelSize(R.dimen.pager_dots_min_touch_target);
+        int width = mExpandedPagerDotsTouchRect.width();
+        if (width < minTouch) {
+            int missing = minTouch - width;
+            mExpandedPagerDotsTouchRect.left -= missing / 2;
+            mExpandedPagerDotsTouchRect.right += missing - missing / 2;
+        }
+        int height = mExpandedPagerDotsTouchRect.height();
+        if (height < minTouch) {
+            mExpandedPagerDotsTouchRect.top -= minTouch - height;
+        }
+        setTouchDelegate(
+                new TouchDelegate(new Rect(mExpandedPagerDotsTouchRect), mPagerDotsWithArrows));
     }
 
     @Override
@@ -517,7 +627,7 @@ public class BcSmartspaceView extends FrameLayout
                 () -> {
                     int size = mAdapter.smartspaceTargets.size();
                     if (mPagerDots != null) {
-                        mPagerDots.setNumPages(size, isLayoutRtl());
+                        setIndicatorNumPages(size);
                     }
                     for (int index = 0; index < size; index++) {
                         SmartspaceTarget targetAtPosition = mAdapter.getTargetAtPosition(index);
@@ -651,15 +761,15 @@ public class BcSmartspaceView extends FrameLayout
                 }
                 setAlpha(alpha);
                 if (mPagerDots != null) {
-                    mPagerDots.setNumPages(mAdapter.smartspaceTargets.size(), isLayoutRtl());
-                    mPagerDots.setAlpha(alpha);
+                    setIndicatorNumPages(mAdapter.smartspaceTargets.size());
+                    getIndicatorView().setAlpha(alpha);
                     if (mPagerDots.getVisibility() != View.GONE) {
                         if (dozeAmount == 1.0f) {
                             BcSmartspaceTemplateDataUtils.updateVisibility(
-                                    mPagerDots, View.INVISIBLE);
+                                    getIndicatorView(), View.INVISIBLE);
                         } else {
                             BcSmartspaceTemplateDataUtils.updateVisibility(
-                                    mPagerDots, View.VISIBLE);
+                                    getIndicatorView(), View.VISIBLE);
                         }
                     }
                 }
@@ -793,15 +903,9 @@ public class BcSmartspaceView extends FrameLayout
         }
     }
 
-    public final void setSelectedDot(float f, int i) {
-        if (mPagerDots != null && i > 0 && i <= mPagerDots.numPages) {
-            mPagerDots.currentPositionIndex = i;
-            mPagerDots.currentPositionOffset = f;
-            mPagerDots.invalidate();
-            if (f >= 0.5d) {
-                i++;
-            }
-            mPagerDots.updateCurrentPageIndex(i);
+    public final void setSelectedDot(float offset, int position) {
+        if (mPagerDots != null) {
+            mPagerDots.setPageOffset(offset, position);
         }
     }
 
