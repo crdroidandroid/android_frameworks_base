@@ -115,6 +115,22 @@ public final class PagerDots extends View {
         invalidate();
     }
 
+    /**
+     * Updates the dot indicator for an in-progress page scroll.
+     *
+     * @param offset fraction scrolled past {@code position}, in [0, 1)
+     * @param position index of the page being scrolled away from
+     */
+    public final void setPageOffset(float offset, int position) {
+        if (position < 0 || position >= numPages) {
+            return;
+        }
+        currentPositionIndex = position;
+        currentPositionOffset = offset;
+        invalidate();
+        updateCurrentPageIndex(offset >= 0.5f ? position + 1 : position);
+    }
+
     public final void updateCurrentPageIndex(int i) {
         if (i == currentPageIndex) {
             return;
