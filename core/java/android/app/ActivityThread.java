@@ -8214,12 +8214,13 @@ public final class ActivityThread extends ClientTransactionHandler
         Trace.traceBegin(Trace.TRACE_TAG_ACTIVITY_MANAGER, "Setup proxies");
         try {
             final IBinder b = ServiceManager.getService(Context.CONNECTIVITY_SERVICE);
-            // Defensive check - unlikely to be null on modern (FBE) devices even in Direct Boot
-            // mode, but was possible on older FDE systems.
-            // Slog.wtf will report if this unexpectedly occurs.
-            // TODO(b/463367733): Remove if proven unnecessary by WTF data.
+            // Isolated processes cannot access ConnectivityService. A missing service in
+            // other processes is unexpected on FBE devices, even in Direct Boot mode.
             if (b == null) {
-                Slog.wtf("ActivityThread", "ConnectivityService is null in handleBindApplication!");
+                if (!Process.isIsolated()) {
+                    Slog.wtf("ActivityThread",
+                            "ConnectivityService is null in handleBindApplication!");
+                }
                 Proxy.setHttpProxyConfiguration(null);
             } else {
                 if (android.net.platform.flags.Flags.enableMultiProxySystemPlatform()) {
