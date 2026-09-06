@@ -122,6 +122,9 @@ import com.android.server.wm.WindowManagerInternal.AppTransitionListener;
 
 import junit.framework.Assert;
 
+import lineageos.providers.LineageSettings;
+
+import org.lineageos.internal.util.DeviceKeysConstants.Action;
 import org.mockito.AdditionalMatchers;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
@@ -512,12 +515,19 @@ class TestPhoneWindowManager {
         }
     }
 
-    void overrideLongPressOnHomeBehavior(int behavior) {
-        mPhoneWindowManager.mLongPressOnHomeBehavior = behavior;
+    void overrideLongPressOnHomeAction(Action action) {
+        overrideHomeAction(LineageSettings.System.KEY_HOME_LONG_PRESS_ACTION, action);
     }
 
-    void overriderDoubleTapOnHomeBehavior(int behavior) {
-        mPhoneWindowManager.mDoubleTapOnHomeBehavior = behavior;
+    void overrideDoubleTapOnHomeAction(Action action) {
+        overrideHomeAction(LineageSettings.System.KEY_HOME_DOUBLE_TAP_ACTION, action);
+    }
+
+    private void overrideHomeAction(String setting, Action action) {
+        assertTrue(LineageSettings.System.putInt(
+                mContext.getContentResolver(), setting, action.ordinal()));
+        mPhoneWindowManager.updateSettings(null);
+        mTestLooper.dispatchAll();
     }
 
     void overrideCanStartDreaming(boolean canDream) {
