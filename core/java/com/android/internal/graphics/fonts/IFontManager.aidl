@@ -32,4 +32,10 @@ interface IFontManager {
     FontConfig getFontConfig();
 
     int updateFontFamily(in List<FontUpdateRequest> request, int baseVersion);
+
+    int installCustomFont(in ParcelFileDescriptor fontFd);
+
+    int clearCustomFont();
+
+    @nullable String getCustomFontName();
 }
