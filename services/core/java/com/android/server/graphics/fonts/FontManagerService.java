@@ -120,6 +120,64 @@ public final class FontManagerService extends IFontManager.Stub {
         }
     }
 
+    @RequiresPermission(Manifest.permission.UPDATE_FONTS)
+    @Override
+    public int installCustomFont(@NonNull ParcelFileDescriptor fontFd) {
+        Objects.requireNonNull(fontFd);
+        getContext().enforceCallingPermission(Manifest.permission.UPDATE_FONTS,
+                "UPDATE_FONTS permission required.");
+        try {
+            synchronized (mUpdatableFontDirLock) {
+                if (mUpdatableFontDir == null) {
+                    return FontManager.RESULT_ERROR_FONT_UPDATER_DISABLED;
+                }
+                mUpdatableFontDir.installCustomFont(fontFd.getFileDescriptor());
+                updateSerializedFontMap();
+            }
+            return FontManager.RESULT_SUCCESS;
+        } catch (SystemFontException e) {
+            Slog.e(TAG, "Failed to install custom font", e);
+            return e.getErrorCode();
+        } finally {
+            try {
+                fontFd.close();
+            } catch (IOException e) {
+                Slog.w(TAG, "Failed to close custom font fd", e);
+            }
+        }
+    }
+
+    @RequiresPermission(Manifest.permission.UPDATE_FONTS)
+    @Override
+    public int clearCustomFont() {
+        getContext().enforceCallingPermission(Manifest.permission.UPDATE_FONTS,
+                "UPDATE_FONTS permission required.");
+        try {
+            synchronized (mUpdatableFontDirLock) {
+                if (mUpdatableFontDir == null) {
+                    return FontManager.RESULT_ERROR_FONT_UPDATER_DISABLED;
+                }
+                mUpdatableFontDir.clearCustomFont();
+                updateSerializedFontMap();
+            }
+            return FontManager.RESULT_SUCCESS;
+        } catch (SystemFontException e) {
+            Slog.e(TAG, "Failed to clear custom font", e);
+            return e.getErrorCode();
+        }
+    }
+
+    @RequiresPermission(Manifest.permission.UPDATE_FONTS)
+    @Override
+    @Nullable
+    public String getCustomFontName() {
+        getContext().enforceCallingPermission(Manifest.permission.UPDATE_FONTS,
+                "UPDATE_FONTS permission required.");
+        synchronized (mUpdatableFontDirLock) {
+            return mUpdatableFontDir == null ? null : mUpdatableFontDir.getCustomFontName();
+        }
+    }
+
     private static void closeFileDescriptors(@Nullable List<FontUpdateRequest> requests) {
         // Make sure we close every passed FD, even if 'requests' is constructed incorrectly and
         // some fields are null.
@@ -221,6 +279,11 @@ public final class FontManagerService extends IFontManager.Stub {
                 }
             }
             return false;
+        }
+
+        @Override
+        public boolean hasFsverity(String fontPath) {
+            return VerityUtils.hasFsverity(fontPath);
         }
 
         @Override

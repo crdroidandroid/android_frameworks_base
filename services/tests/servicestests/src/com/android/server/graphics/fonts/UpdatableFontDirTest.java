@@ -137,6 +137,11 @@ public final class UpdatableFontDirTest {
         }
 
         @Override
+        public boolean hasFsverity(String path) {
+            return mHasFsverityPaths.contains(path);
+        }
+
+        @Override
         public void setUpFsverity(String path) throws IOException {
             mHasFsverityPaths.add(path);
         }
@@ -473,6 +478,44 @@ public final class UpdatableFontDirTest {
         assertThat(Os.stat(fontFile.getAbsolutePath()).st_mode & 0777).isEqualTo(0644);
         File fontDir = fontFile.getParentFile();
         assertThat(Os.stat(fontDir.getAbsolutePath()).st_mode & 0777).isEqualTo(0711);
+    }
+
+    @Test
+    public void customFont_survivesReloadAndIsRemovedAfterClear() throws Exception {
+        UpdatableFontDir dir = new UpdatableFontDir(
+                mUpdatableFontFilesDir, mParser, mFakeFsverityUtil,
+                mConfigFile, mCurrentTimeSupplier, mConfigSupplier);
+        dir.loadFontFileMap();
+
+        try (ParcelFileDescriptor fontFd = newFontFile("custom.ttf,1,CustomFont")) {
+            dir.installCustomFont(fontFd.getFileDescriptor());
+        }
+        assertThat(dir.getCustomFontName()).isEqualTo("CustomFont");
+        assertThat(dir.getFontFamilyMap()).containsKey("sans-serif");
+        assertThat(getLastFamily(dir.getSystemFontConfig(), "sans-serif").getFontList().get(0)
+                .getPostScriptName()).isEqualTo("CustomFont");
+        File installedFont = dir.getPostScriptMap().get("CustomFont");
+        assertThat(installedFont).isNotNull();
+
+        dir.loadFontFileMap();
+        assertThat(dir.getCustomFontName()).isEqualTo("CustomFont");
+        assertThat(dir.getPostScriptMap()).containsKey("CustomFont");
+
+        dir.clearCustomFont();
+        assertThat(dir.getCustomFontName()).isNull();
+        dir.loadFontFileMap();
+        assertThat(dir.getPostScriptMap()).doesNotContainKey("CustomFont");
+        assertThat(installedFont.getParentFile().exists()).isFalse();
+    }
+
+    @Test
+    public void isUiFontFamilyName_matchesFrameworkUiFamiliesOnly() {
+        assertThat(UpdatableFontDir.isUiFontFamilyName("sans-serif")).isTrue();
+        assertThat(UpdatableFontDir.isUiFontFamilyName("google-sans-text")).isTrue();
+        assertThat(UpdatableFontDir.isUiFontFamilyName("variable-body-medium")).isTrue();
+        assertThat(UpdatableFontDir.isUiFontFamilyName("roboto-flex")).isTrue();
+        assertThat(UpdatableFontDir.isUiFontFamilyName("serif")).isFalse();
+        assertThat(UpdatableFontDir.isUiFontFamilyName("monospace")).isFalse();
     }
 
     @Test
@@ -841,6 +884,11 @@ public final class UpdatableFontDirTest {
             @Override
             public boolean isFromTrustedProvider(String path, byte[] signature) {
                 return mFakeFsverityUtil.isFromTrustedProvider(path, signature);
+            }
+
+            @Override
+            public boolean hasFsverity(String path) {
+                return mFakeFsverityUtil.hasFsverity(path);
             }
 
             @Override
@@ -2471,6 +2519,12 @@ public final class UpdatableFontDirTest {
         return new FontUpdateRequest(
                 ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY),
                 signature.getBytes());
+    }
+
+    private ParcelFileDescriptor newFontFile(String content) throws Exception {
+        File file = File.createTempFile("custom-font", ".ttf", mCacheDir);
+        FileUtils.stringToFile(file, content);
+        return ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY);
     }
 
     private static FontUpdateRequest newAddFontFamilyRequest(String xml) throws Exception {
