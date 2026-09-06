@@ -21,12 +21,14 @@ import android.annotation.FlaggedApi;
 import android.annotation.IntDef;
 import android.annotation.IntRange;
 import android.annotation.NonNull;
+import android.annotation.Nullable;
 import android.annotation.RequiresPermission;
 import android.annotation.SystemApi;
 import android.annotation.SystemService;
 import android.annotation.TestApi;
 import android.content.Context;
 import android.os.LocaleList;
+import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 import android.text.FontConfig;
 
@@ -409,6 +411,36 @@ public class FontManager {
         }
     }
 
+    /** @hide */
+    @RequiresPermission(Manifest.permission.UPDATE_FONTS)
+    public @ResultCode int installCustomFont(@NonNull ParcelFileDescriptor fontFd) {
+        Objects.requireNonNull(fontFd);
+        try {
+            return mIFontManager.installCustomFont(fontFd);
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
+    }
+
+    /** @hide */
+    @RequiresPermission(Manifest.permission.UPDATE_FONTS)
+    public @ResultCode int clearCustomFont() {
+        try {
+            return mIFontManager.clearCustomFont();
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
+    }
+
+    /** @hide */
+    @RequiresPermission(Manifest.permission.UPDATE_FONTS)
+    public @Nullable String getCustomFontName() {
+        try {
+            return mIFontManager.getCustomFontName();
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
+    }
 
     /**
      * Factory method of the FontManager.

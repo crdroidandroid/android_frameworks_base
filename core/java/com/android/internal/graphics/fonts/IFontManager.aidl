@@ -34,4 +34,10 @@ interface IFontManager {
     int updateFontFamily(in List<FontUpdateRequest> request, int baseVersion);
 
     int updateFontFallbacks(in List<FontUpdateRequest> fallbackRequests);
+
+    int installCustomFont(in ParcelFileDescriptor fontFd);
+
+    int clearCustomFont();
+
+    @nullable String getCustomFontName();
 }
