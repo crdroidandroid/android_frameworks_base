@@ -24,11 +24,6 @@ import static android.view.KeyEvent.KEYCODE_M;
 import static android.view.KeyEvent.KEYCODE_P;
 import static android.view.KeyEvent.KEYCODE_U;
 
-import static com.android.server.policy.PhoneWindowManager.DOUBLE_TAP_HOME_RECENT_SYSTEM_UI;
-import static com.android.server.policy.PhoneWindowManager.LONG_PRESS_HOME_ALL_APPS;
-import static com.android.server.policy.PhoneWindowManager.LONG_PRESS_HOME_ASSIST;
-import static com.android.server.policy.PhoneWindowManager.LONG_PRESS_HOME_NOTIFICATION_PANEL;
-
 import android.app.role.RoleManager;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -50,6 +45,7 @@ import junitparams.Parameters;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.lineageos.internal.util.DeviceKeysConstants.Action;
 
 @Presubmit
 @MediumTest
@@ -136,20 +132,16 @@ public class KeyGestureEventTests extends ShortcutKeyTestBase {
 
     @Keep
     private static Object[][] longPressOnHomeTestArguments() {
-        // testName, testKeys, longPressOnHomeBehavior, expectedKeyGestureType, expectedKey,
+        // testName, testKeys, action, expectedKeyGestureType, expectedKey,
         // expectedModifierState
         return new Object[][]{
-                {"Long press HOME key -> Toggle Notification panel",
-                        new int[]{KeyEvent.KEYCODE_HOME}, LONG_PRESS_HOME_NOTIFICATION_PANEL,
-                        KeyGestureEvent.KEY_GESTURE_TYPE_TOGGLE_NOTIFICATION_PANEL,
-                        KeyEvent.KEYCODE_HOME, 0},
                 {"Long press HOME key -> Launch assistant",
-                        new int[]{KeyEvent.KEYCODE_HOME}, LONG_PRESS_HOME_ASSIST,
+                        new int[]{KeyEvent.KEYCODE_HOME}, Action.SEARCH,
                         KeyGestureEvent.KEY_GESTURE_TYPE_LAUNCH_ASSISTANT,
                         KeyEvent.KEYCODE_HOME, 0},
-                {"Long press HOME key -> Open App Drawer",
-                        new int[]{KeyEvent.KEYCODE_HOME}, LONG_PRESS_HOME_ALL_APPS,
-                        KeyGestureEvent.KEY_GESTURE_TYPE_ALL_APPS,
+                {"Long press HOME key -> Open app switcher",
+                        new int[]{KeyEvent.KEYCODE_HOME}, Action.APP_SWITCH,
+                        KeyGestureEvent.KEY_GESTURE_TYPE_APP_SWITCH,
                         KeyEvent.KEYCODE_HOME, 0}};
     }
 
@@ -177,11 +169,18 @@ public class KeyGestureEventTests extends ShortcutKeyTestBase {
     }
 
     @Test
+    public void testLongPressOnHome_toggleNotificationPanel() throws RemoteException {
+        mPhoneWindowManager.overrideLongPressOnHomeAction(Action.NOTIFICATIONS);
+        sendLongPressKeyCombination(new int[]{KeyEvent.KEYCODE_HOME});
+        mPhoneWindowManager.assertTogglePanel();
+    }
+
+    @Test
     @Parameters(method = "longPressOnHomeTestArguments")
-    public void testLongPressOnHome(String testName, int[] testKeys, int longPressOnHomeBehavior,
+    public void testLongPressOnHome(String testName, int[] testKeys, Action action,
             @KeyGestureEvent.KeyGestureType int expectedKeyGestureType, int expectedKey,
             int expectedModifierState) {
-        mPhoneWindowManager.overrideLongPressOnHomeBehavior(longPressOnHomeBehavior);
+        mPhoneWindowManager.overrideLongPressOnHomeAction(action);
         sendLongPressKeyCombination(testKeys);
         mPhoneWindowManager.assertKeyGestureCompleted(
                 new int[]{expectedKey}, expectedModifierState, expectedKeyGestureType,
@@ -190,7 +189,7 @@ public class KeyGestureEventTests extends ShortcutKeyTestBase {
 
     @Test
     public void testDoubleTapOnHomeBehavior_AppSwitchBehavior() {
-        mPhoneWindowManager.overriderDoubleTapOnHomeBehavior(DOUBLE_TAP_HOME_RECENT_SYSTEM_UI);
+        mPhoneWindowManager.overrideDoubleTapOnHomeAction(Action.APP_SWITCH);
         sendKeyCombination(new int[]{KeyEvent.KEYCODE_HOME}, 0 /* duration */);
         sendKeyCombination(new int[]{KeyEvent.KEYCODE_HOME}, 0 /* duration */);
         mPhoneWindowManager.assertKeyGestureCompleted(
