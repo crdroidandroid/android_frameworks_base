@@ -3840,14 +3840,14 @@ public class AppOpsService extends IAppOpsService.Stub {
                 callbacks = new RemoteCallbackList.Builder<IAppOpsAsyncNotedCallback>(
                         RemoteCallbackList.FROZEN_CALLEE_POLICY_DROP)
                         .setInterfaceDiedCallback((rcl, cb, cookie) ->
-                            stopWatchingAsyncNoted(packageName, callback)
+                            stopWatchingAsyncNoted(uid, packageName, cb)
                         ).build();
             }
             if (callbacks == null) {
                 callbacks = new RemoteCallbackList<IAppOpsAsyncNotedCallback>() {
                         @Override
                         public void onCallbackDied(IAppOpsAsyncNotedCallback cb) {
-                            stopWatchingAsyncNoted(packageName, callback);
+                            stopWatchingAsyncNoted(uid, packageName, cb);
                         }
                     };
             }
@@ -3862,10 +3862,13 @@ public class AppOpsService extends IAppOpsService.Stub {
         Objects.requireNonNull(callback);
 
         int uid = Binder.getCallingUid();
-        Pair<String, Integer> key = getAsyncNotedOpsKey(packageName, uid);
-
         verifyAndGetBypass(uid, packageName, /* attributionTag= */ null);
+        stopWatchingAsyncNoted(uid, packageName, callback);
+    }
 
+    private void stopWatchingAsyncNoted(int uid, String packageName,
+            IAppOpsAsyncNotedCallback callback) {
+        Pair<String, Integer> key = getAsyncNotedOpsKey(packageName, uid);
         synchronized (this) {
             RemoteCallbackList<IAppOpsAsyncNotedCallback> callbacks = mAsyncOpWatchers.get(key);
             if (callbacks != null) {
