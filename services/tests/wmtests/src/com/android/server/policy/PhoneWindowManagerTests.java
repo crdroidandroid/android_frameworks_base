@@ -272,6 +272,22 @@ public class PhoneWindowManagerTests {
     }
 
     @Test
+    @RequiresFlagsEnabled(com.android.server.display.feature.flags.Flags.FLAG_SEPARATE_TIMEOUTS)
+    public void testFinishedWakingUp_withoutPendingGroup() {
+        mPhoneWindowManager.finishedWakingUp(DEFAULT_DISPLAY_GROUP, 0 /* reason */);
+
+        verify(mKeyguardServiceDelegate, never()).onFinishedWakingUp();
+    }
+
+    @Test
+    @RequiresFlagsEnabled(com.android.server.display.feature.flags.Flags.FLAG_SEPARATE_TIMEOUTS)
+    public void testFinishedGoingToSleep_withoutPendingGroup() {
+        mPhoneWindowManager.finishedGoingToSleep(DEFAULT_DISPLAY_GROUP, 0 /* reason */);
+
+        verify(mKeyguardServiceDelegate, never()).onFinishedGoingToSleep(anyInt(), anyBoolean());
+    }
+
+    @Test
     public void testScreenTurnedOff() {
         doNothing().when(mPhoneWindowManager).postUpdateSettings();
         doNothing().when(mPhoneWindowManager).updateSettings();
