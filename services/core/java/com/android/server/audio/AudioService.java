@@ -1546,7 +1546,8 @@ public class AudioService extends IAudioService.Stub
 
         final PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         var brokerWakeLock =
-                pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "handleAudioDeviceEvent");
+                pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "handleAudioDeviceEvent",
+                        Display.INVALID_DISPLAY);
 
         mDeviceBroker = new AudioDeviceBroker(mContext, this,
                 new AudioDeviceInventory(mAudioSystem,
@@ -1560,7 +1561,8 @@ public class AudioService extends IAudioService.Stub
         mSensorPrivacyManagerInternal =
                 LocalServices.getService(SensorPrivacyManagerInternal.class);
 
-        mAudioEventWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "handleAudioEvent");
+        mAudioEventWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "handleAudioEvent",
+                Display.INVALID_DISPLAY);
 
         mSfxHelper = new SoundEffectsHelper(mContext, playerBase -> ignorePlayerLogs(playerBase));
 
