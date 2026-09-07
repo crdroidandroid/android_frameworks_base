@@ -584,8 +584,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     // finish sleeping
     // 2. group 1 to start waking, and then group 2 to also start waking before group 1 could
     // finish waking
-    volatile int mPendingSleepingGroup;
-    volatile int mPendingWakeupGroup;
+    volatile int mPendingSleepingGroup = Display.INVALID_DISPLAY_GROUP;
+    volatile int mPendingWakeupGroup = Display.INVALID_DISPLAY_GROUP;
     volatile boolean mRecentsVisible;
     volatile boolean mNavBarVirtualKeyHapticFeedbackEnabled = true;
     volatile boolean mPictureInPictureVisible;
