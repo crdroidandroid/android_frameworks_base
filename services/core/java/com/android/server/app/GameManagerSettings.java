@@ -176,7 +176,7 @@ public class GameManagerSettings {
 
             mSettingsFile.finishWrite(fstr);
 
-            FileUtils.setPermissions(mSettingsFile.toString(),
+            FileUtils.setPermissions(mSettingsFile.getBaseFile().getPath(),
                     FileUtils.S_IRUSR | FileUtils.S_IWUSR
                             | FileUtils.S_IRGRP | FileUtils.S_IWGRP,
                     -1, -1);
