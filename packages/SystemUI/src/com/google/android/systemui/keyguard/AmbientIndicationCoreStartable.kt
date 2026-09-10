@@ -24,8 +24,13 @@ constructor(
     private val ambientIndicationInteractor: AmbientIndicationInteractor,
 ) : CoreStartable {
 
+    private var ambientIndicationService: AmbientIndicationService? = null
+
     override fun start() {
-        val ambientIndicationService =
+        if (ambientIndicationService != null) {
+            return
+        }
+        val service =
             AmbientIndicationService(
                 alarmManager = alarmManager,
                 context = context,
@@ -33,10 +38,7 @@ constructor(
                 selectedUserInteractor = selectedUserInteractor,
                 ambientIndicationInteractor = ambientIndicationInteractor,
             )
-        if (ambientIndicationService.mStarted) {
-            return
-        }
-        ambientIndicationService.mStarted = true
+        ambientIndicationService = service
         val intentFilter =
             IntentFilter().apply {
                 addAction("com.google.android.ambientindication.action.AMBIENT_INDICATION_SHOW")
@@ -47,13 +49,13 @@ constructor(
                 )
             }
         context.registerReceiverAsUser(
-            ambientIndicationService,
+            service,
             UserHandle.ALL,
             intentFilter,
             "com.google.android.ambientindication.permission.AMBIENT_INDICATION",
             null,
             Context.RECEIVER_EXPORTED,
         )
-        keyguardUpdateMonitor.registerCallback(ambientIndicationService.mCallback)
+        keyguardUpdateMonitor.registerCallback(service.mCallback)
     }
 }
