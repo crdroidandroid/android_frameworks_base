@@ -19,6 +19,7 @@ filegroup {
     srcs: [
         "**/*.aidl",
         "**/*.java",
+        ":ax_sandbox_common_sources",
         ":framework-nfc-non-updatable-sources",
         ":messagequeue-gen",
         ":ranging_stack_mock_initializer",

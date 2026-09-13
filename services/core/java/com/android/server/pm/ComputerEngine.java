@@ -170,7 +170,6 @@ import com.android.server.utils.WatchedSparseBooleanArray;
 import com.android.server.utils.WatchedSparseIntArray;
 import com.android.server.wm.ActivityTaskManagerInternal;
 import com.android.server.wm.AxSandboxService;
-import com.android.server.wm.IAxSandboxService;
 
 import libcore.util.EmptyArray;
 
@@ -538,7 +537,7 @@ public class ComputerEngine implements Computer {
 
         if (targetPackage == null) return false;
 
-        if (!IAxSandboxService.get().isPackageHidden(targetPackage)) return false;
+        if (!AxSandboxService.get().isPackageHidden(targetPackage)) return false;
 
         if (PACKAGES_SHOULD_NOT_HIDE.contains(targetPackage)) return false;
 
@@ -579,7 +578,7 @@ public class ComputerEngine implements Computer {
     private int shouldSpoofInstallSource(int callingUid, String targetPackage) {
         if (!isSystemReady()) return SPOOF_INSTALL_DISABLED;
         if (targetPackage == null) return SPOOF_INSTALL_DISABLED;
-        if (!IAxSandboxService.get().isPackageHidden(targetPackage)) return SPOOF_INSTALL_DISABLED;
+        if (!AxSandboxService.get().isPackageHidden(targetPackage)) return SPOOF_INSTALL_DISABLED;
         if (callingUid == Process.SYSTEM_UID || callingUid == Process.ROOT_UID)
             return SPOOF_INSTALL_DISABLED;
         if (Process.isIsolated(callingUid) || Process.isSdkSandboxUid(callingUid))
@@ -608,7 +607,7 @@ public class ComputerEngine implements Computer {
             return false;
         }
 
-        if (!IAxSandboxService.get().isPackageSandboxed(packageName)) {
+        if (!AxSandboxService.get().isPackageSandboxed(packageName)) {
             return false;
         }
 

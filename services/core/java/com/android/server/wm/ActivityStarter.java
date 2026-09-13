@@ -911,7 +911,7 @@ class ActivityStarter {
                         String targetPkg = mRequest.intent.getComponent().getPackageName();
                         String callerPkg = mRequest.callingPackage;
                         if (targetPkg != null
-                                && IAxSandboxService.get().isPackageHidden(targetPkg)
+                                && AxSandboxService.get().isPackageHidden(targetPkg)
                                 && !AxSandboxService.BLACKLISTED_PACKAGES.contains(callerPkg)
                                 && !targetPkg.equals(callerPkg)) {
                             int callerUid = mRequest.callingUid;

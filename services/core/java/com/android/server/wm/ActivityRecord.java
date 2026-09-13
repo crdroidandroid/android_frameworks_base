@@ -2425,8 +2425,8 @@ final class ActivityRecord extends WindowToken {
     private int getStartingWindowType(boolean newTask, boolean taskSwitch, boolean processRunning,
             boolean allowTaskSnapshot, boolean activityCreated, boolean activityAllDrawn,
             TaskSnapshot snapshot) {
-        boolean isAppLockerActivity = IAxSandboxService.get().isAppLockerActivity(this.intent.getComponent());
-        if (IAxSandboxService.get().isAppLocked(this) || isAppLockerActivity) {
+        boolean isAppLockerActivity = AxSandboxService.get().isAppLockerActivity(this.intent.getComponent());
+        if (AxSandboxService.get().isAppLocked(this) || isAppLockerActivity) {
             return (isAppLockerActivity || processRunning) ? STARTING_WINDOW_TYPE_NONE : STARTING_WINDOW_TYPE_SPLASH_SCREEN;
         }
         // A special case that a new activity is launching to an existing task which is moving to
@@ -3527,7 +3527,7 @@ final class ActivityRecord extends WindowToken {
      */
     private void finishActivityResults(int resultCode, Intent resultData,
             NeededUriGrants resultGrants) {
-        if (IAxSandboxService.get().checkUnlockApp(this, resultCode, resultData)) {
+        if (AxSandboxService.get().checkUnlockApp(this, resultCode, resultData)) {
             resultTo = null;
         }
         // Send the result if needed
@@ -4338,7 +4338,7 @@ final class ActivityRecord extends WindowToken {
      * finishing or has no saved state or crashed many times, it will also be removed from history.
      */
     void handleAppDied() {
-        IAxSandboxService.get().onAppDied(packageName, mUserId);
+        AxSandboxService.get().onAppDied(packageName, mUserId);
         final boolean remove;
         if (Process.isSdkSandboxUid(getUid())) {
             // Sandbox activities are created for SDKs run in the sandbox process, when the sandbox
@@ -4715,7 +4715,7 @@ final class ActivityRecord extends WindowToken {
             }
             return true;
         } else if (fromActivity.mStartingData != null) {
-            if (IAxSandboxService.get().isAppLockerActivity(this.intent.getComponent())) {
+            if (AxSandboxService.get().isAppLockerActivity(this.intent.getComponent())) {
                 return false;
             }
             if (fromActivity.mStartingData instanceof SnapshotStartingData
@@ -6446,7 +6446,7 @@ final class ActivityRecord extends WindowToken {
             throw new IllegalStateException("Request to stop a finishing activity: " + this);
         }
         if (isNoHistory()) {
-            if (IAxSandboxService.get().isAppLocked(this)) {
+            if (AxSandboxService.get().isAppLocked(this)) {
                 Slog.d(TAG_STATES, "AppLocker: Skip no-history finish for locked app " + this);
             } else if (!task.shouldSleepActivities()) {
                 ProtoLog.d(WM_DEBUG_STATES, "no-history finish of %s", this);
@@ -9150,8 +9150,8 @@ final class ActivityRecord extends WindowToken {
             }
         }
 
-        if (IAxSandboxService.get().isAppLocked(this)
-            || IAxSandboxService.get().isAppLockerActivity(this.intent.getComponent())) {
+        if (AxSandboxService.get().isAppLocked(this)
+            || AxSandboxService.get().isAppLockerActivity(this.intent.getComponent())) {
             return false;
         }
 
