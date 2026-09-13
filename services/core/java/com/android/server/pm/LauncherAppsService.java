@@ -133,7 +133,6 @@ import com.android.server.pm.pkg.ArchiveState;
 import com.android.server.pm.pkg.PackageStateInternal;
 import com.android.server.wm.ActivityTaskManagerInternal;
 import com.android.server.wm.AxSandboxService;
-import com.android.server.wm.IAxSandboxService;
 
 import java.io.DataInputStream;
 import java.io.FileDescriptor;
@@ -1056,8 +1055,8 @@ public class LauncherAppsService extends SystemService {
             List<String> launcherHiddenPkgs = Collections.emptyList();
             if (!isCallerSandboxApp) {
                 try {
-                    hiddenPkgs = IAxSandboxService.get().getHiddenPackages();
-                    launcherHiddenPkgs = IAxSandboxService.get().getHiddenFromLauncherPackages();
+                    hiddenPkgs = AxSandboxService.get().getHiddenPackages();
+                    launcherHiddenPkgs = AxSandboxService.get().getHiddenFromLauncherPackages();
                 } catch (Exception e) {
                     Slog.e(TAG, "Failed to retrieve hidden package lists from AxSandboxService", e);
                 }
