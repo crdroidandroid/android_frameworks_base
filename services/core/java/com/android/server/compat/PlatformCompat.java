@@ -56,7 +56,7 @@ import com.android.internal.compat.IOverrideValidator;
 import com.android.internal.compat.IPlatformCompat;
 import com.android.internal.util.DumpUtils;
 import com.android.server.LocalServices;
-import com.android.server.wm.IAxSandboxService;
+import com.android.server.wm.AxSandboxService;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -185,7 +185,7 @@ public class PlatformCompat extends IPlatformCompat.Stub {
         CompatChange c = mCompatConfig.getCompatChange(changeId);
 
         if (changeId == 143937733L && appInfo != null) {
-            if (IAxSandboxService.get().isPackageSandboxed(appInfo.packageName)) {
+            if (AxSandboxService.get().isPackageSandboxed(appInfo.packageName)) {
                 return true;
             }
         }
