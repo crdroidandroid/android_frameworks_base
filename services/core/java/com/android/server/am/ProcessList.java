@@ -186,7 +186,7 @@ import com.android.server.pm.pkg.AndroidPackage;
 import com.android.server.pm.pkg.PackageStateInternal;
 import com.android.server.privatecompute.PccSandboxManagerInternal;
 import com.android.server.wm.ActivityServiceConnectionsHolder;
-import com.android.server.wm.IAxSandboxService;
+import com.android.server.wm.AxSandboxService;
 import com.android.server.wm.WindowManagerService;
 import com.android.server.wm.WindowProcessController;
 
@@ -1906,7 +1906,7 @@ public final class ProcessList extends ProcessListInternal
             }
             if (gids != null) {
                 try {
-                    int[] restrictedGids = IAxSandboxService.get()
+                    int[] restrictedGids = AxSandboxService.get()
                             .getRestrictedGids(app.info.packageName);
                     if (restrictedGids != null && restrictedGids.length > 0) {
                         java.util.ArrayList<Integer> filtered = new java.util.ArrayList<>();
@@ -2517,7 +2517,7 @@ public final class ProcessList extends ProcessListInternal
             ProcessRecord app) {
         boolean sandboxIsolation = false;
         try {
-            sandboxIsolation = IAxSandboxService.get()
+            sandboxIsolation = AxSandboxService.get()
                     .isSandboxDataIsolationEnabled(app.info.packageName);
         } catch (Exception e) {
             // ignore
@@ -2554,7 +2554,7 @@ public final class ProcessList extends ProcessListInternal
             boolean bindMountAppStorageDirs = false;
             boolean sandboxDataIsolation = false;
             try {
-                sandboxDataIsolation = IAxSandboxService.get()
+                sandboxDataIsolation = AxSandboxService.get()
                         .isSandboxDataIsolationEnabled(app.info.packageName);
             } catch (Exception e) {
                 // ignore

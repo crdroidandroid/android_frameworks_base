@@ -136,6 +136,7 @@ java_library_static {
         ":android.hardware.tv.hdmi.connection-V1-java-source",
         ":android.hardware.tv.hdmi.earc-V1-java-source",
         ":android.hardware.tv.mediaquality-V2-java-source",
+        ":ax_sandbox_server_sources",
         ":statslog-art-java-gen",
         ":statslog-contexthub-java-gen",
         ":statslog-crashrecovery-java-gen",
