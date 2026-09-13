@@ -192,7 +192,7 @@ import com.android.server.inputmethod.InputMethodSubtypeSwitchingController.ImeS
 import com.android.server.pm.UserManagerInternal;
 import com.android.server.statusbar.StatusBarManagerInternal;
 import com.android.server.utils.PriorityDump;
-import com.android.server.wm.IAxSandboxService;
+import com.android.server.wm.AxSandboxService;
 import com.android.server.wm.WindowManagerInternal;
 
 import lineageos.hardware.LineageHardwareManager;
@@ -1834,7 +1834,7 @@ public final class InputMethodManagerService implements IInputMethodManagerImpl.
         final int callingUid = Binder.getCallingUid();
         String[] clientPackages = mContext.getPackageManager().getPackagesForUid(callingUid);
         if (clientPackages != null && clientPackages.length > 0) {
-            if (IAxSandboxService.get().isPackageSandboxed(clientPackages[0])) {
+            if (AxSandboxService.get().isPackageSandboxed(clientPackages[0])) {
                  final var settings = InputMethodSettingsRepository.get(userId);
                  for (InputMethodInfo imi : settings.getMethodList()) {
                      if (imi.isSystem()) return imi;
@@ -6065,7 +6065,7 @@ public final class InputMethodManagerService implements IInputMethodManagerImpl.
                 && selectedImeComponent.getPackageName().equals(targetPkgName)) {
             return true;
         }
-        if (IAxSandboxService.get().isPackageSandboxed(targetPkgName)) {
+        if (AxSandboxService.get().isPackageSandboxed(targetPkgName)) {
             if (!UserHandle.isCore(callingUid)) {
                 String[] packages = mContext.getPackageManager().getPackagesForUid(callingUid);
                 boolean isItself = false;
@@ -6084,7 +6084,7 @@ public final class InputMethodManagerService implements IInputMethodManagerImpl.
         String[] callingPackages = mContext.getPackageManager().getPackagesForUid(callingUid);
         if (callingPackages != null && callingPackages.length > 0) {
             String callingPackage = callingPackages[0];
-            if (IAxSandboxService.get().isPackageSandboxed(callingPackage)) {
+            if (AxSandboxService.get().isPackageSandboxed(callingPackage)) {
                 if (callingPackage.equals(targetPkgName)) {
                     return true;
                 }
