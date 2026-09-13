@@ -419,7 +419,7 @@ import com.android.server.uri.UriGrantsManagerInternal;
 import com.android.server.utils.Slogf;
 import com.android.server.utils.quota.MultiRateLimiter;
 import com.android.server.wm.ActivityTaskManagerInternal;
-import com.android.server.wm.IAxSandboxService;
+import com.android.server.wm.AxSandboxService;
 import com.android.server.wm.BackgroundActivityStartCallback;
 import com.android.server.wm.WindowManagerInternal;
 
@@ -8687,10 +8687,10 @@ public class NotificationManagerService extends SystemService {
                     SmallHash.hash(Objects.hashCode(tag) ^ id));
         }
 
-        if (IAxSandboxService.get().isPackageHidden(pkg)) {
+        if (AxSandboxService.get().isPackageHidden(pkg)) {
             try {
                 String key = pkg + "|" + (tag != null ? tag : "") + "|" + id;
-                IAxSandboxService.get().onHiddenNotificationRemoved(key);
+                AxSandboxService.get().onHiddenNotificationRemoved(key);
                 if (DBG) {
                     Slog.d(TAG, "Removed hidden app notification: " + key);
                 }
@@ -8790,7 +8790,7 @@ public class NotificationManagerService extends SystemService {
                 callingUid, incomingUserId, true, false, "enqueueNotification", pkg);
         final UserHandle user = UserHandle.of(userId);
 
-        final boolean isHiddenApp = IAxSandboxService.get().isPackageHidden(pkg);
+        final boolean isHiddenApp = AxSandboxService.get().isPackageHidden(pkg);
         if (isHiddenApp) {
             try {
                 String key = pkg + "|" + (tag != null ? tag : "") + "|" + id;
@@ -8803,7 +8803,7 @@ public class NotificationManagerService extends SystemService {
                 HiddenNotificationInfo info = new HiddenNotificationInfo(
                         key, pkg, appIcon, title, text, contentIntent, postTime, userId);
 
-                IAxSandboxService.get().onHiddenNotificationPosted(info);
+                AxSandboxService.get().onHiddenNotificationPosted(info);
                 Slog.d(TAG, "Redirected notification from hidden app: " + pkg);
                 return true;
             } catch (Exception e) {
@@ -8915,7 +8915,7 @@ public class NotificationManagerService extends SystemService {
         fixNotificationWithChannel(notification, channel, notificationUid, pkg);
 
         final NotificationRecord r = new NotificationRecord(getContext(), n, channel);
-        if (IAxSandboxService.get().hasAppLock(pkg)) {
+        if (AxSandboxService.get().hasAppLock(pkg)) {
             notification.extras.putBoolean(AxSandboxManager.EXTRA_NOTIFICATION_APP_LOCKED, true);
         } else {
             notification.extras.remove(AxSandboxManager.EXTRA_NOTIFICATION_APP_LOCKED);

@@ -705,7 +705,7 @@ class TaskFragment extends WindowContainer<WindowContainer> {
             getTask().touchActiveTime();
         }
 
-        if (IAxSandboxService.get().checkLockApp(mResumedActivity, r)) {
+        if (AxSandboxService.get().checkLockApp(mResumedActivity, r)) {
             return;
         }
 
@@ -1639,7 +1639,7 @@ class TaskFragment extends WindowContainer<WindowContainer> {
             pausing |= startPausing(mTaskSupervisor.mUserLeaving, false /* uiSleeping */,
                     next, "resumeTopActivity");
         }
-        if (IAxSandboxService.get().checkLockApp(prev, next)) {
+        if (AxSandboxService.get().checkLockApp(prev, next)) {
             return true;
         }
         if (pausing) {
