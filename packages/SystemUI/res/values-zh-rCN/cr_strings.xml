@@ -68,12 +68,12 @@
     <string name="onthego_channel_name">主要</string>
     <string name="global_action_onthego">行走模式</string>
     <string name="onthego_dialog_title">行走模式</string>
-    <string name="onthego_opacity_title">Camera opacity</string>
+    <string name="onthego_opacity_title">相机画面不透明度</string>
     <string name="onthego_opacity_default">50%</string>
-    <string name="onthego_restart_title">Restart on camera switch</string>
-    <string name="onthego_restart_summary">Briefly restart the preview when the camera changes</string>
-    <string name="onthego_front_camera_title">Front camera</string>
-    <string name="onthego_front_camera_summary">Use the front camera instead of the rear</string>
+    <string name="onthego_restart_title">在相机开关时重启</string>
+    <string name="onthego_restart_summary">当相机改变时快速重启预览</string>
+    <string name="onthego_front_camera_title">前置摄像头</string>
+    <string name="onthego_front_camera_summary">使用前置摄像头代替后置摄像头</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">今日使用</string>
     <string name="usage_data_weekly">本周使用</string>
