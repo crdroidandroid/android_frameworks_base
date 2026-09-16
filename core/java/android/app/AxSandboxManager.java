@@ -452,9 +452,10 @@ public class AxSandboxManager {
 
     /** @hide */
     @Nullable
-    public String getSpoofedSetting(@NonNull String callingPackage, @NonNull String settingName) {
+    public String getSpoofedSetting(@NonNull String callingPackage, int callingUid,
+            @NonNull String settingName) {
         try {
-            return mService.getSpoofedSetting(callingPackage, settingName);
+            return mService.getSpoofedSetting(callingPackage, callingUid, settingName);
         } catch (RemoteException e) {
             throw e.rethrowFromSystemServer();
         }

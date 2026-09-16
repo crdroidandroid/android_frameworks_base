@@ -497,8 +497,20 @@ public class AxSandboxService extends IAxSandboxManager.Stub implements IAxSandb
     }
 
     @Override
-    public String getSpoofedSetting(String callingPackage, String settingName) {
+    public String getSpoofedSetting(String callingPackage, int callingUid, String settingName) {
         if (mAppControlController == null) return null;
+        if (!UserHandle.isApp(callingUid)
+                || !mAppControlController.isPackageSandboxed(callingPackage)) {
+            return null;
+        }
+
+        final String[] uidPackages = mContext.getPackageManager().getPackagesForUid(callingUid);
+        if (uidPackages == null || !java.util.Arrays.asList(uidPackages).contains(callingPackage)) {
+            Slog.w(TAG, "Rejecting settings spoof request with mismatched UID/package: uid="
+                    + callingUid + " package=" + callingPackage);
+            return null;
+        }
+
         final String spoofedValue = SettingsSpoofController.getSpoofedValue(settingName);
         if (spoofedValue == null) return null;
         if (!mAppControlController.isSpoofSettingEnabled(callingPackage, settingName)) {
