@@ -185,7 +185,7 @@ public class PlatformCompat extends IPlatformCompat.Stub {
         CompatChange c = mCompatConfig.getCompatChange(changeId);
 
         if (changeId == 143937733L && appInfo != null) {
-            if (AxSandboxService.get().isPackageSandboxed(appInfo.packageName)) {
+            if (AxSandboxService.get().isPackageSandboxed(appInfo.packageName, UserHandle.getUserId(appInfo.uid))) {
                 return true;
             }
         }

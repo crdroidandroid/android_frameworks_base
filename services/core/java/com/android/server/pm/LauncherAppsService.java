@@ -1015,8 +1015,8 @@ public class LauncherAppsService extends SystemService {
             List<String> launcherHiddenPkgs = Collections.emptyList();
             if (!isCallerSandboxApp) {
                 try {
-                    hiddenPkgs = AxSandboxService.get().getHiddenPackages();
-                    launcherHiddenPkgs = AxSandboxService.get().getHiddenFromLauncherPackages();
+                    hiddenPkgs = AxSandboxService.get().getHiddenPackages(user.getIdentifier());
+                    launcherHiddenPkgs = AxSandboxService.get().getHiddenFromLauncherPackages(user.getIdentifier());
                 } catch (Exception e) {
                     Slog.e(TAG, "Failed to retrieve hidden package lists from AxSandboxService", e);
                 }
