@@ -27,6 +27,7 @@
 #include <bionic/malloc.h>
 #include <ctype.h>
 #include <debuggerd/client.h>
+#include <dlfcn.h>
 #include <dmabufinfo/dmabuf_sysfs_stats.h>
 #include <dmabufinfo/dmabufinfo.h>
 #include <errno.h>
@@ -807,6 +808,13 @@ static jboolean android_os_Debug_logAllocatorStats(JNIEnv*, jobject) {
     return mallopt(M_LOG_STATS, 0) == 1 ? JNI_TRUE : JNI_FALSE;
 }
 
+static jboolean android_os_Debug_isDiagnosticPrivacyEnabled(JNIEnv*, jclass) {
+    using IsEnabledFn = bool (*)();
+    static const auto is_enabled = reinterpret_cast<IsEnabledFn>(
+            dlsym(RTLD_DEFAULT, "custom_rom_hide_is_enabled"));
+    return is_enabled != nullptr && is_enabled() ? JNI_TRUE : JNI_FALSE;
+}
+
 /*
  * JNI registration.
  */
@@ -850,6 +858,8 @@ static const JNINativeMethod gMethods[] = {
         {"getGpuTotalUsageKb", "()J", (void*)android_os_Debug_getGpuTotalUsageKb},
         {"isVmapStack", "()Z", (void*)android_os_Debug_isVmapStack},
         {"logAllocatorStats", "()Z", (void*)android_os_Debug_logAllocatorStats},
+        {"isDiagnosticPrivacyEnabled", "()Z",
+         (void*)android_os_Debug_isDiagnosticPrivacyEnabled},
         {"getKernelCmaUsageKb", "()J", (void*)android_os_Debug_getKernelCmaUsageKb},
 };
 

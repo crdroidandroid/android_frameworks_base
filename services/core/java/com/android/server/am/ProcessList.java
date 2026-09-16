@@ -1980,6 +1980,24 @@ public final class ProcessList implements ProcessStateController.ProcessLruUpdat
             boolean isProfileableByShell = app.info.isProfileableByShell();
             boolean isProfileable = app.info.isProfileable();
 
+            // Keep explicitly debuggable builds observable to development tools. Production
+            // processes selected in AxSandbox receive the privacy policy before app code runs.
+            if (!debuggableFlag && UserHandle.isApp(app.uid)) {
+                final com.android.server.wm.AxSandboxService sandboxService =
+                        com.android.server.wm.AxSandboxService.get();
+                if (sandboxService.isPackageSandboxed(app.info.packageName)) {
+                    runtimeFlags |= Zygote.ENABLE_AX_SANDBOX_PRIVACY;
+                    if (sandboxService.isSpoofSettingEnabled(app.info.packageName,
+                            android.app.AxSandboxManager.SPOOF_ADB_ENABLED)) {
+                        runtimeFlags |= Zygote.ENABLE_AX_SANDBOX_ADB;
+                    }
+                    if (sandboxService.isSpoofSettingEnabled(app.info.packageName,
+                            android.app.AxSandboxManager.SPOOF_SELINUX_ENFORCING)) {
+                        runtimeFlags |= Zygote.ENABLE_AX_SANDBOX_SELINUX_ENFORCING;
+                    }
+                }
+            }
+
             if (app.isSdkSandbox) {
                 ApplicationInfo clientInfo = app.getClientInfoForSdkSandbox();
                 if (clientInfo != null) {
