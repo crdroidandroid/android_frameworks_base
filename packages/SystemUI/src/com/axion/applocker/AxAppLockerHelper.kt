@@ -152,28 +152,29 @@ class AxAppLockerHelper @Inject constructor(
 
     fun getState(packageName: String): AppLockState = getState(packageName, UserHandle.USER_SYSTEM)
 
-    private fun getState(packageName: String, userId: Int): AppLockState {
+    fun getState(packageName: String, userId: Int): AppLockState {
         if (packageName.isBlank()) return AppLockState.NONE
         val manager = sandboxManager ?: return AppLockState.NONE
-        return try {
-            manager.getAppLockStateForUser(packageName, userId)
+        try {
+            return manager.getAppLockState(packageName, userId)
         } catch (e: RuntimeException) {
             Log.w(TAG, "getState failed", e)
-            AppLockState.NONE
+            return AppLockState.NONE
         }
     }
 
-    fun hasAppLock(packageName: String): Boolean {
+    fun hasAppLock(packageName: String, userId: Int = UserHandle.USER_SYSTEM): Boolean {
         if (packageName.isBlank()) return false
-        hasLockCache[packageName]?.let { return it }
-        val hasLock = getState(packageName).hasAppLock()
-        hasLockCache[packageName] = hasLock
+        val cacheKey = "$packageName:$userId"
+        hasLockCache[cacheKey]?.let { return it }
+        val hasLock = getState(packageName, userId).hasAppLock()
+        hasLockCache[cacheKey] = hasLock
         return hasLock
     }
 
     fun needsAuth(packageName: String, userId: Int): Boolean {
         if (packageName.isBlank()) return false
-        if (!hasAppLock(packageName)) return false
+        if (!hasAppLock(packageName, userId)) return false
         val key = sessionKey(userId, packageName)
         if (notifUnlocks.contains(key)) return false
         sessionAuthCache[key]?.let { return it }

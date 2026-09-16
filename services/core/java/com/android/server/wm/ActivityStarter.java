@@ -153,6 +153,7 @@ import com.android.server.power.ShutdownCheckPoints;
 import com.android.server.statusbar.StatusBarManagerInternal;
 import com.android.server.uri.NeededUriGrants;
 import com.android.server.wm.ActivityMetricsLogger.LaunchingState;
+import com.android.server.wm.AxSandboxService;
 import com.android.server.wm.BackgroundActivityStartController.BalVerdict;
 import com.android.server.wm.LaunchParamsController.LaunchParams;
 import com.android.server.wm.TaskFragment.EmbeddingCheckResult;
@@ -910,8 +911,9 @@ class ActivityStarter {
                     if (mRequest.intent != null && mRequest.intent.getComponent() != null) {
                         String targetPkg = mRequest.intent.getComponent().getPackageName();
                         String callerPkg = mRequest.callingPackage;
+                        int targetUserId = mRequest.userId;
                         if (targetPkg != null
-                                && AxSandboxService.get().isPackageHidden(targetPkg)
+                                && AxSandboxService.get().isPackageHidden(targetPkg, targetUserId)
                                 && !AxSandboxService.BLACKLISTED_PACKAGES.contains(callerPkg)
                                 && !targetPkg.equals(callerPkg)) {
                             int callerUid = mRequest.callingUid;
