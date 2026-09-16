@@ -1907,7 +1907,7 @@ public final class ProcessList extends ProcessListInternal
             if (gids != null) {
                 try {
                     int[] restrictedGids = AxSandboxService.get()
-                            .getRestrictedGids(app.info.packageName);
+                            .getRestrictedGids(app.info.packageName, UserHandle.getUserId(app.uid));
                     if (restrictedGids != null && restrictedGids.length > 0) {
                         java.util.ArrayList<Integer> filtered = new java.util.ArrayList<>();
                         for (int gid : gids) {
@@ -2518,7 +2518,7 @@ public final class ProcessList extends ProcessListInternal
         boolean sandboxIsolation = false;
         try {
             sandboxIsolation = AxSandboxService.get()
-                    .isSandboxDataIsolationEnabled(app.info.packageName);
+                    .isSandboxDataIsolationEnabled(app.info.packageName, UserHandle.getUserId(app.uid));
         } catch (Exception e) {
             // ignore
         }
@@ -2555,7 +2555,7 @@ public final class ProcessList extends ProcessListInternal
             boolean sandboxDataIsolation = false;
             try {
                 sandboxDataIsolation = AxSandboxService.get()
-                        .isSandboxDataIsolationEnabled(app.info.packageName);
+                        .isSandboxDataIsolationEnabled(app.info.packageName, UserHandle.getUserId(app.uid));
             } catch (Exception e) {
                 // ignore
             }
