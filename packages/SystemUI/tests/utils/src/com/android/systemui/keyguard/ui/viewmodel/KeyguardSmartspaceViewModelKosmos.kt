@@ -22,6 +22,7 @@ import com.android.systemui.kosmos.Kosmos
 import com.android.systemui.kosmos.applicationCoroutineScope
 import com.android.systemui.shade.domain.interactor.shadeModeInteractor
 import com.android.systemui.statusbar.lockscreen.lockscreenSmartspaceController
+import com.android.systemui.statusbar.notification.domain.interactor.activeNotificationsInteractor
 
 val Kosmos.keyguardSmartspaceViewModel by
     Kosmos.Fixture {
@@ -32,5 +33,6 @@ val Kosmos.keyguardSmartspaceViewModel by
             smartspaceInteractor = keyguardSmartspaceInteractor,
             shadeModeInteractor = shadeModeInteractor,
             keyguardInteractor = keyguardInteractor,
+            activeNotificationsInteractor = activeNotificationsInteractor,
         )
     }
