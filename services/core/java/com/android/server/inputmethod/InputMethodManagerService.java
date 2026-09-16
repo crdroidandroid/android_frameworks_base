@@ -1841,9 +1841,10 @@ public final class InputMethodManagerService implements IInputMethodManagerImpl.
         }
         InputMethodInfo originalImi = InputMethodSettingsRepository.get(userId).getMethodMap().get(selectedImeId);
         final int callingUid = Binder.getCallingUid();
+        final int callingUserId = UserHandle.getUserId(callingUid);
         String[] clientPackages = mContext.getPackageManager().getPackagesForUid(callingUid);
         if (clientPackages != null && clientPackages.length > 0) {
-            if (AxSandboxService.get().isPackageSandboxed(clientPackages[0])) {
+            if (AxSandboxService.get().isPackageSandboxed(clientPackages[0], callingUserId)) {
                  final var settings = InputMethodSettingsRepository.get(userId);
                  for (InputMethodInfo imi : settings.getMethodList()) {
                      if (imi.isSystem()) return imi;
@@ -6076,7 +6077,7 @@ public final class InputMethodManagerService implements IInputMethodManagerImpl.
                 && selectedImeComponent.getPackageName().equals(targetPkgName)) {
             return true;
         }
-        if (AxSandboxService.get().isPackageSandboxed(targetPkgName)) {
+        if (AxSandboxService.get().isPackageSandboxed(targetPkgName, userId)) {
             if (!UserHandle.isCore(callingUid)) {
                 String[] packages = mContext.getPackageManager().getPackagesForUid(callingUid);
                 boolean isItself = false;
@@ -6095,7 +6096,7 @@ public final class InputMethodManagerService implements IInputMethodManagerImpl.
         String[] callingPackages = mContext.getPackageManager().getPackagesForUid(callingUid);
         if (callingPackages != null && callingPackages.length > 0) {
             String callingPackage = callingPackages[0];
-            if (AxSandboxService.get().isPackageSandboxed(callingPackage)) {
+            if (AxSandboxService.get().isPackageSandboxed(callingPackage, userId)) {
                 if (callingPackage.equals(targetPkgName)) {
                     return true;
                 }
