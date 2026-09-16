@@ -1289,7 +1289,7 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub
             final int callingUid = Binder.getCallingUid();
             String[] clientPackages = mPackageManager.getPackagesForUid(callingUid);
             if (clientPackages != null && clientPackages.length > 0) {
-                if (AxSandboxService.get().isPackageSandboxed(clientPackages[0])) {
+                if (AxSandboxService.get().isPackageSandboxed(clientPackages[0], resolvedUserId)) {
                     return IntPair.of(0, 0);
                 }
             }
@@ -1605,7 +1605,7 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub
             final List<AccessibilityServiceInfo> result = new ArrayList<>(serviceCount);
             for (int i = 0; i < serviceCount; ++i) {
                 final AccessibilityServiceConnection service = services.get(i);
-                if (AxSandboxService.get().isPackageSandboxed(service.getComponentName().getPackageName())) {
+                if (AxSandboxService.get().isPackageSandboxed(service.getComponentName().getPackageName(), userState.mUserId)) {
                     continue;
                 }
                 if ((service.mFeedbackType & feedbackType) != 0
