@@ -657,7 +657,7 @@ public class SettingsProvider extends ContentProvider {
             AxSandboxManager sandboxManager =
                     getContext().getSystemService(AxSandboxManager.class);
             if (sandboxManager != null) {
-                settings = sandboxManager.getSpoofedSetting(callingPackage, name);
+                settings = sandboxManager.getSpoofedSetting(callingPackage, name, UserHandle.getCallingUserId());
             }
         } catch (Exception e) {}
 
