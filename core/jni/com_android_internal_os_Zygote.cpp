@@ -34,6 +34,7 @@
 #include <android/fdsan.h>
 #include <arpa/inet.h>
 #include <dirent.h>
+#include <dlfcn.h>
 #include <fcntl.h>
 #include <grp.h>
 #include <inttypes.h>
@@ -352,6 +353,9 @@ enum RuntimeFlags : uint32_t {
     PROFILEABLE = 1 << 24,
     DEBUG_ENABLE_PTRACE = 1 << 25,
     ENABLE_PAGE_SIZE_APP_COMPAT = 1 << 26,
+    ENABLE_AX_SANDBOX_PRIVACY = 1 << 27,
+    ENABLE_AX_SANDBOX_SELINUX_ENFORCING = 1 << 28,
+    ENABLE_AX_SANDBOX_ADB = 1 << 29,
 };
 
 enum UnsolicitedZygoteMessageTypes : uint32_t {
@@ -1904,6 +1908,53 @@ static void SpecializeCommon(JNIEnv* env, uid_t uid, gid_t gid, jintArray gids, 
                              bool is_top_app, jobjectArray pkg_data_info_list,
                              jobjectArray allowlisted_data_info_list, bool mount_data_dirs,
                              bool mount_storage_dirs, bool mount_sysprop_overrides) {
+    // This runs in the freshly forked child before application code. Keep the policy in
+    // process-local libc state so native reads do not need Binder calls or global UID rules.
+    const bool privacy_enabled =
+            (runtime_flags & RuntimeFlags::ENABLE_AX_SANDBOX_PRIVACY) != 0;
+    const bool selinux_enforcing_enabled =
+            (runtime_flags & RuntimeFlags::ENABLE_AX_SANDBOX_SELINUX_ENFORCING) != 0;
+    const bool adb_enabled =
+            (runtime_flags & RuntimeFlags::ENABLE_AX_SANDBOX_ADB) != 0;
+    using SetEnabledFn = void (*)(bool);
+    static const auto set_enabled = reinterpret_cast<SetEnabledFn>(
+            dlsym(RTLD_DEFAULT, "custom_rom_hide_set_enabled"));
+    if (set_enabled != nullptr) {
+        set_enabled(privacy_enabled);
+    }
+    using SetAdbEnabledFn = void (*)(bool);
+    static const auto set_adb_enabled = reinterpret_cast<SetAdbEnabledFn>(
+            dlsym(RTLD_DEFAULT, "custom_rom_hide_set_adb_enabled"));
+    if (set_adb_enabled != nullptr) {
+        set_adb_enabled(adb_enabled);
+    }
+    using SetSelinuxEnforcingEnabledFn = void (*)(bool);
+    static const auto set_selinux_enforcing_enabled =
+            reinterpret_cast<SetSelinuxEnforcingEnabledFn>(
+                    dlsym(RTLD_DEFAULT,
+                            "custom_rom_hide_set_selinux_enforcing_enabled"));
+    if (set_selinux_enforcing_enabled != nullptr) {
+        set_selinux_enforcing_enabled(selinux_enforcing_enabled);
+    }
+    if (privacy_enabled) {
+        setenv("BIONIC_AX_SANDBOX_PRIVACY", "1", 1);
+    } else {
+        unsetenv("BIONIC_AX_SANDBOX_PRIVACY");
+    }
+    if (adb_enabled) {
+        setenv("BIONIC_AX_SANDBOX_ADB", "1", 1);
+    } else {
+        unsetenv("BIONIC_AX_SANDBOX_ADB");
+    }
+    if (selinux_enforcing_enabled) {
+        setenv("BIONIC_AX_SANDBOX_SELINUX_ENFORCING", "1", 1);
+    } else {
+        unsetenv("BIONIC_AX_SANDBOX_SELINUX_ENFORCING");
+    }
+    runtime_flags &= ~RuntimeFlags::ENABLE_AX_SANDBOX_PRIVACY;
+    runtime_flags &= ~RuntimeFlags::ENABLE_AX_SANDBOX_SELINUX_ENFORCING;
+    runtime_flags &= ~RuntimeFlags::ENABLE_AX_SANDBOX_ADB;
+
     const char* process_name = is_system_server ? "system_server" : "zygote";
     auto fail_fn = std::bind(ZygoteFailure, env, process_name, managed_nice_name, _1);
     auto extract_fn = std::bind(ExtractJString, env, process_name, managed_nice_name, _1);

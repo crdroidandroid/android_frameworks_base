@@ -628,24 +628,24 @@ public class SettingsProvider extends ContentProvider {
     }
 
     private String getSpoofedValue(String name) {
-        String callingPackage = getCallingPackage();
-        if (callingPackage == null) return null;
+        final int callingUid = Binder.getCallingUid();
+        final String callingPackage = getCallingPackage();
+        final long identity = Binder.clearCallingIdentity();
 
-        if (callingPackage.startsWith("com.android.")
-                || callingPackage.startsWith("com.google.android.")) {
-            return null;
-        }
-        
-        String settings = null;
         try {
             AxSandboxManager sandboxManager =
                     getContext().getSystemService(AxSandboxManager.class);
             if (sandboxManager != null) {
-                settings = sandboxManager.getSpoofedSetting(callingPackage, name);
+                return sandboxManager.getSpoofedSetting(callingPackage, callingUid, name);
             }
-        } catch (Exception e) {}
-        
-        return settings;
+        } catch (RuntimeException e) {
+            Slog.w(LOG_TAG, "Unable to evaluate settings privacy policy for uid="
+                    + callingUid + " package=" + callingPackage, e);
+        } finally {
+            Binder.restoreCallingIdentity(identity);
+        }
+
+        return null;
     }
 
     @Override
