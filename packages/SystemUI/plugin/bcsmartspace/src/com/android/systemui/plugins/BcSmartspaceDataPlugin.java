@@ -145,6 +145,13 @@ public interface BcSmartspaceDataPlugin extends Plugin {
         default void setScreenOn(boolean screenOn) {}
 
         /**
+         * Force this view hidden regardless of the target it holds, overriding the plugin's own
+         * visibility. The keyguard uses this to hide the weather-clock at-a-glance when there are
+         * notifications on screen. Default is a no-op.
+         */
+        default void setHiddenByPolicy(boolean hidden) {}
+
+        /**
          * Sets a delegate to handle clock event registration. Should be called immediately after
          * the view is created.
          */

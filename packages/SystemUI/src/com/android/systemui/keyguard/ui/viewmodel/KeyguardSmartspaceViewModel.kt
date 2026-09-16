@@ -24,6 +24,7 @@ import com.android.systemui.keyguard.domain.interactor.KeyguardInteractor
 import com.android.systemui.keyguard.domain.interactor.KeyguardSmartspaceInteractor
 import com.android.systemui.res.R
 import com.android.systemui.shade.domain.interactor.ShadeModeInteractor
+import com.android.systemui.statusbar.notification.domain.interactor.ActiveNotificationsInteractor
 import com.android.systemui.shade.shared.model.ShadeMode
 import com.android.systemui.statusbar.lockscreen.LockscreenSmartspaceController
 import javax.inject.Inject
@@ -44,12 +45,17 @@ constructor(
     smartspaceInteractor: KeyguardSmartspaceInteractor,
     shadeModeInteractor: ShadeModeInteractor,
     keyguardInteractor: KeyguardInteractor,
+    activeNotificationsInteractor: ActiveNotificationsInteractor,
 ) {
     /** Whether the smartspace section is available in the build. */
     val isSmartspaceEnabled: Boolean = smartspaceController.isEnabled
 
     /** Whether the weather area is available and enabled. */
     val isWeatherEnabled: Flow<Boolean> = smartspaceInteractor.isWeatherEnabled
+
+    /** Whether any notifications are on the lock screen (gates the weather-clock at-a-glance). */
+    val areAnyNotificationsPresent: Flow<Boolean> =
+        activeNotificationsInteractor.areAnyNotificationsPresent
 
     @Deprecated("Remove after flexiglass ships")
     /** Whether the date area should be visible. */
