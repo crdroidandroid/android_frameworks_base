@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2021 The OmniROM project
- * Copyright (C) 2022-2025 crDroid Android project
+ * Copyright (C) 2022-2026 crDroid Android project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,20 +60,57 @@ public class OmniJawsClient {
     public static final int EXTRA_ERROR_LOCATION = 1;
     public static final int EXTRA_ERROR_DISABLED = 2;
 
+    private static final String COL_CITY = "city";
+    private static final String COL_WIND_SPEED = "wind_speed";
+    private static final String COL_WIND_DIRECTION = "wind_direction";
+    private static final String COL_CONDITION_CODE = "condition_code";
+    private static final String COL_TEMPERATURE = "temperature";
+    private static final String COL_HUMIDITY = "humidity";
+    private static final String COL_CONDITION = "condition";
+    private static final String COL_FORECAST_LOW = "forecast_low";
+    private static final String COL_FORECAST_HIGH = "forecast_high";
+    private static final String COL_FORECAST_CONDITION = "forecast_condition";
+    private static final String COL_FORECAST_CONDITION_CODE = "forecast_condition_code";
+    private static final String COL_TIME_STAMP = "time_stamp";
+    private static final String COL_FORECAST_DATE = "forecast_date";
+    private static final String COL_PIN_WHEEL = "pin_wheel";
+    private static final String COL_FEELS_LIKE = "feels_like";
+    private static final String COL_PRESSURE = "pressure";
+    private static final String COL_UVI = "uvi";
+    private static final String COL_VISIBILITY = "visibility";
+    private static final String COL_DEW_POINT = "dew_point";
+    private static final String COL_SUNRISE = "sunrise";
+    private static final String COL_SUNSET = "sunset";
+    private static final String COL_CITY_ID = "city_id";
+
+    private static final String COL_ENABLED = "enabled";
+    private static final String COL_UNITS = "units";
+    private static final String COL_PROVIDER = "provider";
+    private static final String COL_SETUP = "setup";
+    private static final String COL_ICON_PACK = "icon_pack";
+
+    private static final String COL_HOURLY_TEMPERATURE = "hourly_temperature";
+    private static final String COL_HOURLY_CONDITION_CODE = "hourly_condition_code";
+    private static final String COL_HOURLY_CONDITION = "hourly_condition";
+    private static final String COL_HOURLY_TIMESTAMP = "hourly_timestamp";
+    private static final String COL_HOURLY_HUMIDITY = "hourly_humidity";
+    private static final String COL_HOURLY_WIND_SPEED = "hourly_wind_speed";
+
     public static final String[] WEATHER_PROJECTION = {
-            "city", "wind_speed", "wind_direction", "condition_code", "temperature",
-            "humidity", "condition", "forecast_low", "forecast_high", "forecast_condition",
-            "forecast_condition_code", "time_stamp", "forecast_date", "pin_wheel",
-            "feels_like", "pressure", "uvi", "visibility", "dew_point", "sunrise", "sunset"
+            COL_CITY, COL_WIND_SPEED, COL_WIND_DIRECTION, COL_CONDITION_CODE, COL_TEMPERATURE,
+            COL_HUMIDITY, COL_CONDITION, COL_FORECAST_LOW, COL_FORECAST_HIGH, COL_FORECAST_CONDITION,
+            COL_FORECAST_CONDITION_CODE, COL_TIME_STAMP, COL_FORECAST_DATE, COL_PIN_WHEEL,
+            COL_FEELS_LIKE, COL_PRESSURE, COL_UVI, COL_VISIBILITY, COL_DEW_POINT,
+            COL_SUNRISE, COL_SUNSET, COL_CITY_ID
     };
 
     public static final String[] SETTINGS_PROJECTION = {
-            "enabled", "units", "provider", "setup", "icon_pack"
+            COL_ENABLED, COL_UNITS, COL_PROVIDER, COL_SETUP, COL_ICON_PACK
     };
 
     public static final String[] HOURLY_PROJECTION = {
-            "hourly_temperature", "hourly_condition_code", "hourly_condition",
-            "hourly_timestamp", "hourly_humidity", "hourly_wind_speed"
+            COL_HOURLY_TEMPERATURE, COL_HOURLY_CONDITION_CODE, COL_HOURLY_CONDITION,
+            COL_HOURLY_TIMESTAMP, COL_HOURLY_HUMIDITY, COL_HOURLY_WIND_SPEED
     };
 
     private static final DecimalFormat sNoDigitsFormat = new DecimalFormat("0");
@@ -81,14 +118,15 @@ public class OmniJawsClient {
     private static OmniJawsClient sInstance;
 
     private volatile WeatherInfo mCachedInfo;
-    private Resources mRes;
-    private String mPackageName;
-    private String mIconPrefix;
-    private String mSettingIconPackage;
-    private boolean mMetric;
+    private volatile Resources mRes;
+    private volatile String mPackageName;
+    private volatile String mIconPrefix;
+    private volatile String mSettingIconPackage;
+    private volatile boolean mMetric = true;
 
     private final List<WeakReference<OmniJawsObserver>> mObservers = new CopyOnWriteArrayList<>();
     private WeatherUpdateReceiver mReceiver;
+    private Context mReceiverContext;
     private boolean mWeatherReceiverRegistered = false;
 
     public static OmniJawsClient get() {
@@ -115,10 +153,14 @@ public class OmniJawsClient {
             for (WeakReference<OmniJawsObserver> ref : mObservers) {
                 OmniJawsObserver obs = ref.get();
                 if (obs == null) continue;
-                if (WEATHER_UPDATE.equals(action)) {
-                    obs.weatherUpdated();
-                } else if (WEATHER_ERROR.equals(action)) {
-                    obs.weatherError(intent.getIntExtra(EXTRA_ERROR, 0));
+                try {
+                    if (WEATHER_UPDATE.equals(action)) {
+                        obs.weatherUpdated();
+                    } else if (WEATHER_ERROR.equals(action)) {
+                        obs.weatherError(intent.getIntExtra(EXTRA_ERROR, 0));
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, "observer threw on " + action, e);
                 }
             }
         }
@@ -155,42 +197,63 @@ public class OmniJawsClient {
 
             if (weatherCursor != null && weatherCursor.getCount() > 0) {
                 info = new WeatherInfo();
+                info.tempUnits = getTemperatureUnit();
+                info.windUnits = getWindUnit();
                 List<DayForecast> forecasts = new ArrayList<>();
+
+                final int colCity = weatherCursor.getColumnIndex(COL_CITY);
+                final int colWindSpeed = weatherCursor.getColumnIndex(COL_WIND_SPEED);
+                final int colWindDir = weatherCursor.getColumnIndex(COL_WIND_DIRECTION);
+                final int colConditionCode = weatherCursor.getColumnIndex(COL_CONDITION_CODE);
+                final int colTemperature = weatherCursor.getColumnIndex(COL_TEMPERATURE);
+                final int colHumidity = weatherCursor.getColumnIndex(COL_HUMIDITY);
+                final int colCondition = weatherCursor.getColumnIndex(COL_CONDITION);
+                final int colTimeStamp = weatherCursor.getColumnIndex(COL_TIME_STAMP);
+                final int colPinWheel = weatherCursor.getColumnIndex(COL_PIN_WHEEL);
+                final int colFeelsLike = weatherCursor.getColumnIndex(COL_FEELS_LIKE);
+                final int colPressure = weatherCursor.getColumnIndex(COL_PRESSURE);
+                final int colUvi = weatherCursor.getColumnIndex(COL_UVI);
+                final int colVisibility = weatherCursor.getColumnIndex(COL_VISIBILITY);
+                final int colDewPoint = weatherCursor.getColumnIndex(COL_DEW_POINT);
+                final int colSunrise = weatherCursor.getColumnIndex(COL_SUNRISE);
+                final int colSunset = weatherCursor.getColumnIndex(COL_SUNSET);
+                final int colCityId = weatherCursor.getColumnIndex(COL_CITY_ID);
+
+                final int colForecastLow = weatherCursor.getColumnIndex(COL_FORECAST_LOW);
+                final int colForecastHigh = weatherCursor.getColumnIndex(COL_FORECAST_HIGH);
+                final int colForecastCondition = weatherCursor.getColumnIndex(COL_FORECAST_CONDITION);
+                final int colForecastConditionCode =
+                        weatherCursor.getColumnIndex(COL_FORECAST_CONDITION_CODE);
+                final int colForecastDate = weatherCursor.getColumnIndex(COL_FORECAST_DATE);
 
                 for (int i = 0; i < weatherCursor.getCount(); i++) {
                     weatherCursor.moveToPosition(i);
                     if (i == 0) {
-                        info.city = weatherCursor.getString(0);
-                        info.windSpeed = getFormattedValue(weatherCursor.getFloat(1));
-                        info.windDirection = weatherCursor.getInt(2) + "\u00b0";
-                        info.conditionCode = weatherCursor.getInt(3);
-                        info.temp = getFormattedValue(weatherCursor.getFloat(4));
-                        info.humidity = weatherCursor.getString(5);
-                        info.condition = weatherCursor.getString(6);
-                        info.timeStamp = Long.parseLong(weatherCursor.getString(11));
-                        info.pinWheel = weatherCursor.getString(13);
+                        info.city = getString(weatherCursor, colCity);
+                        info.cityId = getString(weatherCursor, colCityId);
+                        info.windSpeed = getFormattedValue(getFloat(weatherCursor, colWindSpeed));
+                        info.windDirection = getInt(weatherCursor, colWindDir, 0) + "\u00b0";
+                        info.conditionCode = getInt(weatherCursor, colConditionCode, -1);
+                        info.temp = getFormattedValue(getFloat(weatherCursor, colTemperature));
+                        info.humidity = getString(weatherCursor, colHumidity);
+                        info.condition = getString(weatherCursor, colCondition);
+                        info.timeStamp = getLong(weatherCursor, colTimeStamp, 0L);
+                        info.pinWheel = getString(weatherCursor, colPinWheel);
 
-                        int colFeelsLike = weatherCursor.getColumnIndex("feels_like");
-                        if (colFeelsLike != -1) info.feelsLike = weatherCursor.getFloat(colFeelsLike);
-                        int colPressure = weatherCursor.getColumnIndex("pressure");
-                        if (colPressure != -1) info.pressure = weatherCursor.getFloat(colPressure);
-                        int colUvi = weatherCursor.getColumnIndex("uvi");
-                        if (colUvi != -1) info.uvi = weatherCursor.getFloat(colUvi);
-                        int colVisibility = weatherCursor.getColumnIndex("visibility");
-                        if (colVisibility != -1) info.visibility = weatherCursor.getFloat(colVisibility);
-                        int colDewPoint = weatherCursor.getColumnIndex("dew_point");
-                        if (colDewPoint != -1) info.dewPoint = weatherCursor.getFloat(colDewPoint);
-                        int colSunrise = weatherCursor.getColumnIndex("sunrise");
-                        if (colSunrise != -1) info.sunrise = weatherCursor.getLong(colSunrise);
-                        int colSunset = weatherCursor.getColumnIndex("sunset");
-                        if (colSunset != -1) info.sunset = weatherCursor.getLong(colSunset);
+                        info.feelsLike = getFloat(weatherCursor, colFeelsLike);
+                        info.pressure = getFloat(weatherCursor, colPressure);
+                        info.uvi = getFloat(weatherCursor, colUvi);
+                        info.visibility = getFloat(weatherCursor, colVisibility);
+                        info.dewPoint = getFloat(weatherCursor, colDewPoint);
+                        info.sunrise = getLong(weatherCursor, colSunrise, 0L);
+                        info.sunset = getLong(weatherCursor, colSunset, 0L);
                     } else {
                         DayForecast day = new DayForecast();
-                        day.low = getFormattedValue(weatherCursor.getFloat(7));
-                        day.high = getFormattedValue(weatherCursor.getFloat(8));
-                        day.condition = weatherCursor.getString(9);
-                        day.conditionCode = weatherCursor.getInt(10);
-                        day.date = weatherCursor.getString(12);
+                        day.low = getFormattedValue(getFloat(weatherCursor, colForecastLow));
+                        day.high = getFormattedValue(getFloat(weatherCursor, colForecastHigh));
+                        day.condition = getString(weatherCursor, colForecastCondition);
+                        day.conditionCode = getInt(weatherCursor, colForecastConditionCode, -1);
+                        day.date = getString(weatherCursor, colForecastDate);
                         forecasts.add(day);
                     }
                 }
@@ -205,12 +268,15 @@ public class OmniJawsClient {
                 SETTINGS_URI, SETTINGS_PROJECTION, null, null, null)) {
 
             if (settingsCursor != null && settingsCursor.moveToFirst()) {
-                mMetric = settingsCursor.getInt(1) == 0;
+                mMetric = getInt(settingsCursor,
+                        settingsCursor.getColumnIndex(COL_UNITS), 0) == 0;
                 if (info != null) {
                     info.tempUnits = getTemperatureUnit();
                     info.windUnits = getWindUnit();
-                    info.provider = settingsCursor.getString(2);
-                    info.iconPack = settingsCursor.getString(4);
+                    info.provider = getString(settingsCursor,
+                            settingsCursor.getColumnIndex(COL_PROVIDER));
+                    info.iconPack = getString(settingsCursor,
+                            settingsCursor.getColumnIndex(COL_ICON_PACK));
                 }
             }
         } catch (Exception e) {
@@ -221,12 +287,12 @@ public class OmniJawsClient {
             try (Cursor hourlyCursor = context.getContentResolver().query(
                     HOURLY_URI, HOURLY_PROJECTION, null, null, null)) {
                 if (hourlyCursor != null && hourlyCursor.getCount() > 0) {
-                    final int colTemp = hourlyCursor.getColumnIndex("hourly_temperature");
-                    final int colCode = hourlyCursor.getColumnIndex("hourly_condition_code");
-                    final int colCondition = hourlyCursor.getColumnIndex("hourly_condition");
-                    final int colTimestamp = hourlyCursor.getColumnIndex("hourly_timestamp");
-                    final int colHumidity = hourlyCursor.getColumnIndex("hourly_humidity");
-                    final int colWindSpeed = hourlyCursor.getColumnIndex("hourly_wind_speed");
+                    final int colTemp = hourlyCursor.getColumnIndex(COL_HOURLY_TEMPERATURE);
+                    final int colCode = hourlyCursor.getColumnIndex(COL_HOURLY_CONDITION_CODE);
+                    final int colCondition = hourlyCursor.getColumnIndex(COL_HOURLY_CONDITION);
+                    final int colTimestamp = hourlyCursor.getColumnIndex(COL_HOURLY_TIMESTAMP);
+                    final int colHumidity = hourlyCursor.getColumnIndex(COL_HOURLY_HUMIDITY);
+                    final int colWindSpeed = hourlyCursor.getColumnIndex(COL_HOURLY_WIND_SPEED);
 
                     if (colTemp == -1 || colCode == -1 || colCondition == -1
                             || colTimestamp == -1 || colHumidity == -1 || colWindSpeed == -1) {
@@ -256,10 +322,46 @@ public class OmniJawsClient {
         updateSettings(context);
     }
 
+    private static String getString(Cursor c, int col) {
+        if (col == -1) return null;
+        try {
+            return c.getString(col);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private static int getInt(Cursor c, int col, int def) {
+        if (col == -1) return def;
+        try {
+            return c.getInt(col);
+        } catch (Exception e) {
+            return def;
+        }
+    }
+
+    private static float getFloat(Cursor c, int col) {
+        if (col == -1) return Float.NaN;
+        try {
+            return c.getFloat(col);
+        } catch (Exception e) {
+            return Float.NaN;
+        }
+    }
+
+    private static long getLong(Cursor c, int col, long def) {
+        if (col == -1) return def;
+        try {
+            return c.getLong(col);
+        } catch (Exception e) {
+            return def;
+        }
+    }
+
     private void updateSettings(Context context) {
         WeatherInfo info = mCachedInfo;
         String iconPack = (info != null) ? info.iconPack : null;
-        if (iconPack == null || TextUtils.isEmpty(iconPack)) {
+        if (TextUtils.isEmpty(iconPack)) {
             loadDefaultIconsPackage(context);
         } else if (!iconPack.equals(mSettingIconPackage)) {
             mSettingIconPackage = iconPack;
@@ -310,7 +412,8 @@ public class OmniJawsClient {
 
         try (Cursor c = context.getContentResolver().query(
                 SETTINGS_URI, SETTINGS_PROJECTION, null, null, null)) {
-            return c != null && c.moveToFirst() && c.getInt(0) == 1;
+            if (c == null || !c.moveToFirst()) return false;
+            return getInt(c, c.getColumnIndex(COL_ENABLED), 0) == 1;
         } catch (Exception e) {
             Log.e(TAG, "isOmniJawsEnabled", e);
             return false;
@@ -331,20 +434,24 @@ public class OmniJawsClient {
 
     public void addObserver(Context context, OmniJawsObserver observer) {
         if (observer == null) return;
-        removeObserver(context, observer);
+        removeObserverInternal(observer);
         mObservers.add(new WeakReference<>(observer));
         registerReceiverIfNeeded(context);
     }
 
     public void removeObserver(Context context, OmniJawsObserver observer) {
         if (observer == null) return;
+        removeObserverInternal(observer);
+        if (mObservers.isEmpty()) {
+            unregisterReceiver();
+        }
+    }
+
+    private void removeObserverInternal(OmniJawsObserver observer) {
         mObservers.removeIf(ref -> {
             OmniJawsObserver o = ref.get();
             return o == null || o == observer;
         });
-        if (mObservers.isEmpty()) {
-            unregisterReceiver(context);
-        }
     }
 
     private void pruneDeadObservers() {
@@ -355,29 +462,34 @@ public class OmniJawsClient {
         }
     }
 
-    private void registerReceiverIfNeeded(Context context) {
-        if (!mWeatherReceiverRegistered && !mObservers.isEmpty()) {
-            if (mReceiver != null) {
-                try {
-                    context.unregisterReceiver(mReceiver);
-                } catch (Exception ignored) {}
-            }
-            mReceiver = new WeatherUpdateReceiver();
-            IntentFilter filter = new IntentFilter();
-            filter.addAction(WEATHER_UPDATE);
-            filter.addAction(WEATHER_ERROR);
-            context.registerReceiver(mReceiver, filter, Context.RECEIVER_EXPORTED);
+    private synchronized void registerReceiverIfNeeded(Context context) {
+        if (mWeatherReceiverRegistered || mObservers.isEmpty()) {
+            return;
+        }
+        mReceiverContext = context.getApplicationContext();
+        mReceiver = new WeatherUpdateReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(WEATHER_UPDATE);
+        filter.addAction(WEATHER_ERROR);
+        try {
+            mReceiverContext.registerReceiver(mReceiver, filter, Context.RECEIVER_EXPORTED);
             mWeatherReceiverRegistered = true;
+        } catch (Exception e) {
+            Log.e(TAG, "registerReceiver failed", e);
+            mReceiver = null;
+            mReceiverContext = null;
         }
     }
 
-    private void unregisterReceiver(Context context) {
-        if (mWeatherReceiverRegistered && mReceiver != null) {
+    private synchronized void unregisterReceiver() {
+        if (mWeatherReceiverRegistered && mReceiver != null && mReceiverContext != null) {
             try {
-                context.unregisterReceiver(mReceiver);
+                mReceiverContext.unregisterReceiver(mReceiver);
             } catch (Exception ignored) {}
-            mWeatherReceiverRegistered = false;
         }
+        mReceiver = null;
+        mReceiverContext = null;
+        mWeatherReceiverRegistered = false;
     }
 
     private String getTemperatureUnit() {
@@ -392,8 +504,14 @@ public class OmniJawsClient {
         if (mRes == null) {
             loadDefaultIconsPackage(context);
         }
+        if (mRes == null) {
+            return getDefaultConditionImage(context);
+        }
         try {
             int resId = mRes.getIdentifier(mIconPrefix + "_" + conditionCode, "drawable", mPackageName);
+            if (resId == 0) {
+                return getDefaultConditionImage(context);
+            }
             Drawable d = mRes.getDrawable(resId, null);
             return d != null ? d : getDefaultConditionImage(context);
         } catch (Exception e) {
@@ -406,27 +524,35 @@ public class OmniJawsClient {
         try {
             Resources res = context.getPackageManager().getResourcesForApplication(ICON_PACKAGE_DEFAULT);
             int resId = res.getIdentifier(ICON_PREFIX_DEFAULT + "_na", "drawable", ICON_PACKAGE_DEFAULT);
+            if (resId == 0) {
+                return new ColorDrawable(Color.TRANSPARENT);
+            }
             Drawable d = res.getDrawable(resId, null);
-            return d != null ? d : new ColorDrawable(Color.RED);
+            return d != null ? d : new ColorDrawable(Color.TRANSPARENT);
         } catch (Exception e) {
-            return new ColorDrawable(Color.RED);
+            return new ColorDrawable(Color.TRANSPARENT);
         }
     }
 
     public Drawable getResOmni(Context context, String iconOmni) {
         if (mRes == null) loadDefaultIconsPackage(context);
+        if (mRes == null) return new ColorDrawable(Color.TRANSPARENT);
         try {
             int resId = mRes.getIdentifier(iconOmni, "drawable", mPackageName);
+            if (resId == 0) {
+                return new ColorDrawable(Color.TRANSPARENT);
+            }
             Drawable d = mRes.getDrawable(resId, null);
-            return d != null ? d : new ColorDrawable(Color.RED);
+            return d != null ? d : new ColorDrawable(Color.TRANSPARENT);
         } catch (Exception e) {
             Log.e(TAG, "getResOmni", e);
-            return new ColorDrawable(Color.RED);
+            return new ColorDrawable(Color.TRANSPARENT);
         }
     }
 
     public static class WeatherInfo {
         public String city;
+        public String cityId;
         public String windSpeed;
         public String windDirection;
         public int conditionCode;
@@ -451,12 +577,16 @@ public class OmniJawsClient {
         public List<HourlyForecast> hourlyForecasts;
 
         public String getLastUpdateTime() {
+            if (timeStamp == null || timeStamp == 0L) {
+                return "";
+            }
             return new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date(timeStamp));
         }
 
         @Override
         public String toString() {
-            return city + " @ " + new Date(timeStamp) + " | " + condition + " | " + temp;
+            return city + " @ " + (timeStamp != null ? new Date(timeStamp) : "never")
+                    + " | " + condition + " | " + temp;
         }
     }
 
