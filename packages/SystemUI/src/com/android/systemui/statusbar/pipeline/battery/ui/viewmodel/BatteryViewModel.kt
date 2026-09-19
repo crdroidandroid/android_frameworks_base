@@ -65,11 +65,25 @@ sealed class BatteryViewModel(
     val isBatteryPercentInsideIconSettingEnabled: Boolean by
         interactor.showPercentInsideIcon.hydratedStateOf(initialValue = false)
 
-    val shouldShowBoltInTextMode: Boolean by
+    val textModeAttributionSymbol: String? by
         combine(interactor.batteryIconStyle, interactor.batteryAttributionType) { style, attr ->
-                style == BatteryRepository.ICON_STYLE_TEXT && attr == Charging
+                if (style != BatteryRepository.ICON_STYLE_TEXT) {
+                    null
+                } else {
+                    when (attr) {
+                        Charging -> TEXT_MODE_BOLT
+
+                        PowerSave -> TEXT_MODE_POWER_SAVE
+
+                        Defend -> TEXT_MODE_DEFEND
+
+                        Unknown -> TEXT_MODE_UNKNOWN
+
+                        else -> null
+                    }
+                }
             }
-            .hydratedStateOf(traceName = "shouldShowBoltInTextMode", initialValue = false)
+            .hydratedStateOf(traceName = "textModeAttributionSymbol", initialValue = null)
 
     /** A [List<BatteryGlyph>] representation of the current [level] */
     private val levelGlyphs: Flow<List<BatteryGlyph>> =
@@ -301,9 +315,19 @@ sealed class BatteryViewModel(
         const val TEST_TAG = "battery"
 
         /**
-         * Bolt drawn next to the percentage when the text-only battery style is selected.
+         * Characters drawn next to the percentage when the text-only battery style is selected.
          */
+        // [BatteryGlyph.Bolt] for charging
         const val TEXT_MODE_BOLT = "\u26A1"
+
+        // [BatteryGlyph.Plus] for power save
+        const val TEXT_MODE_POWER_SAVE = "\u002B"
+
+        // [BatteryGlyph.Defend] when plugged in, charging paused to protect the battery
+        const val TEXT_MODE_DEFEND = "\u1F6E1"
+
+        // [BatteryGlyph.Question] when battery state cannot be determined
+        const val TEXT_MODE_UNKNOWN = "\u003F"
 
         fun Int.glyphRepresentation(): List<BatteryGlyph> = toString().map { it.toGlyph() }
 
