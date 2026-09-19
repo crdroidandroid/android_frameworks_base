@@ -1981,18 +1981,26 @@ public final class ProcessList implements ProcessStateController.ProcessLruUpdat
             boolean isProfileable = app.info.isProfileable();
 
             // Keep explicitly debuggable builds observable to development tools. Production
-            // processes selected in AxSandbox receive the privacy policy before app code runs.
+            // processes selected in AxSandbox, or with a native diagnostic-spoofing option,
+            // receive the privacy policy before app code runs.
             if (!debuggableFlag && UserHandle.isApp(app.uid)) {
                 final com.android.server.wm.AxSandboxService sandboxService =
                         com.android.server.wm.AxSandboxService.get();
-                if (sandboxService.isPackageSandboxed(app.info.packageName)) {
+                final boolean sandboxed = sandboxService.isPackageSandboxed(app.info.packageName);
+                final boolean spoofAdb = sandboxService.isSpoofSettingEnabled(app.info.packageName,
+                        android.app.AxSandboxManager.SPOOF_ADB_ENABLED);
+                final boolean spoofSelinux = sandboxService.isSpoofSettingEnabled(
+                        app.info.packageName,
+                        android.app.AxSandboxManager.SPOOF_SELINUX_ENFORCING);
+                // The app exposes individual spoof switches independently from the broad
+                // "Isolate app" switch. ADB and SELinux need a process-local libc policy, so
+                // their selected switches must be sufficient to enable it.
+                if (sandboxed || spoofAdb || spoofSelinux) {
                     runtimeFlags |= Zygote.ENABLE_AX_SANDBOX_PRIVACY;
-                    if (sandboxService.isSpoofSettingEnabled(app.info.packageName,
-                            android.app.AxSandboxManager.SPOOF_ADB_ENABLED)) {
+                    if (spoofAdb) {
                         runtimeFlags |= Zygote.ENABLE_AX_SANDBOX_ADB;
                     }
-                    if (sandboxService.isSpoofSettingEnabled(app.info.packageName,
-                            android.app.AxSandboxManager.SPOOF_SELINUX_ENFORCING)) {
+                    if (spoofSelinux) {
                         runtimeFlags |= Zygote.ENABLE_AX_SANDBOX_SELINUX_ENFORCING;
                     }
                 }

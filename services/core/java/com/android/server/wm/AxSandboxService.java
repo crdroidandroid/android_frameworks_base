@@ -534,8 +534,9 @@ public class AxSandboxService extends IAxSandboxManager.Stub implements IAxSandb
     }
 
     private boolean shouldSpoofSetting(String packageName, String settingName) {
-        return mAppControlController.isPackageSandboxed(packageName)
-                && mAppControlController.isSpoofSettingEnabled(packageName, settingName);
+        // Spoof settings are individually selectable in the Sandbox UI. Do not silently
+        // require the separate broad-isolation switch, or an enabled toggle becomes a no-op.
+        return mAppControlController.isSpoofSettingEnabled(packageName, settingName);
     }
 
     private void restartPackageForPolicyChange(String packageName) {
