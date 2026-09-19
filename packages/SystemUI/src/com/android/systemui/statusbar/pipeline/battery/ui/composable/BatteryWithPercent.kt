@@ -97,18 +97,23 @@ fun BatteryWithPercent(
         }
 
         if (showPercent) {
-            viewModel.batteryPercent?.let { percent ->
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    BasicText(
-                        text = percent,
-                        color = colorProducer,
-                        style = textStyle,
-                        maxLines = 1,
-                    )
+            val percent = viewModel.batteryPercent
+            val attributionSymbol = viewModel.textModeAttributionSymbol
 
-                    if (viewModel.shouldShowBoltInTextMode) {
+            if (percent != null || attributionSymbol != null) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    if (percent != null) {
                         BasicText(
-                            text = BatteryViewModel.TEXT_MODE_BOLT,
+                            text = percent,
+                            color = colorProducer,
+                            style = textStyle,
+                            maxLines = 1,
+                        )
+                    }
+
+                    if (attributionSymbol != null) {
+                        BasicText(
+                            text = attributionSymbol,
                             color = colorProducer,
                             style = MaterialTheme.typography.labelLargeEmphasized,
                             maxLines = 1,
