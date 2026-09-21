@@ -785,16 +785,18 @@ public class ThemeEngineManagerService extends SystemService {
             Bitmap cached = mBitmapCache.get(cacheKey);
             if (cached != null) return cached;
 
-            String themePackage = getThemePackageForResource(resourceName);
-            if (themePackage == null) return null;
+            final String themePackage;
+            final boolean resourceAllowed;
+            synchronized (ThemeEngineManagerService.this) {
+                themePackage = getThemePackageForResource(resourceName);
+                if (themePackage == null) return null;
+                Set<String> targets = mTargetArrayCache.get(themePackage);
+                resourceAllowed = targets == null || targets.contains(resourceName);
+            }
+            if (!resourceAllowed) return null;
 
             Resources themeResources = getThemeResources(themePackage);
             if (themeResources == null) return null;
-
-            Set<String> targets = mTargetArrayCache.get(themePackage);
-            if (targets != null && !targets.contains(resourceName)) {
-                return null;
-            }
 
             try {
                 int resId = themeResources.getIdentifier(
