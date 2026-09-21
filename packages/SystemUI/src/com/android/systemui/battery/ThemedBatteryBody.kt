@@ -24,9 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.BlendMode
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
@@ -39,7 +36,6 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.font.FontFamily
@@ -110,18 +106,15 @@ private fun PathBatteryBody(
         contentDescription = contentDescription,
     ) {
         val level = levelProvider()
-        val colors = when (val provided = colorsProvider()) {
-            is BatteryColors.DarkTheme -> BatteryColors.DarkTheme.Default
-            is BatteryColors.LightTheme -> BatteryColors.LightTheme.Default
-            else -> provided
-        }
+        val colors = colorsProvider()
         val showLevel = showLevelProvider()
 
         drawable.setBatteryLevel(level ?: 0)
         drawable.charging = isCharging
         drawable.powerSaveEnabled = attr is BatteryGlyph.Plus
         drawable.showPercent = showLevel
-        drawable.setColors(colors.fill.toArgb(), colors.backgroundWithGlyph.toArgb(), colors.fill.toArgb())
+        val bgColor = if (showLevel) colors.backgroundWithGlyph else colors.backgroundOnly
+        drawable.setColors(colors.fill.toArgb(), bgColor.toArgb(), colors.fill.toArgb())
         drawable.setGlyphColor(colors.glyph.toArgb())
 
         val iw = drawable.intrinsicWidth.toFloat()
@@ -164,13 +157,14 @@ private fun PillBatteryBody(
     contentDescription: String,
 ) {
     val context = LocalContext.current
-    val iconLeading = remember(context) {
+    val themeVersion by ThemeIconController.themeVersion.collectAsStateWithLifecycle()
+    val iconLeading = remember(context, themeVersion) {
         context.resources.getBoolean(R.bool.config_themedBatteryPillIconLeading)
     }
-    val isOutline = remember(context) {
+    val isOutline = remember(context, themeVersion) {
         context.resources.getBoolean(R.bool.config_themedBatteryPillOutline)
     }
-    val hasNub = remember(context) {
+    val hasNub = remember(context, themeVersion) {
         context.resources.getBoolean(R.bool.config_themedBatteryPillNub)
     }
     val typeface = remember { Typeface.create(FontStyles.GSF_LABEL_LARGE_EMPHASIZED, Typeface.NORMAL) }
@@ -233,7 +227,7 @@ private fun PillBatteryBody(
             drawPath(fullPath, color = accentColor, style = Fill)
         }
 
-        val textColor = if (isOutline) accentColor else Color.White
+        val textColor = if (isOutline) accentColor else colors.glyph
         val textResult = if (showLevel && level != null) {
             textMeasurer.measure(
                 text = level.toString(),
