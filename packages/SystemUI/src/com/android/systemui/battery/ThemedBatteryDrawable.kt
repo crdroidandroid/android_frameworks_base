@@ -90,12 +90,14 @@ open class ThemedBatteryDrawable(private val context: Context, frameColor: Int) 
     var charging = false
         set(value) {
             field = value
+            levelColor = batteryColorForLevel(batteryLevel)
             postInvalidate()
         }
 
     var powerSaveEnabled = false
         set(value) {
             field = value
+            levelColor = batteryColorForLevel(batteryLevel)
             postInvalidate()
         }
 
