@@ -42,6 +42,7 @@ import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.interaction.DragInteraction
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -75,10 +76,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithCache
-import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.RoundRect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -122,8 +121,8 @@ import com.android.systemui.brightness.ui.compose.Dimensions.IconPadding
 import com.android.systemui.brightness.ui.compose.Dimensions.IconSize
 import com.android.systemui.brightness.ui.compose.Dimensions.SliderBackgroundFrameSize
 import com.android.systemui.brightness.ui.compose.Dimensions.SliderBackgroundRoundedCorner
-import com.android.systemui.brightness.ui.compose.Dimensions.ThumbHeight
 import com.android.systemui.brightness.ui.compose.Dimensions.SliderTrackRoundedCorner
+import com.android.systemui.brightness.ui.compose.Dimensions.ThumbHeight
 import com.android.systemui.brightness.ui.compose.Dimensions.ThumbTrackGapSize
 import com.android.systemui.brightness.ui.compose.Dimensions.ThumbWidth
 import com.android.systemui.brightness.ui.compose.Dimensions.TrackHeight
@@ -168,24 +167,11 @@ fun BrightnessSlider(
     var hapticsEnabled by remember { mutableStateOf(readEnableHaptics(cr)) }
 
     val shapeMode = rememberSliderShapeMode()
-    val trackCornerDp: Dp = when (shapeMode) {
-        1 -> 24.dp  /* Circle */
-        2 -> 12.dp  /* Rounded Square */
-        3 -> 0.dp /* Square */
-        else -> Dimensions.SliderTrackRoundedCorner
-    }
+    val trackCornerDp: Dp = trackCornerFor(shapeMode)
 
     val trackShape = RoundedCornerShape(trackCornerDp)
     val brightnessGradient = brightnessSliderGradient()
-    val thumbColorOverride: Color? =
-        if (!rememberSliderGradient()) {
-            null
-        } else if (rememberGradientColorMode() == 1) {
-            val (customStart, _) = rememberGradientCustomColors()
-            customStart
-        } else {
-            MaterialTheme.colorScheme.primary
-        }
+    val thumbColorOverride: Color? = rememberThumbColorOverride()
 
     var value by remember(gammaValue) { mutableIntStateOf(gammaValue) }
     val animatedValue by
@@ -315,7 +301,7 @@ fun BrightnessSlider(
                 }
             },
             modifier =
-                modifier
+                Modifier
                     .weight(1f)
                     .sysuiResTag("slider")
                     .semantics(mergeDescendants = true) {
@@ -521,6 +507,14 @@ fun rememberSliderShapeMode(): Int {
     return shapeMode
 }
 
+/**
+ * Layout of the volume slider inside the QS brightness row.
+ *
+ * 0 - brightness only (volume slider hidden)
+ * 1 - volume slider beside the brightness slider
+ * 2 - volume slider only (brightness slider hidden)
+ * 3 - volume slider below the brightness slider
+ */
 @Composable
 private fun rememberVolumeSliderMode(): Int {
     val context = LocalContext.current
@@ -529,11 +523,11 @@ private fun rememberVolumeSliderMode(): Int {
     fun readMode(): Int {
         return try {
             Settings.System.getIntForUser(
-                contentResolver, Settings.System.QS_SHOW_VOLUME_SLIDER, 1,
-                UserHandle.USER_CURRENT
-            ).coerceIn(0, 2)
+                contentResolver, Settings.System.QS_SHOW_VOLUME_SLIDER,
+                VolumeSliderMode.DEFAULT, UserHandle.USER_CURRENT
+            ).coerceIn(VolumeSliderMode.OFF, VolumeSliderMode.BELOW)
         } catch (_: Throwable) {
-            1
+            VolumeSliderMode.DEFAULT
         }
     }
 
@@ -566,24 +560,13 @@ private fun rememberShowRingerMode(): Boolean {
     val context = LocalContext.current
     val contentResolver = context.contentResolver
 
-    fun readEnabled(): Boolean {
-        return try {
-            Settings.System.getIntForUser(
-                contentResolver, Settings.System.QS_SHOW_RINGER_MODE, 1,
-                UserHandle.USER_CURRENT
-            ) != 0
-        } catch (_: Throwable) {
-            true
-        }
-    }
-
-    var enabled by remember { mutableStateOf(readEnabled()) }
+    var enabled by remember { mutableStateOf(readShowRingerMode(contentResolver)) }
 
     DisposableEffect(contentResolver) {
         val observer = object : ContentObserver(null) {
             override fun onChange(selfChange: Boolean) {
                 context.mainExecutor.execute {
-                    enabled = readEnabled()
+                    enabled = readShowRingerMode(contentResolver)
                 }
             }
         }
@@ -625,10 +608,10 @@ private fun rememberSliderGradient(): Boolean {
 
     DisposableEffect(contentResolver) {
         val observer = object : ContentObserver(null) {
-                override fun onChange(selfChange: Boolean) {
-                    enabled = readEnabled()
-                }
+            override fun onChange(selfChange: Boolean) {
+                context.mainExecutor.execute { enabled = readEnabled() }
             }
+        }
 
         contentResolver.registerContentObserver(
             Settings.System.getUriFor(Settings.System.QS_BRIGHTNESS_SLIDER_GRADIENT),
@@ -645,7 +628,8 @@ private fun rememberSliderGradient(): Boolean {
 
 @Composable
 private fun rememberGradientColorMode(): Int {
-    val contentResolver = LocalContext.current.contentResolver
+    val context = LocalContext.current
+    val contentResolver = context.contentResolver
 
     fun readMode(): Int = try {
         Settings.System.getIntForUser(
@@ -661,7 +645,7 @@ private fun rememberGradientColorMode(): Int {
     DisposableEffect(contentResolver) {
         val observer = object : ContentObserver(null) {
             override fun onChange(selfChange: Boolean) {
-                mode = readMode()
+                context.mainExecutor.execute { mode = readMode() }
             }
         }
 
@@ -680,7 +664,8 @@ private fun rememberGradientColorMode(): Int {
 
 @Composable
 private fun rememberGradientCustomColors(): Pair<Color, Color> {
-    val contentResolver = LocalContext.current.contentResolver
+    val context = LocalContext.current
+    val contentResolver = context.contentResolver
 
     fun readStart(): Int = try {
         Settings.System.getIntForUser(
@@ -706,8 +691,10 @@ private fun rememberGradientCustomColors(): Pair<Color, Color> {
     DisposableEffect(contentResolver) {
         val observer = object : ContentObserver(null) {
             override fun onChange(selfChange: Boolean) {
-                startInt = readStart()
-                endInt = readEnd()
+                context.mainExecutor.execute {
+                    startInt = readStart()
+                    endInt = readEnd()
+                }
             }
         }
 
@@ -750,6 +737,18 @@ private fun brightnessSliderGradient(): BrightnessGradient? {
     )
 }
 
+/** Thumb color that matches the start of the gradient, or null to use the default thumb color. */
+@Composable
+private fun rememberThumbColorOverride(): Color? =
+    if (!rememberSliderGradient()) {
+        null
+    } else if (rememberGradientColorMode() == 1) {
+        val (customStart, _) = rememberGradientCustomColors()
+        customStart
+    } else {
+        MaterialTheme.colorScheme.primary
+    }
+
 private fun Modifier.sliderBackground(color: Color, corner: Dp) = drawWithCache {
     val offsetAround = SliderBackgroundFrameSize.toSize()
     val newSize = Size(size.width + 2 * offsetAround.width, size.height + 2 * offsetAround.height)
@@ -759,6 +758,22 @@ private fun Modifier.sliderBackground(color: Color, corner: Dp) = drawWithCache 
         drawRoundRect(color = color, topLeft = offset, size = newSize, cornerRadius = cornerRadius)
     }
 }
+
+private fun trackCornerFor(shapeMode: Int): Dp =
+    when (shapeMode) {
+        1 -> 24.dp /* Circle */
+        2 -> 12.dp /* Rounded Square */
+        3 -> 0.dp /* Square */
+        else -> SliderTrackRoundedCorner
+    }
+
+private fun backgroundCornerFor(shapeMode: Int): Dp =
+    when (shapeMode) {
+        1 -> 50.dp /* Circle */
+        2 -> 24.dp /* Rounded Square */
+        3 -> 0.dp /* Square */
+        else -> SliderBackgroundRoundedCorner
+    }
 
 private fun readShowAutoBrightness(cr: ContentResolver): Boolean =
     try {
@@ -779,6 +794,25 @@ private fun readEnableHaptics(cr: ContentResolver): Boolean =
     } catch (_: Throwable) {
         false
     }
+
+private fun readShowRingerMode(cr: ContentResolver): Boolean =
+    try {
+        Settings.System.getIntForUser(
+            cr, Settings.System.QS_SHOW_RINGER_MODE,
+            1, UserHandle.USER_CURRENT
+        ) != 0
+    } catch (_: Throwable) {
+        true
+    }
+
+private fun readRingerMode(audioManager: AudioManager?): Int =
+    runCatching { audioManager?.ringerModeInternal }.getOrNull()
+        ?: AudioManager.RINGER_MODE_NORMAL
+
+/** Setting the stream volume can throw when a DND policy is active. */
+private fun setStreamVolume(audioManager: AudioManager?, streamType: Int, volume: Int) {
+    runCatching { audioManager?.setStreamVolume(streamType, volume, 0) }
+}
 
 @Composable
 private fun drawAutoBrightnessButton(
@@ -880,22 +914,23 @@ private fun VolumeRingerButton(
 ) {
     val context = LocalContext.current
     val view = LocalView.current
-    val audioManager = remember { context.getSystemService(AudioManager::class.java) }
+    val audioManager = remember(context) { context.getSystemService(AudioManager::class.java) }
     val hasVibrator =
-        remember { context.getSystemService(Vibrator::class.java)?.hasVibrator() == true }
+        remember(context) {
+            runCatching { context.getSystemService(Vibrator::class.java)?.hasVibrator() }
+                .getOrNull() == true
+        }
 
-    var ringerMode by remember {
-        mutableIntStateOf(audioManager?.ringerModeInternal ?: AudioManager.RINGER_MODE_NORMAL)
-    }
+    var ringerMode by remember(audioManager) { mutableIntStateOf(readRingerMode(audioManager)) }
 
-    DisposableEffect(Unit) {
+    DisposableEffect(context, audioManager) {
         val receiver =
             object : BroadcastReceiver() {
                 override fun onReceive(c: Context?, intent: Intent?) {
                     when (intent?.action) {
                         AudioManager.RINGER_MODE_CHANGED_ACTION,
                         AudioManager.INTERNAL_RINGER_MODE_CHANGED_ACTION ->
-                            ringerMode = audioManager?.ringerModeInternal ?: ringerMode
+                            ringerMode = readRingerMode(audioManager)
                     }
                 }
             }
@@ -970,8 +1005,10 @@ private fun VolumeRingerButton(
                             view.performHapticFeedback(hapticConstant)
                         }
                         val next = nextRingerMode(ringerMode, hasVibrator)
-                        ringerMode = next
-                        runCatching { audioManager?.ringerModeInternal = next }
+                        // Can throw without DND policy access; fall back to the real state.
+                        val applied =
+                            runCatching { audioManager?.ringerModeInternal = next }.isSuccess
+                        ringerMode = if (applied) next else readRingerMode(audioManager)
                     }
                 ),
         contentAlignment = Alignment.Center,
@@ -990,10 +1027,17 @@ fun BrightnessSliderContainer(
     modifier: Modifier = Modifier,
     containerColors: ContainerColors,
 ) {
+    val volumeSliderMode = rememberVolumeSliderMode()
+    val wantsBrightness = volumeSliderMode != VolumeSliderMode.VOLUME_ONLY
+    val wantsVolume = volumeSliderMode != VolumeSliderMode.OFF
+
     val gamma = viewModel.currentBrightness.value
-    if (gamma == BrightnessSliderViewModel.initialValue.value) { // Ignore initial negative value.
+    val brightnessReady = gamma != BrightnessSliderViewModel.initialValue.value
+    if (!brightnessReady && !wantsVolume) {
         return
     }
+    val showBrightness = wantsBrightness && brightnessReady
+
     val autoMode = viewModel.autoMode
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -1008,18 +1052,8 @@ fun BrightnessSliderContainer(
     var dragging by remember { mutableStateOf(false) }
 
     val shapeMode = rememberSliderShapeMode()
-    val trackCornerDp: Dp = when (shapeMode) {
-        1 -> 24.dp  /* Circle */
-        2 -> 12.dp  /* Rounded Square */
-        3 -> 0.dp /* Square */
-        else -> Dimensions.SliderTrackRoundedCorner
-    }
-    val bgCornerDp: Dp = when (shapeMode) {
-        1 -> 50.dp  /* Circle */
-        2 -> 24.dp  /* Rounded Square */
-        3 -> 0.dp /* Square */
-        else -> Dimensions.SliderBackgroundRoundedCorner
-    }
+    val trackCornerDp: Dp = trackCornerFor(shapeMode)
+    val bgCornerDp: Dp = backgroundCornerFor(shapeMode)
 
     // Use dragging instead of viewModel.showMirror so the color starts changing as soon as the
     // dragging state changes. If not, we may be waiting for the background to finish fading in
@@ -1028,8 +1062,6 @@ fun BrightnessSliderContainer(
         animateColorAsState(
             if (dragging) containerColors.mirrorColor else containerColors.idleColor
         )
-
-    val volumeSliderMode = rememberVolumeSliderMode()
 
     val brightnessModifier =
         Modifier.borderOnFocus(
@@ -1048,6 +1080,14 @@ fun BrightnessSliderContainer(
                 }
                 false
             }
+
+    val volumeModifier =
+        Modifier.borderOnFocus(
+                color = MaterialTheme.colorScheme.secondary,
+                cornerSize = CornerSize(trackCornerDp),
+            )
+            .sliderBackground(containerColors.idleColor, bgCornerDp)
+            .fillMaxWidth()
 
     val brightnessSlider: @Composable () -> Unit = {
         BrightnessSlider(
@@ -1084,9 +1124,13 @@ fun BrightnessSliderContainer(
     val volumeSlider: @Composable () -> Unit = {
         VolumeSlider(
             hapticsViewModelFactory = viewModel.hapticsViewModelFactory,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = volumeModifier,
         )
     }
+
+    // Leave room for both background frames plus a small visual gap between the two sliders.
+    val horizontalGap = SliderBackgroundFrameSize.width * 2 + 4.dp
+    val verticalGap = SliderBackgroundFrameSize.height * 2 + 4.dp
 
     Box(
         modifier =
@@ -1095,22 +1139,31 @@ fun BrightnessSliderContainer(
                 .fillMaxWidth()
                 .sysuiResTag("brightness_slider")
     ) {
-        when (volumeSliderMode) {
-            1 ->
+        when {
+            showBrightness && volumeSliderMode == VolumeSliderMode.BESIDE ->
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     Box(modifier = Modifier.weight(1f)) { brightnessSlider() }
 
-                    Spacer(modifier = Modifier.width(12.dp))
+                    Spacer(modifier = Modifier.width(horizontalGap))
 
                     Box(modifier = Modifier.weight(1f)) { volumeSlider() }
                 }
 
-            2 -> volumeSlider()
+            showBrightness && volumeSliderMode == VolumeSliderMode.BELOW ->
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    brightnessSlider()
 
-            else -> brightnessSlider()
+                    Spacer(modifier = Modifier.height(verticalGap))
+
+                    volumeSlider()
+                }
+
+            showBrightness -> brightnessSlider()
+
+            else -> volumeSlider()
         }
     }
 }
@@ -1124,50 +1177,41 @@ private fun VolumeSlider(
     val context = LocalContext.current
     val cr = context.contentResolver
 
-    val audioManager = remember { context.getSystemService(AudioManager::class.java) }
+    val audioManager = remember(context) { context.getSystemService(AudioManager::class.java) }
     val streamType = AudioManager.STREAM_MUSIC
 
-    val maxVolume = remember(audioManager) { audioManager?.getStreamMaxVolume(streamType) ?: 100 }
+    val maxVolume =
+        remember(audioManager) {
+            runCatching { audioManager?.getStreamMaxVolume(streamType) }.getOrNull() ?: 100
+        }
     val minVolume =
         remember(audioManager) {
-            try {
-                audioManager?.getStreamMinVolume(streamType) ?: 0
-            } catch (_: Throwable) {
-                0
-            }
+            runCatching { audioManager?.getStreamMinVolume(streamType) }.getOrNull() ?: 0
         }
-    val floatValueRange = minVolume.toFloat()..maxVolume.toFloat()
+    // Guard against a degenerate range on odd device configurations.
+    val safeMax = if (maxVolume > minVolume) maxVolume else minVolume + 1
+    val floatValueRange = minVolume.toFloat()..safeMax.toFloat()
 
     var hapticsEnabled by remember { mutableStateOf(readEnableHaptics(cr)) }
+    val showRinger = rememberShowRingerMode()
 
     val shapeMode = rememberSliderShapeMode()
-    val trackCornerDp: Dp =
-        when (shapeMode) {
-            1 -> 24.dp /* Circle */
-            2 -> 12.dp /* Rounded Square */
-            3 -> 0.dp /* Square */
-            else -> Dimensions.SliderTrackRoundedCorner
-        }
+    val trackCornerDp: Dp = trackCornerFor(shapeMode)
     val trackShape = RoundedCornerShape(trackCornerDp)
     val gradient = brightnessSliderGradient()
     val colors = colors(gradient)
     val activeIconColor = colors.activeTickColor
     val inactiveIconColor = colors.inactiveTickColor
-    val thumbColorOverride: Color? =
-        if (!rememberSliderGradient()) {
-            null
-        } else if (rememberGradientColorMode() == 1) {
-            val (customStart, _) = rememberGradientCustomColors()
-            customStart
-        } else {
-            MaterialTheme.colorScheme.primary
-        }
+    val thumbColorOverride: Color? = rememberThumbColorOverride()
 
     var dragging by remember { mutableStateOf(false) }
-    var systemVolume by remember {
-        mutableIntStateOf(audioManager?.getStreamVolume(streamType) ?: minVolume)
-    }
-    var value by remember { mutableIntStateOf(systemVolume) }
+    var systemVolume by
+        remember(audioManager) {
+            mutableIntStateOf(
+                runCatching { audioManager?.getStreamVolume(streamType) }.getOrNull() ?: minVolume
+            )
+        }
+    var value by remember(audioManager) { mutableIntStateOf(systemVolume) }
 
     LaunchedEffect(systemVolume) {
         if (!dragging) value = systemVolume
@@ -1175,7 +1219,7 @@ private fun VolumeSlider(
     val animatedValue by
         animateFloatAsState(targetValue = value.toFloat(), label = "VolumeSliderAnimatedValue")
 
-    DisposableEffect(Unit) {
+    DisposableEffect(context, audioManager) {
         val receiver =
             object : BroadcastReceiver() {
                 override fun onReceive(c: Context?, intent: Intent?) {
@@ -1183,7 +1227,10 @@ private fun VolumeSlider(
                         val type = intent.getIntExtra(AudioManager.EXTRA_VOLUME_STREAM_TYPE, -1)
                         if (type == streamType) {
                             systemVolume =
-                                intent.getIntExtra(AudioManager.EXTRA_VOLUME_STREAM_VALUE, value)
+                                intent.getIntExtra(
+                                    AudioManager.EXTRA_VOLUME_STREAM_VALUE,
+                                    systemVolume,
+                                )
                         }
                     }
                 }
@@ -1209,7 +1256,13 @@ private fun VolumeSlider(
 
         onDispose {
             runCatching { context.unregisterReceiver(receiver) }
-            cr.unregisterContentObserver(hapticsObserver)
+            runCatching { cr.unregisterContentObserver(hapticsObserver) }
+        }
+    }
+
+    LaunchedEffect(audioManager) {
+        runCatching { audioManager?.getStreamVolume(streamType) }.getOrNull()?.let {
+            systemVolume = it
         }
     }
 
@@ -1254,18 +1307,7 @@ private fun VolumeSlider(
 
     val contentDescription = stringResource(R.string.stream_music)
 
-    val showRinger = rememberShowRingerMode()
-
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier =
-            modifier
-                .borderOnFocus(
-                    color = MaterialTheme.colorScheme.secondary,
-                    cornerSize = CornerSize(trackCornerDp),
-                )
-                .fillMaxWidth(),
-    ) {
+    Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier) {
         Slider(
             value = animatedValue,
             valueRange = floatValueRange,
@@ -1274,15 +1316,15 @@ private fun VolumeSlider(
             onValueChange = {
                 dragging = true
                 hapticsViewModel?.onValueChange(it)
-                val newValue = it.roundToInt().coerceIn(minVolume, maxVolume)
+                val newValue = it.roundToInt().coerceIn(minVolume, safeMax)
                 if (newValue != value) {
                     value = newValue
-                    audioManager?.setStreamVolume(streamType, newValue, 0)
+                    setStreamVolume(audioManager, streamType, newValue)
                 }
             },
             onValueChangeFinished = {
                 hapticsViewModel?.onValueChangeEnded()
-                audioManager?.setStreamVolume(streamType, value, 0)
+                setStreamVolume(audioManager, streamType, value)
                 dragging = false
             },
             modifier =
@@ -1292,7 +1334,8 @@ private fun VolumeSlider(
                         this.text = AnnotatedString(contentDescription)
                     }
                     .sliderPercentage {
-                        (value - minVolume).toFloat() / (maxVolume - minVolume).coerceAtLeast(1)
+                        (value - minVolume).toFloat() /
+                            (safeMax - minVolume).coerceAtLeast(1).toFloat()
                     },
             interactionSource = interactionSource,
             thumb = {
@@ -1417,6 +1460,19 @@ private fun VolumeSlider(
             VolumeRingerButton(hapticsEnabled = hapticsEnabled)
         }
     }
+}
+
+private object VolumeSliderMode {
+    /** Brightness slider only. */
+    const val OFF = 0
+    /** Volume slider next to the brightness slider. */
+    const val BESIDE = 1
+    /** Volume slider instead of the brightness slider. */
+    const val VOLUME_ONLY = 2
+    /** Volume slider below the brightness slider. */
+    const val BELOW = 3
+
+    const val DEFAULT = BESIDE
 }
 
 data class ContainerColors(val idleColor: Color, val mirrorColor: Color) {
