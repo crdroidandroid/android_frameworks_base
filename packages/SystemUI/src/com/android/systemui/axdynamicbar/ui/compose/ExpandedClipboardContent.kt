@@ -40,6 +40,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -51,8 +52,18 @@ import com.android.systemui.axdynamicbar.shared.IslandActions
 import com.android.systemui.axdynamicbar.shared.*
 import com.android.systemui.res.R
 
+private const val MAX_PREVIEW_DISPLAY_CHARS = 500
+
+private fun IslandEvent.ClipboardItem.isCurrentClip(event: IslandEvent.Clipboard): Boolean =
+    isImage == event.isImage &&
+        if (isImage) imageUri != null && imageUri == event.imageUri
+        else preview == event.preview
+
 @Composable
 internal fun ClipboardExpanded(event: IslandEvent.Clipboard, interactor: IslandActions) {
+    val current = event.items.firstOrNull { it.isCurrentClip(event) }
+    val older = event.items.filter { it !== current }
+
     Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(SpaceLg)) {
         Row(
             modifier = Modifier
@@ -71,14 +82,18 @@ internal fun ClipboardExpanded(event: IslandEvent.Clipboard, interactor: IslandA
             )
         }
 
-        if (event.items.isNotEmpty()) {
-            Column(verticalArrangement = Arrangement.spacedBy(SpaceMd)) {
-                event.items.forEach { item ->
-                    ClipboardStashItem(item, interactor)
-                }
-            }
+        if (event.isImage) {
+            if (current != null) ClipboardStashItem(current, interactor)
         } else {
             ClipboardSingleItem(event, interactor)
+        }
+
+        if (older.isNotEmpty()) {
+            Column(verticalArrangement = Arrangement.spacedBy(SpaceMd)) {
+                older.forEach { item ->
+                    key(item.id) { ClipboardStashItem(item, interactor) }
+                }
+            }
         }
 
         Row(
@@ -115,15 +130,18 @@ private fun ClipboardStashItem(
     item: IslandEvent.ClipboardItem,
     interactor: IslandActions,
 ) {
+    val copy: () -> Unit = {
+        val uri = item.imageUri
+        if (item.isImage && uri != null) interactor.copyUriToClipboard(uri)
+        else interactor.copyToClipboard(item.preview)
+    }
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .clip(ShapeSm)
             .background(DarkCard)
-            .clickable {
-                if (item.isImage && item.imageUri != null) interactor.copyUriToClipboard(item.imageUri)
-                else interactor.copyToClipboard(item.preview)
-            }
+            .clickable(onClick = copy)
             .padding(SpaceLg),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(SpaceLg),
@@ -160,7 +178,7 @@ private fun ClipboardStashItem(
                 )
                 if (item.preview.isNotEmpty()) {
                     Text(
-                        item.preview,
+                        item.preview.take(MAX_PREVIEW_DISPLAY_CHARS),
                         color = SubtleGray,
                         style = MaterialTheme.typography.labelSmall,
                         maxLines = 1,
@@ -169,7 +187,7 @@ private fun ClipboardStashItem(
                 }
             } else {
                 Text(
-                    item.preview,
+                    item.preview.take(MAX_PREVIEW_DISPLAY_CHARS),
                     color = OnCardText,
                     style = MaterialTheme.typography.bodySmall,
                     maxLines = 2,
@@ -180,14 +198,11 @@ private fun ClipboardStashItem(
 
         Icon(
             Icons.Filled.ContentCopy,
-            null,
+            contentDescription = stringResource(android.R.string.copy),
             tint = IndigoAccent,
             modifier = Modifier
                 .size(SizeIconSm)
-                .clickable {
-                    if (item.isImage && item.imageUri != null) interactor.copyUriToClipboard(item.imageUri)
-                    else interactor.copyToClipboard(item.preview)
-                },
+                .clickable(onClick = copy),
         )
     }
 }
@@ -195,15 +210,16 @@ private fun ClipboardStashItem(
 @Composable
 private fun ClipboardSingleItem(event: IslandEvent.Clipboard, interactor: IslandActions) {
     if (event.preview.isNotEmpty()) {
+        val copy: () -> Unit = {
+            interactor.copyToClipboard(event.preview)
+            interactor.collapseIsland()
+        }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(ShapeSm)
                 .background(DarkCard)
-                .clickable {
-                    interactor.copyToClipboard(event.preview)
-                    interactor.collapseIsland()
-                }
+                .clickable(onClick = copy)
                 .padding(SpaceLg),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(SpaceLg),
@@ -220,7 +236,7 @@ private fun ClipboardSingleItem(event: IslandEvent.Clipboard, interactor: Island
                 }
             }
             Text(
-                event.preview,
+                event.preview.take(MAX_PREVIEW_DISPLAY_CHARS),
                 color = OnCardText,
                 style = MaterialTheme.typography.bodySmall,
                 maxLines = 4,
@@ -229,15 +245,12 @@ private fun ClipboardSingleItem(event: IslandEvent.Clipboard, interactor: Island
             )
             Icon(
                 Icons.Filled.ContentCopy,
-                null,
+                contentDescription = stringResource(android.R.string.copy),
                 tint = IndigoAccent,
                 modifier = Modifier
                     .size(SizeIconSm)
                     .wrapContentWidth()
-                    .clickable {
-                        interactor.copyToClipboard(event.preview)
-                        interactor.collapseIsland()
-                    },
+                    .clickable(onClick = copy),
             )
         }
     }
@@ -271,7 +284,9 @@ internal fun RowScope.CompactClipboardRow(
     }
     Spacer(Modifier.width(SpaceLg))
     Text(
-        event.preview.ifEmpty { stringResource(if (event.isImage) R.string.ax_dynamic_bar_image_copied else R.string.ax_dynamic_bar_copied) },
+        event.preview.take(MAX_PREVIEW_DISPLAY_CHARS).ifEmpty {
+            stringResource(if (event.isImage) R.string.ax_dynamic_bar_image_copied else R.string.ax_dynamic_bar_copied)
+        },
         color = OnCardText,
         style = MaterialTheme.typography.bodySmall,
         maxLines = 1,
