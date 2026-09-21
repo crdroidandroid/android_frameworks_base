@@ -27,13 +27,12 @@ import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 @SysUISingleton
@@ -401,7 +400,9 @@ constructor(
             is IslandEvent.Stopwatch -> repository.notification.clearStopwatch()
             is IslandEvent.RingerMode -> repository.system.clearRinger()
             is IslandEvent.Vpn -> repository.connectivity.clearVpn()
-            is IslandEvent.Clipboard -> repository.system.clearClipboard()
+            // Dismissing (manually or via auto-dismiss) only hides the chip; the stash survives.
+            // "Clear all" in the expanded card removes the stash entries explicitly.
+            is IslandEvent.Clipboard -> repository.system.dismissClipboardEvent()
             is IslandEvent.Notification -> repository.notification.dismissNotification(event)
             is IslandEvent.AppSwitch -> repository.appTracking.clear()
             is IslandEvent.Torch -> {
