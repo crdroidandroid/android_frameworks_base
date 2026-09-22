@@ -858,6 +858,25 @@ public abstract class AndroidKeyStoreKeyPairGeneratorSpi extends KeyPairGenerato
                     for (int d : mKeymasterDigests) params.digest.add(d);
                 }
 
+                // Populate RSA OAEP MGF digest for KeyMint 3+ compatibility
+                if (mKeymasterAlgorithm == KeymasterDefs.KM_ALGORITHM_RSA &&
+                    mKeymasterEncryptionPaddings != null) {
+                    for (int padding : mKeymasterEncryptionPaddings) {
+                        if (padding == KeymasterDefs.KM_PAD_RSA_OAEP) {
+                            // Use digests as MGF1 digests per KeyMint spec
+                            if (mKeymasterDigests != null) {
+                                for (int d : mKeymasterDigests) {
+                                    params.rsaOaepMgfDigest.add(d);
+                                }
+                            } else {
+                                // Default to SHA-1 if no digests specified
+                                params.rsaOaepMgfDigest.add(KeymasterDefs.KM_DIGEST_SHA1);
+                            }
+                            break;
+                        }
+                    }
+                }
+
                 if (mSpec.isDevicePropertiesAttestationIncluded()) {
                     try {
                         final String brand = isPropertyEmptyOrUnknown(Build.BRAND_FOR_ATTESTATION)
