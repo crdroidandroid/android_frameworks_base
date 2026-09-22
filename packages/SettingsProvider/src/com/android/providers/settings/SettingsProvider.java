@@ -636,7 +636,14 @@ public class SettingsProvider extends ContentProvider {
             AxSandboxManager sandboxManager =
                     getContext().getSystemService(AxSandboxManager.class);
             if (sandboxManager != null) {
-                return sandboxManager.getSpoofedSetting(callingPackage, callingUid, name);
+                final String spoofed =
+                        sandboxManager.getSpoofedSetting(callingPackage, callingUid, name);
+                if (spoofed != null) {
+                    Slog.i("AxSandboxAudit", "settings uid=" + callingUid
+                            + " package=" + callingPackage + " name=" + name
+                            + " value=" + spoofed);
+                }
+                return spoofed;
             }
         } catch (RuntimeException e) {
             Slog.w(LOG_TAG, "Unable to evaluate settings privacy policy for uid="
