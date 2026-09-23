@@ -22,6 +22,7 @@ import static android.app.AxSandboxManager.AppLockState.UNLOCKED;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityOptions;
+import android.app.ApplicationExitInfo;
 import android.app.AxSandboxManager;
 import android.app.AxSandboxManager.AppLockState;
 import android.app.IApplicationThread;
@@ -442,14 +443,18 @@ public class AxSandboxService extends IAxSandboxManager.Stub implements IAxSandb
 
     @Override
     public void addSandboxedPackage(String packageName) {
-        mAppControlController.setPackageSandboxed(packageName, true);
-        broadcastPackageChanged(packageName);
+        if (mAppControlController.setPackageSandboxed(packageName, true)) {
+            restartPackageForPolicyChange(packageName);
+            broadcastPackageChanged(packageName);
+        }
     }
 
     @Override
     public void removeSandboxedPackage(String packageName) {
-        mAppControlController.setPackageSandboxed(packageName, false);
-        broadcastPackageChanged(packageName);
+        if (mAppControlController.setPackageSandboxed(packageName, false)) {
+            restartPackageForPolicyChange(packageName);
+            broadcastPackageChanged(packageName);
+        }
     }
 
     @Override
@@ -487,7 +492,12 @@ public class AxSandboxService extends IAxSandboxManager.Stub implements IAxSandb
 
     @Override
     public void setSpoofSettingEnabled(String packageName, String settingKey, boolean enabled) {
-        mAppControlController.setSpoofSettingEnabled(packageName, settingKey, enabled);
+        if (mAppControlController.setSpoofSettingEnabled(packageName, settingKey, enabled)) {
+            // Settings.NameValueCache and the native policy are process-local. A fresh process is
+            // required both to discard values read before the policy changed and to receive the
+            // current Zygote runtime flags.
+            restartPackageForPolicyChange(packageName);
+        }
     }
 
     @Override
@@ -497,14 +507,52 @@ public class AxSandboxService extends IAxSandboxManager.Stub implements IAxSandb
     }
 
     @Override
-    public String getSpoofedSetting(String callingPackage, String settingName) {
+    public String getSpoofedSetting(String callingPackage, int callingUid, String settingName) {
         if (mAppControlController == null) return null;
-        final String spoofedValue = SettingsSpoofController.getSpoofedValue(settingName);
-        if (spoofedValue == null) return null;
-        if (!mAppControlController.isSpoofSettingEnabled(callingPackage, settingName)) {
+        if (Binder.getCallingUid() != Process.SYSTEM_UID || !UserHandle.isApp(callingUid)) {
             return null;
         }
-        return spoofedValue;
+
+        final String[] uidPackages = mContext.getPackageManager().getPackagesForUid(callingUid);
+        final String spoofedValue = SettingsSpoofController.getSpoofedValue(settingName);
+        if (uidPackages == null || spoofedValue == null) return null;
+
+        // Prefer the provider attribution when available, but do not fail open when a valid
+        // ContentProvider call has no package attribution. The UID is Binder-authenticated and
+        // package ownership is resolved again in system_server.
+        if (!TextUtils.isEmpty(callingPackage)) {
+            for (String uidPackage : uidPackages) {
+                if (callingPackage.equals(uidPackage)) {
+                    return shouldSpoofSetting(uidPackage, settingName) ? spoofedValue : null;
+                }
+            }
+        }
+        for (String uidPackage : uidPackages) {
+            if (shouldSpoofSetting(uidPackage, settingName)) return spoofedValue;
+        }
+        return null;
+    }
+
+    private boolean shouldSpoofSetting(String packageName, String settingName) {
+        // Spoof settings are individually selectable in the Sandbox UI. Do not silently
+        // require the separate broad-isolation switch, or an enabled toggle becomes a no-op.
+        return mAppControlController.isSpoofSettingEnabled(packageName, settingName);
+    }
+
+    private void restartPackageForPolicyChange(String packageName) {
+        final int uid = getPackageUid(packageName);
+        if (uid < 0) return;
+
+        final long token = Binder.clearCallingIdentity();
+        try {
+            ActivityManager.getService().killApplication(packageName, UserHandle.getAppId(uid),
+                    UserHandle.getUserId(uid), "AxSandbox policy changed",
+                    ApplicationExitInfo.REASON_OTHER);
+        } catch (RemoteException e) {
+            Slog.w(TAG, "Unable to restart " + packageName + " after policy change", e);
+        } finally {
+            Binder.restoreCallingIdentity(token);
+        }
     }
 
     @Override
