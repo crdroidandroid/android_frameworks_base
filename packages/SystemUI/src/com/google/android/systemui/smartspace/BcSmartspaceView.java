@@ -590,7 +590,6 @@ public class BcSmartspaceView extends FrameLayout
         setPivotY(desiredHeight / 2.0f);
     }
 
-    // ???
     public final void onSmartspaceTargetsUpdated(
             List<? extends Parcelable> targets, Runnable runnable) {
         List<SmartspaceTarget> smartspaceTargets =
@@ -908,15 +907,6 @@ public class BcSmartspaceView extends FrameLayout
         if (mPagerDots != null) {
             mPagerDots.setPageOffset(offset, position);
         }
-    }
-
-    // DOES NOT EXIST ???
-    public final void setSelectedPage(int i) {
-        mViewPager2.post(
-                () -> {
-                    mViewPager2.setCurrentItem(i, false);
-                });
-        setSelectedDot(0.0f, i);
     }
 
     @Override
