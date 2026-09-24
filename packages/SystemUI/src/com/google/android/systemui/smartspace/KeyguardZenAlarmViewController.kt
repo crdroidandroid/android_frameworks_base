@@ -105,18 +105,8 @@ constructor(
         smartspaceViews.forEach { view ->
             if (alarmString != null) {
                 view.setNextAlarm(alarmImage, alarmString)
-                // StateFlowImpl stateFlowImpl =
-                // this.this$0.zenModeInteractor.zenModeRepository.hasNextAlarm;
-                // Boolean bool = Boolean.TRUE;
-                // stateFlowImpl.getClass();
-                // stateFlowImpl.updateState(null, bool);
             } else {
                 view.setNextAlarm(null, null)
-                // StateFlowImpl stateFlowImpl2 =
-                // this.this$0.zenModeInteractor.zenModeRepository.hasNextAlarm;
-                // Boolean bool2 = Boolean.FALSE;
-                // stateFlowImpl2.getClass();
-                // stateFlowImpl2.updateState(null, bool2);
             }
         }
     }
