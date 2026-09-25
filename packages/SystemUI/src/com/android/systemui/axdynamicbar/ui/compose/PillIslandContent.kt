@@ -8,6 +8,12 @@ import com.android.systemui.common.shared.model.Icon as SysUISharedIcon
 import com.android.systemui.common.ui.compose.Icon as SysUIIcon
 import com.android.systemui.statusbar.chips.ui.model.OngoingActivityChipModel
 import com.android.systemui.statusbar.chips.ui.model.Chronometer
+import com.android.systemui.statusbar.chips.ui.model.EventTime
+import com.android.systemui.statusbar.chips.ui.viewmodel.ChronometerState
+import com.android.systemui.statusbar.chips.ui.viewmodel.Formatter as ChipFormatter
+import com.android.systemui.statusbar.chips.ui.viewmodel.toFormatter
+import com.android.systemui.util.time.SystemClock
+import com.android.systemui.util.time.SystemClockImpl
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -44,6 +50,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
@@ -72,9 +79,12 @@ import com.android.systemui.axdynamicbar.model.RecordingState
 import com.android.systemui.axdynamicbar.shared.*
 import androidx.compose.ui.graphics.graphicsLayer
 import com.android.systemui.res.R
+import java.time.Duration
+import java.time.Instant
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.cos
+import kotlin.math.roundToLong
 import kotlin.math.sin
 import java.lang.Math.toRadians
 import kotlinx.coroutines.delay
@@ -1177,38 +1187,13 @@ private fun AospChipText(event: IslandEvent.AospChip, modifier: Modifier, overri
 
 @Composable
 private fun AospChipTimerText(content: OngoingActivityChipModel.Content.Timer, color: Color, modifier: Modifier) {
-    var elapsedMs by remember(content.value, content.timeSource) {
-        mutableLongStateOf(aospTimerElapsedMs(content))
-    }
-    LaunchedEffect(content.value, content.timeSource) {
-        while (true) {
-            elapsedMs = aospTimerElapsedMs(content)
-            when (val chronometer = content.value) {
-                is Chronometer.Paused -> break
-                is Chronometer.Running -> {
-                    val zeroMs = chronometer.eventTime.asElapsedRealtime(content.timeSource)
-                    val nowMs = content.timeSource.elapsedRealtime()
-                    delay(1000L - abs(nowMs - zeroMs) % 1000L)
-                }
-            }
-        }
-    }
-    Text(formatCountdownLong(elapsedMs), color = color, style = PillMono, modifier = modifier)
-}
-
-private fun aospTimerElapsedMs(content: OngoingActivityChipModel.Content.Timer): Long {
-    return when (val chronometer = content.value) {
-        is Chronometer.Paused -> chronometer.atDuration.toMillis().coerceAtLeast(0L)
-        is Chronometer.Running -> {
-            val zeroMs = chronometer.eventTime.asElapsedRealtime(content.timeSource)
-            val nowMs = content.timeSource.elapsedRealtime()
-            if (chronometer.isCountdown) {
-                (zeroMs - nowMs).coerceAtLeast(0L)
-            } else {
-                (nowMs - zeroMs).coerceAtLeast(0L)
-            }
-        }
-    }
+    val text =
+        rememberChronometerText(
+            chronometer = content.value,
+            formatter = content.format.toFormatter(),
+            timeSource = content.timeSource,
+        )
+    if (text != null) ChronometerLabel(text, color, modifier)
 }
 
 @Composable
@@ -1333,66 +1318,120 @@ private fun BtText(event: IslandEvent.Bluetooth, modifier: Modifier, overrideCol
 
 @Composable
 private fun TimerText(event: IslandEvent.Timer, modifier: Modifier, overrideColor: Color? = null) {
-    if (event.endTimeMs > 0L) {
-        val color = overrideColor ?: if (event.isPaused) SubtleGray else BlueAccent
+    val label = event.label.ifEmpty { stringResource(R.string.ax_dynamic_bar_timer) }
+    if (event.endTimeMs <= 0L) {
+        MarqueeLabel(label, overrideColor ?: BlueAccent, modifier)
+        return
+    }
+    val color = overrideColor ?: if (event.isPaused) SubtleGray else BlueAccent
+    val chronometer: Chronometer? =
         if (event.isPaused) {
-            Text(stringResource(R.string.ax_dynamic_bar_paused), color = color, style = PillMono, modifier = modifier)
+            FrozenChronometerCache.get(event.id)?.let { Chronometer.Paused(it) }
         } else {
-            var remainingMs by
-                remember(event.endTimeMs) {
-                    mutableLongStateOf((event.endTimeMs - System.currentTimeMillis()).coerceAtLeast(0L))
-                }
-            LaunchedEffect(event.endTimeMs) {
-                while (remainingMs > 0L) {
-                    delay(500)
-                    remainingMs = (event.endTimeMs - System.currentTimeMillis()).coerceAtLeast(0L)
-                }
-            }
-            Text(formatCountdownLong(remainingMs), color = color, style = PillMono, modifier = modifier)
+            Chronometer.Running(eventTimeFor(event.endTimeMs), isCountdown = true)
         }
-    } else {
-        MarqueeLabel(event.label.ifEmpty { stringResource(R.string.ax_dynamic_bar_timer) }, overrideColor ?: BlueAccent, modifier)
+    val text = chronometer?.let { rememberChronometerText(it, freezeKey = event.id) }
+    when {
+        text != null -> ChronometerLabel(text, color, modifier)
+        event.isPaused -> ChronometerLabel(stringResource(R.string.ax_dynamic_bar_paused), color, modifier)
+        else -> MarqueeLabel(label, color, modifier)
     }
 }
 
 @Composable
 private fun StopwatchText(event: IslandEvent.Stopwatch, modifier: Modifier, overrideColor: Color? = null) {
     val color = overrideColor ?: if (event.isRunning) MintAccent else SubtleGray
-    if (!event.isRunning) {
-        Text(stringResource(R.string.ax_dynamic_bar_paused), color = color, style = PillMono, modifier = modifier)
-    } else {
-        var elapsedMs by
-            remember(event.startTimeMs) {
-                mutableLongStateOf((System.currentTimeMillis() - event.startTimeMs).coerceAtLeast(0L))
-            }
-        LaunchedEffect(event.startTimeMs) {
-            while (true) {
-                delay(200)
-                elapsedMs = (System.currentTimeMillis() - event.startTimeMs).coerceAtLeast(0L)
-            }
+    val chronometer: Chronometer? =
+        if (event.isRunning && event.startTimeMs > 0L) {
+            Chronometer.Running(eventTimeFor(event.startTimeMs), isCountdown = false)
+        } else {
+            FrozenChronometerCache.get(event.id)?.let { Chronometer.Paused(it) }
         }
-        Text(formatStopwatch(elapsedMs), color = color, style = PillMono, modifier = modifier)
-    }
+    val text = chronometer?.let { rememberChronometerText(it, freezeKey = event.id) }
+    ChronometerLabel(text ?: stringResource(R.string.ax_dynamic_bar_paused), color, modifier)
 }
 
 @Composable
 private fun CallTimerText(event: IslandEvent.Call, modifier: Modifier, overrideColor: Color? = null) {
     val isActive = event.callType == "Phone:active"
     if (isActive) {
-        var elapsedMs by remember(event.callStartTimeMs) {
-            mutableLongStateOf((System.currentTimeMillis() - event.callStartTimeMs).coerceAtLeast(0L))
-        }
-        LaunchedEffect(event.callStartTimeMs) {
-            while (true) {
-                delay(1000)
-                elapsedMs = (System.currentTimeMillis() - event.callStartTimeMs).coerceAtLeast(0L)
-            }
-        }
+        val text =
+            rememberChronometerText(
+                Chronometer.Running(eventTimeFor(event.callStartTimeMs), isCountdown = false)
+            )
         val color = overrideColor ?: GreenAccent
-        Text(formatElapsedTime(elapsedMs), color = color, style = PillMono, modifier = modifier)
+        ChronometerLabel(text ?: "00:00", color, modifier)
     } else {
         MarqueeLabel(stringResource(R.string.ax_dynamic_bar_incoming_call), overrideColor ?: BlueAccent, modifier)
     }
+}
+
+private val IslandTimeSource: SystemClock = SystemClockImpl()
+private const val MIN_EPOCH_MILLIS = 1_000_000_000_000L
+
+internal fun eventTimeFor(timestampMs: Long): EventTime =
+    if (timestampMs < MIN_EPOCH_MILLIS) {
+        EventTime.ElapsedRealtime(timestampMs)
+    } else {
+        EventTime.ClockTime(Instant.ofEpochMilli(timestampMs))
+    }
+
+private object FrozenChronometerCache {
+    private const val MAX_ENTRIES = 8
+    private val map =
+        object : LinkedHashMap<String, Duration>(MAX_ENTRIES, 0.75f, true) {
+            override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, Duration>?) =
+                size > MAX_ENTRIES
+        }
+
+    @Synchronized fun put(key: String, value: Duration) { map[key] = value }
+
+    @Synchronized fun get(key: String): Duration? = map[key]
+}
+
+private fun Chronometer.Running.displayedValue(timeSource: SystemClock): Duration? {
+    val zeroMs = eventTime.asElapsedRealtime(timeSource)
+    val nowMs = timeSource.elapsedRealtime()
+    val ms = if (isCountdown) zeroMs - nowMs else nowMs - zeroMs
+    if (ms < 0) return null
+    val adjusted = if (isCountdown) ms - 499 else ms
+    return Duration.ofSeconds((adjusted / 1000f).roundToLong())
+}
+
+@Composable
+private fun rememberChronometerText(
+    chronometer: Chronometer,
+    formatter: ChipFormatter = ChipFormatter.Chronometer,
+    timeSource: SystemClock = IslandTimeSource,
+    freezeKey: String? = null,
+): String? {
+    val state =
+        remember(chronometer, formatter, timeSource) {
+            ChronometerState(timeSource, formatter, chronometer)
+        }
+    if (chronometer is Chronometer.Running) {
+        LaunchedEffect(state) { state.run(chronometer) }
+    }
+    val text = state.currentTimeText
+    if (freezeKey != null && chronometer is Chronometer.Running) {
+        SideEffect {
+            chronometer.displayedValue(timeSource)?.let { FrozenChronometerCache.put(freezeKey, it) }
+        }
+    }
+    return text
+}
+
+@Composable
+private fun ChronometerLabel(text: String, color: Color, modifier: Modifier) {
+    Text(
+        text,
+        color = color,
+        style = PillMono,
+        maxLines = 1,
+        softWrap = false,
+        overflow = TextOverflow.Clip,
+        modifier = modifier,
+    )
 }
 
 @Composable
