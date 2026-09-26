@@ -75,8 +75,26 @@ sealed class IslandEvent(open val priority: Int, val id: String) : Comparable<Is
         val address: String = "",
         val deviceIcon: Drawable? = null,
         val deviceTypeLabel: String = "",
+        val deviceImage: Drawable? = null,
+        val leftBatteryLevel: Int? = null,
+        val rightBatteryLevel: Int? = null,
+        val caseBatteryLevel: Int? = null,
     ) : IslandEvent(priority = 60, id = "bluetooth") {
+        // deviceImage stays in the comparison. It arrives after the event is first published, and
+        // drawable-only updates are otherwise dropped before they reach the bar.
         override fun withoutDrawables() = copy(deviceIcon = null)
+
+        fun batterySummary(): String? {
+            val left = leftBatteryLevel
+            val right = rightBatteryLevel
+            return when {
+                left != null && right != null -> "$left% · $right%"
+                left != null -> "$left%"
+                right != null -> "$right%"
+                batteryLevel >= 0 -> "$batteryLevel%"
+                else -> null
+            }
+        }
     }
 
     data class Hotspot(val numDevices: Int) : IslandEvent(priority = 55, id = "hotspot")
