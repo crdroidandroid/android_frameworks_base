@@ -822,7 +822,7 @@ private fun secondaryTextFor(event: IslandEvent): String? = when (event) {
     is IslandEvent.Vpn,
     is IslandEvent.AppSwitch -> null
     is IslandEvent.Charging -> event.timeRemaining
-    is IslandEvent.Bluetooth -> if (event.batteryLevel >= 0) "${event.batteryLevel}%" else null
+    is IslandEvent.Bluetooth -> event.batterySummary()
     is IslandEvent.Alarm -> {
         if (event.triggerTimeMs > 0) {
             val cal = Calendar.getInstance().apply { timeInMillis = event.triggerTimeMs }
