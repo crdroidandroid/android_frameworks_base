@@ -108,6 +108,9 @@
     <string name="ax_dynamic_bar_connecting">Connecting\u2026</string>
     <string name="ax_dynamic_bar_one_device">1 device</string>
     <string name="ax_dynamic_bar_bluetooth_device">Bluetooth device</string>
+    <string name="ax_dynamic_bar_left_earbud">Left earbud</string>
+    <string name="ax_dynamic_bar_right_earbud">Right earbud</string>
+    <string name="ax_dynamic_bar_earbuds_case">Case</string>
     <string name="ax_dynamic_bar_apps_count"><xliff:g id="count" example="2">%d</xliff:g> apps</string>
     <string name="ax_dynamic_bar_just_now">Just now</string>
     <string name="ax_dynamic_bar_mins_ago"><xliff:g id="count" example="5">%d</xliff:g>m ago</string>
