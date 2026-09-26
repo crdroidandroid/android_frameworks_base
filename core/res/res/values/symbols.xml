@@ -2231,8 +2231,6 @@
   <java-symbol type="integer" name="config_networkDefaultDailyMultipathQuotaBytes" />
   <java-symbol type="integer" name="config_networkMeteredMultipathPreference" />
   <java-symbol type="array" name="config_networkSupportedKeepaliveCount" />
-  <java-symbol type="integer" name="config_reservedPrivilegedKeepaliveSlots" />
-  <java-symbol type="integer" name="config_allowedUnprivilegedKeepalivePerUid" />
   <java-symbol type="integer" name="config_notificationsBatteryFullARGB" />
   <java-symbol type="integer" name="config_notificationsBatteryReallyFullARGB" />
   <java-symbol type="integer" name="config_notificationsBatteryLedOff" />
