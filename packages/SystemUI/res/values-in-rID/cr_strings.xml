@@ -225,10 +225,10 @@
     <string name="ax_dynamic_bar_bluetooth_device">Perangkat bluetooth</string>
     <string name="ax_dynamic_bar_apps_count"><xliff:g id="count" example="2">%d</xliff:g> aplikasi</string>
     <string name="ax_dynamic_bar_just_now">Baru saja</string>
-    <string name="ax_dynamic_bar_mins_ago"><xliff:g id="count" example="5">%d</xliff:g>m ago</string>
-    <string name="ax_dynamic_bar_hours_ago"><xliff:g id="count" example="2">%d</xliff:g>h ago</string>
-    <string name="ax_dynamic_bar_days_ago"><xliff:g id="count" example="3">%d</xliff:g>d ago</string>
-    <string name="ax_dynamic_bar_weeks_ago"><xliff:g id="count" example="1">%d</xliff:g>w ago</string>
+    <string name="ax_dynamic_bar_mins_ago"><xliff:g id="count" example="5">%d</xliff:g> mnt lalu</string>
+    <string name="ax_dynamic_bar_hours_ago"><xliff:g id="count" example="2">%d</xliff:g> jam lalu</string>
+    <string name="ax_dynamic_bar_days_ago"><xliff:g id="count" example="3">%d</xliff:g> hr lalu</string>
+    <string name="ax_dynamic_bar_weeks_ago"><xliff:g id="count" example="1">%d</xliff:g> mgg lalu</string>
     <string name="ax_dynamic_bar_resume">Lanjutkan</string>
     <string name="ax_dynamic_bar_clipboard">Papan klip</string>
     <string name="ax_dynamic_bar_previous">Sebelumnya</string>
@@ -244,11 +244,11 @@
     <string name="ax_dynamic_bar_cam_short">Kamera</string>
     <string name="ax_dynamic_bar_mic_short">Mikrofon</string>
     <string name="ax_dynamic_bar_recent_apps">Aplikasi Terbaru</string>
-    <string name="ax_dynamic_bar_count_running"><xliff:g id="count" example="3">%d</xliff:g> running</string>
+    <string name="ax_dynamic_bar_count_running"><xliff:g id="count" example="3">%d</xliff:g> berjalan</string>
     <string name="ax_dynamic_bar_sports_vs">vs</string>
     <string name="ax_dynamic_bar_sports_live">LANGSUNG</string>
     <string name="ax_dynamic_bar_sports_final">Final</string>
-    <string name="ax_dynamic_bar_sports_halftime">Halftime</string>
+    <string name="ax_dynamic_bar_sports_halftime">Turun Minum</string>
     <string name="ax_dynamic_bar_sports_upcoming">Akan datang</string>
     <!-- Screenshot -->
     <string name="quick_settings_screenshot_label">Tangkapan layar</string>
