@@ -16,30 +16,54 @@
 
 package com.android.systemui.axdynamicbar.data.source
 
+import com.android.systemui.axdynamicbar.domain.AospChipAbsorptionPolicy
 import com.android.systemui.axdynamicbar.domain.AxDynamicBarChipsRefiner
 import com.android.systemui.axdynamicbar.model.IslandEvent
 import com.android.systemui.dagger.SysUISingleton
-import com.android.systemui.statusbar.chips.ui.model.OngoingActivityChipModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+
+/** What the island absorbed from AOSP chips, plus what other sources must now stay quiet about. */
+data class AospChipSnapshot(
+    /** Chips to show in the island. */
+    val events: List<IslandEvent.AospChip> = emptyList(),
+    /** Notification keys owned by absorbed notification chips (hidden ones included). */
+    val notificationKeys: Set<String> = emptySet(),
+    /** Packages owning absorbed notification chips (hidden ones included). */
+    val packages: Set<String> = emptySet(),
+    /** True if any promoted chronometer notification (e.g. Clock timer/stopwatch) is absorbed. */
+    val hasChronometerChip: Boolean = false,
+)
 
 @SysUISingleton
 class AospChipIslandManager @Inject constructor(
     private val refiner: AxDynamicBarChipsRefiner,
+    private val policy: AospChipAbsorptionPolicy,
 ) {
-    val aospChipEvents: Flow<List<IslandEvent.AospChip>> =
-        refiner.chipsFlow.map { model ->
-            model.active
-                .filter { isAbsorbed(it) }
-                .map { IslandEvent.AospChip(active = it) }
-        }
+    val snapshot: Flow<AospChipSnapshot> =
+        refiner.chipsFlow
+            .map { model ->
+                val all = model.active
+                policy.prune(all.mapTo(HashSet()) { it.key })
 
-    private fun isAbsorbed(chip: OngoingActivityChipModel.Active): Boolean {
-        val key = chip.key
-        return key.startsWith("callChip-") ||
-            key == "ShareToApp" ||
-            key == "ScreenRecord" ||
-            key == "CastToOtherDevice"
-    }
+                val absorbed = all.filter { policy.isAbsorbed(it) }
+                val notifChips = absorbed.filter { policy.isNotificationChip(it) }
+
+                AospChipSnapshot(
+                    events =
+                        absorbed
+                            .filterNot { policy.isNotificationChip(it) && it.isHidden }
+                            .map { IslandEvent.AospChip(active = it) },
+                    notificationKeys = notifChips.mapNotNullTo(HashSet()) { it.notificationKey },
+                    packages = notifChips.mapNotNullTo(HashSet()) { it.managingPackageName },
+                    hasChronometerChip = notifChips.isNotEmpty(),
+                )
+            }
+            .distinctUntilChanged()
+
+    /** Kept for existing callers. */
+    val aospChipEvents: Flow<List<IslandEvent.AospChip>> =
+        snapshot.map { it.events }.distinctUntilChanged()
 }
