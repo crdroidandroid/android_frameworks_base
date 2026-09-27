@@ -530,15 +530,6 @@ constructor(
             }
 
             override fun onAuthenticationSucceeded(result: FaceManager.AuthenticationResult) {
-                if (!isFaceAuthResultValid(result)) {
-                    _isAuthenticated.value = false
-                    faceAuthLogger.ignoredFaceAuthTrigger(
-                        null,
-                        "face auth result is no longer valid",
-                    )
-                    onFaceAuthRequestCompleted()
-                    return
-                }
                 // Update _isAuthenticated before _authenticationStatus is updated. There are
                 // consumers that receive the face authentication updates through a long chain of
                 // callbacks
@@ -554,12 +545,6 @@ constructor(
                 onFaceAuthRequestCompleted()
             }
         }
-
-    private fun isFaceAuthResultValid(result: FaceManager.AuthenticationResult) =
-        _isAuthRunning.value &&
-            canRunFaceAuth.value &&
-            !cancellationInProgress.value &&
-            result.userId == currentUserId
 
     private fun handleFaceHardwareError() {
         if (retryCount < HAL_ERROR_RETRY_MAX) {
