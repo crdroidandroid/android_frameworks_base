@@ -747,11 +747,8 @@ private fun KeyguardPrimaryText(event: IslandEvent, color: Color, modifier: Modi
             RecordingState.SAVED -> MarqueeText(stringResource(R.string.ax_dynamic_bar_saved), color, modifier)
         }
         is IslandEvent.Media -> MarqueeText(event.track, color, modifier)
-        is IslandEvent.Timer -> {
-            if (event.endTimeMs > 0L) CountdownText(event, color, modifier)
-            else MarqueeText(event.label.ifEmpty { stringResource(R.string.ax_dynamic_bar_timer) }, color, modifier)
-        }
-        is IslandEvent.Stopwatch -> StopwatchTimeText(event, color, modifier)
+        is IslandEvent.Timer -> PillEventText(event, modifier, overrideColor = color)
+        is IslandEvent.Stopwatch -> PillEventText(event, modifier, overrideColor = color)
         is IslandEvent.Notification -> MarqueeText(event.title ?: event.appName, color, modifier)
         is IslandEvent.Charging -> {
             val parts = rememberChargingParts(batteryString)
@@ -786,8 +783,8 @@ private fun KeyguardPrimaryText(event: IslandEvent, color: Color, modifier: Modi
         }
         is IslandEvent.Alarm -> MarqueeText(event.label.ifEmpty { stringResource(R.string.ax_dynamic_bar_alarm) }, color, modifier)
         is IslandEvent.Call -> {
-                if (event.callStartTimeMs > 0) CallTimerText(event, modifier, color)
-                else MarqueeText(event.callType ?: stringResource(R.string.ax_dynamic_bar_call), color, modifier)
+            if (event.callStartTimeMs > 0) PillEventText(event, modifier, overrideColor = color)
+            else MarqueeText(event.callType ?: stringResource(R.string.ax_dynamic_bar_call), color, modifier)
         }
         is IslandEvent.Torch -> MarqueeText(
             if (event.supportsLevel) "${(event.level.toFloat() / event.maxLevel * 100).toInt()}%"
@@ -811,103 +808,7 @@ private fun KeyguardPrimaryText(event: IslandEvent, color: Color, modifier: Modi
             "${event.songTitle} · ${event.artist}".trimEnd(' ', '·', ' '), color, modifier,
         )
         is IslandEvent.KeyguardIndication -> MarqueeText(event.text, color, modifier)
-        is IslandEvent.AospChip -> AospKeyguardChipText(event, color, modifier)
-    }
-}
-
-@Composable
-private fun AospKeyguardChipText(
-    event: IslandEvent.AospChip,
-    color: Color,
-    modifier: Modifier,
-) {
-    when (val content = event.active.content) {
-        is OngoingActivityChipModel.Content.Text -> {
-            if (content.text.isNotBlank()) MarqueeText(content.text, color, modifier)
-        }
-        is OngoingActivityChipModel.Content.Timer -> AospKeyguardTimerText(content, color, modifier)
-        is OngoingActivityChipModel.Content.ShortTimeDelta -> AospKeyguardDeltaText(content, color, modifier)
-        is OngoingActivityChipModel.Content.Countdown -> Text(
-            formatCountdownLong(content.secondsUntilStarted * 1000L),
-            color = color,
-            style = PillMono,
-            modifier = modifier,
-        )
-        is OngoingActivityChipModel.Content.IconOnly -> Unit
-        is OngoingActivityChipModel.Content.TextVariants -> {
-            content.textVariants.firstOrNull()?.let { text ->
-                if (text.isNotBlank()) MarqueeText(text, color, modifier)
-            }
-        }
-    }
-}
-
-@Composable
-private fun AospKeyguardTimerText(
-    content: OngoingActivityChipModel.Content.Timer,
-    color: Color,
-    modifier: Modifier,
-) {
-    var elapsedMs by remember(content.value, content.timeSource) {
-        mutableLongStateOf(aospTimerElapsedMs(content))
-    }
-    LaunchedEffect(content.value, content.timeSource) {
-        while (true) {
-            elapsedMs = aospTimerElapsedMs(content)
-            when (val chronometer = content.value) {
-                is Chronometer.Paused -> break
-                is Chronometer.Running -> {
-                    val zeroMs = chronometer.eventTime.asElapsedRealtime(content.timeSource)
-                    val nowMs = content.timeSource.elapsedRealtime()
-                    delay(1000L - abs(nowMs - zeroMs) % 1000L)
-                }
-            }
-        }
-    }
-    Text(formatCountdownLong(elapsedMs), color = color, style = PillMono, modifier = modifier)
-}
-
-private fun aospTimerElapsedMs(content: OngoingActivityChipModel.Content.Timer): Long {
-    return when (val chronometer = content.value) {
-        is Chronometer.Paused -> chronometer.atDuration.toMillis().coerceAtLeast(0L)
-        is Chronometer.Running -> {
-            val zeroMs = chronometer.eventTime.asElapsedRealtime(content.timeSource)
-            val nowMs = content.timeSource.elapsedRealtime()
-            if (chronometer.isCountdown) {
-                (zeroMs - nowMs).coerceAtLeast(0L)
-            } else {
-                (nowMs - zeroMs).coerceAtLeast(0L)
-            }
-        }
-    }
-}
-
-@Composable
-private fun AospKeyguardDeltaText(
-    content: OngoingActivityChipModel.Content.ShortTimeDelta,
-    color: Color,
-    modifier: Modifier,
-) {
-    var deltaMs by remember(content.time) {
-        mutableLongStateOf(System.currentTimeMillis() - content.time)
-    }
-    LaunchedEffect(content.time) {
-        while (true) {
-            deltaMs = System.currentTimeMillis() - content.time
-            delay(30_000)
-        }
-    }
-    MarqueeText(aospShortDeltaText(deltaMs), color, modifier)
-}
-
-@Composable
-private fun aospShortDeltaText(deltaMs: Long): String {
-    val mins = abs(deltaMs) / 60_000L
-    return when {
-        mins < 1L -> stringResource(R.string.ax_dynamic_bar_just_now)
-        mins < 60L -> stringResource(R.string.ax_dynamic_bar_mins_ago, mins.toInt())
-        mins < 1440L -> stringResource(R.string.ax_dynamic_bar_hours_ago, (mins / 60L).toInt())
-        else -> stringResource(R.string.ax_dynamic_bar_days_ago, (mins / 1440L).toInt())
+        is IslandEvent.AospChip -> PillEventText(event, modifier, overrideColor = color)
     }
 }
 
@@ -949,26 +850,6 @@ private fun secondaryTextFor(event: IslandEvent): String? = when (event) {
         else -> null
     }
     else -> null
-}
-
-@Composable
-private fun CallTimerText(event: IslandEvent.Call, modifier: Modifier, overrideColor: Color? = null) {
-    val isActive = event.callType == "Phone:active"
-    if (isActive) {
-        var elapsedMs by remember(event.callStartTimeMs) {
-            mutableLongStateOf((System.currentTimeMillis() - event.callStartTimeMs).coerceAtLeast(0L))
-        }
-        LaunchedEffect(event.callStartTimeMs) {
-            while (true) {
-                delay(1000)
-                elapsedMs = (System.currentTimeMillis() - event.callStartTimeMs).coerceAtLeast(0L)
-            }
-        }
-        val color = overrideColor ?: GreenAccent
-        Text(formatElapsedTime(elapsedMs), color = color, style = PillMono, modifier = modifier)
-    } else {
-        MarqueeText(stringResource(R.string.ax_dynamic_bar_incoming_call), overrideColor ?: BlueAccent, modifier)
-    }
 }
 
 private fun String.takeIfDistinctFrom(vararg others: String?): String? {
@@ -1126,40 +1007,4 @@ private fun ElapsedTimeText(
         }
     }
     Text(formatCountdownLong(elapsedMs), color = color, style = PillMono, modifier = modifier)
-}
-
-@Composable
-private fun CountdownText(event: IslandEvent.Timer, color: Color, modifier: Modifier) {
-    if (event.isPaused) {
-        Text(stringResource(R.string.ax_dynamic_bar_paused), color = color, style = PillMono, modifier = modifier)
-    } else {
-        var remainingMs by remember(event.endTimeMs) {
-            mutableLongStateOf((event.endTimeMs - System.currentTimeMillis()).coerceAtLeast(0L))
-        }
-        LaunchedEffect(event.endTimeMs) {
-            while (remainingMs > 0L) {
-                delay(500)
-                remainingMs = (event.endTimeMs - System.currentTimeMillis()).coerceAtLeast(0L)
-            }
-        }
-        Text(formatCountdownLong(remainingMs), color = color, style = PillMono, modifier = modifier)
-    }
-}
-
-@Composable
-private fun StopwatchTimeText(event: IslandEvent.Stopwatch, color: Color, modifier: Modifier) {
-    if (!event.isRunning) {
-        Text(stringResource(R.string.ax_dynamic_bar_paused), color = color, style = PillMono, modifier = modifier)
-    } else {
-        var elapsedMs by remember(event.startTimeMs) {
-            mutableLongStateOf((System.currentTimeMillis() - event.startTimeMs).coerceAtLeast(0L))
-        }
-        LaunchedEffect(event.startTimeMs) {
-            while (true) {
-                delay(200)
-                elapsedMs = (System.currentTimeMillis() - event.startTimeMs).coerceAtLeast(0L)
-            }
-        }
-        Text(formatStopwatch(elapsedMs), color = color, style = PillMono, modifier = modifier)
-    }
 }

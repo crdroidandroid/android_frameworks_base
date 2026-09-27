@@ -217,9 +217,19 @@ constructor(
             transientGroup,
             promotedGroup,
             indicationGroup,
-            aospChip.aospChipEvents,
+            aospChip.snapshot,
         ) { high, transient, promoted, indication, aosp ->
-            high + transient + promoted + indication + aosp
+            val transientFiltered =
+                if (aosp.hasChronometerChip) {
+                    transient.filterNot { it is IslandEvent.Timer || it is IslandEvent.Stopwatch }
+                } else {
+                    transient
+                }
+            val promotedFiltered =
+                promoted.filterNot {
+                    it is IslandEvent.PromotedOngoing && it.sbn.key in aosp.notificationKeys
+                }
+            high + transientFiltered + promotedFiltered + indication + aosp.events
         }
 
         return allEvents.map { events ->
