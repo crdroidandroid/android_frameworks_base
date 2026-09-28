@@ -327,6 +327,10 @@ public class MediaControlPanel {
      * Clean up seekbar and controller when panel is destroyed
      */
     public void onDestroy() {
+        if (mController != null) {
+            mController.unregisterCallback(mCb);
+            mController = null;
+        }
         if (mSeekBarObserver != null) {
             mSeekBarViewModel.getProgress().removeObserver(mSeekBarObserver);
         }
@@ -517,6 +521,9 @@ public class MediaControlPanel {
             mToken = token;
         }
 
+        if (mController != null) {
+            mController.unregisterCallback(mCb);
+        }
         if (mToken != null) {
             mController = new MediaController(mContext, mToken);
             mController.registerCallback(mCb);
@@ -1586,7 +1593,7 @@ public class MediaControlPanel {
      private final MediaController.Callback mCb = new MediaController.Callback() { 
          @Override 
          public void onMetadataChanged(MediaMetadata metadata) { 
-            if (metadata != null) { 
+            if (metadata != null && mMediaViewHolder != null) { 
                  String title = metadata.getString(MediaMetadata.METADATA_KEY_TITLE); 
                  String artist = metadata.getString(MediaMetadata.METADATA_KEY_ARTIST); 
                  mMediaViewHolder.getTitleText().setText(title); 
