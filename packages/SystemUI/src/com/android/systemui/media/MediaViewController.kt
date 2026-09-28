@@ -417,7 +417,8 @@ class MediaViewController @Inject constructor(
             .start()
     }
 
-    override fun onAlbumArtChanged(drawable: Drawable) {
+    override fun onAlbumArtChanged(drawable: Drawable?) {
+        if (artworkDrawable === drawable) return
         coroutineScope.launch {
             artworkDrawable = drawable
             onMediaStateChanged()
