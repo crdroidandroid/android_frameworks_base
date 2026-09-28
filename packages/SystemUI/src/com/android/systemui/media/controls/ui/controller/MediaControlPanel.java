@@ -67,7 +67,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.UiThread;
 import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.android.app.animation.Interpolators;
@@ -1507,12 +1506,16 @@ public class MediaControlPanel {
     /**
      * Scale artwork to fill the background of the panel
      */
-    @UiThread
-    private Drawable getScaledBackground(Icon icon, int width, int height) {
+    @Nullable
+    private Drawable getScaledBackground(@Nullable Icon icon, int width, int height) {
         if (icon == null) {
             return null;
         }
         Drawable drawable = icon.loadDrawable(mContext);
+        if (drawable == null) {
+            Log.w(TAG, "Failed to load artwork drawable");
+            return null;
+        }
         Rect bounds = new Rect(0, 0, width, height);
         if (bounds.width() > width || bounds.height() > height) {
             float offsetX = (bounds.width() - width) / 2.0f;
