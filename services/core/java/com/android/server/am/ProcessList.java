@@ -1980,38 +1980,66 @@ public final class ProcessList implements ProcessStateController.ProcessLruUpdat
             boolean isProfileableByShell = app.info.isProfileableByShell();
             boolean isProfileable = app.info.isProfileable();
 
-            // Keep explicitly debuggable builds observable to development tools. Production
-            // processes selected in AxSandbox, or with a native diagnostic-spoofing option,
-            // receive the privacy policy before app code runs.
-            if (!debuggableFlag && UserHandle.isApp(app.uid)) {
-                final com.android.server.wm.AxSandboxService sandboxService =
-                        com.android.server.wm.AxSandboxService.get();
-                final boolean sandboxed = sandboxService.isPackageSandboxed(app.info.packageName);
-                final boolean spoofAdb = sandboxService.isSpoofSettingEnabled(app.info.packageName,
-                        android.app.AxSandboxManager.SPOOF_ADB_ENABLED);
-                final boolean spoofSelinux = sandboxService.isSpoofSettingEnabled(
-                        app.info.packageName,
-                        android.app.AxSandboxManager.SPOOF_SELINUX_ENFORCING);
-                // The app exposes individual spoof switches independently from the broad
-                // "Isolate app" switch. ADB and SELinux need a process-local libc policy, so
-                // their selected switches must be sufficient to enable it.
-                if (sandboxed || spoofAdb || spoofSelinux) {
-                    runtimeFlags |= Zygote.ENABLE_AX_SANDBOX_PRIVACY;
-                    if (spoofAdb) {
-                        runtimeFlags |= Zygote.ENABLE_AX_SANDBOX_ADB;
-                    }
-                    if (spoofSelinux) {
-                        runtimeFlags |= Zygote.ENABLE_AX_SANDBOX_SELINUX_ENFORCING;
-                    }
-                }
-            }
-
             if (app.isSdkSandbox) {
                 ApplicationInfo clientInfo = app.getClientInfoForSdkSandbox();
                 if (clientInfo != null) {
                     debuggableFlag |= (clientInfo.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
                     isProfileableByShell |= clientInfo.isProfileableByShell();
                     isProfileable |= clientInfo.isProfileable();
+                }
+            }
+
+            // Keep explicitly debuggable builds observable to development tools. Production
+            // processes selected in AxSandbox, or with a native diagnostic-spoofing option,
+            // receive the privacy policy before app code runs.
+            final boolean hasSandboxPolicyOwner = UserHandle.isApp(app.uid)
+                    || app.isolated || app.isSdkSandbox;
+            final String[] sandboxPolicyPackages;
+            if (app.isSdkSandbox) {
+                final ApplicationInfo clientInfo = app.getClientInfoForSdkSandbox();
+                sandboxPolicyPackages = clientInfo != null
+                        ? new String[] { clientInfo.packageName } : new String[0];
+            } else {
+                // A shared UID can host more than one package. The native policy is
+                // process-wide, so a selected package must protect the complete process.
+                sandboxPolicyPackages = app.getProcessPackageNames();
+            }
+            if (!debuggableFlag && hasSandboxPolicyOwner
+                    && sandboxPolicyPackages != null && sandboxPolicyPackages.length > 0) {
+                final com.android.server.wm.AxSandboxService sandboxService =
+                        com.android.server.wm.AxSandboxService.get();
+                boolean sandboxed = false;
+                boolean spoofAdb = false;
+                boolean spoofSelinux = false;
+                for (String packageName : sandboxPolicyPackages) {
+                    if (TextUtils.isEmpty(packageName)) continue;
+                    sandboxed |= sandboxService.isPackageSandboxed(packageName);
+                    spoofAdb |= sandboxService.isSpoofSettingEnabled(packageName,
+                            android.app.AxSandboxManager.SPOOF_ADB_ENABLED);
+                    spoofSelinux |= sandboxService.isSpoofSettingEnabled(packageName,
+                            android.app.AxSandboxManager.SPOOF_SELINUX_ENFORCING);
+                }
+                // The app exposes individual spoof switches independently from the broad
+                // "Isolate app" switch. The selected app sandbox always receives the ADB
+                // endpoint policy so its socket, procfs, and property views stay coherent.
+                // The individual ADB/SELinux switches still work when broad isolation is off.
+                if (sandboxed || spoofAdb || spoofSelinux) {
+                    final boolean jdwpEnabledBySystemProperty =
+                            Zygote.isJdwpEnabledBySystemProperty();
+                    runtimeFlags |= Zygote.ENABLE_AX_SANDBOX_PRIVACY;
+                    if (sandboxed || spoofAdb) {
+                        runtimeFlags |= Zygote.ENABLE_AX_SANDBOX_ADB;
+                    }
+                    if (spoofSelinux) {
+                        runtimeFlags |= Zygote.ENABLE_AX_SANDBOX_SELINUX_ENFORCING;
+                    }
+                    Slog.i("AxSandboxAdb", "policy uid=" + app.uid
+                            + " packages=" + TextUtils.join(",", sandboxPolicyPackages)
+                            + " sandboxed=" + sandboxed
+                            + " spoofAdb=" + spoofAdb
+                            + " spoofSelinux=" + spoofSelinux
+                            + " jdwpProperty=" + jdwpEnabledBySystemProperty
+                            + " runtimeFlags=0x" + Integer.toHexString(runtimeFlags));
                 }
             }
 
@@ -2415,11 +2443,15 @@ public final class ProcessList implements ProcessStateController.ProcessLruUpdat
         }
     }
 
-    private AppZygote createAppZygoteForProcessIfNeeded(final ProcessRecord app) {
+    private AppZygote createAppZygoteForProcessIfNeeded(final ProcessRecord app,
+            final int runtimeFlags) {
         synchronized (mService) {
             // The UID for the app zygote should be the UID of the application hosting
             // the service.
             final int uid = app.getHostingRecord().getDefiningUid();
+            final int sandboxRuntimeFlags = runtimeFlags & (Zygote.ENABLE_AX_SANDBOX_PRIVACY
+                    | Zygote.ENABLE_AX_SANDBOX_SELINUX_ENFORCING
+                    | Zygote.ENABLE_AX_SANDBOX_ADB);
             AppZygote appZygote = mAppZygotes.get(app.info.processName, uid);
             final ArrayList<ProcessRecord> zygoteProcessList;
             if (appZygote == null) {
@@ -2443,11 +2475,13 @@ public final class ProcessList implements ProcessStateController.ProcessLruUpdat
                 // not the calling one.
                 appInfo.packageName = app.getHostingRecord().getDefiningPackageName();
                 appInfo.uid = uid;
-                appZygote = new AppZygote(appInfo, app.processInfo, uid, firstUid, lastUid);
+                appZygote = new AppZygote(appInfo, app.processInfo, uid, firstUid, lastUid,
+                        sandboxRuntimeFlags);
                 mAppZygotes.put(app.info.processName, uid, appZygote);
                 zygoteProcessList = new ArrayList<ProcessRecord>();
                 mAppZygoteProcesses.put(appZygote, zygoteProcessList);
             } else {
+                appZygote.updateSandboxRuntimeFlags(sandboxRuntimeFlags);
                 if (DEBUG_PROCESSES) {
                     Slog.d(TAG_PROCESSES, "Reusing existing app zygote.");
                 }
@@ -2638,7 +2672,12 @@ public final class ProcessList implements ProcessStateController.ProcessLruUpdat
             app.mProcessGroupCreated = false;
             app.mSkipProcessGroupCreation = false;
             long forkTimeNs = SystemClock.uptimeNanos();
-            if (hostingRecord.usesWebviewZygote()) {
+            // WebViewZygote is shared by unrelated applications. Keep a sandboxed WebView on the
+            // primary Zygote so its process-local ADB policy is initialized in the same path as
+            // other sandboxed app processes.
+            final boolean sandboxedWebView = hostingRecord.usesWebviewZygote()
+                    && (runtimeFlags & Zygote.ENABLE_AX_SANDBOX_ADB) != 0;
+            if (hostingRecord.usesWebviewZygote() && !sandboxedWebView) {
                 startResult = startWebView(entryPoint,
                         app.processName, uid, uid, gids, runtimeFlags, mountExternal,
                         app.info.targetSdkVersion, seInfo, requiredAbi, instructionSet,
@@ -2646,7 +2685,7 @@ public final class ProcessList implements ProcessStateController.ProcessLruUpdat
                         app.getDisabledCompatChanges(), app.getStartSeq(),
                         new String[]{PROC_START_SEQ_IDENT + app.getStartSeq()});
             } else if (hostingRecord.usesAppZygote()) {
-                final AppZygote appZygote = createAppZygoteForProcessIfNeeded(app);
+                final AppZygote appZygote = createAppZygoteForProcessIfNeeded(app, runtimeFlags);
 
                 // We can't isolate app data and storage data as parent zygote already did that.
                 startResult = appZygote.startProcess(entryPoint,
@@ -3444,6 +3483,38 @@ public final class ProcessList implements ProcessStateController.ProcessLruUpdat
             }
         }
         return ret;
+    }
+
+    @GuardedBy("mService")
+    int getIsolatedOwnerUidLocked(int isolatedUid) {
+        final ProcessRecord app = mIsolatedProcesses.get(isolatedUid);
+        return app != null ? app.info.uid : Process.INVALID_UID;
+    }
+
+    @GuardedBy("mService")
+    void killSandboxProcessesForUidLocked(int uid, String reason) {
+        final ArrayList<ProcessRecord> processesToKill = new ArrayList<>();
+        for (int i = 0, size = mIsolatedProcesses.size(); i < size; i++) {
+            final ProcessRecord app = mIsolatedProcesses.valueAt(i);
+            if (app.info.uid == uid) {
+                processesToKill.add(app);
+            }
+        }
+
+        final ArrayList<ProcessRecord> sdkSandboxes = mSdkSandboxes.get(uid);
+        if (sdkSandboxes != null) {
+            processesToKill.addAll(sdkSandboxes);
+        }
+
+        for (ProcessRecord app : processesToKill) {
+            app.killLocked(reason, ApplicationExitInfo.REASON_OTHER,
+                    ApplicationExitInfo.SUBREASON_KILL_UID, true /* noisy */);
+        }
+
+        // An app zygote is not represented by an ordinary ProcessRecord. It must also be
+        // discarded so it cannot preload or fork under the previous native policy.
+        killAppZygotesLocked(null /* packageName */, UserHandle.getAppId(uid),
+                UserHandle.getUserId(uid), true /* force */);
     }
 
     /**

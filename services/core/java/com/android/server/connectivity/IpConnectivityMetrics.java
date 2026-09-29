@@ -28,8 +28,11 @@ import android.net.metrics.ApfProgramEvent;
 import android.net.metrics.IpConnectivityLog;
 import android.os.Binder;
 import android.os.Process;
+import android.os.SELinux;
 import android.os.SystemClock;
 import android.provider.Settings;
+import android.system.ErrnoException;
+import android.system.Os;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.util.ArrayMap;
@@ -44,14 +47,19 @@ import com.android.server.LocalServices;
 import com.android.server.SystemService;
 import com.android.server.connectivity.metrics.nano.IpConnectivityLogClass.IpConnectivityEvent;
 
+import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.function.ToIntFunction;
 
 /**
@@ -81,6 +89,24 @@ final public class IpConnectivityMetrics extends SystemService {
     private static final int MAXIMUM_BUFFER_SIZE = DEFAULT_BUFFER_SIZE * 10;
 
     private static final int MAXIMUM_CONNECT_LATENCY_RECORDS = 20000;
+    private static final String DAOFIREWALL_PACKAGE = "org.daofirewall";
+    private static final File DAOFIREWALL_RULE_DIR = new File("/data/system/daofirewall");
+    private static final File DAOFIREWALL_BLOCK_FILE = new File(DAOFIREWALL_RULE_DIR, "blocked");
+    private static final File DAOFIREWALL_ALLOW_FILE = new File(DAOFIREWALL_RULE_DIR, "allowed");
+    private static final File DAOFIREWALL_BLOCK_IP_FILE = new File(DAOFIREWALL_RULE_DIR, "blocked_ips");
+    private static final File DAOFIREWALL_BYPASS_GUARD_FILE =
+            new File(DAOFIREWALL_RULE_DIR, "bypass_guard");
+    private static final File DAOFIREWALL_BYPASS_GUARD_UIDS_FILE =
+            new File(DAOFIREWALL_RULE_DIR, "bypass_guard_uids");
+    private static final File DAOFIREWALL_DIRECT_DNS_UIDS_FILE =
+            new File(DAOFIREWALL_RULE_DIR, "direct_dns_uids");
+    private static final File DAOFIREWALL_DOT_UIDS_FILE =
+            new File(DAOFIREWALL_RULE_DIR, "dot_uids");
+    private static final File DAOFIREWALL_DOH_UIDS_FILE =
+            new File(DAOFIREWALL_RULE_DIR, "doh_uids");
+    private static final File DAOFIREWALL_UID_ALLOWED_DOMAINS_FILE =
+            new File(DAOFIREWALL_RULE_DIR, "uid_allowed_domains");
+    private static final int DAOFIREWALL_MAX_RULES = 500_000;
 
     private static final int ERROR_RATE_LIMITED = -1;
 
@@ -341,10 +367,23 @@ final public class IpConnectivityMetrics extends SystemService {
 
         private void enforceNetdEventListeningPermission() {
             final int uid = Binder.getCallingUid();
-            if (uid != Process.SYSTEM_UID) {
+            if (uid != Process.SYSTEM_UID && !isDaoFirewallCaller(uid)) {
                 throw new SecurityException(String.format("Uid %d has no permission to listen for"
                         + " netd events.", uid));
             }
+        }
+
+        private boolean isDaoFirewallCaller(int uid) {
+            final String[] packages = getContext().getPackageManager().getPackagesForUid(uid);
+            if (packages == null) {
+                return false;
+            }
+            for (String packageName : packages) {
+                if (DAOFIREWALL_PACKAGE.equals(packageName)) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         @Override
@@ -364,6 +403,327 @@ final public class IpConnectivityMetrics extends SystemService {
                 return true;
             }
             return mNetdListener.removeNetdEventCallback(callerType);
+        }
+
+        @Override
+        public boolean setDaoFirewallRules(String[] blockedDomains, String[] allowedDomains) {
+            enforceNetdEventListeningPermission();
+            try {
+                if (!ensureDaoFirewallRuleDir()) {
+                    return false;
+                }
+                writeRuleFile(DAOFIREWALL_BLOCK_FILE, normalizeRules(blockedDomains));
+                writeRuleFile(DAOFIREWALL_ALLOW_FILE, normalizeRules(allowedDomains));
+                return true;
+            } catch (IOException e) {
+                Log.e(TAG, "Could not update DaoFirewall rules", e);
+                return false;
+            }
+        }
+
+        @Override
+        public boolean setDaoFirewallRuleChunk(boolean allowedRules, boolean reset, boolean commit,
+                String[] domains) {
+            enforceNetdEventListeningPermission();
+            final File target = allowedRules ? DAOFIREWALL_ALLOW_FILE : DAOFIREWALL_BLOCK_FILE;
+            try {
+                if (!ensureDaoFirewallRuleDir()) {
+                    return false;
+                }
+                writeRuleChunk(target, normalizeRules(domains), reset, commit);
+                return true;
+            } catch (IOException e) {
+                Log.e(TAG, "Could not update DaoFirewall rule chunk", e);
+                return false;
+            }
+        }
+
+        @Override
+        public boolean setDaoFirewallIpRuleChunk(boolean reset, boolean commit, String[] ips) {
+            enforceNetdEventListeningPermission();
+            try {
+                if (!ensureDaoFirewallRuleDir()) {
+                    return false;
+                }
+                writeRuleChunk(DAOFIREWALL_BLOCK_IP_FILE, normalizeIps(ips), reset, commit);
+                return true;
+            } catch (IOException e) {
+                Log.e(TAG, "Could not update DaoFirewall IP rule chunk", e);
+                return false;
+            }
+        }
+
+        @Override
+        public boolean setDaoFirewallBypassGuard(boolean enabled) {
+            enforceNetdEventListeningPermission();
+            try {
+                if (!ensureDaoFirewallRuleDir()) {
+                    return false;
+                }
+                writeTextFile(DAOFIREWALL_BYPASS_GUARD_FILE, enabled ? "1\n" : "0\n");
+                return true;
+            } catch (IOException e) {
+                Log.e(TAG, "Could not update DaoFirewall bypass guard", e);
+                return false;
+            }
+        }
+
+        @Override
+        public boolean setDaoFirewallBypassGuardUids(int[] uids) {
+            enforceNetdEventListeningPermission();
+            try {
+                if (!ensureDaoFirewallRuleDir()) {
+                    return false;
+                }
+                writeRuleFile(DAOFIREWALL_BYPASS_GUARD_UIDS_FILE, normalizeUids(uids));
+                return true;
+            } catch (IOException e) {
+                Log.e(TAG, "Could not update DaoFirewall bypass guard UIDs", e);
+                return false;
+            }
+        }
+
+        @Override
+        public boolean setDaoFirewallDnsPolicyUids(int policy, int[] uids) {
+            enforceNetdEventListeningPermission();
+            final File target;
+            switch (policy) {
+                case 0:
+                    target = DAOFIREWALL_DIRECT_DNS_UIDS_FILE;
+                    break;
+                case 1:
+                    target = DAOFIREWALL_DOT_UIDS_FILE;
+                    break;
+                case 2:
+                    target = DAOFIREWALL_DOH_UIDS_FILE;
+                    break;
+                default:
+                    return false;
+            }
+            try {
+                if (!ensureDaoFirewallRuleDir()) {
+                    return false;
+                }
+                writeRuleFile(target, normalizeUids(uids));
+                return true;
+            } catch (IOException e) {
+                Log.e(TAG, "Could not update DaoFirewall DNS policy UIDs", e);
+                return false;
+            }
+        }
+
+        @Override
+        public boolean setDaoFirewallUidAllowedRuleChunk(boolean reset, boolean commit,
+                String[] rules) {
+            enforceNetdEventListeningPermission();
+            try {
+                if (!ensureDaoFirewallRuleDir()) {
+                    return false;
+                }
+                writeRuleChunk(DAOFIREWALL_UID_ALLOWED_DOMAINS_FILE,
+                        normalizeUidDomainRules(rules), reset, commit);
+                return true;
+            } catch (IOException e) {
+                Log.e(TAG, "Could not update DaoFirewall per-app allowed domains", e);
+                return false;
+            }
+        }
+
+        private boolean ensureDaoFirewallRuleDir() {
+            if (!DAOFIREWALL_RULE_DIR.exists() && !DAOFIREWALL_RULE_DIR.mkdirs()) {
+                Log.e(TAG, "Could not create DaoFirewall rule directory");
+                return false;
+            }
+            try {
+                Os.chmod(DAOFIREWALL_RULE_DIR.getAbsolutePath(), 0770);
+            } catch (ErrnoException e) {
+                Log.e(TAG, "Could not chmod DaoFirewall rule directory", e);
+                return false;
+            }
+            if (!SELinux.restoreconRecursive(DAOFIREWALL_RULE_DIR)) {
+                Log.e(TAG, "Could not restorecon DaoFirewall rule directory");
+                return false;
+            }
+            return true;
+        }
+
+        private LinkedHashSet<String> normalizeRules(String[] domains) {
+            final LinkedHashSet<String> rules = new LinkedHashSet<>();
+            if (domains == null) {
+                return rules;
+            }
+            for (String domain : domains) {
+                if (rules.size() >= DAOFIREWALL_MAX_RULES) {
+                    break;
+                }
+                final String normalized = normalizeDomain(domain);
+                if (normalized != null) {
+                    rules.add(normalized);
+                }
+            }
+            return rules;
+        }
+
+        private LinkedHashSet<String> normalizeIps(String[] ips) {
+            final LinkedHashSet<String> rules = new LinkedHashSet<>();
+            if (ips == null) {
+                return rules;
+            }
+            for (String ip : ips) {
+                if (rules.size() >= DAOFIREWALL_MAX_RULES) {
+                    break;
+                }
+                final String normalized = normalizeIp(ip);
+                if (normalized != null) {
+                    rules.add(normalized);
+                }
+            }
+            return rules;
+        }
+
+        private LinkedHashSet<String> normalizeUids(int[] uids) {
+            final LinkedHashSet<String> rules = new LinkedHashSet<>();
+            if (uids == null) {
+                return rules;
+            }
+            for (int uid : uids) {
+                if (rules.size() >= DAOFIREWALL_MAX_RULES) {
+                    break;
+                }
+                if (uid >= 10_000) {
+                    rules.add(Integer.toString(uid));
+                }
+            }
+            return rules;
+        }
+
+        private LinkedHashSet<String> normalizeUidDomainRules(String[] entries) {
+            final LinkedHashSet<String> rules = new LinkedHashSet<>();
+            if (entries == null) {
+                return rules;
+            }
+            for (String entry : entries) {
+                if (rules.size() >= DAOFIREWALL_MAX_RULES) {
+                    break;
+                }
+                if (entry == null) {
+                    continue;
+                }
+                final String[] parts = entry.trim().split("\\s+", 2);
+                if (parts.length != 2) {
+                    continue;
+                }
+                final int uid;
+                try {
+                    uid = Integer.parseInt(parts[0]);
+                } catch (NumberFormatException e) {
+                    continue;
+                }
+                final String domain = normalizeDomain(parts[1]);
+                if (uid >= 10_000 && domain != null) {
+                    rules.add(uid + "\t" + domain);
+                }
+            }
+            return rules;
+        }
+
+        private String normalizeDomain(String domain) {
+            if (domain == null) {
+                return null;
+            }
+            String normalized = domain.trim().toLowerCase(Locale.US);
+            while (normalized.endsWith(".")) {
+                normalized = normalized.substring(0, normalized.length() - 1);
+            }
+            if (normalized.isEmpty() || normalized.length() > 253) {
+                return null;
+            }
+            for (int i = 0; i < normalized.length(); i++) {
+                final char c = normalized.charAt(i);
+                if (!((c >= 'a' && c <= 'z') || (c >= '0' && c <= '9')
+                        || c == '-' || c == '.')) {
+                    return null;
+                }
+            }
+            return normalized.contains(".") ? normalized : null;
+        }
+
+        private String normalizeIp(String ip) {
+            if (ip == null) {
+                return null;
+            }
+            String normalized = ip.trim().toLowerCase(Locale.US);
+            if (normalized.startsWith("::ffff:") && normalized.indexOf('.') >= 0) {
+                normalized = normalized.substring("::ffff:".length());
+            }
+            try {
+                return InetAddress.getByName(normalized).getHostAddress().toLowerCase(Locale.US);
+            } catch (IllegalArgumentException | IOException e) {
+                return null;
+            }
+        }
+
+        private void writeRuleFile(File file, LinkedHashSet<String> rules) throws IOException {
+            final File tmp = new File(file.getPath() + ".tmp");
+            try (FileOutputStream out = new FileOutputStream(tmp, false)) {
+                for (String rule : rules) {
+                    out.write(rule.getBytes(StandardCharsets.US_ASCII));
+                    out.write('\n');
+                }
+                out.getFD().sync();
+            }
+            tmp.setReadable(true, false);
+            tmp.setWritable(true, true);
+            if (!tmp.renameTo(file)) {
+                throw new IOException("Could not replace " + file);
+            }
+            if (!SELinux.restorecon(file)) {
+                throw new IOException("Could not restorecon " + file);
+            }
+            file.setReadable(true, false);
+            file.setWritable(true, true);
+        }
+
+        private void writeTextFile(File file, String value) throws IOException {
+            final File tmp = new File(file.getPath() + ".tmp");
+            try (FileOutputStream out = new FileOutputStream(tmp, false)) {
+                out.write(value.getBytes(StandardCharsets.US_ASCII));
+                out.getFD().sync();
+            }
+            tmp.setReadable(true, false);
+            tmp.setWritable(true, true);
+            if (!tmp.renameTo(file)) {
+                throw new IOException("Could not replace " + file);
+            }
+            if (!SELinux.restorecon(file)) {
+                throw new IOException("Could not restorecon " + file);
+            }
+            file.setReadable(true, false);
+            file.setWritable(true, true);
+        }
+
+        private void writeRuleChunk(File file, LinkedHashSet<String> rules, boolean reset,
+                boolean commit) throws IOException {
+            final File tmp = new File(file.getPath() + ".tmp");
+            try (FileOutputStream out = new FileOutputStream(tmp, !reset)) {
+                for (String rule : rules) {
+                    out.write(rule.getBytes(StandardCharsets.US_ASCII));
+                    out.write('\n');
+                }
+                out.getFD().sync();
+            }
+            tmp.setReadable(true, false);
+            tmp.setWritable(true, true);
+            if (commit) {
+                if (!tmp.renameTo(file)) {
+                    throw new IOException("Could not replace " + file);
+                }
+                if (!SELinux.restorecon(file)) {
+                    throw new IOException("Could not restorecon " + file);
+                }
+                file.setReadable(true, false);
+                file.setWritable(true, true);
+            }
         }
 
         @Override

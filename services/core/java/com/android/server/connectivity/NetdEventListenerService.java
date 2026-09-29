@@ -32,8 +32,11 @@ import android.net.metrics.NetworkMetrics;
 import android.net.metrics.WakeupEvent;
 import android.net.metrics.WakeupStats;
 import android.os.BatteryStatsInternal;
+import android.os.IBinder;
+import android.os.Parcel;
 import android.os.RemoteException;
 import android.os.SystemClock;
+import android.system.OsConstants;
 import android.text.format.DateUtils;
 import android.util.ArrayMap;
 import android.util.Log;
@@ -105,8 +108,13 @@ public class NetdEventListenerService extends BaseNetdEventListener {
 
     final TransportForNetIdNetworkCallback mCallback = new TransportForNetIdNetworkCallback();
 
+    private static final int CALLBACK_CALLER_DAOFIREWALL = 3;
+    private static final int TRANSACTION_ON_DAOFIREWALL_BLOCKED_CONNECT_EVENT =
+            IBinder.FIRST_CALL_TRANSACTION + 100;
+    private static final int DAOFIREWALL_BLOCK_CAUSE_PORT = 2;
+
     /**
-     * There are only 3 possible callbacks.
+     * There are only 4 possible callbacks.
      *
      * mNetdEventCallbackList[CALLBACK_CALLER_CONNECTIVITY_SERVICE]
      * Callback registered/unregistered by ConnectivityService.
@@ -117,17 +125,21 @@ public class NetdEventListenerService extends BaseNetdEventListener {
      *
      * mNetdEventCallbackList[CALLBACK_CALLER_NETWORK_WATCHLIST]
      * Callback registered/unregistered by NetworkWatchlistService.
+     *
+     * mNetdEventCallbackList[CALLBACK_CALLER_DAOFIREWALL]
+     * Callback registered/unregistered by DaoFirewall Sapphire mode.
      */
     @GuardedBy("this")
     private static final int[] ALLOWED_CALLBACK_TYPES = {
         INetdEventCallback.CALLBACK_CALLER_CONNECTIVITY_SERVICE,
         INetdEventCallback.CALLBACK_CALLER_DEVICE_POLICY,
-        INetdEventCallback.CALLBACK_CALLER_NETWORK_WATCHLIST
+        INetdEventCallback.CALLBACK_CALLER_NETWORK_WATCHLIST,
+        CALLBACK_CALLER_DAOFIREWALL
     };
 
     @GuardedBy("this")
     private INetdEventCallback[] mNetdEventCallbackList =
-            new INetdEventCallback[ALLOWED_CALLBACK_TYPES.length];
+            new INetdEventCallback[CALLBACK_CALLER_DAOFIREWALL + 1];
 
     public synchronized boolean addNetdEventCallback(int callerType, INetdEventCallback callback) {
         if (!isValidCallerType(callerType)) {
@@ -270,11 +282,37 @@ public class NetdEventListenerService extends BaseNetdEventListener {
         for (INetdEventCallback callback : mNetdEventCallbackList) {
             if (callback != null) {
                 try {
-                    callback.onConnectEvent(ipAddr, port, timestamp, uid);
+                    if (callback == mNetdEventCallbackList[CALLBACK_CALLER_DAOFIREWALL]
+                            && isConnectBlocked(error)) {
+                        reportDaoFirewallBlockedConnect(callback, ipAddr, port, timestamp, uid);
+                    } else {
+                        callback.onConnectEvent(ipAddr, port, timestamp, uid);
+                    }
                 } catch (RemoteException e) {
                     throw e.rethrowFromSystemServer();
                 }
             }
+        }
+    }
+
+    private boolean isConnectBlocked(int error) {
+        return error == OsConstants.EHOSTUNREACH || error == -OsConstants.EHOSTUNREACH;
+    }
+
+    private void reportDaoFirewallBlockedConnect(INetdEventCallback callback, String ipAddr,
+            int port, long timestamp, int uid) throws RemoteException {
+        final Parcel data = Parcel.obtain();
+        try {
+            data.writeInterfaceToken("android.net.INetdEventCallback");
+            data.writeString(ipAddr);
+            data.writeInt(port);
+            data.writeLong(timestamp);
+            data.writeInt(uid);
+            data.writeInt(DAOFIREWALL_BLOCK_CAUSE_PORT);
+            callback.asBinder().transact(TRANSACTION_ON_DAOFIREWALL_BLOCKED_CONNECT_EVENT, data,
+                    null, IBinder.FLAG_ONEWAY);
+        } finally {
+            data.recycle();
         }
     }
 
