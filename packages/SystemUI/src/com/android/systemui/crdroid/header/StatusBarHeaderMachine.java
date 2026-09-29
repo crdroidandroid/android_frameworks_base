@@ -74,6 +74,7 @@ public class StatusBarHeaderMachine {
     private boolean mScreenOn = true;
     private String mDefaultProviderName;
     private String mCurrentProviderName;
+    private Drawable mCurrentHeader;
 
     // broadcast providers sent when they update the header image
     public static final String STATUS_BAR_HEADER_UPDATE_ACTION = "com.android.systemui.crdroid.header.STATUS_BAR_HEADER_UPDATE";
@@ -94,7 +95,7 @@ public class StatusBarHeaderMachine {
                 if (!mScreenOn) {
                     if (DEBUG) Log.i(TAG, "status bar header background SCREEN_ON triggered");
                     mScreenOn = true;
-                    doUpdateStatusHeaderObservers(true);
+                    doUpdateStatusHeaderObservers(false);
                 }
             }
         }
@@ -201,12 +202,17 @@ public class StatusBarHeaderMachine {
 
     private void doUpdateStatusHeaderObservers(final boolean force) {
         if (DEBUG) Log.i(TAG, "updateHeader");
+        final Drawable header = getCurrent();
+        if (!force && header == mCurrentHeader) {
+            return;
+        }
+        mCurrentHeader = header;
         Iterator<IStatusBarHeaderMachineObserver> nextObserver = mObservers
                 .iterator();
         while (nextObserver.hasNext()) {
             IStatusBarHeaderMachineObserver observer = nextObserver.next();
             try {
-                observer.updateHeader(getCurrent(), force);
+                observer.updateHeader(header, force);
             } catch (Exception e) {
                 // just in case
             }
@@ -214,6 +220,7 @@ public class StatusBarHeaderMachine {
     }
 
     private void doDisableStatusHeaderObservers() {
+        mCurrentHeader = null;
         Iterator<IStatusBarHeaderMachineObserver> nextObserver = mObservers
                 .iterator();
         while (nextObserver.hasNext()) {
