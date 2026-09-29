@@ -80,6 +80,8 @@ public class DaylightHeaderProvider implements
     private int mHeaderIndex;
     private boolean mLinearMode;
     private int mAlarmIntervalMinutes = 0;
+    private int mCurrentDrawableId;
+    private Drawable mCurrentDrawable;
 
     public DaylightHeaderProvider(Context context) {
         mContext = context;
@@ -209,6 +211,8 @@ public class DaylightHeaderProvider implements
     }
 
     private void loadHeaders() throws XmlPullParserException, IOException {
+        mCurrentDrawableId = 0;
+        mCurrentDrawable = null;
         mHeadersList = new ArrayList<>();
         XmlPullParser parser = null;
 
@@ -397,7 +401,7 @@ public class DaylightHeaderProvider implements
                     mHeaderIndex = 0;
                 }
                 if (DEBUG) Log.i(TAG, "Current header " + header.mImage);
-                return mRes.getDrawable(mRes.getIdentifier(header.mImage, "drawable", mPackageName), null);
+                return getDrawable(header.mImage);
             }
             // first check day headers
             if (DEBUG) Log.i(TAG, "Check day headers");
@@ -408,23 +412,35 @@ public class DaylightHeaderProvider implements
                 // no day header with hour so just use one
                 if (first == null || last == null) {
                     if (DEBUG) Log.i(TAG, "Current day header " + todayHeaders.get(0).mImage);
-                    return mRes.getDrawable(mRes.getIdentifier(todayHeaders.get(0).mImage, "drawable", mPackageName), null);
+                    return getDrawable(todayHeaders.get(0).mImage);
                 }
                 DaylightHeaderInfo matching = getMatchingHeader(now, todayHeaders);
                 if (DEBUG) Log.i(TAG, "Current day header " + matching.mImage);
-                return mRes.getDrawable(mRes.getIdentifier(matching.mImage, "drawable", mPackageName), null);
+                return getDrawable(matching.mImage);
             }
             if (DEBUG) Log.i(TAG, "Check hour headers");
             List<DaylightHeaderInfo> hourHeaders = getHourHeaders();
             if (hourHeaders.size() != 0) {
                 DaylightHeaderInfo matching = getMatchingHeader(now, hourHeaders);
                 if (DEBUG) Log.i(TAG, "Current hour header " + matching.mImage);
-                return mRes.getDrawable(mRes.getIdentifier(matching.mImage, "drawable", mPackageName), null);
+                return getDrawable(matching.mImage);
             }
         } catch(Resources.NotFoundException e) {
             Log.w(TAG, "No drawable found for " + now +" in " + mPackageName);
         }
         return null;
+    }
+
+    private Drawable getDrawable(String image) {
+        final int drawableId = mRes.getIdentifier(image, "drawable", mPackageName);
+        if (drawableId == 0) {
+            return null;
+        }
+        if (mCurrentDrawable == null || mCurrentDrawableId != drawableId) {
+            mCurrentDrawable = mRes.getDrawable(drawableId, null);
+            mCurrentDrawableId = drawableId;
+        }
+        return mCurrentDrawable;
     }
 
     private boolean isItToday(final Calendar now, DaylightHeaderInfo headerInfo) {
