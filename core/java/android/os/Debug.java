@@ -1099,15 +1099,17 @@ public final class Debug
      * to attach.
      */
     public static boolean waitingForDebugger() {
-        return mWaiting;
+        return !isDiagnosticPrivacyEnabled() && mWaiting;
     }
 
     /**
      * Determine if a debugger is currently attached.
      */
     public static boolean isDebuggerConnected() {
-        return VMDebug.isDebuggerConnected();
+        return !isDiagnosticPrivacyEnabled() && VMDebug.isDebuggerConnected();
     }
+
+    private static native boolean isDiagnosticPrivacyEnabled();
 
     /**
      * Returns an array of strings that identify VM features.  This is
