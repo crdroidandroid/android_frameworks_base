@@ -2,7 +2,10 @@ package com.android.systemui.axdynamicbar.ui.compose
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterExitState
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.animation.fadeIn
@@ -58,9 +61,12 @@ import android.graphics.drawable.Drawable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.ui.res.stringResource
 import com.android.systemui.axdynamicbar.model.IslandEvent
+import com.android.systemui.axdynamicbar.shared.ChipTier
+import com.android.systemui.axdynamicbar.shared.AlphaGlass
 import com.android.systemui.axdynamicbar.shared.AlphaIconBg
 import com.android.systemui.axdynamicbar.shared.AlphaSecondary
 import com.android.systemui.axdynamicbar.shared.AlphaTertiary
+import com.android.systemui.axdynamicbar.shared.islandBlur
 import com.android.systemui.axdynamicbar.shared.PillPrimary
 import com.android.systemui.axdynamicbar.shared.ShapeXl
 import com.android.systemui.axdynamicbar.shared.ShapeXs
@@ -70,16 +76,18 @@ import com.android.systemui.axdynamicbar.shared.SpaceSm
 import com.android.systemui.axdynamicbar.shared.SpaceXs
 import com.android.systemui.axdynamicbar.shared.TsBadge
 import com.android.systemui.axdynamicbar.shared.chipAccentColorFor
-import com.android.systemui.axdynamicbar.shared.chipContentColorOn
+import com.android.systemui.axdynamicbar.shared.chipContentColorFor
+import com.android.systemui.axdynamicbar.shared.chipCornerRadius
+import com.android.systemui.axdynamicbar.shared.chipHeight
 import com.android.systemui.axdynamicbar.shared.chipProgressFor
 import com.android.systemui.axdynamicbar.shared.textKeyFor
+import com.android.systemui.axdynamicbar.shared.tierFor
 import com.android.systemui.axdynamicbar.shared.toScaledBitmap
 import com.android.systemui.axdynamicbar.ui.AxDynamicBarChipViewModel
 import com.android.systemui.res.R
 import kotlin.math.abs
 
 private val ChipShape = ShapeXl
-private val ChipHeight = 24.dp
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -177,6 +185,11 @@ fun AxDynamicBarChip(
                 }
             },
     ) {
+        val visibilityBlurAlpha by transition.animateFloat(
+            transitionSpec = { motionScheme.fastEffectsSpec() },
+            label = "chip_blur_visibility",
+        ) { if (it == EnterExitState.Visible) 1f else 0f }
+
         state?.let { chipState ->
             val displayEvent = chipState.notificationAlert ?: chipState.event
             val isAlert = chipState.notificationAlert != null
@@ -207,24 +220,47 @@ fun AxDynamicBarChip(
                     },
                     label = "chip_event",
                 ) {
+                    val contentBlurAlpha by transition.animateFloat(
+                        transitionSpec = { motionScheme.fastEffectsSpec() },
+                        label = "chip_blur_content",
+                    ) { if (it == EnterExitState.Visible) 1f else 0f }
                     val event = displayEvent
-                    val rawAccent = chipAccentColorFor(event)
-                    val accent by animateColorAsState(rawAccent, MaterialTheme.motionScheme.fastEffectsSpec(), label = "accent")
+                    val accent by animateColorAsState(
+                        chipAccentColorFor(event), motionScheme.fastEffectsSpec(), label = "accent",
+                    )
                     val contentColor by animateColorAsState(
-                        chipContentColorOn(rawAccent), MaterialTheme.motionScheme.fastEffectsSpec(), label = "content",
+                        chipContentColorFor(event), motionScheme.fastEffectsSpec(), label = "content",
                     )
                     val progress = chipProgressFor(event)
+
+                    // Height carries urgency, corner radius carries kind. Animated rather than
+                    // swapped so a tier change (an alarm starting to ring) interpolates.
+                    val tier = if (isAlert) ChipTier.ACTIVE else tierFor(event)
+                    val chipHeight by animateDpAsState(
+                        tier.chipHeight, motionScheme.defaultSpatialSpec(), label = "chip_height",
+                    )
+                    val chipCorner by animateDpAsState(
+                        tier.chipCornerRadius, motionScheme.defaultSpatialSpec(), label = "chip_corner",
+                    )
 
                 Box(
                     modifier = Modifier.fillMaxHeight(),
                     contentAlignment = Alignment.Center,
                 ) {
+                  Box(contentAlignment = Alignment.Center) {
                     Row(
                         modifier =
-                            Modifier.height(ChipHeight)
+                            Modifier.height(chipHeight)
                                 .widthIn(max = 100.dp)
-                                .clip(ChipShape)
-                                .background(accent)
+                                .clip(RoundedCornerShape(chipCorner))
+                                .islandBlur(
+                                    cornerRadius = chipCorner,
+                                    fallbackColor = accent,
+                                    alpha = visibilityBlurAlpha * contentBlurAlpha,
+                                )
+                                // Accent stays the chip's identity, laid over the frost rather
+                                // than replaced by it.
+                                .background(accent.copy(alpha = AlphaGlass))
                                 .then(
                                     if (progress != null) {
                                         val trackColor = lerp(accent, contentColor, 0.2f)
@@ -361,6 +397,7 @@ fun AxDynamicBarChip(
                             }
                         }
                     }
+                  }
                 }
             }
             }

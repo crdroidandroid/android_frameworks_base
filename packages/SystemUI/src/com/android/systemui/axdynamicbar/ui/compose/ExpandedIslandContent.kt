@@ -1,7 +1,8 @@
+@file:OptIn(ExperimentalMaterial3ExpressiveApi::class)
+
 package com.android.systemui.axdynamicbar.ui.compose
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
@@ -28,6 +29,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.MaterialTheme
@@ -167,18 +169,20 @@ fun ExpandedIslandContent(
                         MediaCard(event, interactor)
                     } else {
                         PrimaryCard {
+                            // Hoisted: the specs are read inside the non-composable transitionSpec.
+                            val motionScheme = MaterialTheme.motionScheme
                             AnimatedContent(
                                 targetState = event,
                                 transitionSpec = {
-                                    ((fadeIn(tween(180)) +
+                                    ((fadeIn(motionScheme.defaultEffectsSpec()) +
                                         scaleIn(
                                             initialScale = 0.95f,
-                                            animationSpec = tween(250),
+                                            animationSpec = motionScheme.defaultSpatialSpec(),
                                         )) togetherWith
-                                        (fadeOut(tween(120)) +
+                                        (fadeOut(motionScheme.fastEffectsSpec()) +
                                             scaleOut(
                                                 targetScale = 0.95f,
-                                                animationSpec = tween(200),
+                                                animationSpec = motionScheme.fastSpatialSpec(),
                                             ))).using(sizeTransform = null)
                                 },
                                 contentKey = { it::class.simpleName + it.id },
@@ -205,7 +209,9 @@ internal fun ExpandedEventContent(
         is IslandEvent.PromotedOngoing -> PromotedOngoingExpanded(event, interactor)
         is IslandEvent.Sports -> SportsExpanded(event, interactor)
         is IslandEvent.NowPlaying -> NowPlayingExpanded(event, interactor)
-        is IslandEvent.Media -> MediaExpanded(event, interactor)
+        // Unreachable in practice — Media is routed straight to MediaCard above, which draws its
+        // own frosted surface — but the `when` must stay exhaustive.
+        is IslandEvent.Media -> MediaCard(event, interactor)
         is IslandEvent.Bluetooth -> BluetoothExpanded(event, interactor)
         is IslandEvent.Hotspot -> HotspotExpanded(event)
         is IslandEvent.Charging -> ChargingExpanded(event)
@@ -228,8 +234,8 @@ internal fun ExpandedEventContent(
 @Composable
 internal fun BiometricUnlockExpanded(event: IslandEvent.BiometricUnlock) {
     ExpandedCardLayout(
-        accentColor = GreenAccent,
-        icon = { Icon(Icons.Filled.Check, null, tint = GreenAccent, modifier = Modifier.size(26.dp)) },
+        accentColor = IslandTone.POSITIVE.tint,
+        icon = { Icon(Icons.Filled.Check, null, tint = IslandTone.POSITIVE.tint, modifier = Modifier.size(16.dp)) },
         title = {
             Text(stringResource(R.string.ax_dynamic_bar_device_unlocked), color = OnCardText, style = MaterialTheme.typography.titleMedium)
             Text(event.sourceName, color = SubtleGray, style = MaterialTheme.typography.labelMedium)
@@ -241,7 +247,10 @@ internal fun BiometricUnlockExpanded(event: IslandEvent.BiometricUnlock) {
 internal fun CallExpanded(event: IslandEvent.Call, interactor: IslandActions) {
     val context = LocalContext.current
     val isIncoming = event.callType.contains("incoming", ignoreCase = true)
-    val accent = if (isIncoming) GreenAccent else BlueAccent
+    val tone = if (isIncoming) IslandTone.POSITIVE else IslandTone.ACCENT
+    val accent = tone.tint
+    val declineTint = IslandTone.ALERT.tint
+    val answerTint = IslandTone.POSITIVE.tint
 
     Column(
         modifier = Modifier
@@ -251,16 +260,14 @@ internal fun CallExpanded(event: IslandEvent.Call, interactor: IslandActions) {
                 catch (_: Exception) {}
                 interactor.collapseIsland()
             },
-        verticalArrangement = Arrangement.spacedBy(SpaceLg),
+        verticalArrangement = Arrangement.spacedBy(SpaceMd),
     ) {
+        // Plain row: the card behind it is already the surface, a tinted panel inside it was a
+        // second surface stacked on the glass.
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(ShapeLg)
-                .background(accent.copy(alpha = AlphaFaint))
-                .padding(SpaceLg),
+            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(SpaceLg),
+            horizontalArrangement = Arrangement.spacedBy(SpaceMd),
         ) {
             // Caller photo or app icon
             val photo = event.callerPhoto ?: event.appIcon
@@ -321,14 +328,15 @@ internal fun CallExpanded(event: IslandEvent.Call, interactor: IslandActions) {
                     val isAnswer = action.label.toString().lowercase().let {
                         it.contains("answer") || it.contains("accept")
                     }
+                    val tint = when {
+                        isDestructive -> declineTint
+                        isAnswer -> answerTint
+                        else -> accent
+                    }
                     ExpressivePillButton(
                         label = action.label.toString(),
-                        contentColor = if (isDestructive) RedAccent
-                            else if (isAnswer) GreenAccent
-                            else accent,
-                        backgroundColor = if (isDestructive) RedAccent.copy(alpha = AlphaFaint)
-                            else if (isAnswer) GreenAccent.copy(alpha = AlphaFaint)
-                            else accent.copy(alpha = AlphaFaint),
+                        contentColor = tint,
+                        backgroundColor = tint.copy(alpha = AlphaIconBg),
                         modifier = Modifier.weight(1f),
                         onClick = {
                             try { action.action.actionIntent?.sendWithBal(context) }
@@ -356,21 +364,25 @@ private fun CallElapsedTimer(startTimeMs: Long, color: Color) {
     Text(
         formatElapsedTime(elapsedMs),
         color = color,
-        style = MaterialTheme.typography.labelMedium,
+        style = TsCounter,
     )
 }
 
+/**
+ * The frosted card every expanded tile sits on. The blur backdrop is the surface itself: it falls
+ * back to the opaque [CardBg] wherever the platform will not blur, so no separate background is
+ * painted here.
+ */
 @Composable
 internal fun PrimaryCard(content: @Composable () -> Unit) {
     Box(
         modifier =
             Modifier.fillMaxWidth()
                 .clip(ShapeCard)
-                .background(CardBg)
                 .border(1.dp, CardBorderBrush, ShapeCard)
-                .padding(SpaceXxl)
+                .islandBlur(RadiusCard, CardBg)
     ) {
-        content()
+        Box(modifier = Modifier.padding(SpaceXxl)) { content() }
     }
 }
 

@@ -44,6 +44,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -53,12 +54,18 @@ import com.android.systemui.axdynamicbar.model.IslandEvent
 import com.android.systemui.axdynamicbar.shared.*
 import com.android.systemui.res.R
 
+/** A peripheral battery level: alert role when low, positive otherwise. */
+@Composable
+private fun batteryLevelColor(level: Int): Color =
+    if (level > 20) IslandTone.POSITIVE.tint else IslandTone.ALERT.tint
+
 @Composable
 internal fun ChargingExpanded(event: IslandEvent.Charging) {
+    val tint = IslandTone.POSITIVE.tint
     ExpandedCardLayout(
-        accentColor = GreenAccent,
+        accentColor = tint,
         icon = {
-            Icon(Icons.Filled.BatteryChargingFull, null, tint = GreenAccent, modifier = Modifier.size(30.dp))
+            Icon(Icons.Filled.BatteryChargingFull, null, tint = tint, modifier = Modifier.size(16.dp))
         },
         title = {
             Text(
@@ -71,21 +78,22 @@ internal fun ChargingExpanded(event: IslandEvent.Charging) {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(SpaceMd),
             ) {
-                StatusChip("${event.level}%", GreenAccent)
+                StatusChip("${event.level}%", tint)
                 if (event.isPowerSave) {
-                    StatusChip(stringResource(R.string.ax_dynamic_bar_battery_saver), OrangeAccent)
+                    StatusChip(stringResource(R.string.ax_dynamic_bar_battery_saver), IslandTone.ATTENTION.tint)
+                }
+                // Time-to-full joins the caption line instead of a trailing column of its own.
+                if (!event.timeRemaining.isNullOrEmpty()) {
+                    Text(
+                        "${event.timeRemaining} ${stringResource(R.string.ax_dynamic_bar_until_full)}",
+                        color = SubtleGray,
+                        style = MaterialTheme.typography.labelSmall,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
                 }
             }
         },
-        trailing = if (!event.timeRemaining.isNullOrEmpty()) {
-            {
-                Text(
-                    "${event.timeRemaining} ${stringResource(R.string.ax_dynamic_bar_until_full)}",
-                    color = SubtleGray,
-                    style = MaterialTheme.typography.labelMedium,
-                )
-            }
-        } else null,
     )
 }
 
@@ -102,16 +110,19 @@ internal fun BluetoothExpanded(event: IslandEvent.Bluetooth, interactor: IslandA
             },
         )
     val showSingleBattery = earbuds.isEmpty() && event.caseBatteryLevel == null
+    val tint = IslandTone.ACCENT.tint
     ExpandedCardLayout(
-        accentColor = BlueAccent,
-        iconSize = if (artwork != null) 56.dp else 44.dp,
+        accentColor = tint,
+        // Product artwork is the tile's identity and gets real room; a plain device glyph sits in
+        // the standard badge like every other tile.
+        iconSize = if (artwork != null) 44.dp else SizeIconBadge,
         iconBackground = artwork == null,
         icon = {
             val image = artwork ?: event.deviceIcon
             if (image != null) {
-                val size = if (artwork != null) 56.dp else 30.dp
+                val size = if (artwork != null) 44.dp else 18.dp
                 Image(
-                    bitmap = image.toScaledBitmap(size),
+                    bitmap = image.toSquareScaledBitmap(size),
                     contentDescription =
                         event.deviceTypeLabel.ifEmpty {
                             stringResource(R.string.ax_dynamic_bar_bluetooth_device)
@@ -119,7 +130,7 @@ internal fun BluetoothExpanded(event: IslandEvent.Bluetooth, interactor: IslandA
                     modifier = Modifier.size(size),
                 )
             } else {
-                Icon(Icons.Filled.Bluetooth, null, tint = BlueAccent, modifier = Modifier.size(28.dp))
+                Icon(Icons.Filled.Bluetooth, null, tint = tint, modifier = Modifier.size(16.dp))
             }
         },
         title = {
@@ -136,11 +147,15 @@ internal fun BluetoothExpanded(event: IslandEvent.Bluetooth, interactor: IslandA
             ) {
                 StatusChip(
                     event.deviceTypeLabel.ifEmpty { stringResource(R.string.ax_dynamic_bar_connected) },
-                    BlueAccent,
+                    tint,
                 )
                 if (showSingleBattery && event.batteryLevel >= 0) {
-                    val batteryColor = if (event.batteryLevel > 20) GreenAccent else RedAccent
-                    StatusChip("${event.batteryLevel}%", batteryColor)
+                    Text(
+                        "${event.batteryLevel}%",
+                        color = batteryLevelColor(event.batteryLevel),
+                        style = MaterialTheme.typography.labelSmall,
+                        fontWeight = FontWeight.SemiBold,
+                    )
                 }
             }
             event.caseBatteryLevel?.let { level ->
@@ -163,25 +178,26 @@ internal fun BluetoothExpanded(event: IslandEvent.Bluetooth, interactor: IslandA
                     )
                     Text(
                         "$level%",
-                        color = if (level > 20) GreenAccent else RedAccent,
+                        color = batteryLevelColor(level),
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.SemiBold,
                     )
                 }
             }
         },
-        trailing = { PulsingDot(color = BlueAccent, size = SpaceMd) },
-        actions = {
-            if (earbuds.isNotEmpty()) BluetoothEarbudBatteries(earbuds)
-            ActionChip(
-                label = stringResource(R.string.ax_dynamic_bar_disconnect),
+        // Disconnect moves into the header row instead of a full-width 48 dp band underneath.
+        trailing = {
+            ActionIconButton(
                 icon = Icons.Filled.BluetoothDisabled,
-                color = OnDestructiveText,
+                tint = OnDestructiveText,
                 bg = DestructiveBg,
-                modifier = Modifier.fillMaxWidth(),
+                contentDescription = stringResource(R.string.ax_dynamic_bar_disconnect),
                 onClick = { interactor.disconnectBluetooth(event.address) },
             )
         },
+        actions = if (earbuds.isNotEmpty()) {
+            { BluetoothEarbudBatteries(earbuds) }
+        } else null,
     )
 }
 
@@ -197,10 +213,10 @@ private fun BluetoothEarbudBatteries(batteries: List<BudBattery>) {
             Row(
                 modifier =
                     Modifier.weight(1f)
-                        .heightIn(min = 56.dp)
+                        .heightIn(min = 48.dp)
                         .fillMaxHeight()
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(BlueAccent.copy(alpha = 0.08f))
+                        .clip(ShapeSm)
+                        .background(IslandTone.ACCENT.tint.copy(alpha = AlphaBorder))
                         .semantics(mergeDescendants = true) {}
                         .padding(8.dp),
                 horizontalArrangement = Arrangement.spacedBy(6.dp),
@@ -218,14 +234,14 @@ private fun BluetoothEarbudBatteries(batteries: List<BudBattery>) {
                         text = stringResource(battery.labelRes),
                         style = MaterialTheme.typography.labelSmall,
                         color = SubtleGray,
-                        maxLines = 2,
+                        maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                     )
                     Text(
                         text = "${battery.level}%",
-                        style = MaterialTheme.typography.titleMedium,
+                        style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.SemiBold,
-                        color = if (battery.level > 20) GreenAccent else RedAccent,
+                        color = batteryLevelColor(battery.level),
                         maxLines = 1,
                     )
                 }
@@ -236,9 +252,10 @@ private fun BluetoothEarbudBatteries(batteries: List<BudBattery>) {
 
 @Composable
 internal fun HotspotExpanded(event: IslandEvent.Hotspot) {
+    val tint = toneFor(event).tint
     ExpandedCardLayout(
-        accentColor = OrangeAccent,
-        icon = { Icon(Icons.Filled.Wifi, null, tint = OrangeAccent, modifier = Modifier.size(SizeIconMd)) },
+        accentColor = tint,
+        icon = { Icon(Icons.Filled.Wifi, null, tint = tint, modifier = Modifier.size(16.dp)) },
         title = {
             Text(stringResource(R.string.ax_dynamic_bar_hotspot_active), color = OnCardText, style = MaterialTheme.typography.titleMedium)
             StatusChip(
@@ -247,10 +264,10 @@ internal fun HotspotExpanded(event: IslandEvent.Hotspot) {
                     1 -> stringResource(R.string.ax_dynamic_bar_one_device_connected)
                     else -> stringResource(R.string.ax_dynamic_bar_devices_connected, event.numDevices)
                 },
-                OrangeAccent,
+                tint,
             )
         },
-        trailing = { PulsingDot(color = OrangeAccent, size = SpaceMd) },
+        trailing = { PulsingDot(color = tint, size = SpaceMd) },
     )
 }
 
@@ -259,7 +276,7 @@ internal fun RingerModeExpanded(event: IslandEvent.RingerMode, interactor: Islan
     val style = eventStyleFor(event)
     ExpandedCardLayout(
         accentColor = style.accent,
-        icon = { style.icon?.let { Icon(it, null, tint = style.accent, modifier = Modifier.size(22.dp)) } },
+        icon = { style.icon?.let { Icon(it, null, tint = style.accent, modifier = Modifier.size(16.dp)) } },
         title = {
             Text(stringResource(R.string.ax_dynamic_bar_sound_mode), color = OnCardText, style = MaterialTheme.typography.titleMedium)
             StatusChip(stringResource(style.labelRes), style.accent)
@@ -267,13 +284,13 @@ internal fun RingerModeExpanded(event: IslandEvent.RingerMode, interactor: Islan
         actions = {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(SpaceLg),
+                horizontalArrangement = Arrangement.spacedBy(SpaceSm),
             ) {
                 RingerCard(
                     isSelected = event.mode == AudioManager.RINGER_MODE_NORMAL,
                     icon = Icons.Filled.VolumeUp,
                     label = stringResource(R.string.ax_dynamic_bar_ring),
-                    accent = BlueAccent,
+                    accent = IslandTone.ACCENT.tint,
                     onClick = { interactor.setRingerMode(AudioManager.RINGER_MODE_NORMAL) },
                     modifier = Modifier.weight(1f),
                 )
@@ -281,7 +298,7 @@ internal fun RingerModeExpanded(event: IslandEvent.RingerMode, interactor: Islan
                     isSelected = event.mode == AudioManager.RINGER_MODE_VIBRATE,
                     icon = Icons.Filled.Vibration,
                     label = stringResource(R.string.ax_dynamic_bar_vibrate),
-                    accent = OrangeAccent,
+                    accent = IslandTone.ATTENTION.tint,
                     onClick = { interactor.setRingerMode(AudioManager.RINGER_MODE_VIBRATE) },
                     modifier = Modifier.weight(1f),
                 )
@@ -289,7 +306,7 @@ internal fun RingerModeExpanded(event: IslandEvent.RingerMode, interactor: Islan
                     isSelected = event.mode == AudioManager.RINGER_MODE_SILENT,
                     icon = Icons.Filled.VolumeOff,
                     label = stringResource(R.string.ax_dynamic_bar_silent),
-                    accent = RedAccent,
+                    accent = IslandTone.ATTENTION.tint,
                     onClick = { interactor.setRingerMode(AudioManager.RINGER_MODE_SILENT) },
                     modifier = Modifier.weight(1f),
                 )
@@ -323,17 +340,18 @@ private fun RingerCard(
 
     Surface(
         onClick = onClick,
-        modifier = modifier,
+        modifier = modifier.semantics { selected = isSelected },
         shape = ShapeLg,
         color = bg,
     ) {
+        // The tile is already inset; the generous padding these used to carry just made it tall.
         Column(
-            modifier = Modifier.padding(vertical = SpaceSection),
+            modifier = Modifier.padding(vertical = SpaceMd),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(SpaceMd),
+            verticalArrangement = Arrangement.spacedBy(SpaceXs),
         ) {
-            Icon(icon, null, tint = tint, modifier = Modifier.size(28.dp))
-            Text(label, color = tint, style = MaterialTheme.typography.labelMedium)
+            Icon(icon, null, tint = tint, modifier = Modifier.size(20.dp))
+            Text(label, color = tint, style = MaterialTheme.typography.labelSmall)
         }
     }
 }
@@ -343,7 +361,7 @@ internal fun VpnExpanded(event: IslandEvent.Vpn) {
     val style = eventStyleFor(event)
     ExpandedCardLayout(
         accentColor = style.accent,
-        icon = { style.icon?.let { Icon(it, null, tint = style.accent, modifier = Modifier.size(28.dp)) } },
+        icon = { style.icon?.let { Icon(it, null, tint = style.accent, modifier = Modifier.size(16.dp)) } },
         title = {
             Text(
                 stringResource(style.labelRes),
@@ -353,12 +371,10 @@ internal fun VpnExpanded(event: IslandEvent.Vpn) {
             StatusChip(
                 if (event.isValidated) stringResource(R.string.ax_dynamic_bar_secured)
                 else stringResource(R.string.ax_dynamic_bar_connecting),
-                if (event.isValidated) GreenAccent else OrangeAccent,
+                style.accent,
             )
         },
-        trailing = {
-            PulsingDot(color = if (event.isValidated) GreenAccent else OrangeAccent, size = SpaceMd)
-        },
+        trailing = { PulsingDot(color = style.accent, size = SpaceMd) },
     )
 }
 
@@ -366,14 +382,14 @@ internal fun VpnExpanded(event: IslandEvent.Vpn) {
 internal fun RowScope.CompactBluetoothRow(event: IslandEvent.Bluetooth) {
     Box(
         modifier =
-            Modifier.size(SizeCompactIcon).clip(ShapeCompact).background(BlueAccent.copy(alpha = AlphaIconBg)),
+            Modifier.size(SizeCompactIcon).clip(ShapeCompact).background(IslandTone.ACCENT.tint.copy(alpha = AlphaIconBg)),
         contentAlignment = Alignment.Center,
     ) {
         val image = event.deviceImage ?: event.deviceIcon
         if (image != null) {
-            Image(bitmap = image.toScaledBitmap(SizeIconSm), null, modifier = Modifier.size(SizeIconSm))
+            Image(bitmap = image.toSquareScaledBitmap(SizeIconSm), null, modifier = Modifier.size(SizeIconSm))
         } else {
-            Icon(Icons.Filled.Bluetooth, null, tint = BlueAccent, modifier = Modifier.size(18.dp))
+            Icon(Icons.Filled.Bluetooth, null, tint = IslandTone.ACCENT.tint, modifier = Modifier.size(18.dp))
         }
     }
     Spacer(Modifier.width(SpaceLg))
@@ -396,7 +412,7 @@ internal fun RowScope.CompactBluetoothRow(event: IslandEvent.Bluetooth) {
         val level = event.leftBatteryLevel ?: event.rightBatteryLevel ?: event.batteryLevel
         Text(
             summary,
-            color = if (level > 20) GreenAccent else RedAccent,
+            color = batteryLevelColor(level),
             style = MaterialTheme.typography.bodySmall,
         )
     }
@@ -406,10 +422,10 @@ internal fun RowScope.CompactBluetoothRow(event: IslandEvent.Bluetooth) {
 internal fun RowScope.CompactHotspotRow(event: IslandEvent.Hotspot) {
     Box(
         modifier =
-            Modifier.size(SizeCompactIcon).clip(ShapeCompact).background(OrangeAccent.copy(alpha = AlphaIconBg)),
+            Modifier.size(SizeCompactIcon).clip(ShapeCompact).background(toneFor(event).tint.copy(alpha = AlphaIconBg)),
         contentAlignment = Alignment.Center,
     ) {
-        Icon(Icons.Filled.Wifi, null, tint = OrangeAccent, modifier = Modifier.size(18.dp))
+        Icon(Icons.Filled.Wifi, null, tint = toneFor(event).tint, modifier = Modifier.size(18.dp))
     }
     Spacer(Modifier.width(SpaceLg))
     Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(SpaceXxs)) {
@@ -424,20 +440,20 @@ internal fun RowScope.CompactHotspotRow(event: IslandEvent.Hotspot) {
             style = MaterialTheme.typography.labelSmall,
         )
     }
-    PulsingDot(color = OrangeAccent, size = 7.dp)
+    PulsingDot(color = toneFor(event).tint, size = 7.dp)
 }
 
 @Composable
 internal fun RowScope.CompactChargingRow(event: IslandEvent.Charging) {
     Box(
         modifier =
-            Modifier.size(SizeCompactIcon).clip(ShapeCompact).background(GreenAccent.copy(alpha = AlphaIconBg)),
+            Modifier.size(SizeCompactIcon).clip(ShapeCompact).background(IslandTone.POSITIVE.tint.copy(alpha = AlphaIconBg)),
         contentAlignment = Alignment.Center,
     ) {
         Icon(
             Icons.Filled.BatteryChargingFull,
             null,
-            tint = GreenAccent,
+            tint = IslandTone.POSITIVE.tint,
             modifier = Modifier.size(18.dp),
         )
     }
@@ -455,7 +471,7 @@ internal fun RowScope.CompactChargingRow(event: IslandEvent.Charging) {
                 append("${event.level}%")
                 saverLabel?.let { append(" · $it") }
             },
-            color = if (event.isPowerSave) OrangeAccent else GreenAccent,
+            color = if (event.isPowerSave) IslandTone.ATTENTION.tint else IslandTone.POSITIVE.tint,
             style = MaterialTheme.typography.labelSmall,
         )
     }
@@ -478,12 +494,12 @@ internal fun RowScope.CompactRingerRow(event: IslandEvent.RingerMode) {
 internal fun RowScope.CompactVpnRow() {
     Box(
         modifier =
-            Modifier.size(SizeCompactIcon).clip(ShapeCompact).background(IndigoAccent.copy(alpha = AlphaIconBg)),
+            Modifier.size(SizeCompactIcon).clip(ShapeCompact).background(IslandTone.ACCENT.tint.copy(alpha = AlphaIconBg)),
         contentAlignment = Alignment.Center,
     ) {
-        Icon(Icons.Filled.VpnKey, null, tint = IndigoAccent, modifier = Modifier.size(18.dp))
+        Icon(Icons.Filled.VpnKey, null, tint = IslandTone.ACCENT.tint, modifier = Modifier.size(18.dp))
     }
     Spacer(Modifier.width(SpaceLg))
     Text(stringResource(R.string.ax_dynamic_bar_vpn_active), color = OnCardText, style = MaterialTheme.typography.bodySmall, modifier = Modifier.weight(1f))
-    PulsingDot(color = GreenAccent, size = 7.dp)
+    PulsingDot(color = IslandTone.POSITIVE.tint, size = 7.dp)
 }
