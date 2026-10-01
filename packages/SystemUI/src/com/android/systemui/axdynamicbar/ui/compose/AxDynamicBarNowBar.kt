@@ -2,10 +2,10 @@ package com.android.systemui.axdynamicbar.ui.compose
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterExitState
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.runtime.LaunchedEffect
 import kotlin.math.abs
 import androidx.compose.animation.core.animateIntAsState
@@ -56,25 +56,30 @@ import androidx.compose.ui.platform.LocalViewConfiguration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.android.systemui.axdynamicbar.model.IslandEvent
+import com.android.systemui.axdynamicbar.shared.AlphaGlass
 import com.android.systemui.axdynamicbar.shared.AlphaHint
 import com.android.systemui.axdynamicbar.shared.AlphaTrack
+import com.android.systemui.axdynamicbar.shared.islandBlur
 import com.android.systemui.axdynamicbar.shared.PillPrimary
+import com.android.systemui.axdynamicbar.shared.RadiusXl
 import com.android.systemui.axdynamicbar.shared.ShapeXl
 import com.android.systemui.axdynamicbar.shared.SpaceSm
 import com.android.systemui.axdynamicbar.shared.SpaceXs
 import com.android.systemui.axdynamicbar.shared.chipAccentColorFor
-import com.android.systemui.axdynamicbar.shared.chipContentColorOn
+import com.android.systemui.axdynamicbar.shared.chipContentColorFor
 import com.android.systemui.axdynamicbar.shared.chipProgressFor
 import com.android.systemui.axdynamicbar.shared.iconKeyFor
 import com.android.systemui.axdynamicbar.shared.textKeyFor
 import com.android.systemui.axdynamicbar.shared.toScaledBitmap
 import com.android.systemui.axdynamicbar.ui.AxDynamicBarChipState
 import com.android.systemui.axdynamicbar.ui.AxDynamicBarChipViewModel
-import kotlin.math.abs
 
 private val NowBarShape = ShapeXl
 private val NowBarHeight = 32.dp
 private val NowBarMaxWidth = 200.dp
+
+/** Kept low: an elevation shadow shows through a translucent fill and muddies the glass. */
+private val NowBarElevation = 2.dp
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -90,6 +95,12 @@ fun AxDynamicBarNowBar(
         enter = slideInVertically(motionScheme.defaultSpatialSpec()) { -it } + fadeIn(motionScheme.defaultEffectsSpec()),
         exit = slideOutVertically(motionScheme.fastSpatialSpec()) { -it } + fadeOut(motionScheme.fastEffectsSpec()),
     ) {
+        // Captured here, before AnimatedContent shadows `transition` with its own scope.
+        val visibilityBlurAlpha by transition.animateFloat(
+            transitionSpec = { motionScheme.fastEffectsSpec() },
+            label = "nowbar_blur_visibility",
+        ) { if (it == EnterExitState.Visible) 1f else 0f }
+
         state?.let { chipState ->
             val displayEvent = chipState.notificationAlert ?: chipState.event
             val isAlert = chipState.notificationAlert != null
@@ -103,6 +114,10 @@ fun AxDynamicBarNowBar(
                 contentKey = { if (it.isAlert) "alert" else it.event::class.simpleName },
                 label = "nowbar_event",
             ) { display ->
+                val contentBlurAlpha by transition.animateFloat(
+                    transitionSpec = { motionScheme.fastEffectsSpec() },
+                    label = "nowbar_blur_content",
+                ) { if (it == EnterExitState.Visible) 1f else 0f }
                 var targetWidthPx by remember { mutableIntStateOf(0) }
                 val animatedWidthPx by animateIntAsState(
                     targetWidthPx, MaterialTheme.motionScheme.defaultSpatialSpec(), label = "nowbar_w",
@@ -111,14 +126,17 @@ fun AxDynamicBarNowBar(
                 val rawAccent = chipAccentColorFor(display.event)
                 val accent by animateColorAsState(rawAccent, MaterialTheme.motionScheme.fastEffectsSpec(), label = "accent")
                 val contentColor by animateColorAsState(
-                    chipContentColorOn(rawAccent), MaterialTheme.motionScheme.fastEffectsSpec(), label = "content",
+                    chipContentColorFor(display.event), MaterialTheme.motionScheme.fastEffectsSpec(), label = "content",
                 )
                 val rawProgress = chipProgressFor(display.event)
                 val progressTarget = rawProgress ?: 0f
                 val progressAnim = remember { Animatable(progressTarget) }
+                // A progress change is an effects change, not movement. Typed explicitly because the
+                // spec is built outside the call that would otherwise infer it.
+                val progressSpec = MaterialTheme.motionScheme.defaultEffectsSpec<Float>()
                 LaunchedEffect(progressTarget) {
                     if (abs(progressTarget - progressAnim.value) > 0.05f) {
-                        progressAnim.animateTo(progressTarget, tween(300, easing = FastOutSlowInEasing))
+                        progressAnim.animateTo(progressTarget, progressSpec)
                     } else {
                         progressAnim.snapTo(progressTarget)
                     }
@@ -174,9 +192,15 @@ fun AxDynamicBarNowBar(
                                 val w = if (animatedWidthPx > 0) animatedWidthPx else placeable.width
                                 layout(w, placeable.height) { placeable.placeRelative(0, 0) }
                             }
-                            .shadow(6.dp, NowBarShape)
+                            .shadow(NowBarElevation, NowBarShape)
                             .clip(NowBarShape)
-                            .background(accent)
+                            // Same bounds as the glass fill, so blur and tint cover one shape.
+                            .islandBlur(
+                                cornerRadius = RadiusXl,
+                                fallbackColor = accent,
+                                alpha = visibilityBlurAlpha * contentBlurAlpha,
+                            )
+                            .background(accent.copy(alpha = AlphaGlass))
                             .then(
                                 if (progress != null) {
                                     Modifier.drawWithContent {

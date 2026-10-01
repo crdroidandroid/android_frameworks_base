@@ -27,6 +27,7 @@ import kotlin.math.abs
 import kotlin.math.sign
 import kotlinx.coroutines.launch
 import androidx.compose.ui.input.pointer.PointerInputChange
+import com.android.systemui.axdynamicbar.shared.LocalBlurAlpha
 
 /**
  * A child (e.g. media seekbar) can set this to `true` to prevent
@@ -69,15 +70,24 @@ internal fun MagneticSwipeToDismiss(
 
     val absOff = maxOf(abs(offsetX.value), abs(offsetY.value))
     val progress = (absOff / (detachPx * 4f)).coerceIn(0f, 1f)
+    val contentAlpha = 1f - progress * 0.5f
 
-    CompositionLocalProvider(LocalDismissSwipeLock provides swipeLock) {
+    // The frosted backdrop is a platform View that the graphicsLayer alpha below does not reach,
+    // so the swipe fade is forwarded to it explicitly — multiplied into whatever fade the
+    // container (expanded panel, alert overlay) is already applying.
+    val blurAlpha = LocalBlurAlpha.current * contentAlpha
+
+    CompositionLocalProvider(
+        LocalDismissSwipeLock provides swipeLock,
+        LocalBlurAlpha provides blurAlpha,
+    ) {
         Box(
             modifier =
                 modifier
                     .graphicsLayer {
                         translationX = offsetX.value
                         translationY = offsetY.value
-                        alpha = 1f - progress * 0.5f
+                        alpha = contentAlpha
                         scaleX = 1f - progress * 0.04f
                         scaleY = 1f - progress * 0.04f
                         rotationZ = (offsetX.value / detachPx).coerceIn(-1f, 1f) * 2f
