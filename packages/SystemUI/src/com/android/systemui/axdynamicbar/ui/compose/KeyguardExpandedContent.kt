@@ -221,16 +221,26 @@ private fun ProgressRing(
     }
 }
 
+/**
+ * The frosted keyguard panel. The blur backdrop is the surface (opaque [CardBg] where blur is
+ * unavailable). The inert clickable is load-bearing: it consumes taps on the panel so the
+ * tap-outside-to-collapse handler in [KeyguardExpandedContent] only fires outside it — without it
+ * a tap on album art or the countdown would collapse the panel, and the full-height media panel
+ * would leave nowhere to tap that doesn't.
+ */
 @Composable
-private fun KeyguardPanelSurface(content: @Composable () -> Unit) {
+private fun KeyguardPanelSurface(
+    modifier: Modifier = Modifier.fillMaxWidth(),
+    content: @Composable () -> Unit,
+) {
     Box(
         modifier = Modifier
             .widthIn(max = ExpandedMaxWidth)
-            .fillMaxWidth()
+            .then(modifier)
             .padding(horizontal = SpaceSection)
             .clip(ShapeXl)
-            .background(CardBg)
             .border(1.dp, CardBorderBrush, ShapeXl)
+            .islandBlur(RadiusXl, CardBg)
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
@@ -264,11 +274,11 @@ private fun KeyguardMediaPanel(event: IslandEvent.Media, interactor: IslandActio
     val colors = rememberMediaColors(event)
     val motionScheme = MaterialTheme.motionScheme
 
+    KeyguardPanelSurface(Modifier.fillMaxSize()) {
     Column(
         modifier = Modifier
-            .widthIn(max = ExpandedMaxWidth)
             .fillMaxSize()
-            .padding(horizontal = SpaceSection),
+            .padding(SpaceSection),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Box(
@@ -289,7 +299,7 @@ private fun KeyguardMediaPanel(event: IslandEvent.Media, interactor: IslandActio
             ) { art ->
                 if (art != null) {
                     Image(
-                        bitmap = art.toScaledBitmap(SizeAlbumLg),
+                        bitmap = art.toSquareScaledBitmap(SizeAlbumLg),
                         contentDescription = null,
                         modifier = Modifier
                             .fillMaxHeight()
@@ -326,7 +336,7 @@ private fun KeyguardMediaPanel(event: IslandEvent.Media, interactor: IslandActio
         ) { title ->
             Text(
                 title,
-                color = Color.White,
+                color = OnCardText,
                 style = MaterialTheme.typography.titleLarge,
                 textAlign = TextAlign.Center,
                 maxLines = 2,
@@ -347,7 +357,7 @@ private fun KeyguardMediaPanel(event: IslandEvent.Media, interactor: IslandActio
             ) { artist ->
                 Text(
                     artist,
-                    color = Color.White.copy(alpha = AlphaSecondary),
+                    color = OnCardSecondary,
                     style = MaterialTheme.typography.bodyMedium,
                     textAlign = TextAlign.Center,
                     maxLines = 1,
@@ -358,12 +368,14 @@ private fun KeyguardMediaPanel(event: IslandEvent.Media, interactor: IslandActio
 
         Spacer(Modifier.height(SpaceLg))
 
+        // An inner well rather than a second opaque card: it sits on the frosted panel, so a
+        // translucent fill keeps the glass reading through.
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
                 .border(1.dp, CardBorderBrush, ShapeCard),
             shape = ShapeCard,
-            color = CardBg,
+            color = DarkCard.copy(alpha = AlphaGlass),
         ) {
             Column(
                 modifier = Modifier
@@ -470,7 +482,7 @@ private fun KeyguardMediaPanel(event: IslandEvent.Media, interactor: IslandActio
                         onClick = { interactor.togglePlayPause() },
                         modifier = Modifier.size(SizeButtonLg),
                         shape = CircleShape,
-                        color = colors.accent,
+                        color = colors.accent.copy(alpha = AlphaAccent),
                     ) {
                         Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
                             AnimatedContent(
@@ -484,7 +496,7 @@ private fun KeyguardMediaPanel(event: IslandEvent.Media, interactor: IslandActio
                                 Icon(
                                     if (playing) Icons.Filled.Pause else Icons.Filled.PlayArrow,
                                     if (playing) stringResource(R.string.ax_dynamic_bar_pause) else stringResource(R.string.ax_dynamic_bar_play),
-                                    tint = colors.onAccent,
+                                    tint = colors.accent,
                                     modifier = Modifier.size(SizeIconMd),
                                 )
                             }
@@ -520,6 +532,7 @@ private fun KeyguardMediaPanel(event: IslandEvent.Media, interactor: IslandActio
                 }
             }
         }
+    }
     }
 }
 
@@ -1023,8 +1036,8 @@ private fun KeyguardGenericPanel(
 
         ExpressivePillButton(
             label = stringResource(R.string.ax_dynamic_bar_dismiss),
-            contentColor = colors.onAccent,
-            backgroundColor = colors.accent,
+            contentColor = colors.accent,
+            backgroundColor = colors.accent.copy(alpha = AlphaIconBg),
             modifier = Modifier.fillMaxWidth(),
             onClick = { interactor.dismissEvent(event) },
         )

@@ -77,14 +77,16 @@ import com.android.compose.animation.scene.rememberMutableSceneTransitionLayoutS
 import com.android.compose.animation.scene.transitions
 import com.android.systemui.axdynamicbar.shared.IslandActions
 import com.android.systemui.axdynamicbar.model.IslandEvent
+import com.android.systemui.axdynamicbar.shared.AlphaGlass
 import com.android.systemui.axdynamicbar.shared.AlphaIconBg
 import com.android.systemui.axdynamicbar.shared.AlphaSubtle
+import com.android.systemui.axdynamicbar.shared.islandBlur
 import com.android.systemui.axdynamicbar.shared.CardBg
 import com.android.systemui.axdynamicbar.shared.CardBorderBrush
 import com.android.systemui.axdynamicbar.shared.DarkCard
-import com.android.systemui.axdynamicbar.shared.GreenAccent
+import com.android.systemui.axdynamicbar.shared.IslandTone
 import com.android.systemui.axdynamicbar.shared.OnCardText
-import com.android.systemui.axdynamicbar.shared.RedAccent
+import com.android.systemui.axdynamicbar.shared.RadiusCard
 import com.android.systemui.axdynamicbar.shared.ShapeCard
 import com.android.systemui.axdynamicbar.shared.ShapeChip
 import com.android.systemui.axdynamicbar.shared.ShapeIconMedium
@@ -98,9 +100,10 @@ import com.android.systemui.axdynamicbar.shared.SpaceSm
 import com.android.systemui.axdynamicbar.shared.SpaceXs
 import com.android.systemui.axdynamicbar.shared.SpaceXxl
 import com.android.systemui.axdynamicbar.shared.SubtleGray
-import com.android.systemui.axdynamicbar.shared.chipAccentColorFor
-import com.android.systemui.axdynamicbar.shared.chipContentColorOn
+import com.android.systemui.axdynamicbar.shared.onTint
 import com.android.systemui.axdynamicbar.shared.sendWithBal
+import com.android.systemui.axdynamicbar.shared.tint
+import com.android.systemui.axdynamicbar.shared.toneFor
 import com.android.systemui.axdynamicbar.shared.toScaledBitmap
 import com.android.systemui.res.R
 
@@ -191,7 +194,10 @@ fun NotificationAlertCard(
     val buttonCount = notification.actions.size + if (notification.replyAction != null) 1 else 0
     val hasExtraActions = buttonCount > MAX_COLLAPSED_ACTIONS
     val hasExpandableContent = !isCall && (hasTitleAndBody || hasExtraActions)
-    val accent = chipAccentColorFor(notification)
+    // The card is a surface, so text and washes take the saturated tint. The chip's container
+    // role (chipAccentColorFor) is a pale fill and would be near-invisible as text on the card.
+    val tone = toneFor(notification)
+    val accent = tone.tint
     var showReply by remember(notification.sbn.key) { mutableStateOf(false) }
     var gesturePressed by remember { mutableStateOf(false) }
     var replyFocused by remember(notification.sbn.key) { mutableStateOf(false) }
@@ -236,9 +242,11 @@ fun NotificationAlertCard(
                     )
                 }
                 .clip(ShapeCard)
-                .background(CardBg)
-                .border(1.dp, CardBorderBrush, ShapeCard),
+                .border(1.dp, CardBorderBrush, ShapeCard)
+                // Frosted surface; falls back to the opaque card colour where blur is unavailable.
+                .islandBlur(RadiusCard, CardBg),
         ) {
+          Box {
             SceneTransitionLayout(state = stlState) {
                 scene(AlertCardScenes.Compact) {
                     CompactScene(
@@ -298,6 +306,7 @@ fun NotificationAlertCard(
                     )
                 }
             }
+          }
         }
     }
 }
@@ -622,7 +631,7 @@ private fun AlertActions(
             AlertActionPill(
                 label = reply.label.toString(),
                 icon = Icons.AutoMirrored.Filled.Reply,
-                contentColor = chipContentColorOn(accent),
+                contentColor = IslandTone.ACCENT.onTint,
                 backgroundColor = accent,
                 modifier = Modifier.weight(1f),
                 onClick = onReplyClick,
@@ -695,6 +704,10 @@ private fun CallActions(
     onDismiss: () -> Unit,
 ) {
     val context = LocalContext.current
+    val declineBg = IslandTone.ALERT.tint
+    val declineFg = IslandTone.ALERT.onTint
+    val answerBg = IslandTone.POSITIVE.tint
+    val answerFg = IslandTone.POSITIVE.onTint
     val extras = notification.sbn.notification?.extras
     val isIncoming = extras?.containsKey(Notification.EXTRA_ANSWER_INTENT) == true
     val answerPi = extras?.getParcelable(Notification.EXTRA_ANSWER_INTENT, PendingIntent::class.java)
@@ -711,14 +724,14 @@ private fun CallActions(
                 (declinePi != null && pi == declinePi) || (hangUpPi != null && pi == hangUpPi)
             }
             declineAction?.let { action ->
-                ActionCircle(Icons.Filled.CallEnd, RedAccent, chipContentColorOn(RedAccent)) {
+                ActionCircle(Icons.Filled.CallEnd, declineBg, declineFg) {
                     try { action.action.actionIntent?.sendWithBal(context) }
                     catch (_: PendingIntent.CanceledException) {}
                     onDismiss()
                 }
             }
             answerAction?.let { action ->
-                ActionCircle(Icons.Filled.Call, GreenAccent, chipContentColorOn(GreenAccent)) {
+                ActionCircle(Icons.Filled.Call, answerBg, answerFg) {
                     try { action.action.actionIntent?.sendWithBal(context) }
                     catch (_: PendingIntent.CanceledException) {}
                     onDismiss()
@@ -737,13 +750,13 @@ private fun CallActions(
             endAction?.let { action ->
                 val drawable = action.action.getIcon()?.loadDrawable(context)
                 if (drawable != null) {
-                    DrawableActionCircle(drawable, RedAccent, chipContentColorOn(RedAccent)) {
+                    DrawableActionCircle(drawable, declineBg, declineFg) {
                         try { action.action.actionIntent?.sendWithBal(context) }
                         catch (_: PendingIntent.CanceledException) {}
                         onDismiss()
                     }
                 } else {
-                    ActionCircle(Icons.Filled.CallEnd, RedAccent, chipContentColorOn(RedAccent)) {
+                    ActionCircle(Icons.Filled.CallEnd, declineBg, declineFg) {
                         try { action.action.actionIntent?.sendWithBal(context) }
                         catch (_: PendingIntent.CanceledException) {}
                         onDismiss()
@@ -838,7 +851,7 @@ private fun ReplyField(
             .padding(horizontal = SpaceLg, vertical = SpaceMd)
             .height(40.dp)
             .clip(ShapeChip)
-            .background(DarkCard),
+            .background(DarkCard.copy(alpha = AlphaGlass)),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         BasicTextField(
@@ -881,7 +894,7 @@ private fun ReplyField(
                 modifier = Modifier.size(32.dp).padding(SpaceXs),
             ) {
                 Box(contentAlignment = Alignment.Center) {
-                    Icon(Icons.AutoMirrored.Filled.Send, null, tint = chipContentColorOn(accent), modifier = Modifier.size(14.dp))
+                    Icon(Icons.AutoMirrored.Filled.Send, null, tint = IslandTone.ACCENT.onTint, modifier = Modifier.size(14.dp))
                 }
             }
             Spacer(Modifier.width(SpaceXs))

@@ -66,77 +66,74 @@ internal fun AudioRecordingExpanded(
         }
     }
 
+    val stateWord = stringResource(
+        when (event.state) {
+            RecordingState.RECORDING -> R.string.ax_dynamic_bar_recording
+            RecordingState.PAUSED -> R.string.ax_dynamic_bar_paused
+            RecordingState.SAVED -> R.string.ax_dynamic_bar_saved
+        }
+    )
+    val inline = rememberActionsFitInline(event.actions.map { it.action })
+
+    val actionButtons: @Composable () -> Unit = {
+        event.actions.forEach { notifAction ->
+            NotificationActionButton(
+                action = notifAction.action,
+                label = notifAction.label.toString(),
+                tone = style.tone,
+            ) {
+                try {
+                    notifAction.action.actionIntent?.sendWithBal(context)
+                } catch (_: Exception) {}
+                interactor.collapseIsland()
+            }
+        }
+    }
+
     ExpandedCardLayout(
         accentColor = style.accent,
         icon = {
             when (event.state) {
-                RecordingState.RECORDING -> PulsingDot(color = style.accent, size = 14.dp, durationMs = 550, minAlpha = AlphaTrack)
-                else -> style.icon?.let { Icon(it, null, tint = style.accent, modifier = Modifier.size(22.dp)) }
+                RecordingState.RECORDING ->
+                    PulsingDot(color = style.accent, size = 12.dp, durationMs = 550, minAlpha = AlphaTrack)
+                else -> style.icon?.let { Icon(it, null, tint = style.accent, modifier = Modifier.size(16.dp)) }
             }
         },
         title = {
-            Text(event.appName.ifEmpty { stringResource(style.labelRes) }, color = SubtleGray, style = MaterialTheme.typography.labelMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
-            if (!isSaved) {
-                Text(formatElapsedTime(elapsedMs), color = style.accent, style = MaterialTheme.typography.headlineMedium)
-            } else {
-                Text(stringResource(style.labelRes), color = style.accent, style = MaterialTheme.typography.titleSmall)
-            }
+            // The elapsed time is the headline; state and app share one caption line, replacing
+            // the trailing status chip that used to take a column of its own.
+            Text(
+                if (isSaved) stateWord else formatElapsedTime(elapsedMs),
+                color = style.accent,
+                style = if (isSaved) MaterialTheme.typography.titleSmall else TsValue,
+                maxLines = 1,
+            )
+            Text(
+                if (event.appName.isEmpty()) stateWord else "$stateWord · ${event.appName}",
+                color = SubtleGray,
+                style = MaterialTheme.typography.labelSmall,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
         },
-        trailing = {
-            when (event.state) {
-                RecordingState.RECORDING -> StatusChip(stringResource(R.string.ax_dynamic_bar_recording), style.accent)
-                RecordingState.PAUSED -> StatusChip(stringResource(R.string.ax_dynamic_bar_paused), SubtleGray)
-                RecordingState.SAVED -> {}
+        trailing = if (inline && event.actions.isNotEmpty()) {
+            {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(SpaceSm),
+                ) { actionButtons() }
             }
-        },
-        actions = if (event.actions.isNotEmpty()) {
+        } else null,
+        actions = if (!inline && event.actions.isNotEmpty()) {
             {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(SpaceLg),
-                ) {
-                    event.actions.forEach { notifAction ->
-                        val pkg = notifAction.action.actionIntent?.creatorPackage ?: context.packageName
-                        val kind = notifAction.action.classify(context, pkg)
-                        val btnColor =
-                            when (kind) {
-                                NotificationActionType.STOP, NotificationActionType.DELETE -> DestructiveBg
-                                NotificationActionType.RESUME -> GreenAccent
-                                else -> ActionBg
-                            }
-                        val textColor =
-                            when (kind) {
-                                NotificationActionType.STOP, NotificationActionType.DELETE -> OnDestructiveText
-                                NotificationActionType.RESUME -> chipContentColorOn(GreenAccent)
-                                else -> OnActionText
-                            }
-                        val btnIcon =
-                            when (kind) {
-                                NotificationActionType.STOP, NotificationActionType.DELETE -> Icons.Filled.Stop
-                                NotificationActionType.RESUME -> Icons.Filled.PlayArrow
-                                NotificationActionType.PAUSE -> Icons.Filled.Pause
-                                else -> null
-                            }
-                        ActionChip(
-                            label = notifAction.label.toString(),
-                            icon = btnIcon,
-                            color = textColor,
-                            bg = btnColor,
-                            modifier = Modifier.weight(1f),
-                            onClick = {
-                                try {
-                                    notifAction.action.actionIntent?.sendWithBal(context)
-                                } catch (_: Exception) {}
-                                interactor.collapseIsland()
-                            },
-                        )
-                    }
-                }
+                    horizontalArrangement = Arrangement.spacedBy(SpaceSm),
+                ) { actionButtons() }
             }
         } else null,
     )
 }
-
 
 @Composable
 internal fun RowScope.CompactAudioRecordingRow(event: IslandEvent.AudioRecording) {

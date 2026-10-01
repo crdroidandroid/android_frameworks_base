@@ -45,7 +45,7 @@ internal fun RowScope.TorchPill(event: IslandEvent.Torch) {
     Text(stringResource(style.labelRes), color = OnCardText, style = PillPrimary)
     if (event.supportsLevel) {
         Spacer(Modifier.width(SpaceSm))
-        val pct = (event.level.toFloat() / event.maxLevel * 100).toInt()
+        val pct = (event.level.toFloat() / event.maxLevel.coerceAtLeast(1) * 100).toInt()
         Text("$pct%", color = style.accent, style = PillAccent)
     }
 }
@@ -65,24 +65,25 @@ internal fun TorchExpanded(
     val style = eventStyleFor(event)
     ExpandedCardLayout(
         accentColor = style.accent,
-        icon = { style.icon?.let { Icon(it, null, tint = style.accent, modifier = Modifier.size(28.dp)) } },
+        icon = { style.icon?.let { Icon(it, null, tint = style.accent, modifier = Modifier.size(16.dp)) } },
         title = {
             Text(stringResource(style.labelRes), color = OnCardText, style = MaterialTheme.typography.titleMedium)
             if (event.supportsLevel) {
-                val pct = (displayLevel.toFloat() / event.maxLevel * 100).toInt()
+                val pct = (displayLevel.toFloat() / event.maxLevel.coerceAtLeast(1) * 100).toInt()
                 StatusChip("$pct%", style.accent)
             } else {
                 StatusChip(stringResource(R.string.ax_dynamic_bar_on), style.accent)
             }
         },
         trailing = {
-            CircleButton(
-                color = RedAccent.copy(alpha = AlphaSubtle),
-                size = SizeButton,
+            // Turning the light off is the tile's one destructive command: error role, icon-only.
+            ActionIconButton(
+                icon = Icons.Filled.FlashlightOff,
+                tint = MaterialTheme.colorScheme.error,
+                bg = MaterialTheme.colorScheme.error.copy(alpha = AlphaSubtle),
+                contentDescription = stringResource(R.string.ax_dynamic_bar_dismiss),
                 onClick = { interactor.dismissEvent(event) },
-            ) {
-                Icon(Icons.Filled.FlashlightOff, null, tint = RedAccent, modifier = Modifier.size(22.dp))
-            }
+            )
         },
         actions = if (event.supportsLevel) {
             {
@@ -108,6 +109,7 @@ internal fun TorchExpanded(
                             SliderDefaults.colors(
                                 thumbColor = style.accent,
                                 activeTrackColor = style.accent,
+                                inactiveTrackColor = style.accent.copy(alpha = AlphaTrack),
                             ),
                     )
                 }
@@ -129,7 +131,7 @@ internal fun RowScope.CompactTorchRow(event: IslandEvent.Torch) {
         modifier = Modifier.weight(1f),
     )
     if (event.supportsLevel) {
-        val pct = (event.level.toFloat() / event.maxLevel * 100).toInt()
+        val pct = (event.level.toFloat() / event.maxLevel.coerceAtLeast(1) * 100).toInt()
         Text("$pct%", color = style.accent, style = PillAccent)
     } else {
         Text(stringResource(R.string.ax_dynamic_bar_on), color = style.accent, style = PillAccent)
