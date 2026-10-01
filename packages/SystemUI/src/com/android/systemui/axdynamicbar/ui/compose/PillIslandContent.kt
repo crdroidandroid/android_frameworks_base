@@ -79,6 +79,8 @@ import com.android.systemui.axdynamicbar.model.IslandEvent
 import com.android.systemui.axdynamicbar.model.RecordingState
 import com.android.systemui.axdynamicbar.shared.*
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.CompositingStrategy
 import com.android.systemui.res.R
 import java.time.Duration
 import java.time.Instant
@@ -105,23 +107,23 @@ internal fun PillEventIcon(
         is IslandEvent.Media -> MediaPillIcon(event)
         is IslandEvent.PromotedOngoing -> PromotedOngoingPillIcon(event, tint)
         is IslandEvent.Sports -> SportsPillIcon(event)
-        is IslandEvent.NowPlaying -> AnimatedNowPlayingIcon(tint ?: MintAccent)
+        is IslandEvent.NowPlaying -> AnimatedNowPlayingIcon(tint ?: toneFor(event).tint)
         is IslandEvent.Bluetooth ->
             event.deviceImage?.let { BluetoothArtworkIcon(it) }
-                ?: AnimatedBluetoothIcon(tint ?: BlueAccent)
-        is IslandEvent.Hotspot -> AnimatedHotspotIcon(tint ?: TealAccent)
-        is IslandEvent.Charging -> AnimatedBoltIcon(tint ?: GreenAccent)
-        is IslandEvent.Alarm -> AnimatedBellIcon(tint ?: OrangeAccent, isAnimating = event.isRinging)
-        is IslandEvent.Timer -> AnimatedHourglassIcon(tint ?: BlueAccent, isAnimating = !event.isPaused)
-        is IslandEvent.Stopwatch -> AnimatedTickIcon(tint ?: MintAccent, isRunning = event.isRunning)
+                ?: AnimatedBluetoothIcon(tint ?: toneFor(event).tint)
+        is IslandEvent.Hotspot -> AnimatedHotspotIcon(tint ?: toneFor(event).tint)
+        is IslandEvent.Charging -> AnimatedBoltIcon(tint ?: toneFor(event).tint)
+        is IslandEvent.Alarm -> AnimatedBellIcon(tint ?: toneFor(event).tint, isAnimating = event.isRinging)
+        is IslandEvent.Timer -> AnimatedHourglassIcon(tint ?: toneFor(event).tint, isAnimating = !event.isPaused)
+        is IslandEvent.Stopwatch -> AnimatedTickIcon(tint ?: toneFor(event).tint, isRunning = event.isRunning)
         is IslandEvent.RingerMode -> RingerIcon(event, tint)
-        is IslandEvent.Vpn -> AnimatedShieldIcon(tint ?: IndigoAccent)
-        is IslandEvent.Clipboard -> AnimatedClipboardIcon(tint ?: IndigoAccent)
+        is IslandEvent.Vpn -> AnimatedShieldIcon(tint ?: toneFor(event).tint)
+        is IslandEvent.Clipboard -> AnimatedClipboardIcon(tint ?: toneFor(event).tint)
         is IslandEvent.Call -> CallPillIcon(event)
         is IslandEvent.Notification -> NotificationPillIcon(event)
         is IslandEvent.AppSwitch -> AppSwitchPillIcon(event)
         is IslandEvent.Torch ->
-            Icon(Icons.Filled.FlashlightOn, null, tint = tint ?: YellowAccent, modifier = Modifier.size(SizeBadge))
+            Icon(Icons.Filled.FlashlightOn, null, tint = tint ?: toneFor(event).tint, modifier = Modifier.size(SizeBadge))
         is IslandEvent.BiometricUnlock -> BiometricUnlockIcon(tint)
         is IslandEvent.KeyguardIndication -> KeyguardIndicationIcon(event, tint)
         is IslandEvent.AospChip -> AospChipPillIcon(event, tint)
@@ -136,7 +138,7 @@ private fun StaticPillEventIcon(event: IslandEvent, tint: Color? = null) {
                 ?: Icon(
                     Icons.Filled.Bluetooth,
                     null,
-                    tint = tint ?: BlueAccent,
+                    tint = tint ?: toneFor(event).tint,
                     modifier = Modifier.size(SizeBadge),
                 )
         is IslandEvent.Media -> MediaPillIcon(event, animated = false)
@@ -155,7 +157,7 @@ private fun StaticPillEventIcon(event: IslandEvent, tint: Color? = null) {
                 Icon(
                     Icons.Filled.Notifications,
                     null,
-                    tint = tint ?: BlueAccent,
+                    tint = tint ?: toneFor(event).tint,
                     modifier = Modifier.size(SizeBadge),
                 )
             }
@@ -340,7 +342,7 @@ private fun AnimatedTrophyIcon(color: Color) {
 private fun MediaPillIcon(event: IslandEvent.Media, animated: Boolean = true) {
     event.albumArt?.let { art ->
         Image(
-            bitmap = art.toScaledBitmap(16.dp),
+            bitmap = art.toSquareScaledBitmap(16.dp),
             contentDescription = null,
             modifier = Modifier.size(16.dp).clip(CircleShape),
             contentScale = ContentScale.Crop,
@@ -348,11 +350,11 @@ private fun MediaPillIcon(event: IslandEvent.Media, animated: Boolean = true) {
     }
         ?: Box(
             modifier =
-                Modifier.size(16.dp).clip(CircleShape).background(OrangeAccent.copy(alpha = AlphaSubtle + 0.05f)),
+                Modifier.size(16.dp).clip(CircleShape).background(toneFor(event).tint.copy(alpha = AlphaSubtle + 0.05f)),
             contentAlignment = Alignment.Center,
         ) {
             WaveformAnimation(
-                OrangeAccent,
+                toneFor(event).tint,
                 Modifier.size(10.dp),
                 isAnimating = animated && event.isPlaying,
                 barCount = 3,
@@ -779,7 +781,7 @@ private fun CallPillIcon(event: IslandEvent.Call) {
                 Modifier.size(16.dp)
                     .clip(ShapeXs),
         )
-    } ?: Icon(Icons.Filled.Call, null, tint = GreenAccent, modifier = Modifier.size(SizeBadge))
+    } ?: Icon(Icons.Filled.Call, null, tint = toneFor(event).tint, modifier = Modifier.size(SizeBadge))
 }
 
 @Composable
@@ -805,7 +807,7 @@ private fun NotificationPillIcon(event: IslandEvent.Notification) {
                         .clip(if (isRound) CircleShape else ShapeXs),
             )
         }
-    } ?: Icon(Icons.Filled.Notifications, null, tint = BlueAccent, modifier = Modifier.size(SizeBadge))
+    } ?: Icon(Icons.Filled.Notifications, null, tint = toneFor(event).tint, modifier = Modifier.size(SizeBadge))
 }
 
 private val DOWNLOAD_KEYWORDS = Regex(
@@ -816,7 +818,7 @@ private val DOWNLOAD_KEYWORDS = Regex(
 @Composable
 private fun PromotedOngoingPillIcon(event: IslandEvent.PromotedOngoing, tint: Color? = null) {
     val hasProgress = event.progress >= 0f || event.isIndeterminate
-    val color = tint ?: BlueAccent
+    val color = tint ?: toneFor(event).tint
 
     val isDownloadLike = hasProgress && (
         DOWNLOAD_KEYWORDS.containsMatchIn(event.title) ||
@@ -878,7 +880,7 @@ private fun AnimatedDownloadIcon(color: Color) {
 
 @Composable
 private fun PromotedOngoingText(event: IslandEvent.PromotedOngoing, modifier: Modifier, overrideColor: Color? = null) {
-    val color = overrideColor ?: BlueAccent
+    val color = overrideColor ?: toneFor(event).tint
     val base = when {
         event.shortText.isNotEmpty() -> event.shortText
         event.title.isNotEmpty() -> event.title
@@ -949,7 +951,7 @@ private fun AppSwitchPillIcon(event: IslandEvent.AppSwitch) {
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun BiometricUnlockIcon(tint: Color? = null) {
-    val color = tint ?: GreenAccent
+    val color = tint ?: IslandTone.POSITIVE.tint
     val motionScheme = MaterialTheme.motionScheme
     var started by remember { mutableStateOf(false) }
     LaunchedEffect(Unit) { started = true }
@@ -1005,7 +1007,7 @@ private fun KeyguardIndicationIcon(event: IslandEvent.KeyguardIndication, tint: 
     when (event.indicationType) {
         IslandEvent.KeyguardIndication.IndicationType.BIOMETRIC -> {
             
-            val color = tint ?: GreenAccent
+            val color = tint ?: toneFor(event).tint
             val transition = rememberInfiniteTransition(label = "kg_bio")
             val sweep by transition.animateFloat(
                 initialValue = 60f, targetValue = 300f,
@@ -1027,7 +1029,7 @@ private fun KeyguardIndicationIcon(event: IslandEvent.KeyguardIndication, tint: 
         }
         IslandEvent.KeyguardIndication.IndicationType.TRUST -> {
             
-            val color = tint ?: IndigoAccent
+            val color = tint ?: toneFor(event).tint
             Canvas(modifier = Modifier.size(SizeBadge)) {
                 val w = size.width; val h = size.height
                 val path = Path().apply {
@@ -1043,28 +1045,35 @@ private fun KeyguardIndicationIcon(event: IslandEvent.KeyguardIndication, tint: 
         }
         IslandEvent.KeyguardIndication.IndicationType.ALIGNMENT -> {
             
-            AnimatedBoltIcon(tint ?: OrangeAccent)
+            AnimatedBoltIcon(tint ?: toneFor(event).tint)
         }
         IslandEvent.KeyguardIndication.IndicationType.DISCLOSURE -> {
             
-            val color = tint ?: IndigoAccent
-            Canvas(modifier = Modifier.size(SizeBadge)) {
+            val color = tint ?: toneFor(event).tint
+            // Windows are punched out of the buildings (offscreen layer + Clear) rather than
+            // painted in a fixed black, so they read on any chip fill and in either theme.
+            Canvas(
+                modifier = Modifier.size(SizeBadge)
+                    .graphicsLayer { compositingStrategy = CompositingStrategy.Offscreen }
+            ) {
                 val w = size.width; val h = size.height
-                
+
                 drawRect(color, Offset(w * 0.15f, h * 0.3f), Size(w * 0.35f, h * 0.65f))
                 drawRect(color, Offset(w * 0.55f, h * 0.1f), Size(w * 0.3f, h * 0.85f))
-                
-                val windowColor = Color.Black.copy(alpha = AlphaDisabled)
-                drawRect(windowColor, Offset(w * 0.25f, h * 0.45f), Size(w * 0.12f, h * 0.1f))
-                drawRect(windowColor, Offset(w * 0.25f, h * 0.65f), Size(w * 0.12f, h * 0.1f))
-                drawRect(windowColor, Offset(w * 0.62f, h * 0.22f), Size(w * 0.12f, h * 0.1f))
-                drawRect(windowColor, Offset(w * 0.62f, h * 0.42f), Size(w * 0.12f, h * 0.1f))
-                drawRect(windowColor, Offset(w * 0.62f, h * 0.62f), Size(w * 0.12f, h * 0.1f))
+
+                val windowSize = Size(w * 0.12f, h * 0.1f)
+                listOf(
+                    Offset(w * 0.25f, h * 0.45f),
+                    Offset(w * 0.25f, h * 0.65f),
+                    Offset(w * 0.62f, h * 0.22f),
+                    Offset(w * 0.62f, h * 0.42f),
+                    Offset(w * 0.62f, h * 0.62f),
+                ).forEach { drawRect(Color.Black, it, windowSize, blendMode = BlendMode.Clear) }
             }
         }
         IslandEvent.KeyguardIndication.IndicationType.OWNER_INFO -> {
             
-            val color = tint ?: IndigoAccent
+            val color = tint ?: toneFor(event).tint
             Canvas(modifier = Modifier.size(SizeBadge)) {
                 val w = size.width; val h = size.height
                 
@@ -1079,7 +1088,7 @@ private fun KeyguardIndicationIcon(event: IslandEvent.KeyguardIndication, tint: 
         }
         IslandEvent.KeyguardIndication.IndicationType.PERSISTENT_UNLOCK -> {
             
-            val color = tint ?: GreenAccent
+            val color = tint ?: toneFor(event).tint
             Canvas(modifier = Modifier.size(SizeBadge)) {
                 val w = size.width; val h = size.height
                 
@@ -1095,13 +1104,13 @@ private fun KeyguardIndicationIcon(event: IslandEvent.KeyguardIndication, tint: 
         }
         IslandEvent.KeyguardIndication.IndicationType.TRANSIENT -> {
             
-            val color = tint ?: BlueAccent
+            val color = tint ?: toneFor(event).tint
             Canvas(modifier = Modifier.size(SizeBadge)) {
                 drawCircle(color, style = Stroke(width = SizeStrokeThin.dp.toPx()))
                 val cx = size.width / 2f; val cy = size.height / 2f
-                drawCircle(Color.White, radius = 0.8.dp.toPx(), center = Offset(cx, cy - 2.2.dp.toPx()))
+                drawCircle(color, radius = 0.8.dp.toPx(), center = Offset(cx, cy - 2.2.dp.toPx()))
                 drawLine(
-                    Color.White, Offset(cx, cy - 0.3.dp.toPx()), Offset(cx, cy + 2.8.dp.toPx()),
+                    color, Offset(cx, cy - 0.3.dp.toPx()), Offset(cx, cy + 2.8.dp.toPx()),
                     strokeWidth = 1.2.dp.toPx(), cap = StrokeCap.Round,
                 )
             }
@@ -1123,7 +1132,7 @@ internal fun PillEventText(
         is IslandEvent.Sports -> SportsText(event, modifier, overrideColor)
         is IslandEvent.NowPlaying -> MarqueeLabel(
             "${event.songTitle} · ${event.artist}".trimEnd(' ', '·', ' '),
-            overrideColor ?: MintAccent,
+            overrideColor ?: toneFor(event).tint,
             modifier,
         )
         is IslandEvent.Bluetooth -> BtText(event, modifier, overrideColor)
@@ -1131,18 +1140,18 @@ internal fun PillEventText(
             MarqueeLabel(
                 if (event.numDevices > 0) "${stringResource(R.string.ax_dynamic_bar_hotspot)} · ${stringResource(R.string.ax_dynamic_bar_hotspot_devices, event.numDevices)}"
                 else stringResource(R.string.ax_dynamic_bar_hotspot),
-                overrideColor ?: TealAccent,
+                overrideColor ?: toneFor(event).tint,
                 modifier,
             )
-        is IslandEvent.Charging -> MarqueeLabel("${event.level}%", overrideColor ?: GreenAccent, modifier)
+        is IslandEvent.Charging -> MarqueeLabel("${event.level}%", overrideColor ?: toneFor(event).tint, modifier)
         is IslandEvent.Alarm ->
-            MarqueeLabel(event.label.ifEmpty { stringResource(R.string.ax_dynamic_bar_alarm) }, overrideColor ?: OrangeAccent, modifier)
+            MarqueeLabel(event.label.ifEmpty { stringResource(R.string.ax_dynamic_bar_alarm) }, overrideColor ?: toneFor(event).tint, modifier)
         is IslandEvent.Timer -> TimerText(event, modifier, overrideColor)
         is IslandEvent.Stopwatch -> StopwatchText(event, modifier, overrideColor)
         is IslandEvent.RingerMode -> MarqueeLabel(event.label, overrideColor ?: eventStyleFor(event).accent, modifier)
-        is IslandEvent.Vpn -> MarqueeLabel(stringResource(R.string.ax_dynamic_bar_vpn_active), overrideColor ?: IndigoAccent, modifier)
+        is IslandEvent.Vpn -> MarqueeLabel(stringResource(R.string.ax_dynamic_bar_vpn_active), overrideColor ?: toneFor(event).tint, modifier)
         is IslandEvent.Clipboard ->
-            MarqueeLabel(event.preview.ifEmpty { stringResource(R.string.ax_dynamic_bar_copied) }, overrideColor ?: IndigoAccent, modifier)
+            MarqueeLabel(event.preview.ifEmpty { stringResource(R.string.ax_dynamic_bar_copied) }, overrideColor ?: toneFor(event).tint, modifier)
         is IslandEvent.Call -> {
             if (event.callStartTimeMs > 0L) {
                 CallTimerText(event, modifier, overrideColor)
@@ -1153,7 +1162,7 @@ internal fun PillEventText(
         is IslandEvent.Notification -> {
             val name = event.title
             if (name != null) {
-                MarqueeLabel(name, overrideColor ?: BlueAccent, modifier)
+                MarqueeLabel(name, overrideColor ?: toneFor(event).tint, modifier)
             } else {
                 NotifBellBadge(modifier, notifCount)
             }
@@ -1165,10 +1174,10 @@ internal fun PillEventText(
                 if (event.supportsLevel)
                     "${(event.level.toFloat() / event.maxLevel * 100).toInt()}%"
                 else stringResource(R.string.ax_dynamic_bar_on)
-            MarqueeLabel(label, overrideColor ?: YellowAccent, modifier)
+            MarqueeLabel(label, overrideColor ?: toneFor(event).tint, modifier)
         }
-        is IslandEvent.BiometricUnlock -> MarqueeLabel(stringResource(R.string.ax_dynamic_bar_unlocked), overrideColor ?: GreenAccent, modifier)
-        is IslandEvent.KeyguardIndication -> MarqueeLabel(event.text, overrideColor ?: IndigoAccent, modifier)
+        is IslandEvent.BiometricUnlock -> MarqueeLabel(stringResource(R.string.ax_dynamic_bar_unlocked), overrideColor ?: toneFor(event).tint, modifier)
+        is IslandEvent.KeyguardIndication -> MarqueeLabel(event.text, overrideColor ?: toneFor(event).tint, modifier)
         is IslandEvent.AospChip -> AospChipText(event, modifier, overrideColor)
     }
 }
@@ -1247,9 +1256,9 @@ private fun MarqueeLabel(text: String, color: Color, modifier: Modifier = Modifi
 @Composable
 private fun AudioRecordingPillIcon(event: IslandEvent.AudioRecording, tint: Color? = null) {
     val color = tint ?: when (event.state) {
-        RecordingState.RECORDING -> RedAccent
+        RecordingState.RECORDING -> toneFor(event).tint
         RecordingState.PAUSED -> SubtleGray
-        RecordingState.SAVED -> GreenAccent
+        RecordingState.SAVED -> toneFor(event).tint
     }
     val vector = when (event.state) {
         RecordingState.RECORDING -> Icons.Filled.Mic
@@ -1297,13 +1306,13 @@ private fun AudioRecText(event: IslandEvent.AudioRecording, modifier: Modifier, 
             val color = overrideColor ?: eventStyleFor(event).accent
             Text(formatCountdownLong(elapsedMs), color = color, style = PillMono, modifier = modifier)
         }
-        RecordingState.SAVED -> MarqueeLabel(stringResource(R.string.ax_dynamic_bar_saved), overrideColor ?: GreenAccent, modifier)
+        RecordingState.SAVED -> MarqueeLabel(stringResource(R.string.ax_dynamic_bar_saved), overrideColor ?: toneFor(event).tint, modifier)
     }
 }
 
 @Composable
 private fun MediaText(event: IslandEvent.Media, modifier: Modifier, overrideColor: Color? = null) {
-    val baseColor = overrideColor ?: OrangeAccent
+    val baseColor = overrideColor ?: toneFor(event).tint
     val alpha = if (event.isPlaying) 1f else AlphaHint
     val color = baseColor.copy(alpha = alpha)
     val text = if (event.artist.isNotBlank()) "${event.track} - ${event.artist}" else event.track
@@ -1322,7 +1331,7 @@ private fun BluetoothArtworkIcon(image: Drawable) {
 
 @Composable
 private fun BtText(event: IslandEvent.Bluetooth, modifier: Modifier, overrideColor: Color? = null) {
-    val color = overrideColor ?: BlueAccent
+    val color = overrideColor ?: toneFor(event).tint
     val summary = event.batterySummary()
     if (summary != null) {
         Text(
@@ -1342,10 +1351,10 @@ private fun BtText(event: IslandEvent.Bluetooth, modifier: Modifier, overrideCol
 private fun TimerText(event: IslandEvent.Timer, modifier: Modifier, overrideColor: Color? = null) {
     val label = event.label.ifEmpty { stringResource(R.string.ax_dynamic_bar_timer) }
     if (event.endTimeMs <= 0L) {
-        MarqueeLabel(label, overrideColor ?: BlueAccent, modifier)
+        MarqueeLabel(label, overrideColor ?: toneFor(event).tint, modifier)
         return
     }
-    val color = overrideColor ?: if (event.isPaused) SubtleGray else BlueAccent
+    val color = overrideColor ?: if (event.isPaused) SubtleGray else toneFor(event).tint
     val chronometer: Chronometer? =
         if (event.isPaused) {
             FrozenChronometerCache.get(event.id)?.let { Chronometer.Paused(it) }
@@ -1362,7 +1371,7 @@ private fun TimerText(event: IslandEvent.Timer, modifier: Modifier, overrideColo
 
 @Composable
 private fun StopwatchText(event: IslandEvent.Stopwatch, modifier: Modifier, overrideColor: Color? = null) {
-    val color = overrideColor ?: if (event.isRunning) MintAccent else SubtleGray
+    val color = overrideColor ?: if (event.isRunning) toneFor(event).tint else SubtleGray
     val chronometer: Chronometer? =
         if (event.isRunning && event.startTimeMs > 0L) {
             Chronometer.Running(eventTimeFor(event.startTimeMs), isCountdown = false)
@@ -1381,10 +1390,10 @@ private fun CallTimerText(event: IslandEvent.Call, modifier: Modifier, overrideC
             rememberChronometerText(
                 Chronometer.Running(eventTimeFor(event.callStartTimeMs), isCountdown = false)
             )
-        val color = overrideColor ?: GreenAccent
+        val color = overrideColor ?: toneFor(event).tint
         ChronometerLabel(text ?: "00:00", color, modifier)
     } else {
-        MarqueeLabel(stringResource(R.string.ax_dynamic_bar_incoming_call), overrideColor ?: BlueAccent, modifier)
+        MarqueeLabel(stringResource(R.string.ax_dynamic_bar_incoming_call), overrideColor ?: toneFor(event).tint, modifier)
     }
 }
 
@@ -1459,20 +1468,20 @@ private fun ChronometerLabel(text: String, color: Color, modifier: Modifier) {
 @Composable
 private fun NotifBellBadge(modifier: Modifier, count: Int) {
     Box(modifier = modifier, contentAlignment = Alignment.Center) {
-        Icon(Icons.Filled.Notifications, null, tint = BlueAccent, modifier = Modifier.size(SizeBadge))
+        Icon(Icons.Filled.Notifications, null, tint = IslandTone.ACCENT.tint, modifier = Modifier.size(SizeBadge))
         if (count > 1) {
             Box(
                 modifier =
                     Modifier.align(Alignment.TopEnd)
                         .offset(x = 5.dp, y = (-3).dp)
                         .defaultMinSize(minWidth = SpaceLg, minHeight = SpaceLg)
-                        .background(RedAccent, RoundedCornerShape(SpaceSm))
+                        .background(IslandTone.ALERT.container, RoundedCornerShape(SpaceSm))
                         .padding(horizontal = SpaceXxs),
                 contentAlignment = Alignment.Center,
             ) {
                 Text(
                     if (count > 99) "99+" else "$count",
-                    color = chipContentColorOn(RedAccent),
+                    color = IslandTone.ALERT.onContainer,
                     style = TsBadge,
                     lineHeight = SpaceLg.value.sp,
                     maxLines = 1,

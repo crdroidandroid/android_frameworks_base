@@ -9,6 +9,7 @@ import com.android.compose.animation.rememberExpandableController
 import com.android.systemui.animation.Expandable as SystemUiExpandable
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterExitState
 import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
@@ -32,7 +33,9 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.basicMarquee
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
@@ -58,6 +61,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.getValue
@@ -74,7 +78,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
@@ -82,10 +85,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalViewConfiguration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.android.systemui.axdynamicbar.model.IslandEvent
 import com.android.systemui.axdynamicbar.model.RecordingState
 import com.android.systemui.axdynamicbar.shared.*
@@ -104,6 +105,33 @@ private val ActionSize = SpacePanel
 private val ActionIconSize = SizeBadge
 private val BatteryIconSize = ChipHeight - SpaceXxl
 private val CountBadgeHeight = ChipHeight / 2
+private val MultiLineChipHeight = 48.dp
+
+/**
+ * Keyguard chips are glass over the wallpaper rather than accent pills: the fill is the surface,
+ * text takes surface roles, and the event tone lives in the icon, the progress line and the
+ * action washes. (The container's on* roles are only legible on the container, which these chips
+ * never draw.)
+ */
+@Composable
+private fun chipFillColor(): Color = CardBg.copy(alpha = AlphaGlass)
+
+/** Shared frosted shell for every keyguard chip: blur + glass fill + hairline, pill-shaped. */
+@Composable
+private fun GlassChip(
+    height: Dp,
+    blurAlpha: Float,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
+) {
+    Box(
+        // ShapeChip is a 50 % pill; the blur needs the matching radius explicitly.
+        modifier = modifier.islandBlur(cornerRadius = height / 2, fallbackColor = CardBg, alpha = blurAlpha),
+        contentAlignment = Alignment.Center,
+    ) {
+        content()
+    }
+}
 
 @Composable
 private fun rememberChargingParts(batteryString: String): List<String> {
@@ -139,22 +167,29 @@ fun AxDynamicBarKeyguardChip(
                 viewModel.keyguardExpansion.notifyCollapseSettled()
             }
         }
-        AnimatedVisibility(
-            visibleState = expandedVisibleState,
-            enter = fadeIn(motionScheme.defaultEffectsSpec()),
-            exit = fadeOut(tween(durationMillis = 250)),
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.Center),
-        ) {
-            state?.let {
-                KeyguardExpandedContent(
-                    event = it.event,
-                    allEvents = it.allEvents,
-                    interactor = viewModel.interactor,
-                    onCollapse = { viewModel.keyguardExpansion.collapse() },
-                    hapticsViewModelFactory = viewModel.interactor.sliderHapticsViewModelFactory,
-                )
+        val panelBlurAlpha by animateFloatAsState(
+            targetValue = if (expandedVisibleState.targetState) 1f else 0f,
+            animationSpec = motionScheme.fastEffectsSpec(),
+            label = "kg_panel_blur_alpha",
+        )
+        CompositionLocalProvider(LocalBlurAlpha provides panelBlurAlpha) {
+            AnimatedVisibility(
+                visibleState = expandedVisibleState,
+                enter = fadeIn(motionScheme.defaultEffectsSpec()),
+                exit = fadeOut(motionScheme.defaultEffectsSpec()),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.Center),
+            ) {
+                state?.let {
+                    KeyguardExpandedContent(
+                        event = it.event,
+                        allEvents = it.allEvents,
+                        interactor = viewModel.interactor,
+                        onCollapse = { viewModel.keyguardExpansion.collapse() },
+                        hapticsViewModelFactory = viewModel.interactor.sliderHapticsViewModelFactory,
+                    )
+                }
             }
         }
 
@@ -197,6 +232,18 @@ fun AxDynamicBarKeyguardChip(
                     }
                 },
         ) {
+            // Captured before AnimatedContent shadows `transition`; mirrors the delayed enter above.
+            val chipBlurAlpha by transition.animateFloat(
+                transitionSpec = {
+                    if (targetState == EnterExitState.Visible) {
+                        tween<Float>(durationMillis = 200, delayMillis = 300)
+                    } else {
+                        motionScheme.fastEffectsSpec<Float>()
+                    }
+                },
+                label = "kg_chip_blur_visibility",
+            ) { if (it == EnterExitState.Visible) 1f else 0f }
+
             val chipState = state
             if (chipState != null) {
                 val displayEvent = chipState.notificationAlert ?: chipState.event
@@ -215,23 +262,29 @@ fun AxDynamicBarKeyguardChip(
                     contentKey = { it::class.simpleName },
                     label = "keyguard_chip_event",
                 ) { event ->
-                    val rawAccent = chipAccentColorFor(event)
+                    val contentBlurAlpha by transition.animateFloat(
+                        transitionSpec = { motionScheme.fastEffectsSpec() },
+                        label = "kg_chip_blur_content",
+                    ) { if (it == EnterExitState.Visible) 1f else 0f }
+                    // The saturated tint, not the container: these chips sit on a neutral glass
+                    // surface, where the pale container role would barely show.
                     val accent by animateColorAsState(
-                        rawAccent,
-                        MaterialTheme.motionScheme.fastEffectsSpec(),
+                        accentColorFor(event),
+                        motionScheme.fastEffectsSpec(),
                         label = "kg_accent",
                     )
                     val contentColor by animateColorAsState(
-                        chipContentColorOn(rawAccent),
-                        MaterialTheme.motionScheme.fastEffectsSpec(),
+                        OnCardText,
+                        motionScheme.fastEffectsSpec(),
                         label = "kg_content",
                     )
                     val rawProgress = chipProgressFor(event)
                     val progressTarget = rawProgress ?: 0f
                     val progressAnim = remember { Animatable(progressTarget) }
+                    val progressSpec = motionScheme.defaultEffectsSpec<Float>()
                     LaunchedEffect(progressTarget) {
                         if (abs(progressTarget - progressAnim.value) > 0.05f) {
-                            progressAnim.animateTo(progressTarget, tween(300, easing = FastOutSlowInEasing))
+                            progressAnim.animateTo(progressTarget, progressSpec)
                         } else {
                             progressAnim.snapTo(progressTarget)
                         }
@@ -252,6 +305,7 @@ fun AxDynamicBarKeyguardChip(
                             viewModel = viewModel,
                             batteryString = batteryString,
                             aospChipExpandable = expandable,
+                            blurAlpha = chipBlurAlpha * contentBlurAlpha,
                         )
                     }
                 }
@@ -260,7 +314,7 @@ fun AxDynamicBarKeyguardChip(
                     batteryInfo,
                     keyguardBatteryChipMode,
                     batteryString,
-                    modifier,
+                    blurAlpha = chipBlurAlpha,
                 )
             }
         }
@@ -277,32 +331,38 @@ private fun KeyguardChipBody(
     viewModel: AxDynamicBarChipViewModel,
     batteryString: String = "",
     aospChipExpandable: SystemUiExpandable,
+    blurAlpha: Float,
 ) {
     val context = LocalContext.current
     val motionScheme = MaterialTheme.motionScheme
 
     val parts = rememberChargingParts(batteryString)
     val isMultiLineCharging = event is IslandEvent.Charging && parts.size >= 2
-    val dynamicHeight = if (isMultiLineCharging) 48.dp else ChipHeight
+    val dynamicHeight = if (isMultiLineCharging) MultiLineChipHeight else ChipHeight
+    val strokeColor = chipStrokeColor()
+    val fillColor = chipFillColor()
+    val washColor = accent.copy(alpha = AlphaIconBg)
 
-    Box(contentAlignment = Alignment.Center) {
+    GlassChip(height = dynamicHeight, blurAlpha = blurAlpha) {
         Row(
             modifier = Modifier
                 .height(dynamicHeight)
                 .widthIn(min = 48.dp, max = 260.dp)
+                .border(BorderStroke(0.5.dp, strokeColor), ChipShape)
                 .clip(ChipShape)
-                .background(accent)
+                .background(fillColor)
                 .animateContentSize(motionScheme.defaultSpatialSpec())
                 .then(
                     if (progress != null) {
-                        val trackColor = lerp(accent, contentColor, 0.2f)
-                        val fillColor = lerp(accent, contentColor, 0.6f)
+                        // Faint content-toned track; the progress itself keeps the event tone.
+                        val trackColor = contentColor.copy(alpha = AlphaTrack)
+                        val barColor = accent
                         Modifier.drawWithContent {
                             drawContent()
                             val barH = SizeStrokeWidth.toPx()
                             val y = size.height - barH
                             drawRect(trackColor, Offset(0f, y), Size(size.width, barH))
-                            drawRect(fillColor, Offset(0f, y), Size(size.width * progress, barH))
+                            drawRect(barColor, Offset(0f, y), Size(size.width * progress, barH))
                         }
                     } else Modifier
                 )
@@ -338,7 +398,7 @@ private fun KeyguardChipBody(
                 ) { art ->
                     if (art != null) {
                         Image(
-                            bitmap = art.toScaledBitmap(ChipIconSize),
+                            bitmap = art.toSquareScaledBitmap(ChipIconSize),
                             contentDescription = null,
                             modifier = Modifier
                                 .size(ChipIconSize)
@@ -346,7 +406,7 @@ private fun KeyguardChipBody(
                             contentScale = ContentScale.Crop,
                         )
                     } else {
-                        PillEventIcon(event, tint = contentColor, animated = false)
+                        PillEventIcon(event, tint = accent, animated = false)
                     }
                 }
                 Spacer(Modifier.width(SpaceXs))
@@ -395,7 +455,7 @@ private fun KeyguardChipBody(
                 ActionButton(
                     icon = ActionIcon.SKIP_PREV,
                     color = contentColor,
-                    bgColor = lerp(accent, contentColor, AlphaSubtle),
+                    bgColor = washColor,
                     onClick = { viewModel.skipPrev() },
                     size = ActionSize,
                     iconSize = ActionIconSize,
@@ -405,7 +465,8 @@ private fun KeyguardChipBody(
                     onClick = { viewModel.togglePlayPause() },
                     modifier = Modifier.size(ActionSize),
                     shape = CircleShape,
-                    color = lerp(accent, contentColor, AlphaSubtle),
+                    // Play/pause leads the pair, so it takes the stronger wash with the tone glyph.
+                    color = accent.copy(alpha = AlphaAccent),
                 ) {
                     Box(contentAlignment = Alignment.Center, modifier = Modifier.size(ActionSize)) {
                         Icon(
@@ -414,7 +475,7 @@ private fun KeyguardChipBody(
                                 if (event.isPlaying) R.string.ax_dynamic_bar_pause
                                 else R.string.ax_dynamic_bar_play,
                             ),
-                            tint = contentColor,
+                            tint = accent,
                             modifier = Modifier.size(ActionIconSize),
                         )
                     }
@@ -423,7 +484,7 @@ private fun KeyguardChipBody(
                 ActionButton(
                     icon = ActionIcon.SKIP_NEXT,
                     color = contentColor,
-                    bgColor = lerp(accent, contentColor, AlphaSubtle),
+                    bgColor = washColor,
                     onClick = { viewModel.skipNext() },
                     size = ActionSize,
                     iconSize = ActionIconSize,
@@ -453,7 +514,7 @@ private fun KeyguardChipBody(
                     contentKey = { iconKeyFor(it) },
                     label = "kg_chip_icon",
                 ) { ev ->
-                    PillEventIcon(ev, tint = contentColor, animated = false)
+                    PillEventIcon(ev, tint = accent, animated = false)
                 }
                 Spacer(Modifier.width(SpaceXs))
                 AnimatedContent(
@@ -500,8 +561,8 @@ private fun KeyguardChipBody(
                         Spacer(Modifier.width(SpaceXxs))
                         ActionButton(
                             icon = action.icon,
-                            color = contentColor,
-                            bgColor = lerp(accent, contentColor, AlphaSubtle),
+                            color = accent,
+                            bgColor = washColor,
                             onClick = { action.perform(viewModel, event, context) },
                             size = ActionSize,
                             iconSize = ActionIconSize,
@@ -517,7 +578,7 @@ private fun KeyguardChipBody(
                     modifier = Modifier
                         .height(CountBadgeHeight)
                         .widthIn(min = CountBadgeHeight)
-                        .background(lerp(accent, contentColor, AlphaDisabled), ShapeChip)
+                        .background(contentColor.copy(alpha = AlphaIconBg), ShapeChip)
                         .padding(horizontal = SpaceXxs),
                 ) {
                     Text(
@@ -537,29 +598,32 @@ private fun KeyguardBatteryChip(
     info: KeyguardBatteryInfo,
     keyguardBatteryChipMode: Int,
     batteryString: String,
-    modifier: Modifier,
+    blurAlpha: Float,
 ) {
     if (keyguardBatteryChipMode <= 0) return
 
     if (keyguardBatteryChipMode == 1 && !info.isCharging) return
 
+    // The icon carries the chip's colour; the label is surface content because the chip fills
+    // with the glass surface. Neutral takes onSurfaceVariant — surfaceVariant would vanish into it.
     val accent = when {
         info.isCharging -> BatteryChargingColor
         info.isPowerSave -> BatteryPowerSaveColor
-        else -> BatteryNeutralColor
+        else -> MaterialTheme.colorScheme.onSurfaceVariant
     }
-    val contentColor = chipContentColorOn(accent)
+    val contentColor = OnCardText
 
     val parts = rememberChargingParts(batteryString)
     val isMultiLine = info.isCharging && parts.size >= 2
-    val dynamicHeight = if (isMultiLine) 48.dp else ChipHeight
+    val dynamicHeight = if (isMultiLine) MultiLineChipHeight else ChipHeight
 
-    Box(contentAlignment = Alignment.Center) {
+    GlassChip(height = dynamicHeight, blurAlpha = blurAlpha) {
         Row(
-            modifier = modifier
+            modifier = Modifier
                 .height(dynamicHeight)
+                .border(BorderStroke(0.5.dp, chipStrokeColor()), ChipShape)
                 .clip(ChipShape)
-                .background(accent)
+                .background(chipFillColor())
                 .widthIn(min = 48.dp, max = 260.dp)
                 .padding(horizontal = SpaceMd)
                 .animateContentSize(MaterialTheme.motionScheme.defaultSpatialSpec()),
@@ -567,11 +631,13 @@ private fun KeyguardBatteryChip(
         ) {
             
             if (info.isCharging) {
-                AnimatedChargingBoltIcon(info.level, contentColor, BatteryIconSize)
+                AnimatedChargingBoltIcon(info.level, accent, BatteryIconSize)
             } else {
-                AnimatedBatteryFillIcon(info.level, contentColor, BatteryIconSize)
+                AnimatedBatteryFillIcon(info.level, accent, BatteryIconSize)
             }
             Spacer(Modifier.width(SpaceXs))
+            // GlassChip's content lambda isn't inline, so no early `return` here: the charging
+            // label and the level/secondary/time labels are mutually exclusive branches.
             if (info.isCharging) {
                 if (isMultiLine) {
                     Column(
@@ -587,7 +653,7 @@ private fun KeyguardBatteryChip(
                         )
                         Text(
                             parts[1],
-                            style = PillPrimary.copy(fontSize = 10.sp),
+                            style = TsCaption,
                             color = contentColor.copy(alpha = AlphaSecondary),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -603,48 +669,45 @@ private fun KeyguardBatteryChip(
                         modifier = Modifier.basicMarquee(),
                     )
                 }
-                return
-            }
-            Text(
-                "${info.level}%",
-                style = PillPrimary,
-                color = contentColor,
-                maxLines = 1,
-            )
-
-            val secondaryLabel = when {
-                info.isCharging && info.isWireless -> stringResource(R.string.ax_dynamic_bar_wireless)
-                info.isCharging -> stringResource(R.string.ax_dynamic_bar_charging)
-                info.isPowerSave -> stringResource(R.string.ax_dynamic_bar_saver)
-                else -> null
-            }
-            if (secondaryLabel != null) {
+            } else {
                 Text(
-                    " · ",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = contentColor.copy(alpha = AlphaTertiary),
-                )
-                Text(
-                    secondaryLabel,
-                    style = MaterialTheme.typography.labelSmall,
-                    color = contentColor.copy(alpha = AlphaSecondary),
+                    "${info.level}%",
+                    style = PillPrimary,
+                    color = contentColor,
                     maxLines = 1,
                 )
-            }
 
-            val timeRemaining = info.timeRemaining
-            if (timeRemaining != null) {
-                Text(
-                    " · ",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = contentColor.copy(alpha = AlphaTertiary),
-                )
-                Text(
-                    timeRemaining,
-                    style = MaterialTheme.typography.labelSmall,
-                    color = contentColor.copy(alpha = AlphaSecondary),
-                    maxLines = 1,
-                )
+                // Not charging here; charging takes the branch above.
+                val secondaryLabel =
+                    if (info.isPowerSave) stringResource(R.string.ax_dynamic_bar_saver) else null
+                if (secondaryLabel != null) {
+                    Text(
+                        " · ",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = contentColor.copy(alpha = AlphaTertiary),
+                    )
+                    Text(
+                        secondaryLabel,
+                        style = MaterialTheme.typography.labelSmall,
+                        color = contentColor.copy(alpha = AlphaSecondary),
+                        maxLines = 1,
+                    )
+                }
+
+                val timeRemaining = info.timeRemaining
+                if (timeRemaining != null) {
+                    Text(
+                        " · ",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = contentColor.copy(alpha = AlphaTertiary),
+                    )
+                    Text(
+                        timeRemaining,
+                        style = MaterialTheme.typography.labelSmall,
+                        color = contentColor.copy(alpha = AlphaSecondary),
+                        maxLines = 1,
+                    )
+                }
             }
         }
     }
@@ -763,7 +826,7 @@ private fun KeyguardPrimaryText(event: IslandEvent, color: Color, modifier: Modi
                     )
                     Text(
                         parts[1],
-                        style = PillPrimary.copy(fontSize = 10.sp),
+                        style = TsCaption,
                         color = color.copy(alpha = AlphaSecondary),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,

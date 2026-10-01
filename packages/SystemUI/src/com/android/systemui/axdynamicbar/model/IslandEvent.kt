@@ -74,7 +74,6 @@ sealed class IslandEvent(open val priority: Int, val id: String) : Comparable<Is
         val customActions: List<MediaCustomAction> = emptyList(),
         val appIcon: Drawable? = null,
         val packageName: String = "",
-        val mediaColor: Int = 0,
     ) : IslandEvent(priority = MEDIA_PLAYING_PRIORITY, id = "media") {
         override val priority: Int
             get() = if (isPlaying) MEDIA_PLAYING_PRIORITY else MEDIA_PAUSED_PRIORITY

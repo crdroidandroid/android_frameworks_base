@@ -55,7 +55,6 @@ constructor(
     var onMediaSessionLost: (() -> Unit)? = null
 
     @Volatile private var listening = false
-    @Volatile private var sessionMediaColor: Int = 0
     @Volatile private var sessionAlbumArt: Drawable? = null
     @Volatile private var sessionAppIcon: Drawable? = null
     private val systemMediaSessionManager: SystemMediaSessionManager by lazy {
@@ -87,10 +86,7 @@ constructor(
         }
 
     private val mediaSessionListener = object : MediaSessionManager.MediaDataListener {
-        override fun onMediaColorsChanged(color: Int) {
-            sessionMediaColor = color
-            _mediaEvent.update { event -> event?.copy(mediaColor = color) }
-        }
+        override fun onMediaColorsChanged(color: Int) {}
 
         override fun onAlbumArtChanged(drawable: Drawable?) {
             if (sessionAlbumArt === drawable) return
@@ -277,7 +273,6 @@ constructor(
                             customActions = customActions,
                             appIcon = appIcon,
                             packageName = pkg ?: "",
-                            mediaColor = sessionMediaColor,
                         )
                 } else {
                     _mediaEvent.update { event ->
@@ -325,7 +320,6 @@ constructor(
         } catch (_: Exception) {}
         _mediaEvent.value = null
         activeMediaPackage = null
-        sessionMediaColor = 0
         sessionAlbumArt = null
         sessionAppIcon = null
     }

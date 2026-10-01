@@ -580,6 +580,7 @@ android_library {
         "ax_platform_hooks",
         "FadingEdgeLayoutLib",
         "commonutils",
+        "ax_blur",
     ],
     enable_ksp: true,
     annotation_processor_flags: [
