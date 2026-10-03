@@ -33,6 +33,7 @@ import android.os.UserHandle;
 import android.text.TextUtils;
 import android.util.ArrayMap;
 import android.util.ArraySet;
+import android.util.Pair;
 import android.util.Slog;
 import android.util.SparseArray;
 
@@ -363,9 +364,16 @@ public abstract class AppsFilterBase implements AppsFilterSnapshot {
 
     private static final String PACKAGE_SYSTEMUI = "com.android.systemui";
 
-    private static boolean isHiddenPackage(@NonNull String packageName) {
-        return ROOT_PACKAGES.contains(packageName) || isRomPackage(packageName);
+    public static boolean isHiddenPackage(@Nullable String packageName) {
+        return packageName != null
+                && (ROOT_PACKAGES.contains(packageName)
+                        || ROM_PACKAGES_EXACT.contains(packageName)
+                        || isRomPackage(packageName));
     }
+
+    private static final Set<String> ROM_PACKAGES_EXACT = Set.of(
+            "lineageos.platform"
+    );
 
     private static boolean isRomPackage(@NonNull String packageName) {
         return packageName.startsWith("org.lineageos.")
@@ -378,6 +386,22 @@ public abstract class AppsFilterBase implements AppsFilterSnapshot {
                 || packageName.startsWith("org.lunaris.")
                 || packageName.startsWith("org.omnirom.")
                 || packageName.startsWith("org.protonaosp.");
+    }
+
+    public static boolean shouldHideFromUid(@NonNull Computer snapshot, int callingUid,
+            @Nullable String targetPackageName) {
+        if (!isHiddenPackage(targetPackageName)) {
+            return false;
+        }
+        final int callingAppId = UserHandle.getAppId(callingUid);
+        if (callingAppId < Process.FIRST_APPLICATION_UID) {
+            return false;
+        }
+        final Pair<PackageStateInternal, SharedUserApi> p =
+                snapshot.getPackageOrSharedUser(callingAppId);
+        final Object callingSetting = p == null ? null
+                : (p.first != null ? p.first : p.second);
+        return !canAccessHiddenPackages(snapshot, callingUid, callingSetting);
     }
 
     private static boolean canAccessHiddenPackages(@NonNull Computer snapshot, int callingUid,
@@ -447,19 +471,19 @@ public abstract class AppsFilterBase implements AppsFilterSnapshot {
         }
         try {
             final int callingAppId = UserHandle.getAppId(callingUid);
-            if (callingAppId < Process.FIRST_APPLICATION_UID
-                    || targetPkgSetting.getAppId() < Process.FIRST_APPLICATION_UID
-                    || callingAppId == targetPkgSetting.getAppId()) {
+            final int targetAppId = targetPkgSetting.getAppId();
+            if (callingAppId < Process.FIRST_APPLICATION_UID || callingAppId == targetAppId) {
                 return false;
             }
             final Computer computer = (Computer) snapshot;
-            final String targetPackageName = targetPkgSetting.getPackageName();
-            if (isHiddenPackage(targetPackageName)
+            if (isHiddenPackage(targetPkgSetting.getPackageName())
                     && !canAccessHiddenPackages(computer, callingUid, callingSetting)) {
                 return true;
             }
+            if (targetAppId < Process.FIRST_APPLICATION_UID) {
+                return false;
+            }
             if (Process.isSdkSandboxUid(callingAppId)) {
-                final int targetAppId = targetPkgSetting.getAppId();
                 final int targetUid = UserHandle.getUid(userId, targetAppId);
                 // we only allow sdk sandbox processes access to forcequeryable packages or
                 // if the target app is the sandbox's client app
