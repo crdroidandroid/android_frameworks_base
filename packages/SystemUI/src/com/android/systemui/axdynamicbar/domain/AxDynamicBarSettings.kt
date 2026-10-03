@@ -42,9 +42,6 @@ class AxDynamicBarSettings @Inject constructor(
     private val _compactNotifications = MutableStateFlow(true)
     val compactNotifications: StateFlow<Boolean> = _compactNotifications.asStateFlow()
 
-    private val _isHeadsUpEnabled = MutableStateFlow(true)
-    val isHeadsUpEnabled: StateFlow<Boolean> = _isHeadsUpEnabled.asStateFlow()
-
     private val _disabledEventTypes = MutableStateFlow<Set<String>>(emptySet())
     val disabledEventTypes: StateFlow<Set<String>> = _disabledEventTypes.asStateFlow()
 
@@ -95,11 +92,6 @@ class AxDynamicBarSettings @Inject constructor(
             settingsObserver,
             UserHandle.USER_ALL,
         )
-        globalSettings.registerContentObserverSync(
-            Global.HEADS_UP_NOTIFICATIONS_ENABLED,
-            false,
-            settingsObserver,
-        )
     }
 
     fun destroy() {
@@ -118,8 +110,6 @@ class AxDynamicBarSettings @Inject constructor(
             secureSettings.getIntForUser(KEY_KEYGUARD_BATTERY_CHIP_MODE, 1, UserHandle.USER_CURRENT)
         _compactNotifications.value =
             secureSettings.getIntForUser(KEY_COMPACT_NOTIFICATIONS, 1, UserHandle.USER_CURRENT) == 1
-        _isHeadsUpEnabled.value =
-            globalSettings.getInt(Global.HEADS_UP_NOTIFICATIONS_ENABLED, 1) == 1
 
         val json = secureSettings.getStringForUser(KEY_EVENTS, UserHandle.USER_CURRENT) ?: ""
         _disabledEventTypes.value =
