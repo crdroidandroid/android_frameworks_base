@@ -454,10 +454,14 @@ constructor(
 
                 val allNotifActions = sbn.notification?.actions ?: emptyArray()
 
+                // App-provided buttons (Mark as read, Copy code, Call, ...). Contextual actions are
+                // system-generated smart suggestions, not the app's own buttons.
                 val actions =
                     allNotifActions
-                        .filter { a -> a.remoteInputs.isNullOrEmpty() && a.actionIntent != null }
-                        .take(2)
+                        .filter { a ->
+                            a.remoteInputs.isNullOrEmpty() && a.actionIntent != null && !a.isContextual
+                        }
+                        .take(3)
                         .mapNotNull { a ->
                             a.title?.let { IslandEvent.NotificationAction(label = it, action = a) }
                         }
@@ -1176,4 +1180,3 @@ constructor(
         )
     }
 }
-
