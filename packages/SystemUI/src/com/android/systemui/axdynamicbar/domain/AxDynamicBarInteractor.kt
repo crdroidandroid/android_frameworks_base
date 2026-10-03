@@ -59,12 +59,17 @@ constructor(
 
     private val autoDismissJobs = ConcurrentHashMap<String, Job>()
     @Volatile private var notifAlertJob: Job? = null
+    @Volatile private var alertHeld = false
+    @Volatile private var alertReplyActive = false
+    @Volatile private var overlayImeVisible = false
 
     private val dismissedEventIds: MutableSet<String> = ConcurrentHashMap.newKeySet()
 
     override var onFocusableRequested: ((Boolean) -> Unit)? = null
 
     var onCollapseRequested: (() -> Unit)? = null
+
+    var onAlertReplyCaptureRequested: ((Boolean) -> Unit)? = null
 
     private var isInitialized = false
 
@@ -432,11 +437,13 @@ constructor(
     }
 
     override fun onNotificationAlertInteractionStart() {
+        alertHeld = true
         notifAlertJob?.cancel()
         notifAlertJob = null
     }
 
     override fun onNotificationAlertInteractionEnd() {
+        alertHeld = false
         val current = _uiState.value
         val alert = current.notificationAlert ?: return
         if (alert.isActiveCall()) return
@@ -446,7 +453,39 @@ constructor(
         }
     }
 
+    override fun onAlertReplyActiveChanged(active: Boolean) {
+        val newActive = active && _uiState.value.notificationAlert != null
+        if (newActive == alertReplyActive) return
+        alertReplyActive = newActive
+        onAlertReplyCaptureRequested?.invoke(newActive)
+    }
+
+    fun onOverlayTouchOutsideCard() {
+        if (alertReplyActive) abandonAlertReply()
+    }
+
+    fun onOverlayImeVisibilityChanged(visible: Boolean) {
+        val wasVisible = overlayImeVisible
+        overlayImeVisible = visible
+        if (wasVisible && !visible && alertReplyActive) abandonAlertReply()
+    }
+
+    private fun abandonAlertReply() {
+        if (_uiState.value.notificationAlert == null) {
+            alertReplyActive = false
+            onAlertReplyCaptureRequested?.invoke(false)
+            return
+        }
+        dismissNotificationAlert()
+    }
+
     fun dismissNotificationAlert() {
+        alertHeld = false
+        if (alertReplyActive) {
+            alertReplyActive = false
+            onFocusableRequested?.invoke(false)
+            onAlertReplyCaptureRequested?.invoke(false)
+        }
         notifAlertJob?.cancel()
         notifAlertJob = null
         val current = _uiState.value
@@ -481,6 +520,11 @@ constructor(
 
         val hasProgress = notification.progress >= 0 || notification.isProgressIndeterminate
         val isSameKey = existingAlert != null && existingAlert.sbn.key == notification.sbn.key
+
+        if (alertHeld && existingAlert != null) {
+            if (isSameKey) _uiState.value = current.copy(notificationAlert = notification)
+            return
+        }
 
         if (isSameKey && hasProgress) {
             _uiState.value = current.copy(notificationAlert = notification)

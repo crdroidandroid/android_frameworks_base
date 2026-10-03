@@ -3,6 +3,8 @@ package com.android.systemui.axdynamicbar.ui
 import android.content.Context
 import android.graphics.PixelFormat
 import android.view.Gravity
+import android.view.MotionEvent
+import android.view.ViewTreeObserver
 import android.view.WindowManager
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.MutableTransitionState
@@ -84,9 +86,27 @@ constructor(
     private var panelLifecycleOwner: PanelLifecycleOwner? = null
     private var hideOverlayJob: Job? = null
 
+    private var replyCaptureActive = false
+    private var imeVisible = false
+    private var imeHeight = 0
+
+    private val touchableInsetsListener =
+        ViewTreeObserver.OnComputeInternalInsetsListener { info ->
+            if (!replyCaptureActive) return@OnComputeInternalInsetsListener
+            val v = overlayView ?: return@OnComputeInternalInsetsListener
+            val touchableBottom = when {
+                !imeVisible -> v.height
+                imeHeight > 0 -> v.height - imeHeight
+                else -> v.height / 2 // IME height unknown: never cover the keyboard
+            }
+            info.setTouchableInsets(ViewTreeObserver.InternalInsetsInfo.TOUCHABLE_INSETS_REGION)
+            info.touchableRegion.set(0, 0, v.width, touchableBottom.coerceAtLeast(0))
+        }
+
     fun init() {
         viewModel.interactor.onCollapseRequested = { viewModel.statusBarExpansion.collapse() }
         viewModel.interactor.onFocusableRequested = { focusable -> setOverlayFocusable(focusable) }
+        viewModel.interactor.onAlertReplyCaptureRequested = { enabled -> setReplyCapture(enabled) }
 
         val needsOverlay =
             combine(
@@ -150,13 +170,31 @@ constructor(
         val view = ComposeView(context).apply {
             setContent { PlatformTheme { OverlayContent(viewModel, statusBarTop, hasCutout) } }
             setOnTouchListener { _, event ->
-                if (event.action == android.view.MotionEvent.ACTION_OUTSIDE) {
-                    viewModel.statusBarExpansion.collapse()
-                    true
-                } else {
-                    false
+                when (event.actionMasked) {
+                    MotionEvent.ACTION_OUTSIDE -> {
+                        viewModel.statusBarExpansion.collapse()
+                        true
+                    }
+                    MotionEvent.ACTION_DOWN ->
+                        if (replyCaptureActive) {
+                            viewModel.interactor.onOverlayTouchOutsideCard()
+                            true
+                        } else false
+                    else -> false
                 }
             }
+            setOnApplyWindowInsetsListener { v, insets ->
+                val visible = insets.isVisible(WindowInsets.Type.ime())
+                val height = insets.getInsets(WindowInsets.Type.ime()).bottom
+                if (visible != imeVisible || height != imeHeight) {
+                    imeVisible = visible
+                    imeHeight = height
+                    if (replyCaptureActive) v.requestLayout() // recompute touchable region
+                }
+                viewModel.interactor.onOverlayImeVisibilityChanged(visible)
+                v.onApplyWindowInsets(insets)
+            }
+            viewTreeObserver.addOnComputeInternalInsetsListener(touchableInsetsListener)
         }
 
         view.setViewTreeLifecycleOwner(lifecycleOwner)
@@ -205,6 +243,9 @@ constructor(
         }
         overlayView = null
         panelLifecycleOwner = null
+        replyCaptureActive = false
+        imeVisible = false
+        imeHeight = 0
     }
 
     private var shrinkRunnable: Runnable? = null
@@ -230,6 +271,17 @@ constructor(
             shrinkRunnable = runnable
             mainHandler.postDelayed(runnable, EXIT_ANIM_DURATION)
         }
+    }
+
+    private fun setReplyCapture(enabled: Boolean) = ensureMainThread {
+        if (replyCaptureActive == enabled) return@ensureMainThread
+        replyCaptureActive = enabled
+        val view = overlayView ?: return@ensureMainThread
+        val params = view.layoutParams as? WindowManager.LayoutParams ?: return@ensureMainThread
+        params.height =
+            if (enabled) WindowManager.LayoutParams.MATCH_PARENT
+            else WindowManager.LayoutParams.WRAP_CONTENT
+        windowManager.updateViewLayout(view, params)
     }
 
     private fun setOverlayFocusable(focusable: Boolean) = ensureMainThread {
