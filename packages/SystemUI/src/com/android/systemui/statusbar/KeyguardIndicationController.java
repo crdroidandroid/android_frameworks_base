@@ -77,6 +77,7 @@ import android.os.UserManager;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.text.format.Formatter;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
@@ -167,6 +168,7 @@ public class KeyguardIndicationController {
     private static final int MSG_RESET_ERROR_MESSAGE_ON_SCREEN_ON = 2;
     private static final int MSG_SHOW_RECOGNIZING_FACE = 3;
     private static final int MSG_HIDE_RECOGNIZING_FACE = 4;
+    private static final long BATTERY_INFO_UPDATE_INTERVAL_MS = 1000;
     private static final long TRANSIENT_BIOMETRIC_ERROR_TIMEOUT = 1300;
     public static final long DEFAULT_MESSAGE_TIME = 3500;
     public static final long DEFAULT_HIDE_DELAY_MS =
@@ -260,8 +262,10 @@ public class KeyguardIndicationController {
     private boolean mHasWarpCharger;
     private boolean mHasVoocCharger;
 
-    private IBatteryPropertiesRegistrar mBatteryPropertiesRegistrar;
     private boolean mAlternateFastchargeInfoUpdate;
+    @Nullable
+    private IBatteryPropertiesRegistrar mBatteryPropertiesRegistrar;
+    private boolean mBatteryInfoPolling;
 
     private KeyguardUpdateMonitorCallback mUpdateMonitorCallback;
 
@@ -293,6 +297,7 @@ public class KeyguardIndicationController {
         @Override
         public void onScreenTurnedOn() {
             mHandler.removeMessages(MSG_RESET_ERROR_MESSAGE_ON_SCREEN_ON);
+            updateBatteryInfoPolling();
             if (mBiometricErrorMessageToShowOnScreenOn != null) {
                 String followUpMessage = mFaceLockedOutThisAuthSession
                         ? faceLockedOutFollowupMessage() : null;
@@ -309,6 +314,7 @@ public class KeyguardIndicationController {
 
         @Override
         public void onScreenTurnedOff() {
+            updateBatteryInfoPolling();
             if (mFaceDetectionRunning) {
                 mFaceDetectionRunning = false;
                 mBiometricErrorMessageToShowOnScreenOn = null;
@@ -478,12 +484,15 @@ public class KeyguardIndicationController {
 
         mCurrentDivider = mContext.getResources().getInteger(R.integer.config_currentInfoDivider);
 
-        mAlternateFastchargeInfoUpdate =
-                    mContext.getResources().getBoolean(R.bool.config_alternateFastchargeInfoUpdate);
+        mAlternateFastchargeInfoUpdate = mContext.getResources().getBoolean(
+                R.bool.config_alternateFastchargeInfoUpdate);
         if (mAlternateFastchargeInfoUpdate) {
-            mBatteryPropertiesRegistrar =
-                    IBatteryPropertiesRegistrar.Stub.asInterface(
+            mBatteryPropertiesRegistrar = IBatteryPropertiesRegistrar.Stub.asInterface(
                     ServiceManager.getService("batteryproperties"));
+            if (mBatteryPropertiesRegistrar == null) {
+                Log.w(TAG, "batteryproperties service unavailable, disabling fast info update");
+                mAlternateFastchargeInfoUpdate = false;
+            }
         }
     }
 
@@ -569,6 +578,7 @@ public class KeyguardIndicationController {
      */
     public void destroy() {
         mHandler.removeCallbacksAndMessages(null);
+        mBatteryInfoPolling = false;
         mHideBiometricMessageHandler.cancel();
         mHideTransientMessageHandler.cancel();
         mBroadcastDispatcher.unregisterReceiver(mBroadcastReceiver);
@@ -1542,19 +1552,49 @@ public class KeyguardIndicationController {
         mInitialTextColorState = color;
     }
 
-    private final Runnable mUpdateInfo = new Runnable() {
+    private final Runnable mBatteryInfoUpdateRunnable = new Runnable() {
+        @Override
         public void run() {
-            long now = SystemClock.uptimeMillis();
-            long next = now + (1000 - now % 1000);
-            try {
-                mBatteryPropertiesRegistrar.scheduleUpdate();
-            } catch (RemoteException e) {
+            if (!mBatteryInfoPolling) {
+                return;
             }
-            if (mHandler != null) {
-                mHandler.postAtTime(mUpdateInfo, next);
+            final IBatteryPropertiesRegistrar registrar = mBatteryPropertiesRegistrar;
+            if (registrar != null) {
+                mBackgroundExecutor.execute(() -> {
+                    try {
+                        registrar.scheduleUpdate();
+                    } catch (RemoteException | RuntimeException e) {
+                        mKeyguardLogger.log(TAG, ERROR, "Error scheduling battery update", e);
+                    }
+                });
             }
+            final long now = SystemClock.uptimeMillis();
+            mHandler.postAtTime(this,
+                    now + BATTERY_INFO_UPDATE_INTERVAL_MS
+                            - (now % BATTERY_INFO_UPDATE_INTERVAL_MS));
         }
     };
+
+    private boolean shouldPollBatteryInfo() {
+        return mAlternateFastchargeInfoUpdate
+                && mBatteryPropertiesRegistrar != null
+                && mPowerPluggedIn
+                && !mPowerCharged
+                && (mDozing || mKeyguardStateController.isShowing())
+                && mScreenLifecycle.getScreenState() == SCREEN_ON;
+    }
+
+    private void updateBatteryInfoPolling() {
+        final boolean shouldPoll = shouldPollBatteryInfo();
+        if (shouldPoll == mBatteryInfoPolling) {
+            return;
+        }
+        mBatteryInfoPolling = shouldPoll;
+        mHandler.removeCallbacks(mBatteryInfoUpdateRunnable);
+        if (shouldPoll) {
+            mBatteryInfoUpdateRunnable.run();
+        }
+    }
 
     protected class BaseKeyguardCallback extends KeyguardUpdateMonitorCallback {
         @Override
@@ -1610,13 +1650,8 @@ public class KeyguardIndicationController {
                     mChargingTimeRemaining = -1;
                 }
             }
-            if (mAlternateFastchargeInfoUpdate && (wasPluggedIn != mPowerPluggedIn)) {
-                if (mPowerPluggedIn) {
-                    mUpdateInfo.run();
-                } else {
-                    mHandler.removeCallbacks(mUpdateInfo);
-                }
-            }
+
+            updateBatteryInfoPolling();
 
             mKeyguardLogger.logRefreshBatteryInfo(isChargingOrFull, mPowerPluggedIn, mBatteryLevel,
                     mBatteryDefender);
@@ -2008,6 +2043,7 @@ public class KeyguardIndicationController {
                 return;
             }
             mDozing = dozing;
+            updateBatteryInfoPolling();
 
             if (mDozing) {
                 hideBiometricMessage();
@@ -2033,6 +2069,7 @@ public class KeyguardIndicationController {
 
         @Override
         public void onKeyguardShowingChanged() {
+            updateBatteryInfoPolling();
             // All transient messages are gone the next time keyguard is shown
             if (!mKeyguardStateController.isShowing()) {
                 mKeyguardLogger.log(TAG, LogLevel.DEBUG, "clear messages");
