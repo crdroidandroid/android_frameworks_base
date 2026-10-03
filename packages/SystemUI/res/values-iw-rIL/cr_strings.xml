@@ -148,7 +148,6 @@
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="one">‏%d מכשירים מחוברים</item>
         <item quantity="two">%d devices connected</item>
-        <item quantity="many">%d devices connected</item>
         <item quantity="other">‏%d מכשירים מחוברים</item>
     </plurals>
     <!-- 5G toggle in Internet Dialog -->
