@@ -130,6 +130,7 @@ import android.util.Xml;
 import android.util.proto.ProtoOutputStream;
 import android.security.pif.PlayIntegritySpoofService;
 
+import com.android.internal.annotations.GuardedBy;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.pm.pkg.component.ParsedActivity;
 import com.android.internal.pm.pkg.component.ParsedInstrumentation;
@@ -756,7 +757,11 @@ public class ComputerEngine implements Computer {
                                 && shouldFilterApplication(
                                 getPackageStateInternal(ai.applicationInfo.packageName,
                                         Process.SYSTEM_UID), filterCallingUid, userId);
-                if (!blockInstantResolution && !blockNormalResolution) {
+                final boolean blockHiddenRomResolution = !isCallerInstantApp
+                        && AppsFilterBase.shouldHideFromUid(
+                                this, filterCallingUid, comp.getPackageName());
+                if (!blockInstantResolution && !blockNormalResolution
+                        && !blockHiddenRomResolution) {
                     final ResolveInfo ri = new ResolveInfo();
                     ri.activityInfo = ai;
                     ri.userHandle = UserHandle.of(userId);
@@ -972,8 +977,10 @@ public class ComputerEngine implements Computer {
             final PackageStateInternal setting =
                     getPackageStateInternal(pkgName, Process.SYSTEM_UID);
 
-            if (setting != null && setting.getAndroidPackage() != null && (resolveForStart
-                    || !shouldFilterApplication(setting, filterCallingUid, userId))) {
+            if (setting != null && setting.getAndroidPackage() != null
+                    && ((resolveForStart && !AppsFilterBase.shouldHideFromUid(
+                                    this, filterCallingUid, pkgName))
+                            || !shouldFilterApplication(setting, filterCallingUid, userId))) {
                 final List<ResolveInfo> queryResult = mComponentResolver.queryActivities(this,
                         intent, resolvedType, flags, setting.getAndroidPackage().getActivities(),
                         userId);
@@ -1245,6 +1252,22 @@ public class ComputerEngine implements Computer {
         return null;
     }
 
+    @GuardedBy("mDefaultHomeCache")
+    private final SparseArray<String> mDefaultHomeCache = new SparseArray<>();
+
+    @Nullable
+    public final String getDefaultHome(@UserIdInt int userId) {
+        synchronized (mDefaultHomeCache) {
+            final int index = mDefaultHomeCache.indexOfKey(userId);
+            if (index >= 0) {
+                return mDefaultHomeCache.valueAt(index);
+            }
+            final String defaultHome = mDefaultAppProvider.getDefaultHome(userId);
+            mDefaultHomeCache.put(userId, defaultHome);
+            return defaultHome;
+        }
+    }
+
     /**
      * Report the 'Home' activity which is currently set as "always use this one". If non is set
      * then reports the most likely home activity or null if there are more than one.
@@ -1409,6 +1432,12 @@ public class ComputerEngine implements Computer {
             final ResolveInfo info = resolveInfos.get(i);
             if (info.activityInfo != null
                     && shouldHideFromCaller(filterCallingUid, info.activityInfo.packageName)) {
+                resolveInfos.remove(i);
+                continue;
+            }
+            if (!resolveForStart && info.activityInfo != null
+                    && AppsFilterBase.shouldHideFromUid(
+                            this, filterCallingUid, info.activityInfo.packageName)) {
                 resolveInfos.remove(i);
                 continue;
             }
@@ -5959,8 +5988,10 @@ public class ComputerEngine implements Computer {
     @Override
     public String[] getSharedUserPackagesForPackage(@NonNull String packageName,
             @UserIdInt int userId) {
+        final int callingUid = Binder.getCallingUid();
         final PackageStateInternal packageSetting = mSettings.getPackage(packageName);
-        if (packageSetting == null || mSettings.getSharedUserFromPackageName(packageName) == null) {
+        if (packageSetting == null || mSettings.getSharedUserFromPackageName(packageName) == null
+                || shouldFilterApplicationIncludingUninstalled(packageSetting, callingUid, userId)) {
             return EmptyArray.STRING;
         }
 
@@ -5971,7 +6002,8 @@ public class ComputerEngine implements Computer {
         int i = 0;
         for (int index = 0; index < numPackages; index++) {
             final PackageStateInternal ps = packages.valueAt(index);
-            if (ps.getUserStateOrDefault(userId).isInstalled()) {
+            if (ps.getUserStateOrDefault(userId).isInstalled()
+                    && !shouldFilterApplication(ps, callingUid, userId)) {
                 res[i++] = ps.getPackageName();
             }
         }
