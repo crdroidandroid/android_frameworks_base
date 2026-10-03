@@ -1,6 +1,7 @@
 package com.android.systemui.axdynamicbar.data.source
 
 import android.app.Notification
+import android.app.Person
 import android.content.Context
 import com.android.systemui.res.R
 import android.graphics.Bitmap
@@ -21,6 +22,7 @@ import com.android.systemui.axdynamicbar.model.RecordingState
 import com.android.systemui.dagger.SysUISingleton
 import com.android.systemui.dagger.qualifiers.Application
 import com.android.systemui.util.ScrimUtils
+import java.util.Objects
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -129,8 +131,7 @@ constructor(
 
     var activeMediaPackageProvider: (() -> String?)? = null
 
-    private val seenNotificationKeys = mutableSetOf<String>()
-    private val seenMessagingTimestamps = mutableMapOf<String, Long>()
+    private val seenSignatures = mutableMapOf<String, Long>()
 
     var onTimerEvent: ((IslandEvent.Timer) -> Unit)? = null
     var onAlarmEvent: ((IslandEvent.Alarm) -> Unit)? = null
@@ -147,8 +148,7 @@ constructor(
         object : ScrimUtils.ScrimEventListener {
             override fun onNotificationRemoved(sbn: StatusBarNotification) {
                 val pkg = sbn.packageName ?: return
-                seenNotificationKeys.remove(sbn.key)
-                seenMessagingTimestamps.remove(sbn.key)
+                seenSignatures.remove(sbn.key)
 
                 if (sbn.key == timerNotificationKey) {
                     timerNotificationKey = null
@@ -414,26 +414,28 @@ constructor(
                 val notif = sbn.notification
                 val isMessagingStyle =
                     notif != null && notif.isStyle(Notification.MessagingStyle::class.java)
-                val latestMessageTime: Long =
-                    if (isMessagingStyle) {
-                        val msgs =
-                            notif?.extras?.getParcelableArray(
-                                Notification.EXTRA_MESSAGES,
-                                Parcelable::class.java,
-                            )
-                        if (msgs != null && msgs.isNotEmpty()) {
-                            Notification.MessagingStyle.Message
-                                .getMessagesFromBundleArray(msgs)
-                                .maxOfOrNull { it.timestamp } ?: 0L
-                        } else 0L
-                    } else 0L
 
-                if (isMessagingStyle && latestMessageTime > 0L) {
-                    val previous = seenMessagingTimestamps.put(sbn.key, latestMessageTime)
-                    if (previous != null && previous == latestMessageTime) return
-                } else {
-                    if (!seenNotificationKeys.add(sbn.key)) return
-                }
+                val lastMessage: Notification.MessagingStyle.Message? =
+                    if (isMessagingStyle) {
+                        notif?.extras
+                            ?.getParcelableArray(Notification.EXTRA_MESSAGES, Parcelable::class.java)
+                            ?.takeIf { it.isNotEmpty() }
+                            ?.let { Notification.MessagingStyle.Message.getMessagesFromBundleArray(it) }
+                            ?.maxByOrNull { it.timestamp }
+                    } else null
+
+                val signature: Long =
+                    if (lastMessage != null) lastMessage.timestamp
+                    else contentSignature(sbn, extras)
+                val previous = seenSignatures.put(sbn.key, signature)
+
+                if (previous == signature) return
+
+                if (previous != null &&
+                    (notif?.flags ?: 0) and Notification.FLAG_ONLY_ALERT_ONCE != 0
+                ) return
+
+                if (lastMessage != null && isFromSelf(lastMessage, extras)) return
 
                 val icon =
                     try {
@@ -575,8 +577,7 @@ constructor(
         if (!listening) return
         listening = false
         ScrimUtils.get().removeListener(scrimListener)
-        seenNotificationKeys.clear()
-        seenMessagingTimestamps.clear()
+        seenSignatures.clear()
         timerJob?.cancel()
         timerJob = null
         _timerEvent.value = null
@@ -1155,6 +1156,24 @@ constructor(
             } catch (_: Exception) {
                 null
             }
+    }
+
+    private fun contentSignature(sbn: StatusBarNotification, extras: Bundle): Long {
+        val title = extras.getCharSequence(Notification.EXTRA_TITLE)?.toString()
+        val text = (extras.getCharSequence(Notification.EXTRA_BIG_TEXT)
+            ?: extras.getCharSequence(Notification.EXTRA_TEXT))?.toString()
+        val lastLine = extras.getCharSequenceArray(Notification.EXTRA_TEXT_LINES)
+            ?.lastOrNull()?.toString()
+        return 31L * sbn.notification.`when` + Objects.hash(title, text, lastLine)
+    }
+
+    private fun isFromSelf(msg: Notification.MessagingStyle.Message, extras: Bundle): Boolean {
+        val sender = msg.senderPerson ?: return true   // null sender == the device user
+        val self = extras.getParcelable(Notification.EXTRA_MESSAGING_PERSON, Person::class.java)
+        return self != null && (
+            (self.key != null && self.key == sender.key) ||
+                (self.key == null && self.name != null && self.name == sender.name)
+        )
     }
 }
 
