@@ -21,6 +21,7 @@ import static android.app.AxSandboxManager.AppLockState.UNLOCKED;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.ActivityManagerInternal;
 import android.app.ActivityOptions;
 import android.app.AxSandboxManager;
 import android.app.AxSandboxManager.AppLockState;
@@ -442,14 +443,18 @@ public class AxSandboxService extends IAxSandboxManager.Stub implements IAxSandb
 
     @Override
     public void addSandboxedPackage(String packageName) {
-        mAppControlController.setPackageSandboxed(packageName, true);
-        broadcastPackageChanged(packageName);
+        if (mAppControlController.setPackageSandboxed(packageName, true)) {
+            restartPackageForPolicyChange(packageName);
+            broadcastPackageChanged(packageName);
+        }
     }
 
     @Override
     public void removeSandboxedPackage(String packageName) {
-        mAppControlController.setPackageSandboxed(packageName, false);
-        broadcastPackageChanged(packageName);
+        if (mAppControlController.setPackageSandboxed(packageName, false)) {
+            restartPackageForPolicyChange(packageName);
+            broadcastPackageChanged(packageName);
+        }
     }
 
     @Override
@@ -487,7 +492,12 @@ public class AxSandboxService extends IAxSandboxManager.Stub implements IAxSandb
 
     @Override
     public void setSpoofSettingEnabled(String packageName, String settingKey, boolean enabled) {
-        mAppControlController.setSpoofSettingEnabled(packageName, settingKey, enabled);
+        if (mAppControlController.setSpoofSettingEnabled(packageName, settingKey, enabled)) {
+            // Settings.NameValueCache and the native policy are process-local. A fresh process is
+            // required both to discard values read before the policy changed and to receive the
+            // current Zygote runtime flags.
+            restartPackageForPolicyChange(packageName);
+        }
     }
 
     @Override
@@ -497,14 +507,100 @@ public class AxSandboxService extends IAxSandboxManager.Stub implements IAxSandb
     }
 
     @Override
-    public String getSpoofedSetting(String callingPackage, String settingName) {
+    public String getSpoofedSetting(String callingPackage, int callingUid, String settingName) {
         if (mAppControlController == null) return null;
-        final String spoofedValue = SettingsSpoofController.getSpoofedValue(settingName);
-        if (spoofedValue == null) return null;
-        if (!mAppControlController.isSpoofSettingEnabled(callingPackage, settingName)) {
+        final int binderCallingUid = Binder.getCallingUid();
+        final boolean isPolicyUid = UserHandle.isApp(callingUid)
+                || Process.isSdkSandboxUid(callingUid)
+                || Process.isIsolatedUid(callingUid);
+        if (binderCallingUid != Process.SYSTEM_UID || !isPolicyUid) {
             return null;
         }
-        return spoofedValue;
+
+        final int packageUid;
+        if (Process.isSdkSandboxUid(callingUid)) {
+            packageUid = Process.getAppUidForSdkSandboxUid(callingUid);
+        } else if (Process.isIsolatedUid(callingUid)) {
+            final ActivityManagerInternal activityManagerInternal =
+                    LocalServices.getService(ActivityManagerInternal.class);
+            packageUid = activityManagerInternal != null
+                    ? activityManagerInternal.getIsolatedOwnerUid(callingUid)
+                    : Process.INVALID_UID;
+        } else {
+            packageUid = callingUid;
+        }
+        if (packageUid == Process.INVALID_UID) return null;
+        String[] uidPackages = mContext.getPackageManager().getPackagesForUid(packageUid);
+        final String spoofedValue = SettingsSpoofController.getSpoofedValue(settingName);
+        if (spoofedValue == null) return null;
+
+        // Keep the verified provider attribution as a fast path for ordinary UIDs. Isolated and
+        // SDK Sandbox callers are resolved to their owner UID above; never fail open to an
+        // unverified package string when that owner lookup has no package mapping.
+        if (uidPackages == null && !TextUtils.isEmpty(callingPackage)
+                && !Process.isIsolatedUid(callingUid)
+                && !Process.isSdkSandboxUid(callingUid)) {
+            uidPackages = new String[] { callingPackage };
+        }
+        if (uidPackages == null) return null;
+
+        // Prefer the provider attribution when available, but evaluate the complete UID package
+        // set as well: a shared-UID process has one native policy for all of its packages. The
+        // UID is Binder-authenticated and package ownership is resolved again in system_server.
+        if (!TextUtils.isEmpty(callingPackage)) {
+            for (String uidPackage : uidPackages) {
+                if (callingPackage.equals(uidPackage)) {
+                    if (shouldSpoofSetting(uidPackage, settingName)) return spoofedValue;
+                    break;
+                }
+            }
+        }
+        for (String uidPackage : uidPackages) {
+            if (shouldSpoofSetting(uidPackage, settingName)) return spoofedValue;
+        }
+        return null;
+    }
+
+    private boolean shouldSpoofSetting(String packageName, String settingName) {
+        // A sandboxed package and a package with ADB diagnostic isolation enabled must receive
+        // one coherent Global debug view: both ADB and developer-settings flags are disabled.
+        final boolean isGlobalDebugSetting =
+                Settings.Global.ADB_ENABLED.equals(settingName)
+                        || Settings.Global.DEVELOPMENT_SETTINGS_ENABLED.equals(settingName);
+        if (isGlobalDebugSetting
+                && (mAppControlController.isPackageSandboxed(packageName)
+                        || mAppControlController.isSpoofSettingEnabled(
+                                packageName, AxSandboxManager.SPOOF_ADB_ENABLED))) {
+            return true;
+        }
+        return mAppControlController.isSpoofSettingEnabled(packageName, settingName);
+    }
+
+    private void restartPackageForPolicyChange(String packageName) {
+        final int uid = getPackageUid(packageName);
+        if (uid < 0) return;
+
+        final long token = Binder.clearCallingIdentity();
+        try {
+            final String reason = "AxSandbox policy changed";
+            final ActivityManagerInternal activityManagerInternal =
+                    LocalServices.getService(ActivityManagerInternal.class);
+            if (activityManagerInternal != null) {
+                // killUid() addresses only the package UID itself. Isolated and SDK Sandbox
+                // processes use different UIDs, while app zygotes are tracked separately.
+                activityManagerInternal.killSandboxProcessesForUid(uid, reason);
+            }
+            // The native policy is process-wide. A shared UID may run several packages in the
+            // same ProcessRecord, so killing only the package named by the UI can leave the
+            // process alive with stale seccomp, property, and SettingsProvider state.
+            ActivityManager.getService().killUid(
+                    UserHandle.getAppId(uid), UserHandle.getUserId(uid),
+                    reason);
+        } catch (RemoteException e) {
+            Slog.w(TAG, "Unable to restart " + packageName + " after policy change", e);
+        } finally {
+            Binder.restoreCallingIdentity(token);
+        }
     }
 
     @Override

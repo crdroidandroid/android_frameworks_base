@@ -65,14 +65,31 @@ public class AppZygote {
 
     private final ApplicationInfo mAppInfo;
     private final ProcessInfo mProcessInfo;
+    private int mSandboxRuntimeFlags;
 
     public AppZygote(ApplicationInfo appInfo, ProcessInfo processInfo, int zygoteUid, int uidGidMin,
-            int uidGidMax) {
+            int uidGidMax, int sandboxRuntimeFlags) {
         mAppInfo = appInfo;
         mProcessInfo = processInfo;
         mZygoteUid = zygoteUid;
         mZygoteUidGidMin = uidGidMin;
         mZygoteUidGidMax = uidGidMax;
+        mSandboxRuntimeFlags = sandboxRuntimeFlags;
+    }
+
+    /**
+     * Updates process-local Sandbox policy inherited by the app zygote.
+     *
+     * <p>The app zygote is shared by all isolated services of one package. If the policy changes
+     * while it is alive, discard the preloaded zygote so the next child is created with the new
+     * native policy before any application code runs.
+     */
+    public void updateSandboxRuntimeFlags(int sandboxRuntimeFlags) {
+        synchronized (mLock) {
+            if (mSandboxRuntimeFlags == sandboxRuntimeFlags) return;
+            mSandboxRuntimeFlags = sandboxRuntimeFlags;
+            stopZygoteLocked();
+        }
     }
 
     /**
@@ -194,6 +211,7 @@ public class AppZygote {
         try {
             int runtimeFlags = Zygote.getMemorySafetyRuntimeFlagsForSecondaryZygote(
                     mAppInfo, mProcessInfo);
+            runtimeFlags |= mSandboxRuntimeFlags;
 
             final int[] sharedAppGid = {
                     UserHandle.getSharedAppGid(UserHandle.getAppId(mAppInfo.uid)) };

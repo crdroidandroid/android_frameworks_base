@@ -139,6 +139,8 @@ prebuilt_etc {
 
 prebuilt_etc {
     name: "privapp_whitelist_com.android.imsserviceentitlement",
+    // sapphire ships this whitelist in its proprietary product files.
+    installable: false,
     product_specific: true,
     sub_dir: "permissions",
     src: "com.android.imsserviceentitlement.xml",

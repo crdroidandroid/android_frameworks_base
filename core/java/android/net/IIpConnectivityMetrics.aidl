@@ -45,4 +45,53 @@ interface IIpConnectivityMetrics {
      */
     boolean addNetdEventCallback(in int callerType, in INetdEventCallback callback);
     boolean removeNetdEventCallback(in int callerType);
+
+    /**
+     * DaoFirewall Sapphire private API. Updates the domain policy consumed by netd before DNS
+     * resolution. The APK stays installable outside the ROM; the ROM only owns the enforcement path.
+     * @hide
+     */
+    boolean setDaoFirewallRules(in String[] blockedDomains, in String[] allowedDomains);
+
+    /**
+     * Chunked DaoFirewall Sapphire rule update. Large host lists can exceed Binder parcel limits,
+     * so callers write to a temporary policy file in bounded chunks and commit with an atomic rename.
+     * @hide
+     */
+    boolean setDaoFirewallRuleChunk(boolean allowedRules, boolean reset, boolean commit,
+            in String[] domains);
+
+    /**
+     * Chunked DaoFirewall Sapphire IP denylist update.
+     * @hide
+     */
+    boolean setDaoFirewallIpRuleChunk(boolean reset, boolean commit, in String[] ips);
+
+    /**
+     * Enables the Sapphire DNS bypass guard. When enabled, the ROM enforcement path may reject
+     * direct DNS, DoT and known resolver DoH traffic before it leaves the device.
+     * @hide
+     */
+    boolean setDaoFirewallBypassGuard(boolean enabled);
+
+    /**
+     * Updates the app UID allowlist for Sapphire DNS bypass blocking. Only these app UIDs get the
+     * per-app bypass guard; the global guard above is still available for explicit all-app mode.
+     * @hide
+     */
+    boolean setDaoFirewallBypassGuardUids(in int[] uids);
+
+    /**
+     * Updates one Sapphire DNS policy UID set.
+     * policy 0 = direct DNS/53, 1 = DoT/853, 2 = known DoH resolvers/443.
+     * @hide
+     */
+    boolean setDaoFirewallDnsPolicyUids(int policy, in int[] uids);
+
+    /**
+     * Updates the per-UID domain allowlist consumed before the global Sapphire denylist.
+     * Each entry is encoded as "uid\tdomain". Large lists are committed atomically in chunks.
+     * @hide
+     */
+    boolean setDaoFirewallUidAllowedRuleChunk(boolean reset, boolean commit, in String[] rules);
 }
