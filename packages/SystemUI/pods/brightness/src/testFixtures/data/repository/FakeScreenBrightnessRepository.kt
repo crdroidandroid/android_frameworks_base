@@ -21,6 +21,7 @@ import android.hardware.display.BrightnessInfo.BRIGHTNESS_MAX_REASON_NONE
 import android.hardware.display.BrightnessInfo.HIGH_BRIGHTNESS_MODE_OFF
 import com.android.systemui.brightness.data.model.LinearBrightness
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 
@@ -88,4 +89,8 @@ class FakeScreenBrightnessRepository(
                 )
             }
     }
+
+    override val isAutoBrightnessEnabledFlow: StateFlow<Boolean> = MutableStateFlow(false)
+
+    override fun toggleBrightnessMode() { }
 }
