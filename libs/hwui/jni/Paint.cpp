@@ -858,8 +858,16 @@ namespace PaintGlue {
     static jboolean getFillPath(CRITICAL_JNI_PARAMS_COMMA jlong objHandle, jlong srcHandle, jlong dstHandle) {
         Paint* obj = reinterpret_cast<Paint*>(objHandle);
         SkPath* src = AsSkPath(srcHandle);
+        if (!src) {
+            return JNI_FALSE;
+        }
+        SkPathBuilder builder;
+        bool result = skpathutils::FillPathWithPaint(*src, *obj, &builder);
         SkPathBuilder* dst = AsSkPathBuilder(dstHandle);
-        return skpathutils::FillPathWithPaint(*src, *obj, dst) ? JNI_TRUE : JNI_FALSE;
+        if (dst) {
+            *dst = std::move(builder);
+        }
+        return result ? JNI_TRUE : JNI_FALSE;
     }
 
     static jlong setShader(CRITICAL_JNI_PARAMS_COMMA jlong objHandle, jlong shaderHandle) {
