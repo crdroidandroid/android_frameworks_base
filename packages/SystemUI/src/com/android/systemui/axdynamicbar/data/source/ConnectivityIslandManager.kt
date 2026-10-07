@@ -55,6 +55,9 @@ constructor(
     private val previousBtAddresses = java.util.Collections.synchronizedSet(mutableSetOf<String>())
     private var listening = false
     private var wasVpnEnabled = false
+
+    @Volatile private var hotspotDismissed = false
+    @Volatile private var vpnDismissed = false
     private var vpnJob: Job? = null
     private val bluetoothAdapter = context.getSystemService(BluetoothManager::class.java)?.adapter
     private var imageDevice: BluetoothDevice? = null
@@ -261,8 +264,11 @@ constructor(
         object : HotspotController.Callback {
             override fun onHotspotChanged(enabled: Boolean, numDevices: Int) {
                 if (enabled) {
-                    _hotspotEvent.value = IslandEvent.Hotspot(numDevices = numDevices)
+                    if (!hotspotDismissed) {
+                        _hotspotEvent.value = IslandEvent.Hotspot(numDevices = numDevices)
+                    }
                 } else {
+                    hotspotDismissed = false
                     _hotspotEvent.value = null
                 }
             }
@@ -274,6 +280,7 @@ constructor(
             applicationScope.launch(backgroundDispatcher) {
                 vpnInteractor.vpnState.collect { state ->
                     if (state.isEnabled) {
+                        if (vpnDismissed) return@collect
                         val existing = _vpnEvent.value
                         _vpnEvent.value =
                             if (existing != null) {
@@ -288,6 +295,7 @@ constructor(
                                 )
                             }
                     } else {
+                        vpnDismissed = false
                         _vpnEvent.value = null
                     }
                     wasVpnEnabled = state.isEnabled
@@ -318,6 +326,7 @@ constructor(
     fun startHotspot() {
         if (hotspotListening) return
         hotspotListening = true
+        hotspotDismissed = false
         if (hotspotController.isHotspotEnabled) {
             _hotspotEvent.value = IslandEvent.Hotspot(hotspotController.getNumConnectedDevices())
         }
@@ -335,6 +344,7 @@ constructor(
         if (vpnListening) return
         vpnListening = true
         wasVpnEnabled = false
+        vpnDismissed = false
         startVpnListener()
     }
 
@@ -378,10 +388,12 @@ constructor(
     }
 
     fun clearHotspot() {
+        hotspotDismissed = true
         _hotspotEvent.value = null
     }
 
     fun clearVpn() {
+        vpnDismissed = true
         _vpnEvent.value = null
     }
 }
