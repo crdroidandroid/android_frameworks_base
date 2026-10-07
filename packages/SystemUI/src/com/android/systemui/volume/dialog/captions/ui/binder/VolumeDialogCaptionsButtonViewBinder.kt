@@ -16,6 +16,9 @@
 
 package com.android.systemui.volume.dialog.captions.ui.binder
 
+import android.content.res.ColorStateList
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.InsetDrawable
@@ -62,6 +65,20 @@ constructor(
             dialogViewModel.addTouchableBounds(captionsButton)
         }
 
+        val transition = captionsButton.prepareTransitionBackground()
+        val selectionShape = transition?.selectionShape()
+        val originalSelectionFill = selectionShape?.let { SelectionFill.capture(it) }
+
+        fun applySelectionFill(gradient: ArgbGradient?) {
+            selectionShape ?: return
+            if (gradient != null) {
+                gradient.applyTo(selectionShape, captionsButton.isLayoutRtl)
+            } else {
+                originalSelectionFill?.restore(selectionShape)
+            }
+            transition?.invalidateSelf()
+        }
+
         val context = captionsButton.context
         var gradient =
             GradientSettings.argbGradient(context, Settings.System.VOLUME_SLIDER_GRADIENT)
@@ -69,7 +86,7 @@ constructor(
             GradientSettings.registerObserver(context, Settings.System.VOLUME_SLIDER_GRADIENT) {
                 gradient =
                     GradientSettings.argbGradient(context, Settings.System.VOLUME_SLIDER_GRADIENT)
-                applyGradientSelectionBackground(captionsButton, gradient)
+                applySelectionFill(gradient)
             }
         coroutineContext.job.invokeOnCompletion {
             GradientSettings.unregisterObserver(context, gradientObserver)
@@ -108,19 +125,19 @@ constructor(
                         )
                     )
 
-                    applyGradientSelectionBackground(this, gradient)
+                    applySelectionFill(gradient)
 
-                    val transition = background as TransitionDrawable
-                    transition.isCrossFadeEnabled = true
-                    if (index == 0) {
-                        if (isEnabled) {
-                            transition.startTransition(0)
-                        }
-                    } else {
-                        if (isEnabled) {
-                            transition.startTransition(DURATION_MILLIS)
+                    if (transition != null) {
+                        if (index == 0) {
+                            if (isEnabled) {
+                                transition.startTransition(0)
+                            }
                         } else {
-                            transition.reverseTransition(DURATION_MILLIS)
+                            if (isEnabled) {
+                                transition.startTransition(DURATION_MILLIS)
+                            } else {
+                                transition.reverseTransition(DURATION_MILLIS)
+                            }
                         }
                     }
 
@@ -138,23 +155,24 @@ constructor(
         )
     }
 
-    private fun applyGradientSelectionBackground(
-        button: CaptionsToggleImageButton,
-        gradient: ArgbGradient?,
+    private class SelectionFill(
+        private val color: ColorStateList?,
+        private val colors: IntArray?,
+        private val orientation: GradientDrawable.Orientation,
     ) {
-        button.background = button.background?.mutate() ?: return
-        val shape = button.selectionShape() ?: return
-        if (gradient != null) {
-            gradient.applyTo(shape, button.isLayoutRtl)
-        } else if (shape.colors != null) {
-            // Gradient got disabled while the dialog is alive, restore the stock solid color.
-            shape.setColor(
-                button.context.getColor(com.android.internal.R.color.materialColorPrimary)
-            )
-        } else {
-            return
+        fun restore(shape: GradientDrawable) {
+            shape.orientation = orientation
+            when {
+                colors != null -> shape.colors = colors
+                // setColor() also clears any gradient colors.
+                color != null -> shape.color = color
+            }
         }
-        button.background.invalidateSelf()
+
+        companion object {
+            fun capture(shape: GradientDrawable) =
+                SelectionFill(shape.color, shape.colors, shape.orientation)
+        }
     }
 
     private companion object {
@@ -162,14 +180,27 @@ constructor(
     }
 }
 
-private fun CaptionsToggleImageButton.selectionShape(): GradientDrawable? {
-    val transition = background as? TransitionDrawable ?: return null
+private fun CaptionsToggleImageButton.prepareTransitionBackground(): TransitionDrawable? {
+    val transition = background?.mutate() as? TransitionDrawable ?: return null
+    background = transition
+    transition.isCrossFadeEnabled = true
 
-    fun unwrap(drawable: Drawable?): GradientDrawable? =
-        when (drawable) {
-            is GradientDrawable -> drawable
-            is InsetDrawable -> drawable.drawable as? GradientDrawable
-            else -> null
-        }
-    return unwrap(transition.getDrawable(1))
+    val offShape = unwrapShape(transition.getDrawable(0))
+    if (offShape != null) {
+        offShape.setColor(Color.TRANSPARENT)
+    } else {
+        transition.setDrawable(0, ColorDrawable(Color.TRANSPARENT))
+    }
+    transition.invalidateSelf()
+    return transition
 }
+
+private fun TransitionDrawable.selectionShape(): GradientDrawable? =
+    if (numberOfLayers > 1) unwrapShape(getDrawable(1)) else null
+
+private fun unwrapShape(drawable: Drawable?): GradientDrawable? =
+    when (drawable) {
+        is GradientDrawable -> drawable
+        is InsetDrawable -> drawable.drawable as? GradientDrawable
+        else -> null
+    }
