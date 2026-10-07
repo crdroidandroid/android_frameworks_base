@@ -43,6 +43,8 @@ constructor(
     companion object {
         private const val TAG = "NotificationIslandManager"
 
+        private const val RECORDER_REMOVAL_GRACE_MS = 3_000L
+
         private val CLOCK_PACKAGES = setOf("com.google.android.deskclock", "com.android.deskclock")
         private val ALARM_PACKAGES = setOf("com.google.android.deskclock", "com.android.deskclock")
 
@@ -126,6 +128,16 @@ constructor(
 
     private var accumulatedPauseMs: Long = 0L
 
+    private var recorderGraceJob: Job? = null
+    private var recording: IslandEvent.AudioRecording? = null
+    private var recordingDismissed = false
+    private var lastTimer: IslandEvent.Timer? = null
+    private var timerDismissedKey: String? = null
+    private var stopwatchDismissedKey: String? = null
+    private val dismissedPromotedKeys = mutableSetOf<String>()
+    private val dismissedSportsKeys = mutableSetOf<String>()
+    private var alarmNotificationKey: String? = null
+
     val notificationFlow = MutableSharedFlow<IslandEvent.Notification>(extraBufferCapacity = 16)
     val notificationRemovedFlow = MutableSharedFlow<String>(extraBufferCapacity = 16)
 
@@ -154,22 +166,38 @@ constructor(
                     timerNotificationKey = null
                     timerJob?.cancel()
                     timerJob = null
-                    _timerEvent.value = null
+                    resetTimerState()
                 }
                 if (sbn.key == stopwatchNotificationKey) {
                     stopwatchNotificationKey = null
+                    stopwatchDismissedKey = null
                     _stopwatchEvent.value = null
                 }
+                dismissedPromotedKeys.remove(sbn.key)
+                dismissedSportsKeys.remove(sbn.key)
 
                 if (sbn.key == recorderNotifKey) {
                     recorderNotifKey = null
-                    val currentState = _audioRecordingEvent.value?.state
+                    val currentState = recording?.state
                     if (currentState == RecordingState.SAVED) {
-                        recorderPackage = null
-                        _audioRecordingEvent.value = null
-                        pauseStartMs = 0L
-                        accumulatedPauseMs = 0L
+                        clearAudioRecording()
+                    } else if (currentState != null) {
+                        recorderGraceJob?.cancel()
+                        recorderGraceJob =
+                            applicationScope.launch {
+                                delay(RECORDER_REMOVAL_GRACE_MS)
+                                if (recorderNotifKey == null &&
+                                    recording?.state != RecordingState.SAVED
+                                ) {
+                                    clearAudioRecording()
+                                }
+                            }
                     }
+                }
+
+                if (sbn.key == alarmNotificationKey) {
+                    alarmNotificationKey = null
+                    _alarmEvent.value = null
                 }
 
                 _callEvents.value =
@@ -302,7 +330,7 @@ constructor(
                                 }
                             }
                         val appName = resolveAppName(pkg)
-                        val existing = _audioRecordingEvent.value
+                        val existing = recording
                         val now = System.currentTimeMillis()
                         val parsedElapsedMs = parseRecorderElapsedMs(extras)
 
@@ -318,9 +346,11 @@ constructor(
                         accumulatedPauseMs = 0L
                         pauseStartMs = 0L
 
+                        recorderGraceJob?.cancel()
+                        recorderGraceJob = null
                         recorderPackage = pkg
                         recorderNotifKey = sbn.key
-                        _audioRecordingEvent.value =
+                        publishRecording(
                             IslandEvent.AudioRecording(
                                 appName = appName,
                                 state =
@@ -330,26 +360,31 @@ constructor(
                                 actions = notifActions,
                                 pausedDurationMs = 0L,
                             )
+                        )
                         return
                     }
                 }
 
                 if (
-                    pkg == recorderPackage && _audioRecordingEvent.value != null && !sbn.isOngoing
+                    pkg == recorderPackage && recording != null && !sbn.isOngoing
                 ) {
                     val notifActions =
                         allActions.mapNotNull { a ->
                             a.title?.let { IslandEvent.NotificationAction(label = it, action = a) }
                         }
                     val title = extras.getString("android.title") ?: ""
-                    val existing = _audioRecordingEvent.value ?: return
+                    val existing = recording ?: return
+                    recorderGraceJob?.cancel()
+                    recorderGraceJob = null
                     recorderNotifKey = sbn.key
-                    _audioRecordingEvent.value =
+                    if (existing.state != RecordingState.SAVED) recordingDismissed = false
+                    publishRecording(
                         existing.copy(
                             appName = title.ifEmpty { existing.appName },
                             state = RecordingState.SAVED,
                             actions = notifActions,
                         )
+                    )
                     return
                 }
 
@@ -391,6 +426,7 @@ constructor(
                     return
                 }
                 if (!sbn.isOngoing) {
+                    dismissedPromotedKeys.remove(sbn.key)
                     _promotedOngoingEvents.value =
                         _promotedOngoingEvents.value.filter { it.sbn.key != sbn.key }
                 }
@@ -584,22 +620,28 @@ constructor(
         seenSignatures.clear()
         timerJob?.cancel()
         timerJob = null
-        _timerEvent.value = null
+        timerNotificationKey = null
+        resetTimerState()
+        stopwatchNotificationKey = null
+        stopwatchDismissedKey = null
         _stopwatchEvent.value = null
+        dismissedPromotedKeys.clear()
+        dismissedSportsKeys.clear()
         _alarmEvent.value = null
         _callEvents.value = emptyList()
         _notificationEvents.value = emptyList()
         _promotedOngoingEvents.value = emptyList()
         _sportsEvents.value = emptyList()
         _nowPlayingEvent.value = null
-        _audioRecordingEvent.value = null
-        recorderPackage = null
-        recorderNotifKey = null
-        pauseStartMs = 0L
-        accumulatedPauseMs = 0L
+        alarmNotificationKey = null
+        clearAudioRecording()
     }
 
     fun clearAudioRecording() {
+        recorderGraceJob?.cancel()
+        recorderGraceJob = null
+        recording = null
+        recordingDismissed = false
         _audioRecordingEvent.value = null
         recorderPackage = null
         recorderNotifKey = null
@@ -618,12 +660,31 @@ constructor(
         _notificationEvents.value = current
     }
 
+    fun dismissAudioRecording() {
+        if (recording == null) return
+        recordingDismissed = true
+        _audioRecordingEvent.value = null
+    }
+
+    private fun publishRecording(event: IslandEvent.AudioRecording) {
+        recording = event
+        _audioRecordingEvent.value = if (recordingDismissed) null else event
+    }
+
     fun clearTimer() {
+        timerDismissedKey = timerNotificationKey
         _timerEvent.value = null
+    }
+
+    private fun resetTimerState() {
+        timerDismissedKey = null
+        lastTimer = null
         timerOriginalDurationMs = 0L
+        _timerEvent.value = null
     }
 
     fun clearStopwatch() {
+        stopwatchDismissedKey = stopwatchNotificationKey
         _stopwatchEvent.value = null
     }
 
@@ -676,7 +737,7 @@ constructor(
         }
 
         if (isPaused && endTimeMs > System.currentTimeMillis()) {
-            val existing = _timerEvent.value
+            val existing = lastTimer
             if (existing != null && existing.endTimeMs > 0L) {
                 endTimeMs = existing.endTimeMs
             }
@@ -697,8 +758,13 @@ constructor(
                 actions = actions,
             )
         timerNotificationKey = sbn.key
-        _timerEvent.value = event
-        onTimerEvent?.invoke(event)
+        lastTimer = event
+        val isFiring = sbn.notification?.channelId?.contains("firing", ignoreCase = true) == true
+        if (isFiring) timerDismissedKey = null
+        if (sbn.key != timerDismissedKey) {
+            _timerEvent.value = event
+            onTimerEvent?.invoke(event)
+        }
 
         timerJob?.cancel()
         if (endTimeMs > 0L && !isPaused) {
@@ -706,6 +772,9 @@ constructor(
             timerJob =
                 applicationScope.launch {
                     delay((remainingMs + 3_000L).coerceAtLeast(3_000L))
+                    // Expired: the dismissal ends with this run of the timer.
+                    timerDismissedKey = null
+                    lastTimer = null
                     _timerEvent.value = null
                 }
         }
@@ -751,7 +820,7 @@ constructor(
                 actions = actions,
             )
         stopwatchNotificationKey = sbn.key
-        _stopwatchEvent.value = event
+        if (sbn.key != stopwatchDismissedKey) _stopwatchEvent.value = event
     }
 
     private fun extractChronometerBase(sbn: StatusBarNotification): Long {
@@ -807,6 +876,7 @@ constructor(
                 isRinging = isRinging,
                 appIcon = icon,
             )
+        alarmNotificationKey = sbn.key
         _alarmEvent.value = event
         onAlarmEvent?.invoke(event)
     }
@@ -939,6 +1009,7 @@ constructor(
     }
 
     private fun handlePromotedOngoing(sbn: StatusBarNotification, extras: Bundle, pkg: String) {
+        if (sbn.key in dismissedPromotedKeys) return
         val shortCritical =
             try {
                 sbn.notification?.shortCriticalText?.toString() ?: ""
@@ -979,12 +1050,22 @@ constructor(
         _promotedOngoingEvents.value = current
     }
 
+    /** Hides the ongoing notification until it is removed or stops being ongoing. */
     fun clearPromotedOngoing(key: String) {
+        dismissedPromotedKeys.add(key)
         _promotedOngoingEvents.value = _promotedOngoingEvents.value.filter { it.sbn.key != key }
     }
 
-    fun clearSportsEvent(key: String) {
-        _sportsEvents.value = _sportsEvents.value.filter { it.key != key }
+    fun clearSportsEvent(key: String, team1: String? = null, team2: String? = null) {
+        val matching =
+            _sportsEvents.value.filter { e ->
+                e.key == key ||
+                    (team1 != null && team2 != null &&
+                        e.team1Name.equals(team1, ignoreCase = true) &&
+                        e.team2Name.equals(team2, ignoreCase = true))
+            }
+        matching.forEach { dismissedSportsKeys.add(it.key) }
+        _sportsEvents.value = _sportsEvents.value.filter { e -> matching.none { it.key == e.key } }
     }
 
     fun clearNowPlaying() {
@@ -1121,6 +1202,8 @@ constructor(
             sbn = sbn,
             appIcon = appIcon,
         )
+
+        if (sbn.key in dismissedSportsKeys) return true
 
         val current = _sportsEvents.value.toMutableList()
         current.removeAll { it.key == sbn.key }
