@@ -19,9 +19,19 @@ const val NOTIFICATION_STALE_PRIORITY = 15
 const val MEDIA_PLAYING_PRIORITY = 70
 const val MEDIA_PAUSED_PRIORITY = 20
 
+/**
+ * [suppressOnDismiss] makes the interactor hide a dismissed event for as long as its source keeps
+ * publishing the same id. Only for events whose dismissal cannot touch the source (AospChip).
+ *
+ * Do not enable it for an event whose dismissal clears its source: ids are reused, and the
+ * suppression is released only by a source emission without that id. The clear itself emits that,
+ * so the suppression either does nothing or, if that emission is missed, hides every later
+ * occurrence for good. Sources that need "stay hidden until it ends" remember the dismissal
+ * themselves (see chargingDismissed).
+ */
 data class EventBehavior(
     val autoDismissMs: Long? = null,
-    val suppressOnDismiss: Boolean = true,
+    val suppressOnDismiss: Boolean = false,
     val autoShowsIsland: Boolean = true,
 )
 
@@ -34,7 +44,10 @@ sealed class IslandEvent(open val priority: Int, val id: String) : Comparable<Is
 
     data class AospChip(
         val active: OngoingActivityChipModel.Active,
-    ) : IslandEvent(priority = priorityForAospChipKey(active.key), id = "aosp_${active.key}")
+    ) : IslandEvent(priority = priorityForAospChipKey(active.key), id = "aosp_${active.key}") {
+        // Dismissal cannot clear an AOSP chip, so it is hidden by id until the chip goes away.
+        override val behavior = EventBehavior(suppressOnDismiss = true)
+    }
 
     data class AudioRecording(
         val appName: String = "",
@@ -106,22 +119,21 @@ sealed class IslandEvent(open val priority: Int, val id: String) : Comparable<Is
         val isPowerSave: Boolean = false,
         val timeRemaining: String? = null,
     ) : IslandEvent(priority = 50, id = "charging") {
-        override val behavior = EventBehavior(autoDismissMs = 3000L, suppressOnDismiss = false)
+        override val behavior = EventBehavior(autoDismissMs = 3000L)
     }
 
     data class RingerMode(val mode: Int, val label: String) :
         IslandEvent(priority = 40, id = "ringer_mode") {
-        override val behavior = EventBehavior(autoDismissMs = 2500L, suppressOnDismiss = false)
+        override val behavior = EventBehavior(autoDismissMs = 2500L)
     }
 
     data class BiometricUnlock(val sourceType: Int = 0, val sourceName: String = "Fingerprint") :
         IslandEvent(priority = 80, id = "biometric_unlock") {
-        override val behavior = EventBehavior(autoDismissMs = 2000L, suppressOnDismiss = false)
+        override val behavior = EventBehavior(autoDismissMs = 2000L)
     }
 
     data class Torch(val level: Int = -1, val maxLevel: Int = -1) :
         IslandEvent(priority = 97, id = "torch") {
-        override val behavior = EventBehavior(suppressOnDismiss = false)
         val supportsLevel: Boolean
             get() = level >= 0 && maxLevel > 1
     }
@@ -190,7 +202,6 @@ sealed class IslandEvent(open val priority: Int, val id: String) : Comparable<Is
         val appIcon: Drawable? = null,
         val actions: List<NotificationAction> = emptyList(),
     ) : IslandEvent(priority = 42, id = "now_playing") {
-        override val behavior = EventBehavior(autoDismissMs = null)
         override fun withoutDrawables() = copy(appIcon = null)
     }
 
@@ -229,7 +240,7 @@ sealed class IslandEvent(open val priority: Int, val id: String) : Comparable<Is
         val recentApps: List<RecentApp> = emptyList(),
         val previousApp: RecentApp? = null,
     ) : IslandEvent(priority = 10, id = "app_switch") {
-        override val behavior = EventBehavior(suppressOnDismiss = false, autoShowsIsland = false)
+        override val behavior = EventBehavior(autoShowsIsland = false)
         override fun withoutDrawables() = copy(
             recentApps = recentApps.map { it.copy(appIcon = null) },
             previousApp = previousApp?.copy(appIcon = null),
@@ -242,13 +253,13 @@ sealed class IslandEvent(open val priority: Int, val id: String) : Comparable<Is
     ) : IslandEvent(priority = 5, id = "kg_indication_${indicationType.name}") {
         override val behavior: EventBehavior
             get() = when (indicationType) {
-                IndicationType.BIOMETRIC -> EventBehavior(autoDismissMs = 3500L, suppressOnDismiss = false)
-                IndicationType.TRANSIENT -> EventBehavior(autoDismissMs = 3500L, suppressOnDismiss = false)
-                IndicationType.TRUST -> EventBehavior(suppressOnDismiss = false)
-                IndicationType.DISCLOSURE -> EventBehavior(suppressOnDismiss = false)
-                IndicationType.OWNER_INFO -> EventBehavior(suppressOnDismiss = false)
-                IndicationType.ALIGNMENT -> EventBehavior(autoDismissMs = 5000L, suppressOnDismiss = false)
-                IndicationType.PERSISTENT_UNLOCK -> EventBehavior(suppressOnDismiss = false)
+                IndicationType.BIOMETRIC -> EventBehavior(autoDismissMs = 3500L)
+                IndicationType.TRANSIENT -> EventBehavior(autoDismissMs = 3500L)
+                IndicationType.TRUST -> DEFAULT_BEHAVIOR
+                IndicationType.DISCLOSURE -> DEFAULT_BEHAVIOR
+                IndicationType.OWNER_INFO -> DEFAULT_BEHAVIOR
+                IndicationType.ALIGNMENT -> EventBehavior(autoDismissMs = 5000L)
+                IndicationType.PERSISTENT_UNLOCK -> DEFAULT_BEHAVIOR
             }
 
         enum class IndicationType {
@@ -294,7 +305,6 @@ sealed class IslandEvent(open val priority: Int, val id: String) : Comparable<Is
         val callStartTimeMs: Long = System.currentTimeMillis(),
         val actions: List<NotificationAction> = emptyList(),
     ) : IslandEvent(priority = 100, id = "call_${sbn.key}") {
-        override val behavior = EventBehavior(autoDismissMs = null, suppressOnDismiss = false)
         override fun withoutDrawables() = copy(appIcon = null, callerPhoto = null)
     }
 
@@ -320,7 +330,6 @@ sealed class IslandEvent(open val priority: Int, val id: String) : Comparable<Is
         val callStartTimeMs: Long = 0L,
         val createdAt: Long = System.currentTimeMillis(),
     ) : IslandEvent(priority = NOTIFICATION_STALE_PRIORITY, id = "notification_${sbn.key}") {
-        override val behavior = EventBehavior(autoDismissMs = null)
         override val priority: Int
             get() =
                 if (System.currentTimeMillis() - createdAt < NOTIFICATION_DECAY_MS)
@@ -362,4 +371,3 @@ internal fun priorityForAospChipKey(key: String): Int = when {
     key == "CastToOtherDevice" -> 82
     else -> 70
 }
-
