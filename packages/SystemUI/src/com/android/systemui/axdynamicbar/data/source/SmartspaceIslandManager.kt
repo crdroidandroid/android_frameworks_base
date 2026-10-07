@@ -43,9 +43,19 @@ constructor(
 
     private var listening = false
 
+    private var allSports: List<IslandEvent.Sports> = emptyList()
+    private val dismissedSportsKeys = mutableSetOf<String>()
+
+    private var lastNowPlayingText: String? = null
+    private var dismissedNowPlayingText: String? = null
+
     private val callback = object : QuickLookClient.Callback {
         override fun onSportsUpdate(sports: List<SportsData>) {
-            _sportsEvents.value = sports.mapIndexed { index, data ->
+            val seen = HashMap<String, Int>()
+            allSports = sports.map { data ->
+                val base = "ql_sports_${data.league}|${data.team1Name}|${data.team2Name}"
+                val count = seen.merge(base, 1) { a, b -> a + b } ?: 1
+                val key = if (count == 1) base else "$base#$count"
                 val status = parseGameStatus(data.status, data.statusDetail)
                 IslandEvent.Sports(
                     team1Name = data.team1Name,
@@ -57,16 +67,27 @@ constructor(
                     status = status,
                     statusDetail = data.statusDetail,
                     league = data.league,
-                    key = "ql_sports_$index",
+                    key = key,
                 )
             }
+            val liveKeys = allSports.mapTo(HashSet()) { it.key }
+            dismissedSportsKeys.retainAll(liveKeys)
+            publishSports()
         }
 
         override fun onNowPlayingUpdate(text: String, tapAction: PendingIntent?) {
             if (text.isBlank()) {
+                lastNowPlayingText = null
+                dismissedNowPlayingText = null
                 _nowPlayingEvent.value = null
                 return
             }
+            lastNowPlayingText = text
+            if (text == dismissedNowPlayingText) {
+                _nowPlayingEvent.value = null
+                return
+            }
+            dismissedNowPlayingText = null
             val byMatch = Regex("""(.+?)\s+by\s+(.+)""", RegexOption.IGNORE_CASE).find(text)
             val dashParts = if (byMatch == null) text.split(" - ", " – ", limit = 2) else null
             val songTitle: String
@@ -103,13 +124,35 @@ constructor(
         if (!listening) return
         listening = false
         quickLookClient.removeCallback(callback)
+        allSports = emptyList()
+        dismissedSportsKeys.clear()
+        lastNowPlayingText = null
+        dismissedNowPlayingText = null
         _sportsEvents.value = emptyList()
         _nowPlayingEvent.value = null
     }
 
-    fun clearSportsEvent(key: String) {
-        _sportsEvents.value = _sportsEvents.value.filter { it.key != key }
+    fun clearSportsEvent(key: String, team1: String? = null, team2: String? = null) {
+        allSports
+            .filter { it.key == key || it.isSameGame(team1, team2) }
+            .forEach { dismissedSportsKeys.add(it.key) }
+        dismissedSportsKeys.add(key)
+        publishSports()
     }
+
+    fun dismissNowPlaying() {
+        dismissedNowPlayingText = lastNowPlayingText
+        _nowPlayingEvent.value = null
+    }
+
+    private fun publishSports() {
+        _sportsEvents.value = allSports.filterNot { it.key in dismissedSportsKeys }
+    }
+
+    private fun IslandEvent.Sports.isSameGame(team1: String?, team2: String?): Boolean =
+        team1 != null && team2 != null &&
+            team1Name.equals(team1, ignoreCase = true) &&
+            team2Name.equals(team2, ignoreCase = true)
 
     private fun parseGameStatus(status: String, detail: String): IslandEvent.GameStatus {
         val combined = "$status $detail".lowercase()

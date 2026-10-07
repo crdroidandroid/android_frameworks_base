@@ -382,12 +382,17 @@ constructor(
             )
 
         when (event) {
-            is IslandEvent.AudioRecording -> repository.notification.clearAudioRecording()
+            is IslandEvent.AudioRecording ->
+                if (event.state == RecordingState.SAVED) {
+                    repository.notification.clearAudioRecording()
+                } else {
+                    repository.notification.dismissAudioRecording()
+                }
             is IslandEvent.Sports -> {
-                repository.smartspace.clearSportsEvent(event.key)
-                repository.notification.clearSportsEvent(event.key)
+                repository.smartspace.clearSportsEvent(event.key, event.team1Name, event.team2Name)
+                repository.notification.clearSportsEvent(event.key, event.team1Name, event.team2Name)
             }
-            is IslandEvent.NowPlaying -> {}
+            is IslandEvent.NowPlaying -> repository.smartspace.dismissNowPlaying()
             is IslandEvent.PromotedOngoing ->
                 repository.notification.clearPromotedOngoing(event.sbn.key)
             is IslandEvent.Media -> repository.media.clear()
