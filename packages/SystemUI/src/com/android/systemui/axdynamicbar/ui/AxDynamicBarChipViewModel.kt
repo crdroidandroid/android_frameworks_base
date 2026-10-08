@@ -12,6 +12,7 @@ import com.android.systemui.statusbar.KeyguardIndicationController
 import com.android.systemui.statusbar.pipeline.battery.domain.interactor.BatteryInteractor
 import com.android.systemui.statusbar.policy.BatteryController
 import javax.inject.Inject
+import kotlin.math.abs
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -172,6 +173,22 @@ constructor(
 
     val isKeyguardExpanded: StateFlow<Boolean> = keyguardExpansion.isExpanded
 
+    @Volatile private var outsideCollapseDownTime = NO_OUTSIDE_COLLAPSE
+
+    fun collapseFromOutsideTouch(downTime: Long) {
+        if (!statusBarExpansion.isExpanded.value) return
+        outsideCollapseDownTime = downTime
+        statusBarExpansion.collapse()
+    }
+
+    fun chipTapClosesPanel(downTime: Long): Boolean {
+        val outside = outsideCollapseDownTime
+        outsideCollapseDownTime = NO_OUTSIDE_COLLAPSE
+        val sameGesture =
+            outside != NO_OUTSIDE_COLLAPSE && abs(downTime - outside) <= SAME_GESTURE_TOLERANCE_MS
+        return sameGesture || statusBarExpansion.isExpanded.value
+    }
+
     fun cycleNext() = interactor.cycleNext()
 
     fun cyclePrev() = interactor.cyclePrev()
@@ -211,6 +228,8 @@ constructor(
 
     companion object {
         private const val LOW_UDFPS_THRESHOLD = 0.93f
+        private const val NO_OUTSIDE_COLLAPSE = -1L
+        private const val SAME_GESTURE_TOLERANCE_MS = 100L
     }
 
     private fun formatChargingString(text: String?): String {
