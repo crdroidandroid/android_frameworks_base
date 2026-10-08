@@ -172,7 +172,7 @@ constructor(
             setOnTouchListener { _, event ->
                 when (event.actionMasked) {
                     MotionEvent.ACTION_OUTSIDE -> {
-                        viewModel.statusBarExpansion.collapse()
+                        viewModel.collapseFromOutsideTouch(event.downTime)
                         true
                     }
                     MotionEvent.ACTION_DOWN ->
@@ -479,4 +479,3 @@ private class PanelLifecycleOwner : LifecycleOwner, SavedStateRegistryOwner,
         lifecycleRegistry.handleLifecycleEvent(event)
     }
 }
-
