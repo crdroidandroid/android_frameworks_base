@@ -15494,6 +15494,102 @@ public final class Settings {
          * @hide
          */
         public static final String SPOOF_TRICKYSTORE_PATCH = "spoof_trickystore_patch";
+
+        /**
+         * Whether the TrickyStore keybox is kept up to date automatically.
+         *
+         * <p>Type: int (0 for false, 1 for true)
+         *
+         * @hide
+         */
+        public static final String SPOOF_TRICKYSTORE_ENABLED =
+                "spoof_trickystore_enabled";
+
+        /**
+         * Where the installed keybox came from, either {@code official} when it
+         * was downloaded by the ROM or {@code user} when it was imported.
+         *
+         * <p>Type: string
+         *
+         * @hide
+         */
+        public static final String SPOOF_TRICKYSTORE_KEYBOX_SOURCE =
+                "spoof_trickystore_keybox_source";
+
+        /**
+         * Timestamp of the last successful official keybox download.
+         *
+         * <p>Type: long
+         *
+         * @hide
+         */
+        public static final String SPOOF_TRICKYSTORE_LAST_FETCHED =
+                "spoof_trickystore_last_fetched";
+
+        /**
+         * Timestamp of the last keybox revocation check.
+         *
+         * <p>Type: long
+         *
+         * @hide
+         */
+        public static final String SPOOF_TRICKYSTORE_LAST_REVOCATION_CHECK =
+                "spoof_trickystore_last_revocation_check";
+
+        /**
+         * Timestamp at which the automatic download was paused because no valid
+         * official keybox was available.
+         *
+         * <p>Type: long
+         *
+         * @hide
+         */
+        public static final String SPOOF_TRICKYSTORE_LAST_NO_VALID =
+                "spoof_trickystore_last_no_valid";
+
+        /**
+         * Result of the last keybox validation: {@code VALID},
+         * {@code EXPIRING_SOON}, {@code REVOKED}, {@code SUSPENDED},
+         * {@code CHAIN_INVALID}, {@code UNTRUSTED_ROOT} or {@code UNKNOWN}.
+         *
+         * <p>Type: string
+         *
+         * @hide
+         */
+        public static final String SPOOF_TRICKYSTORE_LAST_REVOCATION_STATUS =
+                "spoof_trickystore_last_revocation_status";
+
+        /**
+         * Detail about the last keybox validation result, such as
+         * {@code KEY_COMPROMISE} or {@code CERT_EXPIRED}.
+         *
+         * <p>Type: string
+         *
+         * @hide
+         */
+        public static final String SPOOF_TRICKYSTORE_LAST_REVOCATION_REASON =
+                "spoof_trickystore_last_revocation_reason";
+
+        /**
+         * Hex serials of the keyboxes that were last seen as revoked, used as an
+         * offline fallback when the revocation endpoint cannot be reached.
+         *
+         * <p>Type: string
+         *
+         * @hide
+         */
+        public static final String SPOOF_TRICKYSTORE_CACHED_REVOKED_SERIALS =
+                "spoof_trickystore_cached_revoked_serials";
+
+        /**
+         * Timestamp of the offline revoked serial cache.
+         *
+         * <p>Type: long
+         *
+         * @hide
+         */
+        public static final String SPOOF_TRICKYSTORE_CACHED_REVOKED_AT =
+                "spoof_trickystore_cached_revoked_at";
     }
 
     /**

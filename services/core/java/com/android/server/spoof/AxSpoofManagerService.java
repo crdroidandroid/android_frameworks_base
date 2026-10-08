@@ -39,11 +39,13 @@ public final class AxSpoofManagerService extends SystemService {
             Settings.Secure.SPOOF_TRICKYSTORE_TARGET,
             Settings.Secure.SPOOF_TRICKYSTORE_KEYBOX,
             Settings.Secure.SPOOF_TRICKYSTORE_PATCH,
+            Settings.Secure.SPOOF_TRICKYSTORE_ENABLED,
     };
 
     private final ContentResolver mResolver;
     private final Map<String, String> mCache = new ConcurrentHashMap<>();
     private final AxSpoofManagerInternal mLocalService = new LocalService();
+    private final TrickyStoreUpdater mTrickyStoreUpdater;
 
     private ContentObserver mObserver;
     private volatile boolean mReady;
@@ -51,6 +53,7 @@ public final class AxSpoofManagerService extends SystemService {
     public AxSpoofManagerService(Context context) {
         super(context);
         mResolver = context.getContentResolver();
+        mTrickyStoreUpdater = new TrickyStoreUpdater(context);
     }
 
     @Override
@@ -72,6 +75,7 @@ public final class AxSpoofManagerService extends SystemService {
         refreshAll();
         registerObserver();
         mReady = true;
+        mTrickyStoreUpdater.start();
         Slog.i(TAG, "AxSpoofManager ready");
     }
 
@@ -151,6 +155,16 @@ public final class AxSpoofManagerService extends SystemService {
         @Override
         public String getTrickyStorePatch() {
             return getCached(Settings.Secure.SPOOF_TRICKYSTORE_PATCH);
+        }
+
+        @Override
+        public void refreshTrickyStoreKeyBox() {
+            mTrickyStoreUpdater.requestKeyBoxFetch();
+        }
+
+        @Override
+        public void refreshTrickyStoreStatus() {
+            mTrickyStoreUpdater.requestStatusCheck();
         }
     }
 }

@@ -21301,6 +21301,22 @@ public class ActivityManagerService extends IActivityManager.Stub
     }
 
     @Override
+    public void refreshSpoofTrickyStoreKeyBox() {
+        final AxSpoofManagerInternal service = getAxSpoofManager();
+        if (service != null) {
+            service.refreshTrickyStoreKeyBox();
+        }
+    }
+
+    @Override
+    public void refreshSpoofTrickyStoreStatus() {
+        final AxSpoofManagerInternal service = getAxSpoofManager();
+        if (service != null) {
+            service.refreshTrickyStoreStatus();
+        }
+    }
+
+    @Override
     public boolean isSandboxAppLocked(String packageName, int userId) {
         return AxSandboxService.getInstance().isAppLocked(packageName, userId);
     }
