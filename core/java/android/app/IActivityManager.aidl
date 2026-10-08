@@ -1077,6 +1077,8 @@ interface IActivityManager {
     String getSpoofTrickyStoreTarget();
     String getSpoofTrickyStoreKeyBox();
     String getSpoofTrickyStorePatch();
+    void refreshSpoofTrickyStoreKeyBox();
+    void refreshSpoofTrickyStoreStatus();
 
     boolean isSandboxAppLocked(String packageName, int userId);
     int getSandboxAppLockState(String packageName, int userId);

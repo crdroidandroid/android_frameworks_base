@@ -27,4 +27,10 @@ public interface AxSpoofManagerInternal {
     String getTrickyStoreKeyBox();
 
     String getTrickyStorePatch();
+
+    /** Starts an official keybox download on demand. */
+    void refreshTrickyStoreKeyBox();
+
+    /** Re-runs the keybox validation on demand. */
+    void refreshTrickyStoreStatus();
 }
