@@ -163,7 +163,7 @@ object DeviceEntryIconViewBinder {
                 if (height <= 0 || width <= 0) {
                     return@OnLayoutChangeListener
                 }
-                if (height == oldBottom - oldTop && width == oldLeft - oldRight) {
+                if (height == oldBottom - oldTop && width == oldRight - oldLeft) {
                     return@OnLayoutChangeListener
                 }
                 v?.background?.let {
