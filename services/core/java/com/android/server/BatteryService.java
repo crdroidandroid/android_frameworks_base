@@ -319,6 +319,10 @@ public final class BatteryService extends SystemService {
     private boolean mHasOemCharger;
     private boolean mLastOemCharger;
 
+    private String mOemFastChargerStatusPath;
+    private String mOemFastChargerStatusPath2;
+    private String mOemFastChargerStatusValue;
+
     private long mDischargeStartTime;
     private int mDischargeStartLevel;
 
@@ -484,6 +488,15 @@ public final class BatteryService extends SystemService {
                 mContext.getResources().getBoolean(com.android.internal.R.bool.config_hasWarpCharger) ||
                 mContext.getResources().getBoolean(com.android.internal.R.bool.config_hasVoocCharger) ||
                 mContext.getResources().getBoolean(com.android.internal.R.bool.config_hasTurboPowerCharger);
+
+        mOemFastChargerStatusPath = mContext.getResources().getString(
+                com.android.internal.R.string.config_oemFastChargerStatusPath);
+        mOemFastChargerStatusPath2 = mContext.getResources().getString(
+                com.android.internal.R.string.config_oemFastChargerStatusPath2);
+        mOemFastChargerStatusValue = mContext.getResources().getString(
+                com.android.internal.R.string.config_oemFastChargerStatusValue);
+        if (TextUtils.isEmpty(mOemFastChargerStatusValue))
+            mOemFastChargerStatusValue = "1";
 
         mCriticalBatteryLevel = mContext.getResources().getInteger(
                 com.android.internal.R.integer.config_criticalBatteryWarningLevel);
@@ -1236,29 +1249,24 @@ public final class BatteryService extends SystemService {
     }
 
     private boolean isOemCharger() {
-        String path = mContext.getResources().getString(
-                com.android.internal.R.string.config_oemFastChargerStatusPath);
-        String path2 = mContext.getResources().getString(
-                com.android.internal.R.string.config_oemFastChargerStatusPath2);
-        if (TextUtils.isEmpty(path) && TextUtils.isEmpty(path2))
+        if (TextUtils.isEmpty(mOemFastChargerStatusPath)
+                && TextUtils.isEmpty(mOemFastChargerStatusPath2))
             return false;
-        String value = mContext.getResources().getString(
-                com.android.internal.R.string.config_oemFastChargerStatusValue);
-        if (TextUtils.isEmpty(value))
-            value = "1";
         try {
             boolean isFastCharge = false;
             boolean isFastCharge2 = false;
-            if (!TextUtils.isEmpty(path)) {
-                isFastCharge = FileUtils.readTextFile(new File(path), value.length(), null).equals(value);
-            } 
-            if (!TextUtils.isEmpty(path2)) {
-                isFastCharge2 = FileUtils.readTextFile(new File(path2), value.length(), null).equals(value);
-            } 
+            if (!TextUtils.isEmpty(mOemFastChargerStatusPath)) {
+                isFastCharge = FileUtils.readTextFile(new File(mOemFastChargerStatusPath),
+                        mOemFastChargerStatusValue.length(), null).equals(mOemFastChargerStatusValue);
+            }
+            if (!TextUtils.isEmpty(mOemFastChargerStatusPath2)) {
+                isFastCharge2 = FileUtils.readTextFile(new File(mOemFastChargerStatusPath2),
+                        mOemFastChargerStatusValue.length(), null).equals(mOemFastChargerStatusValue);
+            }
             return isFastCharge || isFastCharge2;
         } catch (IOException e) {
             Slog.e(TAG, "Failed to read oem fast charger status path: "
-                + path + " " + path2);
+                + mOemFastChargerStatusPath + " " + mOemFastChargerStatusPath2);
         }
         return false;
     }
