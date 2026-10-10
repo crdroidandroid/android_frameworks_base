@@ -4,6 +4,8 @@
      SPDX-License-Identifier: Apache-2.0
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- GameSpace -->
+    <string name="gamespace_new_game_added">GameSpace\'e <xliff:g id="name" example="MyApp">%s</xliff:g> eklendi</string>
     <!-- Button that copies the url to the log of a crashed application -->
     <string name="aerr_copy">Kilitlenme günlüğü bağlantısını kopyala</string>
     <string name="url_copy_success">Bağlantı başarıyla kopyalandı</string>
@@ -16,6 +18,4 @@
     <string name="pocket_mode_instruction_step2">2. Cep modundan çıkmak için güç düğmesini basılı tutun.</string>
     <!-- Cycle through ringer modes -->
     <string name="volume_dialog_ringer_guidance_normal">Çağrılar ve bildirimlerde zil çalacak</string>
-    <!-- GameSpace -->
-    <string name="gamespace_new_game_added">GameSpace\'e <xliff:g id="name" example="MyApp">%s</xliff:g> eklendi</string>
 </resources>
