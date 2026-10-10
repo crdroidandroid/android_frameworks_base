@@ -97,9 +97,9 @@
     <string name="ax_dynamic_bar_connecting">正在连接\u2026</string>
     <string name="ax_dynamic_bar_one_device">1 台设备</string>
     <string name="ax_dynamic_bar_bluetooth_device">蓝牙设备</string>
-    <string name="ax_dynamic_bar_left_earbud">Left earbud</string>
-    <string name="ax_dynamic_bar_right_earbud">Right earbud</string>
-    <string name="ax_dynamic_bar_earbuds_case">Case</string>
+    <string name="ax_dynamic_bar_left_earbud">左耳机</string>
+    <string name="ax_dynamic_bar_right_earbud">右耳机</string>
+    <string name="ax_dynamic_bar_earbuds_case">充电盒</string>
     <string name="ax_dynamic_bar_apps_count"><xliff:g id="count" example="2">%d</xliff:g> 应用</string>
     <string name="ax_dynamic_bar_just_now">刚刚</string>
     <string name="ax_dynamic_bar_mins_ago"><xliff:g id="count" example="5">%d</xliff:g>分钟前</string>
@@ -157,15 +157,15 @@
     <string name="smartspace_content_desc">速览</string>
     <string name="smartspace_flight_qr_code">二维码</string>
     <!-- Content description for the smartspace paging arrows [CHAR LIMIT=NONE] -->
-    <string name="accessibility_smartspace_previous_page">Previous page</string>
-    <string name="accessibility_smartspace_next_page">Next page</string>
+    <string name="accessibility_smartspace_previous_page">上一页</string>
+    <string name="accessibility_smartspace_next_page">下一页</string>
     <!-- Ambient indication -->
-    <string name="accessibility_action_expand">Expand</string>
-    <string name="accessibility_now_playing_container_recognition_result_content_description">Identified song. %1$s, %2$s.</string>
-    <string name="accessibility_now_playing_container_song_searching_content_description">Identifying song</string>
-    <string name="accessibility_now_playing_like_icon">Add to favorites</string>
-    <string name="accessibility_now_playing_play_icon">Play on Default Music Player</string>
-    <string name="accessibility_now_playing_unlike_icon">Remove from favorites</string>
+    <string name="accessibility_action_expand">展开</string>
+    <string name="accessibility_now_playing_container_recognition_result_content_description">已识别歌曲。%1$s, %2$s。</string>
+    <string name="accessibility_now_playing_container_song_searching_content_description">正在识别歌曲</string>
+    <string name="accessibility_now_playing_like_icon">添加到收藏</string>
+    <string name="accessibility_now_playing_play_icon">使用默认音乐播放器播放</string>
+    <string name="accessibility_now_playing_unlike_icon">从收藏中移除</string>
     <string name="now_playing_label">正在播放</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">行走模式已激活</string>
@@ -196,8 +196,8 @@
     <!-- Label for UI element which allows to use lens on screenshot [CHAR LIMIT=30] -->
     <string name="screenshot_lens_label">智能镜头</string>
     <!-- Per-app volume panel -->
-    <string name="app_volume">App volume</string>
-    <string name="app_volume_no_active_apps">No active audio playback</string>
+    <string name="app_volume">应用音量</string>
+    <string name="app_volume_no_active_apps">暂无音频播放</string>
     <!-- Sound QS Tile -->
     <string name="quick_settings_sound_label">声音</string>
     <string name="quick_settings_sound_ring">铃声</string>
