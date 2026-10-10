@@ -8,6 +8,8 @@
     <string name="status_bar_nfc">NFC</string>
     <string name="status_bar_data_saver">Заощадження трафіку</string>
     <string name="status_bar_call_strength">Піктограма рівня сигналу</string>
+    <!-- Button to restart SystemUI, within the Restart Options dialog -->
+    <string name="global_action_restart_systemui">Системний інтерфейс</string>
     <!-- Notification counter -->
     <!-- Name of the roaming status bar icon. -->
     <string name="status_bar_roaming">Індикатор роумінгу</string>
@@ -26,137 +28,6 @@
     <string name="kilobytespersecond_short">кБ/с</string>
     <string name="megabytespersecond_short">МБ/с</string>
     <string name="gigabytespersecond_short">ГБ/с</string>
-    <!-- Weather -->
-    <string name="weather_condition_clouds">Хмарно</string>
-    <string name="weather_condition_rain">Дощова</string>
-    <string name="weather_condition_clear">Чисте небо</string>
-    <string name="weather_condition_storm">Гроза</string>
-    <string name="weather_condition_snow">Йде сніг</string>
-    <string name="weather_condition_wind">Вітряно</string>
-    <string name="weather_condition_mist">Димка</string>
-    <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> Швидке заряджання (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> до кінця зарядки)</string>
-    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="Percentage">%s</xliff:g> • Швидке заряджання</string>
-    <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> Швидке заряджання (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> до закінчення зарядки)</string>
-    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="Percentage">%s</xliff:g> • Швидке заряджання</string>
-    <!-- Indication on the keyguard that is shown when the device is charging with a VOOC charger. Should match keyguard_plugged_in_vooc_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Заряджання VOOC(<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> до повної зарядки)</string>
-    <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • Заряджання VOOC</string>
-    <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • Турбо зарядка (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> до повного зарядження)</string>
-    <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • Турбо зарядка</string>
-    <!-- Smartspace -->
-    <string name="accessibility_next_alarm">Наступний будильник спрацює о %s</string>
-    <string name="accessibility_smartspace_page">Сторінка %1$d із %2$d</string>
-    <string name="active_mode_content_description">%1$s увімкнено</string>
-    <string name="music_controls_no_title">Немає заголовка</string>
-    <string name="smartspace_content_desc">Інформаційний віджет</string>
-    <string name="smartspace_flight_qr_code">QR-код</string>
-    <string name="smartspace_role_desc">Переглянути</string>
-    <!-- Button to restart SystemUI, within the Restart Options dialog -->
-    <string name="global_action_restart_systemui">Системний інтерфейс</string>
-    <!-- On The Go -->
-    <string name="onthego_notif_ticker">Режим «На ходу» активовано</string>
-    <string name="onthego_notif_title">Режим «На ходу» активний</string>
-    <string name="onthego_notif_stop">Зупинити</string>
-    <string name="onthego_notif_options">Параметри</string>
-    <string name="onthego_notif_error">Не вдається запустити режим «На ходу»</string>
-    <string name="onthego_notif_restart">Перезавантажити режим «На ходу»</string>
-    <string name="onthego_notif_camera_changed">Режим камери змінено</string>
-    <string name="onthego_service_toggle">Автоматично перезапустити службу</string>
-    <string name="onthego_channel_name">Основний</string>
-    <string name="global_action_onthego">Режим \"На ходу\"</string>
-    <string name="onthego_dialog_title">Режим \"На ходу\"</string>
-    <string name="onthego_opacity_title">Непрозорість камери</string>
-    <string name="onthego_opacity_default">50%</string>
-    <string name="onthego_restart_title">Перезавантажити при перемиканні камери</string>
-    <string name="onthego_restart_summary">Коротко перезапустити попередній перегляд, коли зміна камери</string>
-    <string name="onthego_front_camera_title">Фронтальна камера</string>
-    <string name="onthego_front_camera_summary">Використовувати передню камеру замість задньої</string>
-    <!-- Data usage info in QS footer -->
-    <string name="usage_data">використане сьогодні</string>
-    <string name="usage_data_weekly">використано цього тижня</string>
-    <string name="usage_data_default_suffix">Дані</string>
-    <string name="usage_wifi_default_suffix">Wi-Fi</string>
-    <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">Примусово припинити?</string>
-    <string name="force_stop_dlg_text">Примусове закриття додатку може призвести до збою в його роботі.</string>
-    <!-- Label for UI element which allows to use lens on screenshot [CHAR LIMIT=30] -->
-    <string name="screenshot_lens_label">Об\'єктив</string>
-    <!-- Sound QS Tile -->
-    <string name="quick_settings_sound_label">Мелодії</string>
-    <string name="quick_settings_sound_ring">Кільце</string>
-    <string name="quick_settings_sound_vibrate">Вібрація</string>
-    <string name="quick_settings_sound_silent">Беззвучний</string>
-    <!-- CPUInfo tile -->
-    <string name="quick_settings_cpuinfo_label">Інформація про процесор</string>
-    <!-- FPS Info tile -->
-    <string name="quick_settings_fpsinfo_label">Інформація про FPS</string>
-    <!-- FPS view text placeholder -->
-    <string name="fps_text_placeholder">Кадрів в секунду <xliff:g id="fps" example="90">%1$d</xliff:g></string>
-    <!-- Compass QS Tile -->
-    <string name="quick_settings_compass_label">Компас</string>
-    <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
-    <string name="quick_settings_compass_init">Ініціалізація\u2026</string>
-    <string name="quick_settings_compass_N">Пн.</string>
-    <string name="quick_settings_compass_NE">Пн. Сх.</string>
-    <string name="quick_settings_compass_E">Сх.</string>
-    <string name="quick_settings_compass_SE">Пд. Сх.</string>
-    <string name="quick_settings_compass_S">Пд.</string>
-    <string name="quick_settings_compass_SW">Пд. Зх.</string>
-    <string name="quick_settings_compass_W">Зх.</string>
-    <string name="quick_settings_compass_NW">Пн. Зх.</string>
-    <!-- DataSwitch Tile -->
-    <string name="qs_data_switch_label">Змінити картку для передачі даних</string>
-    <!-- Volume panel QS tile -->
-    <string name="quick_settings_volume_panel_label">Панель гучності</string>
-    <!-- Smart Pixels -->
-    <string name="quick_settings_smart_pixels_label">Смарт Пікселі</string>
-    <string name="quick_settings_smart_pixels_on">Увімкнути</string>
-    <string name="quick_settings_smart_pixels_off">Вимкнено</string>
-    <string name="smart_pixels_percent_label">Відсоток пікселів</string>
-    <string name="smart_pixels_percent_format"><xliff:g id="percent" example="25">%d</xliff:g>%%</string>
-    <!-- Weather Tile -->
-    <string name="omnijaws_service_error">Помилка завантаження даних про погоду</string>
-    <string name="omnijaws_service_unknown">Немає даних про погоду</string>
-    <string name="omnijaws_label_default">Погода</string>
-    <!-- Refresh Rate Tile -->
-    <string name="refresh_rate_tile_label">Частота оновлення</string>
-    <string name="auto_mode_label">Автоматично</string>
-    <!-- Screenshot Tile -->
-    <string name="screenshot_long_press">Довге натискання — виділена область</string>
-    <!-- Language toggle tile -->
-    <string name="quick_settings_locale_label">Мова</string>
-    <string name="quick_settings_locale_more_locales_toast">Будь ласка, налаштуйте кілька мов, щоб увімкнути функцію перемикання</string>
-    <!-- AI Assistant affordance [CHAR LIMIT=32] -->
-    <string name="accessibility_assistant_button">Помічник ШІ</string>
-    <!-- Preferred network tile -->
-    <string name="qs_preferred_network_label">Бажана мережа</string>
-    <string name="qs_preferred_network_lte">4G / LTE</string>
-    <string name="qs_preferred_network_nr">5G / NR</string>
-    <string name="qs_preferred_network_unsupported">Не підтримується</string>
-    <!-- VPN tethering QS tile -->
-    <string name="vpn_tethering_label">VPN-модем</string>
-    <!-- Text while recognizing face -->
-    <string name="face_unlock_recognizing">Розпізнавання обличчя...</string>
-    <!-- Flashlight Strength -->
-    <string name="flashlight_strength_title">Сила ліхтарика</string>
-    <string name="flashlight_strength_turn_off">Вимкнути</string>
-    <string name="flashlight_strength_turn_on">Увімкнути</string>
-    <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
-    <plurals name="quick_settings_internet_hotspot_summary_num_devices">
-        <item quantity="one">Пристрій під\'єднано</item>
-        <item quantity="few">Підключено пристроїв: %1$d</item>
-        <item quantity="many">Підключено пристроїв: %1$d</item>
-        <item quantity="other">%d пристрій підключено</item>
-    </plurals>
-    <!-- 5G toggle in Internet Dialog -->
-    <string name="enable_fiveg">Увімкнути 5G</string>
-    <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
-    <string name="screenrecord_delete_label">Видалити</string>
-    <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
-    <string name="screenrecord_delete_description">Запис з екрана видалено</string>
     <!-- AxDynamicBar strings [CHAR LIMIT=NONE] -->
     <string name="ax_dynamic_bar_timer">Таймер</string>
     <string name="ax_dynamic_bar_stopwatch">Секундомір</string>
@@ -226,6 +97,9 @@
     <string name="ax_dynamic_bar_connecting">З\'єднання\u2026</string>
     <string name="ax_dynamic_bar_one_device">1 пристрій</string>
     <string name="ax_dynamic_bar_bluetooth_device">Пристрій Bluetooth</string>
+    <string name="ax_dynamic_bar_left_earbud">Left earbud</string>
+    <string name="ax_dynamic_bar_right_earbud">Right earbud</string>
+    <string name="ax_dynamic_bar_earbuds_case">Case</string>
     <string name="ax_dynamic_bar_apps_count"><xliff:g id="count" example="2">%d</xliff:g> застосунки</string>
     <string name="ax_dynamic_bar_just_now">Щойно</string>
     <string name="ax_dynamic_bar_mins_ago"><xliff:g id="count" example="5">%d</xliff:g>хв тому</string>
@@ -255,6 +129,144 @@
     <string name="ax_dynamic_bar_sports_upcoming">Майбутні</string>
     <!-- Screenshot -->
     <string name="quick_settings_screenshot_label">Знімок екрану</string>
+    <!-- Weather -->
+    <string name="weather_condition_clouds">Хмарно</string>
+    <string name="weather_condition_rain">Дощова</string>
+    <string name="weather_condition_clear">Чисте небо</string>
+    <string name="weather_condition_storm">Гроза</string>
+    <string name="weather_condition_snow">Йде сніг</string>
+    <string name="weather_condition_wind">Вітряно</string>
+    <string name="weather_condition_mist">Димка</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> Швидке заряджання (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> до кінця зарядки)</string>
+    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="Percentage">%s</xliff:g> • Швидке заряджання</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> Швидке заряджання (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> до закінчення зарядки)</string>
+    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="Percentage">%s</xliff:g> • Швидке заряджання</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a VOOC charger. Should match keyguard_plugged_in_vooc_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Заряджання VOOC(<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> до повної зарядки)</string>
+    <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • Заряджання VOOC</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • Турбо зарядка (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> до повного зарядження)</string>
+    <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • Турбо зарядка</string>
+    <!-- Smartspace -->
+    <string name="accessibility_next_alarm">Наступний будильник спрацює о %s</string>
+    <string name="accessibility_smartspace_page">Сторінка %1$d із %2$d</string>
+    <string name="active_mode_content_description">%1$s увімкнено</string>
+    <string name="music_controls_no_title">Немає заголовка</string>
+    <string name="smartspace_content_desc">Інформаційний віджет</string>
+    <string name="smartspace_flight_qr_code">QR-код</string>
+    <!-- Content description for the smartspace paging arrows [CHAR LIMIT=NONE] -->
+    <string name="accessibility_smartspace_previous_page">Previous page</string>
+    <string name="accessibility_smartspace_next_page">Next page</string>
+    <!-- Ambient indication -->
+    <string name="accessibility_action_expand">Expand</string>
+    <string name="accessibility_now_playing_container_recognition_result_content_description">Identified song. %1$s, %2$s.</string>
+    <string name="accessibility_now_playing_container_song_searching_content_description">Identifying song</string>
+    <string name="accessibility_now_playing_like_icon">Add to favorites</string>
+    <string name="accessibility_now_playing_play_icon">Play on Default Music Player</string>
+    <string name="accessibility_now_playing_unlike_icon">Remove from favorites</string>
+    <string name="now_playing_label">Зараз грає</string>
+    <!-- On The Go -->
+    <string name="onthego_notif_ticker">Режим «На ходу» активовано</string>
+    <string name="onthego_notif_title">Режим «На ходу» активний</string>
+    <string name="onthego_notif_stop">Зупинити</string>
+    <string name="onthego_notif_options">Параметри</string>
+    <string name="onthego_notif_error">Не вдається запустити режим «На ходу»</string>
+    <string name="onthego_notif_restart">Перезавантажити режим «На ходу»</string>
+    <string name="onthego_notif_camera_changed">Режим камери змінено</string>
+    <string name="onthego_service_toggle">Автоматично перезапустити службу</string>
+    <string name="onthego_channel_name">Основний</string>
+    <string name="global_action_onthego">Режим \"На ходу\"</string>
+    <string name="onthego_dialog_title">Режим \"На ходу\"</string>
+    <string name="onthego_opacity_title">Непрозорість камери</string>
+    <string name="onthego_opacity_default">50%</string>
+    <string name="onthego_restart_title">Перезавантажити при перемиканні камери</string>
+    <string name="onthego_restart_summary">Коротко перезапустити попередній перегляд, коли зміна камери</string>
+    <string name="onthego_front_camera_title">Фронтальна камера</string>
+    <string name="onthego_front_camera_summary">Використовувати передню камеру замість задньої</string>
+    <!-- Data usage info in QS footer -->
+    <string name="usage_data">використане сьогодні</string>
+    <string name="usage_data_weekly">використано цього тижня</string>
+    <string name="usage_data_default_suffix">Дані</string>
+    <string name="usage_wifi_default_suffix">Wi-Fi</string>
+    <!-- Kill button in notification guts -->
+    <string name="force_stop_dlg_title">Примусово припинити?</string>
+    <string name="force_stop_dlg_text">Примусове закриття додатку може призвести до збою в його роботі.</string>
+    <!-- Label for UI element which allows to use lens on screenshot [CHAR LIMIT=30] -->
+    <string name="screenshot_lens_label">Об\'єктив</string>
+    <!-- Per-app volume panel -->
+    <string name="app_volume">App volume</string>
+    <string name="app_volume_no_active_apps">No active audio playback</string>
+    <!-- Sound QS Tile -->
+    <string name="quick_settings_sound_label">Мелодії</string>
+    <string name="quick_settings_sound_ring">Кільце</string>
+    <string name="quick_settings_sound_vibrate">Вібрація</string>
+    <string name="quick_settings_sound_silent">Беззвучний</string>
+    <!-- CPUInfo tile -->
+    <string name="quick_settings_cpuinfo_label">Інформація про процесор</string>
+    <!-- FPS Info tile -->
+    <string name="quick_settings_fpsinfo_label">Інформація про FPS</string>
+    <!-- FPS view text placeholder -->
+    <string name="fps_text_placeholder">Кадрів в секунду <xliff:g id="fps" example="90">%1$d</xliff:g></string>
+    <!-- Compass QS Tile -->
+    <string name="quick_settings_compass_label">Компас</string>
+    <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
+    <string name="quick_settings_compass_init">Ініціалізація\u2026</string>
+    <string name="quick_settings_compass_N">Пн.</string>
+    <string name="quick_settings_compass_NE">Пн. Сх.</string>
+    <string name="quick_settings_compass_E">Сх.</string>
+    <string name="quick_settings_compass_SE">Пд. Сх.</string>
+    <string name="quick_settings_compass_S">Пд.</string>
+    <string name="quick_settings_compass_SW">Пд. Зх.</string>
+    <string name="quick_settings_compass_W">Зх.</string>
+    <string name="quick_settings_compass_NW">Пн. Зх.</string>
+    <!-- DataSwitch Tile -->
+    <string name="qs_data_switch_label">Змінити картку для передачі даних</string>
+    <!-- Volume panel QS tile -->
+    <string name="quick_settings_volume_panel_label">Панель гучності</string>
+    <!-- Smart Pixels -->
+    <string name="quick_settings_smart_pixels_label">Смарт Пікселі</string>
+    <string name="quick_settings_smart_pixels_on">Увімкнути</string>
+    <string name="quick_settings_smart_pixels_off">Вимкнено</string>
+    <string name="smart_pixels_percent_label">Відсоток пікселів</string>
+    <string name="smart_pixels_percent_format"><xliff:g id="percent" example="25">%d</xliff:g>%%</string>
+    <!-- Weather Tile -->
+    <string name="omnijaws_service_error">Помилка завантаження даних про погоду</string>
+    <string name="omnijaws_service_unknown">Немає даних про погоду</string>
+    <string name="omnijaws_label_default">Погода</string>
+    <!-- Refresh Rate Tile -->
+    <string name="refresh_rate_tile_label">Частота оновлення</string>
+    <string name="auto_mode_label">Автоматично</string>
+    <!-- Screenshot Tile -->
+    <string name="screenshot_long_press">Довге натискання — виділена область</string>
+    <!-- Language toggle tile -->
+    <string name="quick_settings_locale_label">Мова</string>
+    <string name="quick_settings_locale_more_locales_toast">Будь ласка, налаштуйте кілька мов, щоб увімкнути функцію перемикання</string>
+    <!-- AI Assistant affordance [CHAR LIMIT=32] -->
+    <string name="accessibility_assistant_button">Помічник ШІ</string>
+    <!-- Preferred network tile -->
+    <string name="qs_preferred_network_label">Бажана мережа</string>
+    <string name="qs_preferred_network_lte">4G / LTE</string>
+    <string name="qs_preferred_network_nr">5G / NR</string>
+    <string name="qs_preferred_network_unsupported">Не підтримується</string>
+    <!-- VPN tethering QS tile -->
+    <string name="vpn_tethering_label">VPN-модем</string>
+    <!-- Text while recognizing face -->
+    <string name="face_unlock_recognizing">Розпізнавання обличчя...</string>
+    <!-- Flashlight Strength -->
+    <string name="flashlight_strength_title">Сила ліхтарика</string>
+    <string name="flashlight_strength_turn_off">Вимкнути</string>
+    <string name="flashlight_strength_turn_on">Увімкнути</string>
+    <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
+    <plurals name="quick_settings_internet_hotspot_summary_num_devices">
+        <item quantity="one">Пристрій під\'єднано</item>
+        <item quantity="few">Підключено пристроїв: %1$d</item>
+        <item quantity="many">Підключено пристроїв: %1$d</item>
+        <item quantity="other">%d пристрій підключено</item>
+    </plurals>
+    <!-- 5G toggle in Internet Dialog -->
+    <string name="enable_fiveg">Увімкнути 5G</string>
     <!-- Blur QS tile -->
     <string name="quick_settings_blur_label">Розмиття</string>
 </resources>
