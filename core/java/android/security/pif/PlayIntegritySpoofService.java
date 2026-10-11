@@ -9,6 +9,7 @@ import android.content.pm.Signature;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.text.TextUtils;
 import android.util.ArraySet;
@@ -35,6 +36,8 @@ public final class PlayIntegritySpoofService {
     private static final String VENDING_PACKAGE = "com.android.vending";
     private static final String GMS_PACKAGE = "com.google.android.gms";
     private static final String GPHOTOS_PACKAGE = "com.google.android.apps.photos";
+
+    private static final long LOAD_RETRY_INTERVAL_MS = 5000;
 
     private static final Map<String, Object> PIXEL_XL_PROPS = Map.of(
         "BRAND", "google",
@@ -176,28 +179,35 @@ public final class PlayIntegritySpoofService {
     private volatile boolean mSignatureSpoofed = false;
 
     private final Object mLoadLock = new Object();
+    private long mLastLoadAttempt = 0;
+    private boolean mLoadFailureLogged = false;
 
     private PlayIntegritySpoofService() {}
 
     public static synchronized PlayIntegritySpoofService getInstance() {
         if (sInstance == null) {
             sInstance = new PlayIntegritySpoofService();
-            sInstance.loadConfig();
         }
-        sInstance.ensureLoaded();
         return sInstance;
+    }
+
+    private static boolean canLoadNow() {
+        if (ActivityThread.isSystem()) {
+            return "1".equals(SystemProperties.get("sys.boot_completed"));
+        }
+        return true;
     }
 
     private void ensureLoaded() {
         if (mConfigLoaded) return;
+        if (!canLoadNow()) return;
         synchronized (mLoadLock) {
             if (mConfigLoaded) return;
-            loadConfigInternal();
-        }
-    }
-
-    private void loadConfig() {
-        synchronized (mLoadLock) {
+            final long now = SystemClock.uptimeMillis();
+            if (mLastLoadAttempt != 0 && now - mLastLoadAttempt < LOAD_RETRY_INTERVAL_MS) {
+                return;
+            }
+            mLastLoadAttempt = now;
             loadConfigInternal();
         }
     }
@@ -205,7 +215,6 @@ public final class PlayIntegritySpoofService {
     private void loadConfigInternal() {
         IActivityManager service = ActivityManager.getService();
         if (service == null) {
-            if (mVerboseLogs > 0) Log.w(TAG, "ActivityManager not ready, skipping PIF config load");
             return;
         }
 
@@ -216,9 +225,13 @@ public final class PlayIntegritySpoofService {
             mSpoofPhotos = spoofPhotos == null || "1".equals(spoofPhotos)
                             || "true".equalsIgnoreCase(spoofPhotos);
         } catch (Throwable e) {
-            Log.e(TAG, "Failed to fetch PIF config from system_server", e);
+            if (!mLoadFailureLogged) {
+                mLoadFailureLogged = true;
+                Log.w(TAG, "PIF config not available yet: " + e);
+            }
             return;
         }
+        mLoadFailureLogged = false;
 
         if (content == null || content.isEmpty()) {
             mBuildFields.clear();
@@ -349,9 +362,11 @@ public final class PlayIntegritySpoofService {
     }
 
     public boolean shouldSpoof(String processName) {
+        if (!DROIDGUARD_PACKAGE.equals(processName) && !VENDING_PACKAGE.equals(processName)) {
+            return false;
+        }
         ensureLoaded();
-        if (!mConfigLoaded) return false;
-        return DROIDGUARD_PACKAGE.equals(processName) || VENDING_PACKAGE.equals(processName);
+        return mConfigLoaded;
     }
 
     public boolean isGmsProcess(String dataDir) {
@@ -368,13 +383,13 @@ public final class PlayIntegritySpoofService {
     }
 
     public void spoofBuildFields(String processName) {
-        ensureLoaded();
-        if (!mConfigLoaded) return;
-
         boolean isVending = isVending(processName);
         boolean isDroidGuard = isDroidGuard(processName);
 
         if (!isDroidGuard && !isVending) return;
+
+        ensureLoaded();
+        if (!mConfigLoaded) return;
 
         if (isVending) {
             if (mSpoofVendingSdk) {
@@ -660,8 +675,9 @@ public final class PlayIntegritySpoofService {
     }
 
     public String getSpoofedProperty(String key) {
+        if (key == null) return null;
         ensureLoaded();
-        if (key == null || !mSpoofProps || !mConfigLoaded) return null;
+        if (!mSpoofProps || !mConfigLoaded) return null;
 
         String value = mSystemProps.get(key);
         if (value != null) return value;
@@ -708,6 +724,7 @@ public final class PlayIntegritySpoofService {
 
     public boolean shouldSpoofPhotos(String packageName) {
         if (!TextUtils.equals(GPHOTOS_PACKAGE, packageName)) return false;
+        ensureLoaded();
         return mSpoofPhotos;
     }
 
