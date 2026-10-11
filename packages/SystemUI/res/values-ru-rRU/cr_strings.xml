@@ -97,9 +97,9 @@
     <string name="ax_dynamic_bar_connecting">Подключение...</string>
     <string name="ax_dynamic_bar_one_device">1 устройство</string>
     <string name="ax_dynamic_bar_bluetooth_device">Устройство Bluetooth</string>
-    <string name="ax_dynamic_bar_left_earbud">Left earbud</string>
-    <string name="ax_dynamic_bar_right_earbud">Right earbud</string>
-    <string name="ax_dynamic_bar_earbuds_case">Case</string>
+    <string name="ax_dynamic_bar_left_earbud">Левый наушник</string>
+    <string name="ax_dynamic_bar_right_earbud">Правый наушник</string>
+    <string name="ax_dynamic_bar_earbuds_case">Футляр</string>
     <string name="ax_dynamic_bar_apps_count">Приложений: <xliff:g id="count" example="2">%d</xliff:g></string>
     <string name="ax_dynamic_bar_just_now">Прямо сейчас</string>
     <string name="ax_dynamic_bar_mins_ago"><xliff:g id="count" example="5">%d</xliff:g>мин. назад</string>
@@ -157,15 +157,15 @@
     <string name="smartspace_content_desc">Самое главное</string>
     <string name="smartspace_flight_qr_code">QR-код</string>
     <!-- Content description for the smartspace paging arrows [CHAR LIMIT=NONE] -->
-    <string name="accessibility_smartspace_previous_page">Previous page</string>
-    <string name="accessibility_smartspace_next_page">Next page</string>
+    <string name="accessibility_smartspace_previous_page">Предыдущая страница</string>
+    <string name="accessibility_smartspace_next_page">Следующая страница</string>
     <!-- Ambient indication -->
-    <string name="accessibility_action_expand">Expand</string>
-    <string name="accessibility_now_playing_container_recognition_result_content_description">Identified song. %1$s, %2$s.</string>
-    <string name="accessibility_now_playing_container_song_searching_content_description">Identifying song</string>
-    <string name="accessibility_now_playing_like_icon">Add to favorites</string>
-    <string name="accessibility_now_playing_play_icon">Play on Default Music Player</string>
-    <string name="accessibility_now_playing_unlike_icon">Remove from favorites</string>
+    <string name="accessibility_action_expand">Развернуть</string>
+    <string name="accessibility_now_playing_container_recognition_result_content_description">Распознанная песня. %1$s, %2$s.</string>
+    <string name="accessibility_now_playing_container_song_searching_content_description">Распознание песни</string>
+    <string name="accessibility_now_playing_like_icon">Добавить в избранное</string>
+    <string name="accessibility_now_playing_play_icon">Воспроизвести в музыкальном проигрывателе по умолчанию</string>
+    <string name="accessibility_now_playing_unlike_icon">Убрать из Избранного</string>
     <string name="now_playing_label">Сейчас играет</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">Режим «На ходу» включен</string>
@@ -196,8 +196,8 @@
     <!-- Label for UI element which allows to use lens on screenshot [CHAR LIMIT=30] -->
     <string name="screenshot_lens_label">Объектив</string>
     <!-- Per-app volume panel -->
-    <string name="app_volume">App volume</string>
-    <string name="app_volume_no_active_apps">No active audio playback</string>
+    <string name="app_volume">Громкость приложения</string>
+    <string name="app_volume_no_active_apps">Нет активного аудио плеера</string>
     <!-- Sound QS Tile -->
     <string name="quick_settings_sound_label">Звук</string>
     <string name="quick_settings_sound_ring">Звонок</string>
