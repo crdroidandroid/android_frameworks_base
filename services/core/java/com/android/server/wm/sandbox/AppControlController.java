@@ -304,16 +304,18 @@ public class AppControlController {
         Slog.d(TAG, "setPackageHidden: " + packageName + " hidden=" + hidden);
     }
 
-    public void setPackageSandboxed(String packageName, boolean sandboxed) {
-        if (TextUtils.isEmpty(packageName)) return;
+    public boolean setPackageSandboxed(String packageName, boolean sandboxed) {
+        if (TextUtils.isEmpty(packageName)) return false;
+        final boolean changed;
         synchronized (this) {
-            boolean changed = sandboxed ? mSandboxedPackages.add(packageName)
-                                       : mSandboxedPackages.remove(packageName);
+            changed = sandboxed ? mSandboxedPackages.add(packageName)
+                    : mSandboxedPackages.remove(packageName);
             if (changed) {
                 saveConfigToSettings();
             }
         }
         Slog.d(TAG, "setPackageSandboxed: " + packageName + " sandboxed=" + sandboxed);
+        return changed;
     }
 
     public void setDevOptionsHidden(String packageName, boolean hidden) {
@@ -486,11 +488,11 @@ public class AppControlController {
         }
     }
 
-    public void setSpoofSettingEnabled(String packageName, String settingKey, boolean enabled) {
-        if (TextUtils.isEmpty(packageName) || TextUtils.isEmpty(settingKey)) return;
+    public boolean setSpoofSettingEnabled(String packageName, String settingKey, boolean enabled) {
+        if (TextUtils.isEmpty(packageName) || TextUtils.isEmpty(settingKey)) return false;
+        final boolean changed;
         synchronized (this) {
             Set<String> settings = mSpoofSettingsMap.get(packageName);
-            boolean changed;
             if (enabled) {
                 if (settings == null) {
                     settings = new HashSet<>();
@@ -498,7 +500,7 @@ public class AppControlController {
                 }
                 changed = settings.add(settingKey);
             } else {
-                if (settings == null) return;
+                if (settings == null) return false;
                 changed = settings.remove(settingKey);
                 if (settings.isEmpty()) {
                     mSpoofSettingsMap.remove(packageName);
@@ -506,6 +508,7 @@ public class AppControlController {
             }
             if (changed) saveConfigToSettings();
         }
+        return changed;
     }
 
     public List<String> getEnabledSpoofSettings(String packageName) {

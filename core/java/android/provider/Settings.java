@@ -3081,6 +3081,15 @@ public final class Settings {
     public static final String CALL_METHOD_GET_GLOBAL = "GET_global";
 
     /**
+     * @hide - Private call() method used by Settings.NameValueCache to resolve the
+     * process-local AxSandbox setting policy without trusting a cached setting value.
+     */
+    public static final String CALL_METHOD_GET_AX_SANDBOX_SETTING = "GET_ax_sandbox_setting";
+
+    /** @hide Result key for {@link #CALL_METHOD_GET_AX_SANDBOX_SETTING}. */
+    public static final String CALL_METHOD_GET_AX_SANDBOX_SETTING_RESULT = "_ax_sandbox_policy";
+
+    /**
      * @hide - Private call() method on SettingsProvider to read from 'config' table.
      */
     public static final String CALL_METHOD_GET_CONFIG = "GET_config";
@@ -3395,6 +3404,93 @@ public final class Settings {
 
     private static final String TAG = "Settings";
     private static final boolean LOCAL_LOGV = false;
+    private static final int AX_SANDBOX_POLICY_UNKNOWN = -1;
+    private static final int AX_SANDBOX_POLICY_DISABLED = 0;
+    private static final int AX_SANDBOX_POLICY_ENABLED = 1;
+    private static final int AX_SANDBOX_LOG_ADB = 1;
+    private static final int AX_SANDBOX_LOG_DEVELOPMENT = 1 << 1;
+    private static final Object sAxSandboxSettingsLock = new Object();
+    private static int sAxSandboxSettingsPid = -1;
+    private static int sAxSandboxAdbPolicy = AX_SANDBOX_POLICY_UNKNOWN;
+    private static int sAxSandboxDevelopmentPolicy = AX_SANDBOX_POLICY_UNKNOWN;
+    private static int sAxSandboxLoggedSettings;
+
+    private static boolean isAxSandboxSettingName(String name) {
+        return Global.ADB_ENABLED.equals(name)
+                || Global.DEVELOPMENT_SETTINGS_ENABLED.equals(name);
+    }
+
+    private static boolean isAxSandboxSettingsNamespace(Uri uri) {
+        if (uri == null) return false;
+        final String path = uri.getPath();
+        return "/global".equals(path) || "/secure".equals(path) || "/system".equals(path);
+    }
+
+    private static boolean isAxSandboxSettingSpoofed(ContentResolver resolver, String name) {
+        final int myUid = Process.myUid();
+        if (!UserHandle.isApp(myUid)
+                && !Process.isIsolatedUid(myUid)
+                && !Process.isSdkSandboxUid(myUid)) {
+            return false;
+        }
+
+        final int pid = Process.myPid();
+        synchronized (sAxSandboxSettingsLock) {
+            if (sAxSandboxSettingsPid != pid) {
+                // Settings is preloaded by Zygote. Never inherit the policy result or the log
+                // state from the pre-fork process into an application process.
+                sAxSandboxSettingsPid = pid;
+                sAxSandboxAdbPolicy = AX_SANDBOX_POLICY_UNKNOWN;
+                sAxSandboxDevelopmentPolicy = AX_SANDBOX_POLICY_UNKNOWN;
+                sAxSandboxLoggedSettings = 0;
+            }
+
+            if (!isAxSandboxSettingName(name)) return false;
+
+            final boolean isAdb = Global.ADB_ENABLED.equals(name);
+
+            int policy = isAdb ? sAxSandboxAdbPolicy : sAxSandboxDevelopmentPolicy;
+            if (policy == AX_SANDBOX_POLICY_UNKNOWN) {
+                policy = resolveAxSandboxSettingPolicy(resolver, name, myUid);
+                if (isAdb) {
+                    sAxSandboxAdbPolicy = policy;
+                } else {
+                    sAxSandboxDevelopmentPolicy = policy;
+                }
+            }
+            return policy == AX_SANDBOX_POLICY_ENABLED;
+        }
+    }
+
+    private static int resolveAxSandboxSettingPolicy(ContentResolver resolver, String name,
+            int myUid) {
+        try {
+            // The provider receives this call with the app's Binder UID and package attribution.
+            // It then performs the policy lookup under its system identity, avoiding a direct
+            // app-side lookup of the private AxSandboxService Binder service.
+            final Bundle result = resolver.call(AUTHORITY,
+                    CALL_METHOD_GET_AX_SANDBOX_SETTING, name, null);
+            if (result == null || !result.containsKey(CALL_METHOD_GET_AX_SANDBOX_SETTING_RESULT)) {
+                return AX_SANDBOX_POLICY_UNKNOWN;
+            }
+            return result.getBoolean(CALL_METHOD_GET_AX_SANDBOX_SETTING_RESULT)
+                    ? AX_SANDBOX_POLICY_ENABLED : AX_SANDBOX_POLICY_DISABLED;
+        } catch (RuntimeException e) {
+            Log.w("AxSandboxSettings", "Unable to resolve policy for uid=" + myUid
+                    + " setting=" + name, e);
+            return AX_SANDBOX_POLICY_UNKNOWN;
+        }
+    }
+
+    private static void logAxSandboxSettingsInterception(String name, int uid) {
+        final int logBit = Global.ADB_ENABLED.equals(name)
+                ? AX_SANDBOX_LOG_ADB : AX_SANDBOX_LOG_DEVELOPMENT;
+        synchronized (sAxSandboxSettingsLock) {
+            if ((sAxSandboxLoggedSettings & logBit) != 0) return;
+            sAxSandboxLoggedSettings |= logBit;
+        }
+        Log.i("AxSandboxSettings", "Intercepted " + name + "=0 for uid=" + uid);
+    }
 
     // Used in system server calling uid workaround in call()
     private static boolean sInSystemServer = false;
@@ -3729,6 +3825,14 @@ public final class Settings {
         @UnsupportedAppUsage
         public String getStringForUser(ContentResolver cr, String name,
                 final @CanBeCURRENT @UserIdInt int userId) {
+            // This one implementation backs Global.sNameValueCache,
+            // Secure.sNameValueCache, and System.sNameValueCache. The namespace guard keeps
+            // Config.sNameValueCache out of the process setting policy while still covering
+            // Secure/System calls that redirect moved keys to Global.
+            if (isAxSandboxSettingsNamespace(mUri) && isAxSandboxSettingSpoofed(cr, name)) {
+                logAxSandboxSettingsInterception(name, Process.myUid());
+                return "0";
+            }
             final boolean isSelf = (userId == UserHandle.myUserId());
             final AttributionSource attributionSource = cr.getAttributionSource();
             final int deviceId =

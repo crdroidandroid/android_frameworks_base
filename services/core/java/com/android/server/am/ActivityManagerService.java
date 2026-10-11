@@ -18184,6 +18184,22 @@ public class ActivityManagerService extends IActivityManager.Stub
             }
         }
 
+        @Override
+        public int getIsolatedOwnerUid(int isolatedUid) {
+            synchronized (ActivityManagerService.this) {
+                return mProcessList.getIsolatedOwnerUidLocked(isolatedUid);
+            }
+        }
+
+        @Override
+        public void killSandboxProcessesForUid(int uid, String reason) {
+            synchronized (ActivityManagerService.this) {
+                synchronized (mProcLock) {
+                    mProcessList.killSandboxProcessesForUidLocked(uid, reason);
+                }
+            }
+        }
+
         /** @see ActivityManagerService#sendIntentSender */
         @Override
         public int sendIntentSender(IIntentSender target, IBinder allowlistToken, int code,
