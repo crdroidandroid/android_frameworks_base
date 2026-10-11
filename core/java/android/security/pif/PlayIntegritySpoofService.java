@@ -20,8 +20,10 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -147,6 +149,16 @@ public final class PlayIntegritySpoofService {
 
     private static PlayIntegritySpoofService sInstance;
 
+    private static final Object sUnsafeLock = new Object();
+    private static boolean sUnsafeLookedUp;
+    private static Object sUnsafe;
+    private static Method sPutObject;
+    private static Method sPutInt;
+    private static Method sPutLong;
+    private static Method sPutBoolean;
+    private static Field sFieldOffset;
+    private static Method sFieldGetOffset;
+
     private volatile int mVerboseLogs = 0;
     private volatile boolean mSpoofBuild = true;
     private volatile boolean mSpoofProps = true;
@@ -207,9 +219,6 @@ public final class PlayIntegritySpoofService {
             Log.e(TAG, "Failed to fetch PIF config from system_server", e);
             return;
         }
-
-        Map<String, String> newBuildFields = new ConcurrentHashMap<>();
-        Map<String, String> newSystemProps = new ConcurrentHashMap<>();
 
         if (content == null || content.isEmpty()) {
             mBuildFields.clear();
@@ -399,9 +408,7 @@ public final class PlayIntegritySpoofService {
 
         try {
             Field creatorField = findField(PackageInfo.class, "CREATOR");
-            creatorField.setAccessible(true);
-            creatorField.set(null, customCreator);
-            creatorField.setAccessible(false);
+            setStaticField(creatorField, customCreator);
         } catch (Exception e) {
             Log.e(TAG, "Couldn't replace PackageInfoCreator: " + e);
             return;
@@ -456,31 +463,148 @@ public final class PlayIntegritySpoofService {
         throw new NoSuchFieldException("Field '" + fieldName + "' not found");
     }
 
+    private static boolean initUnsafe() {
+        synchronized (sUnsafeLock) {
+            if (sUnsafeLookedUp) return sUnsafe != null && sPutObject != null
+                    && (sFieldOffset != null || sFieldGetOffset != null);
+            sUnsafeLookedUp = true;
+
+            try {
+                Class<?> unsafeClass = Class.forName("sun.misc.Unsafe");
+                Object unsafe = null;
+                for (String name : new String[] { "theUnsafe", "THE_ONE" }) {
+                    try {
+                        Field f = unsafeClass.getDeclaredField(name);
+                        f.setAccessible(true);
+                        unsafe = f.get(null);
+                        if (unsafe != null) break;
+                    } catch (Throwable ignored) {
+                    }
+                }
+                if (unsafe == null) {
+                    try {
+                        unsafe = unsafeClass.getMethod("getUnsafe").invoke(null);
+                    } catch (Throwable ignored) {
+                    }
+                }
+                if (unsafe == null) {
+                    Log.w(TAG, "sun.misc.Unsafe instance unavailable");
+                    return false;
+                }
+
+                sPutObject = unsafeClass.getMethod("putObject",
+                        Object.class, long.class, Object.class);
+                sPutInt = unsafeClass.getMethod("putInt", Object.class, long.class, int.class);
+                sPutLong = unsafeClass.getMethod("putLong", Object.class, long.class, long.class);
+                try {
+                    sPutBoolean = unsafeClass.getMethod("putBoolean",
+                            Object.class, long.class, boolean.class);
+                } catch (NoSuchMethodException ignored) {
+                }
+                sUnsafe = unsafe;
+            } catch (Throwable t) {
+                Log.w(TAG, "Failed to resolve sun.misc.Unsafe: " + t);
+                sUnsafe = null;
+                return false;
+            }
+
+            try {
+                Field f = Field.class.getDeclaredField("offset");
+                f.setAccessible(true);
+                sFieldOffset = f;
+            } catch (Throwable ignored) {
+            }
+            if (sFieldOffset == null) {
+                try {
+                    Method m = Field.class.getDeclaredMethod("getOffset");
+                    m.setAccessible(true);
+                    sFieldGetOffset = m;
+                } catch (Throwable ignored) {
+                }
+            }
+            if (sFieldOffset == null && sFieldGetOffset == null) {
+                Log.w(TAG, "Unable to resolve java.lang.reflect.Field offset");
+                return false;
+            }
+            return true;
+        }
+    }
+
+    private static long fieldOffset(Field field) throws ReflectiveOperationException {
+        if (sFieldOffset != null) {
+            return ((Number) sFieldOffset.get(field)).longValue();
+        }
+        return ((Number) sFieldGetOffset.invoke(field)).longValue();
+    }
+
+    private static void putStaticViaUnsafe(Field field, Object value)
+            throws ReflectiveOperationException {
+        if (!initUnsafe()) {
+            throw new IllegalStateException("Unsafe fallback unavailable");
+        }
+        if (!Modifier.isStatic(field.getModifiers())) {
+            throw new IllegalArgumentException(field.getName() + " is not static");
+        }
+
+        Object base = field.getDeclaringClass();
+        long offset = fieldOffset(field);
+        Class<?> type = field.getType();
+
+        if (!type.isPrimitive()) {
+            sPutObject.invoke(sUnsafe, base, offset, value);
+        } else if (type == int.class) {
+            sPutInt.invoke(sUnsafe, base, offset, ((Number) value).intValue());
+        } else if (type == long.class) {
+            sPutLong.invoke(sUnsafe, base, offset, ((Number) value).longValue());
+        } else if (type == boolean.class && sPutBoolean != null) {
+            sPutBoolean.invoke(sUnsafe, base, offset, (Boolean) value);
+        } else {
+            throw new IllegalArgumentException("Unsupported static type " + type);
+        }
+    }
+
+    private static void setStaticField(Field field, Object value) throws Exception {
+        field.setAccessible(true);
+        try {
+            try {
+                field.set(null, value);
+            } catch (IllegalAccessException e) {
+                putStaticViaUnsafe(field, value);
+            }
+            Object now = field.get(null);
+            if (!Objects.equals(now, value)) {
+                throw new IllegalStateException("write to " + field.getName()
+                        + " did not stick (still " + now + ")");
+            }
+        } finally {
+            field.setAccessible(false);
+        }
+    }
+
     private void spoofSdkInt() {
         try {
             Field field = Build.VERSION.class.getDeclaredField("SDK_INT");
             field.setAccessible(true);
             int oldValue = field.getInt(null);
+            field.setAccessible(false);
             int targetSdk = Math.min(oldValue, 32);
             if (oldValue != targetSdk) {
-                field.set(null, targetSdk);
+                setStaticField(field, targetSdk);
                 Log.d(TAG + "/Java:PS", "[SDK_INT]: " + oldValue + " -> " + targetSdk);
             }
-            field.setAccessible(false);
         } catch (Exception e) {
-            Log.e(TAG, "Failed to spoof SDK_INT", e);
+            Log.e(TAG, "Failed to spoof SDK_INT: " + e);
         }
     }
 
-    private void spoofField(String fieldName, String value, String logSuffix) {
+    private boolean spoofField(String fieldName, String value, String logSuffix) {
         if (value == null || value.isEmpty()) {
             if (mVerboseLogs > 0) Log.d(TAG, fieldName + " is empty, skipping");
-            return;
+            return false;
         }
 
         try {
-            Field field = null;
-            String oldValue = null;
+            Field field;
 
             if (hasField(Build.class, fieldName)) {
                 field = Build.class.getDeclaredField(fieldName);
@@ -488,16 +612,16 @@ public final class PlayIntegritySpoofService {
                 field = Build.VERSION.class.getDeclaredField(fieldName);
             } else {
                 if (mVerboseLogs > 1) Log.d(TAG, "Field not found: " + fieldName);
-                return;
+                return false;
             }
 
             field.setAccessible(true);
-            oldValue = String.valueOf(field.get(null));
+            String oldValue = String.valueOf(field.get(null));
+            field.setAccessible(false);
 
             if (value.equals(oldValue)) {
                 if (mVerboseLogs > 2) Log.d(TAG, "[" + fieldName + "]: " + value + " (unchanged)");
-                field.setAccessible(false);
-                return;
+                return true;
             }
 
             Class<?> fieldType = field.getType();
@@ -513,17 +637,18 @@ public final class PlayIntegritySpoofService {
                 newValue = Boolean.parseBoolean(value);
             } else {
                 Log.w(TAG, "Unsupported field type: " + fieldType);
-                field.setAccessible(false);
-                return;
+                return false;
             }
 
-            field.set(null, newValue);
-            field.setAccessible(false);
+            setStaticField(field, newValue);
 
-            Log.d(TAG + "/Java:" + logSuffix, "[" + fieldName + "]: " + oldValue + " -> " + value);
-
+            if (mVerboseLogs > 0 || mDebug) {
+                Log.d(TAG + "/Java:" + logSuffix, "[" + fieldName + "]: " + oldValue + " -> " + value);
+            }
+            return true;
         } catch (Exception e) {
-            Log.e(TAG, "Failed to spoof " + fieldName, e);
+            Log.e(TAG, "Failed to spoof " + fieldName + ": " + e);
+            return false;
         }
     }
 
@@ -587,10 +712,16 @@ public final class PlayIntegritySpoofService {
     }
 
     public void spoofPhotosProps() {
+        int ok = 0;
         for (Map.Entry<String, Object> entry : PIXEL_XL_PROPS.entrySet()) {
-            spoofField(entry.getKey(), String.valueOf(entry.getValue()), "Photos");
+            if (spoofField(entry.getKey(), String.valueOf(entry.getValue()), "Photos")) ok++;
         }
-        Log.i(TAG, "Photos spoofing enabled - device appears as Pixel XL");
+        if (ok == PIXEL_XL_PROPS.size()) {
+            Log.i(TAG, "Photos spoofing enabled - device appears as Pixel XL");
+        } else {
+            Log.w(TAG, "Photos spoofing partial: " + ok + "/" + PIXEL_XL_PROPS.size()
+                    + " fields applied");
+        }
     }
 
     public Boolean hasSystemFeature(String name, int version) {
