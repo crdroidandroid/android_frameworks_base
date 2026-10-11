@@ -28,6 +28,7 @@ import android.content.pm.SigningDetails;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.Process;
+import android.os.SELinux;
 import android.os.Trace;
 import android.os.UserHandle;
 import android.text.TextUtils;
@@ -324,6 +325,63 @@ public abstract class AppsFilterBase implements AppsFilterSnapshot {
         return targetUid == Process.getAppUidForSdkSandboxUid(callingUid);
     }
 
+    private static final String[] ROM_PACKAGE_PREFIXES = {
+            "org.lineageos.",
+            "lineageos.",
+            "co.aospa.",
+            "org.protonaosp.",
+            "org.omnirom.",
+            "com.android.axion.",
+            "com.axion.",
+            "com.libremobileos.",
+            "com.crdroid.",
+            "io.chaldeaprjkt.",
+            "org.lunaris."
+    };
+
+    private static final String[] UNTRUSTED_APP_DOMAINS = {
+            ":untrusted_app",
+            ":isolated_app",
+            ":ephemeral_app"
+    };
+
+    private static boolean shouldHideRomPackage(@Nullable PackageStateInternal targetPkgSetting, int callingAppId) {
+        if (targetPkgSetting == null 
+                || callingAppId < Process.FIRST_APPLICATION_UID
+                || callingAppId == targetPkgSetting.getAppId()) {
+            return false;
+        }
+
+        final String packageName = targetPkgSetting.getPackageName();
+        boolean isRomPackage = false;
+        for (String prefix : ROM_PACKAGE_PREFIXES) {
+            if (packageName.startsWith(prefix)) {
+                isRomPackage = true;
+                break;
+            }
+        }
+        if (!isRomPackage) {
+            return false;
+        }
+
+        final int callingPid = Binder.getCallingPid();
+        if (callingPid <= 0 || callingPid == Process.myPid()) {
+            return false;
+        }
+
+        final String context = SELinux.getPidContext(callingPid);
+        if (context == null) {
+            return false;
+        }
+
+        for (String domain : UNTRUSTED_APP_DOMAINS) {
+            if (context.contains(domain)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * See
      * {@link AppsFilterSnapshot#shouldFilterApplication(PackageDataSnapshot, int, Object,
@@ -337,6 +395,11 @@ public abstract class AppsFilterBase implements AppsFilterSnapshot {
         }
         try {
             int callingAppId = UserHandle.getAppId(callingUid);
+            
+            if (shouldHideRomPackage(targetPkgSetting, callingAppId)) {
+                return true;
+            }
+
             if (callingAppId < Process.FIRST_APPLICATION_UID
                     || targetPkgSetting.getAppId() < Process.FIRST_APPLICATION_UID
                     || callingAppId == targetPkgSetting.getAppId()) {
