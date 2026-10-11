@@ -4,6 +4,8 @@
      SPDX-License-Identifier: Apache-2.0
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- GameSpace -->
+    <string name="gamespace_new_game_added"><xliff:g id="name" example="MyApp">%s</xliff:g> 已添加到 游戏空间</string>
     <!-- Button that copies the url to the log of a crashed application -->
     <string name="aerr_copy">复制崩溃日志链接</string>
     <string name="url_copy_success">已成功复制链接</string>
@@ -16,6 +18,4 @@
     <string name="pocket_mode_instruction_step2">2. 按住电源按钮可退出口袋检测。</string>
     <!-- Cycle through ringer modes -->
     <string name="volume_dialog_ringer_guidance_normal">来电和通知时将响铃</string>
-    <!-- GameSpace -->
-    <string name="gamespace_new_game_added"><xliff:g id="name" example="MyApp">%s</xliff:g> 已添加到 游戏空间</string>
 </resources>
