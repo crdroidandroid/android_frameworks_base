@@ -99,7 +99,7 @@
     <string name="ax_dynamic_bar_bluetooth_device">Bluetooth apparaat</string>
     <string name="ax_dynamic_bar_left_earbud">Left earbud</string>
     <string name="ax_dynamic_bar_right_earbud">Right earbud</string>
-    <string name="ax_dynamic_bar_earbuds_case">Case</string>
+    <string name="ax_dynamic_bar_earbuds_case">Zaak</string>
     <string name="ax_dynamic_bar_apps_count"><xliff:g id="count" example="2">%d</xliff:g> apps</string>
     <string name="ax_dynamic_bar_just_now">Zojuist</string>
     <string name="ax_dynamic_bar_mins_ago"><xliff:g id="count" example="5">%d</xliff:g>m geleden</string>
@@ -157,15 +157,15 @@
     <string name="smartspace_content_desc">In een oogopslag</string>
     <string name="smartspace_flight_qr_code">QR code</string>
     <!-- Content description for the smartspace paging arrows [CHAR LIMIT=NONE] -->
-    <string name="accessibility_smartspace_previous_page">Previous page</string>
-    <string name="accessibility_smartspace_next_page">Next page</string>
+    <string name="accessibility_smartspace_previous_page">Vorige pagina</string>
+    <string name="accessibility_smartspace_next_page">Volgende pagina</string>
     <!-- Ambient indication -->
-    <string name="accessibility_action_expand">Expand</string>
-    <string name="accessibility_now_playing_container_recognition_result_content_description">Identified song. %1$s, %2$s.</string>
-    <string name="accessibility_now_playing_container_song_searching_content_description">Identifying song</string>
-    <string name="accessibility_now_playing_like_icon">Add to favorites</string>
-    <string name="accessibility_now_playing_play_icon">Play on Default Music Player</string>
-    <string name="accessibility_now_playing_unlike_icon">Remove from favorites</string>
+    <string name="accessibility_action_expand">Uitvouwen</string>
+    <string name="accessibility_now_playing_container_recognition_result_content_description">Nummer geïdentificeerd. %1$s, %2$s.</string>
+    <string name="accessibility_now_playing_container_song_searching_content_description">Nummer identificeren</string>
+    <string name="accessibility_now_playing_like_icon">Toevoegen aan favorieten</string>
+    <string name="accessibility_now_playing_play_icon">Afspelen op de standaard muziekspeler</string>
+    <string name="accessibility_now_playing_unlike_icon">Verwijder uit favorieten</string>
     <string name="now_playing_label">Speelt nu</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">On-The-Go geactiveerd</string>
@@ -197,7 +197,7 @@
     <string name="screenshot_lens_label">Lens</string>
     <!-- Per-app volume panel -->
     <string name="app_volume">App volume</string>
-    <string name="app_volume_no_active_apps">No active audio playback</string>
+    <string name="app_volume_no_active_apps">Geen actieve audio playback</string>
     <!-- Sound QS Tile -->
     <string name="quick_settings_sound_label">Geluid</string>
     <string name="quick_settings_sound_ring">Beltoon</string>
