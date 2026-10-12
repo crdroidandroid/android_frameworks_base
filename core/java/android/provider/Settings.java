@@ -22954,9 +22954,7 @@ public final class Settings {
         public static boolean setStrings(@NonNull String namespace,
                 @NonNull Map<String, String> keyValues)
                 throws DeviceConfig.BadConfigException {
-            boolean result = setStrings(getContentResolver(), namespace, keyValues);
-            DeviceConfigUtils.setDefaultProperties(namespace, null);
-            return result;
+            return setStrings(getContentResolver(), namespace, keyValues);
         }
 
         /**
@@ -22982,6 +22980,10 @@ public final class Settings {
             int result = sNameValueCache.setStringsForPrefix(
                     resolver, createPrefix(namespace), compositeKeyValueMap);
             if (result == SET_ALL_RESULT_SUCCESS) {
+                // Bulk updates use this overload directly (for example, DeviceConfig sync). Keep
+                // protected device overrides authoritative after the provider replaces a whole
+                // namespace.
+                DeviceConfigUtils.setDefaultProperties(namespace, null);
                 return true;
             } else if (result == SET_ALL_RESULT_DISABLED) {
                 return false;
