@@ -97,9 +97,9 @@
     <string name="ax_dynamic_bar_connecting">Csatlakozás…</string>
     <string name="ax_dynamic_bar_one_device">1 készülék</string>
     <string name="ax_dynamic_bar_bluetooth_device">Bluetooth eszköz</string>
-    <string name="ax_dynamic_bar_left_earbud">Left earbud</string>
-    <string name="ax_dynamic_bar_right_earbud">Right earbud</string>
-    <string name="ax_dynamic_bar_earbuds_case">Case</string>
+    <string name="ax_dynamic_bar_left_earbud">Bal fülhallgató</string>
+    <string name="ax_dynamic_bar_right_earbud">Jobb fülhallgató</string>
+    <string name="ax_dynamic_bar_earbuds_case">Tároló</string>
     <string name="ax_dynamic_bar_apps_count"><xliff:g id="count" example="2">%d</xliff:g> alkalmazás</string>
     <string name="ax_dynamic_bar_just_now">Épp most</string>
     <string name="ax_dynamic_bar_mins_ago"><xliff:g id="count" example="5">%d</xliff:g>p ezelőtt</string>
@@ -157,15 +157,15 @@
     <string name="smartspace_content_desc">Belepillantás</string>
     <string name="smartspace_flight_qr_code">QR-kód</string>
     <!-- Content description for the smartspace paging arrows [CHAR LIMIT=NONE] -->
-    <string name="accessibility_smartspace_previous_page">Previous page</string>
-    <string name="accessibility_smartspace_next_page">Next page</string>
+    <string name="accessibility_smartspace_previous_page">Előző oldal</string>
+    <string name="accessibility_smartspace_next_page">Következő oldal</string>
     <!-- Ambient indication -->
-    <string name="accessibility_action_expand">Expand</string>
-    <string name="accessibility_now_playing_container_recognition_result_content_description">Identified song. %1$s, %2$s.</string>
-    <string name="accessibility_now_playing_container_song_searching_content_description">Identifying song</string>
-    <string name="accessibility_now_playing_like_icon">Add to favorites</string>
-    <string name="accessibility_now_playing_play_icon">Play on Default Music Player</string>
-    <string name="accessibility_now_playing_unlike_icon">Remove from favorites</string>
+    <string name="accessibility_action_expand">Kibontás</string>
+    <string name="accessibility_now_playing_container_recognition_result_content_description">Azonosított dal. %1$s, %2$s.</string>
+    <string name="accessibility_now_playing_container_song_searching_content_description">Dal azonosítása</string>
+    <string name="accessibility_now_playing_like_icon">Kedvencekhez ad</string>
+    <string name="accessibility_now_playing_play_icon">Lejátszás az alapértelmezett zenelejátszón</string>
+    <string name="accessibility_now_playing_unlike_icon">Eltávolítás a kedvencekből</string>
     <string name="now_playing_label">Most hallható </string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">Menet közben (On-The-Go) aktiválva</string>
@@ -196,8 +196,8 @@
     <!-- Label for UI element which allows to use lens on screenshot [CHAR LIMIT=30] -->
     <string name="screenshot_lens_label">Google Lens</string>
     <!-- Per-app volume panel -->
-    <string name="app_volume">App volume</string>
-    <string name="app_volume_no_active_apps">No active audio playback</string>
+    <string name="app_volume">Alkalmazás-hangerő</string>
+    <string name="app_volume_no_active_apps">Nincs aktív hanglejátszás</string>
     <!-- Sound QS Tile -->
     <string name="quick_settings_sound_label">Hang</string>
     <string name="quick_settings_sound_ring">Csengés</string>
