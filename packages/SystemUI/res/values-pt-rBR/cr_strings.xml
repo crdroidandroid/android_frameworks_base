@@ -49,11 +49,11 @@
     <!-- Smartspace -->
     <string name="accessibility_next_alarm">Próximo alarme às %s</string>
     <string name="accessibility_smartspace_page">Página %1$d de %2$d</string>
-    <string name="active_mode_content_description">%1$s is on</string>
+    <string name="active_mode_content_description">%1$s está ativado</string>
     <string name="music_controls_no_title">Sem título</string>
-    <string name="smartspace_content_desc">At a glance</string>
+    <string name="smartspace_content_desc">Visão geral</string>
     <string name="smartspace_flight_qr_code">Código QR</string>
-    <string name="smartspace_role_desc">View</string>
+    <string name="smartspace_role_desc">Exibir</string>
     <!-- Button to restart SystemUI, within the Restart Options dialog -->
     <string name="global_action_restart_systemui">Interface do sistema</string>
     <!-- On The Go -->
@@ -68,7 +68,7 @@
     <string name="onthego_channel_name">Principal</string>
     <string name="global_action_onthego">OTG</string>
     <string name="onthego_dialog_title">OTG</string>
-    <string name="onthego_opacity_title">Camera opacity</string>
+    <string name="onthego_opacity_title">Opacidade do painel</string>
     <string name="onthego_opacity_default">50%</string>
     <string name="onthego_restart_title">Restart on camera switch</string>
     <string name="onthego_restart_summary">Briefly restart the preview when the camera changes</string>
@@ -195,14 +195,14 @@
     <string name="ax_dynamic_bar_saved">Saved</string>
     <string name="ax_dynamic_bar_recording">Recording</string>
     <string name="ax_dynamic_bar_done">Done</string>
-    <string name="ax_dynamic_bar_ringing">Ringing</string>
+    <string name="ax_dynamic_bar_ringing">Tocando</string>
     <string name="ax_dynamic_bar_running">Running</string>
-    <string name="ax_dynamic_bar_on">ON</string>
+    <string name="ax_dynamic_bar_on">ATIVAR</string>
     <string name="ax_dynamic_bar_recents">Recents</string>
-    <string name="ax_dynamic_bar_kill_app">Kill app</string>
-    <string name="ax_dynamic_bar_unlocked">Unlocked</string>
+    <string name="ax_dynamic_bar_kill_app">Encerrar app</string>
+    <string name="ax_dynamic_bar_unlocked">Desbloqueado</string>
     <string name="ax_dynamic_bar_device_unlocked">Device Unlocked</string>
-    <string name="ax_dynamic_bar_progress">Progress</string>
+    <string name="ax_dynamic_bar_progress">Avançar</string>
     <string name="ax_dynamic_bar_casting_to">Casting to</string>
     <string name="ax_dynamic_bar_camera_mic">Camera &amp; Microphone</string>
     <string name="ax_dynamic_bar_camera">Camera</string>
@@ -245,7 +245,7 @@
     <string name="ax_dynamic_bar_cam_short">Cam</string>
     <string name="ax_dynamic_bar_mic_short">Mic</string>
     <string name="ax_dynamic_bar_recent_apps">Recent Apps</string>
-    <string name="ax_dynamic_bar_count_running"><xliff:g id="count" example="3">%d</xliff:g> running</string>
+    <string name="ax_dynamic_bar_count_running"><xliff:g id="count" example="3">%d</xliff:g> executando</string>
     <string name="ax_dynamic_bar_sports_vs">vs</string>
     <string name="ax_dynamic_bar_sports_live">LIVE</string>
     <string name="ax_dynamic_bar_sports_final">Final</string>
