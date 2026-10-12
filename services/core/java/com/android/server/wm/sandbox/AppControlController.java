@@ -70,6 +70,9 @@ public class AppControlController {
     private final Map<String, int[]> mGidRestrictions = new HashMap<>();
     private final Map<String, Set<String>> mSpoofSettingsMap = new HashMap<>();
     private final Set<String> mDataIsolationPackages = new HashSet<>();
+    // SettingsProvider/AppOps can call back into package and sandbox services. Never hold the
+    // state monitor while writing the setting; serialize only the external writes instead.
+    private final Object mSettingsWriteLock = new Object();
 
     private ContentObserver mConfigObserver;
 
@@ -163,19 +166,25 @@ public class AppControlController {
 
     private void saveConfigToSettings() {
         try {
-            JSONObject config = new JSONObject();
+            synchronized (mSettingsWriteLock) {
+                JSONObject config = new JSONObject();
 
-            synchronized (this) {
-                config.put(KEY_LOCKED_PKGS, new JSONArray(mLockedPackages));
-                config.put(KEY_HIDDEN_PKGS, new JSONArray(mHiddenPackages));
-                config.put(KEY_SANDBOXED_PKGS, new JSONArray(mSandboxedPackages));
-                config.put(KEY_HIDEDEVOPTS_PKGS, new JSONArray(mHideDevOptsPackages));
-                saveSpoofSettingsMap(config);
-                config.put(KEY_DATA_ISOLATION, new JSONArray(mDataIsolationPackages));
-                saveGidRestrictions(config);
+                // Snapshot the in-memory state, then release this monitor before entering
+                // SettingsProvider. SettingsProvider/AppOps may synchronously query the
+                // package manager, which can call back into this controller.
+                synchronized (this) {
+                    config.put(KEY_LOCKED_PKGS, new JSONArray(mLockedPackages));
+                    config.put(KEY_HIDDEN_PKGS, new JSONArray(mHiddenPackages));
+                    config.put(KEY_SANDBOXED_PKGS, new JSONArray(mSandboxedPackages));
+                    config.put(KEY_HIDEDEVOPTS_PKGS, new JSONArray(mHideDevOptsPackages));
+                    saveSpoofSettingsMap(config);
+                    config.put(KEY_DATA_ISOLATION, new JSONArray(mDataIsolationPackages));
+                    saveGidRestrictions(config);
+                }
+
+                Settings.Secure.putString(mContentResolver, SETTING_SANDBOX_CONFIG,
+                        config.toString());
             }
-
-            Settings.Secure.putString(mContentResolver, SETTING_SANDBOX_CONFIG, config.toString());
 
         } catch (JSONException e) {
             Slog.e(TAG, "Failed to save sandbox_config JSON", e);
@@ -259,12 +268,14 @@ public class AppControlController {
             return;
         }
         int uid = getPackageUid(packageName);
+        final boolean changed;
         synchronized (this) {
-            if (mLockedPackages.add(packageName)) {
-                saveConfigToSettings();
-                if (uid >= 0) {
-                    broadcastPackageChange(packageName, uid);
-                }
+            changed = mLockedPackages.add(packageName);
+        }
+        if (changed) {
+            saveConfigToSettings();
+            if (uid >= 0) {
+                broadcastPackageChange(packageName, uid);
             }
         }
         Slog.d(TAG, "addLockedApp: " + packageName);
@@ -273,12 +284,14 @@ public class AppControlController {
     public void removeLockedApp(String packageName) {
         if (TextUtils.isEmpty(packageName)) return;
         int uid = getPackageUid(packageName);
+        final boolean changed;
         synchronized (this) {
-            if (mLockedPackages.remove(packageName)) {
-                saveConfigToSettings();
-                if (uid >= 0) {
-                    broadcastPackageChange(packageName, uid);
-                }
+            changed = mLockedPackages.remove(packageName);
+        }
+        if (changed) {
+            saveConfigToSettings();
+            if (uid >= 0) {
+                broadcastPackageChange(packageName, uid);
             }
         }
         Slog.d(TAG, "removeLockedApp: " + packageName);
@@ -291,14 +304,15 @@ public class AppControlController {
             return;
         }
         int uid = getPackageUid(packageName);
+        final boolean changed;
         synchronized (this) {
-            boolean changed = hidden ? mHiddenPackages.add(packageName)
-                                     : mHiddenPackages.remove(packageName);
-            if (changed) {
-                saveConfigToSettings();
-                if (uid >= 0) {
-                    broadcastPackageChange(packageName, uid);
-                }
+            changed = hidden ? mHiddenPackages.add(packageName)
+                    : mHiddenPackages.remove(packageName);
+        }
+        if (changed) {
+            saveConfigToSettings();
+            if (uid >= 0) {
+                broadcastPackageChange(packageName, uid);
             }
         }
         Slog.d(TAG, "setPackageHidden: " + packageName + " hidden=" + hidden);
@@ -310,9 +324,9 @@ public class AppControlController {
         synchronized (this) {
             changed = sandboxed ? mSandboxedPackages.add(packageName)
                     : mSandboxedPackages.remove(packageName);
-            if (changed) {
-                saveConfigToSettings();
-            }
+        }
+        if (changed) {
+            saveConfigToSettings();
         }
         Slog.d(TAG, "setPackageSandboxed: " + packageName + " sandboxed=" + sandboxed);
         return changed;
@@ -320,12 +334,13 @@ public class AppControlController {
 
     public void setDevOptionsHidden(String packageName, boolean hidden) {
         if (TextUtils.isEmpty(packageName)) return;
+        final boolean changed;
         synchronized (this) {
-            boolean changed = hidden ? mHideDevOptsPackages.add(packageName)
-                                    : mHideDevOptsPackages.remove(packageName);
-            if (changed) {
-                saveConfigToSettings();
-            }
+            changed = hidden ? mHideDevOptsPackages.add(packageName)
+                    : mHideDevOptsPackages.remove(packageName);
+        }
+        if (changed) {
+            saveConfigToSettings();
         }
         Slog.d(TAG, "setDevOptionsHidden: " + packageName + " hidden=" + hidden);
     }
@@ -462,8 +477,8 @@ public class AppControlController {
             } else {
                 mGidRestrictions.put(packageName, gids);
             }
-            saveConfigToSettings();
         }
+        saveConfigToSettings();
     }
 
     public int[] getRestrictedGids(String packageName) {
@@ -506,8 +521,10 @@ public class AppControlController {
                     mSpoofSettingsMap.remove(packageName);
                 }
             }
-            if (changed) saveConfigToSettings();
+            // Persist after releasing the state monitor. SettingsProvider/AppOps may call back
+            // through package visibility and acquire this controller's monitor.
         }
+        if (changed) saveConfigToSettings();
         return changed;
     }
 
@@ -557,10 +574,11 @@ public class AppControlController {
 
     public void setDataIsolationEnabled(String packageName, boolean enabled) {
         if (TextUtils.isEmpty(packageName)) return;
+        final boolean changed;
         synchronized (this) {
-            boolean changed = enabled ? mDataIsolationPackages.add(packageName)
-                                      : mDataIsolationPackages.remove(packageName);
-            if (changed) saveConfigToSettings();
+            changed = enabled ? mDataIsolationPackages.add(packageName)
+                    : mDataIsolationPackages.remove(packageName);
         }
+        if (changed) saveConfigToSettings();
     }
 }
