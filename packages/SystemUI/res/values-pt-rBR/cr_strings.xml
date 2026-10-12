@@ -77,8 +77,8 @@
     <string name="ax_dynamic_bar_device_unlocked">Device Unlocked</string>
     <string name="ax_dynamic_bar_progress">Avançar</string>
     <string name="ax_dynamic_bar_casting_to">Casting to</string>
-    <string name="ax_dynamic_bar_camera_mic">Camera &amp; Microphone</string>
-    <string name="ax_dynamic_bar_camera">Camera</string>
+    <string name="ax_dynamic_bar_camera_mic">Câmera &amp; Microfone</string>
+    <string name="ax_dynamic_bar_camera">Câmera</string>
     <string name="ax_dynamic_bar_microphone">Microphone</string>
     <string name="ax_dynamic_bar_camera_mic_short">Camera &amp; Mic</string>
     <string name="ax_dynamic_bar_hotspot_devices"><xliff:g id="count" example="3">%d</xliff:g> devices</string>
