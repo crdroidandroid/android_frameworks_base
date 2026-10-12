@@ -19,18 +19,17 @@ package com.android.internal.util.crdroid;
 import android.content.res.Resources;
 import android.provider.Settings;
 import android.util.Log;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
-import com.android.internal.util.ArrayUtils;
+import java.util.Arrays;
 
 public class DeviceConfigUtils {
 
     private static final String TAG = DeviceConfigUtils.class.getSimpleName();
 
     private static final boolean DEBUG = false;
+
+    /** Allows the override writer itself to pass through the public Config write path. */
+    private static final ThreadLocal<Boolean> sApplyingDefaults = new ThreadLocal<>();
 
     private static String[] getDeviceConfigsOverride() {
         String[] globalDeviceConfigs =
@@ -43,12 +42,19 @@ public class DeviceConfigUtils {
     }
 
     public static boolean shouldDenyDeviceConfigControl(String namespace, String property) {
+        if (Boolean.TRUE.equals(sApplyingDefaults.get())) {
+            return false;
+        }
+
         if (DEBUG) Log.d(TAG, "shouldAllowDeviceConfigControl, namespace=" + namespace + ", property=" + property);
         for (String p : getDeviceConfigsOverride()) {
-            String[] kv = p.split("=");
-            String fullKey = kv[0];
-            String[] nsKey = fullKey.split("/");
-            if (nsKey[0] == namespace && nsKey[1] == property){
+            String[] kv = p.split("=", 2);
+            String[] nsKey = kv[0].split("/", 2);
+            if (nsKey.length != 2) {
+                Log.w(TAG, "Ignoring malformed DeviceConfig override: " + p);
+                continue;
+            }
+            if (nsKey[0].equals(namespace) && nsKey[1].equals(property)) {
                 if (DEBUG) Log.d(TAG, "shouldAllowDeviceConfigControl, deny, namespace=" + namespace + ", property=" + property);
                 return true;
             }
@@ -59,27 +65,37 @@ public class DeviceConfigUtils {
 
     public static void setDefaultProperties(String filterNamespace, String filterProperty) {
         if (DEBUG) Log.d(TAG, "setDefaultProperties");
-        for (String p : getDeviceConfigsOverride()) {
-            String[] kv = p.split("=");
-            String fullKey = kv[0];
-            String[] nsKey = fullKey.split("/");
+        final boolean wasApplyingDefaults = Boolean.TRUE.equals(sApplyingDefaults.get());
+        sApplyingDefaults.set(true);
+        try {
+            for (String p : getDeviceConfigsOverride()) {
+                String[] kv = p.split("=", 2);
+                String[] nsKey = kv[0].split("/", 2);
+                if (nsKey.length != 2) {
+                    Log.w(TAG, "Ignoring malformed DeviceConfig override: " + p);
+                    continue;
+                }
 
-            String namespace = nsKey[0];
-            String key = nsKey[1];
+                String namespace = nsKey[0];
+                String key = nsKey[1];
 
-            if (filterNamespace != null && filterNamespace == namespace){
-                continue;
+                if (filterNamespace != null && !filterNamespace.equals(namespace)) {
+                    continue;
+                }
+
+                if (filterProperty != null && !filterProperty.equals(key)) {
+                    continue;
+                }
+
+                String value = kv.length > 1 ? kv[1] : "";
+                Settings.Config.putString(namespace, key, value, false);
             }
-
-            if (filterProperty != null && filterProperty == key){
-                continue;
+        } finally {
+            if (wasApplyingDefaults) {
+                sApplyingDefaults.set(true);
+            } else {
+                sApplyingDefaults.remove();
             }
-
-            String value = "";
-            if (kv.length > 1) {
-                value = kv[1];
-            }
-            Settings.Config.putString(namespace, key, value, false);
         }
     }
 }
