@@ -52,5 +52,5 @@ interface IAxSandboxManager {
     boolean isSandboxDataIsolationEnabled(String packageName);
     void setSandboxDataIsolationEnabled(String packageName, boolean enabled);
 
-    String getSpoofedSetting(String callingPackage, String settingName);
+    String getSpoofedSetting(@nullable String callingPackage, int callingUid, String settingName);
 }
