@@ -70,8 +70,8 @@
     <string name="onthego_dialog_title">OTG</string>
     <string name="onthego_opacity_title">Opacidade do painel</string>
     <string name="onthego_opacity_default">50%</string>
-    <string name="onthego_restart_title">Restart on camera switch</string>
-    <string name="onthego_restart_summary">Briefly restart the preview when the camera changes</string>
+    <string name="onthego_restart_title">Reiniciar no interruptor da câmera</string>
+    <string name="onthego_restart_summary">Reiniciar rapidamente a visualização quando a câmera mudar</string>
     <string name="onthego_front_camera_title">Front camera</string>
     <string name="onthego_front_camera_summary">Use the front camera instead of the rear</string>
     <!-- Data usage info in QS footer -->
@@ -204,8 +204,8 @@
     <string name="ax_dynamic_bar_device_unlocked">Device Unlocked</string>
     <string name="ax_dynamic_bar_progress">Avançar</string>
     <string name="ax_dynamic_bar_casting_to">Casting to</string>
-    <string name="ax_dynamic_bar_camera_mic">Camera &amp; Microphone</string>
-    <string name="ax_dynamic_bar_camera">Camera</string>
+    <string name="ax_dynamic_bar_camera_mic">Câmera &amp; Microfone</string>
+    <string name="ax_dynamic_bar_camera">Câmera</string>
     <string name="ax_dynamic_bar_microphone">Microphone</string>
     <string name="ax_dynamic_bar_camera_mic_short">Camera &amp; Mic</string>
     <string name="ax_dynamic_bar_hotspot_devices"><xliff:g id="count" example="3">%d</xliff:g> devices</string>
