@@ -177,7 +177,7 @@ public class FontController {
         // Don't remap variable-* families when the default Google Sans Flex
         // font stack is active; let them pass through so optical sizing and
         // ROND axis values in fonts_customization.xml render correctly.
-        if (fontToOverride.contains("variable") && currentFont.contains(DEFAULT_FONT_ROOT)) {
+        if (fontToOverride.contains("variable") && isDefaultFont(currentFont)) {
             logger("Default font active, passing through variable family: " + fontToOverride);
             return null;
         }
@@ -196,6 +196,10 @@ public class FontController {
 
     public static Typeface resolveBaseTypeface() {
         return get().resolveDefaultTypeface();
+    }
+
+    public static boolean isDefaultFont(String fontFamily) {
+        return fontFamily != null && fontFamily.contains(DEFAULT_FONT_ROOT);
     }
 
     private Typeface resolveDefaultTypeface() {
