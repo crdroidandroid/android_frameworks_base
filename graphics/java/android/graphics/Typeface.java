@@ -999,6 +999,12 @@ public class Typeface {
         }
     }
 
+    private static final String VARIABLE_FAMILY_PREFIX = "variable-";
+
+    // The families the variable-* families point to, or null to use them as defined.
+    private static volatile String sVariableHeadlineFamily;
+    private static volatile String sVariableBodyFamily;
+
     /**
      * Create a typeface object given a family name, and option style information.
      * If null is passed for the name, then the "default" font will be chosen.
@@ -1403,7 +1409,44 @@ public class Typeface {
     /** @hide */
     public static Typeface getSystemDefaultTypeface(@NonNull String familyName) {
         Typeface tf = sSystemFontMap.get(familyName);
+        if (familyName != null && familyName.startsWith(VARIABLE_FAMILY_PREFIX)) {
+            final Typeface selected = getSelectedTypeface(familyName, tf);
+            if (selected != null) {
+                return selected;
+            }
+        }
         return tf == null ? Typeface.DEFAULT : tf;
+    }
+
+    /**
+     * Points the Material 3 Expressive {@code variable-*} families at the families of the
+     * selected font, keeping their weights. The display, headline and title families follow
+     * {@code headlineFamily}, and the body and label families follow {@code bodyFamily}.
+     * Passing null for both uses the {@code variable-*} families as defined.
+     *
+     * @hide
+     */
+    public static void setVariableFontFamilies(@Nullable String headlineFamily,
+            @Nullable String bodyFamily) {
+        sVariableHeadlineFamily = headlineFamily;
+        sVariableBodyFamily = bodyFamily;
+    }
+
+    @Nullable
+    private static Typeface getSelectedTypeface(@NonNull String familyName,
+            @Nullable Typeface variable) {
+        final String role = familyName.substring(VARIABLE_FAMILY_PREFIX.length());
+        final String selectedFamily = role.startsWith("body") || role.startsWith("label")
+                ? sVariableBodyFamily : sVariableHeadlineFamily;
+        if (selectedFamily == null) {
+            return null;
+        }
+        final Typeface selected = sSystemFontMap.get(selectedFamily);
+        if (selected == null) {
+            return null;
+        }
+        final int weight = variable != null ? variable.getWeight() : FontStyle.FONT_WEIGHT_NORMAL;
+        return create(selected, weight, false);
     }
 
     /** @hide */
