@@ -77,7 +77,7 @@
     <string name="ax_dynamic_bar_device_unlocked">Odblokowano urządzenie</string>
     <string name="ax_dynamic_bar_progress">Postęp</string>
     <string name="ax_dynamic_bar_casting_to">Przesyłanie do</string>
-    <string name="ax_dynamic_bar_camera_mic">Aparat oraz mikrofon</string>
+    <string name="ax_dynamic_bar_camera_mic">Aparat i mikrofon</string>
     <string name="ax_dynamic_bar_camera">Aparat</string>
     <string name="ax_dynamic_bar_microphone">Mikrofon</string>
     <string name="ax_dynamic_bar_camera_mic_short">Aparat i Mik.</string>
