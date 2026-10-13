@@ -97,9 +97,9 @@
     <string name="ax_dynamic_bar_connecting">接続中\u2026</string>
     <string name="ax_dynamic_bar_one_device">1 デバイス</string>
     <string name="ax_dynamic_bar_bluetooth_device">Bluetoothデバイス</string>
-    <string name="ax_dynamic_bar_left_earbud">Left earbud</string>
-    <string name="ax_dynamic_bar_right_earbud">Right earbud</string>
-    <string name="ax_dynamic_bar_earbuds_case">Case</string>
+    <string name="ax_dynamic_bar_left_earbud">左イヤホン</string>
+    <string name="ax_dynamic_bar_right_earbud">右イヤホン</string>
+    <string name="ax_dynamic_bar_earbuds_case">ケース</string>
     <string name="ax_dynamic_bar_apps_count"><xliff:g id="count" example="2">%d</xliff:g>個のアプリ</string>
     <string name="ax_dynamic_bar_just_now">たった今</string>
     <string name="ax_dynamic_bar_mins_ago"><xliff:g id="count" example="5">%d</xliff:g>分前</string>
@@ -157,15 +157,15 @@
     <string name="smartspace_content_desc">At a glance</string>
     <string name="smartspace_flight_qr_code">QRコード</string>
     <!-- Content description for the smartspace paging arrows [CHAR LIMIT=NONE] -->
-    <string name="accessibility_smartspace_previous_page">Previous page</string>
-    <string name="accessibility_smartspace_next_page">Next page</string>
+    <string name="accessibility_smartspace_previous_page">前のページ</string>
+    <string name="accessibility_smartspace_next_page">次のページ</string>
     <!-- Ambient indication -->
-    <string name="accessibility_action_expand">Expand</string>
-    <string name="accessibility_now_playing_container_recognition_result_content_description">Identified song. %1$s, %2$s.</string>
-    <string name="accessibility_now_playing_container_song_searching_content_description">Identifying song</string>
-    <string name="accessibility_now_playing_like_icon">Add to favorites</string>
-    <string name="accessibility_now_playing_play_icon">Play on Default Music Player</string>
-    <string name="accessibility_now_playing_unlike_icon">Remove from favorites</string>
+    <string name="accessibility_action_expand">展開</string>
+    <string name="accessibility_now_playing_container_recognition_result_content_description">曲が特定されました。 %1$s, %2$s。</string>
+    <string name="accessibility_now_playing_container_song_searching_content_description">曲を識別しています</string>
+    <string name="accessibility_now_playing_like_icon">お気に入りに追加</string>
+    <string name="accessibility_now_playing_play_icon">デフォルトの音楽プレーヤーで再生</string>
+    <string name="accessibility_now_playing_unlike_icon">お気に入りから削除する</string>
     <string name="now_playing_label">再生中</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">On-The-Go モードを有効化しました</string>
@@ -196,8 +196,8 @@
     <!-- Label for UI element which allows to use lens on screenshot [CHAR LIMIT=30] -->
     <string name="screenshot_lens_label">レンズ</string>
     <!-- Per-app volume panel -->
-    <string name="app_volume">App volume</string>
-    <string name="app_volume_no_active_apps">No active audio playback</string>
+    <string name="app_volume">アプリの音量</string>
+    <string name="app_volume_no_active_apps">現在再生中の音声はありません</string>
     <!-- Sound QS Tile -->
     <string name="quick_settings_sound_label">サウンド</string>
     <string name="quick_settings_sound_ring">着信音</string>
