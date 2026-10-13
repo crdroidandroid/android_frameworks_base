@@ -97,9 +97,9 @@
     <string name="ax_dynamic_bar_connecting">Łączenie\u2026</string>
     <string name="ax_dynamic_bar_one_device">1 urządzenie</string>
     <string name="ax_dynamic_bar_bluetooth_device">Urządzenie Bluetooth</string>
-    <string name="ax_dynamic_bar_left_earbud">Left earbud</string>
-    <string name="ax_dynamic_bar_right_earbud">Right earbud</string>
-    <string name="ax_dynamic_bar_earbuds_case">Case</string>
+    <string name="ax_dynamic_bar_left_earbud">Lewa słuchawka</string>
+    <string name="ax_dynamic_bar_right_earbud">Prawa słuchawka</string>
+    <string name="ax_dynamic_bar_earbuds_case">Etui</string>
     <string name="ax_dynamic_bar_apps_count"><xliff:g id="count" example="2">%d</xliff:g> aplikacje</string>
     <string name="ax_dynamic_bar_just_now">Przed chwilą</string>
     <string name="ax_dynamic_bar_mins_ago"><xliff:g id="count" example="5">%d</xliff:g>m temu</string>
@@ -115,7 +115,7 @@
     <string name="ax_dynamic_bar_rec_short">Zapis</string>
     <string name="ax_dynamic_bar_cast_short">Przesyłaj</string>
     <string name="ax_dynamic_bar_active">Aktywny</string>
-    <string name="ax_dynamic_bar_biometric">Biometria</string>
+    <string name="ax_dynamic_bar_biometric">Biometryczny</string>
     <string name="ax_dynamic_bar_trust">Zaufanie</string>
     <string name="ax_dynamic_bar_alignment">Wyrównanie</string>
     <string name="ax_dynamic_bar_cam_short">Kam.</string>
@@ -157,15 +157,15 @@
     <string name="smartspace_content_desc">W skrócie</string>
     <string name="smartspace_flight_qr_code">Kod QR</string>
     <!-- Content description for the smartspace paging arrows [CHAR LIMIT=NONE] -->
-    <string name="accessibility_smartspace_previous_page">Previous page</string>
-    <string name="accessibility_smartspace_next_page">Next page</string>
+    <string name="accessibility_smartspace_previous_page">Poprzednia strona</string>
+    <string name="accessibility_smartspace_next_page">Następna strona</string>
     <!-- Ambient indication -->
-    <string name="accessibility_action_expand">Expand</string>
-    <string name="accessibility_now_playing_container_recognition_result_content_description">Identified song. %1$s, %2$s.</string>
-    <string name="accessibility_now_playing_container_song_searching_content_description">Identifying song</string>
-    <string name="accessibility_now_playing_like_icon">Add to favorites</string>
-    <string name="accessibility_now_playing_play_icon">Play on Default Music Player</string>
-    <string name="accessibility_now_playing_unlike_icon">Remove from favorites</string>
+    <string name="accessibility_action_expand">Rozwiń</string>
+    <string name="accessibility_now_playing_container_recognition_result_content_description">Zidentyfikowane utwory. %1$s, %2$s.</string>
+    <string name="accessibility_now_playing_container_song_searching_content_description">Identyfikowanie utworu</string>
+    <string name="accessibility_now_playing_like_icon">Dodaj do ulubionych</string>
+    <string name="accessibility_now_playing_play_icon">Odtwarzaj na domyślnym odtwarzaczu muzyki</string>
+    <string name="accessibility_now_playing_unlike_icon">Usuń z ulubionych</string>
     <string name="now_playing_label">Teraz odtwarzane</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker"> Aktywowano tryb \"w ruchu\"</string>
@@ -196,8 +196,8 @@
     <!-- Label for UI element which allows to use lens on screenshot [CHAR LIMIT=30] -->
     <string name="screenshot_lens_label">Obiektyw</string>
     <!-- Per-app volume panel -->
-    <string name="app_volume">App volume</string>
-    <string name="app_volume_no_active_apps">No active audio playback</string>
+    <string name="app_volume">Głośność aplikacji</string>
+    <string name="app_volume_no_active_apps">Brak odtwarzania dźwięku</string>
     <!-- Sound QS Tile -->
     <string name="quick_settings_sound_label">Dźwięk</string>
     <string name="quick_settings_sound_ring">Dzwonek</string>
