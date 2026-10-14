@@ -97,9 +97,9 @@
     <string name="ax_dynamic_bar_connecting">З\'єднання\u2026</string>
     <string name="ax_dynamic_bar_one_device">1 пристрій</string>
     <string name="ax_dynamic_bar_bluetooth_device">Пристрій Bluetooth</string>
-    <string name="ax_dynamic_bar_left_earbud">Left earbud</string>
-    <string name="ax_dynamic_bar_right_earbud">Right earbud</string>
-    <string name="ax_dynamic_bar_earbuds_case">Case</string>
+    <string name="ax_dynamic_bar_left_earbud">Ліва нав\'язка</string>
+    <string name="ax_dynamic_bar_right_earbud">Правий навушник</string>
+    <string name="ax_dynamic_bar_earbuds_case">Футляр</string>
     <string name="ax_dynamic_bar_apps_count"><xliff:g id="count" example="2">%d</xliff:g> застосунки</string>
     <string name="ax_dynamic_bar_just_now">Щойно</string>
     <string name="ax_dynamic_bar_mins_ago"><xliff:g id="count" example="5">%d</xliff:g>хв тому</string>
@@ -157,10 +157,10 @@
     <string name="smartspace_content_desc">Інформаційний віджет</string>
     <string name="smartspace_flight_qr_code">QR-код</string>
     <!-- Content description for the smartspace paging arrows [CHAR LIMIT=NONE] -->
-    <string name="accessibility_smartspace_previous_page">Previous page</string>
-    <string name="accessibility_smartspace_next_page">Next page</string>
+    <string name="accessibility_smartspace_previous_page">Попередня сторінка</string>
+    <string name="accessibility_smartspace_next_page">Наступна сторінка</string>
     <!-- Ambient indication -->
-    <string name="accessibility_action_expand">Expand</string>
+    <string name="accessibility_action_expand">Розгорнути</string>
     <string name="accessibility_now_playing_container_recognition_result_content_description">Identified song. %1$s, %2$s.</string>
     <string name="accessibility_now_playing_container_song_searching_content_description">Identifying song</string>
     <string name="accessibility_now_playing_like_icon">Add to favorites</string>
