@@ -4684,8 +4684,9 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
         }
 
         if (!TextUtils.equals(mLastResolvedSystemFont, Typeface.getFontName())) {
-            Typeface tf = Typeface.getOverrideTypeface(mFontFamily);
-            setTypeface(tf);
+            if (mFontFamily != null) {
+                setTypeface(Typeface.getOverrideTypeface(mFontFamily));
+            }
             mLastResolvedSystemFont = Typeface.getFontName();
         }
 
