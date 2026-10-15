@@ -15,10 +15,12 @@
  */
 package com.android.server.spoof;
 
+import android.app.ActivityManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.ContentObserver;
 import android.net.Uri;
+import android.os.Process;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.Slog;
@@ -90,6 +92,9 @@ public final class AxSpoofManagerService extends SystemService {
                 }
                 refreshKey(key);
                 Slog.i(TAG, "Spoof config refreshed: " + key);
+                if (Settings.Secure.SPOOF_PIF_CONFIG.equals(key)) {
+                    restartPifTargets();
+                }
             }
         };
         for (String key : WATCHED_KEYS) {
@@ -119,6 +124,30 @@ public final class AxSpoofManagerService extends SystemService {
 
     private String readSetting(String key) {
         return Settings.Secure.getStringForUser(mResolver, key, UserHandle.USER_SYSTEM);
+    }
+
+    private void restartPifTargets() {
+        try {
+            ActivityManager am = getContext().getSystemService(ActivityManager.class);
+            if (am == null) {
+                return;
+            }
+            am.forceStopPackage("com.android.vending");
+            java.util.List<ActivityManager.RunningAppProcessInfo> procs =
+                    am.getRunningAppProcesses();
+            if (procs != null) {
+                for (ActivityManager.RunningAppProcessInfo proc : procs) {
+                    if ("com.google.android.gms.unstable".equals(proc.processName)
+                            || "com.android.vending".equals(proc.processName)) {
+                        Slog.i(TAG, "Killing PIF target process " + proc.processName
+                                + " (pid=" + proc.pid + ")");
+                        Process.killProcess(proc.pid);
+                    }
+                }
+            }
+        } catch (Throwable t) {
+            Slog.w(TAG, "Failed to restart PIF target processes", t);
+        }
     }
 
     private final class LocalService implements AxSpoofManagerInternal {
