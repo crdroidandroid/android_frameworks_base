@@ -97,9 +97,9 @@
     <string name="ax_dynamic_bar_connecting">Se conectează\u2026</string>
     <string name="ax_dynamic_bar_one_device">1 dispozitiv</string>
     <string name="ax_dynamic_bar_bluetooth_device">Dispozitiv Bluetooth</string>
-    <string name="ax_dynamic_bar_left_earbud">Left earbud</string>
-    <string name="ax_dynamic_bar_right_earbud">Right earbud</string>
-    <string name="ax_dynamic_bar_earbuds_case">Case</string>
+    <string name="ax_dynamic_bar_left_earbud">Cască stânga</string>
+    <string name="ax_dynamic_bar_right_earbud">Cască dreapta</string>
+    <string name="ax_dynamic_bar_earbuds_case">Carcasă</string>
     <string name="ax_dynamic_bar_apps_count"><xliff:g id="count" example="2">%d</xliff:g> aplicații</string>
     <string name="ax_dynamic_bar_just_now">Chiar acum</string>
     <string name="ax_dynamic_bar_mins_ago"><xliff:g id="count" example="5">%d</xliff:g>m în urmă</string>
@@ -157,15 +157,15 @@
     <string name="smartspace_content_desc">Din perspectivă</string>
     <string name="smartspace_flight_qr_code">Cod QR</string>
     <!-- Content description for the smartspace paging arrows [CHAR LIMIT=NONE] -->
-    <string name="accessibility_smartspace_previous_page">Previous page</string>
-    <string name="accessibility_smartspace_next_page">Next page</string>
+    <string name="accessibility_smartspace_previous_page">Pagina precedentă</string>
+    <string name="accessibility_smartspace_next_page">Pagina următoare</string>
     <!-- Ambient indication -->
-    <string name="accessibility_action_expand">Expand</string>
-    <string name="accessibility_now_playing_container_recognition_result_content_description">Identified song. %1$s, %2$s.</string>
-    <string name="accessibility_now_playing_container_song_searching_content_description">Identifying song</string>
-    <string name="accessibility_now_playing_like_icon">Add to favorites</string>
-    <string name="accessibility_now_playing_play_icon">Play on Default Music Player</string>
-    <string name="accessibility_now_playing_unlike_icon">Remove from favorites</string>
+    <string name="accessibility_action_expand">Extinde</string>
+    <string name="accessibility_now_playing_container_recognition_result_content_description">Melodie identificată. %1$s, %2$s.</string>
+    <string name="accessibility_now_playing_container_song_searching_content_description">Identificarea melodiei</string>
+    <string name="accessibility_now_playing_like_icon">Adaugă la favorite</string>
+    <string name="accessibility_now_playing_play_icon">Redă pe playerul muzical implicit</string>
+    <string name="accessibility_now_playing_unlike_icon">Șterge de la favorite</string>
     <string name="now_playing_label">Acum se redă</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">On-The-Go activat</string>
@@ -196,8 +196,8 @@
     <!-- Label for UI element which allows to use lens on screenshot [CHAR LIMIT=30] -->
     <string name="screenshot_lens_label">Obiectiv</string>
     <!-- Per-app volume panel -->
-    <string name="app_volume">App volume</string>
-    <string name="app_volume_no_active_apps">No active audio playback</string>
+    <string name="app_volume">Volum aplicație</string>
+    <string name="app_volume_no_active_apps">Nici o redare audio activă</string>
     <!-- Sound QS Tile -->
     <string name="quick_settings_sound_label">Sunet</string>
     <string name="quick_settings_sound_ring">Sonerie</string>
