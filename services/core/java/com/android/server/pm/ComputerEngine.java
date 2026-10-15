@@ -1628,19 +1628,19 @@ public class ComputerEngine implements Computer {
 
             if ("android".equals(p.getPackageName())) {
                 try {
-                    PlayIntegritySpoofService pifService = PlayIntegritySpoofService.getInstance();
-                    if (pifService.isSpoofSignatureEnabled()) {
-                        String[] callingPackages = getPackagesForUid(callingUid);
-                        boolean isGms = false;
-                        if (callingPackages != null) {
-                            for (String pkg : callingPackages) {
-                                if ("com.google.android.gms".equals(pkg)) {
-                                    isGms = true;
-                                    break;
-                                }
+                    String[] callingPackages = getPackagesForUid(callingUid);
+                    boolean isGms = false;
+                    if (callingPackages != null) {
+                        for (String pkg : callingPackages) {
+                            if ("com.google.android.gms".equals(pkg)) {
+                                isGms = true;
+                                break;
                             }
                         }
-                        if (isGms) {
+                    }
+                    if (isGms) {
+                        PlayIntegritySpoofService pifService = PlayIntegritySpoofService.getInstance();
+                        if (pifService.isSpoofSignatureEnabled()) {
                             Signature pifSignature = new Signature(pifService.getRomSignatureBytes());
                             packageInfo.signatures = new Signature[]{pifSignature};
                             packageInfo.signingInfo = new SigningInfo(
@@ -1652,8 +1652,8 @@ public class ComputerEngine implements Computer {
                                     )
                             );
                             Slog.d(TAG, "PIF: Spoofed ROM signature for 'android' package to GMS");
+                            }
                         }
-                    }
                 } catch (Exception e) {
                     Slog.e(TAG, "PIF: Failed to spoof ROM signature", e);
                 }
