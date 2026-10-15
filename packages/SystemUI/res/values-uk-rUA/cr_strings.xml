@@ -161,11 +161,11 @@
     <string name="accessibility_smartspace_next_page">Наступна сторінка</string>
     <!-- Ambient indication -->
     <string name="accessibility_action_expand">Розгорнути</string>
-    <string name="accessibility_now_playing_container_recognition_result_content_description">Identified song. %1$s, %2$s.</string>
-    <string name="accessibility_now_playing_container_song_searching_content_description">Identifying song</string>
-    <string name="accessibility_now_playing_like_icon">Add to favorites</string>
-    <string name="accessibility_now_playing_play_icon">Play on Default Music Player</string>
-    <string name="accessibility_now_playing_unlike_icon">Remove from favorites</string>
+    <string name="accessibility_now_playing_container_recognition_result_content_description">Визначення композиції. %1$s, %2$s.</string>
+    <string name="accessibility_now_playing_container_song_searching_content_description">Визначення пісні</string>
+    <string name="accessibility_now_playing_like_icon">Додати до вподобань</string>
+    <string name="accessibility_now_playing_play_icon">Грати за промовчанням музичний програвач</string>
+    <string name="accessibility_now_playing_unlike_icon">Видалити з улюблених</string>
     <string name="now_playing_label">Зараз грає</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">Режим «На ходу» активовано</string>
@@ -196,8 +196,8 @@
     <!-- Label for UI element which allows to use lens on screenshot [CHAR LIMIT=30] -->
     <string name="screenshot_lens_label">Об\'єктив</string>
     <!-- Per-app volume panel -->
-    <string name="app_volume">App volume</string>
-    <string name="app_volume_no_active_apps">No active audio playback</string>
+    <string name="app_volume">Гучність програми</string>
+    <string name="app_volume_no_active_apps">Немає відтворення активного аудіо</string>
     <!-- Sound QS Tile -->
     <string name="quick_settings_sound_label">Мелодії</string>
     <string name="quick_settings_sound_ring">Кільце</string>
