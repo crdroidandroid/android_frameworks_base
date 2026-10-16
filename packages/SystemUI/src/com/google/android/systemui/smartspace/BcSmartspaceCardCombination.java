@@ -8,6 +8,7 @@ import android.graphics.drawable.Icon;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -64,27 +65,27 @@ public class BcSmartspaceCardCombination extends BcSmartspaceCardSecondary {
                                 .getDimensionPixelSize(R.dimen.enhanced_smartspace_icon_size));
         boolean z2 = true;
         if (iconDrawableWithCustomSize == null) {
-            BcSmartspaceTemplateDataUtils.updateVisibility(imageView, 8);
+            BcSmartspaceTemplateDataUtils.updateVisibility(imageView, View.GONE);
             z = false;
         } else {
             imageView.setImageDrawable(iconDrawableWithCustomSize);
-            BcSmartspaceTemplateDataUtils.updateVisibility(imageView, 0);
+            BcSmartspaceTemplateDataUtils.updateVisibility(imageView, View.VISIBLE);
             z = true;
         }
         CharSequence title = action.getTitle();
         if (TextUtils.isEmpty(title)) {
-            BcSmartspaceTemplateDataUtils.updateVisibility(textView, 8);
+            BcSmartspaceTemplateDataUtils.updateVisibility(textView, View.GONE);
             z2 = z;
         } else {
             textView.setText(title);
-            BcSmartspaceTemplateDataUtils.updateVisibility(textView, 0);
+            BcSmartspaceTemplateDataUtils.updateVisibility(textView, View.VISIBLE);
         }
         constraintLayout.setContentDescription(z2 ? action.getContentDescription() : null);
         if (z2) {
-            BcSmartspaceTemplateDataUtils.updateVisibility(constraintLayout, 0);
+            BcSmartspaceTemplateDataUtils.updateVisibility(constraintLayout, View.VISIBLE);
             return z2;
         }
-        BcSmartspaceTemplateDataUtils.updateVisibility(constraintLayout, 8);
+        BcSmartspaceTemplateDataUtils.updateVisibility(constraintLayout, View.GONE);
         return z2;
     }
 
@@ -97,8 +98,8 @@ public class BcSmartspaceCardCombination extends BcSmartspaceCardSecondary {
 
     @Override
     public final void resetUi() {
-        BcSmartspaceTemplateDataUtils.updateVisibility(mFirstSubCard, 8);
-        BcSmartspaceTemplateDataUtils.updateVisibility(mSecondSubCard, 8);
+        BcSmartspaceTemplateDataUtils.updateVisibility(mFirstSubCard, View.GONE);
+        BcSmartspaceTemplateDataUtils.updateVisibility(mSecondSubCard, View.GONE);
     }
 
     @Override

@@ -49,8 +49,8 @@ public final class WeatherSmartspaceDataProvider implements BcSmartspaceDataPlug
                     this
                             + " onTargetsAvailable called. Callers = "
                             + android.os.Debug.getCallers(3));
-            Log.d("WeatherSSDataProvider", " targets.size() = " + targets.size());
-            Log.d("WeatherSSDataProvider", " targets = " + targets.toString());
+            Log.d("WeatherSSDataProvider", "    targets.size() = " + targets.size());
+            Log.d("WeatherSSDataProvider", "    targets = " + targets.toString());
         }
 
         mSmartspaceTargets.clear();

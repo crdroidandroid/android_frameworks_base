@@ -35,8 +35,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-/* compiled from: go/retraceme af8e0b46c0cb0ee2c99e9b6d0c434e5c0b686fd9230eaab7fb9a40e3a9d0cf6f */
-/* loaded from: classes2.dex */
 public class BcSmartspaceCard extends ConstraintLayout implements SmartspaceCard {
     public final DoubleShadowIconDrawable mBaseActionIconDrawable;
     public Rect mBaseActionIconSubtitleHitRect;
@@ -57,12 +55,10 @@ public class BcSmartspaceCard extends ConstraintLayout implements SmartspaceCard
     public boolean mUsePageIndicatorUi;
     public boolean mValidSecondaryCard;
 
-    /* JADX DEBUG: Don't trust debug lines info. Lines numbers was adjusted: min line is 1 */
     public BcSmartspaceCard(Context context) {
         this(context, null);
     }
 
-    /* JADX DEBUG: Don't trust debug lines info. Lines numbers was adjusted: min line is 1 */
     public static int getClickedIndex(
             BcSmartspaceCardLoggingInfo bcSmartspaceCardLoggingInfo, int i) {
         List list;
@@ -88,8 +84,7 @@ public class BcSmartspaceCard extends ConstraintLayout implements SmartspaceCard
         return 0;
     }
 
-    /* JADX DEBUG: Don't trust debug lines info. Lines numbers was adjusted: min line is 1 */
-    @Override // com.google.android.systemui.smartspace.SmartspaceCard
+    @Override
     public final void bindData(
             SmartspaceTarget smartspaceTarget,
             BcSmartspaceDataPlugin.SmartspaceEventNotifier smartspaceEventNotifier,
@@ -101,8 +96,8 @@ public class BcSmartspaceCard extends ConstraintLayout implements SmartspaceCard
         this.mLoggingInfo = null;
         this.mEventNotifier = null;
         int i = 8;
-        BcSmartspaceTemplateDataUtils.updateVisibility(this.mSecondaryCardGroup, 8);
-        BcSmartspaceTemplateDataUtils.updateVisibility(this.mBaseActionIconSubtitleView, 8);
+        BcSmartspaceTemplateDataUtils.updateVisibility(this.mSecondaryCardGroup, View.GONE);
+        BcSmartspaceTemplateDataUtils.updateVisibility(this.mBaseActionIconSubtitleView, View.GONE);
         this.mIconDrawable.mIconDrawable = null;
         this.mBaseActionIconDrawable.mIconDrawable = null;
         int i2 = 0;
@@ -323,9 +318,7 @@ public class BcSmartspaceCard extends ConstraintLayout implements SmartspaceCard
         }
     }
 
-    /* JADX DEBUG: Don't trust debug lines info. Lines numbers was adjusted: min line is 1 */
-    @Override // androidx.constraintlayout.widget.ConstraintLayout, android.view.ViewGroup,
-    // android.view.View
+    @Override
     public final void onLayout(boolean z, int i, int i2, int i3, int i4) {
         super.onLayout(z, i, i2, i3, i4);
         if (z || this.mTouchDelegateIsDirty) {
@@ -357,7 +350,6 @@ public class BcSmartspaceCard extends ConstraintLayout implements SmartspaceCard
         }
     }
 
-    /* JADX DEBUG: Don't trust debug lines info. Lines numbers was adjusted: min line is 1 */
     public final void setBaseActionIconSubtitle(
             CharSequence charSequence, CharSequence charSequence2, Drawable drawable) {
         if (this.mBaseActionIconSubtitleView == null) {
@@ -365,18 +357,17 @@ public class BcSmartspaceCard extends ConstraintLayout implements SmartspaceCard
             return;
         }
         if (TextUtils.isEmpty(charSequence)) {
-            BcSmartspaceTemplateDataUtils.updateVisibility(this.mBaseActionIconSubtitleView, 8);
+            BcSmartspaceTemplateDataUtils.updateVisibility(this.mBaseActionIconSubtitleView, View.GONE);
             return;
         }
-        BcSmartspaceTemplateDataUtils.updateVisibility(this.mBaseActionIconSubtitleView, 0);
+        BcSmartspaceTemplateDataUtils.updateVisibility(this.mBaseActionIconSubtitleView, View.VISIBLE);
         this.mBaseActionIconSubtitleView.setText(charSequence);
         this.mBaseActionIconSubtitleView.setCompoundDrawablesRelative(drawable, null, null, null);
         ContentDescriptionUtil.setFormattedContentDescription(
                 "BcSmartspaceCard", this.mBaseActionIconSubtitleView, charSequence, charSequence2);
     }
 
-    /* JADX DEBUG: Don't trust debug lines info. Lines numbers was adjusted: min line is 1 */
-    @Override // com.google.android.systemui.smartspace.SmartspaceCard
+    @Override
     public final void setDozeAmount(float f) {
         this.mDozeAmount = f;
         SmartspaceTarget smartspaceTarget = this.mTarget;
@@ -413,8 +404,7 @@ public class BcSmartspaceCard extends ConstraintLayout implements SmartspaceCard
         }
     }
 
-    /* JADX DEBUG: Don't trust debug lines info. Lines numbers was adjusted: min line is 1 */
-    @Override // com.google.android.systemui.smartspace.SmartspaceCard
+    @Override
     public final void setPrimaryTextColor(int i) {
         TextView textView = this.mTitleTextView;
         if (textView != null) {
@@ -453,7 +443,6 @@ public class BcSmartspaceCard extends ConstraintLayout implements SmartspaceCard
                 mSubtitleTextView, useIcon ? mIconDrawable : null, isRtl());
     }
 
-    /* JADX DEBUG: Don't trust debug lines info. Lines numbers was adjusted: min line is 1 */
     public final void setTitle(
             CharSequence text, CharSequence contentDescription, boolean useIcon) {
         boolean z2;

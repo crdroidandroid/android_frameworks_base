@@ -199,7 +199,6 @@ public class BcSmartspaceCardWeatherForecast extends BcSmartspaceCardSecondary {
         }
     }
 
-    /* JADX DEBUG: Don't trust debug lines info. Lines numbers was adjusted: min line is 2 */
     public BcSmartspaceCardWeatherForecast(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
     }

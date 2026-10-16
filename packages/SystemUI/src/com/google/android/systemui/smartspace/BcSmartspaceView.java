@@ -59,6 +59,7 @@ public class BcSmartspaceView extends FrameLayout
     public BcSmartspaceDataPlugin mDataProvider;
     public boolean mHasPerformedLongPress;
     public boolean mHasPostedLongPress;
+    private boolean mHiddenByPolicy;
     public float mInitialTouchX;
     public float mInitialTouchY;
     public boolean mIsAodEnabled;
@@ -427,6 +428,8 @@ public class BcSmartspaceView extends FrameLayout
         super.onFinishInflate();
         View pager = findViewById(R.id.smartspace_card_pager);
         mViewPager2 = (ViewPager2) pager;
+        // The no-op transformer only serves to disable the item animator.
+        mViewPager2.setPageTransformer((page, position) -> {});
         mAdapter = new CardRecyclerViewAdapter(this, mConfigProvider);
         CardRecyclerViewAdapter cardRecyclerViewAdapter =
                 new CardRecyclerViewAdapter(this, mConfigProvider);
@@ -580,7 +583,7 @@ public class BcSmartspaceView extends FrameLayout
             return;
         }
         float scale = (float) height / desiredHeight;
-        int width = (int) (MeasureSpec.getSize(widthMeasureSpec) / scale);
+        int width = Math.round(MeasureSpec.getSize(widthMeasureSpec) / scale);
         super.onMeasure(
                 MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
                 MeasureSpec.makeMeasureSpec(desiredHeight, MeasureSpec.EXACTLY));
@@ -742,7 +745,7 @@ public class BcSmartspaceView extends FrameLayout
                     mAdapter.refreshCardBackground();
                 }
                 mAdapter.updateCurrentTextColor();
-                if (!mAdapter.smartspaceTargets.isEmpty()) {
+                if (!mAdapter.smartspaceTargets.isEmpty() && !mHiddenByPolicy) {
                     BcSmartspaceTemplateDataUtils.updateVisibility(this, View.VISIBLE);
                 }
                 if (mAdapter.hasAodLockscreenTransition) {
@@ -844,6 +847,19 @@ public class BcSmartspaceView extends FrameLayout
     @Override
     public final void setFalsingManager(FalsingManager falsingManager) {
         BcSmartSpaceUtil.sFalsingManager = falsingManager;
+    }
+
+    @Override
+    public final void setHiddenByPolicy(boolean hidden) {
+        if (mHiddenByPolicy == hidden) {
+            return;
+        }
+        mHiddenByPolicy = hidden;
+        if (hidden) {
+            BcSmartspaceTemplateDataUtils.updateVisibility(this, View.GONE);
+        } else if (!mAdapter.smartspaceTargets.isEmpty()) {
+            BcSmartspaceTemplateDataUtils.updateVisibility(this, View.VISIBLE);
+        }
     }
 
     @Override
