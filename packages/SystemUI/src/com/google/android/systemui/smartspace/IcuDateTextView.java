@@ -113,20 +113,14 @@ public class IcuDateTextView extends DoubleShadowTextView {
 
         mHandler = new Handler();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("Intent.ACTION_TIME_CHANGED");
-        intentFilter.addAction("Intent.ACTION_TIMEZONE_CHANGED");
+        intentFilter.addAction(Intent.ACTION_TIME_CHANGED);
+        intentFilter.addAction(Intent.ACTION_TIMEZONE_CHANGED);
 
         if (mBgHandler == null) {
             Log.w(TAG, "mBgHandler is not set! Fallback to make binder calls on main thread.");
-            getContext().registerReceiver(mIntentReceiver, intentFilter, Context.RECEIVER_EXPORTED);
+            getContext().registerReceiver(mIntentReceiver, intentFilter);
         } else {
-            mBgHandler.post(
-                    () ->
-                            getContext()
-                                    .registerReceiver(
-                                            mIntentReceiver,
-                                            intentFilter,
-                                            Context.RECEIVER_EXPORTED));
+            mBgHandler.post(() -> getContext().registerReceiver(mIntentReceiver, intentFilter));
         }
 
         if (mTimeChangedDelegate == null) {

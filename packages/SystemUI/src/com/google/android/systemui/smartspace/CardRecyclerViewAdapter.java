@@ -42,8 +42,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/* compiled from: go/retraceme af8e0b46c0cb0ee2c99e9b6d0c434e5c0b686fd9230eaab7fb9a40e3a9d0cf6f */
-/* loaded from: classes2.dex */
 public final class CardRecyclerViewAdapter
         extends RecyclerView.Adapter<CardRecyclerViewAdapter.ViewHolder> {
     public static final Set<Integer> legacySecondaryCardResourceIdSet =
@@ -84,14 +82,13 @@ public final class CardRecyclerViewAdapter
     public final SparseArray<ViewHolder> viewHolders;
     public final ViewPager2 viewPager2;
 
-    /* compiled from: go/retraceme af8e0b46c0cb0ee2c99e9b6d0c434e5c0b686fd9230eaab7fb9a40e3a9d0cf6f */
     public final class DiffUtilItemCallback extends DiffUtil.ItemCallback<SmartspaceTarget> {
-        @Override // androidx.recyclerview.widget.DiffUtil.Callback
+        @Override
         public final boolean areItemsTheSame(SmartspaceTarget oldItem, SmartspaceTarget newItem) {
             return oldItem.getSmartspaceTargetId().equals(newItem.getSmartspaceTargetId());
         }
 
-        @Override // androidx.recyclerview.widget.DiffUtil.Callback
+        @Override
         public final boolean areContentsTheSame(
                 SmartspaceTarget oldItem, SmartspaceTarget newItem) {
             return false;
@@ -123,7 +120,6 @@ public final class CardRecyclerViewAdapter
         }
     }
 
-    /* JADX DEBUG: Don't trust debug lines info. Lines numbers was adjusted: min line is 1 */
     public CardRecyclerViewAdapter(BcSmartspaceView root, BcSmartspaceConfigPlugin configProvider) {
         DiffUtilItemCallback diffUtilItemCallback = new DiffUtilItemCallback();
         AsyncDifferConfig<SmartspaceTarget> asyncDifferConfig =
@@ -289,8 +285,7 @@ public final class CardRecyclerViewAdapter
         return 1.0f - dozeAmount >= 0.36f && transitioningTo == TransitionType.TO_LOCKSCREEN;
     }
 
-    /* JADX DEBUG: Don't trust debug lines info. Lines numbers was adjusted: min line is 1 */
-    @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+    @Override
     public final void onBindViewHolder(ViewHolder holder, int position) {
         SmartspaceTarget target = mDiffer.getCurrentList().get(position);
         boolean isTemplateCard = isTemplateCard(target);
