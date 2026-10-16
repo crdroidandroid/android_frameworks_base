@@ -1,22 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.systemui.smartspace.uitemplate.SubListTemplateCard android:clipChildren="false"
+<com.google.android.systemui.smartspace.uitemplate.SubListTemplateCard xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:clipChildren="false"
     android:clipToPadding="false"
     android:layout_width="wrap_content"
-    android:layout_height="fill_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:androidprv="http://schemas.android.com/apk/prv/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
+    android:layout_height="match_parent">
     <ImageView
         android:id="@+id/list_icon"
         android:visibility="gone"
-        android:layout_width="20.0dip"
-        android:layout_height="20.0dip"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+        app:layout_constraintTop_toTopOf="parent"/>
     <TextView
-        android:textSize="14.0sp"
+        android:textSize="14sp"
         android:id="@+id/list_item_1"
         android:visibility="gone"
         android:layout_width="wrap_content"
@@ -24,14 +20,13 @@
         android:maxLines="1"
         app:layout_constraintBottom_toTopOf="@+id/list_item_2"
         app:layout_constraintEnd_toStartOf="@+id/list_icon"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
-        style="@style/EnhancedSmartspaceTextSubtitle" />
-
+        style="@style/EnhancedSmartspaceTextSubtitle"/>
     <TextView
-        android:textSize="14.0sp"
+        android:textSize="14sp"
         android:id="@+id/list_item_2"
         android:visibility="gone"
         android:layout_width="wrap_content"
@@ -39,13 +34,12 @@
         android:maxLines="1"
         app:layout_constraintBottom_toTopOf="@+id/list_item_3"
         app:layout_constraintEnd_toStartOf="@+id/list_icon"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/list_item_1"
-        style="@style/EnhancedSmartspaceTextSubtitle" />
-
+        style="@style/EnhancedSmartspaceTextSubtitle"/>
     <TextView
-        android:textSize="14.0sp"
+        android:textSize="14sp"
         android:id="@+id/list_item_3"
         android:visibility="gone"
         android:layout_width="wrap_content"
@@ -53,8 +47,8 @@
         android:maxLines="1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/list_icon"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/list_item_2"
-        style="@style/EnhancedSmartspaceTextSubtitle" />
+        style="@style/EnhancedSmartspaceTextSubtitle"/>
 </com.google.android.systemui.smartspace.uitemplate.SubListTemplateCard>

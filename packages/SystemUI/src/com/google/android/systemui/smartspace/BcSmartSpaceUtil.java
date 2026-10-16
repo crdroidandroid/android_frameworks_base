@@ -215,7 +215,7 @@ public abstract class BcSmartSpaceUtil {
 
         view.setOnClickListener(
                 v -> {
-                    if (sFalsingManager != null && sFalsingManager.isFalseTap(1)) {
+                    if (sFalsingManager != null && sFalsingManager.isFalseTap(FalsingManager.LOW_PENALTY)) {
                         return;
                     }
 
@@ -264,7 +264,7 @@ public abstract class BcSmartSpaceUtil {
 
         view.setOnClickListener(
                 v -> {
-                    if (sFalsingManager != null && sFalsingManager.isFalseTap(1)) {
+                    if (sFalsingManager != null && sFalsingManager.isFalseTap(FalsingManager.LOW_PENALTY)) {
                         return;
                     }
 

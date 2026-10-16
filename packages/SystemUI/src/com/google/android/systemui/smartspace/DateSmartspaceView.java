@@ -23,8 +23,6 @@ import com.android.systemui.res.R;
 import com.google.android.systemui.smartspace.logging.BcSmartspaceCardLogger;
 import com.google.android.systemui.smartspace.logging.BcSmartspaceCardLoggingInfo;
 
-/* compiled from: go/retraceme af8e0b46c0cb0ee2c99e9b6d0c434e5c0b686fd9230eaab7fb9a40e3a9d0cf6f */
-/* loaded from: classes2.dex */
 public class DateSmartspaceView extends LinearLayout
         implements BcSmartspaceDataPlugin.SmartspaceView {
     public static final boolean DEBUG = Log.isLoggable("DateSmartspaceView", Log.DEBUG);
@@ -150,8 +148,7 @@ public class DateSmartspaceView extends LinearLayout
         updateColorForExtras();
     }
 
-    /* JADX DEBUG: Don't trust debug lines info. Lines numbers was adjusted: min line is 1 */
-    @Override // com.android.systemui.plugins.BcSmartspaceDataPlugin.SmartspaceView
+    @Override
     public final void setDozeAmount(float dozeAmount) {
         int loggingSurface;
         mDozeAmount = dozeAmount;
@@ -213,11 +210,7 @@ public class DateSmartspaceView extends LinearLayout
         } else {
             mNextAlarmTextView.setContentDescription(
                     getContext().getString(R.string.accessibility_next_alarm, description));
-            String displayText =
-                    TextUtils.isEmpty(null)
-                            ? mNextAlarmData.mDescription
-                            : mNextAlarmData.mDescription + " · null";
-            mNextAlarmTextView.setText(displayText);
+            mNextAlarmTextView.setText(mNextAlarmData.mDescription);
             int iconSize =
                     getContext()
                             .getResources()
@@ -335,7 +328,6 @@ public class DateSmartspaceView extends LinearLayout
         this(context, attrs, 0);
     }
 
-    /* JADX WARN: Type inference failed for: r4v10, types: [com.google.android.systemui.smartspace.DateSmartspaceView$1] */
     public DateSmartspaceView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         mUiSurface = null;
@@ -353,10 +345,8 @@ public class DateSmartspaceView extends LinearLayout
                         .build();
         mNextAlarmData = new BcNextAlarmData();
         mAodSettingsObserver =
-                new ContentObserver(new Handler()) { // from class:
-                    // com.google.android.systemui.smartspace.DateSmartspaceView.1
-                    /* JADX DEBUG: Don't trust debug lines info. Lines numbers was adjusted: min line is 1 */
-                    @Override // android.database.ContentObserver
+                new ContentObserver(new Handler()) {
+                    @Override
                     public final void onChange(boolean selfChange) {
                         boolean isAodEnabled =
                                 Settings.Secure.getIntForUser(
