@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -35,10 +36,10 @@ public class BcSmartspaceCardLoyalty extends BcSmartspaceCardGenericImage {
     @Override
     public final void resetUi() {
         super.resetUi();
-        BcSmartspaceTemplateDataUtils.updateVisibility(mImageView, 8);
-        BcSmartspaceTemplateDataUtils.updateVisibility(mLoyaltyProgramLogoView, 8);
-        BcSmartspaceTemplateDataUtils.updateVisibility(mLoyaltyProgramNameView, 8);
-        BcSmartspaceTemplateDataUtils.updateVisibility(mCardPromptView, 8);
+        BcSmartspaceTemplateDataUtils.updateVisibility(mImageView, View.GONE);
+        BcSmartspaceTemplateDataUtils.updateVisibility(mLoyaltyProgramLogoView, View.GONE);
+        BcSmartspaceTemplateDataUtils.updateVisibility(mLoyaltyProgramNameView, View.GONE);
+        BcSmartspaceTemplateDataUtils.updateVisibility(mCardPromptView, View.GONE);
     }
 
     @Override
@@ -67,15 +68,15 @@ public class BcSmartspaceCardLoyalty extends BcSmartspaceCardGenericImage {
             } else {
                 textView.setText(string);
             }
-            BcSmartspaceTemplateDataUtils.updateVisibility(mCardPromptView, 0);
+            BcSmartspaceTemplateDataUtils.updateVisibility(mCardPromptView, View.VISIBLE);
             if (containsKey) {
-                BcSmartspaceTemplateDataUtils.updateVisibility(mImageView, 0);
+                BcSmartspaceTemplateDataUtils.updateVisibility(mImageView, View.VISIBLE);
             }
             return true;
         }
         if (!extras.containsKey("loyaltyProgramName")) {
             if (containsKey) {
-                BcSmartspaceTemplateDataUtils.updateVisibility(mLoyaltyProgramLogoView, 0);
+                BcSmartspaceTemplateDataUtils.updateVisibility(mLoyaltyProgramLogoView, View.VISIBLE);
             }
             return containsKey;
         }
@@ -86,9 +87,9 @@ public class BcSmartspaceCardLoyalty extends BcSmartspaceCardGenericImage {
         } else {
             textView2.setText(string2);
         }
-        BcSmartspaceTemplateDataUtils.updateVisibility(mLoyaltyProgramNameView, 0);
+        BcSmartspaceTemplateDataUtils.updateVisibility(mLoyaltyProgramNameView, View.VISIBLE);
         if (containsKey) {
-            BcSmartspaceTemplateDataUtils.updateVisibility(mLoyaltyProgramLogoView, 0);
+            BcSmartspaceTemplateDataUtils.updateVisibility(mLoyaltyProgramLogoView, View.VISIBLE);
         }
         return true;
     }

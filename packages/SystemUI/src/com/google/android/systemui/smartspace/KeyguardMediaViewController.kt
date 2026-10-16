@@ -7,6 +7,8 @@ import android.content.Context
 import android.media.MediaMetadata
 import android.os.UserHandle
 import android.text.TextUtils
+import com.android.systemui.dagger.SysUISingleton
+import com.android.systemui.dagger.qualifiers.Main
 import com.android.systemui.media.NotificationMediaManager
 import com.android.systemui.settings.UserTracker
 import com.android.systemui.statusbar.lockscreen.LockscreenSmartspaceController
@@ -14,6 +16,7 @@ import com.android.systemui.util.concurrency.DelayableExecutor
 import com.android.systemui.res.R
 import javax.inject.Inject
 
+@SysUISingleton
 class KeyguardMediaViewController
 @Inject
 constructor(
@@ -21,11 +24,11 @@ constructor(
     val mediaManager: NotificationMediaManager,
     val smartspaceController: LockscreenSmartspaceController,
     val userTracker: UserTracker,
-    val uiExecutor: DelayableExecutor,
+    @Main val uiExecutor: DelayableExecutor,
 ) {
     var title: CharSequence? = null
     var artist: CharSequence? = null
-    lateinit var mediaComponent: ComponentName
+    val mediaComponent = ComponentName(context, KeyguardMediaViewController::class.java)
 
     val mediaListener =
         object : NotificationMediaManager.MediaListener {
@@ -43,12 +46,14 @@ constructor(
         }
 
         val newTitle = metadata?.let {
-            val displayTitle = it.getText(MediaMetadata.METADATA_KEY_DISPLAY_TITLE)
-            if (TextUtils.isEmpty(displayTitle)) {
-                it.getText(MediaMetadata.METADATA_KEY_TITLE)
-            } else {
-                displayTitle
-            } ?: context.resources.getString(R.string.music_controls_no_title)
+            var text = it.getText(MediaMetadata.METADATA_KEY_DISPLAY_TITLE)
+            if (TextUtils.isEmpty(text)) {
+                text = it.getText(MediaMetadata.METADATA_KEY_TITLE)
+            }
+            if (TextUtils.isEmpty(text)) {
+                text = context.resources.getString(R.string.music_controls_no_title)
+            }
+            text
         }
 
         val newArtist = metadata?.getText(MediaMetadata.METADATA_KEY_ARTIST)

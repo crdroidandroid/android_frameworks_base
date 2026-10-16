@@ -149,7 +149,6 @@ import com.android.systemui.statusbar.dagger.StatusBarModule;
 import com.android.systemui.statusbar.domain.interactor.StatusBarRegionSamplingInteractorModule;
 import com.android.systemui.statusbar.events.StatusBarEventsModule;
 import com.android.systemui.statusbar.events.SystemStatusAnimationScheduler;
-import com.android.systemui.statusbar.lockscreen.LockscreenSmartspaceController;
 import com.android.systemui.statusbar.notification.collection.NotifPipeline;
 import com.android.systemui.statusbar.notification.collection.inflation.NotificationRowBinder;
 import com.android.systemui.statusbar.notification.collection.inflation.NotificationRowBinderImpl;
@@ -204,8 +203,6 @@ import com.google.android.systemui.keyguard.domain.interactor.AmbientIndicationI
 import com.google.android.systemui.keyguard.ui.sections.DefaultAmbientIndicationAreaSection;
 import com.google.android.systemui.smartspace.BcSmartspaceDataProvider;
 import com.google.android.systemui.smartspace.DateSmartspaceDataProvider;
-import com.google.android.systemui.smartspace.KeyguardMediaViewController;
-import com.google.android.systemui.smartspace.KeyguardZenAlarmViewController;
 import com.google.android.systemui.smartspace.WeatherSmartspaceDataProvider;
 import com.google.android.systemui.smartspace.dagger.SmartspaceGoogleModule;
 
@@ -418,10 +415,6 @@ public abstract class SystemUIModule {
     abstract BcSmartspaceDataPlugin optionalDateSmartspaceConfigPlugin();
 
     @BindsOptionalOf
-    @Named(SmartspaceModule.GLANCEABLE_HUB_SMARTSPACE_DATA_PLUGIN)
-    abstract BcSmartspaceDataPlugin optionalGlanceableHubBcSmartspaceDataPlugin();
-
-    @BindsOptionalOf
     @Named(SmartspaceModule.WEATHER_SMARTSPACE_DATA_PLUGIN)
     abstract BcSmartspaceDataPlugin optionalWeatherSmartspaceConfigPlugin();
 
@@ -527,79 +520,23 @@ public abstract class SystemUIModule {
 
     @Provides
     @SysUISingleton
-    static KeyguardZenAlarmViewController provideKeyguardZenAlarmViewController(
-            Context context,
-            @Named(SmartspaceModule.DATE_SMARTSPACE_DATA_PLUGIN) BcSmartspaceDataPlugin datePlugin,
-            ZenModeController zenModeController,
-            ZenModeInteractor zenModeInteractor,
-            AlarmManager alarmManager,
-            NextAlarmControllerImpl nextAlarmController,
-            @Main Handler handler,
-            @Application CoroutineScope applicationScope,
-            @Background CoroutineDispatcher bgDispatcher) {
-        KeyguardZenAlarmViewController controller =
-                new KeyguardZenAlarmViewController(
-                        context,
-                        datePlugin,
-                        zenModeController,
-                        zenModeInteractor,
-                        alarmManager,
-                        nextAlarmController,
-                        handler,
-                        applicationScope,
-                        bgDispatcher);
-        controller.alarmImage =
-                context.getResources().getDrawable(R.drawable.ic_access_alarms_big, null);
-        return controller;
-    }
-    @Provides
-    @SysUISingleton
-    static KeyguardMediaViewController provideKeyguardMediaViewController(
-            Context context,
-            NotificationMediaManager mediaManager,
-            LockscreenSmartspaceController smartspaceController,
-            UserTracker userTracker,
-            @Main DelayableExecutor uiExecutor) {
-        KeyguardMediaViewController controller =
-                new KeyguardMediaViewController(
-                        context, mediaManager, smartspaceController, userTracker, uiExecutor);
-        controller.mediaComponent = new ComponentName(context, KeyguardMediaViewController.class);
-        return controller;
-    }
-    @Provides
-    @SysUISingleton
     static BcSmartspaceConfigProvider provideBcSmartspaceConfigPlugin(FeatureFlags featureFlags) {
         return new BcSmartspaceConfigProvider(featureFlags);
     }
+
     @Provides
     @SysUISingleton
     static BcSmartspaceDataPlugin provideBcSmartspaceDataPlugin() {
         return new BcSmartspaceDataProvider();
     }
+
     @Provides
     @SysUISingleton
     @Named(SmartspaceModule.DATE_SMARTSPACE_DATA_PLUGIN)
     static BcSmartspaceDataPlugin provideDateSmartspaceDataPlugin() {
         return new DateSmartspaceDataProvider();
     }
-    @Provides
-    @SysUISingleton
-    @Named(SmartspaceModule.DREAM_SMARTSPACE_DATA_PLUGIN)
-    static BcSmartspaceDataPlugin provideDreamBcSmartspaceDataPlugin() {
-        return new BcSmartspaceDataProvider();
-    }
-    @Provides
-    @SysUISingleton
-    @Named(SmartspaceModule.DREAM_WEATHER_SMARTSPACE_DATA_PLUGIN)
-    static BcSmartspaceDataPlugin provideDreamWeatherSmartspaceDataPlugin() {
-        return new WeatherSmartspaceDataProvider();
-    }
-    @Provides
-    @SysUISingleton
-    @Named(SmartspaceModule.GLANCEABLE_HUB_SMARTSPACE_DATA_PLUGIN)
-    static BcSmartspaceDataPlugin provideGlanceableHubBcSmartspaceDataPlugin() {
-        return new BcSmartspaceDataProvider();
-    }
+
     @Provides
     @SysUISingleton
     @Named(SmartspaceModule.WEATHER_SMARTSPACE_DATA_PLUGIN)
