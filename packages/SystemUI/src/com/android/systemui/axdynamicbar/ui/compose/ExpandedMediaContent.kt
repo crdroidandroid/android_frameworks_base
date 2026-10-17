@@ -10,7 +10,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
@@ -89,7 +88,6 @@ internal fun MediaCard(event: IslandEvent.Media, interactor: IslandActions) {
         modifier = Modifier
             .fillMaxWidth()
             .clip(ShapeCard)
-            .border(1.dp, CardBorderBrush, ShapeCard)
             .islandBlur(RadiusCard, CardBg)
     ) {
         Column(

@@ -11,7 +11,6 @@ import androidx.compose.animation.core.spring
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -82,7 +81,6 @@ import com.android.systemui.axdynamicbar.shared.AlphaIconBg
 import com.android.systemui.axdynamicbar.shared.AlphaSubtle
 import com.android.systemui.axdynamicbar.shared.islandBlur
 import com.android.systemui.axdynamicbar.shared.CardBg
-import com.android.systemui.axdynamicbar.shared.CardBorderBrush
 import com.android.systemui.axdynamicbar.shared.DarkCard
 import com.android.systemui.axdynamicbar.shared.IslandTone
 import com.android.systemui.axdynamicbar.shared.OnCardText
@@ -242,7 +240,6 @@ fun NotificationAlertCard(
                     )
                 }
                 .clip(ShapeCard)
-                .border(1.dp, CardBorderBrush, ShapeCard)
                 // Frosted surface; falls back to the opaque card colour where blur is unavailable.
                 .islandBlur(RadiusCard, CardBg),
         ) {

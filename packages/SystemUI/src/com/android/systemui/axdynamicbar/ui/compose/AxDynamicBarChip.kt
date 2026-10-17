@@ -66,6 +66,7 @@ import com.android.systemui.axdynamicbar.shared.AlphaGlass
 import com.android.systemui.axdynamicbar.shared.AlphaIconBg
 import com.android.systemui.axdynamicbar.shared.AlphaSecondary
 import com.android.systemui.axdynamicbar.shared.AlphaTertiary
+import com.android.systemui.axdynamicbar.shared.ChipHighlightWidth
 import com.android.systemui.axdynamicbar.shared.islandBlur
 import com.android.systemui.axdynamicbar.shared.PillPrimary
 import com.android.systemui.axdynamicbar.shared.ShapeXl
@@ -253,14 +254,15 @@ fun AxDynamicBarChip(
                             Modifier.height(chipHeight)
                                 .widthIn(max = 100.dp)
                                 .clip(RoundedCornerShape(chipCorner))
+                                // The frost is tinted with the accent itself: one coloured
+                                // glass layer rather than a fill stacked on a neutral frost.
                                 .islandBlur(
                                     cornerRadius = chipCorner,
                                     fallbackColor = accent,
+                                    tint = accent.copy(alpha = AlphaGlass),
                                     alpha = visibilityBlurAlpha * contentBlurAlpha,
+                                    highlightWidth = ChipHighlightWidth,
                                 )
-                                // Accent stays the chip's identity, laid over the frost rather
-                                // than replaced by it.
-                                .background(accent.copy(alpha = AlphaGlass))
                                 .then(
                                     if (progress != null) {
                                         val trackColor = lerp(accent, contentColor, 0.2f)

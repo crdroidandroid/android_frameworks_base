@@ -59,6 +59,7 @@ import com.android.systemui.axdynamicbar.model.IslandEvent
 import com.android.systemui.axdynamicbar.shared.AlphaGlass
 import com.android.systemui.axdynamicbar.shared.AlphaHint
 import com.android.systemui.axdynamicbar.shared.AlphaTrack
+import com.android.systemui.axdynamicbar.shared.ChipHighlightWidth
 import com.android.systemui.axdynamicbar.shared.islandBlur
 import com.android.systemui.axdynamicbar.shared.PillPrimary
 import com.android.systemui.axdynamicbar.shared.RadiusXl
@@ -194,13 +195,14 @@ fun AxDynamicBarNowBar(
                             }
                             .shadow(NowBarElevation, NowBarShape)
                             .clip(NowBarShape)
-                            // Same bounds as the glass fill, so blur and tint cover one shape.
+                            // Accent-tinted frost: one coloured glass layer, no fill on top.
                             .islandBlur(
                                 cornerRadius = RadiusXl,
                                 fallbackColor = accent,
+                                tint = accent.copy(alpha = AlphaGlass),
                                 alpha = visibilityBlurAlpha * contentBlurAlpha,
+                                highlightWidth = ChipHighlightWidth,
                             )
-                            .background(accent.copy(alpha = AlphaGlass))
                             .then(
                                 if (progress != null) {
                                     Modifier.drawWithContent {
