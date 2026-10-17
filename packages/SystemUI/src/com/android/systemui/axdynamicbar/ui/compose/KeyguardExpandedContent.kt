@@ -239,7 +239,6 @@ private fun KeyguardPanelSurface(
             .then(modifier)
             .padding(horizontal = SpaceSection)
             .clip(ShapeXl)
-            .border(1.dp, CardBorderBrush, ShapeXl)
             .islandBlur(RadiusXl, CardBg)
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
