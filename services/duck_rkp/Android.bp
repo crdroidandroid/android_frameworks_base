@@ -1,0 +1,23 @@
+aidl_interface {
+    name: "vendor.lineage.duckrkp",
+    srcs: ["aidl/vendor/lineage/duckrkp/*.aidl"],
+    local_include_dir: "aidl",
+    vendor_available: true,
+    stability: "vintf",
+    owner: "LineageOS",
+    frozen: false,
+    versions_with_info: [
+        {
+            version: "1",
+            imports: [],
+        },
+    ],
+    backend: {
+        java: {
+            sdk_version: "system_current",
+        },
+        cpp: {
+            enabled: false,
+        },
+    },
+}

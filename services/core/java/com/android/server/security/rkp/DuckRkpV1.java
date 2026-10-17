@@ -76,18 +76,46 @@ final class DuckRkpV1 {
         progress.update("hardware");
         IRemotelyProvisionedComponent component = IRemotelyProvisionedComponent.Stub.asInterface(
                 ServiceManager.checkService(SERVICE));
-        if (component == null) throw new Failure("hal_unavailable");
-        RpcHardwareInfo info = component.getHardwareInfo();
-        int curve = info.supportedEekCurve;
-        if (curve != RpcHardwareInfo.CURVE_P256 && curve != RpcHardwareInfo.CURVE_25519) {
-            throw new Failure("hal_unsupported");
+        boolean nativeAvailable = DuckRkpNative.available();
+        int curve = RpcHardwareInfo.CURVE_NONE;
+        if (component != null) {
+            try {
+                curve = component.getHardwareInfo().supportedEekCurve;
+            } catch (android.os.RemoteException | ServiceSpecificException e) {
+                if (!nativeAvailable) throw new Failure("hal_unavailable");
+            }
         }
+        boolean aidl = curve == RpcHardwareInfo.CURVE_P256
+                || curve == RpcHardwareInfo.CURVE_25519;
+        Failure last = new Failure(component == null ? "hal_unavailable" : "hal_unsupported");
+        // Native CSR protocols are independent of the AIDL HAL version and EEK support.
+        int[][] methods = {{2, 0}, {0, curve}, {1, RpcHardwareInfo.CURVE_25519},
+                {1, RpcHardwareInfo.CURVE_P256}};
+        for (int[] method : methods) {
+            if (method[0] == 0 ? !aidl : !nativeAvailable) continue;
+            try {
+                return provision(progress, component, method[0], method[1]);
+            } catch (Failure e) {
+                android.util.Slog.w("DuckRkp", "Backend " + method[0] + " curve " + method[1]
+                        + " failed: " + e.code + " (" + e.detail + ")");
+                if (!e.code.equals("hal_rejected") && !e.code.equals("native_rejected")
+                        && !e.code.equals("native_unavailable") && !e.code.equals("missing_eek")
+                        && !e.code.equals("invalid_hal_response")
+                        && !(e.code.equals("http_error") && (e.detail == 400 || e.detail == 422))) {
+                    throw e;
+                }
+                last = e;
+            }
+        }
+        throw last;
+    }
+
+    private static DuckRkpCertificates.Result provision(Progress progress,
+            IRemotelyProvisionedComponent component, int backend, int curve) throws Exception {
         KeyPairGenerator generator = KeyPairGenerator.getInstance("EC");
         generator.initialize(new ECGenParameterSpec("secp256r1"));
         KeyPair key = generator.generateKeyPair();
         Map publicKey = publicKey((ECPublicKey) key.getPublic());
-        MacedPublicKey macedKey = new MacedPublicKey();
-        macedKey.macedKey = macedPublicKey(publicKey);
 
         progress.update("fetching");
         byte[] request = encode(new Map().put(text("fingerprint"), text(Build.FINGERPRINT))
@@ -99,31 +127,42 @@ final class DuckRkpV1 {
         if (challenge.length == 0 || challenge.length > 64) {
             throw new Failure("invalid_response");
         }
-        byte[] eek = null;
-        for (DataItem entry : array(eekResponse.get(0))) {
-            List<DataItem> pair = array(entry);
-            if (pair.size() != 2) throw new Failure("invalid_response");
-            if (integer(pair.get(0)) == curve) {
-                if (eek != null || array(pair.get(1)).isEmpty()) {
-                    throw new Failure("invalid_response");
+        byte[] csr;
+        if (backend == 2) {
+            progress.update("hardware");
+            csr = DuckRkpNative.signV2(publicKey, challenge);
+        } else {
+            byte[] eek = null;
+            for (DataItem entry : array(eekResponse.get(0))) {
+                List<DataItem> pair = array(entry);
+                if (pair.size() != 2) throw new Failure("invalid_response");
+                if (integer(pair.get(0)) == curve) {
+                    if (eek != null || array(pair.get(1)).isEmpty()) {
+                        throw new Failure("invalid_response");
+                    }
+                    eek = encode(pair.get(1));
                 }
-                eek = encode(pair.get(1));
+            }
+            if (eek == null || eek.length > HAL_LIMIT) throw new Failure("missing_eek");
+            progress.update("hardware");
+            if (backend == 1) {
+                csr = DuckRkpNative.signV1(publicKey, challenge, eek, Build.FINGERPRINT);
+            } else {
+                DeviceInfo deviceInfo = new DeviceInfo();
+                ProtectedData protectedData = new ProtectedData();
+                MacedPublicKey macedKey = new MacedPublicKey();
+                macedKey.macedKey = macedPublicKey(publicKey);
+                byte[] tag;
+                try {
+                    tag = component.generateCertificateRequest(false,
+                            new MacedPublicKey[] {macedKey}, eek, challenge, deviceInfo, protectedData);
+                } catch (ServiceSpecificException e) {
+                    throw new Failure("hal_rejected", e.errorCode);
+                }
+                csr = assemble(publicKey, challenge, tag, deviceInfo.deviceInfo,
+                        protectedData.protectedData, Build.FINGERPRINT);
             }
         }
-        if (eek == null || eek.length > HAL_LIMIT) throw new Failure("missing_eek");
-
-        progress.update("hardware");
-        DeviceInfo deviceInfo = new DeviceInfo();
-        ProtectedData protectedData = new ProtectedData();
-        byte[] tag;
-        try {
-            tag = component.generateCertificateRequest(false, new MacedPublicKey[] {macedKey},
-                    eek, challenge, deviceInfo, protectedData);
-        } catch (ServiceSpecificException e) {
-            throw new Failure("hal_rejected", e.errorCode);
-        }
-        byte[] csr = assemble(publicKey, challenge, tag, deviceInfo.deviceInfo,
-                protectedData.protectedData, Build.FINGERPRINT);
         progress.update("signing");
         String url = ENDPOINT + ":signCertificates?challenge="
                 + Base64.encodeToString(challenge, Base64.URL_SAFE | Base64.NO_WRAP | Base64.NO_PADDING)
