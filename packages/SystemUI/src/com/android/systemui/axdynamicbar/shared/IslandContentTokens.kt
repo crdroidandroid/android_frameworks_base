@@ -138,7 +138,10 @@ internal const val AlphaTrack = 0.25f
  */
 internal const val AlphaAccent = 0.30f
 
-/** Opacity of a fill laid over an [islandBlur] surface: enough to carry colour, thin enough to frost. */
+/**
+ * Opacity of a chip's coloured frost (the tint passed to [islandBlur]) and of solid tiles inside
+ * a glass card: enough to carry colour and keep a status-bar label legible, thin enough to frost.
+ */
 internal const val AlphaGlass = 0.72f
 
 /**
@@ -151,30 +154,36 @@ internal const val AlphaGlass = 0.72f
  */
 internal val LocalBlurAlpha = compositionLocalOf { 1f }
 
+/** Rim width for the small glass pills; the 1 dp card rim would read as an outline at chip size. */
+internal val ChipHighlightWidth = 0.5.dp
+
 /**
- * Frosted backdrop for one island surface, drawn behind the content of the node it's applied to.
- * Apply it after the surface's `clip` (and `border`, so the hairline stays on top) and before any
- * glass fill or padding, so it covers the full surface.
+ * Frosted glass for one island surface, drawn behind the content of the node it's applied to.
+ * Apply it after the surface's `clip` and before padding, so it covers the full surface.
  *
  * [cornerRadius] must match the shape the surface clips to. [fallbackColor] is painted instead
- * wherever the platform won't blur (blur disabled, battery saver, unsupported device); it fades
- * with [alpha] too, since the helper draws it at full strength otherwise.
+ * wherever the platform won't blur (blur disabled, battery saver, unsupported device). [tint] is
+ * the frost laid over the blur: null takes the system frost; chips pass their own colour so the
+ * frost *is* the chip's colour instead of a second fill stacked on top of it. The rim highlight
+ * replaces a separate border.
  */
 @Composable
 internal fun Modifier.islandBlur(
     cornerRadius: Dp,
     fallbackColor: Color,
+    tint: Color? = null,
     alpha: Float = LocalBlurAlpha.current,
-): Modifier {
-    val clamped = alpha.coerceIn(0f, 1f)
-    return axBlurBackground(
+    highlightWidth: Dp = AxBlurSurfaceDefaults.HighlightWidth,
+): Modifier =
+    axBlurBackground(
         enabled = true,
-        fallbackColor = fallbackColor.copy(alpha = fallbackColor.alpha * clamped),
-        tintColor = AxBlurSurfaceDefaults.tintColor(),
+        fallbackColor = fallbackColor,
+        tintColor = tint ?: AxBlurSurfaceDefaults.tintColor(),
         cornerRadius = cornerRadius,
-        alpha = clamped,
+        alpha = alpha,
+        highlight = AxBlurSurfaceDefaults.highlightBrush(),
+        highlightWidth = highlightWidth,
     )
-}
 
 /**
  * Emphasis tone for an island event.
@@ -267,9 +276,6 @@ internal val CardBorderBrush: Brush
                 )
         )
 
-/** Hairline around a glass chip, so its edge survives against a busy wallpaper. */
-@Composable
-internal fun chipStrokeColor(): Color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
 
 /** The tone an event is drawn in. */
 internal fun toneFor(event: IslandEvent): IslandTone = eventStyleFor(event).tone
