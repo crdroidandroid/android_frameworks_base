@@ -413,7 +413,11 @@ constructor(
         val pkg = getActiveController()?.packageName ?: return
         mainHandler.post {
             try {
-                mediaOutputDialogManager.createAndShow(packageName = pkg, aboveStatusBar = true)
+                mediaOutputDialogManager.createAndShow(
+                    packageName = pkg,
+                    aboveStatusBar = true,
+                    useSystemColors = true,
+                )
             } catch (e: Exception) {
                 Log.w(TAG, "Failed to open media output switcher", e)
             }
