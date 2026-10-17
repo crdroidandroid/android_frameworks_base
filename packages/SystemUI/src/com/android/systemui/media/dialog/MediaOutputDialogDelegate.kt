@@ -39,7 +39,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.internal.logging.UiEvent
 import com.android.internal.logging.UiEventLogger
-import com.android.media.flags.Flags.enableMediaOutputSwitcherEntryPointTheming
 import com.android.systemui.broadcast.BroadcastSender
 import com.android.systemui.res.R
 import com.android.systemui.statusbar.phone.SystemUIDialog
@@ -240,7 +239,7 @@ constructor(
             val icon = headerIcon.toIcon(mContext)
             val iconSupportsColorExtraction =
                 icon.type == Icon.TYPE_BITMAP || icon.type == Icon.TYPE_ADAPTIVE_BITMAP
-            val useSystemColors = enableMediaOutputSwitcherEntryPointTheming() && mUseSystemColors
+            val useSystemColors = mUseSystemColors
             if (!iconSupportsColorExtraction || useSystemColors) {
                 // icon doesn't support getBitmap, use default value for color scheme
                 updateButtonBackgroundColorFilter()
