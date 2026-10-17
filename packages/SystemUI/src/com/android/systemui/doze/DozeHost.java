@@ -50,6 +50,14 @@ public interface DozeHost {
     void setPulsePending(boolean isPulsePending);
 
     /**
+     * Whether a successful biometric authentication is waking the device up and unlocking it.
+     * This is already true before PowerManager starts waking up.
+     */
+    default boolean isWakeAndUnlocking() {
+        return false;
+    }
+
+    /**
      * Makes a current pulse last for twice as long.
      * @param reason why we're extending it.
      */
