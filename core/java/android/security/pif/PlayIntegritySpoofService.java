@@ -266,11 +266,12 @@ public final class PlayIntegritySpoofService {
         mVerboseLogs = 0;
         mSpoofBuild = true;
         mSpoofProps = true;
-        mSpoofProvider = true;
+        mSpoofProvider = false;
         mSpoofSignature = false;
         mSpoofVendingBuild = true;
         mSpoofVendingSdk = false;
         mDebug = false;
+        mDeviceInitialSdkInt = "";
 
         try {
             mBuildFields.clear();
@@ -286,6 +287,12 @@ public final class PlayIntegritySpoofService {
             String fingerprint = mBuildFields.get("FINGERPRINT");
             if (fingerprint != null && !fingerprint.isEmpty()) {
                 expandFingerprint(fingerprint);
+            }
+
+            if (mBuildFields.isEmpty() && mSystemProps.isEmpty()) {
+                mConfigLoaded = false;
+                Log.w(TAG, "PIF config contains no usable fields, ignoring");
+                return;
             }
 
             mConfigLoaded = true;
@@ -334,6 +341,11 @@ public final class PlayIntegritySpoofService {
                         break;
                     case NULL:
                         reader.nextNull();
+                        continue;
+                    case BEGIN_OBJECT:
+                    case BEGIN_ARRAY:
+                        if (mVerboseLogs > 0) Log.d(TAG, "Skipping nested value for " + key);
+                        reader.skipValue();
                         continue;
                     default:
                         value = reader.nextString();
@@ -416,6 +428,9 @@ public final class PlayIntegritySpoofService {
         }
     }
     private static String resolveDeviceInitialSdk(String device, String configuredSdk) {
+        if (configuredSdk != null && !configuredSdk.isEmpty()) {
+            return configuredSdk;
+        }
         if (device != null) {
             switch (device) {
                 case "oriole":
@@ -454,7 +469,7 @@ public final class PlayIntegritySpoofService {
                     break;
             }
         }
-        return (configuredSdk != null && !configuredSdk.isEmpty()) ? configuredSdk : "32";
+        return "32";
     }
     public static boolean isTargetProcess(String processName) {
         return DROIDGUARD_PACKAGE.equals(processName) || VENDING_PACKAGE.equals(processName);
