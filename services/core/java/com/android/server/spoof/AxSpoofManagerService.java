@@ -28,11 +28,16 @@ import android.util.Slog;
 import com.android.internal.os.BackgroundThread;
 import com.android.server.SystemService;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public final class AxSpoofManagerService extends SystemService {
     private static final String TAG = "AxSpoofManager";
+
+    private static final String VENDING_PACKAGE = "com.android.vending";
+    private static final String DROIDGUARD_PROCESS = "com.google.android.gms.unstable";
+    private static final String PHOTOS_PACKAGE = "com.google.android.apps.photos";
 
     private static final String[] WATCHED_KEYS = {
             Settings.Secure.SPOOF_PIF_CONFIG,
@@ -49,6 +54,7 @@ public final class AxSpoofManagerService extends SystemService {
 
     private ContentObserver mObserver;
     private volatile boolean mReady;
+    private volatile int mUserId = UserHandle.USER_SYSTEM;
 
     public AxSpoofManagerService(Context context) {
         super(context);
@@ -67,10 +73,23 @@ public final class AxSpoofManagerService extends SystemService {
         }
     }
 
+    @Override
+    public void onUserSwitching(TargetUser from, TargetUser to) {
+        final int userId = to.getUserIdentifier();
+        BackgroundThread.getHandler().post(() -> {
+            mUserId = userId;
+            refreshAll();
+            Slog.i(TAG, "Spoof config reloaded for user " + userId);
+            restartPifTargets();
+            restartPhotos();
+        });
+    }
+
     private void systemReady() {
         if (mReady) {
             return;
         }
+        mUserId = ActivityManager.getCurrentUser();
         refreshAll();
         registerObserver();
         mReady = true;
@@ -83,8 +102,11 @@ public final class AxSpoofManagerService extends SystemService {
         }
         mObserver = new ContentObserver(BackgroundThread.getHandler()) {
             @Override
-            public void onChange(boolean selfChange, Uri uri) {
+            public void onChange(boolean selfChange, Uri uri, int userId) {
                 if (uri == null) {
+                    return;
+                }
+                if (userId != UserHandle.USER_ALL && userId != mUserId) {
                     return;
                 }
                 String key = uri.getLastPathSegment();
@@ -95,6 +117,8 @@ public final class AxSpoofManagerService extends SystemService {
                 Slog.i(TAG, "Spoof config refreshed: " + key);
                 if (Settings.Secure.SPOOF_PIF_CONFIG.equals(key)) {
                     restartPifTargets();
+                } else if (Settings.Secure.SPOOF_PIF_PHOTOS.equals(key)) {
+                    restartPhotos();
                 }
             }
         };
@@ -124,30 +148,59 @@ public final class AxSpoofManagerService extends SystemService {
     }
 
     private String readSetting(String key) {
-        return Settings.Secure.getStringForUser(mResolver, key, UserHandle.USER_CURRENT);
+        final int userId = mReady ? mUserId : UserHandle.USER_CURRENT;
+        return Settings.Secure.getStringForUser(mResolver, key, userId);
     }
 
+    /** Restarts DroidGuard and Play Store so they pick up a new PIF config. */
     private void restartPifTargets() {
         try {
             ActivityManager am = getContext().getSystemService(ActivityManager.class);
             if (am == null) {
                 return;
             }
-            am.forceStopPackage("com.android.vending");
-            java.util.List<ActivityManager.RunningAppProcessInfo> procs =
-                    am.getRunningAppProcesses();
-            if (procs != null) {
-                for (ActivityManager.RunningAppProcessInfo proc : procs) {
-                    if ("com.google.android.gms.unstable".equals(proc.processName)
-                            || "com.android.vending".equals(proc.processName)) {
-                        Slog.i(TAG, "Killing PIF target process " + proc.processName
-                                + " (pid=" + proc.pid + ")");
-                        Process.killProcess(proc.pid);
-                    }
-                }
-            }
+            am.forceStopPackageAsUser(VENDING_PACKAGE, mUserId);
+            killProcesses(am, DROIDGUARD_PROCESS, false);
+            killProcesses(am, VENDING_PACKAGE, false);
         } catch (Throwable t) {
             Slog.w(TAG, "Failed to restart PIF target processes", t);
+        }
+    }
+
+    /** Restarts Google Photos so it picks up a new Photos spoofing state. */
+    private void restartPhotos() {
+        try {
+            ActivityManager am = getContext().getSystemService(ActivityManager.class);
+            if (am == null) {
+                return;
+            }
+            killProcesses(am, PHOTOS_PACKAGE, true);
+        } catch (Throwable t) {
+            Slog.w(TAG, "Failed to restart Photos", t);
+        }
+    }
+
+    /**
+     * Kills processes of the current user whose name equals {@code name} or, when
+     * {@code includeSubProcesses} is set, starts with {@code name + ":"}.
+     */
+    private void killProcesses(ActivityManager am, String name, boolean includeSubProcesses) {
+        List<ActivityManager.RunningAppProcessInfo> procs = am.getRunningAppProcesses();
+        if (procs == null) {
+            return;
+        }
+        for (ActivityManager.RunningAppProcessInfo proc : procs) {
+            if (proc.processName == null) {
+                continue;
+            }
+            boolean matches = name.equals(proc.processName)
+                    || (includeSubProcesses && proc.processName.startsWith(name + ":"));
+            if (!matches || UserHandle.getUserId(proc.uid) != mUserId) {
+                continue;
+            }
+            Slog.i(TAG, "Killing spoof target process " + proc.processName
+                    + " (pid=" + proc.pid + ")");
+            Process.killProcess(proc.pid);
         }
     }
 
@@ -157,7 +210,7 @@ public final class AxSpoofManagerService extends SystemService {
             return getCached(Settings.Secure.SPOOF_PIF_CONFIG);
         }
 
-       @Override
+        @Override
         public String getPifSpoofPhotos() {
             return getCached(Settings.Secure.SPOOF_PIF_PHOTOS);
         }
