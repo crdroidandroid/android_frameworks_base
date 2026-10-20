@@ -23,6 +23,8 @@ import android.net.Uri;
 import android.os.Process;
 import android.os.UserHandle;
 import android.provider.Settings;
+import android.security.trickystore.TrickyStoreService;
+import android.text.TextUtils;
 import android.util.Slog;
 
 import com.android.internal.os.BackgroundThread;
@@ -79,6 +81,7 @@ public final class AxSpoofManagerService extends SystemService {
         BackgroundThread.getHandler().post(() -> {
             mUserId = userId;
             refreshAll();
+            maybeSeedDefaultTargets(false);
             Slog.i(TAG, "Spoof config reloaded for user " + userId);
             restartPifTargets();
             restartPhotos();
@@ -93,6 +96,7 @@ public final class AxSpoofManagerService extends SystemService {
         refreshAll();
         registerObserver();
         mReady = true;
+        maybeSeedDefaultTargets(false);
         Slog.i(TAG, "AxSpoofManager ready");
     }
 
@@ -119,6 +123,8 @@ public final class AxSpoofManagerService extends SystemService {
                     restartPifTargets();
                 } else if (Settings.Secure.SPOOF_PIF_PHOTOS.equals(key)) {
                     restartPhotos();
+                } else if (Settings.Secure.SPOOF_TRICKYSTORE_KEYBOX.equals(key)) {
+                    maybeSeedDefaultTargets(true);
                 }
             }
         };
@@ -150,6 +156,42 @@ public final class AxSpoofManagerService extends SystemService {
     private String readSetting(String key) {
         final int userId = mReady ? mUserId : UserHandle.USER_CURRENT;
         return Settings.Secure.getStringForUser(mResolver, key, userId);
+    }
+
+    /**
+     * Seeds {@link TrickyStoreService#DEFAULT_TARGET_LIST} into the target setting
+     * the first time a keybox is present and the target setting has never been
+     * written. This is what makes a freshly loaded keybox attest GMS and the usual
+     * targets without the user opening the TrickyStore screen and picking defaults.
+     */
+    private void maybeSeedDefaultTargets(boolean restartGms) {
+        try {
+            String keybox = readSetting(Settings.Secure.SPOOF_TRICKYSTORE_KEYBOX);
+            if (TextUtils.isEmpty(keybox)) {
+                return;
+            }
+            // Deliberately a null check, not isEmpty(): "" is a user who cleared
+            // the list and must be respected; null is "never configured".
+            String target = readSetting(Settings.Secure.SPOOF_TRICKYSTORE_TARGET);
+            if (target != null) {
+                return;
+            }
+
+            Settings.Secure.putStringForUser(
+                    mResolver,
+                    Settings.Secure.SPOOF_TRICKYSTORE_TARGET,
+                    TrickyStoreService.DEFAULT_TARGET_LIST,
+                    mUserId);
+            refreshKey(Settings.Secure.SPOOF_TRICKYSTORE_TARGET);
+            Slog.i(TAG, "Seeded default TrickyStore targets after keybox load (user "
+                    + mUserId + ")");
+
+            if (restartGms) {
+                restartPifTargets();
+            }
+        } catch (Throwable t) {
+            Slog.w(TAG, "Failed to seed default TrickyStore targets", t);
+        }
     }
 
     /** Restarts DroidGuard and Play Store so they pick up a new PIF config. */
