@@ -70,6 +70,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -546,30 +547,38 @@ private fun KeyguardMediaSeekBar(
     val durationMs = event.duration
     val positionMs = mediaProgress.positionMs
     val serverFraction = mediaProgress.progress
+    val speed = event.playbackSpeed.takeIf { it > 0f } ?: 1f
+
+    // What is playing; a new track or source restarts interpolation.
+    val mediaKey = "${event.packageName}|${event.track}|${event.artist}"
 
     var isScrubbing by remember { mutableStateOf(false) }
-    var displayFraction by remember { mutableStateOf(serverFraction) }
+    var displayFraction by remember { mutableFloatStateOf(serverFraction) }
 
     val interactorRef = rememberUpdatedState(interactor)
+    // Gesture handlers are installed once; read the duration through state so seeks after a
+    // track change use the current track's length.
+    val durationRef = rememberUpdatedState(durationMs)
 
     // Read the dismiss swipe lock provided by MagneticSwipeToDismiss
     val swipeLock = LocalDismissSwipeLock.current
 
-    // Smooth frame-interpolated progress
-    LaunchedEffect(positionMs, durationMs, isPlaying) {
+    // Frame-interpolated progress while playing; snaps to the reported value otherwise.
+    LaunchedEffect(mediaKey, positionMs, durationMs, isPlaying, speed) {
         if (isScrubbing) return@LaunchedEffect
 
         displayFraction = serverFraction
 
         if (!isPlaying || durationMs <= 0L) return@LaunchedEffect
 
-        val startWallMs = System.currentTimeMillis()
         val startProgressMs = positionMs
+        val startNanos = withFrameNanos { it }
         while (true) {
-            delay(16L)
+            val frameNanos = withFrameNanos { it }
             if (isScrubbing) break
-            val elapsed = System.currentTimeMillis() - startWallMs
-            val interpolated = ((startProgressMs + elapsed).toFloat() / durationMs).coerceIn(0f, 1f)
+            val elapsedMs = (frameNanos - startNanos) / 1_000_000L
+            val interpolated =
+                ((startProgressMs + elapsedMs * speed) / durationMs).coerceIn(0f, 1f)
             displayFraction = interpolated
             if (interpolated >= 1f) break
         }
@@ -600,7 +609,7 @@ private fun KeyguardMediaSeekBar(
                 detectTapGestures { offset ->
                     val f = (offset.x / size.width.toFloat()).coerceIn(0f, 1f)
                     displayFraction = f
-                    interactorRef.value.seekTo((f * durationMs).toLong())
+                    interactorRef.value.seekTo((f * durationRef.value).toLong())
                 }
             }
             .pointerInput("drag") {
@@ -610,7 +619,7 @@ private fun KeyguardMediaSeekBar(
                         displayFraction = (offset.x / size.width.toFloat()).coerceIn(0f, 1f)
                     },
                     onDragEnd = {
-                        interactorRef.value.seekTo((displayFraction * durationMs).toLong())
+                        interactorRef.value.seekTo((displayFraction * durationRef.value).toLong())
                         isScrubbing = false
                     },
                     onDragCancel = { isScrubbing = false },
