@@ -37,8 +37,42 @@ public final class AttestationUtils {
             if (sBootKey == null) {
                 sBootKey = getBootKeyFromKeybox();
             }
+            if (sBootKey == null) {
+                Log.w(TAG, "No boot key from prop or keybox, using random bytes");
+                sBootKey = generateRandomBytes(32);
+            }
         }
         return sBootKey;
+    }
+
+    /**
+     * Deterministic boot-hash fallback derived from the active keybox, used before
+     * the random fallback so that — when the vbmeta prop is missing and the TEE is
+     * broken — two attestations in the same boot still agree on RootOfTrust instead
+     * of each getting fresh random bytes. Domain-separated from the boot KEY digest
+     * (which is a plain SHA-256 of the same cert) so the two fields don't collide.
+     * Returns null if no keybox is loaded.
+     */
+    private static byte[] deriveBootHashFromKeybox() {
+        try {
+            KeyBoxManager keyBoxManager = TrickyStoreService.getInstance().getKeyBoxManager();
+            if (keyBoxManager == null || !keyBoxManager.hasKeyboxes()) {
+                return null;
+            }
+            KeyBoxManager.KeyBox keybox = keyBoxManager.getKeybox("EC");
+            if (keybox == null) {
+                keybox = keyBoxManager.getKeybox("RSA");
+            }
+            if (keybox == null || keybox.certificates == null || keybox.certificates.isEmpty()) {
+                return null;
+            }
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            digest.update("boothash".getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            return digest.digest(keybox.certificates.get(0).getEncoded());
+        } catch (Exception e) {
+            Log.w(TAG, "Failed to derive boot hash from keybox", e);
+            return null;
+        }
     }
 
     /**
@@ -95,7 +129,10 @@ public final class AttestationUtils {
                 sBootHash = extractBootHashFromTee();
             }
             if (sBootHash == null) {
-                Log.w(TAG, "Failed to get boot hash from prop, disk, and TEE, using random bytes");
+                sBootHash = deriveBootHashFromKeybox();
+            }
+            if (sBootHash == null) {
+                Log.w(TAG, "Failed to get boot hash from prop, TEE, and keybox, using random bytes");
                 sBootHash = generateRandomBytes(32);
             }
         }
