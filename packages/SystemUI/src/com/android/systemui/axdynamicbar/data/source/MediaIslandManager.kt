@@ -9,6 +9,7 @@ import android.media.AudioDeviceInfo
 import android.media.AudioManager
 import android.media.MediaMetadata
 import android.media.session.MediaController
+import android.media.session.MediaSession
 import android.media.session.MediaSessionManager as SystemMediaSessionManager
 import android.media.session.PlaybackState
 import android.os.Handler
@@ -22,6 +23,7 @@ import com.android.systemui.dagger.qualifiers.Main
 import com.android.systemui.media.MediaSessionManager
 import com.android.systemui.media.NotificationMediaManager
 import com.android.systemui.media.dialog.MediaOutputDialogManager
+import com.android.systemui.plugins.ActivityStarter
 import com.android.systemui.util.concurrency.RepeatableExecutor
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,12 +40,18 @@ constructor(
     @Background private val backgroundExecutor: RepeatableExecutor,
     private val notificationMediaManager: NotificationMediaManager,
     private val mediaOutputDialogManager: MediaOutputDialogManager,
+    private val activityStarter: ActivityStarter,
 ) {
     companion object {
         private const val TAG = "MediaIslandManager"
         private const val POSITION_UPDATE_INTERVAL_MS = 1000L
 
         private const val UNKNOWN_DURATION = 0L
+
+        // Scores used to pick the session that matches what NotificationMediaManager reports.
+        private const val SCORE_TRACK_MATCH = 4
+        private const val SCORE_IN_MOTION = 2
+        private const val SCORE_PREFERRED_PKG = 1
     }
 
     private val _mediaEvent = MutableStateFlow<IslandEvent.Media?>(null)
@@ -60,29 +68,41 @@ constructor(
     private val systemMediaSessionManager: SystemMediaSessionManager by lazy {
         context.getSystemService(SystemMediaSessionManager::class.java)
     }
+
     @Volatile private var activeMediaController: MediaController? = null
+    @Volatile private var activeControllerCallback: ControllerCallback? = null
 
-    private val mediaControllerCallback =
-        object : MediaController.Callback() {
-            override fun onPlaybackStateChanged(state: PlaybackState?) {
-                if (state != null) {
-                    updatePosition(state)
-                }
-            }
+    private inner class ControllerCallback(private val token: MediaSession.Token) :
+        MediaController.Callback() {
 
-            override fun onAudioInfoChanged(info: MediaController.PlaybackInfo) {
-                _mediaEvent.update { event -> event?.copy(outputDeviceName = getOutputDeviceName()) }
-            }
+        private fun isCurrent(): Boolean = activeMediaController?.sessionToken == token
 
-            override fun onSessionDestroyed() {
-                activeMediaController = null
+        override fun onPlaybackStateChanged(state: PlaybackState?) {
+            if (state == null || !isCurrent()) return
+            updatePosition(state, activeMediaController?.packageName)
+        }
+
+        override fun onAudioInfoChanged(info: MediaController.PlaybackInfo) {
+            if (!isCurrent()) return
+            _mediaEvent.update { event -> event?.copy(outputDeviceName = getOutputDeviceName()) }
+        }
+
+        override fun onSessionDestroyed() {
+            if (!isCurrent()) return
+            val destroyedPkg = activeMediaController?.packageName
+            setActiveController(null)
+            val shown = _mediaEvent.value
+            setActiveController(findController(shown?.track, shown?.artist, shown?.packageName))
+            val shownPkg = shown?.packageName
+            if (shown != null && (shownPkg.isNullOrEmpty() || shownPkg == destroyedPkg)) {
                 onMediaSessionLost?.invoke()
             }
         }
+    }
 
     private val sessionChangedListener =
         SystemMediaSessionManager.OnActiveSessionsChangedListener { controllers ->
-            bindController(controllers)
+            onActiveSessionsChanged(controllers.orEmpty())
         }
 
     private val mediaSessionListener = object : MediaSessionManager.MediaDataListener {
@@ -113,17 +133,95 @@ constructor(
         }
     }
 
-    private fun bindController(controllers: List<MediaController>?) {
-        activeMediaController?.unregisterCallback(mediaControllerCallback)
-        activeMediaController = controllers?.firstOrNull()
-        activeMediaController?.registerCallback(mediaControllerCallback, mainHandler)
-        activeMediaController?.playbackState?.let {
-            updatePosition(it)
+    private fun activeSessions(): List<MediaController> =
+        try {
+            systemMediaSessionManager.getActiveSessions(null).orEmpty()
+        } catch (e: Exception) {
+            Log.w(TAG, "Failed to query active media sessions", e)
+            emptyList()
         }
 
-        if (controllers.isNullOrEmpty() && _mediaEvent.value != null) {
+    private fun matchesTrack(controller: MediaController, track: String?, artist: String?): Boolean {
+        if (track.isNullOrEmpty()) return false
+        val md = controller.metadata ?: return false
+        val title =
+            md.getString(MediaMetadata.METADATA_KEY_DISPLAY_TITLE)
+                ?: md.getString(MediaMetadata.METADATA_KEY_TITLE)
+        if (title != track) return false
+        val sessionArtist = md.getString(MediaMetadata.METADATA_KEY_ARTIST)
+        return artist.isNullOrEmpty() || sessionArtist.isNullOrEmpty() || sessionArtist == artist
+    }
+
+    private fun pickController(
+        sessions: List<MediaController>,
+        track: String?,
+        artist: String?,
+        preferredPkg: String?,
+    ): MediaController? {
+        if (sessions.isEmpty()) return null
+        return sessions.maxByOrNull { c ->
+            var score = 0
+            if (matchesTrack(c, track, artist)) score += SCORE_TRACK_MATCH
+            if (c.playbackState?.let { isInMotion(it) } == true) score += SCORE_IN_MOTION
+            if (!preferredPkg.isNullOrEmpty() && c.packageName == preferredPkg) {
+                score += SCORE_PREFERRED_PKG
+            }
+            score
+        }
+    }
+
+    private fun findController(track: String?, artist: String?, preferredPkg: String?) =
+        pickController(activeSessions(), track, artist, preferredPkg)
+
+    private fun setActiveController(controller: MediaController?) {
+        val current = activeMediaController
+        if (current?.sessionToken == controller?.sessionToken) return
+        activeControllerCallback?.let { cb ->
+            try {
+                current?.unregisterCallback(cb)
+            } catch (_: Exception) {}
+        }
+        activeControllerCallback = null
+        activeMediaController = controller
+        if (controller != null) {
+            val cb = ControllerCallback(controller.sessionToken)
+            try {
+                controller.registerCallback(cb, mainHandler)
+                activeControllerCallback = cb
+            } catch (e: Exception) {
+                Log.w(TAG, "Failed to register media controller callback", e)
+            }
+        }
+    }
+
+    private fun onActiveSessionsChanged(controllers: List<MediaController>) {
+        val event = _mediaEvent.value
+        if (event == null) {
+            setActiveController(
+                pickController(controllers, null, null, activeMediaController?.packageName)
+            )
+            return
+        }
+        if (controllers.isEmpty()) {
+            setActiveController(null)
+            onMediaSessionLost?.invoke()
+            return
+        }
+        setActiveController(pickController(controllers, event.track, event.artist, event.packageName))
+        if (event.packageName.isNotEmpty() && controllers.none { it.packageName == event.packageName }) {
             onMediaSessionLost?.invoke()
         }
+    }
+
+    private fun getActiveController(): MediaController? {
+        val event = _mediaEvent.value
+        val bound = activeMediaController
+        if (bound != null &&
+            (event == null || event.packageName.isEmpty() || bound.packageName == event.packageName)
+        ) {
+            return bound
+        }
+        return findController(event?.track, event?.artist, event?.packageName) ?: bound
     }
 
     private fun isInMotion(state: PlaybackState): Boolean =
@@ -131,10 +229,8 @@ constructor(
             state.state == PlaybackState.STATE_FAST_FORWARDING ||
             state.state == PlaybackState.STATE_REWINDING
 
-    private fun computeAccuratePosition(
-        state: PlaybackState,
-        duration: Long = _mediaEvent.value?.duration?.takeIf { it > 0L } ?: Long.MAX_VALUE,
-    ): Long {
+    /** [duration] <= 0 means unknown; the position is then not clamped. */
+    private fun computeAccuratePosition(state: PlaybackState, duration: Long): Long {
         val maxPosition = duration.takeIf { it > 0L } ?: Long.MAX_VALUE
         val basePos = state.position.coerceAtLeast(0L)
         if (!isInMotion(state)) return basePos.coerceAtMost(maxPosition)
@@ -172,12 +268,24 @@ constructor(
         cancelProgressPolling = null
     }
 
-    private fun updatePosition(state: PlaybackState) {
+    private fun updatePosition(state: PlaybackState, pkg: String?) {
         val now = SystemClock.elapsedRealtime()
         val speed = state.playbackSpeed.takeIf { it > 0f } ?: 1f
         val playing = isInMotion(state)
         _mediaEvent.update { event ->
-            val duration = event?.duration?.takeIf { it > 0L } ?: return@update event
+            if (event == null) return@update null
+            // Never let one app's playback state move another app's card.
+            if (!pkg.isNullOrEmpty() && event.packageName.isNotEmpty() && event.packageName != pkg) {
+                return@update event
+            }
+            val duration = event.duration
+            if (duration <= 0L) {
+                return@update event.copy(
+                    isPlaying = playing,
+                    playbackSpeed = speed,
+                    positionUpdateTime = now,
+                )
+            }
             val posMs = computeAccuratePosition(state, duration)
             val progress = (posMs.toFloat() / duration.toFloat()).coerceIn(0f, 1f)
             event.copy(
@@ -190,21 +298,20 @@ constructor(
         }
     }
 
-    private fun getActiveController(): MediaController? =
-        activeMediaController ?: try {
-            systemMediaSessionManager.getActiveSessions(null).firstOrNull()
-        } catch (_: Exception) {
-            null
-        }
-
-    private fun resolveAlbumArt(track: String, artist: String, albumArt: Drawable?): Drawable? {
-        val current = _mediaEvent.value ?: return albumArt
-        return if (current.track == track && current.artist == artist) {
-            current.albumArt ?: albumArt
-        } else {
-            albumArt
-        }
-    }
+    private fun buildCustomActions(
+        ps: PlaybackState?,
+        pkg: String?,
+    ): List<IslandEvent.MediaCustomAction> =
+        ps?.customActions?.take(2)?.mapNotNull { ca ->
+            val lbl = ca.name?.toString()?.takeIf { it.isNotEmpty() } ?: return@mapNotNull null
+            val act = ca.action?.takeIf { it.isNotEmpty() } ?: return@mapNotNull null
+            val icon = try {
+                if (ca.icon != 0 && pkg != null) {
+                    DrawableIcon.createWithResource(pkg, ca.icon).loadDrawable(context)
+                } else null
+            } catch (_: Exception) { null }
+            IslandEvent.MediaCustomAction(label = lbl, action = act, icon = icon)
+        } ?: emptyList()
 
     private val mediaListener =
         object : NotificationMediaManager.MediaListener {
@@ -221,38 +328,45 @@ constructor(
                 val rawDuration = metadata?.getLong(MediaMetadata.METADATA_KEY_DURATION) ?: 0L
                 val duration = if (rawDuration > 0L) rawDuration else UNKNOWN_DURATION
 
-                val albumArt = sessionAlbumArt ?: run {
-                    val bmp = metadata?.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART)
-                        ?: metadata?.getBitmap(MediaMetadata.METADATA_KEY_ART)
-                    bmp?.let { BitmapDrawable(context.resources, it) }
-                }
-                val resolvedAlbumArt = resolveAlbumArt(track, artist, albumArt)
-
-                val controller = getActiveController()
+                val controller =
+                    if (metadata != null) {
+                        findController(track, artist, null).also { setActiveController(it) }
+                    } else {
+                        activeMediaController
+                    }
                 val ps = controller?.playbackState
-                val existingPos = _mediaEvent.value?.position ?: 0L
-                val posMs = if (ps != null) computeAccuratePosition(ps, duration) else existingPos
-                val progress =
-                    if (duration > 0L) (posMs.toFloat() / duration.toFloat()).coerceIn(0f, 1f)
-                    else 0f
-                val outputDevice = getOutputDeviceName()
                 val pkg = controller?.packageName
-                val customActions =
-                    ps?.customActions?.take(2)?.mapNotNull { ca ->
-                        val lbl =
-                            ca.name?.toString()?.takeIf { it.isNotEmpty() }
-                                ?: return@mapNotNull null
-                        val act = ca.action?.takeIf { it.isNotEmpty() } ?: return@mapNotNull null
-                        val icon = try {
-                            if (ca.icon != 0 && pkg != null) {
-                                DrawableIcon.createWithResource(pkg, ca.icon)
-                                    .loadDrawable(context)
-                            } else null
-                        } catch (_: Exception) { null }
-                        IslandEvent.MediaCustomAction(label = lbl, action = act, icon = icon)
-                    } ?: emptyList()
-                val appIcon = sessionAppIcon
 
+                val current = _mediaEvent.value
+                val sameSource = current != null && pkg != null && current.packageName == pkg
+                val sameTrack =
+                    sameSource && current!!.track == track && current.artist == artist
+
+                val effectiveDuration =
+                    when {
+                        duration > 0L -> duration
+                        sameTrack -> current!!.duration
+                        else -> UNKNOWN_DURATION
+                    }
+                val posMs =
+                    ps?.let { computeAccuratePosition(it, effectiveDuration) }
+                        ?: if (sameTrack) current!!.position else 0L
+                val progress =
+                    if (effectiveDuration > 0L) {
+                        (posMs.toFloat() / effectiveDuration.toFloat()).coerceIn(0f, 1f)
+                    } else 0f
+
+                val metadataArt =
+                    (metadata?.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART)
+                        ?: metadata?.getBitmap(MediaMetadata.METADATA_KEY_ART))
+                        ?.let { BitmapDrawable(context.resources, it) }
+                val albumArt =
+                    if (sameTrack) current?.albumArt ?: sessionAlbumArt ?: metadataArt
+                    else metadataArt ?: sessionAlbumArt
+                val appIcon = if (sameSource) current?.appIcon ?: sessionAppIcon else sessionAppIcon
+
+                val outputDevice = getOutputDeviceName()
+                val customActions = buildCustomActions(ps, pkg)
                 val speed = ps?.playbackSpeed?.takeIf { it > 0f } ?: 1f
                 val updateTime = SystemClock.elapsedRealtime()
 
@@ -263,9 +377,9 @@ constructor(
                             track = track,
                             artist = artist,
                             isPlaying = true,
-                            albumArt = resolvedAlbumArt,
+                            albumArt = albumArt,
                             progress = progress,
-                            duration = duration,
+                            duration = effectiveDuration,
                             position = posMs,
                             playbackSpeed = speed,
                             positionUpdateTime = updateTime,
@@ -276,16 +390,28 @@ constructor(
                         )
                 } else {
                     _mediaEvent.update { event ->
-                        event?.copy(
-                            isPlaying = false,
-                            albumArt = resolvedAlbumArt ?: event.albumArt,
-                            progress = progress,
-                            duration = duration.takeIf { it > 0L } ?: event.duration,
-                            position = posMs,
-                            playbackSpeed = speed,
-                            positionUpdateTime = updateTime,
-                        )
+                        when {
+                            event == null -> null
+                            metadata == null -> event.copy(isPlaying = false)
+                            else ->
+                                event.copy(
+                                    track = track,
+                                    artist = artist,
+                                    isPlaying = false,
+                                    albumArt = albumArt ?: if (sameTrack) event.albumArt else null,
+                                    progress = progress,
+                                    duration = effectiveDuration,
+                                    position = posMs,
+                                    playbackSpeed = speed,
+                                    positionUpdateTime = updateTime,
+                                    outputDeviceName = outputDevice,
+                                    customActions = customActions,
+                                    appIcon = appIcon ?: event.appIcon,
+                                    packageName = pkg ?: event.packageName,
+                                )
+                        }
                     }
+                    if (pkg != null && _mediaEvent.value != null) activeMediaPackage = pkg
                 }
             }
         }
@@ -296,7 +422,7 @@ constructor(
         notificationMediaManager.addCallback(mediaListener)
         MediaSessionManager.get().addListener(mediaSessionListener)
         try {
-            bindController(systemMediaSessionManager.getActiveSessions(null))
+            setActiveController(pickController(activeSessions(), null, null, null))
             systemMediaSessionManager.addOnActiveSessionsChangedListener(
                 sessionChangedListener,
                 null,
@@ -315,9 +441,8 @@ constructor(
         MediaSessionManager.get().removeListener(mediaSessionListener)
         try {
             systemMediaSessionManager.removeOnActiveSessionsChangedListener(sessionChangedListener)
-            activeMediaController?.unregisterCallback(mediaControllerCallback)
-            activeMediaController = null
         } catch (_: Exception) {}
+        setActiveController(null)
         _mediaEvent.value = null
         activeMediaPackage = null
         sessionAlbumArt = null
@@ -333,7 +458,7 @@ constructor(
     fun togglePlayPause() {
         val c = getActiveController() ?: return
         val playbackState = c.playbackState
-        val playing = playbackState?.state == PlaybackState.STATE_PLAYING
+        val playing = playbackState?.let { isInMotion(it) } == true
         if (playing) {
             c.transportControls.pause()
         } else {
@@ -342,9 +467,8 @@ constructor(
         val now = SystemClock.elapsedRealtime()
         _mediaEvent.update { event ->
             if (event == null) return@update null
-            val duration = event.duration.takeIf { it > 0L } ?: Long.MAX_VALUE
             val position =
-                playbackState?.let { computeAccuratePosition(it, duration) } ?: event.position
+                playbackState?.let { computeAccuratePosition(it, event.duration) } ?: event.position
             event.copy(isPlaying = !playing, position = position, positionUpdateTime = now)
         }
     }
@@ -366,16 +490,28 @@ constructor(
     }
 
     fun getMediaAppIntent(): Intent? {
-        val pkg = getActiveController()?.packageName ?: return null
+        val pkg =
+            getActiveController()?.packageName
+                ?: _mediaEvent.value?.packageName?.takeIf { it.isNotEmpty() }
+                ?: return null
         val intent = context.packageManager.getLaunchIntentForPackage(pkg) ?: return null
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         return intent
     }
 
     fun openMediaApp() {
+        val sessionActivity = getActiveController()?.sessionActivity
+        if (sessionActivity != null) {
+            try {
+                activityStarter.postStartActivityDismissingKeyguard(sessionActivity)
+                return
+            } catch (e: Exception) {
+                Log.w(TAG, "Failed to open media session activity", e)
+            }
+        }
         val intent = getMediaAppIntent() ?: return
         try {
-            context.startActivity(intent)
+            activityStarter.postStartActivityDismissingKeyguard(intent, 0)
         } catch (e: Exception) {
             Log.w(TAG, "Failed to open media app", e)
         }
