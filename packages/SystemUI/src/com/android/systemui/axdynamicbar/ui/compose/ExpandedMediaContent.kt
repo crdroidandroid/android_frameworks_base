@@ -42,15 +42,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
@@ -62,7 +63,6 @@ import com.android.systemui.axdynamicbar.model.IslandEvent
 import com.android.systemui.axdynamicbar.shared.*
 import com.android.systemui.media.controls.ui.drawable.SquigglyProgress
 import com.android.systemui.res.R
-import kotlinx.coroutines.delay
 
 private val AlbumArtSize = 64.dp
 private val PlayPauseSize = 48.dp
@@ -290,30 +290,35 @@ private fun MediaSeekBar(
     val durationMs = event.duration
     val positionMs = mediaProgress.positionMs
     val serverFraction = mediaProgress.progress
+    val speed = event.playbackSpeed.takeIf { it > 0f } ?: 1f
+
+    val mediaKey = "${event.packageName}|${event.track}|${event.artist}"
 
     var isScrubbing by remember { mutableStateOf(false) }
-    var displayFraction by remember { mutableStateOf(serverFraction) }
+    var displayFraction by remember { mutableFloatStateOf(serverFraction) }
 
     val interactorRef = rememberUpdatedState(interactor)
+    val durationRef = rememberUpdatedState(durationMs)
 
     // Read the dismiss swipe lock provided by MagneticSwipeToDismiss
     val swipeLock = LocalDismissSwipeLock.current
 
-    // Smooth frame-interpolated progress when playing, snaps when paused or scrubbing
-    LaunchedEffect(positionMs, durationMs, isPlaying) {
+    // Frame-interpolated progress while playing; snaps to the reported value otherwise.
+    LaunchedEffect(mediaKey, positionMs, durationMs, isPlaying, speed) {
         if (isScrubbing) return@LaunchedEffect
 
         displayFraction = serverFraction
 
         if (!isPlaying || durationMs <= 0L) return@LaunchedEffect
 
-        val startWallMs = System.currentTimeMillis()
         val startProgressMs = positionMs
+        val startNanos = withFrameNanos { it }
         while (true) {
-            delay(16L) // ~60 fps
+            val frameNanos = withFrameNanos { it }
             if (isScrubbing) break
-            val elapsed = System.currentTimeMillis() - startWallMs
-            val interpolated = ((startProgressMs + elapsed).toFloat() / durationMs).coerceIn(0f, 1f)
+            val elapsedMs = (frameNanos - startNanos) / 1_000_000L
+            val interpolated =
+                ((startProgressMs + elapsedMs * speed) / durationMs).coerceIn(0f, 1f)
             displayFraction = interpolated
             if (interpolated >= 1f) break
         }
@@ -356,7 +361,7 @@ private fun MediaSeekBar(
                     detectTapGestures { offset ->
                         val fraction = (offset.x / size.width.toFloat()).coerceIn(0f, 1f)
                         displayFraction = fraction
-                        interactorRef.value.seekTo((fraction * durationMs).toLong())
+                        interactorRef.value.seekTo((fraction * durationRef.value).toLong())
                     }
                 }
                 .pointerInput("drag") {
@@ -366,7 +371,9 @@ private fun MediaSeekBar(
                             displayFraction = (offset.x / size.width.toFloat()).coerceIn(0f, 1f)
                         },
                         onDragEnd = {
-                            interactorRef.value.seekTo((displayFraction * durationMs).toLong())
+                            interactorRef.value.seekTo(
+                                (displayFraction * durationRef.value).toLong()
+                            )
                             isScrubbing = false
                         },
                         onDragCancel = { isScrubbing = false },
@@ -497,6 +504,7 @@ internal fun RowScope.CompactMediaRow(
     event: IslandEvent.Media,
     interactor: IslandActions,
 ) {
+    val accent = rememberMediaColors(event).accent
     event.albumArt?.let {
         Image(
             bitmap = it.toSquareScaledBitmap(SizeCompactIcon),
@@ -505,7 +513,6 @@ internal fun RowScope.CompactMediaRow(
             contentScale = ContentScale.Crop,
         )
     } ?: run {
-        val accent = rememberMediaColors(event).accent
         Box(
             modifier = Modifier.size(SizeCompactIcon)
                 .clip(ShapeCompact)
@@ -537,14 +544,14 @@ internal fun RowScope.CompactMediaRow(
     Surface(
         onClick = { interactor.togglePlayPause() },
         shape = CircleShape,
-        color = rememberMediaColors(event).accent.copy(alpha = AlphaAccent),
+        color = accent.copy(alpha = AlphaAccent),
         modifier = Modifier.size(36.dp),
     ) {
         Box(contentAlignment = Alignment.Center) {
             Icon(
                 if (event.isPlaying) Icons.Filled.Pause else Icons.Filled.PlayArrow,
                 null,
-                tint = rememberMediaColors(event).accent,
+                tint = accent,
                 modifier = Modifier.size(18.dp),
             )
         }
