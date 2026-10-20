@@ -18,83 +18,79 @@ package com.android.systemui.statusbar
 import android.content.Context
 import android.database.ContentObserver
 import android.net.ConnectivityManager
+import android.net.Network
 import android.net.NetworkCapabilities
-import android.net.wifi.WifiManager
+import android.net.NetworkRequest
+import android.net.wifi.ScanResult
+import android.net.wifi.WifiInfo
 import android.os.UserHandle
 import android.provider.Settings
 
-import kotlinx.coroutines.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
 
 object WifiStandardController {
 
-    private var view: WifiStandardImageView? = null
-    private var context: Context? = null
-    private var coroutineScope: CoroutineScope? = null
+    /** Standard of the connected Wi-Fi network, or WIFI_STANDARD_UNKNOWN while the icon is off. */
+    @OptIn(ExperimentalCoroutinesApi::class)
+    fun wifiStandard(context: Context): Flow<Int> =
+        wifiStandardEnabledFlow(context)
+            .flatMapLatest { enabled ->
+                if (enabled) connectedWifiStandardFlow(context)
+                else flowOf(ScanResult.WIFI_STANDARD_UNKNOWN)
+            }
+            .distinctUntilChanged()
 
-    fun INSTANCE(context: Context): WifiStandardController {
-        this.context = context.applicationContext
-        return this
-    }
+    // Wi-Fi refreshes the network's WifiInfo, standard included, on every association and roam.
+    private fun connectedWifiStandardFlow(context: Context): Flow<Int> = callbackFlow {
+        val connectivityManager = context.getSystemService(ConnectivityManager::class.java)
+        val callback = object : ConnectivityManager.NetworkCallback() {
+            private var current: Network? = null
 
-    fun attachView(view: WifiStandardImageView) {
-        this.view = view
-        coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
-        startCollecting()
-    }
+            override fun onCapabilitiesChanged(network: Network, caps: NetworkCapabilities) {
+                current = network
+                trySend(
+                    (caps.transportInfo as? WifiInfo)?.wifiStandard
+                        ?: ScanResult.WIFI_STANDARD_UNKNOWN
+                )
+            }
 
-    fun detachView() {
-        coroutineScope?.cancel()
-        coroutineScope = null
-        view = null
-    }
-
-    private fun startCollecting() {
-        coroutineScope?.launch {
-            combine(wifiStandardFlow(), wifiStandardEnabledFlow()) { standard, enabled ->
-                Pair(standard, enabled)
-            }.collect { (standard, enabled) ->
-                view?.updateWifiStatus(standard, enabled)
+            override fun onLost(network: Network) {
+                if (network == current) {
+                    current = null
+                    trySend(ScanResult.WIFI_STANDARD_UNKNOWN)
+                }
             }
         }
+        val request = NetworkRequest.Builder()
+            .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+            .build()
+
+        trySend(ScanResult.WIFI_STANDARD_UNKNOWN)
+        connectivityManager.registerNetworkCallback(request, callback)
+        awaitClose { connectivityManager.unregisterNetworkCallback(callback) }
     }
 
-    private fun wifiStandardFlow(): Flow<Int> = flow {
-        val connectivityManager = context!!.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val wifiManager = context!!.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
-
-        while (true) {
-            val networkCapabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
-            val wifiStandard = if (networkCapabilities?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) == true) {
-                wifiManager.connectionInfo.wifiStandard
-            } else {
-                -1
-            }
-            emit(wifiStandard)
-            delay(1000)
-        }
-    }.distinctUntilChanged()
-
-    private fun wifiStandardEnabledFlow(): Flow<Boolean> = callbackFlow {
-        val contentResolver = context!!.contentResolver
-        val settingUri = Settings.System.getUriFor(Settings.System.WIFI_STANDARD_ICON)
-
+    private fun wifiStandardEnabledFlow(context: Context): Flow<Boolean> = callbackFlow {
+        val contentResolver = context.contentResolver
         val observer = object : ContentObserver(null) {
             override fun onChange(selfChange: Boolean) {
-                trySend(isWifiStandardEnabled())
+                trySend(isWifiStandardEnabled(context))
             }
         }
 
-        contentResolver.registerContentObserver(settingUri, false, observer)
-        send(isWifiStandardEnabled())
+        contentResolver.registerContentObserver(
+            Settings.System.getUriFor(Settings.System.WIFI_STANDARD_ICON), false, observer
+        )
+        send(isWifiStandardEnabled(context))
 
         awaitClose { contentResolver.unregisterContentObserver(observer) }
     }.distinctUntilChanged()
 
-    private fun isWifiStandardEnabled(): Boolean {
+    private fun isWifiStandardEnabled(context: Context): Boolean {
         return Settings.System.getIntForUser(
-            context!!.contentResolver,
+            context.contentResolver,
             Settings.System.WIFI_STANDARD_ICON,
             0,
             UserHandle.USER_CURRENT
