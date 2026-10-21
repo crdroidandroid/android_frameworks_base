@@ -1406,6 +1406,18 @@ public class Typeface {
         return tf == null ? getSystemDefaultTypeface(familyName) : tf;
     }
 
+    /**
+     * Returns the system typeface registered under the given name, or null if there is none.
+     * Unlike {@link #getSystemDefaultTypeface(String)} this never substitutes
+     * {@link #DEFAULT}, so a caller can tell a missing family from the default font.
+     *
+     * @hide
+     */
+    @Nullable
+    public static Typeface getSystemTypeface(@NonNull String familyName) {
+        return sSystemFontMap.get(familyName);
+    }
+
     /** @hide */
     public static Typeface getSystemDefaultTypeface(@NonNull String familyName) {
         Typeface tf = sSystemFontMap.get(familyName);

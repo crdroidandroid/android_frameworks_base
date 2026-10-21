@@ -206,8 +206,8 @@ public class FontController {
         // First try to resolve the currently active custom font directly
         String currentFont = getCurrentFont();
         if (currentFont != null && !currentFont.isEmpty()) {
-            Typeface tf = Typeface.getSystemDefaultTypeface(currentFont);
-            if (tf != null && tf != Typeface.DEFAULT) {
+            Typeface tf = Typeface.getSystemTypeface(currentFont);
+            if (tf != null) {
                 logger("resolveDefaultTypeface: resolved current font '" + currentFont + "'");
                 return tf;
             }
@@ -320,8 +320,8 @@ public class FontController {
 
             for (String suffix : suffixes) {
                 String candidate = fontName + suffix;
-                Typeface tf = Typeface.getSystemDefaultTypeface(candidate);
-                if (tf != null && tf != Typeface.DEFAULT) {
+                Typeface tf = Typeface.getSystemTypeface(candidate);
+                if (tf != null) {
                     logger("resolveNamedVariant: matched '" + candidate + "'");
                     return tf;
                 }
