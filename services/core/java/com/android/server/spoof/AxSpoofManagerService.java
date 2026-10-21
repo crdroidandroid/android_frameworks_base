@@ -20,6 +20,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.database.ContentObserver;
 import android.net.Uri;
+import android.os.Binder;
 import android.os.Process;
 import android.os.UserHandle;
 import android.provider.Settings;
@@ -29,6 +30,7 @@ import android.util.Slog;
 
 import com.android.internal.os.BackgroundThread;
 import com.android.server.SystemService;
+import com.android.server.security.rkp.DuckRkpManager;
 
 import java.util.List;
 import java.util.Map;
@@ -48,13 +50,17 @@ public final class AxSpoofManagerService extends SystemService {
             Settings.Secure.SPOOF_TRICKYSTORE_TARGET,
             Settings.Secure.SPOOF_TRICKYSTORE_KEYBOX,
             Settings.Secure.SPOOF_TRICKYSTORE_PATCH,
+            Settings.Secure.SPOOF_DUCK_RKP_ENABLED,
     };
+
+    private static final String TRICKYSTORE_ENABLED_KEY = "spoof_trickystore_enabled";
 
     private final ContentResolver mResolver;
     private final Map<String, String> mCache = new ConcurrentHashMap<>();
     private final AxSpoofManagerInternal mLocalService = new LocalService();
 
     private ContentObserver mObserver;
+    private volatile DuckRkpManager mDuckRkp;
     private volatile boolean mReady;
     private volatile int mUserId = UserHandle.USER_SYSTEM;
 
@@ -93,6 +99,8 @@ public final class AxSpoofManagerService extends SystemService {
             return;
         }
         mUserId = ActivityManager.getCurrentUser();
+        mDuckRkp = new DuckRkpManager(
+                getContext(), BackgroundThread.getHandler(), this::onDuckRkpChanged);
         refreshAll();
         registerObserver();
         mReady = true;
@@ -117,6 +125,14 @@ public final class AxSpoofManagerService extends SystemService {
                 if (key == null) {
                     return;
                 }
+                if (TRICKYSTORE_ENABLED_KEY.equals(key)) {
+                    mDuckRkp.onSettingsChanged(true);
+                    return;
+                }
+                if (Settings.Secure.SPOOF_TRICKYSTORE_KEYBOX.equals(key)
+                        || Settings.Secure.SPOOF_DUCK_RKP_ENABLED.equals(key)) {
+                    mDuckRkp.onSettingsChanged(false);
+                }
                 refreshKey(key);
                 Slog.i(TAG, "Spoof config refreshed: " + key);
                 if (Settings.Secure.SPOOF_PIF_CONFIG.equals(key)) {
@@ -132,6 +148,8 @@ public final class AxSpoofManagerService extends SystemService {
             mResolver.registerContentObserver(
                     Settings.Secure.getUriFor(key), false, mObserver, UserHandle.USER_ALL);
         }
+        mResolver.registerContentObserver(Settings.System.getUriFor(TRICKYSTORE_ENABLED_KEY),
+                false, mObserver, UserHandle.USER_SYSTEM);
     }
 
     private void refreshAll() {
@@ -246,6 +264,15 @@ public final class AxSpoofManagerService extends SystemService {
         }
     }
 
+    /** A device RKP keybox was generated or removed: reload settings and restart GMS. */
+    private void onDuckRkpChanged() {
+        BackgroundThread.getHandler().post(() -> {
+            refreshAll();
+            maybeSeedDefaultTargets(false);
+            restartPifTargets();
+        });
+    }
+
     private final class LocalService implements AxSpoofManagerInternal {
         @Override
         public String getPifConfig() {
@@ -269,12 +296,26 @@ public final class AxSpoofManagerService extends SystemService {
 
         @Override
         public String getTrickyStoreKeyBox() {
-            return getCached(Settings.Secure.SPOOF_TRICKYSTORE_KEYBOX);
+            DuckRkpManager duck = mDuckRkp;
+            if (duck == null) return getCached(Settings.Secure.SPOOF_TRICKYSTORE_KEYBOX);
+            long token = Binder.clearCallingIdentity();
+            try {
+                return duck.getKeybox();
+            } finally {
+                Binder.restoreCallingIdentity(token);
+            }
         }
 
         @Override
         public String getTrickyStorePatch() {
             return getCached(Settings.Secure.SPOOF_TRICKYSTORE_PATCH);
+        }
+
+        @Override
+        public DuckRkpManager getDuckRkpManager() {
+            DuckRkpManager duck = mDuckRkp;
+            if (duck == null) throw new IllegalStateException("RKP service is starting");
+            return duck;
         }
     }
 }

@@ -755,8 +755,8 @@ public class TrickyStoreService {
             if (XPOSED_PACKAGES.contains(pkg)) continue;
             Mode mode = mPackageModes.get(pkg);
             if (mode == Mode.SKIP) continue;
-            if (mode == Mode.GENERATE) return true;
-            if (mode == Mode.AUTO && isTeeBroken()) return true;
+            if (mode == Mode.GENERATE) return hasKeyboxes();
+            if (mode == Mode.AUTO && hasKeyboxes() && isTeeBroken()) return true;
         }
         return false;
     }
@@ -843,7 +843,33 @@ public class TrickyStoreService {
         }
     }
 
+    // KeyBoxManager accepts algorithm="ec", single quotes and extra attributes, so the
+    // structural pre-check has to as well.
+    private static final java.util.regex.Pattern KEY_ECDSA = java.util.regex.Pattern.compile(
+            "<Key\\s[^>]*?algorithm\\s*=\\s*[\"'](?:ecdsa|ec)[\"']",
+            java.util.regex.Pattern.CASE_INSENSITIVE);
+    private static final java.util.regex.Pattern KEY_RSA = java.util.regex.Pattern.compile(
+            "<Key\\s[^>]*?algorithm\\s*=\\s*[\"']rsa[\"']",
+            java.util.regex.Pattern.CASE_INSENSITIVE);
+
+    /**
+     * Structural check of a keybox document before it is parsed.
+     *
+     * @return null if acceptable, otherwise a short reason
+     */
+    public static String keyboxProblem(String xml) {
+        if (xml == null) return "Keybox is empty";
+        if (!KEY_ECDSA.matcher(xml).find() && !KEY_RSA.matcher(xml).find()) {
+            return "No ECDSA or RSA key block";
+        }
+        if (!xml.contains("<serial>") && !xml.contains("DeviceID")) {
+            return "No serial or DeviceID";
+        }
+        return null;
+    }
+
     public boolean hasKeyboxes() {
+        maybeRefreshKeyBox();
         return mKeyBoxManager.hasKeyboxes();
     }
 

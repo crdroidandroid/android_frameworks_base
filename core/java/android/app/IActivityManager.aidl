@@ -1078,6 +1078,11 @@ interface IActivityManager {
     String getSpoofTrickyStoreKeyBox();
     String getSpoofTrickyStorePatch();
 
+    Bundle getDuckRkpState();
+    void setDuckRkpEnabled(boolean enabled);
+    void provisionDuckRkp();
+    void setSpoofTrickyStoreKeyBox(String keybox);
+
     boolean isSandboxAppLocked(String packageName, int userId);
     int getSandboxAppLockState(String packageName, int userId);
     boolean isSandboxPackageHidden(String packageName, int userId);

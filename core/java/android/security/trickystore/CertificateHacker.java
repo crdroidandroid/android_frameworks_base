@@ -15,6 +15,8 @@ import com.android.internal.org.bouncycastle.asn1.DEROctetString;
 import com.android.internal.org.bouncycastle.asn1.DERSequence;
 import com.android.internal.org.bouncycastle.asn1.DERTaggedObject;
 import com.android.internal.org.bouncycastle.asn1.x509.AlgorithmIdentifier;
+import com.android.internal.org.bouncycastle.asn1.x509.AuthorityKeyIdentifier;
+import com.android.internal.org.bouncycastle.asn1.x509.SubjectKeyIdentifier;
 import com.android.internal.org.bouncycastle.asn1.x509.Extension;
 import com.android.internal.org.bouncycastle.cert.X509CertificateHolder;
 import com.android.internal.org.bouncycastle.cert.X509v3CertificateBuilder;
@@ -180,6 +182,17 @@ public final class CertificateHacker {
                 String oidString = oid.toString();
                 if (oidString.equals(CertificateGenerator.ATTESTATION_OID.getId())) {
                     builder.addExtension(hackedExtension);
+                } else if (oidString.equals(Extension.authorityKeyIdentifier.getId())) {
+                    X509CertificateHolder issuerHolder = new X509CertificateHolder(
+                            keybox.certificates.get(0).getEncoded());
+                    Extension subjectKeyId = issuerHolder.getExtension(Extension.subjectKeyIdentifier);
+                    byte[] issuerKeyId = subjectKeyId != null
+                            ? SubjectKeyIdentifier.getInstance(subjectKeyId.getParsedValue()).getKeyIdentifier()
+                            : MessageDigest.getInstance("SHA-1").digest(
+                                    issuerHolder.getSubjectPublicKeyInfo().getPublicKeyData().getBytes());
+                    builder.addExtension(Extension.authorityKeyIdentifier,
+                            leafHolder.getExtension(Extension.authorityKeyIdentifier).isCritical(),
+                            new AuthorityKeyIdentifier(issuerKeyId));
                 } else {
                     builder.addExtension(leafHolder.getExtension(
                         new ASN1ObjectIdentifier(oidString)));
