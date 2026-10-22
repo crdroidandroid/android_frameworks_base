@@ -157,8 +157,8 @@
     <string name="smartspace_content_desc">Synthèse</string>
     <string name="smartspace_flight_qr_code">QR code</string>
     <!-- Content description for the smartspace paging arrows [CHAR LIMIT=NONE] -->
-    <string name="accessibility_smartspace_previous_page">Previous page</string>
-    <string name="accessibility_smartspace_next_page">Next page</string>
+    <string name="accessibility_smartspace_previous_page">Page précédente</string>
+    <string name="accessibility_smartspace_next_page">Page suivante</string>
     <!-- Ambient indication -->
     <string name="accessibility_action_expand">Expand</string>
     <string name="accessibility_now_playing_container_recognition_result_content_description">Identified song. %1$s, %2$s.</string>
