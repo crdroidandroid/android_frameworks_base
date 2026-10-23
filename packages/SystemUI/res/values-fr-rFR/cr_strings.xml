@@ -97,8 +97,8 @@
     <string name="ax_dynamic_bar_connecting">Connexion à\u2026</string>
     <string name="ax_dynamic_bar_one_device">1 appareil</string>
     <string name="ax_dynamic_bar_bluetooth_device">Périphérique bluetooth</string>
-    <string name="ax_dynamic_bar_left_earbud">Left earbud</string>
-    <string name="ax_dynamic_bar_right_earbud">Right earbud</string>
+    <string name="ax_dynamic_bar_left_earbud">Écouteur gauche</string>
+    <string name="ax_dynamic_bar_right_earbud">Écouteur droit</string>
     <string name="ax_dynamic_bar_earbuds_case">Case</string>
     <string name="ax_dynamic_bar_apps_count"><xliff:g id="count" example="2">%d</xliff:g> applications</string>
     <string name="ax_dynamic_bar_just_now">À l\'instant</string>
@@ -157,15 +157,15 @@
     <string name="smartspace_content_desc">Synthèse</string>
     <string name="smartspace_flight_qr_code">QR code</string>
     <!-- Content description for the smartspace paging arrows [CHAR LIMIT=NONE] -->
-    <string name="accessibility_smartspace_previous_page">Previous page</string>
-    <string name="accessibility_smartspace_next_page">Next page</string>
+    <string name="accessibility_smartspace_previous_page">Page précédente</string>
+    <string name="accessibility_smartspace_next_page">Page suivante</string>
     <!-- Ambient indication -->
-    <string name="accessibility_action_expand">Expand</string>
-    <string name="accessibility_now_playing_container_recognition_result_content_description">Identified song. %1$s, %2$s.</string>
-    <string name="accessibility_now_playing_container_song_searching_content_description">Identifying song</string>
-    <string name="accessibility_now_playing_like_icon">Add to favorites</string>
-    <string name="accessibility_now_playing_play_icon">Play on Default Music Player</string>
-    <string name="accessibility_now_playing_unlike_icon">Remove from favorites</string>
+    <string name="accessibility_action_expand">Agrandir</string>
+    <string name="accessibility_now_playing_container_recognition_result_content_description">Morceau reconnu. %1$s, %2$s.</string>
+    <string name="accessibility_now_playing_container_song_searching_content_description">Reconnaissance du morceau</string>
+    <string name="accessibility_now_playing_like_icon">Ajouter aux favoris</string>
+    <string name="accessibility_now_playing_play_icon">Lire sur le lecteur de musique par défaut</string>
+    <string name="accessibility_now_playing_unlike_icon">Retirer des favoris</string>
     <string name="now_playing_label">À l’écoute</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">On-The-Go activé</string>
@@ -196,8 +196,8 @@
     <!-- Label for UI element which allows to use lens on screenshot [CHAR LIMIT=30] -->
     <string name="screenshot_lens_label">Objectif</string>
     <!-- Per-app volume panel -->
-    <string name="app_volume">App volume</string>
-    <string name="app_volume_no_active_apps">No active audio playback</string>
+    <string name="app_volume">Volume de l\'app</string>
+    <string name="app_volume_no_active_apps">Aucune sortie d\'audio active</string>
     <!-- Sound QS Tile -->
     <string name="quick_settings_sound_label">Sons</string>
     <string name="quick_settings_sound_ring">Sonnerie</string>
