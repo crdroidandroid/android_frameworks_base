@@ -59,9 +59,18 @@ public abstract class VerityUtils {
         return Build.VERSION.DEVICE_INITIAL_SDK_INT >= Build.VERSION_CODES.R;
     }
 
+    /**
+     * Enables fs-verity for the file without signature.
+     *
+     * @return 0 on success, otherwise a positive errno
+     */
+    public static int enableFsverity(@NonNull String filePath) {
+        return enableFsverityNative(filePath);
+    }
+
     /** Enables fs-verity for the file without signature. */
     public static void setUpFsverity(@NonNull String filePath) throws IOException {
-        int errno = enableFsverityNative(filePath);
+        int errno = enableFsverity(filePath);
         if (errno != 0) {
             throw new IOException("Failed to enable fs-verity on " + filePath + ": "
                     + Os.strerror(errno));
