@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.os.Process;
 import android.util.Log;
 
 import com.android.internal.org.bouncycastle.asn1.ASN1Boolean;
@@ -56,6 +57,7 @@ import javax.security.auth.x500.X500Principal;
 public final class CertificateGenerator {
     private static final String TAG = "CertificateGenerator";
     private static final int MAX_ATTESTATION_CHALLENGE_SIZE = 128;
+    private static final BouncyCastleProvider BC_PROVIDER = new BouncyCastleProvider();
 
     public static final ASN1ObjectIdentifier ATTESTATION_OID =
         new ASN1ObjectIdentifier("1.3.6.1.4.1.11129.2.1.17");
@@ -143,9 +145,7 @@ public final class CertificateGenerator {
         }
 
         try {
-            X509CertificateHolder issuerHolder = new X509CertificateHolder(
-                keybox.certificates.get(0).getEncoded());
-            X500Name issuer = issuerHolder.getSubject();
+            X500Name issuer = keybox.getIssuerSubject();
 
             X509Certificate leaf = buildCertificate(keyPair, keybox, params, issuer, securityLevel, uid);
 
@@ -198,7 +198,7 @@ public final class CertificateGenerator {
         String sigAlg = params.algorithm == 3 ? "SHA256withECDSA" : "SHA256withRSA";
         JcaContentSignerBuilder signerBuilder = new JcaContentSignerBuilder(sigAlg);
         if (params.algorithm == 3) {
-            signerBuilder.setProvider(new BouncyCastleProvider());
+            signerBuilder.setProvider(BC_PROVIDER);
         }
         ContentSigner signer = signerBuilder.build(keybox.keyPair.getPrivate());
 
@@ -227,6 +227,9 @@ public final class CertificateGenerator {
                 new DEROctetString(bootHash)
             };
             DERSequence rootOfTrust = new DERSequence(rootOfTrustElements);
+
+            // Fetch the patch configuration once, not three times during one leaf.
+            final int[] patchLevels = AttestationUtils.getPatchLevels(params.packages);
 
             // AuthorizationList entries must be emitted in ascending tag order,
             // exactly as KeyMint does, so collect them in a TreeMap first.
@@ -257,7 +260,7 @@ public final class CertificateGenerator {
             tee.put(702, new ASN1Integer(0));
             tee.put(704, rootOfTrust);
             tee.put(705, new ASN1Integer(AttestationUtils.getOsVersion()));
-            tee.put(706, new ASN1Integer(AttestationUtils.getPatchLevel(false, params.packages)));
+            tee.put(706, new ASN1Integer(patchLevels[0]));
             if (params.brand != null) {
                 tee.put(710, new DEROctetString(params.brand));
             }
@@ -273,13 +276,13 @@ public final class CertificateGenerator {
             if (params.model != null) {
                 tee.put(717, new DEROctetString(params.model));
             }
-            tee.put(718, new ASN1Integer(AttestationUtils.getVendorPatchLevel(true, params.packages)));
-            tee.put(719, new ASN1Integer(AttestationUtils.getBootPatchLevel(true, params.packages)));
+            tee.put(718, new ASN1Integer(patchLevels[1]));
+            tee.put(719, new ASN1Integer(patchLevels[2]));
 
             java.util.TreeMap<Integer, ASN1Encodable> sw = new java.util.TreeMap<>();
             sw.put(701, new ASN1Integer(System.currentTimeMillis()));
             try {
-                sw.put(709, createApplicationId(uid));
+                sw.put(709, createApplicationId(uid, params.packages));
             } catch (Throwable e) {
                 Log.w(TAG, "Failed to create application ID", e);
             }
@@ -340,7 +343,8 @@ public final class CertificateGenerator {
         return bits;
     }
 
-    private static DEROctetString createApplicationId(int uid) throws Throwable {
+    private static DEROctetString createApplicationId(int uid, String[] knownPackages)
+            throws Throwable {
         Context context = ActivityThread.currentApplication();
         if (context == null) {
             throw new IllegalStateException("createApplicationId: context not available from ActivityThread!");
@@ -351,7 +355,10 @@ public final class CertificateGenerator {
             throw new IllegalStateException("createApplicationId: PackageManager not found!");
         }
 
-        String[] packages = pm.getPackagesForUid(uid);
+        String[] packages = uid == Process.myUid() ? knownPackages : null;
+        if (packages == null || packages.length == 0) {
+            packages = pm.getPackagesForUid(uid);
+        }
         if (packages == null || packages.length == 0) {
             throw new IllegalStateException("No packages found for UID: " + uid);
         }

@@ -72,9 +72,8 @@ public final class CertificateHacker {
         }
 
         try {
-            CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
-            X509Certificate leaf = (X509Certificate) certFactory.generateCertificate(
-                new ByteArrayInputStream(chain[0].getEncoded()));
+            if (!(chain[0] instanceof X509Certificate)) return chain;
+            X509Certificate leaf = (X509Certificate) chain[0];
 
             byte[] extensionBytes = leaf.getExtensionValue(
                 CertificateGenerator.ATTESTATION_OID.getId());
@@ -126,11 +125,8 @@ public final class CertificateHacker {
             }
 
             List<Certificate> certificates = new ArrayList<>(keybox.certificates);
-            X509CertificateHolder issuerHolder = new X509CertificateHolder(
-                certificates.get(0).getEncoded());
-
             X509v3CertificateBuilder builder = new X509v3CertificateBuilder(
-                issuerHolder.getSubject(),
+                keybox.getIssuerSubject(),
                 leafHolder.getSerialNumber(),
                 leafHolder.getNotBefore(),
                 leafHolder.getNotAfter(),
@@ -156,6 +152,7 @@ public final class CertificateHacker {
             }
 
             X509CertificateHolder builtHolder = builder.build(signer);
+            CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
             X509Certificate hackedLeaf = (X509Certificate) certFactory.generateCertificate(
                 new ByteArrayInputStream(builtHolder.getEncoded()));
 
@@ -325,6 +322,8 @@ public final class CertificateHacker {
         };
         DERSequence hackedRootOfTrust = new DERSequence(rootOfTrustElements);
 
+        final int[] patchLevels = AttestationUtils.getPatchLevels(packages);
+
         // Collect everything by tag so the list is emitted in ascending tag order,
         // like real KeyMint output.
         java.util.TreeMap<Integer, ASN1Encodable> ordered = new java.util.TreeMap<>();
@@ -333,11 +332,11 @@ public final class CertificateHacker {
             ordered.put(t.getTagNo(), t);
         }
         ordered.put(718, new DERTaggedObject(true, 718,
-            new ASN1Integer(AttestationUtils.getVendorPatchLevel(true, packages))));
+            new ASN1Integer(patchLevels[1])));
         ordered.put(719, new DERTaggedObject(true, 719,
-            new ASN1Integer(AttestationUtils.getBootPatchLevel(true, packages))));
+            new ASN1Integer(patchLevels[2])));
         ordered.put(706, new DERTaggedObject(true, 706,
-            new ASN1Integer(AttestationUtils.getPatchLevel(false, packages))));
+            new ASN1Integer(patchLevels[0])));
         ordered.put(705, new DERTaggedObject(true, 705,
             new ASN1Integer(AttestationUtils.getOsVersion())));
         ordered.put(704, new DERTaggedObject(704, hackedRootOfTrust));
