@@ -120,10 +120,9 @@ public class FontManager {
     /**
      * Indicates a failure due to disabled font updater.
      *
-     * This is typically returned due to missing Linux kernel feature.
-     * The font updater only works with the Linux kernel that has fs-verity feature. The fs-verity
-     * is required after the device shipped with Android 11. Thus the updated device may not have
-     * fs-verity feature and font updater is disabled.
+     * This is returned when fs-verity cannot be enabled for updated font files. Devices that
+     * shipped with Android 11 or later are assumed to support it. Older devices are checked
+     * directly, and the updater stays disabled when the font filesystem does not support it.
      */
     public static final int RESULT_ERROR_FONT_UPDATER_DISABLED = -7;
 
