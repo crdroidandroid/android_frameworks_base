@@ -6,10 +6,16 @@ import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
 import android.util.Log;
 
-import com.android.internal.org.bouncycastle.asn1.*;
+import com.android.internal.org.bouncycastle.asn1.ASN1InputStream;
+import com.android.internal.org.bouncycastle.asn1.ASN1OctetString;
+import com.android.internal.org.bouncycastle.asn1.ASN1Sequence;
+import com.android.internal.org.bouncycastle.asn1.ASN1TaggedObject;
 
-import java.security.*;
-import java.security.cert.*;
+import java.security.KeyPairGenerator;
+import java.security.KeyStore;
+import java.security.MessageDigest;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
 
 /**
  * @hide
@@ -17,8 +23,8 @@ import java.security.cert.*;
 public final class AttestationUtils {
     private static final String TAG = "AttestationUtils";
 
-    private static byte[] sBootKey;
-    private static byte[] sBootHash;
+    private static volatile byte[] sBootKey;
+    private static volatile byte[] sBootHash;
     private static volatile boolean sTeeBroken = false;
 
     private AttestationUtils() {}
@@ -32,17 +38,21 @@ public final class AttestationUtils {
     }
 
     public static byte[] getBootKey() {
-        if (sBootKey == null) {
-            sBootKey = getBootKeyFromProp();
-            if (sBootKey == null) {
-                sBootKey = getBootKeyFromKeybox();
-            }
-            if (sBootKey == null) {
-                Log.w(TAG, "No boot key from prop or keybox, using random bytes");
-                sBootKey = generateRandomBytes(32);
+        byte[] key = sBootKey;
+        if (key != null) return key;
+        synchronized (AttestationUtils.class) {
+            key = sBootKey;
+            if (key == null) {
+                key = getBootKeyFromProp();
+                if (key == null) key = getBootKeyFromKeybox();
+                if (key == null) {
+                    Log.w(TAG, "No boot key from prop or keybox, using random bytes");
+                    key = generateRandomBytes(32);
+                }
+                sBootKey = key;
             }
         }
-        return sBootKey;
+        return key;
     }
 
     /**
@@ -123,20 +133,22 @@ public final class AttestationUtils {
     }
 
     public static byte[] getBootHash() {
-        if (sBootHash == null) {
-            sBootHash = getBootHashFromProp();
-            if (sBootHash == null && !sTeeBroken) {
-                sBootHash = extractBootHashFromTee();
-            }
-            if (sBootHash == null) {
-                sBootHash = deriveBootHashFromKeybox();
-            }
-            if (sBootHash == null) {
-                Log.w(TAG, "Failed to get boot hash from prop, TEE, and keybox, using random bytes");
-                sBootHash = generateRandomBytes(32);
+        byte[] hash = sBootHash;
+        if (hash != null) return hash;
+        synchronized (AttestationUtils.class) {
+            hash = sBootHash;
+            if (hash == null) {
+                hash = getBootHashFromProp();
+                if (hash == null && !sTeeBroken) hash = extractBootHashFromTee();
+                if (hash == null) hash = deriveBootHashFromKeybox();
+                if (hash == null) {
+                    Log.w(TAG, "Failed to get boot hash from prop, TEE, and keybox, using random bytes");
+                    hash = generateRandomBytes(32);
+                }
+                sBootHash = hash;
             }
         }
-        return sBootHash;
+        return hash;
     }
 
     public static void initBootHash() {
@@ -281,18 +293,53 @@ public final class AttestationUtils {
         return attestVersion == 4 ? 41 : attestVersion;
     }
 
+    /**
+     * Resolve the three patch levels from a single configuration snapshot.
+     * The result is [system (YYYYMM), vendor (YYYYMMDD), boot (YYYYMMDD)].
+     */
+    public static int[] getPatchLevels(String[] packages) {
+        TrickyStoreService.CustomPatchLevel customLevel =
+                TrickyStoreService.getInstance().getCustomPatchLevelForPackage(packages);
+        int system = getPatchLevelFromConfig(customLevel, false);
+        int vendor = getVendorPatchLevelFromConfig(customLevel, true);
+        int boot = getBootPatchLevelFromConfig(customLevel, true);
+        return new int[] {system, vendor, boot};
+    }
+
+    private static int getPatchLevelFromConfig(
+            TrickyStoreService.CustomPatchLevel level, boolean isLong) {
+        if (level != null && level.system != null) {
+            Integer parsed = parsePatchLevel(level.system, isLong);
+            if (parsed != null) return parsed;
+        }
+        return convertPatchLevel(Build.VERSION.SECURITY_PATCH, isLong);
+    }
+
+    private static int getVendorPatchLevelFromConfig(
+            TrickyStoreService.CustomPatchLevel level, boolean isLong) {
+        if (level != null && level.vendor != null) {
+            Integer parsed = parsePatchLevel(level.vendor, isLong);
+            if (parsed != null) return parsed;
+        }
+        return convertPatchLevel(Build.VERSION.SECURITY_PATCH, isLong);
+    }
+
+    private static int getBootPatchLevelFromConfig(
+            TrickyStoreService.CustomPatchLevel level, boolean isLong) {
+        if (level != null && level.boot != null) {
+            Integer parsed = parsePatchLevel(level.boot, isLong);
+            if (parsed != null) return parsed;
+        }
+        return convertPatchLevel(Build.VERSION.SECURITY_PATCH, isLong);
+    }
+
     public static int getPatchLevel(boolean isLong) {
         return getPatchLevel(isLong, null);
     }
 
     public static int getPatchLevel(boolean isLong, String[] packages) {
-        TrickyStoreService.CustomPatchLevel customLevel =
-            TrickyStoreService.getInstance().getCustomPatchLevelForPackage(packages);
-        if (customLevel != null && customLevel.system != null) {
-            Integer parsed = parsePatchLevel(customLevel.system, isLong);
-            if (parsed != null) return parsed;
-        }
-        return convertPatchLevel(Build.VERSION.SECURITY_PATCH, isLong);
+        return getPatchLevelFromConfig(
+                TrickyStoreService.getInstance().getCustomPatchLevelForPackage(packages), isLong);
     }
 
     public static int getVendorPatchLevel(boolean isLong) {
@@ -300,13 +347,8 @@ public final class AttestationUtils {
     }
 
     public static int getVendorPatchLevel(boolean isLong, String[] packages) {
-        TrickyStoreService.CustomPatchLevel customLevel =
-            TrickyStoreService.getInstance().getCustomPatchLevelForPackage(packages);
-        if (customLevel != null && customLevel.vendor != null) {
-            Integer parsed = parsePatchLevel(customLevel.vendor, isLong);
-            if (parsed != null) return parsed;
-        }
-        return convertPatchLevel(Build.VERSION.SECURITY_PATCH, isLong);
+        return getVendorPatchLevelFromConfig(
+                TrickyStoreService.getInstance().getCustomPatchLevelForPackage(packages), isLong);
     }
 
     public static int getBootPatchLevel(boolean isLong) {
@@ -314,13 +356,8 @@ public final class AttestationUtils {
     }
 
     public static int getBootPatchLevel(boolean isLong, String[] packages) {
-        TrickyStoreService.CustomPatchLevel customLevel =
-            TrickyStoreService.getInstance().getCustomPatchLevelForPackage(packages);
-        if (customLevel != null && customLevel.boot != null) {
-            Integer parsed = parsePatchLevel(customLevel.boot, isLong);
-            if (parsed != null) return parsed;
-        }
-        return convertPatchLevel(Build.VERSION.SECURITY_PATCH, isLong);
+        return getBootPatchLevelFromConfig(
+                TrickyStoreService.getInstance().getCustomPatchLevelForPackage(packages), isLong);
     }
 
     private static Integer parsePatchLevel(String value, boolean isLong) {

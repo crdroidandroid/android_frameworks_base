@@ -19,6 +19,7 @@ package android.security.trickystore;
 import android.app.ActivityManager;
 import android.app.IActivityManager;
 import android.os.RemoteException;
+import android.os.SystemClock;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
 import android.util.JsonReader;
@@ -63,6 +64,14 @@ public class TrickyStoreService {
     private volatile long mLastRevocationCheckMs = 0L;
     private volatile long mLastTargetsRefreshMs = 0L;
     private static final long TARGETS_REFRESH_COOLDOWN_MS = 5_000L;
+    // Most attestations call into keybox and patch configuration repeatedly. These
+    // cooldowns avoid synchronous ActivityManager Binder calls on every request.
+    // Explicit refreshKeyBox()/refreshPatchLevel() still bypass the cooldown.
+    private static final long CONFIG_REFRESH_COOLDOWN_MS = 5_000L;
+    private final Object mKeyboxRefreshLock = new Object();
+    private final Object mPatchRefreshLock = new Object();
+    private volatile long mLastKeyboxRefreshElapsedMs = 0L;
+    private volatile long mLastPatchRefreshElapsedMs = 0L;
     private static final long REVOCATION_CHECK_COOLDOWN_MS = 24 * 60 * 60 * 1000L;
     private static final long CACHE_TRUST_WINDOW_MS = 7L * 24 * 60 * 60 * 1000L;
     private static final java.io.File REVOCATION_CACHE_FILE =
@@ -262,6 +271,13 @@ public class TrickyStoreService {
     }
 
     public void refreshKeyBox() {
+        synchronized (mKeyboxRefreshLock) {
+            mLastKeyboxRefreshElapsedMs = SystemClock.elapsedRealtime();
+            refreshKeyBoxLocked();
+        }
+    }
+
+    private void refreshKeyBoxLocked() {
         String raw = fetchFromAms(am -> am.getSpoofTrickyStoreKeyBox());
         if (raw == null || raw.isEmpty()) {
             mKeyBoxManager.clear();
@@ -322,6 +338,13 @@ public class TrickyStoreService {
     }
 
     public void refreshPatchLevel() {
+        synchronized (mPatchRefreshLock) {
+            mLastPatchRefreshElapsedMs = SystemClock.elapsedRealtime();
+            refreshPatchLevelLocked();
+        }
+    }
+
+    private void refreshPatchLevelLocked() {
         String content = fetchFromAms(am -> am.getSpoofTrickyStorePatch());
         mPerPackagePatchLevels.clear();
         if (content == null || content.isEmpty()) {
@@ -667,18 +690,50 @@ public class TrickyStoreService {
         }
     }
 
+    private void maybeRefreshKeyBox() {
+        long now = SystemClock.elapsedRealtime();
+        if (mLastKeyboxRefreshElapsedMs != 0L
+                && now - mLastKeyboxRefreshElapsedMs < CONFIG_REFRESH_COOLDOWN_MS) {
+            return;
+        }
+        synchronized (mKeyboxRefreshLock) {
+            now = SystemClock.elapsedRealtime();
+            if (mLastKeyboxRefreshElapsedMs == 0L
+                    || now - mLastKeyboxRefreshElapsedMs >= CONFIG_REFRESH_COOLDOWN_MS) {
+                mLastKeyboxRefreshElapsedMs = now;
+                refreshKeyBoxLocked();
+            }
+        }
+    }
+
+    private void maybeRefreshPatchLevel() {
+        long now = SystemClock.elapsedRealtime();
+        if (mLastPatchRefreshElapsedMs != 0L
+                && now - mLastPatchRefreshElapsedMs < CONFIG_REFRESH_COOLDOWN_MS) {
+            return;
+        }
+        synchronized (mPatchRefreshLock) {
+            now = SystemClock.elapsedRealtime();
+            if (mLastPatchRefreshElapsedMs == 0L
+                    || now - mLastPatchRefreshElapsedMs >= CONFIG_REFRESH_COOLDOWN_MS) {
+                mLastPatchRefreshElapsedMs = now;
+                refreshPatchLevelLocked();
+            }
+        }
+    }
+
     public KeyBoxManager getKeyBoxManager() {
-        refreshKeyBox();
+        maybeRefreshKeyBox();
         return mKeyBoxManager;
     }
 
     public CustomPatchLevel getCustomPatchLevel() {
-        refreshPatchLevel();
+        maybeRefreshPatchLevel();
         return mCustomPatchLevel;
     }
 
     public CustomPatchLevel getCustomPatchLevelForPackage(String[] packages) {
-        refreshPatchLevel();
+        maybeRefreshPatchLevel();
         if (packages != null) {
             for (String pkg : packages) {
                 CustomPatchLevel level = mPerPackagePatchLevels.get(pkg);
