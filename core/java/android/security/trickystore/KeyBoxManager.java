@@ -10,6 +10,8 @@ import com.android.internal.org.bouncycastle.asn1.pkcs.RSAPrivateKey;
 import com.android.internal.org.bouncycastle.asn1.sec.ECPrivateKey;
 import com.android.internal.org.bouncycastle.asn1.x9.ECNamedCurveTable;
 import com.android.internal.org.bouncycastle.asn1.x9.X9ECParameters;
+import com.android.internal.org.bouncycastle.asn1.x500.X500Name;
+import com.android.internal.org.bouncycastle.cert.X509CertificateHolder;
 import com.android.internal.org.bouncycastle.crypto.params.ECDomainParameters;
 import com.android.internal.org.bouncycastle.crypto.params.ECPrivateKeyParameters;
 import com.android.internal.org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPrivateKey;
@@ -27,6 +29,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
+import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.RSAPrivateCrtKeySpec;
@@ -53,15 +56,33 @@ public class KeyBoxManager {
     public static class KeyBox {
         public final KeyPair keyPair;
         public final List<Certificate> certificates;
+        private volatile X500Name mIssuerSubject;
 
         public KeyBox(KeyPair keyPair, List<Certificate> certificates) {
             this.keyPair = keyPair;
             this.certificates = certificates;
         }
+
+        public X500Name getIssuerSubject() throws java.io.IOException,
+                CertificateEncodingException {
+            X500Name subject = mIssuerSubject;
+            if (subject != null) return subject;
+            synchronized (this) {
+                subject = mIssuerSubject;
+                if (subject == null) {
+                    subject = new X509CertificateHolder(certificates.get(0).getEncoded())
+                            .getSubject();
+                    mIssuerSubject = subject;
+                }
+            }
+            return subject;
+        }
     }
 
     public void clear() {
-        mKeyboxes.clear();
+        // Publish a fresh map instead of clearing the map a concurrent attestation
+        // might already be reading.
+        mKeyboxes = new ConcurrentHashMap<>();
         Log.i(TAG, "Keyboxes cleared");
     }
 
