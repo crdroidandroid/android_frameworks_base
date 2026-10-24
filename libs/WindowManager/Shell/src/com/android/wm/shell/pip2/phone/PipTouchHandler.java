@@ -540,7 +540,7 @@ public class PipTouchHandler implements PipTransitionState.PipTransitionStateCha
         }
 
         if ((ev.getAction() == MotionEvent.ACTION_DOWN || mTouchState.isUserInteracting())
-                && isDismissTargetEnabled(ev)
+                && isDismissTargetEnabled(ev.getSource())
                 && mPipDismissTargetHandler.maybeConsumeMotionEvent(ev)) {
             // If the first touch event occurs within the magnetic field, pass the ACTION_DOWN event
             // to the touch state. Touch state needs a DOWN event in order to later process MOVE
@@ -877,7 +877,7 @@ public class PipTouchHandler implements PipTransitionState.PipTransitionStateCha
 
             if (touchState.startedDragging()) {
                 mSavedSnapFraction = -1f;
-                if (isDismissTargetEnabled(touchState.getLatestMotionEvent())) {
+                if (isDismissTargetEnabled(touchState.getLatestMotionEventSource())) {
                     mPipDismissTargetHandler.showDismissTargetMaybe();
                 }
             }
@@ -1092,11 +1092,11 @@ public class PipTouchHandler implements PipTransitionState.PipTransitionStateCha
         }
     }
 
-    private boolean isDismissTargetEnabled(MotionEvent ev) {
+    private boolean isDismissTargetEnabled(int source) {
         // Only allow dismiss target to be shown and enabled on touch screen and stylus input
         return !mPipDesktopState.isDraggingPipAcrossDisplaysEnabled()
-                || ev.getSource() == InputDevice.SOURCE_TOUCHSCREEN
-                || ev.getSource() == InputDevice.SOURCE_STYLUS;
+                || source == InputDevice.SOURCE_TOUCHSCREEN
+                || source == InputDevice.SOURCE_STYLUS;
     }
 
     /**
