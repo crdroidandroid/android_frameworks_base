@@ -32,6 +32,8 @@ import android.os.ResultReceiver;
 import android.os.SharedMemory;
 import android.os.ShellCallback;
 import android.system.ErrnoException;
+import android.system.Os;
+import android.system.OsConstants;
 import android.text.FontConfig;
 import android.util.AndroidException;
 import android.util.ArrayMap;
@@ -71,6 +73,8 @@ public final class FontManagerService extends IFontManager.Stub {
 
     private static final String FONT_FILES_DIR = "/data/fonts/files";
     private static final String CONFIG_XML_FILE = "/data/fonts/config/config.xml";
+    /** Prefix of the throwaway file used to test fs-verity. Must stay out of font loading. */
+    private static final String FSVERITY_PROBE_PREFIX = ".fsverity_probe";
 
     @android.annotation.EnforcePermission(android.Manifest.permission.UPDATE_FONTS)
     @RequiresPermission(Manifest.permission.UPDATE_FONTS)
@@ -128,6 +132,13 @@ public final class FontManagerService extends IFontManager.Stub {
                 "UPDATE_FONTS permission required.");
         try {
             synchronized (mUpdatableFontDirLock) {
+                // Boot may have run before the font directory was available. Try again now.
+                if (mUpdatableFontDir == null) {
+                    mUpdatableFontDir = createUpdatableFontDir();
+                    if (mUpdatableFontDir != null) {
+                        mUpdatableFontDir.loadFontFileMap();
+                    }
+                }
                 if (mUpdatableFontDir == null) {
                     return FontManager.RESULT_ERROR_FONT_UPDATER_DISABLED;
                 }
@@ -311,6 +322,14 @@ public final class FontManagerService extends IFontManager.Stub {
     @Nullable
     private UpdatableFontDir mUpdatableFontDir;
 
+    /**
+     * Definite fs-verity probe result for {@link #FONT_FILES_DIR} on devices that shipped
+     * before Android 11. Null until the probe can determine support.
+     */
+    @GuardedBy("mUpdatableFontDirLock")
+    @Nullable
+    private Boolean mFontDirFsverityAvailable;
+
     // mSerializedFontMapLock can be acquired while holding mUpdatableFontDirLock.
     // mUpdatableFontDirLock should not be newly acquired while holding mSerializedFontMapLock.
     private final Object mSerializedFontMapLock = new Object();
@@ -363,8 +382,9 @@ public final class FontManagerService extends IFontManager.Stub {
     private UpdatableFontDir createUpdatableFontDir() {
         // Never read updatable font files in safe mode.
         if (mIsSafeMode) return null;
-        // If apk verity is supported, fs-verity should be available.
-        if (!VerityUtils.isFsVeritySupported()) return null;
+        // Shipping API level is only a proxy. Kernels for devices that shipped before R can
+        // still implement fs-verity, so check the filesystem that will store the font.
+        if (!isFontDirFsverityAvailable()) return null;
 
         String[] certs = mContext.getResources().getStringArray(
                 R.array.config_fontManagerServiceCerts);
@@ -378,6 +398,72 @@ public final class FontManagerService extends IFontManager.Stub {
 
         return new UpdatableFontDir(new File(FONT_FILES_DIR), new OtfFontFileParser(),
                 new FsverityUtilImpl(certs), new File(CONFIG_XML_FILE));
+    }
+
+    @GuardedBy("mUpdatableFontDirLock")
+    private boolean isFontDirFsverityAvailable() {
+        if (VerityUtils.isFsVeritySupported()) return true;
+        if (mFontDirFsverityAvailable != null) return mFontDirFsverityAvailable;
+
+        Boolean probed = probeFontDirFsverity();
+        if (probed != null) {
+            mFontDirFsverityAvailable = probed;
+            Slog.i(TAG, "fs-verity on " + FONT_FILES_DIR + " is "
+                    + (probed ? "supported" : "not supported"));
+        }
+        return Boolean.TRUE.equals(probed);
+    }
+
+    /**
+     * Enables fs-verity on a throwaway file in the font directory.
+     *
+     * @return {@code TRUE} or {@code FALSE} when support is known, or {@code null} when the
+     *         directory could not be tested
+     */
+    @Nullable
+    private static Boolean probeFontDirFsverity() {
+        File dir = new File(FONT_FILES_DIR);
+        if (!dir.isDirectory() && !dir.mkdirs()) {
+            Slog.w(TAG, "Font directory is not available for fs-verity probe: " + dir);
+            return null;
+        }
+        if (!deleteFsverityProbes(dir)) return null;
+
+        File probe = null;
+        try {
+            probe = File.createTempFile(FSVERITY_PROBE_PREFIX, null, dir);
+            int errno = VerityUtils.enableFsverity(probe.getAbsolutePath());
+            if (errno == 0) {
+                return deleteFsverityProbes(dir) ? Boolean.TRUE : null;
+            }
+            if (errno == OsConstants.EOPNOTSUPP || errno == OsConstants.ENOTTY
+                    || errno == OsConstants.ENOSYS) {
+                Slog.i(TAG, "fs-verity is not supported on " + dir + ": " + Os.strerror(errno));
+                deleteFsverityProbes(dir);
+                return Boolean.FALSE;
+            }
+            Slog.w(TAG, "fs-verity probe failed on " + dir + ": " + Os.strerror(errno));
+            deleteFsverityProbes(dir);
+            return null;
+        } catch (IOException e) {
+            Slog.w(TAG, "Unable to probe fs-verity in " + dir, e);
+            if (probe != null) deleteFsverityProbes(dir);
+            return null;
+        }
+    }
+
+    /** Returns whether every probe file was removed. A leftover aborts font loading. */
+    private static boolean deleteFsverityProbes(File dir) {
+        File[] probes = dir.listFiles((unused, name) -> name.startsWith(FSVERITY_PROBE_PREFIX));
+        if (probes == null) return false;
+        boolean removed = true;
+        for (File probe : probes) {
+            if (probe.exists() && !probe.delete()) {
+                Slog.w(TAG, "Failed to delete fs-verity probe " + probe);
+                removed = false;
+            }
+        }
+        return removed;
     }
 
     /**
