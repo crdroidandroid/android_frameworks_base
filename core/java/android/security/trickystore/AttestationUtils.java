@@ -161,19 +161,27 @@ public final class AttestationUtils {
         }
         Log.i(TAG, "initBootHash: No prop, attempting TEE extraction");
         hash = extractBootHashFromTee();
+        if (hash == null) {
+            Log.i(TAG, "initBootHash: TEE extraction failed, attempting keybox");
+            hash = deriveBootHashFromKeybox();
+        }
+        if (hash == null) {
+            Log.w(TAG, "initBootHash: Keybox derivation failed, using random bytes");
+            hash = generateRandomBytes(32);
+        }
         if (hash != null) {
             sBootHash = hash;
-            Log.i(TAG, "initBootHash: TEE extraction successful, setting prop");
+            Log.i(TAG, "initBootHash: hash available, setting prop");
             setVbmetaDigestProp(bytesToHex(hash));
         } else {
-            Log.e(TAG, "initBootHash: Failed to extract boot hash from TEE");
+            Log.e(TAG, "initBootHash: Failed to extract/generate boot hash");
         }
     }
 
     private static void setVbmetaDigestProp(String digest) {
         try {
             SystemProperties.set("ro.boot.vbmeta.digest", digest);
-            Log.i(TAG, "Set ro.boot.vbmeta.digest property to TEE boot hash");
+            Log.i(TAG, "Set ro.boot.vbmeta.digest property successfully");
         } catch (Exception e) {
             Log.e(TAG, "Failed to set vbmeta.digest property", e);
         }
