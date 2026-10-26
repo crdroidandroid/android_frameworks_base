@@ -1,5 +1,6 @@
 /*
  *  Copyright (C) 2015 The OmniROM Project
+ *  Copyright (C) 2026 crDroid Android Project
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,37 +21,30 @@ package com.android.systemui.crdroid.header;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
-import android.content.res.XmlResourceParser;
-import android.database.ContentObserver;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.util.Log;
-import android.os.Handler;
 import android.os.UserHandle;
 import android.provider.Settings;
-import android.util.SparseArray;
+import android.text.TextUtils;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
-import com.android.systemui.res.R;
 import com.android.internal.util.crdroid.Utils;
 
 public class DaylightHeaderProvider implements
@@ -59,26 +53,31 @@ public class DaylightHeaderProvider implements
     public static final String TAG = "DaylightHeaderProvider";
     private static final boolean DEBUG = false;
 
-    private class DaylightHeaderInfo {
-        public int mType = 0;
-        public int mHour = -1;
-        public int mDay = -1;
-        public int mMonth = -1;
-        public String mImage;
+    private static class DaylightHeaderInfo {
+        int mType = 0;
+        int mHour = -1;
+        int mDay = -1;
+        /** 1-based month, as written in the header pack XML. */
+        int mMonth = -1;
+        String mImage;
     }
+
+    private static final Comparator<DaylightHeaderInfo> BY_HOUR =
+            Comparator.comparingInt(h -> h.mHour);
+
     // default in SystemUI
     private static final String HEADER_PACKAGE_DEFAULT = "com.android.systemui";
 
-    private Context mContext;
-    private List<DaylightHeaderInfo> mHeadersList;
+    private final Context mContext;
+    private List<DaylightHeaderInfo> mHeadersList = new ArrayList<>();
     private Resources mRes;
     private String mPackageName;
     private String mHeaderName;
     private String mSettingHeaderPackage;
     private PendingIntent mAlarmIntent;
     private boolean mRandomMode;
-    private int mHeaderIndex;
     private boolean mLinearMode;
+    private int mHeaderIndex;
     private int mAlarmIntervalMinutes = 0;
     private int mCurrentDrawableId;
     private Drawable mCurrentDrawable;
@@ -94,23 +93,27 @@ public class DaylightHeaderProvider implements
 
     @Override
     public void settingsChanged(Uri uri) {
-        final String settingHeaderPackage = Settings.System.getStringForUser(mContext.getContentResolver(),
+        final String settingHeaderPackage = Settings.System.getStringForUser(
+                mContext.getContentResolver(),
                 Settings.System.STATUS_BAR_DAYLIGHT_HEADER_PACK,
                 UserHandle.USER_CURRENT);
         final boolean customHeader = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.STATUS_BAR_CUSTOM_HEADER, 0,
                 UserHandle.USER_CURRENT) == 1;
 
-        if (customHeader) {
-            stopAlarm();
-            if (settingHeaderPackage == null) {
-                loadDefaultHeaderPackage();
-            } else if (mSettingHeaderPackage == null || !settingHeaderPackage.equals(mSettingHeaderPackage)) {
-                mSettingHeaderPackage = settingHeaderPackage;
-                loadCustomHeaderPackage();
-            }
-            startAlarm();
+        if (!customHeader) {
+            return;
         }
+        stopAlarm();
+        if (TextUtils.isEmpty(settingHeaderPackage)) {
+            if (!HEADER_PACKAGE_DEFAULT.equals(mSettingHeaderPackage) || mRes == null) {
+                loadDefaultHeaderPackage();
+            }
+        } else if (!settingHeaderPackage.equals(mSettingHeaderPackage) || mRes == null) {
+            mSettingHeaderPackage = settingHeaderPackage;
+            loadCustomHeaderPackage();
+        }
+        startAlarm();
     }
 
     @Override
@@ -121,12 +124,11 @@ public class DaylightHeaderProvider implements
     @Override
     public void disableProvider() {
         stopAlarm();
-   }
+    }
 
     private void stopAlarm() {
         if (mAlarmIntent != null) {
-            final AlarmManager alarmManager = (AlarmManager) mContext
-                    .getSystemService(Context.ALARM_SERVICE);
+            final AlarmManager alarmManager = mContext.getSystemService(AlarmManager.class);
             if (DEBUG) Log.i(TAG, "stop alarm");
             alarmManager.cancel(mAlarmIntent);
             mAlarmIntent.cancel();
@@ -138,52 +140,54 @@ public class DaylightHeaderProvider implements
         // TODO: actually this should find out the next needed alarm
         // instead of forcing it every interval
         final Calendar c = Calendar.getInstance();
-        final AlarmManager alarmManager = (AlarmManager) mContext
-                .getSystemService(Context.ALARM_SERVICE);
+        final AlarmManager alarmManager = mContext.getSystemService(AlarmManager.class);
 
         if (mAlarmIntent != null) {
             alarmManager.cancel(mAlarmIntent);
             mAlarmIntent.cancel();
         }
 
-        Intent intent = new Intent(StatusBarHeaderMachine.STATUS_BAR_HEADER_UPDATE_ACTION);
+        // Package-scoped so only SystemUI's own (not exported) receiver gets it.
+        Intent intent = new Intent(StatusBarHeaderMachine.STATUS_BAR_HEADER_UPDATE_ACTION)
+                .setPackage(mContext.getPackageName());
         mAlarmIntent = PendingIntent.getBroadcast(mContext, 0, intent,
-                PendingIntent.FLAG_IMMUTABLE);
+                PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
         if (mAlarmIntervalMinutes == 0) {
             c.add(Calendar.HOUR_OF_DAY, 1);
             c.set(Calendar.MINUTE, 0);
+            c.set(Calendar.SECOND, 0);
+            c.set(Calendar.MILLISECOND, 0);
         }
         long alarmStart = c.getTimeInMillis();
-        long interval = mAlarmIntervalMinutes == 0 ? AlarmManager.INTERVAL_HOUR : mAlarmIntervalMinutes * 60 * 1000;
-        
+        long interval = mAlarmIntervalMinutes == 0
+                ? AlarmManager.INTERVAL_HOUR : mAlarmIntervalMinutes * 60L * 1000L;
+
         if (DEBUG) Log.i(TAG, "start alarm at " + new Date(alarmStart) + " with interval of " + interval);
-        
+
         alarmManager.setInexactRepeating(AlarmManager.RTC, alarmStart, interval, mAlarmIntent);
     }
 
     private void loadCustomHeaderPackage() {
         if (DEBUG) Log.i(TAG, "Load header pack " + mSettingHeaderPackage);
-        int idx = mSettingHeaderPackage.indexOf("/");
-        
+        final int idx = mSettingHeaderPackage.indexOf('/');
         if (idx != -1) {
-            String[] parts = mSettingHeaderPackage.split("/");
-            mPackageName = parts[0];
-            mHeaderName = parts[1];
+            mPackageName = mSettingHeaderPackage.substring(0, idx);
+            mHeaderName = mSettingHeaderPackage.substring(idx + 1);
         } else {
             mPackageName = mSettingHeaderPackage;
             mHeaderName = null;
         }
-        
+
         try {
             PackageManager packageManager = mContext.getPackageManager();
             mRes = packageManager.getResourcesForApplication(mPackageName);
             loadHeaders();
         } catch (Exception e) {
-            Log.e(TAG, "Failed to load header pack " + mHeaderName, e);
+            Log.e(TAG, "Failed to load header pack " + mSettingHeaderPackage, e);
             mRes = null;
         }
-        
+
         if (mRes == null) {
             Log.w(TAG, "Header pack loading failed - loading default");
             loadDefaultHeaderPackage();
@@ -195,7 +199,7 @@ public class DaylightHeaderProvider implements
         mPackageName = HEADER_PACKAGE_DEFAULT;
         mHeaderName = null;
         mSettingHeaderPackage = mPackageName;
-        
+
         try {
             PackageManager packageManager = mContext.getPackageManager();
             mRes = packageManager.getResourcesForApplication(mPackageName);
@@ -203,194 +207,116 @@ public class DaylightHeaderProvider implements
         } catch (Exception e) {
             Log.e(TAG, "Failed to load default header pack", e);
             mRes = null;
-        }
-        
-        if (mRes == null) {
-            Log.w(TAG, "No default package found or failed to load");
+            mHeadersList = new ArrayList<>();
         }
     }
 
     private void loadHeaders() throws XmlPullParserException, IOException {
         mCurrentDrawableId = 0;
         mCurrentDrawable = null;
-        mHeadersList = new ArrayList<>();
-        XmlPullParser parser = null;
+        mHeaderIndex = 0;
 
-        try (InputStream in = (mHeaderName == null)
-                ? mRes.getAssets().open("daylight_header.xml")
-                : mRes.getAssets().open(mHeaderName.substring(mHeaderName.lastIndexOf(".") + 1) + ".xml")) {
+        final String configFile = (mHeaderName == null)
+                ? "daylight_header.xml"
+                : mHeaderName.substring(mHeaderName.lastIndexOf('.') + 1) + ".xml";
+        if (DEBUG) Log.i(TAG, "Load header pack config " + configFile);
 
-            if (mHeaderName == null) {
-                if (DEBUG) Log.i(TAG, "Load header pack config daylight_header.xml");
-            } else {
-                if (DEBUG) Log.i(TAG, "Load header pack config " + mHeaderName.substring(mHeaderName.lastIndexOf(".") + 1) + ".xml");
-            }
-
-            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-            parser = factory.newPullParser();
+        final List<DaylightHeaderInfo> headers = new ArrayList<>();
+        try (InputStream in = mRes.getAssets().open(configFile)) {
+            XmlPullParser parser = XmlPullParserFactory.newInstance().newPullParser();
             parser.setInput(in, "UTF-8");
-            loadResourcesFromXmlParser(parser);
+            loadResourcesFromXmlParser(parser, headers);
+        }
+        mHeadersList = headers;
+    }
 
-        } catch (IOException | XmlPullParserException e) {
-            Log.e(TAG, "Error loading headers", e);
-            throw e;
-        } finally {
-            if (parser instanceof XmlResourceParser) {
-                ((XmlResourceParser) parser).close();
-            }
+    private static int parseInt(String value, int fallback) {
+        if (value == null) return fallback;
+        try {
+            return Integer.parseInt(value.trim());
+        } catch (NumberFormatException e) {
+            return fallback;
         }
     }
 
-    private void loadResourcesFromXmlParser(XmlPullParser parser) throws XmlPullParserException, IOException {
-        int eventType = parser.getEventType();
+    private void loadResourcesFromXmlParser(XmlPullParser parser, List<DaylightHeaderInfo> headers)
+            throws XmlPullParserException, IOException {
         mRandomMode = false;
         mLinearMode = false;
         mAlarmIntervalMinutes = 0;
-        
-        do {
+
+        // Always advance the parser in the loop header; the old do/while used `continue`
+        // without calling next(), which looped forever on mixed random/day packs.
+        for (int eventType = parser.getEventType(); eventType != XmlPullParser.END_DOCUMENT;
+                eventType = parser.next()) {
             if (eventType != XmlPullParser.START_TAG) {
-                eventType = parser.next();
                 continue;
             }
-            
-            String name = parser.getName();
-            
+            final String name = parser.getName();
+
             if (name.equalsIgnoreCase("day_header")) {
                 if (mRandomMode) continue;
-                
                 DaylightHeaderInfo headerInfo = new DaylightHeaderInfo();
-                headerInfo.mHour = -1;
                 headerInfo.mType = 0;
-                
-                String day = parser.getAttributeValue(null, "day");
-                if (day != null) headerInfo.mDay = Integer.parseInt(day);
-                
-                String month = parser.getAttributeValue(null, "month");
-                if (month != null) headerInfo.mMonth = Integer.parseInt(month);
-                
-                String hour = parser.getAttributeValue(null, "hour");
-                if (hour != null) headerInfo.mHour = Integer.parseInt(hour);
-                
-                String image = parser.getAttributeValue(null, "image");
-                if (image != null) headerInfo.mImage = image;
-                
+                headerInfo.mDay = parseInt(parser.getAttributeValue(null, "day"), -1);
+                headerInfo.mMonth = parseInt(parser.getAttributeValue(null, "month"), -1);
+                headerInfo.mHour = parseInt(parser.getAttributeValue(null, "hour"), -1);
+                headerInfo.mImage = parser.getAttributeValue(null, "image");
                 if (headerInfo.mImage != null && headerInfo.mDay != -1 && headerInfo.mMonth != -1) {
-                    mHeadersList.add(headerInfo);
+                    headers.add(headerInfo);
                 }
-            
             } else if (name.equalsIgnoreCase("hour_header")) {
                 if (mRandomMode) continue;
-                
                 DaylightHeaderInfo headerInfo = new DaylightHeaderInfo();
                 headerInfo.mType = 1;
-                
-                String hour = parser.getAttributeValue(null, "hour");
-                if (hour != null) headerInfo.mHour = Integer.parseInt(hour);
-                
-                String image = parser.getAttributeValue(null, "image");
-                if (image != null) headerInfo.mImage = image;
-                
+                headerInfo.mHour = parseInt(parser.getAttributeValue(null, "hour"), -1);
+                headerInfo.mImage = parser.getAttributeValue(null, "image");
                 if (headerInfo.mImage != null && headerInfo.mHour != -1) {
-                    mHeadersList.add(headerInfo);
+                    headers.add(headerInfo);
                 }
-            
-            } else if (name.equalsIgnoreCase("random_header") || name.equalsIgnoreCase("list_header")) {
+            } else if (name.equalsIgnoreCase("random_header")
+                    || name.equalsIgnoreCase("list_header")) {
                 mRandomMode = name.equalsIgnoreCase("random_header");
                 mLinearMode = name.equalsIgnoreCase("list_header");
-                
-                if (mRandomMode && DEBUG) Log.i(TAG, "Load random mode header pack");
-                if (mLinearMode && DEBUG) Log.i(TAG, "Load linear mode header pack");
-                
                 DaylightHeaderInfo headerInfo = new DaylightHeaderInfo();
                 headerInfo.mType = 2;
-                
-                String image = parser.getAttributeValue(null, "image");
-                if (image != null) headerInfo.mImage = image;
-                
-                if (headerInfo.mImage != null) mHeadersList.add(headerInfo);
-            
+                headerInfo.mImage = parser.getAttributeValue(null, "image");
+                if (headerInfo.mImage != null) {
+                    headers.add(headerInfo);
+                }
             } else if (name.equalsIgnoreCase("change_interval")) {
-                String intervalMinutes = parser.getAttributeValue(null, "minutes");
-                mAlarmIntervalMinutes = Integer.parseInt(intervalMinutes);
+                mAlarmIntervalMinutes = Math.max(0,
+                        parseInt(parser.getAttributeValue(null, "minutes"), 0));
                 if (DEBUG) Log.i(TAG, "Set change interval to " + mAlarmIntervalMinutes);
             }
-            
-            eventType = parser.next();
-        
-        } while (eventType != XmlPullParser.END_DOCUMENT);
-
-        if (mRandomMode) {
-            Collections.shuffle(mHeadersList);
         }
-        
-        if (!mLinearMode && !mRandomMode) {
+
+        if (mRandomMode || mLinearMode) {
+            if (mRandomMode) {
+                Collections.shuffle(headers);
+            }
+        } else {
             mAlarmIntervalMinutes = 0;
+            // getMatchingHeader() walks the list in hour order.
+            headers.sort(BY_HOUR);
         }
-    }
-
-    /**
-     * header with biggest hour
-     */
-    private DaylightHeaderInfo getLastHourHeader(List<DaylightHeaderInfo> headerList) {
-        if (headerList == null || headerList.size() == 0) {
-            return null;
-        }
-        Iterator<DaylightHeaderInfo> nextHeader = headerList.iterator();
-        int hour = -1;
-        DaylightHeaderInfo last = null;
-        while(nextHeader.hasNext()) {
-            DaylightHeaderInfo header = nextHeader.next();
-            if (header.mHour == -1) {
-                continue;
-            }
-            if (last == null) {
-                last = header;
-                hour = last.mHour;
-            } else if (header.mHour > hour) {
-                last = header;
-                hour = last.mHour;
-            }
-        }
-        return last;
-    }
-
-    /**
-     * header with lowest hour
-     */
-    private DaylightHeaderInfo getFirstHourHeader(List<DaylightHeaderInfo> headerList) {
-        if (headerList == null || headerList.size() == 0) {
-            return null;
-        }
-        Iterator<DaylightHeaderInfo> nextHeader = headerList.iterator();
-        DaylightHeaderInfo first = null;
-        int hour = -1;
-        while(nextHeader.hasNext()) {
-            DaylightHeaderInfo header = nextHeader.next();
-            if (header.mHour == -1) {
-                continue;
-            }
-            if (first == null) {
-                first = header;
-                hour = first.mHour;
-            } else if (header.mHour < hour) {
-                first = header;
-                hour = first.mHour;
-            }
-        }
-        return first;
+        if (DEBUG) Log.i(TAG, "loaded " + headers.size() + " headers");
     }
 
     @Override
     public Drawable getCurrent(final Calendar now) {
-        if (!Utils.isPackageInstalled(mContext, mPackageName)) {
+        if (mPackageName == null || !Utils.isPackageInstalled(mContext, mPackageName)) {
             Log.w(TAG, "Header pack no longer available - loading default " + mPackageName);
             loadDefaultHeaderPackage();
         }
-        if (mRes == null || mHeadersList == null || mHeadersList.size() == 0) {
+        if (mRes == null || mHeadersList.isEmpty()) {
             return null;
         }
         try {
             if (mRandomMode || mLinearMode) {
+                if (mHeaderIndex >= mHeadersList.size()) {
+                    mHeaderIndex = 0;
+                }
                 DaylightHeaderInfo header = mHeadersList.get(mHeaderIndex);
                 mHeaderIndex++;
                 if (mHeaderIndex == mHeadersList.size()) {
@@ -403,34 +329,32 @@ public class DaylightHeaderProvider implements
                 if (DEBUG) Log.i(TAG, "Current header " + header.mImage);
                 return getDrawable(header.mImage);
             }
+
             // first check day headers
-            if (DEBUG) Log.i(TAG, "Check day headers");
-            List<DaylightHeaderInfo> todayHeaders = getTodayHeaders(now);
-            if (todayHeaders.size() != 0) {
-                DaylightHeaderInfo first = getFirstHourHeader(todayHeaders);
-                DaylightHeaderInfo last = getLastHourHeader(todayHeaders);
-                // no day header with hour so just use one
-                if (first == null || last == null) {
-                    if (DEBUG) Log.i(TAG, "Current day header " + todayHeaders.get(0).mImage);
-                    return getDrawable(todayHeaders.get(0).mImage);
-                }
+            List<DaylightHeaderInfo> todayHeaders = getHeaders(0, now);
+            if (!todayHeaders.isEmpty()) {
                 DaylightHeaderInfo matching = getMatchingHeader(now, todayHeaders);
+                // no day header with an hour, so just use the first one
+                if (matching == null) matching = todayHeaders.get(0);
                 if (DEBUG) Log.i(TAG, "Current day header " + matching.mImage);
                 return getDrawable(matching.mImage);
             }
-            if (DEBUG) Log.i(TAG, "Check hour headers");
-            List<DaylightHeaderInfo> hourHeaders = getHourHeaders();
-            if (hourHeaders.size() != 0) {
+
+            List<DaylightHeaderInfo> hourHeaders = getHeaders(1, now);
+            if (!hourHeaders.isEmpty()) {
                 DaylightHeaderInfo matching = getMatchingHeader(now, hourHeaders);
-                if (DEBUG) Log.i(TAG, "Current hour header " + matching.mImage);
-                return getDrawable(matching.mImage);
+                if (matching != null) {
+                    if (DEBUG) Log.i(TAG, "Current hour header " + matching.mImage);
+                    return getDrawable(matching.mImage);
+                }
             }
-        } catch(Resources.NotFoundException e) {
-            Log.w(TAG, "No drawable found for " + now +" in " + mPackageName);
+        } catch (Resources.NotFoundException e) {
+            Log.w(TAG, "No drawable found for " + now.getTime() + " in " + mPackageName);
         }
         return null;
     }
 
+    /** Returns the cached drawable when the image did not change, so observers skip redraws. */
     private Drawable getDrawable(String image) {
         final int drawableId = mRes.getIdentifier(image, "drawable", mPackageName);
         if (drawableId == 0) {
@@ -443,56 +367,45 @@ public class DaylightHeaderProvider implements
         return mCurrentDrawable;
     }
 
-    private boolean isItToday(final Calendar now, DaylightHeaderInfo headerInfo) {
-        return now.get(Calendar.MONTH) +1 == headerInfo.mMonth && now
-                    .get(Calendar.DAY_OF_MONTH) == headerInfo.mDay;
+    private static boolean isItToday(final Calendar now, DaylightHeaderInfo headerInfo) {
+        return now.get(Calendar.MONTH) + 1 == headerInfo.mMonth
+                && now.get(Calendar.DAY_OF_MONTH) == headerInfo.mDay;
     }
 
-    private List<DaylightHeaderInfo> getTodayHeaders(final Calendar now) {
-        List<DaylightHeaderInfo> todayHeaders = new ArrayList<DaylightHeaderInfo>();
-        Iterator<DaylightHeaderInfo> nextHeader = mHeadersList.iterator();
-        while(nextHeader.hasNext()) {
-            DaylightHeaderInfo header = nextHeader.next();
-            if (header.mType == 0) {
-                if (isItToday(now, header)){
-                    todayHeaders.add(header);
-                }
+    /** Headers of [type]; for day headers only today's. Keeps the list's hour order. */
+    private List<DaylightHeaderInfo> getHeaders(int type, final Calendar now) {
+        List<DaylightHeaderInfo> result = new ArrayList<>();
+        for (DaylightHeaderInfo header : mHeadersList) {
+            if (header.mType == type && (type != 0 || isItToday(now, header))) {
+                result.add(header);
             }
         }
-        return todayHeaders;
+        return result;
     }
 
-    private List<DaylightHeaderInfo> getHourHeaders() {
-        List<DaylightHeaderInfo> hourHeaders = new ArrayList<DaylightHeaderInfo>();
-        Iterator<DaylightHeaderInfo> nextHeader = mHeadersList.iterator();
-        while(nextHeader.hasNext()) {
-            DaylightHeaderInfo header = nextHeader.next();
-            if (header.mType == 1) {
-                hourHeaders.add(header);
+    /**
+     * The header whose hour most recently started; before the first hour of the day it
+     * wraps to the last one. Returns null when no header in the list has an hour.
+     */
+    private static DaylightHeaderInfo getMatchingHeader(final Calendar now,
+            List<DaylightHeaderInfo> headerList) {
+        final int hour = now.get(Calendar.HOUR_OF_DAY);
+        DaylightHeaderInfo first = null;
+        DaylightHeaderInfo last = null;
+        DaylightHeaderInfo match = null;
+        for (DaylightHeaderInfo header : headerList) { // sorted by hour
+            if (header.mHour == -1) {
+                continue;
+            }
+            if (first == null) first = header;
+            last = header;
+            if (header.mHour <= hour) {
+                match = header;
             }
         }
-        return hourHeaders;
-    }
-
-    private DaylightHeaderInfo getMatchingHeader(final Calendar now, List<DaylightHeaderInfo> headerList) {
-        DaylightHeaderInfo first = getFirstHourHeader(headerList);
-        DaylightHeaderInfo last = getLastHourHeader(headerList);
-        DaylightHeaderInfo prev = first;
-
-        Iterator<DaylightHeaderInfo> nextHeader = headerList.iterator();
-        while(nextHeader.hasNext()) {
-            DaylightHeaderInfo header = nextHeader.next();
-            final int hour = now.get(Calendar.HOUR_OF_DAY);
-            if (header.mHour > hour) {
-                if (header == first) {
-                    // if before first return last
-                    return last;
-                }
-                // on the first bigger one return prev
-                return prev;
-            }
-            prev = header;
+        if (first == null) {
+            return null;
         }
-        return last;
+        return match != null ? match : last;
     }
 }
