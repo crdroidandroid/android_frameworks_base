@@ -3796,6 +3796,7 @@ public final class NotificationPanelViewController implements
                     mHeaderImageEnabled =
                             TunerService.parseIntegerSwitch(newValue, false);
                     if (!mHeaderImageEnabled) {
+                        stopHeaderAnimIfRunning();
                         mQsHeaderLayout.setVisibility(View.GONE);
                     } else {
                         mOrientation = mView.getResources().getConfiguration().orientation;
@@ -3813,6 +3814,8 @@ public final class NotificationPanelViewController implements
                 case STATUS_BAR_CUSTOM_HEADER_SHADOW:
                     mHeaderImageShadow =
                             TunerService.parseInteger(newValue, 0);
+                    // Force updateHeaderImage() to recompute the image alpha.
+                    mShadeHeaderExpansion = -1f;
                     if (mHeaderImageEnabled) {
                         mView.post(() -> updateHeaderImage());
                     }
@@ -3830,8 +3833,11 @@ public final class NotificationPanelViewController implements
         @Override
         public void disableHeader() {
             mView.post(() -> {
+                stopHeaderAnimIfRunning();
                 mCurrentBackground = null;
+                mQsHeaderImageView.setImageDrawable(null);
                 mQsHeaderImageView.setVisibility(View.GONE);
+                mQsHeaderLayout.setVisibility(View.GONE);
             });
         }
 
@@ -4514,8 +4520,12 @@ public final class NotificationPanelViewController implements
             mQsHeaderImageView.setVisibility(View.VISIBLE);
             mCurrentBackground = drawable;
             setNotificationPanelHeaderBackground(drawable, force);
+            // Re-apply the shadow alpha to the new drawable.
+            mShadeHeaderExpansion = -1f;
         } else {
+            stopHeaderAnimIfRunning();
             mCurrentBackground = null;
+            mQsHeaderImageView.setImageDrawable(null);
             mQsHeaderImageView.setVisibility(View.GONE);
         }
         if (mHeaderImageEnabled) {
