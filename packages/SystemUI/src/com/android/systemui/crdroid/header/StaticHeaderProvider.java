@@ -1,5 +1,6 @@
 /*
  *  Copyright (C) 2017 The OmniROM Project
+ *  Copyright (C) 2026 crDroid Android Project
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,19 +20,17 @@
 package com.android.systemui.crdroid.header;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Handler;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.Log;
 
 import java.util.Calendar;
+import java.util.Objects;
 
-import com.android.systemui.res.R;
 import com.android.internal.util.crdroid.Utils;
 
 public class StaticHeaderProvider implements
@@ -40,10 +39,12 @@ public class StaticHeaderProvider implements
     public static final String TAG = "StaticHeaderProvider";
     private static final boolean DEBUG = false;
 
-    private Context mContext;
+    private final Context mContext;
     private Resources mRes;
     private String mImage;
     private String mPackageName;
+    /** Cached so repeated getCurrent() calls return the same instance (no redundant redraws). */
+    private Drawable mDrawable;
 
     public StaticHeaderProvider(Context context) {
         mContext = context;
@@ -59,19 +60,27 @@ public class StaticHeaderProvider implements
         final boolean customHeader = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.STATUS_BAR_CUSTOM_HEADER, 0,
                 UserHandle.USER_CURRENT) == 1;
-        String imageUrl = Settings.System.getStringForUser(mContext.getContentResolver(),
+        final String imageUrl = Settings.System.getStringForUser(mContext.getContentResolver(),
                 Settings.System.STATUS_BAR_CUSTOM_HEADER_IMAGE,
                 UserHandle.USER_CURRENT);
 
-        if (imageUrl != null && customHeader) {
-            int idx = imageUrl.indexOf("/");
-            if (idx != -1) {
-                String[] parts = imageUrl.split("/");
-                mPackageName = parts[0];
-                mImage = parts[1];
-                loadHeaderImage();
-            }
+        if (!customHeader || imageUrl == null) {
+            return;
         }
+        final int idx = imageUrl.indexOf('/');
+        if (idx <= 0 || idx == imageUrl.length() - 1) {
+            Log.w(TAG, "Invalid header image setting: " + imageUrl);
+            return;
+        }
+        final String packageName = imageUrl.substring(0, idx);
+        final String image = imageUrl.substring(idx + 1);
+        if (mRes != null && packageName.equals(mPackageName) && Objects.equals(image, mImage)) {
+            return; // unchanged
+        }
+        mPackageName = packageName;
+        mImage = image;
+        mDrawable = null;
+        loadHeaderResources();
     }
 
     @Override
@@ -81,34 +90,46 @@ public class StaticHeaderProvider implements
 
     @Override
     public void disableProvider() {
+        // Release the bitmap while another provider (or none) is active.
+        mDrawable = null;
+        mRes = null;
     }
 
-    private void loadHeaderImage() {
-        if (DEBUG) Log.i(TAG, "Load header image " + " " + mPackageName + " " + mImage);
-
+    private void loadHeaderResources() {
+        if (DEBUG) Log.i(TAG, "Load header image " + mPackageName + "/" + mImage);
         try {
             PackageManager packageManager = mContext.getPackageManager();
             mRes = packageManager.getResourcesForApplication(mPackageName);
         } catch (Exception e) {
-            Log.e(TAG, "Failed to load icon pack " + mPackageName, e);
+            Log.e(TAG, "Failed to load header pack " + mPackageName, e);
             mRes = null;
         }
     }
 
     @Override
     public Drawable getCurrent(final Calendar now) {
-        if (mRes == null) {
+        if (mRes == null || mPackageName == null) {
             return null;
         }
         if (!Utils.isPackageInstalled(mContext, mPackageName)) {
             Log.w(TAG, "Header pack image " + mImage + " no longer available");
+            mRes = null;
+            mDrawable = null;
+            return null;
+        }
+        if (mDrawable != null) {
+            return mDrawable;
+        }
+        final int resId = mRes.getIdentifier(mImage, "drawable", mPackageName);
+        if (resId == 0) {
+            Log.w(TAG, "No drawable " + mImage + " in " + mPackageName);
             return null;
         }
         try {
-            return mRes.getDrawable(mRes.getIdentifier(mImage, "drawable", mPackageName), null);
-        } catch(Resources.NotFoundException e) {
-            Log.w(TAG, "No drawable found for " + now +" in " + mPackageName);
+            mDrawable = mRes.getDrawable(resId, null);
+        } catch (Resources.NotFoundException e) {
+            Log.w(TAG, "Failed to load " + mImage + " from " + mPackageName, e);
         }
-        return null;
+        return mDrawable;
     }
 }

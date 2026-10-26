@@ -1,5 +1,6 @@
 /*
  *  Copyright (C) 2015 The OmniROM Project
+ *  Copyright (C) 2026 crDroid Android Project
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,29 +19,33 @@
 
 package com.android.systemui.crdroid.header;
 
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.util.Log;
 import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Process;
 import android.os.UserHandle;
 import android.provider.Settings;
-import android.util.SparseArray;
+import android.util.Log;
 
-import java.util.Calendar;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Iterator;
 import java.util.Calendar;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+/**
+ * Picks the active header provider and pushes its image to observers.
+ *
+ * All provider work (settings changes, alarms, screen on, image decoding) runs on one
+ * background thread, so providers never race each other or block the UI thread.
+ * Observers receive callbacks on that thread and must post to their own views.
+ */
 public class StatusBarHeaderMachine {
 
     private static final String TAG = "StatusBarHeaderMachine";
@@ -66,108 +71,82 @@ public class StatusBarHeaderMachine {
         public void refreshHeader();
     }
 
-    private Context mContext;
-    private Map<String, IStatusBarHeaderProvider> mProviders = new HashMap<String, IStatusBarHeaderProvider>();
-    private List<IStatusBarHeaderMachineObserver> mObservers = new ArrayList<IStatusBarHeaderMachineObserver>();
-    private Handler mHandler = new Handler();
-    private boolean mAttached;
+    // broadcast providers sent when they update the header image
+    public static final String STATUS_BAR_HEADER_UPDATE_ACTION =
+            "com.android.systemui.crdroid.header.STATUS_BAR_HEADER_UPDATE";
+
+    private static HandlerThread sThread;
+
+    private final Context mContext;
+    private final Handler mHandler;
+    private final Map<String, IStatusBarHeaderProvider> mProviders = new HashMap<>();
+    private final List<IStatusBarHeaderMachineObserver> mObservers = new ArrayList<>();
+    private final String mDefaultProviderName;
+
+    // Only touched on mHandler's thread.
+    private boolean mReceiverRegistered;
+    private boolean mObserving;
     private boolean mScreenOn = true;
-    private String mDefaultProviderName;
     private String mCurrentProviderName;
     private Drawable mCurrentHeader;
-
-    // broadcast providers sent when they update the header image
-    public static final String STATUS_BAR_HEADER_UPDATE_ACTION = "com.android.systemui.crdroid.header.STATUS_BAR_HEADER_UPDATE";
 
     private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (STATUS_BAR_HEADER_UPDATE_ACTION.equals(intent.getAction())) {
+            final String action = intent.getAction();
+            if (STATUS_BAR_HEADER_UPDATE_ACTION.equals(action)) {
                 if (mScreenOn) {
                     if (DEBUG) Log.i(TAG, "status bar header background alarm triggered");
                     doUpdateStatusHeaderObservers(false);
                 }
-            } else if (Intent.ACTION_SCREEN_OFF.equals(intent.getAction())) {
+            } else if (Intent.ACTION_SCREEN_OFF.equals(action)) {
                 mScreenOn = false;
-            } else if (Intent.ACTION_SCREEN_ON.equals(intent.getAction())) {
-                // we use ineact alarms so we cant be sure they have been sent during
+            } else if (Intent.ACTION_SCREEN_ON.equals(action)) {
+                // we use inexact alarms so we cant be sure they have been sent during
                 // screen off (sleep) - so update it on screen on
                 if (!mScreenOn) {
                     if (DEBUG) Log.i(TAG, "status bar header background SCREEN_ON triggered");
                     mScreenOn = true;
                     doUpdateStatusHeaderObservers(false);
                 }
+            } else if (Intent.ACTION_USER_SWITCHED.equals(action)) {
+                // Every setting is per user; re-read everything for the new user.
+                notifyProviderSettingsChanged(null);
+                updateEnablementLocked();
             }
         }
     };
 
-    private class SettingsObserver extends ContentObserver {
-        SettingsObserver(Handler handler) {
-            super(handler);
-        }
-
-        void observe() {
-            mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.STATUS_BAR_CUSTOM_HEADER),
-                    false, this, UserHandle.USER_ALL);
-            mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.STATUS_BAR_DAYLIGHT_HEADER_PACK),
-                    false, this, UserHandle.USER_ALL);
-            mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.STATUS_BAR_CUSTOM_HEADER_IMAGE),
-                    false, this, UserHandle.USER_ALL);
-            mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.STATUS_BAR_CUSTOM_HEADER_PROVIDER),
-                    false, this, UserHandle.USER_ALL);
-            mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.STATUS_BAR_CUSTOM_HEADER_SHADOW),
-                    false, this, UserHandle.USER_ALL);
-            mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.STATUS_BAR_FILE_HEADER_IMAGE),
-                    false, this, UserHandle.USER_ALL);
-        }
-
-        void unobserve() {
-            mContext.getContentResolver().unregisterContentObserver(this);
-        }
-
-        @Override
-        public void onChange(boolean selfChange, Uri uri) {
-            final boolean customHeader = Settings.System.getIntForUser(mContext.getContentResolver(),
-                    Settings.System.STATUS_BAR_CUSTOM_HEADER, 0,
-                    UserHandle.USER_CURRENT) == 1;
-            if (customHeader && uri.equals(Settings.System.getUriFor(
-                    Settings.System.STATUS_BAR_CUSTOM_HEADER_SHADOW))) {
-                doRefreshStatusHeaderObservers();
-            } else {
-                IStatusBarHeaderProvider provider = getCurrentProvider();
-                // forward to current active provider
-                if (provider != null) {
-                    try {
-                        provider.settingsChanged(uri);
-                    } catch (Exception e) {
-                        // just in case
-                    }
-                }
-                updateEnablement();
-            }
-        }
-    }
-
-    private SettingsObserver mSettingsObserver = new SettingsObserver(null);
+    private final ContentObserver mSettingsObserver;
 
     public StatusBarHeaderMachine(Context context) {
         mContext = context;
+        mHandler = new Handler(getThread().getLooper());
+        mSettingsObserver = new ContentObserver(mHandler) {
+            @Override
+            public void onChange(boolean selfChange, Uri uri) {
+                onSettingChanged(uri);
+            }
+        };
+
         DaylightHeaderProvider defaultProvider = new DaylightHeaderProvider(context);
         addProvider(defaultProvider);
         mDefaultProviderName = defaultProvider.getName();
         mCurrentProviderName = mDefaultProviderName;
         addProvider(new StaticHeaderProvider(context));
         addProvider(new FileHeaderProvider(context));
-        mSettingsObserver.observe();
     }
 
-    public Drawable getCurrent() {
+    private static synchronized HandlerThread getThread() {
+        if (sThread == null) {
+            sThread = new HandlerThread(TAG, Process.THREAD_PRIORITY_BACKGROUND);
+            sThread.start();
+        }
+        return sThread;
+    }
+
+    /** Returns the current header. Must be called on the machine's thread. */
+    private Drawable getCurrent() {
         final Calendar now = Calendar.getInstance();
         IStatusBarHeaderProvider provider = getCurrentProvider();
         if (provider != null) {
@@ -175,7 +154,7 @@ public class StatusBarHeaderMachine {
                 if (DEBUG) Log.i(TAG, "get current from provider " + provider.getName());
                 return provider.getCurrent(now);
             } catch (Exception e) {
-                // just in case
+                Log.w(TAG, "Provider " + provider.getName() + " failed", e);
             }
         }
         return null;
@@ -189,65 +168,106 @@ public class StatusBarHeaderMachine {
 
     public void addObserver(IStatusBarHeaderMachineObserver observer) {
         if (DEBUG) Log.i(TAG, "addObserver " + observer);
-
-        if (!mObservers.contains(observer)) {
-            mObservers.add(observer);
-        }
+        mHandler.post(() -> {
+            if (!mObservers.contains(observer)) {
+                mObservers.add(observer);
+            }
+            startObservingLocked();
+        });
     }
 
     public void removeObserver(IStatusBarHeaderMachineObserver observer) {
-        mObservers.remove(observer);
-        mSettingsObserver.unobserve();
+        mHandler.post(() -> {
+            mObservers.remove(observer);
+            if (mObservers.isEmpty()) {
+                // Nobody to draw for: drop alarms, receivers and observers until reattached.
+                stopObservingLocked();
+                IStatusBarHeaderProvider provider = getCurrentProvider();
+                if (provider != null) {
+                    provider.disableProvider();
+                }
+                unregisterReceiverLocked();
+                mCurrentHeader = null;
+            }
+        });
+    }
+
+    /** Re-evaluates enabled state and provider. Safe to call from any thread. */
+    public void updateEnablement() {
+        mHandler.post(this::updateEnablementLocked);
+    }
+
+    private void startObservingLocked() {
+        if (mObserving) {
+            return;
+        }
+        final String[] keys = {
+                Settings.System.STATUS_BAR_CUSTOM_HEADER,
+                Settings.System.STATUS_BAR_DAYLIGHT_HEADER_PACK,
+                Settings.System.STATUS_BAR_CUSTOM_HEADER_IMAGE,
+                Settings.System.STATUS_BAR_CUSTOM_HEADER_PROVIDER,
+                Settings.System.STATUS_BAR_FILE_HEADER_IMAGE,
+        };
+        for (String key : keys) {
+            mContext.getContentResolver().registerContentObserver(
+                    Settings.System.getUriFor(key), false, mSettingsObserver, UserHandle.USER_ALL);
+        }
+        mObserving = true;
+    }
+
+    private void stopObservingLocked() {
+        if (mObserving) {
+            mContext.getContentResolver().unregisterContentObserver(mSettingsObserver);
+            mObserving = false;
+        }
+    }
+
+    private void onSettingChanged(Uri uri) {
+        // Shadow is applied by the shade itself (NotificationPanelViewController listens to
+        // it via TunerService), so there is nothing for providers to do here.
+        notifyProviderSettingsChanged(uri);
+        updateEnablementLocked();
+    }
+
+    private void notifyProviderSettingsChanged(Uri uri) {
+        final IStatusBarHeaderProvider provider = getCurrentProvider();
+        if (provider != null) {
+            try {
+                provider.settingsChanged(uri);
+            } catch (Exception e) {
+                Log.w(TAG, "settingsChanged failed for " + provider.getName(), e);
+            }
+        }
     }
 
     private void doUpdateStatusHeaderObservers(final boolean force) {
-        if (DEBUG) Log.i(TAG, "updateHeader");
+        if (DEBUG) Log.i(TAG, "updateHeader force=" + force);
         final Drawable header = getCurrent();
         if (!force && header == mCurrentHeader) {
             return;
         }
         mCurrentHeader = header;
-        Iterator<IStatusBarHeaderMachineObserver> nextObserver = mObservers
-                .iterator();
-        while (nextObserver.hasNext()) {
-            IStatusBarHeaderMachineObserver observer = nextObserver.next();
+        for (IStatusBarHeaderMachineObserver observer : new ArrayList<>(mObservers)) {
             try {
                 observer.updateHeader(header, force);
             } catch (Exception e) {
-                // just in case
+                Log.w(TAG, "observer.updateHeader failed", e);
             }
         }
     }
 
     private void doDisableStatusHeaderObservers() {
         mCurrentHeader = null;
-        Iterator<IStatusBarHeaderMachineObserver> nextObserver = mObservers
-                .iterator();
-        while (nextObserver.hasNext()) {
-            IStatusBarHeaderMachineObserver observer = nextObserver.next();
+        for (IStatusBarHeaderMachineObserver observer : new ArrayList<>(mObservers)) {
             try {
                 observer.disableHeader();
             } catch (Exception e) {
-                // just in case
+                Log.w(TAG, "observer.disableHeader failed", e);
             }
         }
     }
 
-    private void doRefreshStatusHeaderObservers() {
-        if (DEBUG) Log.i(TAG, "refreshHeader");
-        Iterator<IStatusBarHeaderMachineObserver> nextObserver = mObservers
-                .iterator();
-        while (nextObserver.hasNext()) {
-            IStatusBarHeaderMachineObserver observer = nextObserver.next();
-            try {
-                observer.refreshHeader();
-            } catch (Exception e) {
-                // just in case
-            }
-        }
-    }
-
-    public void updateEnablement() {
+    private void updateEnablementLocked() {
         final boolean customHeader = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.STATUS_BAR_CUSTOM_HEADER, 0,
                 UserHandle.USER_CURRENT) == 1;
@@ -255,58 +275,64 @@ public class StatusBarHeaderMachine {
                 Settings.System.STATUS_BAR_CUSTOM_HEADER_PROVIDER,
                 UserHandle.USER_CURRENT);
 
-        if (providerName != null && !providerName.equals(mCurrentProviderName)) {
-            Iterator<IStatusBarHeaderProvider> nextProvider = mProviders
-                    .values().iterator();
-            while (nextProvider.hasNext()) {
-                IStatusBarHeaderProvider provider = nextProvider.next();
-                if (!provider.getName().equals(providerName)) {
+        final String wantedProvider = (providerName != null && mProviders.containsKey(providerName))
+                ? providerName : mDefaultProviderName;
+        if (!wantedProvider.equals(mCurrentProviderName)) {
+            for (IStatusBarHeaderProvider provider : mProviders.values()) {
+                if (!provider.getName().equals(wantedProvider)) {
                     if (DEBUG) Log.i(TAG, "disable provider " + provider.getName());
                     provider.disableProvider();
                 }
             }
-            mCurrentProviderName = providerName;
+            mCurrentProviderName = wantedProvider;
         }
 
-        IStatusBarHeaderProvider provider = getCurrentProvider();
+        final IStatusBarHeaderProvider provider = getCurrentProvider();
         if (provider == null) {
             Log.w(TAG, "updateEnablement: no active provider");
             return;
         }
-        if (customHeader) {
+        if (customHeader && !mObservers.isEmpty()) {
             if (DEBUG) Log.i(TAG, "enable provider " + provider.getName());
             provider.enableProvider();
-
-            if (!mAttached) {
-                // we dont want to wait for the alarm
-                doUpdateStatusHeaderObservers(true);
-                IntentFilter filter = new IntentFilter();
-                filter.addAction(Intent.ACTION_SCREEN_ON);
-                filter.addAction(Intent.ACTION_SCREEN_OFF);
-                filter.addAction(STATUS_BAR_HEADER_UPDATE_ACTION);
-                mContext.registerReceiver(mBroadcastReceiver, filter, Context.RECEIVER_EXPORTED);
-                mAttached = true;
-            } else {
-                // we dont want to wait for the alarm if provider has changed its header image
-                doUpdateStatusHeaderObservers(true);
-            }
+            registerReceiverLocked();
+            // we dont want to wait for the alarm
+            doUpdateStatusHeaderObservers(true);
         } else {
             if (DEBUG) Log.i(TAG, "disable provider " + provider.getName());
             provider.disableProvider();
-
-            if (mAttached) {
-                mContext.unregisterReceiver(mBroadcastReceiver);
+            if (unregisterReceiverLocked()) {
                 doDisableStatusHeaderObservers();
-                mAttached = false;
             }
         }
     }
 
-    private IStatusBarHeaderProvider getCurrentProvider() {
-        if (mProviders.size() == 1) {
-            return mProviders.get(mDefaultProviderName);
+    private void registerReceiverLocked() {
+        if (mReceiverRegistered) {
+            return;
         }
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_SCREEN_ON);
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
+        filter.addAction(Intent.ACTION_USER_SWITCHED);
+        filter.addAction(STATUS_BAR_HEADER_UPDATE_ACTION);
+        // The update alarm is a package-scoped PendingIntent owned by SystemUI, so
+        // nothing outside SystemUI needs to (or should be able to) reach this receiver.
+        mContext.registerReceiverForAllUsers(mBroadcastReceiver, filter, null, mHandler,
+                Context.RECEIVER_NOT_EXPORTED);
+        mReceiverRegistered = true;
+    }
 
+    private boolean unregisterReceiverLocked() {
+        if (!mReceiverRegistered) {
+            return false;
+        }
+        mContext.unregisterReceiver(mBroadcastReceiver);
+        mReceiverRegistered = false;
+        return true;
+    }
+
+    private IStatusBarHeaderProvider getCurrentProvider() {
         if (mCurrentProviderName == null || !mProviders.containsKey(mCurrentProviderName)) {
             return mProviders.get(mDefaultProviderName);
         }
