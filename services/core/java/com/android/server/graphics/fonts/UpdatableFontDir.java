@@ -20,6 +20,7 @@ import static com.android.server.graphics.fonts.FontManagerService.SystemFontExc
 
 import android.annotation.NonNull;
 import android.annotation.Nullable;
+import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.graphics.fonts.FontManager;
 import android.graphics.fonts.FontStyle;
@@ -30,6 +31,7 @@ import android.os.LocaleList;
 import android.system.ErrnoException;
 import android.system.Os;
 import android.text.FontConfig;
+import android.text.TextUtils;
 import android.util.ArrayMap;
 import android.util.AtomicFile;
 import android.util.Base64;
@@ -73,6 +75,8 @@ final class UpdatableFontDir {
     private static final String CUSTOM_FONT_MARKER_FILE = "custom.font";
     private static final String CUSTOM_FONT_FAMILY_NAME = "sans-serif";
     private static final long MAX_CUSTOM_FONT_FILE_SIZE = 64L * 1024L * 1024L;
+    /** Framework string naming the lock screen clock family; the custom font never touches it. */
+    private static final String CLOCK_FONT_FAMILY_RES = "config_clockFontFamily";
     private static final String EMOJI_LANG = "und-Zsye";
     private static final String EMOJI_DEFAULT_POSTSCRIPT_NAME = "NotoColorEmoji";
     // This is from frameworks/minikin/include/minikin/FontCollection.h
@@ -1129,8 +1133,12 @@ final class UpdatableFontDir {
         boolean customFontApplied = false;
         if (customFontFamily != null && !customFontFamily.getFamilies().isEmpty()) {
             FontConfig.FontFamily customFamily = customFontFamily.getFamilies().get(0);
+            // The clock family (config_clockFontFamily, e.g. google-sans-flex-clock) keeps its
+            // own font. Its name matches the "google-sans" UI prefix, so it is excluded here.
+            final String clockFamily = getClockFontFamilyName();
             for (FontConfig.NamedFamilyList baseFamily : config.getNamedFamilyLists()) {
-                if (!isUiFontFamilyName(baseFamily.getName())) {
+                if (!isUiFontFamilyName(baseFamily.getName())
+                        || isSameFamilyName(baseFamily.getName(), clockFamily)) {
                     continue;
                 }
                 List<FontConfig.FontFamily> fallbackFamilies =
@@ -1157,6 +1165,17 @@ final class UpdatableFontDir {
 
         if (customFontFamily != null && !customFontApplied) {
             mergedFamilies.add(customFontFamily);
+        }
+
+        // If config_clockFontFamily is an alias of a UI family, the alias would now resolve to
+        // the custom font. Pin it to an untouched copy of the original family instead: named
+        // families take precedence over aliases with the same name when Typefaces are built.
+        if (customFontFamily != null && customFontApplied) {
+            FontConfig.NamedFamilyList pinnedClock =
+                    pinAliasedClockFamily(config, getClockFontFamilyName());
+            if (pinnedClock != null) {
+                mergedFamilies.add(pinnedClock);
+            }
         }
 
         if (Flags.insertFontFamily()) {
@@ -1220,12 +1239,77 @@ final class UpdatableFontDir {
             return false;
         }
         String normalized = familyName.toLowerCase(Locale.ROOT);
+        // Clock faces (google-sans-flex-clock, google-sans-clock, ...) are display fonts the
+        // lock screen picks deliberately; replacing them with the custom font is unwanted.
+        if (normalized.contains("clock")) {
+            return false;
+        }
         return normalized.startsWith("sans-serif")
                 || normalized.startsWith("google-sans")
                 || normalized.startsWith("variable-")
                 || normalized.equals("roboto")
                 || normalized.equals("roboto-flex")
                 || normalized.startsWith("source-sans-pro");
+    }
+
+    /**
+     * The family named by config_clockFontFamily, or null when the resource doesn't exist.
+     * Looked up by name because not every tree defines it (SystemUI's DefaultClockProvider
+     * does the same).
+     */
+    @Nullable
+    private static String getClockFontFamilyName() {
+        try {
+            Resources res = Resources.getSystem();
+            int id = res.getIdentifier(CLOCK_FONT_FAMILY_RES, "string", "android");
+            if (id == 0) {
+                return null;
+            }
+            String family = res.getString(id);
+            return TextUtils.isEmpty(family) ? null : family;
+        } catch (Resources.NotFoundException e) {
+            return null;
+        }
+    }
+
+    private static boolean isSameFamilyName(@Nullable String a, @Nullable String b) {
+        return a != null && b != null && a.equalsIgnoreCase(b);
+    }
+
+    /**
+     * When {@code clockFamily} is not a named family but a plain (weight-less) alias of a UI
+     * family, returns a named copy of that family as preinstalled, so the clock keeps it.
+     * Returns null when nothing needs pinning.
+     */
+    @Nullable
+    private static FontConfig.NamedFamilyList pinAliasedClockFamily(
+            FontConfig config, @Nullable String clockFamily) {
+        if (clockFamily == null) {
+            return null;
+        }
+        for (FontConfig.NamedFamilyList family : config.getNamedFamilyLists()) {
+            if (isSameFamilyName(family.getName(), clockFamily)) {
+                return null; // A real family: already left alone above.
+            }
+        }
+        String original = null;
+        for (FontConfig.Alias alias : config.getAliases()) {
+            if (isSameFamilyName(alias.getName(), clockFamily)
+                    && alias.getWeight() == FontStyle.FONT_WEIGHT_NORMAL) {
+                original = alias.getOriginal();
+                break;
+            }
+        }
+        if (original == null || !isUiFontFamilyName(original)) {
+            return null;
+        }
+        for (FontConfig.NamedFamilyList family : config.getNamedFamilyLists()) {
+            if (isSameFamilyName(family.getName(), original)) {
+                return new FontConfig.NamedFamilyList(
+                        family.getFamilies(), clockFamily, family.getFallback());
+            }
+        }
+        return null;
     }
 
     @VisibleForTesting
