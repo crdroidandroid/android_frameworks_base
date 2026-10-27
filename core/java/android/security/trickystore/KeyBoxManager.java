@@ -15,6 +15,7 @@ import com.android.internal.org.bouncycastle.cert.X509CertificateHolder;
 import com.android.internal.org.bouncycastle.crypto.params.ECDomainParameters;
 import com.android.internal.org.bouncycastle.crypto.params.ECPrivateKeyParameters;
 import com.android.internal.org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPrivateKey;
+import com.android.internal.org.bouncycastle.jce.provider.BouncyCastleProvider;
 import com.android.internal.org.bouncycastle.jcajce.provider.asymmetric.ec.KeyFactorySpi.EC;
 import com.android.internal.org.bouncycastle.jcajce.provider.asymmetric.rsa.KeyFactorySpi;
 
@@ -27,6 +28,8 @@ import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.Signature;
+import java.security.SecureRandom;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
 import java.security.cert.CertificateEncodingException;
@@ -34,10 +37,11 @@ import java.security.cert.X509Certificate;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.RSAPrivateCrtKeySpec;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Locale;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -47,7 +51,7 @@ import java.util.regex.Pattern;
 public class KeyBoxManager {
     private static final String TAG = "KeyBoxManager";
 
-    private volatile Map<String, KeyBox> mKeyboxes = new ConcurrentHashMap<>();
+    private volatile Map<String, KeyBox> mKeyboxes = Collections.emptyMap();
 
     private static final Pattern PEM_HEADER = Pattern.compile("-----BEGIN ([^-]+)-----");
     private static final Pattern XML_COMMENT = Pattern.compile("<!--.*?-->", Pattern.DOTALL);
@@ -60,7 +64,7 @@ public class KeyBoxManager {
 
         public KeyBox(KeyPair keyPair, List<Certificate> certificates) {
             this.keyPair = keyPair;
-            this.certificates = certificates;
+            this.certificates = Collections.unmodifiableList(new ArrayList<>(certificates));
         }
 
         public X500Name getIssuerSubject() throws java.io.IOException,
@@ -82,7 +86,8 @@ public class KeyBoxManager {
     public void clear() {
         // Publish a fresh map instead of clearing the map a concurrent attestation
         // might already be reading.
-        mKeyboxes = new ConcurrentHashMap<>();
+        mKeyboxes = Collections.emptyMap();
+        AttestationUtils.invalidateFallbackBootState();
         Log.i(TAG, "Keyboxes cleared");
     }
 
@@ -104,11 +109,12 @@ public class KeyBoxManager {
     public boolean parseKeybox(String xmlContent) {
         // Parse into a private map and publish it at the end, so a concurrent
         // attestation never sees a half-filled or empty keybox mid-refresh.
-        Map<String, KeyBox> next = new ConcurrentHashMap<>();
-        if (xmlContent == null || xmlContent.isEmpty()) {
-            mKeyboxes = next;
-            return true;
+        // Do not let an accidental null/empty fetch erase a valid configuration.
+        if (xmlContent == null || xmlContent.trim().isEmpty()) {
+            Log.w(TAG, "Rejecting empty keybox document");
+            return false;
         }
+        Map<String, KeyBox> next = new java.util.HashMap<>();
 
         // Truncation is detected by well-formedness, not by NumberOfKeyboxes: the root
         // element must have closed for a parse failure to still be usable.
@@ -224,11 +230,15 @@ public class KeyBoxManager {
                             inNumberOfKeyboxes = false;
                         } else if ("Key".equals(tagName)) {
                             inKey = false;
-                            if (currentAlgorithm != null && privateKeyPem != null && !certificatePems.isEmpty()) {
-                                processKeybox(next, currentAlgorithm, privateKeyPem, certificatePems);
-                                parsedKeyCount++;
-                                boxHasKey = true;
+                            if (currentAlgorithm == null || privateKeyPem == null
+                                    || certificatePems.isEmpty()) {
+                                throw new IllegalArgumentException("Incomplete <Key> block");
                             }
+                            if (!processKeybox(next, currentAlgorithm, privateKeyPem, certificatePems)) {
+                                throw new IllegalArgumentException("Invalid <Key> block: " + currentAlgorithm);
+                            }
+                            parsedKeyCount++;
+                            boxHasKey = true;
                         } else if ("Keybox".equals(tagName)) {
                             if (boxHasKey) parsedKeyboxCount++;
                             boxHasKey = false;
@@ -247,10 +257,8 @@ public class KeyBoxManager {
             // every <Key> they find. So a mismatch is only logged. A truncated download is
             // caught by the parse failure below, and a document that yields no key at all
             // is still rejected so it can't wipe the loaded keyboxes.
-            if (declaredKeyboxCount != null && declaredKeyboxCount > 0 && parsedKeyCount == 0) {
-                Log.e(TAG, "Keybox XML declares " + declaredKeyboxCount
-                        + " keybox(es) but no complete key parsed — rejecting, keeping the"
-                        + " current keyboxes");
+            if (next.isEmpty() || parsedKeyCount == 0 || !rootClosed) {
+                Log.e(TAG, "Incomplete or keyless keybox XML; preserving loaded keyboxes");
                 return false;
             }
             if (declaredKeyboxCount != null
@@ -261,29 +269,22 @@ public class KeyBoxManager {
                         + " key(s); NumberOfKeyboxes is advisory, using what parsed");
             }
 
-            mKeyboxes = next;
-            Log.i(TAG, "Parsed " + next.size() + " keyboxes");
+            mKeyboxes = Collections.unmodifiableMap(next);
+            AttestationUtils.invalidateFallbackBootState();
+            Log.i(TAG, "Parsed " + next.size() + " validated keyboxes");
             return true;
         } catch (Exception e) {
-            Log.e(TAG, "Failed to parse keybox XML", e);
-            if (!rootClosed || next.isEmpty()) {
-                // Cut off before the root element closed (an interrupted download), or
-                // nothing usable came out: keep what is loaded instead of publishing a
-                // partial or empty set.
-                Log.e(TAG, "Keybox XML looks truncated or unusable — keeping the current keyboxes");
-                return false;
-            }
-            // Complete document with trailing garbage: everything before it parsed.
-            mKeyboxes = next;
-            return true;
+            Log.e(TAG, "Keybox XML rejected; preserving previously loaded keyboxes", e);
+            return false;
         }
     }
 
-    private void processKeybox(Map<String, KeyBox> target, String algorithm, String privateKeyPem,
+    /** Validates a complete key and publishes it only into the temporary parse map. */
+    private boolean processKeybox(Map<String, KeyBox> target, String algorithm, String privateKeyPem,
             List<String> certificatePems) {
         try {
             String normalizedAlgorithm;
-            switch (algorithm.toLowerCase()) {
+            switch (algorithm.toLowerCase(Locale.ROOT)) {
                 case "ec":
                 case "ecdsa":
                     normalizedAlgorithm = "EC";
@@ -292,27 +293,82 @@ public class KeyBoxManager {
                     normalizedAlgorithm = "RSA";
                     break;
                 default:
-                    normalizedAlgorithm = algorithm;
+                    Log.w(TAG, "Unsupported keybox algorithm: " + algorithm);
+                    return false;
+            }
+            if (target.containsKey(normalizedAlgorithm)) {
+                Log.w(TAG, "Duplicate keybox algorithm: " + normalizedAlgorithm);
+                return false;
             }
 
             PrivateKey privateKey = parsePrivateKey(privateKeyPem, normalizedAlgorithm);
             List<Certificate> certificates = new ArrayList<>();
-            CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
-
-            for (String certPem : certificatePems) {
-                byte[] certBytes = parsePemContent(certPem);
-                Certificate cert = certFactory.generateCertificate(new ByteArrayInputStream(certBytes));
-                certificates.add(cert);
+            CertificateFactory factory = CertificateFactory.getInstance("X.509");
+            for (String pem : certificatePems) {
+                certificates.add(factory.generateCertificate(
+                        new ByteArrayInputStream(parsePemContent(pem))));
             }
+            if (certificates.isEmpty()) return false;
 
-            if (!certificates.isEmpty()) {
-                PublicKey publicKey = ((X509Certificate) certificates.get(0)).getPublicKey();
-                KeyPair keyPair = new KeyPair(publicKey, privateKey);
-                target.put(normalizedAlgorithm, new KeyBox(keyPair, certificates));
-                Log.i(TAG, "Added keybox for algorithm: " + normalizedAlgorithm);
+            X509Certificate issuer = (X509Certificate) certificates.get(0);
+            if (!normalizedAlgorithm.equalsIgnoreCase(issuer.getPublicKey().getAlgorithm())
+                    || !normalizedAlgorithm.equalsIgnoreCase(privateKey.getAlgorithm())) {
+                Log.e(TAG, "Private key or certificate has unexpected algorithm: "
+                        + normalizedAlgorithm);
+                return false;
             }
+            // A present private key is not necessarily the key for the first certificate.
+            // Sign and verify a random challenge to reject mismatched material early.
+            verifyPrivateKey(privateKey, issuer.getPublicKey(), normalizedAlgorithm);
+            validateCertificateChain(certificates);
+            target.put(normalizedAlgorithm,
+                    new KeyBox(new KeyPair(issuer.getPublicKey(), privateKey), certificates));
+            Log.i(TAG, "Validated keybox for algorithm: " + normalizedAlgorithm);
+            return true;
         } catch (Exception e) {
-            Log.e(TAG, "Failed to process keybox for algorithm: " + algorithm, e);
+            Log.e(TAG, "Invalid keybox for algorithm: " + algorithm, e);
+            return false;
+        }
+    }
+
+    private static void verifyPrivateKey(PrivateKey privateKey, PublicKey publicKey,
+            String algorithm) throws Exception {
+        String sigAlgorithm = "EC".equals(algorithm) ? "SHA256withECDSA" : "SHA256withRSA";
+        byte[] challenge = new byte[32];
+        new SecureRandom().nextBytes(challenge);
+        Signature signer = "EC".equals(algorithm)
+                ? Signature.getInstance(sigAlgorithm, new BouncyCastleProvider())
+                : Signature.getInstance(sigAlgorithm);
+        signer.initSign(privateKey);
+        signer.update(challenge);
+        byte[] signature = signer.sign();
+        Signature verifier = "EC".equals(algorithm)
+                ? Signature.getInstance(sigAlgorithm, new BouncyCastleProvider())
+                : Signature.getInstance(sigAlgorithm);
+        verifier.initVerify(publicKey);
+        verifier.update(challenge);
+        if (!verifier.verify(signature)) {
+            throw new java.security.InvalidKeyException(
+                    "Private key does not correspond to keybox certificate");
+        }
+    }
+
+    private static void validateCertificateChain(List<Certificate> certificates)
+            throws Exception {
+        for (int i = 0; i < certificates.size(); i++) {
+            X509Certificate certificate = (X509Certificate) certificates.get(i);
+            certificate.checkValidity();
+            if (i + 1 < certificates.size()) {
+                X509Certificate issuer = (X509Certificate) certificates.get(i + 1);
+                if (!certificate.getIssuerX500Principal().equals(issuer.getSubjectX500Principal())) {
+                    throw new java.security.cert.CertificateException(
+                            "Certificate issuer does not match next certificate at index " + i);
+                }
+                certificate.verify(issuer.getPublicKey());
+            } else if (certificate.getSubjectX500Principal().equals(
+                    certificate.getIssuerX500Principal())) {
+                certificate.verify(certificate.getPublicKey());
+            }
         }
     }
 
@@ -394,6 +450,9 @@ public class KeyBoxManager {
     }
 
     private byte[] parsePemContent(String pem) {
+        if (pem == null || pem.trim().isEmpty()) {
+            throw new IllegalArgumentException("Missing PEM data");
+        }
         String base64 = pem
             .replaceAll("-----BEGIN [^-]+-----", "")
             .replaceAll("-----END [^-]+-----", "")
