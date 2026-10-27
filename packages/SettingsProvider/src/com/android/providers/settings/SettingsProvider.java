@@ -934,7 +934,7 @@ public class SettingsProvider extends ContentProvider {
             // Check whether the uri is ringtone cache uri for a specific PhoneAccountHandle,
             // which should be in the form of "content://settings/system/ringtone2_cache_xxxx".
             cacheRingtoneSetting = uri.getPathSegments().get(1)
-                    .replace(Settings.System.RINGTONE2_CACHE, Settings.System.RINGTONE);
+                    .replace(Settings.System.RINGTONE2_CACHE, Settings.System.RINGTONE2);
         } else if (Settings.System.NOTIFICATION_SOUND_CACHE_URI.equals(uri)) {
             cacheRingtoneSetting = Settings.System.NOTIFICATION_SOUND;
         } else if (Settings.System.ALARM_ALERT_CACHE_URI.equals(uri)) {
