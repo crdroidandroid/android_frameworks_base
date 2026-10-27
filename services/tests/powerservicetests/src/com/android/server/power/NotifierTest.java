@@ -51,6 +51,7 @@ import android.app.AppOpsManager;
 import android.app.IActivityManager;
 import android.app.IUidObserver;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.hardware.SensorManager;
 import android.hardware.display.AmbientDisplayConfiguration;
@@ -73,6 +74,7 @@ import android.platform.test.annotations.DisableFlags;
 import android.platform.test.annotations.EnableFlags;
 import android.platform.test.flag.junit.SetFlagsRule;
 import android.provider.Settings;
+import android.telephony.TelephonyManager;
 import android.testing.TestableContext;
 import android.util.SparseArray;
 import android.util.SparseBooleanArray;
@@ -145,6 +147,8 @@ public class NotifierTest {
     @Mock private WakeLockLog mWakeLockLog;
     @Mock private WakelockTracer mWakelockTracer;
     @Mock private WakelockMapper mWakelockMapper;
+    @Mock private PackageManager mPackageManager;
+    @Mock private TelephonyManager mTelephonyManager;
 
     @Mock private IBatteryStats mBatteryStats;
 
@@ -1529,6 +1533,21 @@ public class NotifierTest {
         verifyNoInteractions(mLogger);
     }
 
+    @Test
+    public void testOnUserActivity_telephony(@TestParameter boolean hasTelephony) {
+        when(mContextSpy.getPackageManager()).thenReturn(mPackageManager);
+        when(mPackageManager.hasSystemFeature(PackageManager.FEATURE_TELEPHONY))
+                .thenReturn(hasTelephony);
+        when(mContextSpy.getSystemService(TelephonyManager.class)).thenReturn(mTelephonyManager);
+        createNotifier();
+
+        mNotifier.onUserActivity(Display.DEFAULT_DISPLAY_GROUP,
+                PowerManager.USER_ACTIVITY_EVENT_TOUCH, UID);
+        mTestLooper.dispatchAll();
+
+        verify(mTelephonyManager, times(hasTelephony ? 1 : 0)).notifyUserActivity();
+    }
+
     private final PowerManagerService.Injector mInjector = new PowerManagerService.Injector() {
         @Override
         Notifier createNotifier(Looper looper, Context context, IBatteryStats batteryStats,
@@ -1652,8 +1671,8 @@ public class NotifierTest {
                 mBatteryStats,
                 mInjector.createSuspendBlocker(mService, "testBlocker"),
                 mPolicy,
-                null,
-                null,
+                mock(FaceDownDetector.class),
+                mock(ScreenUndimDetector.class),
                 mTestExecutor, mPowerManagerFlags, injector, mWakelockMapper);
     }
 
