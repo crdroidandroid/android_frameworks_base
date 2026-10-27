@@ -40,8 +40,8 @@
     <color name="notification_scrim_base">@android:color/system_accent1_200</color>
 
     <!-- Fallback colors for notification shade/scrim -->
-    <color name="shade_panel_fallback">@android:color/system_accent2_200</color>
-    <color name="notification_scrim_fallback">@android:color/system_surface_dim_light</color>
+    <color name="shade_panel_fallback">@android:color/system_surface_container_light</color>
+    <color name="notification_scrim_fallback">@android:color/system_surface_container_high_light</color>
 
     <!-- The color of the background in the separated list of the Global Actions menu -->
     <color name="global_actions_separated_background">#F5F5F5</color>

@@ -130,8 +130,8 @@
     <color name="notification_scrim_base">@android:color/system_accent1_600</color>
 
     <!-- Dark theme fallback colors for notification shade/scrim -->
-    <color name="shade_panel_fallback">@android:color/system_accent2_800</color>
-    <color name="notification_scrim_fallback">@android:color/system_surface_dim_dark</color>
+    <color name="shade_panel_fallback">@android:color/system_surface_container_dark</color>
+    <color name="notification_scrim_fallback">@android:color/system_surface_container_high_dark</color>
 
     <!-- Keyboard shortcut helper dialog -->
     <color name="ksh_key_item_color">@*android:color/system_on_surface_variant_dark</color>
