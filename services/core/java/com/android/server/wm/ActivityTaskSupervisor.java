@@ -820,6 +820,12 @@ public class ActivityTaskSupervisor implements RecentTasks.Callbacks {
         }
 
         final Task task = r.getTask();
+        if (task == null) {
+            // The record was detached from its task while the pause was in flight (e.g. the
+            // task was removed or the activity finished), so there is nothing left to start.
+            Slog.w(TAG, "realStartActivityLocked: " + r + " is no longer attached to a task");
+            return false;
+        }
         if (andResume) {
             // Try pausing the existing resumed activity in the Task if any.
             if (task.pauseActivityIfNeeded(r, "realStart")) {
