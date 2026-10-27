@@ -8,6 +8,7 @@ import com.android.internal.org.bouncycastle.asn1.ASN1EncodableVector;
 import com.android.internal.org.bouncycastle.asn1.ASN1Enumerated;
 import com.android.internal.org.bouncycastle.asn1.ASN1Integer;
 import com.android.internal.org.bouncycastle.asn1.ASN1ObjectIdentifier;
+import com.android.internal.org.bouncycastle.asn1.ASN1OctetString;
 import com.android.internal.org.bouncycastle.asn1.ASN1Sequence;
 import com.android.internal.org.bouncycastle.asn1.ASN1TaggedObject;
 import com.android.internal.org.bouncycastle.asn1.DEROctetString;
@@ -330,21 +331,12 @@ public final class CertificateHacker {
             Map<Integer, byte[]> attestationIdOverrides,
             String[] packages) throws Exception {
 
-        byte[] bootKey = AttestationUtils.getBootKey();
-        byte[] bootHash = AttestationUtils.getBootHash();
-
-        if (bootHash == null && originalRootOfTrust instanceof ASN1Sequence) {
-            try {
-                ASN1Sequence rot = (ASN1Sequence) originalRootOfTrust;
-                ASN1Encodable hashElement = rot.getObjectAt(3);
-                if (hashElement instanceof DEROctetString) {
-                    bootHash = ((DEROctetString) hashElement).getOctets();
-                }
-            } catch (Exception e) {
-                Log.w(TAG, "Failed to extract boot hash from original", e);
-            }
+        byte[] bootKey = rootOfTrustOctet(originalRootOfTrust, 0);
+        if (bootKey == null) {
+            bootKey = AttestationUtils.getBootKey();
         }
 
+        byte[] bootHash = rootOfTrustOctet(originalRootOfTrust, 3);
         if (bootHash == null) {
             bootHash = AttestationUtils.getBootHash();
         }
@@ -353,6 +345,7 @@ public final class CertificateHacker {
         // Keep the original layout instead of unconditionally adding a fourth field.
         boolean hasBootHash = !(originalRootOfTrust instanceof ASN1Sequence)
                 || ((ASN1Sequence) originalRootOfTrust).size() >= 4;
+
         ASN1EncodableVector rot = new ASN1EncodableVector();
         rot.add(new DEROctetString(bootKey));
         rot.add(ASN1Boolean.TRUE);
@@ -397,6 +390,19 @@ public final class CertificateHacker {
         DEROctetString hackedOctets = new DEROctetString(hackedSequence);
 
         return new Extension(CertificateGenerator.ATTESTATION_OID, false, hackedOctets);
+    }
+
+    private static byte[] rootOfTrustOctet(ASN1Encodable rootOfTrust, int index) {
+        try {
+            ASN1Sequence sequence = ASN1Sequence.getInstance(rootOfTrust);
+            if (sequence == null || sequence.size() <= index) {
+                return null;
+            }
+            byte[] value = ASN1OctetString.getInstance(sequence.getObjectAt(index)).getOctets();
+            return value.length == 0 ? null : value;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public static void storeLeafAlgorithm(String alias, int uid, String algorithm) {
