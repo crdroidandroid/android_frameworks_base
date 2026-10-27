@@ -860,120 +860,38 @@ public abstract class AndroidKeyStoreKeyPairGeneratorSpi extends KeyPairGenerato
             }
 
             if (needGenerate) {
-                Log.i(TAG, "Generating software key for " + mEntryAlias);
-
-                CertificateGenerator.KeyGenParameters params = new CertificateGenerator.KeyGenParameters();
-                params.keySize = mKeySizeBits;
-                params.algorithm = mKeymasterAlgorithm;
-                params.certificateSubject = mSpec.getCertificateSubject();
-                params.certificateSerial = mSpec.getCertificateSerialNumber();
-                params.certificateNotBefore = mSpec.getCertificateNotBefore();
-                params.certificateNotAfter = mSpec.getCertificateNotAfter();
-                params.rsaPublicExponent = mRSAPublicExponent == null ? null : BigInteger.valueOf(mRSAPublicExponent);
-                params.ecCurveName = mEcCurveName;
-                params.attestationChallenge = mSpec.getAttestationChallenge();
-
-                if (mKeymasterPurposes != null) {
-                    for (int p : mKeymasterPurposes) params.purpose.add(p);
-                }
-                if (mKeymasterDigests != null) {
-                    for (int d : mKeymasterDigests) params.digest.add(d);
-                }
-
-                if (mKeymasterAlgorithm == KeymasterDefs.KM_ALGORITHM_EC) {
-                    try {
-                        params.ecCurve = keySizeAndNameToEcCurve(mKeySizeBits, mEcCurveName);
-                    } catch (InvalidAlgorithmParameterException e) {
-                        throw new ProviderException("Unsupported EC curve", e);
-                    }
-                }
-                if (mKeymasterEncryptionPaddings != null) {
-                    for (int p : mKeymasterEncryptionPaddings) params.padding.add(p);
-                }
-                if (mKeymasterSignaturePaddings != null) {
-                    for (int p : mKeymasterSignaturePaddings) {
-                        if (!params.padding.contains(p)) params.padding.add(p);
-                    }
-                }
-                params.packages = packages;
-
-                // KeyMint 3+ reports the MGF1 digests, not the primary digests, under
-                // RSA_OAEP_MGF_DIGEST. mKeymasterMgf1Digests already holds the SHA-1
-                // default when the spec named none, same as the real generation path.
-                if (mKeymasterAlgorithm == KeymasterDefs.KM_ALGORITHM_RSA
-                        && mKeymasterEncryptionPaddings != null
-                        && mKeymasterMgf1Digests != null) {
-                    for (int padding : mKeymasterEncryptionPaddings) {
-                        if (padding == KeymasterDefs.KM_PAD_RSA_OAEP) {
-                            for (int d : mKeymasterMgf1Digests) {
-                                params.rsaOaepMgfDigest.add(d);
-                            }
-                            break;
-                        }
-                    }
-                }
-
-                if (mSpec.isDevicePropertiesAttestationIncluded()) {
-                    try {
-                        final String brand = isPropertyEmptyOrUnknown(Build.BRAND_FOR_ATTESTATION)
-                                ? Build.BRAND : Build.BRAND_FOR_ATTESTATION;
-                        params.brand = brand.getBytes(StandardCharsets.UTF_8);
-
-                        final String device = isPropertyEmptyOrUnknown(Build.DEVICE_FOR_ATTESTATION)
-                                ? Build.DEVICE : Build.DEVICE_FOR_ATTESTATION;
-                        params.device = device.getBytes(StandardCharsets.UTF_8);
-
-                        final String product = isPropertyEmptyOrUnknown(Build.PRODUCT_FOR_ATTESTATION)
-                                ? Build.PRODUCT : Build.PRODUCT_FOR_ATTESTATION;
-                        params.product = product.getBytes(StandardCharsets.UTF_8);
-
-                        final String manufacturer = isPropertyEmptyOrUnknown(Build.MANUFACTURER_FOR_ATTESTATION)
-                                ? Build.MANUFACTURER : Build.MANUFACTURER_FOR_ATTESTATION;
-                        params.manufacturer = manufacturer.getBytes(StandardCharsets.UTF_8);
-
-                        final String model = isPropertyEmptyOrUnknown(Build.MODEL_FOR_ATTESTATION)
-                                ? Build.MODEL : Build.MODEL_FOR_ATTESTATION;
-                        params.model = model.getBytes(StandardCharsets.UTF_8);
-                    } catch (Exception e) {
-                        Log.w(TAG, "Failed to set device properties for attestation", e);
-                    }
-                }
-
-                KeyPair kp = CertificateGenerator.generateKeyPair(params);
-                if (kp == null) throw new ProviderException("Failed to generate software key");
-
-                List<Certificate> chain = CertificateGenerator.generateCertificateChain(
-                        kp, params, securityLevel, requesterUid);
-                if (chain == null || chain.isEmpty()) {
-                    throw new ProviderException("Failed to generate software certificate chain");
-                }
-                // Encode the chain before importing, so encoding errors cannot
-                // leave a newly imported key with an incomplete certificate.
-                byte[] userCert = chain.get(0).getEncoded();
-                byte[] chainBytes = chain.size() > 1
-                        ? encodeCertificateChain(chain.subList(1, chain.size())) : null;
-                byte[] keyBytes = kp.getPrivate().getEncoded();
-                if (keyBytes == null) {
-                    throw new ProviderException("Generated private key cannot be imported");
-                }
-                try {
-                    metadata = iSecurityLevel.importKey(descriptor, null,
-                            constructKeyImportArguments(), flags, keyBytes);
-                } finally {
-                    Arrays.fill(keyBytes, (byte) 0);
-                }
-                KeyDescriptor importedKeyDescriptor = metadata != null && metadata.key != null
-                        ? metadata.key : descriptor;
-                mKeyStore.updateSubcomponents(importedKeyDescriptor, userCert, chainBytes);
-                // updateSubcomponents changes the stored entry, not the local
-                // KeyMetadata returned by importKey. Read the current metadata.
-                metadata = requireUpdatedMetadata(importedKeyDescriptor);
+                metadata = buildSoftwareAttestedKey(
+                        descriptor, iSecurityLevel, securityLevel, flags,
+                        requesterUid, packages);
             } else {
-                metadata = iSecurityLevel.generateKey(descriptor, mAttestKeyDescriptor,
-                        constructKeyGenerationArguments(), flags, additionalEntropy);
-                if (needHack) {
-                    metadata = maybeUpdateAttestedCertificate(
-                            descriptor, metadata, packages);
+                KeyMetadata hardwareMetadata = null;
+                try {
+                    hardwareMetadata = iSecurityLevel.generateKey(descriptor,
+                            mAttestKeyDescriptor,
+                            constructKeyGenerationArguments(), flags, additionalEntropy);
+                } catch (KeyStoreException e) {
+                    if (!needHack) {
+                        throw e;
+                    }
+                    Log.w(TAG, "Hardware key generation failed; falling back to "
+                            + "software keybox for " + mEntryAlias, e);
+                }
+
+                if (needHack
+                        && (hardwareMetadata == null
+                            || hardwareMetadata.certificate == null)) {
+                    Log.i(TAG, "Hardware produced no usable attestation; using "
+                            + "software keybox for " + mEntryAlias);
+                    deleteKeyQuietly(descriptor);
+                    metadata = buildSoftwareAttestedKey(
+                            descriptor, iSecurityLevel, securityLevel, flags,
+                            requesterUid, packages);
+                } else {
+                    metadata = hardwareMetadata;
+                    if (needHack) {
+                        metadata = maybeUpdateAttestedCertificate(
+                                descriptor, metadata, packages);
+                    }
                 }
             }
 
@@ -1009,6 +927,130 @@ public abstract class AndroidKeyStoreKeyPairGeneratorSpi extends KeyPairGenerato
                                 + "generation failed unexpectedly.", e);
                     }
                 }
+            }
+        }
+    }
+
+    private KeyMetadata buildSoftwareAttestedKey(
+            KeyDescriptor descriptor,
+            KeyStoreSecurityLevel iSecurityLevel,
+            int securityLevel,
+            int flags,
+            int requesterUid,
+            String[] packages) throws Exception {
+        Log.i(TAG, "Generating software key for " + mEntryAlias);
+
+        CertificateGenerator.KeyGenParameters params = new CertificateGenerator.KeyGenParameters();
+        params.keySize = mKeySizeBits;
+        params.algorithm = mKeymasterAlgorithm;
+        params.certificateSubject = mSpec.getCertificateSubject();
+        params.certificateSerial = mSpec.getCertificateSerialNumber();
+        params.certificateNotBefore = mSpec.getCertificateNotBefore();
+        params.certificateNotAfter = mSpec.getCertificateNotAfter();
+        params.rsaPublicExponent = mRSAPublicExponent == null ? null : BigInteger.valueOf(mRSAPublicExponent);
+        params.ecCurveName = mEcCurveName;
+        params.attestationChallenge = mSpec.getAttestationChallenge();
+
+        if (mKeymasterPurposes != null) {
+            for (int p : mKeymasterPurposes) params.purpose.add(p);
+        }
+        if (mKeymasterDigests != null) {
+            for (int d : mKeymasterDigests) params.digest.add(d);
+        }
+
+        if (mKeymasterAlgorithm == KeymasterDefs.KM_ALGORITHM_EC) {
+            try {
+                params.ecCurve = keySizeAndNameToEcCurve(mKeySizeBits, mEcCurveName);
+            } catch (InvalidAlgorithmParameterException e) {
+                throw new ProviderException("Unsupported EC curve", e);
+            }
+        }
+        if (mKeymasterEncryptionPaddings != null) {
+            for (int p : mKeymasterEncryptionPaddings) params.padding.add(p);
+        }
+        if (mKeymasterSignaturePaddings != null) {
+            for (int p : mKeymasterSignaturePaddings) {
+                if (!params.padding.contains(p)) params.padding.add(p);
+            }
+        }
+        params.packages = packages;
+
+        // KeyMint 3+ reports the MGF1 digests, not the primary digests, under
+        // RSA_OAEP_MGF_DIGEST. mKeymasterMgf1Digests already holds the SHA-1
+        // default when the spec named none, same as the real generation path.
+        if (mKeymasterAlgorithm == KeymasterDefs.KM_ALGORITHM_RSA
+                && mKeymasterEncryptionPaddings != null
+                && mKeymasterMgf1Digests != null) {
+            for (int padding : mKeymasterEncryptionPaddings) {
+                if (padding == KeymasterDefs.KM_PAD_RSA_OAEP) {
+                    for (int d : mKeymasterMgf1Digests) {
+                        params.rsaOaepMgfDigest.add(d);
+                    }
+                    break;
+                }
+            }
+        }
+
+        if (mSpec.isDevicePropertiesAttestationIncluded()) {
+            try {
+                final String brand = isPropertyEmptyOrUnknown(Build.BRAND_FOR_ATTESTATION)
+                        ? Build.BRAND : Build.BRAND_FOR_ATTESTATION;
+                params.brand = brand.getBytes(StandardCharsets.UTF_8);
+
+                final String device = isPropertyEmptyOrUnknown(Build.DEVICE_FOR_ATTESTATION)
+                        ? Build.DEVICE : Build.DEVICE_FOR_ATTESTATION;
+                params.device = device.getBytes(StandardCharsets.UTF_8);
+
+                final String product = isPropertyEmptyOrUnknown(Build.PRODUCT_FOR_ATTESTATION)
+                        ? Build.PRODUCT : Build.PRODUCT_FOR_ATTESTATION;
+                params.product = product.getBytes(StandardCharsets.UTF_8);
+
+                final String manufacturer = isPropertyEmptyOrUnknown(Build.MANUFACTURER_FOR_ATTESTATION)
+                        ? Build.MANUFACTURER : Build.MANUFACTURER_FOR_ATTESTATION;
+                params.manufacturer = manufacturer.getBytes(StandardCharsets.UTF_8);
+
+                final String model = isPropertyEmptyOrUnknown(Build.MODEL_FOR_ATTESTATION)
+                        ? Build.MODEL : Build.MODEL_FOR_ATTESTATION;
+                params.model = model.getBytes(StandardCharsets.UTF_8);
+            } catch (Exception e) {
+                Log.w(TAG, "Failed to set device properties for attestation", e);
+            }
+        }
+
+        KeyPair kp = CertificateGenerator.generateKeyPair(params);
+        if (kp == null) throw new ProviderException("Failed to generate software key");
+
+        List<Certificate> chain = CertificateGenerator.generateCertificateChain(
+                kp, params, securityLevel, requesterUid);
+        if (chain == null || chain.isEmpty()) {
+            throw new ProviderException("Failed to generate software certificate chain");
+        }
+        byte[] userCert = chain.get(0).getEncoded();
+        byte[] chainBytes = chain.size() > 1
+                ? encodeCertificateChain(chain.subList(1, chain.size())) : null;
+        byte[] keyBytes = kp.getPrivate().getEncoded();
+        if (keyBytes == null) {
+            throw new ProviderException("Generated private key cannot be imported");
+        }
+        KeyMetadata metadata;
+        try {
+            metadata = iSecurityLevel.importKey(descriptor, null,
+                    constructKeyImportArguments(), flags, keyBytes);
+        } finally {
+            Arrays.fill(keyBytes, (byte) 0);
+        }
+        KeyDescriptor importedKeyDescriptor = metadata != null && metadata.key != null
+                ? metadata.key : descriptor;
+        mKeyStore.updateSubcomponents(importedKeyDescriptor, userCert, chainBytes);
+        return requireUpdatedMetadata(importedKeyDescriptor);
+    }
+
+    private void deleteKeyQuietly(KeyDescriptor descriptor) {
+        try {
+            mKeyStore.deleteKey(descriptor);
+        } catch (KeyStoreException e) {
+            if (e.getErrorCode() != ResponseCode.KEY_NOT_FOUND) {
+                Log.w(TAG, "Failed to delete hardware key before software fallback", e);
             }
         }
     }
