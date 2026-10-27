@@ -971,14 +971,22 @@ public class Typeface {
          */
         public @NonNull Typeface build() {
             final int userFallbackSize = mFamilies.size();
+            final int weight = mStyle == null ? 400 : mStyle.getWeight();
+            final int italic =
+                    (mStyle == null || mStyle.getSlant() == FontStyle.FONT_SLANT_UPRIGHT) ?  0 : 1;
+            final Font firstFont = mFamilies.get(0).getSize() > 0
+                    ? mFamilies.get(0).getFont(0) : null;
+            final Typeface override =
+                    FontController.getBundledFontOverride(firstFont, weight, italic == 1);
+            if (override != null) {
+                return override;
+            }
+
             final Typeface fallbackTypeface = getSystemDefaultTypeface(mFallbackName);
             final long[] ptrArray = new long[userFallbackSize];
             for (int i = 0; i < userFallbackSize; ++i) {
                 ptrArray[i] = mFamilies.get(i).getNativePtr();
             }
-            final int weight = mStyle == null ? 400 : mStyle.getWeight();
-            final int italic =
-                    (mStyle == null || mStyle.getSlant() == FontStyle.FONT_SLANT_UPRIGHT) ?  0 : 1;
             return new Typeface(nativeCreateFromArray(
                     ptrArray, fallbackTypeface.getNativeInstance(), weight, italic), null);
         }
@@ -1669,6 +1677,60 @@ public class Typeface {
                 Arrays.asList(
                         tf, tfBold, tfItalic, tfItalicBold),
                 Arrays.asList(tf, Typeface.SERIF, Typeface.MONOSPACE));
+
+        if (FontController.isDefaultFont(fontFamily)) {
+            retargetStaticDefaults(null, null);
+        } else {
+            retargetStaticDefaults(tf, tfBold);
+        }
+    }
+
+    private static Typeface sOriginalDefault;
+    private static Typeface sOriginalDefaultBold;
+
+    @Nullable
+    private static Typeface resolveConcrete(@Nullable Typeface t) {
+        while (t != null && t.mPendingTypeface != null) {
+            final Typeface next = t.mPendingTypeface.get();
+            if (next == null || next == t) {
+                return null;
+            }
+            t = next;
+        }
+        return t;
+    }
+
+    private void retargetPendingTypeface(@Nullable Typeface target) {
+        if (mPendingTypeface == null) {
+            return;
+        }
+        final Typeface concrete = resolveConcrete(target);
+        // Never point a placeholder at itself or at another placeholder (would loop in
+        // getNativeInstance()).
+        if (concrete == null || concrete == this || concrete.mPendingTypeface != null) {
+            return;
+        }
+        mPendingTypeface.set(concrete);
+    }
+
+    private static void retargetStaticDefaults(@Nullable Typeface regular,
+            @Nullable Typeface bold) {
+        synchronized (SYSTEM_FONT_MAP_LOCK) {
+            if (sOriginalDefault == null) {
+                sOriginalDefault = resolveConcrete(DEFAULT);
+                sOriginalDefaultBold = resolveConcrete(DEFAULT_BOLD);
+            }
+            final Typeface newRegular = regular != null ? regular : sOriginalDefault;
+            final Typeface newBold = bold != null ? bold : sOriginalDefaultBold;
+            if (newRegular == null || newBold == null) {
+                return;
+            }
+            DEFAULT.retargetPendingTypeface(newRegular);
+            if (SANS_SERIF != DEFAULT) {
+                SANS_SERIF.retargetPendingTypeface(newRegular);
+            }
+            DEFAULT_BOLD.retargetPendingTypeface(newBold);
+        }
     }
 
     /** @hide */
