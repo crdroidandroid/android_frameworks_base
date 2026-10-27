@@ -39,6 +39,7 @@ import android.util.Slog;
 
 import androidx.annotation.VisibleForTesting;
 
+import com.android.internal.util.android.FontController;
 import com.android.text.flags.Flags;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -55,7 +56,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
@@ -502,6 +502,15 @@ final class UpdatableFontDir {
         return null;
     }
 
+    private boolean hasActiveCustomFont(PersistentSystemFontConfig.Config config) {
+        for (FontUpdateRequest.Family family : config.fontFamilies) {
+            if (isCustomFontFamily(family)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private boolean isCustomFontFamily(FontUpdateRequest.Family family) {
         if (!CUSTOM_FONT_FAMILY_NAME.equals(family.getName()) || family.getFonts().isEmpty()) {
             return false;
@@ -602,6 +611,9 @@ final class UpdatableFontDir {
         }
         FontConfig preinstalledFontConfig = mConfigSupplier.apply(Collections.emptyMap());
         int maxCount = getMaxPrioritizedUnnamedFamilyCount(preinstalledFontConfig);
+        if (hasActiveCustomFont(curConfig)) {
+            maxCount = Math.max(maxCount - 1, 0);
+        }
         if (curConfig.prioritizedFamilyList.size() + fallbackRequests.size() > maxCount) {
             throw new SystemFontException(FontManager.RESULT_ERROR_INVALID_ARGUMENT,
                     "Too many fallback font update requests: " + fallbackRequests.size()
@@ -1137,7 +1149,7 @@ final class UpdatableFontDir {
             // own font. Its name matches the "google-sans" UI prefix, so it is excluded here.
             final String clockFamily = getClockFontFamilyName();
             for (FontConfig.NamedFamilyList baseFamily : config.getNamedFamilyLists()) {
-                if (!isUiFontFamilyName(baseFamily.getName())
+                if (!FontController.isOverridableFamily(baseFamily.getName())
                         || isSameFamilyName(baseFamily.getName(), clockFamily)) {
                     continue;
                 }
@@ -1165,6 +1177,11 @@ final class UpdatableFontDir {
 
         if (customFontFamily != null && !customFontApplied) {
             mergedFamilies.add(customFontFamily);
+        }
+
+        if (customFontFamily != null && !customFontFamily.getFamilies().isEmpty()) {
+            mergedFamilies.add(new FontConfig.NamedFamilyList(customFontFamily.getFamilies(),
+                    FontController.CUSTOM_FONT_MARKER_FAMILY, null));
         }
 
         // If config_clockFontFamily is an alias of a UI family, the alias would now resolve to
@@ -1206,6 +1223,9 @@ final class UpdatableFontDir {
             }
 
             int maxCount = getMaxPrioritizedUnnamedFamilyCount(config);
+            if (customFontApplied) {
+                maxCount = Math.max(maxCount - 1, 0);
+            }
             if (prioritizedUnnamedFamilies.size() > maxCount) {
                 Slog.w(TAG, "Too many prioritized unnamed families: "
                         + prioritizedUnnamedFamilies.size()
@@ -1231,25 +1251,6 @@ final class UpdatableFontDir {
         return new FontConfig(
                 config.getFontFamilies(), config.getAliases(), mergedFamilies,
                 config.getLocaleFallbackCustomizations(), mLastModifiedMillis, mConfigVersion);
-    }
-
-    @VisibleForTesting
-    static boolean isUiFontFamilyName(@Nullable String familyName) {
-        if (familyName == null) {
-            return false;
-        }
-        String normalized = familyName.toLowerCase(Locale.ROOT);
-        // Clock faces (google-sans-flex-clock, google-sans-clock, ...) are display fonts the
-        // lock screen picks deliberately; replacing them with the custom font is unwanted.
-        if (normalized.contains("clock")) {
-            return false;
-        }
-        return normalized.startsWith("sans-serif")
-                || normalized.startsWith("google-sans")
-                || normalized.startsWith("variable-")
-                || normalized.equals("roboto")
-                || normalized.equals("roboto-flex")
-                || normalized.startsWith("source-sans-pro");
     }
 
     /**
@@ -1300,7 +1301,7 @@ final class UpdatableFontDir {
                 break;
             }
         }
-        if (original == null || !isUiFontFamilyName(original)) {
+        if (original == null || !FontController.isOverridableFamily(original)) {
             return null;
         }
         for (FontConfig.NamedFamilyList family : config.getNamedFamilyLists()) {

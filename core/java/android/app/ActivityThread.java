@@ -7314,7 +7314,10 @@ public final class ActivityThread extends ClientTransactionHandler
         mConfigurationController.handleConfigurationChanged(config);
         updateDeviceIdForNonUIContexts(deviceId);
 
-        FontController.OnConfigurationChanged(getApplication().getResources());
+        final Application currentApp = getApplication();
+        if (currentApp != null) {
+            FontController.OnConfigurationChanged(currentApp.getResources());
+        }
 
         // These are only done to maintain @UnsupportedAppUsage and should be removed someday.
         mCurDefaultDisplayDpi = mConfigurationController.getCurDefaultDisplayDpi();
@@ -7465,6 +7468,7 @@ public final class ActivityThread extends ClientTransactionHandler
 
         if (app != null) {
             updateVariableFontFamilies(app);
+            FontController.OnConfigurationChanged(app.getResources());
         }
     }
 
