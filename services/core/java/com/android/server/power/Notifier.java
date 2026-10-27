@@ -30,6 +30,7 @@ import android.app.trust.TrustManager;
 import android.content.Context;
 import android.content.IIntentReceiver;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.hardware.display.DisplayManagerInternal;
 import android.media.AudioManager;
 import android.media.Ringtone;
@@ -161,6 +162,7 @@ public class Notifier {
     @Nullable private final StatusBarManagerInternal mStatusBarManagerInternal;
     private final TrustManager mTrustManager;
     private final Vibrator mVibrator;
+    @Nullable private final TelephonyManager mTelephonyManager;
     @NonNull private final WakeLockLog mPartialWakeLockLog;
     @NonNull private final WakeLockLog mFullWakeLockLog;
     @Nullable private final WakelockTracer mWakelockTracer;
@@ -355,6 +357,9 @@ public class Notifier {
         mDisplayManagerInternal = LocalServices.getService(DisplayManagerInternal.class);
         mTrustManager = mContext.getSystemService(TrustManager.class);
         mVibrator = mContext.getSystemService(Vibrator.class);
+        mTelephonyManager = mContext.getPackageManager().hasSystemFeature(
+                PackageManager.FEATURE_TELEPHONY)
+                ? mContext.getSystemService(TelephonyManager.class) : null;
         mWakefulnessSessionObserver = new WakefulnessSessionObserver(mContext, null);
         mWakelockMapper = wakelockMapper;
 
@@ -1171,8 +1176,9 @@ public class Notifier {
             }
             mUserActivityPending = false;
         }
-        TelephonyManager tm = mContext.getSystemService(TelephonyManager.class);
-        tm.notifyUserActivity();
+        if (mTelephonyManager != null) {
+            mTelephonyManager.notifyUserActivity();
+        }
         mInputManagerInternal.notifyUserActivity();
         mPolicy.userActivity(displayGroupId, event);
         mFaceDownDetector.userActivity(event);
