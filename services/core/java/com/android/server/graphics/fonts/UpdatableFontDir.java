@@ -36,6 +36,8 @@ import android.util.AtomicFile;
 import android.util.Base64;
 import android.util.Slog;
 
+import com.android.internal.util.android.FontController;
+
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.File;
@@ -803,7 +805,7 @@ final class UpdatableFontDir {
             // own font. Its name matches the "google-sans" UI prefix, so it is excluded here.
             final String clockFamily = getClockFontFamilyName();
             for (FontConfig.NamedFamilyList baseFamily : config.getNamedFamilyLists()) {
-                if (!isUiFontFamilyName(baseFamily.getName())
+                if (!FontController.isOverridableFamily(baseFamily.getName())
                         || isSameFamilyName(baseFamily.getName(), clockFamily)) {
                     continue;
                 }
@@ -833,6 +835,11 @@ final class UpdatableFontDir {
             mergedFamilies.add(customFontFamily);
         }
 
+        if (customFontFamily != null && !customFontFamily.getFamilies().isEmpty()) {
+            mergedFamilies.add(new FontConfig.NamedFamilyList(customFontFamily.getFamilies(),
+                    FontController.CUSTOM_FONT_MARKER_FAMILY, null));
+        }
+
         // If config_clockFontFamily is an alias of a UI family, the alias would now resolve to
         // the custom font. Pin it to an untouched copy of the original family instead: named
         // families take precedence over aliases with the same name when Typefaces are built.
@@ -847,24 +854,6 @@ final class UpdatableFontDir {
         return new FontConfig(
                 config.getFontFamilies(), config.getAliases(), mergedFamilies,
                 config.getLocaleFallbackCustomizations(), mLastModifiedMillis, mConfigVersion);
-    }
-
-    static boolean isUiFontFamilyName(@Nullable String familyName) {
-        if (familyName == null) {
-            return false;
-        }
-        String normalized = familyName.toLowerCase(Locale.ROOT);
-        // Clock faces (google-sans-flex-clock, google-sans-clock, ...) are display fonts the
-        // lock screen picks deliberately; replacing them with the custom font is unwanted.
-        if (normalized.contains("clock")) {
-            return false;
-        }
-        return normalized.startsWith("sans-serif")
-                || normalized.startsWith("google-sans")
-                || normalized.startsWith("variable-")
-                || normalized.equals("roboto")
-                || normalized.equals("roboto-flex")
-                || normalized.startsWith("source-sans-pro");
     }
 
     /**
@@ -915,7 +904,7 @@ final class UpdatableFontDir {
                 break;
             }
         }
-        if (original == null || !isUiFontFamilyName(original)) {
+        if (original == null || !FontController.isOverridableFamily(original)) {
             return null;
         }
         for (FontConfig.NamedFamilyList family : config.getNamedFamilyLists()) {
