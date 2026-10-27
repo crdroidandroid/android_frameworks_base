@@ -14,18 +14,23 @@
  */
 package com.android.internal.util.android;
 
+import android.annotation.Nullable;
 import android.app.ActivityThread;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Typeface;
+import android.graphics.fonts.Font;
+import android.graphics.fonts.FontFileUtil;
 import android.os.SystemProperties;
 import android.util.ArrayMap;
 import android.util.Log;
 import android.text.TextUtils;
 import com.android.internal.R;
 
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.Set;
@@ -34,7 +39,7 @@ public class FontController {
 
     private static final String TAG = "FontController";
 
-    private static FontController sInstance = null;
+    private static final FontController sInstance = new FontController();
 
     private volatile Resources sResources = null;
 
@@ -42,31 +47,50 @@ public class FontController {
 
     private static final String DEFAULT_FONT_ROOT = "google-sans-flex";
 
+    public static final String CUSTOM_FONT_MARKER_FAMILY = "user-custom-font";
+
+    private static final String[] BUNDLED_UI_FONT_PREFIXES = {
+            "googlesans",
+            "productsans",
+            "sourcesans",
+            "roboto"
+    };
+
+    private static final String[] BUNDLED_UI_FONT_EXCLUDES = {
+            "mono",
+            "code",
+            "clock",
+            "slab",
+            "serif",
+            "condensed"
+    };
+
     private static final String[] DEFAULT_FONT_FALLBACKS = {
             "google-sans-flex",
             "google-sans",
             "sans-serif"
     };
 
-    private static final Set<String> OVERRIDE_FONTS = new HashSet<>(Arrays.asList(
-            "google", "sans-serif", "gsf-", "variable"
-    ));
+    private static final String[] OVERRIDE_FAMILY_PREFIXES = {
+            "sans-serif",
+            "google-sans",
+            "gsf-",
+            "variable-",
+            "roboto",
+            "source-sans-pro"
+    };
 
-    private static final Set<String> SYS_OVERRIDE_FONTS = new HashSet<>(Arrays.asList(
-            "serif", "monospace"
-    ));
+    private static final String[] OVERRIDE_FAMILY_EXCLUDES = {
+            "clock",
+            "mono",
+            "condensed",
+            "smallcaps"
+    };
 
     private static final Set<String> EXCLUDED_APPS = new HashSet<>(Arrays.asList(
             "it.subito",
             "tv.arte.plus7",
             "com.google.android.gm"
-    ));
-
-    private static final Set<String> SYS_OVERRIDE_APPS = new HashSet<>(Arrays.asList(
-            "com.android.settings",
-            "com.android.systemui",
-            "com.android.launcher3",
-            "android"
     ));
 
     private static final Map<String, Integer> WEIGHT_MAP = new ArrayMap<>();
@@ -116,9 +140,6 @@ public class FontController {
     }
 
     public static FontController get() {
-        if (sInstance == null) {
-            sInstance = new FontController();
-        }
         return sInstance;
     }
 
@@ -139,13 +160,10 @@ public class FontController {
     private String getCurrentFont() {
         if (sResources == null) return sFontFamily;
         try {
-            int configId = sResources.getIdentifier("config_bodyFontFamily", "string", "android");
-            if (configId != 0) {
-                String currFont = sResources.getString(configId);
-                if (!TextUtils.equals(sFontFamily, currFont)) {
-                    sFontFamily = currFont;
-                    logger("Font changed to: " + sFontFamily);
-                }
+            String currFont = sResources.getString(R.string.config_bodyFontFamily);
+            if (!TextUtils.isEmpty(currFont) && !TextUtils.equals(sFontFamily, currFont)) {
+                sFontFamily = currFont;
+                logger("Font changed to: " + sFontFamily);
             }
         } catch (Exception e) {
             logger("getCurrentFont failed: " + e.getMessage());
@@ -156,13 +174,11 @@ public class FontController {
     private Typeface getOverrideTypefaceInternal(String fontToOverride) {
         if (fontToOverride == null) return null;
 
-        String pkgName = getCurrentPackageName();
+        final String pkgName = getCurrentPackageName();
 
         if (pkgName == null) return null;
 
-        final boolean isSysPkg = SYS_OVERRIDE_APPS.contains(pkgName);
-
-        if (pkgName != null && EXCLUDED_APPS.contains(pkgName) && !isSysPkg) {
+        if (EXCLUDED_APPS.contains(pkgName)) {
             logger("Excluded app, skipping override: " + pkgName);
             return null;
         }
@@ -182,9 +198,7 @@ public class FontController {
             return null;
         }
 
-        boolean override = OVERRIDE_FONTS.stream().anyMatch(fontToOverride::contains)
-            || (isSysPkg && SYS_OVERRIDE_FONTS.stream().anyMatch(fontToOverride::contains));
-        if (!override) {
+        if (!isOverridableFamily(fontToOverride)) {
             logger("Not on override list, skipping override: " + fontToOverride);
             return null;
         }
@@ -192,6 +206,87 @@ public class FontController {
         int adjustment = getFontWeightAdjustment();
         Typeface resolvedBase = resolveDefaultTypeface();
         return TypefaceFactory.create(fontToOverride, resolvedBase, adjustment);
+    }
+
+    @Nullable
+    public static Typeface getBundledFontOverride(@Nullable Font font, int weight,
+            boolean italic) {
+        if (font == null) return null;
+        try {
+            return get().getBundledFontOverrideInternal(font, weight, italic);
+        } catch (Throwable t) {
+            // Never break typeface creation for an app.
+            logger("getBundledFontOverride failed: " + t);
+            return null;
+        }
+    }
+
+    public static boolean hasCustomFont() {
+        return Typeface.getSystemTypeface(CUSTOM_FONT_MARKER_FAMILY) != null;
+    }
+
+    private Typeface getBundledFontOverrideInternal(Font font, int weight, boolean italic) {
+        if (ActivityThread.isSystem()) return null;
+        if (sResources == null || Typeface.getSystemFontMap().isEmpty()) return null;
+
+        final String pkgName = getCurrentPackageName();
+        if (pkgName == null) return null;
+        if (EXCLUDED_APPS.contains(pkgName)) return null;
+
+        final String currentFont = getCurrentFont();
+        if (isDefaultFont(currentFont) && !hasCustomFont()) return null;
+
+        final String psName = getPostScriptName(font);
+        if (!isBundledUiFont(psName)) return null;
+
+        final int clampedWeight = Math.max(1, Math.min(1000, weight));
+        if (!italic) {
+            Typeface named = TypefaceFactory.resolveNamedVariant(currentFont, clampedWeight, false);
+            if (named != null) {
+                logger("Bundled font " + psName + " -> named variant, weight=" + clampedWeight);
+                return named;
+            }
+        }
+        final Typeface base = resolveDefaultTypeface();
+        logger("Bundled font " + psName + " in " + pkgName + " -> " + currentFont
+                + ", weight=" + clampedWeight + ", italic=" + italic);
+        return Typeface.create(base, clampedWeight, italic);
+    }
+
+    @Nullable
+    private static String getPostScriptName(Font font) {
+        try {
+            ByteBuffer buffer = font.getBuffer();
+            if (buffer == null) return null;
+            return FontFileUtil.getPostScriptName(buffer, font.getTtcIndex());
+        } catch (Throwable t) {
+            return null;
+        }
+    }
+
+    public static boolean isBundledUiFont(@Nullable String psName) {
+        if (psName == null || TextUtils.isEmpty(psName)) return false;
+        final String normalized = psName.toLowerCase(Locale.ROOT)
+                .replace("-", "").replace("_", "").replace(" ", "");
+        for (String exclude : BUNDLED_UI_FONT_EXCLUDES) {
+            if (normalized.contains(exclude)) return false;
+        }
+        for (String prefix : BUNDLED_UI_FONT_PREFIXES) {
+            if (normalized.startsWith(prefix)) return true;
+        }
+        return false;
+    }
+
+    public static boolean isOverridableFamily(@Nullable String familyName) {
+        if (familyName == null || TextUtils.isEmpty(familyName)) return false;
+        final String name = familyName.toLowerCase(Locale.ROOT);
+        for (String exclude : OVERRIDE_FAMILY_EXCLUDES) {
+            if (name.contains(exclude)) return false;
+        }
+        for (String prefix : OVERRIDE_FAMILY_PREFIXES) {
+            if (name.startsWith(prefix)) return true;
+        }
+        return false;
     }
 
     public static Typeface resolveBaseTypeface() {
@@ -225,6 +320,7 @@ public class FontController {
     }
 
     private void handleOnConfiguration(Resources res) {
+        if (res == null) return;
         sResources = res;
         String pkgName = getCurrentPackageName();
         if (pkgName == null || EXCLUDED_APPS.contains(pkgName)) return;
