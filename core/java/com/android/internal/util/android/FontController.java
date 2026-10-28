@@ -16,7 +16,6 @@ package com.android.internal.util.android;
 
 import android.annotation.Nullable;
 import android.app.ActivityThread;
-import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.graphics.fonts.Font;
@@ -203,9 +202,7 @@ public class FontController {
             return null;
         }
 
-        int adjustment = getFontWeightAdjustment();
-        Typeface resolvedBase = resolveDefaultTypeface();
-        return TypefaceFactory.create(fontToOverride, resolvedBase, adjustment);
+        return TypefaceFactory.create(fontToOverride, resolveDefaultTypeface());
     }
 
     @Nullable
@@ -239,6 +236,7 @@ public class FontController {
         final String psName = getPostScriptName(font);
         if (!isBundledUiFont(psName)) return null;
 
+        // Keep the requested weight as is; fontWeightAdjustment is applied by the caller.
         final int clampedWeight = Math.max(1, Math.min(1000, weight));
         if (!italic) {
             Typeface named = TypefaceFactory.resolveNamedVariant(currentFont, clampedWeight, false);
@@ -265,7 +263,7 @@ public class FontController {
     }
 
     public static boolean isBundledUiFont(@Nullable String psName) {
-        if (psName == null || TextUtils.isEmpty(psName)) return false;
+        if (TextUtils.isEmpty(psName)) return false;
         final String normalized = psName.toLowerCase(Locale.ROOT)
                 .replace("-", "").replace("_", "").replace(" ", "");
         for (String exclude : BUNDLED_UI_FONT_EXCLUDES) {
@@ -278,7 +276,7 @@ public class FontController {
     }
 
     public static boolean isOverridableFamily(@Nullable String familyName) {
-        if (familyName == null || TextUtils.isEmpty(familyName)) return false;
+        if (TextUtils.isEmpty(familyName)) return false;
         final String name = familyName.toLowerCase(Locale.ROOT);
         for (String exclude : OVERRIDE_FAMILY_EXCLUDES) {
             if (name.contains(exclude)) return false;
@@ -300,17 +298,15 @@ public class FontController {
     private Typeface resolveDefaultTypeface() {
         // First try to resolve the currently active custom font directly
         String currentFont = getCurrentFont();
-        if (currentFont != null && !currentFont.isEmpty()) {
-            Typeface tf = Typeface.getSystemTypeface(currentFont);
-            if (tf != null) {
-                logger("resolveDefaultTypeface: resolved current font '" + currentFont + "'");
-                return tf;
-            }
+        Typeface installed = Typeface.getSystemTypeface(currentFont);
+        if (installed != null) {
+            logger("resolveDefaultTypeface: resolved current font '" + currentFont + "'");
+            return installed;
         }
-        // Fall back through known default font aliases
+        // Family-list ids such as google-sans-flex are not always map keys.
         for (String family : DEFAULT_FONT_FALLBACKS) {
-            Typeface tf = Typeface.getSystemDefaultTypeface(family);
-            if (tf != null && tf != Typeface.DEFAULT) {
+            Typeface tf = Typeface.getSystemTypeface(family);
+            if (tf != null) {
                 logger("resolveDefaultTypeface: resolved via fallback '" + family + "'");
                 return tf;
             }
@@ -337,18 +333,6 @@ public class FontController {
         }
     }
 
-    private int getFontWeightAdjustment() {
-        try {
-            Resources res = sResources;
-            if (res == null) return 0;
-            Configuration cfg = res.getConfiguration();
-            return cfg != null ? cfg.fontWeightAdjustment : 0;
-        } catch (Exception e) {
-            logger("getFontWeightAdjustment failed: " + e.getMessage());
-            return 0;
-        }
-    }
-
     private static void logger(String msg) {
         if (SystemProperties.getBoolean("persist.sys.ax_font_debug", false)) {
             Log.d(TAG, msg);
@@ -357,12 +341,8 @@ public class FontController {
 
     private static class TypefaceFactory {
 
-        public static Typeface create(String fontToOverride, Typeface base, int fontWeightAdjustment) {
+        public static Typeface create(String fontToOverride, Typeface base) {
             int weight = resolveWeightByName(fontToOverride);
-
-            if (fontWeightAdjustment != 0) {
-                weight = Math.min(1000, Math.max(100, weight + fontWeightAdjustment));
-            }
 
             boolean isItalic = fontToOverride.contains("italic");
             boolean isBold = weight >= 700;
@@ -392,7 +372,6 @@ public class FontController {
             logger("TypefaceFactory.create: fontToOverride=" + fontToOverride +
                    ", style=" + style +
                    ", weight=" + weight +
-                   ", adj=" + fontWeightAdjustment +
                    ", isItalic=" + isItalic +
                    ", success=" + (result != null));
 
