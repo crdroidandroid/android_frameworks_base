@@ -2204,6 +2204,16 @@ class UserController implements Handler.Callback {
                             autoStopUserInSecs, unlockListener));
                     t.traceEnd(); // updateStartedUserArrayStarting
                     return true;
+                } else if (uss.state == UserState.STATE_STOPPING) {
+                    // Cancel the stop while still holding mLock, so a pending
+                    // finishUserStopping() doesn't continue to shutdown while racing
+                    // continueStartUserInternal() on the handler thread.
+                    Slogf.i(TAG, "User #" + userId
+                            + " is stopping - aborting the stop process to start it");
+                    uss.setState(uss.lastState);
+                    updateStartedUserArrayLU();
+                    needStart = true;
+                    updateUmState = true;
                 }
             }
 
