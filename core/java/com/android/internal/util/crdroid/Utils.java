@@ -129,11 +129,16 @@ public class Utils {
     }
 
     public static void restartSystemUI() {
-        final IStatusBarService mBarService = IStatusBarService.Stub.asInterface(
+        final IStatusBarService barService = IStatusBarService.Stub.asInterface(
                 ServiceManager.getService(Context.STATUS_BAR_SERVICE));
+        if (barService == null) {
+            Log.w(TAG, "restartSystemUI: statusbar service not available");
+            return;
+        }
         try {
-            mBarService.restartSystemUI();
-        } catch (RemoteException e) {
+            barService.restartSystemUI();
+        } catch (RemoteException | RuntimeException e) {
+            Log.e(TAG, "restartSystemUI failed", e);
         }
     }
 
