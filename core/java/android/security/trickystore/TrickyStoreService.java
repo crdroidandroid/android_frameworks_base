@@ -347,14 +347,29 @@ public class TrickyStoreService {
         }
     }
 
+    /** Handle leading BOM and zero-width markers before identifying XML or base64. */
+    private static String stripLeadingKeyboxMarkers(String text) {
+        int index = 0;
+        while (index < text.length()) {
+            char ch = text.charAt(index);
+            if (!Character.isWhitespace(ch) && ch != '\uFEFF' && ch != '\u200B'
+                    && ch != '\u200C' && ch != '\u200D' && ch != '\u2060') {
+                break;
+            }
+            index++;
+        }
+        return text.substring(index).trim();
+    }
+
     private String decodeKeybox(String payload) {
-        String trimmed = payload.trim();
+        String trimmed = stripLeadingKeyboxMarkers(payload);
         if (trimmed.startsWith("<")) {
             return trimmed;
         }
         try {
             byte[] decoded = Base64.getDecoder().decode(trimmed);
-            String asXml = new String(decoded, StandardCharsets.UTF_8).trim();
+            String asXml = stripLeadingKeyboxMarkers(
+                    new String(decoded, StandardCharsets.UTF_8));
             if (asXml.startsWith("<")) {
                 return asXml;
             }
@@ -424,31 +439,74 @@ public class TrickyStoreService {
         flushPatchSection(next, currentPackage, system, vendor, boot, all);
     }
 
-    private static String resolvePatchTemplate(String value) {
+    // YYYY-MM[-DD], where each component may be a placeholder or a fixed number.
+    private static final java.util.regex.Pattern PATCH_TEMPLATE = java.util.regex.Pattern
+            .compile("^(YYYY|\\d{4})-(MM|\\d{2})(?:-(DD|\\d{2}))?$");
+
+    /** Resolve date placeholders using UTC; preserve fixed dates and invalid values. */
+    public static String resolvePatchTemplate(String value) {
         if (value == null) return null;
-        java.util.regex.Matcher m = java.util.regex.Pattern
-            .compile("^YYYY-MM-(\\d{2})$").matcher(value.trim());
-        if (!m.matches()) return value;
-        String day = m.group(1);
-        java.util.Calendar cal = java.util.Calendar.getInstance(
-            java.util.TimeZone.getTimeZone("UTC"));
-        return String.format(java.util.Locale.US, "%04d-%02d-%s",
-            cal.get(java.util.Calendar.YEAR),
-            cal.get(java.util.Calendar.MONTH) + 1,
-            day);
+        String trimmed = value.trim();
+        java.util.Calendar now = java.util.Calendar.getInstance(
+                java.util.TimeZone.getTimeZone("UTC"));
+        int currentYear = now.get(java.util.Calendar.YEAR);
+        int currentMonth = now.get(java.util.Calendar.MONTH) + 1;
+        int currentDay = now.get(java.util.Calendar.DAY_OF_MONTH);
+        if ("today".equalsIgnoreCase(trimmed)) {
+            return String.format(java.util.Locale.US, "%04d-%02d-%02d",
+                    currentYear, currentMonth, currentDay);
+        }
+        java.util.regex.Matcher matcher = PATCH_TEMPLATE.matcher(trimmed);
+        if (!matcher.matches()) return trimmed;
+        boolean yearPlaceholder = "YYYY".equals(matcher.group(1));
+        boolean monthPlaceholder = "MM".equals(matcher.group(2));
+        boolean dayPlaceholder = "DD".equals(matcher.group(3));
+        if (!yearPlaceholder && !monthPlaceholder && !dayPlaceholder) return trimmed;
+
+        int year = yearPlaceholder ? currentYear : Integer.parseInt(matcher.group(1));
+        int month = monthPlaceholder ? currentMonth : Integer.parseInt(matcher.group(2));
+        if (year < 1 || year > 9999 || month < 1 || month > 12) return trimmed;
+        if (matcher.group(3) == null) {
+            return String.format(java.util.Locale.US, "%04d-%02d", year, month);
+        }
+        int day = dayPlaceholder ? currentDay : Integer.parseInt(matcher.group(3));
+        // Preserve a valid day across month transitions. Only templated dates clamp.
+        int maxDay = java.time.YearMonth.of(year, month).lengthOfMonth();
+        if (day < 1) return trimmed;
+        day = Math.min(day, maxDay);
+        return String.format(java.util.Locale.US, "%04d-%02d-%02d", year, month, day);
+    }
+
+    /** Parse checks can be used by Settings without storing anything locally. */
+    public static boolean isValidPatchValue(String value) {
+        if (value == null) return false;
+        String trimmed = value.trim();
+        if ("no".equalsIgnoreCase(trimmed) || "prop".equalsIgnoreCase(trimmed)) return true;
+        return AttestationUtils.isValidPatchLevel(resolvePatchTemplate(trimmed));
+    }
+
+    /** Reject invalid patch input before publishing a complete configuration snapshot. */
+    private static String resolveValidatedPatchValue(String value, String field, String pkg) {
+        if (value == null) return null;
+        if (!isValidPatchValue(value)) {
+            throw new IllegalArgumentException("Invalid " + field + " patch level for "
+                    + (pkg == null ? "global configuration" : "package " + pkg)
+                    + ": " + value);
+        }
+        return resolvePatchTemplate(value);
     }
 
     private void flushPatchSection(PatchConfigBuilder next,
             String pkg, String system, String vendor, String boot, String all) {
         if (system == null && vendor == null && boot == null && all == null) return;
-        String resolvedAll    = resolvePatchTemplate(all);
-        String resolvedSystem = resolvePatchTemplate(system);
-        String resolvedVendor = resolvePatchTemplate(vendor);
-        String resolvedBoot   = resolvePatchTemplate(boot);
+        String resolvedAll = resolveValidatedPatchValue(all, "all", pkg);
+        String resolvedSystem = resolveValidatedPatchValue(system, "system", pkg);
+        String resolvedVendor = resolveValidatedPatchValue(vendor, "vendor", pkg);
+        String resolvedBoot = resolveValidatedPatchValue(boot, "boot", pkg);
         CustomPatchLevel level = new CustomPatchLevel(
             resolvedSystem != null ? resolvedSystem : resolvedAll,
             resolvedVendor != null ? resolvedVendor : resolvedAll,
-            resolvedBoot   != null ? resolvedBoot   : resolvedAll,
+            resolvedBoot != null ? resolvedBoot : resolvedAll,
             resolvedAll
         );
         if (pkg == null) {
