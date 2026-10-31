@@ -441,6 +441,18 @@ final class UiModeManagerService extends SystemService {
         }
     };
 
+    private final ContentObserver mBatterySaverDarkThemeObserver = new ContentObserver(mHandler) {
+        @Override
+        public void onChange(boolean selfChange, @NonNull Collection<Uri> uris, int flags,
+                @NonNull UserHandle user) {
+            synchronized (mLock) {
+                if (mSystemReady && mPowerSave && user.getIdentifier() == mCurrentUser) {
+                    updateLocked(0, 0);
+                }
+            }
+        }
+    };
+
     private final ContentObserver mForceInvertStateObserver = new ContentObserver(mHandler) {
         @Override
         public void onChange(boolean selfChange, Uri uri) {
@@ -591,6 +603,10 @@ final class UiModeManagerService extends SystemService {
                 context.getContentResolver()
                         .registerContentObserver(Secure.getUriFor(Secure.UI_NIGHT_MODE),
                                 false, mDarkThemeObserver, 0);
+                context.getContentResolver()
+                        .registerContentObserver(
+                                Secure.getUriFor(Secure.BATTERY_SAVER_DARK_THEME),
+                                false, mBatterySaverDarkThemeObserver, UserHandle.USER_ALL);
                 if (android.view.accessibility.Flags.forceInvertColor()) {
                     context.getContentResolver()
                             .registerContentObserver(
@@ -798,7 +814,7 @@ final class UiModeManagerService extends SystemService {
     }
 
     private void registerDeviceInactiveListenerLocked() {
-        if (mPowerSave) return;
+        if (isPowerSaveNightModeOverrideNeeded()) return;
         mWaitForDeviceInactive = true;
         final IntentFilter intentFilter =
                 new IntentFilter(Intent.ACTION_SCREEN_OFF);
@@ -2095,7 +2111,8 @@ final class UiModeManagerService extends SystemService {
         }
 
         mCurUiMode.set(uiMode);
-        if (!mHoldingConfiguration && (!mWaitForDeviceInactive || mPowerSave)) {
+        if (!mHoldingConfiguration
+                && (!mWaitForDeviceInactive || isPowerSaveNightModeOverrideNeeded())) {
             mConfiguration.uiMode = uiMode;
         }
     }
@@ -2104,7 +2121,12 @@ final class UiModeManagerService extends SystemService {
      * Override night mode in power save mode if not in car mode
      */
     private boolean isPowerSaveNightModeOverrideNeeded() {
-        return mPowerSave && !mCarModeEnabled && !mCar;
+        return mPowerSave && !mCarModeEnabled && !mCar && isBatterySaverDarkThemeEnabled();
+    }
+
+    private boolean isBatterySaverDarkThemeEnabled() {
+        return Secure.getIntForUser(getContext().getContentResolver(),
+                Secure.BATTERY_SAVER_DARK_THEME, 1, mCurrentUser) != 0;
     }
 
     @UiModeManager.NightMode
