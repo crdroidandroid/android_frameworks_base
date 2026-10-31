@@ -141,6 +141,9 @@ final class UiModeManagerService extends SystemService {
     // Enable launching of applications when entering the dock.
     private static final boolean ENABLE_LAUNCH_DESK_DOCK_APP = true;
     private static final String SYSTEM_PROPERTY_DEVICE_THEME = "persist.sys.theme";
+    // Whether battery saver should force dark theme. Defaults to enabled to preserve the
+    // legacy behavior; exposed as a user toggle in crDroid Settings.
+    private static final String SETTING_BATTERY_SAVER_DARK_THEME = "battery_saver_dark_theme";
     @VisibleForTesting
     public static final Set<Integer> SUPPORTED_NIGHT_MODE_CUSTOM_TYPES = new ArraySet(
             new Integer[]{MODE_NIGHT_CUSTOM_TYPE_SCHEDULE, MODE_NIGHT_CUSTOM_TYPE_BEDTIME});
@@ -441,6 +444,17 @@ final class UiModeManagerService extends SystemService {
         }
     };
 
+    private final ContentObserver mBatterySaverDarkThemeObserver = new ContentObserver(mHandler) {
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            synchronized (mLock) {
+                if (mSystemReady) {
+                    updateLocked(0, 0);
+                }
+            }
+        }
+    };
+
     private final ContentObserver mForceInvertStateObserver = new ContentObserver(mHandler) {
         @Override
         public void onChange(boolean selfChange, Uri uri) {
@@ -591,6 +605,10 @@ final class UiModeManagerService extends SystemService {
                 context.getContentResolver()
                         .registerContentObserver(Secure.getUriFor(Secure.UI_NIGHT_MODE),
                                 false, mDarkThemeObserver, 0);
+                context.getContentResolver()
+                        .registerContentObserver(
+                                Secure.getUriFor(SETTING_BATTERY_SAVER_DARK_THEME),
+                                false, mBatterySaverDarkThemeObserver, UserHandle.USER_ALL);
                 if (android.view.accessibility.Flags.forceInvertColor()) {
                     context.getContentResolver()
                             .registerContentObserver(
@@ -2104,7 +2122,9 @@ final class UiModeManagerService extends SystemService {
      * Override night mode in power save mode if not in car mode
      */
     private boolean isPowerSaveNightModeOverrideNeeded() {
-        return mPowerSave && !mCarModeEnabled && !mCar;
+        return mPowerSave && !mCarModeEnabled && !mCar
+                && Secure.getIntForUser(getContext().getContentResolver(),
+                        SETTING_BATTERY_SAVER_DARK_THEME, 1, mCurrentUser) != 0;
     }
 
     @UiModeManager.NightMode
