@@ -19,7 +19,11 @@ package com.android.systemui.qs.tiles.impl.uimodenight.domain.interactor
 import android.app.UiModeManager
 import android.content.Context
 import android.content.res.Configuration
+import android.database.ContentObserver
+import android.os.Handler
+import android.os.Looper
 import android.os.UserHandle
+import android.provider.Settings
 import com.android.systemui.qs.tiles.base.domain.interactor.QSTileDataInteractor
 import com.android.systemui.qs.tiles.base.domain.model.DataUpdateTrigger
 import com.android.systemui.qs.tiles.impl.uimodenight.domain.interactor.model.UiModeNightTileModel
@@ -52,12 +56,12 @@ constructor(
     ): Flow<UiModeNightTileModel> =
         conflatedCallbackFlow {
             // send initial state
-            trySend(createModel())
+            trySend(createModel(user))
 
             val configurationCallback =
                 object : ConfigurationController.ConfigurationListener {
                     override fun onUiModeChanged() {
-                        trySend(createModel())
+                        trySend(createModel(user))
                     }
                 }
             configurationController.addCallback(configurationCallback)
@@ -65,7 +69,7 @@ constructor(
             val batteryCallback =
                 object : BatteryController.BatteryStateChangeCallback {
                     override fun onPowerSaveChanged(isPowerSave: Boolean) {
-                        trySend(createModel())
+                        trySend(createModel(user))
                     }
                 }
             batteryController.addCallback(batteryCallback)
@@ -73,24 +77,37 @@ constructor(
             val locationCallback =
                 object : LocationController.LocationChangeCallback {
                     override fun onLocationSettingsChanged(locationEnabled: Boolean) {
-                        trySend(createModel())
+                        trySend(createModel(user))
                     }
                 }
             locationController.addCallback(locationCallback)
+
+            val batterySaverDarkThemeObserver =
+                object : ContentObserver(Handler(Looper.getMainLooper())) {
+                    override fun onChange(selfChange: Boolean) {
+                        trySend(createModel(user))
+                    }
+                }
+            context.contentResolver.registerContentObserver(
+                Settings.Secure.getUriFor(SETTING_BATTERY_SAVER_DARK_THEME),
+                false,
+                batterySaverDarkThemeObserver,
+            )
 
             awaitClose {
                 configurationController.removeCallback(configurationCallback)
                 batteryController.removeCallback(batteryCallback)
                 locationController.removeCallback(locationCallback)
+                context.contentResolver.unregisterContentObserver(batterySaverDarkThemeObserver)
             }
         }
 
-    private fun createModel(): UiModeNightTileModel {
+    private fun createModel(user: UserHandle): UiModeNightTileModel {
         val uiMode = uiModeManager.nightMode
         val nightMode =
             (context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) ==
                 Configuration.UI_MODE_NIGHT_YES
-        val powerSave = batteryController.isPowerSave
+        val powerSave = batteryController.isPowerSave && isBatterySaverDarkThemeEnabled(user)
         val locationEnabled = locationController.isLocationEnabled
         val nightModeCustomType = uiModeManager.nightModeCustomType
         val use24HourFormat = dateFormatUtil.is24HourFormat
@@ -109,5 +126,13 @@ constructor(
         )
     }
 
+    private fun isBatterySaverDarkThemeEnabled(user: UserHandle): Boolean =
+        Settings.Secure.getIntForUser(
+            context.contentResolver, SETTING_BATTERY_SAVER_DARK_THEME, 1, user.identifier) != 0
+
     override fun availability(user: UserHandle): Flow<Boolean> = flowOf(true)
+
+    companion object {
+        private const val SETTING_BATTERY_SAVER_DARK_THEME = "battery_saver_dark_theme"
+    }
 }
