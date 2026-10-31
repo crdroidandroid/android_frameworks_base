@@ -55,6 +55,8 @@ public class KeyBoxManager {
 
     private static final Pattern PEM_HEADER = Pattern.compile("-----BEGIN ([^-]+)-----");
     private static final Pattern XML_COMMENT = Pattern.compile("<!--.*?-->", Pattern.DOTALL);
+    // Remove invisible copy/paste markers before XML and PEM parsing.
+    private static final Pattern ZERO_WIDTH = Pattern.compile("[\\u200B-\\u200D\\u2060\\uFEFF]");
 
     /** @hide */
     public static class KeyBox {
@@ -115,7 +117,25 @@ public class KeyBoxManager {
             return false;
         }
         Map<String, KeyBox> next = new java.util.HashMap<>();
+        if (!parseInto(next, xmlContent)) return false;
+        mKeyboxes = Collections.unmodifiableMap(next);
+        AttestationUtils.invalidateFallbackBootState();
+        Log.i(TAG, "Parsed " + next.size() + " validated keyboxes");
+        return true;
+    }
 
+    /**
+     * Validate a prospective keybox without replacing the active configuration or
+     * writing files. Returns null when it can be loaded, a reason otherwise.
+     */
+    public static String validate(String xmlContent) {
+        if (xmlContent == null || xmlContent.trim().isEmpty()) return "Keybox is empty";
+        Map<String, KeyBox> checked = new java.util.HashMap<>();
+        return new KeyBoxManager().parseInto(checked, xmlContent)
+                ? null : "Keybox is incomplete or contains invalid key material";
+    }
+
+    private boolean parseInto(Map<String, KeyBox> next, String xmlContent) {
         // Truncation is detected by well-formedness, not by NumberOfKeyboxes: the root
         // element must have closed for a parse failure to still be usable.
         int depth = 0;
@@ -269,9 +289,6 @@ public class KeyBoxManager {
                         + " key(s); NumberOfKeyboxes is advisory, using what parsed");
             }
 
-            mKeyboxes = Collections.unmodifiableMap(next);
-            AttestationUtils.invalidateFallbackBootState();
-            Log.i(TAG, "Parsed " + next.size() + " validated keyboxes");
             return true;
         } catch (Exception e) {
             Log.e(TAG, "Keybox XML rejected; preserving previously loaded keyboxes", e);
@@ -310,16 +327,14 @@ public class KeyBoxManager {
             }
             if (certificates.isEmpty()) return false;
 
-            X509Certificate issuer = (X509Certificate) certificates.get(0);
-            if (!normalizedAlgorithm.equalsIgnoreCase(issuer.getPublicKey().getAlgorithm())
-                    || !normalizedAlgorithm.equalsIgnoreCase(privateKey.getAlgorithm())) {
-                Log.e(TAG, "Private key or certificate has unexpected algorithm: "
-                        + normalizedAlgorithm);
+            if (!normalizedAlgorithm.equalsIgnoreCase(privateKey.getAlgorithm())) {
+                Log.e(TAG, "Private key has unexpected algorithm: " + normalizedAlgorithm);
                 return false;
             }
-            // A present private key is not necessarily the key for the first certificate.
-            // Sign and verify a random challenge to reject mismatched material early.
-            verifyPrivateKey(privateKey, issuer.getPublicKey(), normalizedAlgorithm);
+            // Certificates can arrive unordered. Find the one matching the private key
+            // and reconstruct the complete issuer path before strict validation.
+            certificates = orderChain(privateKey, normalizedAlgorithm, certificates);
+            X509Certificate issuer = (X509Certificate) certificates.get(0);
             validateCertificateChain(certificates);
             target.put(normalizedAlgorithm,
                     new KeyBox(new KeyPair(issuer.getPublicKey(), privateKey), certificates));
@@ -351,6 +366,85 @@ public class KeyBoxManager {
             throw new java.security.InvalidKeyException(
                     "Private key does not correspond to keybox certificate");
         }
+    }
+
+    /**
+     * Order an unordered certificate list from the key-matching leaf to its issuer.
+     * Reject ambiguous or disconnected chains; keep strict signature and date checks.
+     * A keybox is allowed to end at an intermediate without a self-signed root.
+     */
+    private static List<Certificate> orderChain(PrivateKey privateKey, String algorithm,
+            List<Certificate> certificates) throws Exception {
+        List<X509Certificate> unique = new ArrayList<>();
+        for (Certificate certificate : certificates) {
+            X509Certificate candidate = (X509Certificate) certificate;
+            boolean duplicate = false;
+            for (X509Certificate existing : unique) {
+                if (java.util.Arrays.equals(existing.getEncoded(), candidate.getEncoded())) {
+                    duplicate = true;
+                    break;
+                }
+            }
+            if (!duplicate) unique.add(candidate);
+        }
+
+        X509Certificate leaf = null;
+        for (X509Certificate candidate : unique) {
+            if (!algorithm.equalsIgnoreCase(candidate.getPublicKey().getAlgorithm())) continue;
+            try {
+                verifyPrivateKey(privateKey, candidate.getPublicKey(), algorithm);
+            } catch (Exception ignored) {
+                continue;
+            }
+            if (leaf != null) {
+                throw new java.security.cert.CertificateException(
+                        "Ambiguous keybox: multiple certificates match private key");
+            }
+            leaf = candidate;
+        }
+        if (leaf == null) {
+            throw new java.security.cert.CertificateException(
+                    "No keybox certificate matches private key");
+        }
+
+        List<Certificate> ordered = new ArrayList<>();
+        List<X509Certificate> remaining = new ArrayList<>(unique);
+        X509Certificate current = leaf;
+        while (true) {
+            ordered.add(current);
+            remaining.remove(current);
+            if (current.getIssuerX500Principal().equals(current.getSubjectX500Principal())) {
+                try {
+                    current.verify(current.getPublicKey());
+                    break;
+                } catch (Exception ignored) {
+                    // Self-issued certificates can be cross-signed during rotation.
+                }
+            }
+            X509Certificate next = null;
+            for (X509Certificate candidate : remaining) {
+                if (!current.getIssuerX500Principal().equals(candidate.getSubjectX500Principal())) {
+                    continue;
+                }
+                try {
+                    current.verify(candidate.getPublicKey());
+                } catch (Exception ignored) {
+                    continue;
+                }
+                if (next != null) {
+                    throw new java.security.cert.CertificateException(
+                            "Ambiguous keybox: multiple matching issuer certificates");
+                }
+                next = candidate;
+            }
+            if (next == null) break;
+            current = next;
+        }
+        if (!remaining.isEmpty()) {
+            throw new java.security.cert.CertificateException(
+                    "Keybox contains certificates disconnected from private key's chain");
+        }
+        return ordered;
     }
 
     private static void validateCertificateChain(List<Certificate> certificates)
@@ -468,6 +562,7 @@ public class KeyBoxManager {
                 content = content.substring(bom.length());
             }
         }
+        content = ZERO_WIDTH.matcher(content).replaceAll("");
         content = XML_COMMENT.matcher(content).replaceAll("");
         return content.trim();
     }
