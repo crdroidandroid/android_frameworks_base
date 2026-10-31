@@ -75,8 +75,13 @@ public final class AttestationUtils {
         return sTeeBroken;
     }
 
-    /** Called after a successful keybox replacement, not during a failed fetch. */
-    public static synchronized void invalidateFallbackBootState() {
+    /**
+     * Called after a successful keybox replacement, not after a failed fetch.
+     * Must not take AttestationUtils.class: boot-hash derivation holds that lock
+     * while it may initialize TrickyStoreService and refresh the keybox.
+     * Volatile fields provide visibility without reversing the lock order.
+     */
+    public static void invalidateFallbackBootState() {
         if (sBootKeyFallback) sBootKey = null;
         if (sBootHashFallback) sBootHash = null;
     }
@@ -646,42 +651,65 @@ public final class AttestationUtils {
                 TrickyStoreService.getInstance().getCustomPatchLevelForPackage(packages), isLong);
     }
 
+    /** Check YYYYMM or YYYYMMDD patch dates (with optional dashes), including leap years. */
+    public static boolean isValidPatchLevel(String value) {
+        return parsePatchDate(value) != null;
+    }
+
+    private static final java.util.regex.Pattern PATCH_DATE_FORMAT =
+            java.util.regex.Pattern.compile(
+                    "(?:[0-9]{6}|[0-9]{8}|[0-9]{4}-[0-9]{2}|[0-9]{4}-[0-9]{2}-[0-9]{2})");
+
+    /** Returns year, month and day. Month-only patch dates resolve to the first day. */
+    private static int[] parsePatchDate(String value) {
+        if (value == null) return null;
+        String trimmed = value.trim();
+        if (!PATCH_DATE_FORMAT.matcher(trimmed).matches()) return null;
+        String normalized = trimmed.replace("-", "");
+        if (normalized.length() != 6 && normalized.length() != 8) return null;
+        for (int i = 0; i < normalized.length(); i++) {
+            char c = normalized.charAt(i);
+            if (c < '0' || c > '9') return null;
+        }
+        try {
+            int year = Integer.parseInt(normalized.substring(0, 4));
+            int month = Integer.parseInt(normalized.substring(4, 6));
+            int day = normalized.length() == 8
+                    ? Integer.parseInt(normalized.substring(6, 8)) : 1;
+            return isValidPatchDate(year, month, day)
+                    ? new int[] {year, month, day} : null;
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+    private static boolean isValidPatchDate(int year, int month, int day) {
+        return year >= 1 && year <= 9999 && month >= 1 && month <= 12
+                && day >= 1 && day <= java.time.YearMonth.of(year, month).lengthOfMonth();
+    }
+
     private static Integer parsePatchLevel(String value, boolean isLong) {
         if (value == null || value.equalsIgnoreCase("no") || value.equalsIgnoreCase("prop")) {
             return null;
         }
-
-        String normalized = value.replace("-", "");
-        try {
-            if (normalized.length() == 8) {
-                int year = Integer.parseInt(normalized.substring(0, 4));
-                int month = Integer.parseInt(normalized.substring(4, 6));
-                int day = Integer.parseInt(normalized.substring(6, 8));
-                return isLong ? year * 10000 + month * 100 + day : year * 100 + month;
-            } else if (normalized.length() == 6) {
-                int year = Integer.parseInt(normalized.substring(0, 4));
-                int month = Integer.parseInt(normalized.substring(4, 6));
-                return isLong ? year * 10000 + month * 100 : year * 100 + month;
-            }
-        } catch (NumberFormatException e) {
-            Log.e(TAG, "Failed to parse patch level: " + value, e);
+        int[] date = parsePatchDate(value);
+        if (date == null) {
+            Log.w(TAG, "Ignoring invalid patch level: " + value);
+            return null;
         }
-        return null;
+        return isLong ? date[0] * 10000 + date[1] * 100 + date[2]
+                : date[0] * 100 + date[1];
     }
 
     public static int convertPatchLevel(String patchString, boolean isLong) {
-        try {
-            String[] parts = patchString.split("-");
-            if (isLong && parts.length >= 3) {
-                return Integer.parseInt(parts[0]) * 10000 +
-                       Integer.parseInt(parts[1]) * 100 +
-                       Integer.parseInt(parts[2]);
-            } else if (parts.length >= 2) {
-                return Integer.parseInt(parts[0]) * 100 + Integer.parseInt(parts[1]);
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "Invalid patch level format: " + patchString, e);
+        int[] date = parsePatchDate(patchString);
+        if (date != null) {
+            return isLong ? date[0] * 10000 + date[1] * 100 + date[2]
+                    : date[0] * 100 + date[1];
         }
+        // Retain the previous fixed fallback instead of asserting today's date is a
+        // device security patch. Invalid configured patch levels are ignored above.
+        Log.e(TAG, "Invalid patch level format: " + patchString);
         return 202404;
     }
 
