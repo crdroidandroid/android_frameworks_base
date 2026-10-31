@@ -19,8 +19,10 @@ package com.android.systemui.qs.tiles;
 import android.app.UiModeManager;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.database.ContentObserver;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.service.quicksettings.Tile;
 import android.text.TextUtils;
@@ -64,10 +66,19 @@ public class UiModeNightTile extends QSTileImpl<QSTile.BooleanState> implements
 
     public static final String TILE_SPEC = "dark";
 
+    private static final String SETTING_BATTERY_SAVER_DARK_THEME = "battery_saver_dark_theme";
+
     public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a");
     private final UiModeManager mUiModeManager;
     private final BatteryController mBatteryController;
     private final LocationController mLocationController;
+    private final ContentObserver mBatterySaverDarkThemeObserver = new ContentObserver(
+            new Handler(Looper.getMainLooper())) {
+        @Override
+        public void onChange(boolean selfChange) {
+            refreshState();
+        }
+    };
     @Inject
     public UiModeNightTile(
             QSHost host,
@@ -90,6 +101,15 @@ public class UiModeNightTile extends QSTileImpl<QSTile.BooleanState> implements
         mLocationController = locationController;
         configurationController.observe(getLifecycle(), this);
         batteryController.observe(getLifecycle(), this);
+        mContext.getContentResolver().registerContentObserver(
+                Settings.Secure.getUriFor(SETTING_BATTERY_SAVER_DARK_THEME), false,
+                mBatterySaverDarkThemeObserver);
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        mContext.getContentResolver().unregisterContentObserver(mBatterySaverDarkThemeObserver);
     }
 
     @Override
@@ -120,7 +140,9 @@ public class UiModeNightTile extends QSTileImpl<QSTile.BooleanState> implements
     @Override
     protected void handleUpdateState(BooleanState state, Object arg) {
         int uiMode = mUiModeManager.getNightMode();
-        boolean powerSave = mBatteryController.isPowerSave();
+        boolean powerSave = mBatteryController.isPowerSave()
+                && Settings.Secure.getIntForUser(mContext.getContentResolver(),
+                        SETTING_BATTERY_SAVER_DARK_THEME, 1, UserHandle.USER_CURRENT) != 0;
         boolean nightMode = (mContext.getResources().getConfiguration().uiMode
                         & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
 
