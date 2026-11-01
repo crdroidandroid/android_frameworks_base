@@ -1,6 +1,9 @@
 package android.security.trickystore;
 
+import android.hardware.security.keymint.Tag;
 import android.os.Build;
+import android.security.KeyStore2;
+import android.security.KeyStoreException;
 import android.os.SystemProperties;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
@@ -30,6 +33,24 @@ public final class AttestationUtils {
     private static volatile boolean sBootHashFallback;
 
     private AttestationUtils() {}
+
+    public static byte[] getModuleHash() {
+        try {
+            byte[] modulesDer = KeyStore2.getInstance()
+                    .getSupplementaryAttestationInfo(Tag.MODULE_HASH);
+            if (modulesDer == null || modulesDer.length == 0) {
+                Log.w(TAG, "MODULE_HASH supplementary data unavailable");
+                return null;
+            }
+            return MessageDigest.getInstance("SHA-256").digest(modulesDer);
+        } catch (KeyStoreException | java.security.NoSuchAlgorithmException e) {
+            Log.w(TAG, "Unable to calculate MODULE_HASH from Keystore2", e);
+            return null;
+        } catch (RuntimeException e) {
+            Log.w(TAG, "MODULE_HASH query failed", e);
+            return null;
+        }
+    }
 
     public static void setTeeBroken(boolean broken) {
         sTeeBroken = broken;
