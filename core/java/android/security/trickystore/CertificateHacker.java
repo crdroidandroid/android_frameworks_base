@@ -386,10 +386,43 @@ public final class CertificateHacker {
 
         DERSequence hackedEnforced = new DERSequence(orderedVector);
         originalEncodables[7] = hackedEnforced;
+        addMissingSoftwareModuleHash(originalEncodables);
         DERSequence hackedSequence = new DERSequence(originalEncodables);
         DEROctetString hackedOctets = new DEROctetString(hackedSequence);
 
         return new Extension(CertificateGenerator.ATTESTATION_OID, false, hackedOctets);
+    }
+
+    private static void addMissingSoftwareModuleHash(ASN1Encodable[] keyDescription)
+            throws Exception {
+        if (keyDescription.length < 8
+                || !(keyDescription[6] instanceof ASN1Sequence)
+                || ASN1Integer.getInstance(keyDescription[0]).getValue().intValue() < 400
+                || ASN1Integer.getInstance(keyDescription[2]).getValue().intValue() < 400) {
+            return;
+        }
+
+        ASN1Sequence sw = (ASN1Sequence) keyDescription[6];
+        java.util.TreeMap<Integer, ASN1Encodable> fields = new java.util.TreeMap<>();
+        for (ASN1Encodable entry : sw) {
+            ASN1TaggedObject tagged = ASN1TaggedObject.getInstance(entry);
+            fields.put(tagged.getTagNo(), tagged);
+        }
+        if (fields.containsKey(724)) {
+            return;
+        }
+
+        byte[] moduleHash = AttestationUtils.getModuleHash();
+        if (moduleHash == null) {
+            return;
+        }
+        fields.put(724, new DERTaggedObject(true, 724,
+                new DEROctetString(moduleHash)));
+        ASN1EncodableVector software = new ASN1EncodableVector();
+        for (ASN1Encodable entry : fields.values()) {
+            software.add(entry);
+        }
+        keyDescription[6] = new DERSequence(software);
     }
 
     private static byte[] rootOfTrustOctet(ASN1Encodable rootOfTrust, int index) {
