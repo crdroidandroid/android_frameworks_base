@@ -90,4 +90,7 @@
     <!-- Whether to disable Smart Pixels on UDFPS -->
     <bool name="config_disableSmartPixelsOnUDFPS">false</bool>
 
+   <!-- Draw rounded corners in software instead of the HWC display decoration layer.
+        For composers that crash on a frame holding only the decoration mask. -->
+   <bool name="config_disableHwcScreenDecoration">false</bool>
 </resources>
