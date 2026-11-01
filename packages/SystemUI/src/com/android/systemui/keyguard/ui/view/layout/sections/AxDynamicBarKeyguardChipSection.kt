@@ -32,6 +32,7 @@ private const val EXPANDED_BOTTOM_PROTECTION_DP = 16f
 private const val UNSET = -1
 
 private val HIDDEN_VIEW_IDS = listOf(
+    R.id.status_view_media_container,
     R.id.shared_notification_container,
     R.id.notificationShelf,
     R.id.bc_smartspace_view,
