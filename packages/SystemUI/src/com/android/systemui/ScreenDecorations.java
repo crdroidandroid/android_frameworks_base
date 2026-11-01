@@ -319,6 +319,13 @@ public class ScreenDecorations implements
         });
     }
 
+    private DisplayDecorationSupport getHwcScreenDecorationSupport() {
+        if (mContext.getResources().getBoolean(R.bool.config_disableHwcScreenDecoration)) {
+            return null;
+        }
+        return mContext.getDisplay().getDisplayDecorationSupport();
+    }
+
     private static boolean eq(DisplayDecorationSupport a, DisplayDecorationSupport b) {
         if (a == null) return (b == null);
         if (b == null) return false;
@@ -510,7 +517,7 @@ public class ScreenDecorations implements
         mDebugRoundedCornerFactory =
                 new RoundedCornerDecorProviderFactory(mDebugRoundedCornerDelegate);
         mCutoutFactory = getCutoutFactory();
-        mHwcScreenDecorationSupport = mContext.getDisplay().getDisplayDecorationSupport();
+        mHwcScreenDecorationSupport = getHwcScreenDecorationSupport();
         updateHwLayerRoundedCornerDrawable();
         setupDecorations();
         setupCameraListener();
@@ -568,7 +575,7 @@ public class ScreenDecorations implements
                 if (!Objects.equals(newUniqueId, mDisplayUniqueId)) {
                     mDisplayUniqueId = newUniqueId;
                     final DisplayDecorationSupport newScreenDecorationSupport =
-                            mContext.getDisplay().getDisplayDecorationSupport();
+                            getHwcScreenDecorationSupport();
 
                     mRoundedCornerResDelegate.updateDisplayUniqueId(newUniqueId, null);
 
