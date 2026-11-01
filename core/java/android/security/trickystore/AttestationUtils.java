@@ -1,6 +1,14 @@
 package android.security.trickystore;
 
 import android.hardware.security.keymint.Tag;
+import android.hardware.security.keymint.IKeyMintDevice;
+import android.os.IBinder;
+import android.os.ServiceManager;
+import android.os.VintfObject;
+import android.util.Xml;
+import org.xmlpull.v1.XmlPullParser;
+import java.io.File;
+import java.io.FileInputStream;
 import android.os.Build;
 import android.security.KeyStore2;
 import android.security.KeyStoreException;
@@ -37,6 +45,7 @@ public final class AttestationUtils {
     private static volatile boolean sTeeBroken = false;
     private static volatile boolean sBootKeyFallback;
     private static volatile boolean sBootHashFallback;
+    private static volatile int sKeyMintAidlVersion;
 
     private AttestationUtils() {}
 
@@ -368,6 +377,20 @@ public final class AttestationUtils {
     }
 
     public static int getAttestVersion() {
+        final int sdkVersion = getSdkAttestVersion();
+        final int halVersion = getKeyMintAidlVersion();
+        if (halVersion > 0 && sdkVersion >= 100) {
+            return Math.min(sdkVersion, halVersion * 100);
+        }
+        return sdkVersion;
+    }
+
+    public static int getKeymasterVersion() {
+        int attestVersion = getAttestVersion();
+        return attestVersion == 4 ? 41 : attestVersion;
+    }
+
+    private static int getSdkAttestVersion() {
         switch (Build.VERSION.SDK_INT) {
             case Build.VERSION_CODES.Q:
             case Build.VERSION_CODES.R:
@@ -381,13 +404,179 @@ public final class AttestationUtils {
             case Build.VERSION_CODES.VANILLA_ICE_CREAM:
                 return 300;
             default:
-                return 400;
+                return Build.VERSION.SDK_INT >= 37 ? 500 : 400;
         }
     }
 
-    public static int getKeymasterVersion() {
-        int attestVersion = getAttestVersion();
-        return attestVersion == 4 ? 41 : attestVersion;
+    private static int getKeyMintAidlVersion() {
+        int cached = sKeyMintAidlVersion;
+        if (cached > 0) return cached;
+        synchronized (AttestationUtils.class) {
+            cached = sKeyMintAidlVersion;
+            if (cached > 0) return cached;
+
+            int declared = findDeclaredKeyMintVersion();
+            if (declared < 1) declared = findVintfKeyMintVersion();
+            final int running = findRunningKeyMintVersion();
+            final int detected = declared > 0
+                    ? (running > 0 ? Math.min(declared, running) : declared)
+                    : running;
+            if (detected > 0) {
+                sKeyMintAidlVersion = detected;
+                Log.i(TAG, "KeyMint default HAL version: VINTF=" + declared
+                        + ", runtime=" + running + ", effective=" + detected);
+                return detected;
+            }
+            Log.w(TAG, "KeyMint HAL version unavailable; using Android SDK fallback");
+            return -1;
+        }
+    }
+
+    private static int findVintfKeyMintVersion() {
+        try {
+            String[] entries = VintfObject.getHalNamesAndVersions();
+            if (entries == null) return -1;
+            int version = -1;
+            for (String entry : entries) {
+                if (entry == null) continue;
+                String prefix = "android.hardware.security.keymint@";
+                if (!entry.startsWith(prefix)) continue;
+                try {
+                    int v = Integer.parseInt(entry.substring(prefix.length()));
+                    if (v > 0 && v < 100) version = minKnownVersion(version, v);
+                } catch (NumberFormatException ignored) {
+                    // Unversioned HAL entries are normal on older platforms.
+                }
+            }
+            return version;
+        } catch (RuntimeException | LinkageError e) {
+            Log.d(TAG, "Unable to query VINTF HAL versions", e);
+            return -1;
+        }
+    }
+
+    private static int findRunningKeyMintVersion() {
+        try {
+            IBinder binder = ServiceManager.checkService(
+                    "android.hardware.security.keymint.IKeyMintDevice/default");
+            if (binder == null) return -1;
+            IKeyMintDevice device = IKeyMintDevice.Stub.asInterface(binder);
+            int version = device.getInterfaceVersion();
+            return version > 0 && version < 100 ? version : -1;
+        } catch (Exception | LinkageError e) {
+            Log.d(TAG, "Unable to query runtime KeyMint HAL version", e);
+            return -1;
+        }
+    }
+
+    private static int findDeclaredKeyMintVersion() {
+        final String[] dirs = {
+                "/vendor/etc/vintf", "/odm/etc/vintf",
+                "/system/etc/vintf", "/system_ext/etc/vintf"
+        };
+        int version = -1;
+        for (String dir : dirs) {
+            version = minKnownVersion(version,
+                    readKeyMintVersionFromManifest(new File(dir, "manifest.xml")));
+
+            String sku = SystemProperties.get("ro.boot.product.hardware.sku", "");
+            if (!sku.isEmpty() && sku.matches("[A-Za-z0-9_.-]+")) {
+                version = minKnownVersion(version, readKeyMintVersionFromManifest(
+                        new File(dir, "manifest_" + sku + ".xml")));
+            }
+            File[] fragments = new File(dir, "manifest").listFiles();
+            if (fragments == null) continue;
+            for (File fragment : fragments) {
+                if (fragment.isFile() && fragment.getName().endsWith(".xml")) {
+                    version = minKnownVersion(version,
+                            readKeyMintVersionFromManifest(fragment));
+                }
+            }
+        }
+        return version;
+    }
+
+    private static int minKnownVersion(int a, int b) {
+        return a < 1 ? b : (b < 1 ? a : Math.min(a, b));
+    }
+
+    private static int readKeyMintVersionFromManifest(File file) {
+        if (!file.isFile()) return -1;
+        int found = -1;
+        try (FileInputStream stream = new FileInputStream(file)) {
+            XmlPullParser parser = Xml.newPullParser();
+            parser.setInput(stream, "UTF-8");
+            int halDepth = -1;
+            int interfaceDepth = -1;
+            boolean aidl = false;
+            String halName = null;
+            String versionText = null;
+            String interfaceName = null;
+            boolean defaultInstance = false;
+            boolean matched = false;
+            for (int event = parser.getEventType(); event != XmlPullParser.END_DOCUMENT;
+                    event = parser.next()) {
+                if (event == XmlPullParser.START_TAG) {
+                    String tag = parser.getName();
+                    if ("hal".equals(tag) && halDepth < 0) {
+                        halDepth = parser.getDepth();
+                        aidl = "aidl".equals(parser.getAttributeValue(null, "format"));
+                        halName = null;
+                        versionText = null;
+                        matched = false;
+                    } else if (aidl && halDepth > 0) {
+                        if ("interface".equals(tag)) {
+                            interfaceDepth = parser.getDepth();
+                            interfaceName = null;
+                            defaultInstance = false;
+                        } else if ("name".equals(tag)) {
+                            String value = parser.nextText().trim();
+                            if (interfaceDepth > 0) interfaceName = value;
+                            else if (parser.getDepth() == halDepth + 1) halName = value;
+                        } else if ("version".equals(tag)
+                                && parser.getDepth() == halDepth + 1) {
+                            versionText = parser.nextText().trim();
+                        } else if ("instance".equals(tag) && interfaceDepth > 0) {
+                            defaultInstance |= "default".equals(parser.nextText().trim());
+                        } else if ("fqname".equals(tag)) {
+                            String value = parser.nextText().trim();
+                            if (value.equals("IKeyMintDevice/default")
+                                    || value.endsWith("::IKeyMintDevice/default")) {
+                                matched = true;
+                            }
+                        }
+                    }
+                } else if (event == XmlPullParser.END_TAG) {
+                    String tag = parser.getName();
+                    if (interfaceDepth > 0 && "interface".equals(tag)
+                            && parser.getDepth() == interfaceDepth) {
+                        matched |= "IKeyMintDevice".equals(interfaceName) && defaultInstance;
+                        interfaceDepth = -1;
+                    } else if (halDepth > 0 && "hal".equals(tag)
+                            && parser.getDepth() == halDepth) {
+                        if (aidl && "android.hardware.security.keymint".equals(halName)
+                                && matched) {
+                            int parsed = 1; // AIDL VINTF defaults to version 1.
+                            if (versionText != null) {
+                                try {
+                                    parsed = Integer.parseInt(versionText);
+                                } catch (NumberFormatException e) {
+                                    parsed = -1;
+                                }
+                            }
+                            if (parsed > 0 && parsed < 100) {
+                                found = minKnownVersion(found, parsed);
+                            }
+                        }
+                        halDepth = -1;
+                        interfaceDepth = -1;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            Log.d(TAG, "Unable to parse VINTF manifest " + file.getPath(), e);
+        }
+        return found;
     }
 
     /**
