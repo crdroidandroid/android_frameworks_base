@@ -1,8 +1,15 @@
 /* SPDX-License-Identifier: Apache-2.0 */
 package com.android.server.security.rkp;
 
+import android.app.AlarmManager;
+import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -30,6 +37,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public final class DuckRkpManager {
     private static final String TAG = "DuckRkp";
@@ -37,9 +48,18 @@ public final class DuckRkpManager {
     private static final String MASTER_KEY = "spoof_trickystore_enabled";
     private static final long TIMEOUT_MS = 90000;
     private static final long COOLDOWN_MS = 60000;
+    private static final long RETRY_MS = TimeUnit.MINUTES.toMillis(30);
+    private static final long MAX_RETRY_MS = TimeUnit.HOURS.toMillis(6);
+    private static final long NETWORK_CHECK_MS = TimeUnit.HOURS.toMillis(1);
+    private static final long ALARM_WINDOW_MS = TimeUnit.MINUTES.toMillis(10);
+    private static final String AUTO_STATE_KEY = "spoof_duck_rkp_auto_state";
 
     private final ContentResolver mResolver;
     private final Handler mHandler;
+    private final AlarmManager mAlarms;
+    private final ConnectivityManager mConnectivity;
+    private final Runnable mReschedule = this::scheduleAutomatic;
+    private final AlarmManager.OnAlarmListener mAutomatic = this::scheduleAutomatic;
     private final Runnable mOnChanged;
     private final AtomicFile mFile = new AtomicFile(
             new File(Environment.getDataSystemDirectory(), "duck_rkp.xml"));
@@ -47,6 +67,12 @@ public final class DuckRkpManager {
             runnable -> new Thread(runnable, "DuckRkp"));
     private String mGenerated;
     private long mExpiresAt;
+    private long mRenewAt;
+    private long mNextAttempt;
+    private long mNextAutomaticAt;
+    private int mFailures;
+    private boolean mAutomaticPaused;
+    private boolean mWaitingForNetwork;
     private long mGeneration;
     private long mRevision;
     private long mStartedAt;
@@ -60,11 +86,48 @@ public final class DuckRkpManager {
     public DuckRkpManager(Context context, Handler handler, Runnable onChanged) {
         mResolver = context.getContentResolver();
         mHandler = handler;
+        mAlarms = context.getSystemService(AlarmManager.class);
+        mConnectivity = context.getSystemService(ConnectivityManager.class);
         mOnChanged = onChanged;
+        mConnectivity.registerDefaultNetworkCallback(new ConnectivityManager.NetworkCallback() {
+            @Override
+            public void onCapabilitiesChanged(Network network, NetworkCapabilities capabilities) {
+                requestSchedule();
+            }
+
+            @Override
+            public void onLost(Network network) {
+                requestSchedule();
+            }
+        }, mHandler);
+        context.registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                requestSchedule();
+            }
+        }, new IntentFilter(Intent.ACTION_TIME_CHANGED), null, mHandler,
+                Context.RECEIVER_NOT_EXPORTED);
         mWorker.execute(this::load);
     }
 
     private synchronized void load() {
+        try {
+            String state = Settings.Secure.getStringForUser(mResolver, AUTO_STATE_KEY,
+                    UserHandle.USER_SYSTEM);
+            if (state != null) {
+                JSONObject saved = new JSONObject(state);
+                mNextAttempt = Math.min(saved.getLong("next_attempt"),
+                        System.currentTimeMillis() + MAX_RETRY_MS);
+                mFailures = Math.max(0, Math.min(5, saved.getInt("failures")));
+                mAutomaticPaused = saved.getBoolean("paused");
+                mFailure = saved.getString("error");
+                mDetail = saved.getInt("detail");
+            }
+        } catch (Exception e) {
+            mAutomaticPaused = true;
+            mFailure = "settings_unavailable";
+            Slog.w(TAG, "Cannot read automatic provisioning state");
+        }
         try {
             if (mFile.exists()) {
                 String xml;
@@ -73,7 +136,9 @@ public final class DuckRkpManager {
                     if (data.length > DuckRkpCbor.LIMIT) throw new IllegalArgumentException();
                     xml = new String(data, StandardCharsets.UTF_8);
                 }
-                mExpiresAt = validateGenerated(xml);
+                Validity validity = validateGenerated(xml);
+                mExpiresAt = validity.expiresAt();
+                mRenewAt = validity.renewAt();
                 mGenerated = xml;
             }
         } catch (Exception e) {
@@ -98,6 +163,10 @@ public final class DuckRkpManager {
         state.putBoolean("active", !imported && enabled && masterEnabled()
                 && mGenerated != null && mExpiresAt > System.currentTimeMillis());
         state.putLong("expires_at", mExpiresAt);
+        state.putLong("renew_at", mRenewAt);
+        state.putLong("next_automatic_at", mNextAutomaticAt);
+        state.putBoolean("automatic_paused", mAutomaticPaused);
+        state.putBoolean("waiting_for_network", mWaitingForNetwork);
         state.putLong("revision", mRevision);
         state.putLong("retry_after_ms", Math.max(0,
                 COOLDOWN_MS - (SystemClock.elapsedRealtime() - mLastAttempt)));
@@ -113,13 +182,18 @@ public final class DuckRkpManager {
             throw new IllegalStateException("Remove the imported keybox before enabling device RKP");
         }
         putEnabled(enabled);
-        mGeneration++;
-        mFailure = "";
-        mStage = "idle";
+        cancelProvisioning();
+        if (!mAutomaticPaused) mFailure = "";
+        saveAutomaticState();
+        requestSchedule();
         mOnChanged.run();
     }
 
     public synchronized void provision() {
+        startProvisioning(true);
+    }
+
+    private void startProvisioning(boolean manual) {
         if (!mLoaded || !isEnabled() || !masterEnabled() || hasImportedKeybox()) {
             throw new IllegalStateException("Device RKP is disabled");
         }
@@ -127,6 +201,12 @@ public final class DuckRkpManager {
         if (mBusy || now - mLastAttempt < COOLDOWN_MS) {
             throw new IllegalStateException("An RKP request is active or was attempted recently");
         }
+        if (manual) mFailures = 0;
+        // A system_server restart must not replay a possibly submitted signing request.
+        writeAutomaticState("submission_unknown", 0, true, 0);
+        mAutomaticPaused = false;
+        mNextAutomaticAt = 0;
+        mWaitingForNetwork = false;
         long generation = ++mGeneration;
         mStartedAt = now;
         mLastAttempt = now;
@@ -139,7 +219,10 @@ public final class DuckRkpManager {
                 if (mBusy && generation == mGeneration) {
                     mGeneration++;
                     mFailure = "timeout";
+                    mAutomaticPaused = true;
+                    mNextAttempt = 0;
                     mStage = "idle";
+                    saveAutomaticState();
                 }
             }
         };
@@ -153,10 +236,11 @@ public final class DuckRkpManager {
                     stage -> progress(generation, stage));
             synchronized (this) {
                 progress(generation, "saving");
-                validateGenerated(result.xml);
+                Validity validity = validateGenerated(result.xml);
                 saveGenerated(result.xml);
                 mGenerated = result.xml;
-                mExpiresAt = result.expiresAt;
+                mExpiresAt = validity.expiresAt();
+                mRenewAt = validity.renewAt();
                 mRevision++;
                 mStage = "ready";
                 resetRevocation();
@@ -179,6 +263,22 @@ public final class DuckRkpManager {
             mHandler.removeCallbacks(timeout);
             synchronized (this) {
                 mBusy = false;
+                if (generation == mGeneration) {
+                    if (mFailure.isEmpty()) {
+                        mFailures = 0;
+                        mAutomaticPaused = false;
+                        mNextAttempt = System.currentTimeMillis() + COOLDOWN_MS;
+                    } else if (isRetryable(mFailure, mDetail)) {
+                        mFailures = Math.min(5, mFailures + 1);
+                        mAutomaticPaused = false;
+                        mNextAttempt = System.currentTimeMillis() + retryDelay(mFailures);
+                    } else {
+                        mAutomaticPaused = true;
+                        mNextAttempt = 0;
+                    }
+                    saveAutomaticState();
+                }
+                requestSchedule();
             }
         }
     }
@@ -244,10 +344,16 @@ public final class DuckRkpManager {
         mFile.delete();
         mGenerated = null;
         mExpiresAt = 0;
+        mRenewAt = 0;
+        mNextAttempt = 0;
+        mFailures = 0;
+        mAutomaticPaused = false;
         mRevision++;
         mFailure = "";
         mStage = "idle";
         resetRevocation();
+        saveAutomaticState();
+        requestSchedule();
         mOnChanged.run();
     }
 
@@ -255,15 +361,106 @@ public final class DuckRkpManager {
         try {
             if (hasImportedKeybox() && isEnabled()) putEnabled(false);
             if (masterChanged || !isEnabled() || !masterEnabled() || hasImportedKeybox()) {
-                mGeneration++;
-                mStage = "idle";
+                cancelProvisioning();
             }
         } catch (RuntimeException e) {
             mGeneration++;
             mStage = "idle";
+            mAutomaticPaused = true;
             mFailure = "settings_unavailable";
             Slog.w(TAG, "Cannot read provisioning settings");
         }
+        requestSchedule();
+    }
+
+    private void cancelProvisioning() {
+        mGeneration++;
+        mStage = "idle";
+        if (mBusy) {
+            mFailure = "canceled";
+            mAutomaticPaused = true;
+            mNextAttempt = 0;
+            saveAutomaticState();
+        }
+    }
+
+    private void requestSchedule() {
+        mHandler.removeCallbacks(mReschedule);
+        mHandler.post(mReschedule);
+    }
+
+    private synchronized void scheduleAutomatic() {
+        mAlarms.cancel(mAutomatic);
+        mNextAutomaticAt = 0;
+        mWaitingForNetwork = false;
+        try {
+            if (!mLoaded || mBusy || mAutomaticPaused || !isEnabled() || !masterEnabled()
+                    || hasImportedKeybox() || !isQualcomm()
+                    || !ServiceManager.isDeclared(DuckRkpV1.SERVICE)) return;
+            long now = System.currentTimeMillis();
+            long cooldown = Math.max(0,
+                    COOLDOWN_MS - (SystemClock.elapsedRealtime() - mLastAttempt));
+            long due = Math.max(Math.max(mGenerated == null ? now : mRenewAt, mNextAttempt),
+                    now + cooldown);
+            if (due <= now) {
+                NetworkCapabilities capabilities = mConnectivity.getNetworkCapabilities(
+                        mConnectivity.getActiveNetwork());
+                if (capabilities != null
+                        && capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                        && capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)) {
+                    startProvisioning(false);
+                    return;
+                }
+                mWaitingForNetwork = true;
+                due = now + NETWORK_CHECK_MS;
+            }
+            mNextAutomaticAt = due;
+            mAlarms.setWindow(AlarmManager.RTC, due, ALARM_WINDOW_MS,
+                    TAG, mAutomatic, mHandler);
+        } catch (RuntimeException e) {
+            mAutomaticPaused = true;
+            mFailure = "settings_unavailable";
+            Slog.w(TAG, "Cannot schedule automatic provisioning");
+        }
+    }
+
+    private void writeAutomaticState(String error, int detail, boolean paused, long nextAttempt) {
+        try {
+            String state = new JSONObject().put("error", error).put("detail", detail)
+                    .put("paused", paused).put("next_attempt", nextAttempt)
+                    .put("failures", mFailures).toString();
+            if (!Settings.Secure.putStringForUser(mResolver, AUTO_STATE_KEY, state,
+                    UserHandle.USER_SYSTEM)) {
+                throw new IllegalStateException("Cannot save automatic provisioning state");
+            }
+        } catch (JSONException e) {
+            throw new IllegalStateException("Cannot encode automatic provisioning state", e);
+        }
+    }
+
+    private void saveAutomaticState() {
+        try {
+            writeAutomaticState(mFailure, mDetail, mAutomaticPaused, mNextAttempt);
+        } catch (RuntimeException e) {
+            mAutomaticPaused = true;
+            mFailure = "settings_unavailable";
+            Slog.w(TAG, "Cannot save automatic provisioning state");
+        }
+    }
+
+    static long renewalTime(long notBefore, long expiresAt) {
+        long lifetime = Math.max(0, expiresAt - notBefore);
+        return expiresAt - Math.min(TimeUnit.HOURS.toMillis(24), lifetime / 5);
+    }
+
+    static long retryDelay(int failures) {
+        return Math.min(MAX_RETRY_MS, RETRY_MS * (1L << Math.min(4, Math.max(0, failures - 1))));
+    }
+
+    static boolean isRetryable(String error, int detail) {
+        return "network_error".equals(error) || "hal_unavailable".equals(error)
+                || ("http_error".equals(error)
+                    && (detail == 408 || detail == 429 || (detail >= 500 && detail <= 599)));
     }
 
     public synchronized String getKeybox() {
@@ -316,7 +513,9 @@ public final class DuckRkpManager {
                 0, UserHandle.USER_SYSTEM);
     }
 
-    private static long validateGenerated(String xml) throws Exception {
+    private record Validity(long expiresAt, long renewAt) {}
+
+    private static Validity validateGenerated(String xml) throws Exception {
         KeyBoxManager manager = new KeyBoxManager();
         if (!manager.parseKeybox(xml)) throw new IllegalArgumentException("Invalid stored keybox");
         KeyBoxManager.KeyBox keybox = manager.getKeybox("EC");
@@ -341,6 +540,11 @@ public final class DuckRkpManager {
             }
             child.verify(issuer.getPublicKey());
         }
-        return DuckRkpCertificates.validate(certificates);
+        long expiresAt = DuckRkpCertificates.validate(certificates);
+        long notBefore = 0;
+        for (X509Certificate certificate : certificates) {
+            notBefore = Math.max(notBefore, certificate.getNotBefore().getTime());
+        }
+        return new Validity(expiresAt, renewalTime(notBefore, expiresAt));
     }
 }
