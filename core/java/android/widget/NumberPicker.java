@@ -278,7 +278,7 @@ public class NumberPicker extends LinearLayout {
      * The height of the text.
      */
     @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
-    private final int mTextSize;
+    private int mTextSize;
 
     /**
      * The height of the gap between text elements if the selector wheel.
@@ -1182,7 +1182,8 @@ public class NumberPicker extends LinearLayout {
             return;
         }
         mCurrentScrollOffset += y;
-        while (mCurrentScrollOffset - mInitialScrollOffset > mSelectorTextGapHeight) {
+        int valueChangeDistance = mSelectorElementHeight / 2;
+        while (mCurrentScrollOffset - mInitialScrollOffset > valueChangeDistance) {
             mCurrentScrollOffset -= mSelectorElementHeight;
             decrementSelectorIndices(selectorIndices);
             setValueInternal(selectorIndices[SELECTOR_MIDDLE_ITEM_INDEX], true);
@@ -1190,7 +1191,7 @@ public class NumberPicker extends LinearLayout {
                 mCurrentScrollOffset = mInitialScrollOffset;
             }
         }
-        while (mCurrentScrollOffset - mInitialScrollOffset < -mSelectorTextGapHeight) {
+        while (mCurrentScrollOffset - mInitialScrollOffset < -valueChangeDistance) {
             mCurrentScrollOffset += mSelectorElementHeight;
             incrementSelectorIndices(selectorIndices);
             setValueInternal(selectorIndices[SELECTOR_MIDDLE_ITEM_INDEX], true);
@@ -1755,7 +1756,8 @@ public class NumberPicker extends LinearLayout {
     public void setTextSize(@FloatRange(from = 0.0, fromInclusive = false) float size) {
         mSelectorWheelPaint.setTextSize(size);
         mInputText.setTextSize(TypedValue.COMPLEX_UNIT_PX, size);
-        invalidate();
+        mTextSize = (int) size;
+        requestLayout();
     }
 
     /**
