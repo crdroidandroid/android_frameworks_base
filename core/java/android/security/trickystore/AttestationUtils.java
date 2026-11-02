@@ -86,16 +86,24 @@ public final class AttestationUtils {
         if (sBootHashFallback) sBootHash = null;
     }
 
+    public static boolean isNullOrZeroBootKey(byte[] key) {
+        if (key == null) return true;
+        for (byte value : key) {
+            if (value != 0) return false;
+        }
+        return true;
+    }
+
     public static byte[] getBootKey() {
         byte[] key = sBootKey;
-        if (key != null) return key;
+        if (!isNullOrZeroBootKey(key)) return key;
         synchronized (AttestationUtils.class) {
             key = sBootKey;
-            if (key == null) {
+            if (isNullOrZeroBootKey(key)) {
                 key = getBootKeyFromProp();
-                sBootKeyFallback = key == null;
-                if (key == null) key = getBootKeyFromKeybox();
-                if (key == null) {
+                sBootKeyFallback = isNullOrZeroBootKey(key);
+                if (isNullOrZeroBootKey(key)) key = getBootKeyFromKeybox();
+                if (isNullOrZeroBootKey(key)) {
                     Log.w(TAG, "No boot key from prop or keybox, using random bytes");
                     key = generateRandomBytes(32);
                 }
