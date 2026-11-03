@@ -73,6 +73,8 @@ public class NetworkTraffic extends TextView implements DarkReceiver, StatusIcon
     private static final int MODE_UPSTREAM_ONLY = 1;
     private static final int MODE_DOWNSTREAM_ONLY = 2;
 
+    private static final int TEXT_WEIGHT_BOLD = 700;
+
     private final Monitor mMonitor;
 
     private String mSlot;
@@ -108,9 +110,7 @@ public class NetworkTraffic extends TextView implements DarkReceiver, StatusIcon
         // Static styling, applied once instead of on every "enabled" tuning callback.
         setLines(2);
         setMaxLines(2);
-        final String txtFont = getResources().getString(
-                com.android.internal.R.string.config_bodyFontFamily);
-        setTypeface(Typeface.create(txtFont, Typeface.BOLD));
+        applyBoldTypeface();
         setLineSpacing(0f, 0.95f);
         setLayoutDirection(View.LAYOUT_DIRECTION_LOCALE);
         setTextDirection(View.TEXT_DIRECTION_LOCALE);
@@ -171,6 +171,9 @@ public class NetworkTraffic extends TextView implements DarkReceiver, StatusIcon
     @Override
     protected void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+        getPaint().density = getResources().getDisplayMetrics().density;
+        mAppliedText = null;
+        applyBoldTypeface();
         mCurrentWidth = -1;
         mDrawableResId = -1;
         mMonitor.onConfigurationChanged();
@@ -179,6 +182,13 @@ public class NetworkTraffic extends TextView implements DarkReceiver, StatusIcon
         } else {
             updateWidth();
         }
+    }
+
+    private void applyBoldTypeface() {
+        final String family = getResources().getString(
+                com.android.internal.R.string.config_bodyFontFamily);
+        final Typeface base = Typeface.create(family, Typeface.NORMAL);
+        setTypeface(Typeface.create(base, TEXT_WEIGHT_BOLD, false));
     }
 
     private void onTrafficStateChanged() {
