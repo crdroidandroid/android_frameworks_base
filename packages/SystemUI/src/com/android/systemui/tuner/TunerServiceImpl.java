@@ -87,7 +87,7 @@ public class TunerServiceImpl extends TunerService {
 
     private final Observer mObserver = new Observer();
     // Map of Uris we listen on to their settings keys.
-    private final ArrayMap<Uri, String> mListeningUris = new ArrayMap<>();
+    private final ConcurrentHashMap<Uri, String> mListeningUris = new ConcurrentHashMap<>();
     // Map of settings keys to the listener.
     private final ConcurrentHashMap<String, Set<Tunable>> mTunableLookup =
             new ConcurrentHashMap<>();
@@ -340,8 +340,7 @@ public class TunerServiceImpl extends TunerService {
         } else {
             uri = Settings.Secure.getUriFor(key);
         }
-        if (!mListeningUris.containsKey(uri)) {
-            mListeningUris.put(uri, key);
+        if (mListeningUris.putIfAbsent(uri, key) == null) {
             mContentResolver.registerContentObserver(uri, false, mObserver,
                     isLineageGlobal(key) ? UserHandle.USER_ALL : mCurrentUser);
         }
