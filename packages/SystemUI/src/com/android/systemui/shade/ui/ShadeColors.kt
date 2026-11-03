@@ -17,8 +17,14 @@
 
 package com.android.systemui.shade.ui
 
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.res.Configuration
+import android.database.ContentObserver
+import android.os.Handler
+import android.os.Looper
 import android.os.UserHandle
 import android.provider.Settings
 import com.android.internal.graphics.ColorUtils
@@ -163,10 +169,49 @@ object ShadeColors {
         (context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) ==
             Configuration.UI_MODE_NIGHT_YES
 
+    @Volatile private var cachedStyle: Style? = null
+    @Volatile private var styleGeneration = 0
+    @Volatile private var observingStyle = false
+
     private fun style(context: Context): Style {
+        cachedStyle?.let { return it }
+        ensureObservingStyle(context)
+        val generation = styleGeneration
         val v = Settings.Secure.getIntForUser(
             context.contentResolver, Settings.Secure.SHADE_COLOR_STYLE, 0, UserHandle.USER_CURRENT)
-        return Style.entries.getOrElse(v) { Style.AOSP }
+        val style = Style.entries.getOrElse(v) { Style.AOSP }
+        if (generation == styleGeneration) cachedStyle = style
+        return style
+    }
+
+    private fun invalidateStyle() {
+        styleGeneration++
+        cachedStyle = null
+    }
+
+    @Synchronized
+    private fun ensureObservingStyle(context: Context) {
+        if (observingStyle) return
+        val app = context.applicationContext ?: context
+        val handler = Handler(Looper.getMainLooper())
+        app.contentResolver.registerContentObserver(
+            Settings.Secure.getUriFor(Settings.Secure.SHADE_COLOR_STYLE),
+            false,
+            object : ContentObserver(handler) {
+                override fun onChange(selfChange: Boolean) = invalidateStyle()
+            },
+            UserHandle.USER_ALL,
+        )
+        app.registerReceiverForAllUsers(
+            object : BroadcastReceiver() {
+                override fun onReceive(context: Context, intent: Intent) = invalidateStyle()
+            },
+            IntentFilter(Intent.ACTION_USER_SWITCHED),
+            null,
+            handler,
+            Context.RECEIVER_NOT_EXPORTED,
+        )
+        observingStyle = true
     }
 
     private fun aospShadePanel(context: Context, blurSupported: Boolean, withScrim: Boolean): Int =
