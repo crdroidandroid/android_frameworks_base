@@ -4607,6 +4607,13 @@ public final class NotificationPanelViewController implements
         }
 
         Drawable current = mQsHeaderImageView.getDrawable();
+        if (current instanceof TransitionDrawable td && td.getNumberOfLayers() > 0) {
+            current = td.getDrawable(td.getNumberOfLayers() - 1);
+        }
+        if (current == dw) {
+            mQsHeaderImageView.setImageDrawable(dw);
+            return;
+        }
         if (current != null && !force && !(current instanceof Animatable)) {
             Drawable[] layers = new Drawable[]{current, dw};
             TransitionDrawable transitionDrawable = new TransitionDrawable(layers);
