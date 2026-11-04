@@ -395,7 +395,7 @@ public final class AttestationUtils {
         if (halVersion > 0 && sdkVersion >= 100) {
             return Math.min(sdkVersion, halVersion * 100);
         }
-        return sdkVersion;
+        return 4;
     }
 
     public static int getKeymasterVersion() {
