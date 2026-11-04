@@ -1916,8 +1916,8 @@ public class SyncStorageEngine {
                         }
                     } else {
                         EventLog.writeEvent(0x534e4554, "35028827", -1,
-                                "account:" + info.account + " provider:" + authorityName + " user:"
-                                        + userId);
+                                "account:" + info.account.toSafeString()
+                                        + " provider:" + authorityName + " user:" + userId);
                     }
                 }
             }
