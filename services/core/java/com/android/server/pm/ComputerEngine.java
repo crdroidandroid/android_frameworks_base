@@ -172,14 +172,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
-import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -1549,21 +1547,10 @@ public class ComputerEngine implements Computer {
                 }
             }
 
-            Optional.ofNullable(MicrogUtils.getFakeSignature(p)).ifPresent(fakeSignature -> {
-                packageInfo.signatures = new Signature[]{fakeSignature};
-                try {
-                    packageInfo.signingInfo = new SigningInfo(
-                            new SigningDetails(
-                                    packageInfo.signatures,
-                                    SigningDetails.SignatureSchemeVersion.SIGNING_BLOCK_V3,
-                                    SigningDetails.toSigningKeys(packageInfo.signatures),
-                                    null
-                            )
-                    );
-                } catch (CertificateException e) {
-                    Slog.e(TAG, "Caught an exception when creating signing keys: ", e);
-                }
-            });
+            final Signature fakeSignature = MicrogUtils.getFakeSignature(p);
+            if (fakeSignature != null) {
+                MicrogUtils.applyFakeSignature(packageInfo, fakeSignature, flags);
+            }
 
             return packageInfo;
         } else if ((flags & (MATCH_UNINSTALLED_PACKAGES | MATCH_ARCHIVED_PACKAGES)) != 0
