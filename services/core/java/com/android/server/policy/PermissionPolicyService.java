@@ -875,7 +875,11 @@ public final class PermissionPolicyService extends SystemService {
             if (permissionInfo == null) {
                 return;
             }
-            addPermissionAppOp(packageInfo, pkg, permissionInfo);
+            // Runtime permission app-op modes are derived directly from permission flags by
+            // AppOpService. Trying to synchronize those modes through setUidMode is rejected by
+            // the new permission access model and can leave the legacy synchronizer repeatedly
+            // retrying an override that is no longer authoritative. Keep only the extra app-op
+            // synchronization required by soft-restricted permissions.
             addExtraAppOp(packageInfo, pkg, permissionInfo);
         }
 
