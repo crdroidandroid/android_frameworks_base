@@ -23,7 +23,6 @@ import com.android.systemui.axdynamicbar.model.RecordingState
 import com.android.systemui.dagger.SysUISingleton
 import com.android.systemui.dagger.qualifiers.Application
 import com.android.systemui.util.ScrimUtils
-import java.util.Collections
 import java.util.Objects
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
@@ -91,8 +90,6 @@ constructor(
             addAll(RECORDER_PACKAGES)
         }
 
-        private const val MAX_NOTIFICATION_EVENTS = 10
-        private const val MAX_SEEN_SIGNATURES = 256
 
         private val NOW_PLAYING_BY_PATTERN = Regex("""(.+?)\s+by\s+(.+)""", RegexOption.IGNORE_CASE)
         private val ELAPSED_PATTERN = Regex("""(\d+):(\d+)(?::(\d+))?""")
@@ -162,14 +159,18 @@ constructor(
 
     var activeMediaPackageProvider: (() -> String?)? = null
 
-    private val seenSignatures: MutableMap<String, Long> =
-        Collections.synchronizedMap(
-            object : LinkedHashMap<String, Long>(64, 0.75f, true) {
-                override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, Long>?) =
-                    size > MAX_SEEN_SIGNATURES
-            }
-        )
+    /**
+     * Last content signature per posted key. Not size-capped: evicting a still-posted entry made
+     * its next update look new and alert again. Removal drops the entry, so it is bounded by the
+     * live notifications. Concurrent because stopListening() clears it from another thread.
+     */
+    private val seenSignatures: MutableMap<String, Long> = ConcurrentHashMap()
 
+    /**
+     * Keys that may still be shown. Cleared on removal and on dismiss so a late coalesce cannot
+     * put the notification back (and pin its sbn/bitmaps). A later post adds the key again.
+     * This, not a size cap, is what bounds _notificationEvents to live notifications.
+     */
     private val activeNotificationKeys: MutableSet<String> = ConcurrentHashMap.newKeySet()
     private val notificationLock = Any()
 
@@ -667,6 +668,7 @@ constructor(
 
     fun dismissNotification(event: IslandEvent.Notification) {
         synchronized(notificationLock) {
+            activeNotificationKeys.remove(event.sbn.key)
             _notificationEvents.update { list -> list.filter { it.id != event.id } }
         }
     }
@@ -676,7 +678,7 @@ constructor(
         synchronized(notificationLock) {
             if (event.sbn.key !in activeNotificationKeys) return
             _notificationEvents.update { list ->
-                (listOf(event) + list.filter { it.id != event.id }).take(MAX_NOTIFICATION_EVENTS)
+                listOf(event) + list.filter { it.id != event.id }
             }
         }
     }
