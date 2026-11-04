@@ -2864,6 +2864,7 @@
                 android:protectionLevel="signature|privileged" />
 
     <!-- @SystemApi Allows a system application to access hardware packet offload capabilities.
+         This permission allows lockdown VPNs to be bypassed.
          @hide -->
     <permission android:name="android.permission.PACKET_KEEPALIVE_OFFLOAD"
         android:protectionLevel="signature|privileged" />
