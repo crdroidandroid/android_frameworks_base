@@ -18,6 +18,9 @@ package com.android.systemui.axdynamicbar.shared
 
 import android.app.Notification
 import android.content.Context
+import android.util.LruCache
+
+private val iconResNameCache = LruCache<String, String>(256)
 
 enum class NotificationActionType {
     STOP,
@@ -54,12 +57,17 @@ fun Notification.Action.classify(context: Context, packageName: String): Notific
         val icon = getIcon() ?: return@run null
         val resId = try { icon.resId } catch (_: Exception) { 0 }
         if (resId == 0) return@run null
-        try {
-            context.packageManager.getResourcesForApplication(packageName)
-                .getResourceEntryName(resId).lowercase()
-        } catch (_: Exception) {
-            null
-        }
+        val key = "$packageName:$resId"
+        iconResNameCache.get(key)?.let { return@run it.ifEmpty { null } }
+        val name =
+            try {
+                context.packageManager.getResourcesForApplication(packageName)
+                    .getResourceEntryName(resId).lowercase()
+            } catch (_: Exception) {
+                null
+            }
+        iconResNameCache.put(key, name ?: "")
+        name
     }
 
     when {

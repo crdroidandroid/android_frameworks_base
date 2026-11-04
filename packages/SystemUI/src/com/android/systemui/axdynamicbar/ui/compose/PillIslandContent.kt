@@ -302,6 +302,7 @@ private fun AnimatedTrophyIcon(color: Color) {
         animationSpec = infiniteRepeatable(tween(1200, easing = FastOutSlowInEasing), RepeatMode.Reverse),
         label = "trophy_shimmer",
     )
+    val cupPath = remember { Path() }
 
     Canvas(modifier = Modifier.size(SizeBadge)) {
         val w = size.width
@@ -314,7 +315,8 @@ private fun AnimatedTrophyIcon(color: Color) {
         val cupBot = h * 0.58f
         val cupLeft = w * 0.25f
         val cupRight = w * 0.75f
-        val cupPath = Path().apply {
+        cupPath.apply {
+            rewind()
             moveTo(cupLeft, cupTop)
             lineTo(cupRight, cupTop)
             lineTo(cupRight - w * 0.05f, cupBot)
@@ -1030,9 +1032,11 @@ private fun KeyguardIndicationIcon(event: IslandEvent.KeyguardIndication, tint: 
         IslandEvent.KeyguardIndication.IndicationType.TRUST -> {
             
             val color = tint ?: toneFor(event).tint
+            val path = remember { Path() }
             Canvas(modifier = Modifier.size(SizeBadge)) {
                 val w = size.width; val h = size.height
-                val path = Path().apply {
+                path.apply {
+                    rewind()
                     moveTo(w * 0.5f, h * 0.05f)
                     lineTo(w * 0.9f, h * 0.25f)
                     lineTo(w * 0.85f, h * 0.65f)
@@ -1207,10 +1211,11 @@ private fun AospChipText(event: IslandEvent.AospChip, modifier: Modifier, overri
 
 @Composable
 private fun AospChipTimerText(content: OngoingActivityChipModel.Content.Timer, color: Color, modifier: Modifier) {
+    val formatter = remember(content.format) { content.format.toFormatter() }
     val text =
         rememberChronometerText(
             chronometer = content.value,
-            formatter = content.format.toFormatter(),
+            formatter = formatter,
             timeSource = content.timeSource,
         )
     if (text != null) ChronometerLabel(text, color, modifier)

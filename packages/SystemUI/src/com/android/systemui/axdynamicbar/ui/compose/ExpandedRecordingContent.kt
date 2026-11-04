@@ -73,7 +73,8 @@ internal fun AudioRecordingExpanded(
             RecordingState.SAVED -> R.string.ax_dynamic_bar_saved
         }
     )
-    val inline = rememberActionsFitInline(event.actions.map { it.action })
+    val actionList = remember(event.actions) { event.actions.map { it.action } }
+    val inline = rememberActionsFitInline(actionList)
 
     val actionButtons: @Composable () -> Unit = {
         event.actions.forEach { notifAction ->

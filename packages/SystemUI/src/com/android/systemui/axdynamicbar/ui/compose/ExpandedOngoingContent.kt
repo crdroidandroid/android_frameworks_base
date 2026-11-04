@@ -68,6 +68,7 @@ private fun resolveRemoteViews(ctx: Context, notification: Notification): Remote
 }
 
 private fun applyOrReapplyRemoteViews(frame: FrameLayout, notification: Notification): Boolean {
+    if (frame.tag === notification && frame.childCount > 0) return true
     val rv =
         try {
             resolveRemoteViews(frame.context, notification)
@@ -79,6 +80,7 @@ private fun applyOrReapplyRemoteViews(frame: FrameLayout, notification: Notifica
         try {
             rv.reapply(frame.context, existing)
             prepareForIsland(existing)
+            frame.tag = notification
             return true
         } catch (_: Exception) {
             frame.removeAllViews()
@@ -94,6 +96,7 @@ private fun applyOrReapplyRemoteViews(frame: FrameLayout, notification: Notifica
                 FrameLayout.LayoutParams.WRAP_CONTENT,
             ),
         )
+        frame.tag = notification
         true
     } catch (_: Exception) {
         false
@@ -178,7 +181,8 @@ private fun PromotedOngoingFallback(
                 }
                 .take(MAX_INLINE_ACTIONS)
         }
-    val inline = rememberActionsFitInline(usableActions.map { it.action })
+    val actionList = remember(usableActions) { usableActions.map { it.action } }
+    val inline = rememberActionsFitInline(actionList)
     val hasProgress = event.progress >= 0f || event.isIndeterminate
 
     val actionButtons: @Composable () -> Unit = {
