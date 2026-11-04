@@ -29,6 +29,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -70,6 +71,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -118,11 +120,13 @@ constructor(
         val needsOverlay =
             combine(
                 viewModel.isExpanded,
-                viewModel.interactor.uiState.map { it.notificationAlert },
+                viewModel.interactor.uiState.map { it.notificationAlert != null }
+                    .distinctUntilChanged(),
                 viewModel.isOnKeyguard,
-            ) { expanded, alert, onKeyguard ->
-                !onKeyguard && (expanded || alert != null)
+            ) { expanded, hasAlert, onKeyguard ->
+                !onKeyguard && (expanded || hasAlert)
             }
+                .distinctUntilChanged()
 
         needsOverlay
             .onEach { needed ->
@@ -229,7 +233,15 @@ constructor(
         params.gravity = Gravity.TOP or Gravity.FILL_HORIZONTAL
         params.title = "AxDynamicBarExpanded"
 
-        windowManager.addView(view, params)
+        try {
+            windowManager.addView(view, params)
+        } catch (e: RuntimeException) {
+            view.viewTreeObserver.removeOnComputeInternalInsetsListener(touchableInsetsListener)
+            lifecycleOwner.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+            panelLifecycleOwner = null
+            android.util.Log.w("AxDynamicBarExpanded", "Unable to add overlay", e)
+            return
+        }
         overlayView = view
     }
 
@@ -246,7 +258,14 @@ constructor(
                 handleLifecycleEvent(Lifecycle.Event.ON_STOP)
                 handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
             }
-            windowManager.removeViewImmediate(view)
+            view.viewTreeObserver.removeOnComputeInternalInsetsListener(touchableInsetsListener)
+            view.setOnTouchListener(null)
+            view.setOnApplyWindowInsetsListener(null)
+            try {
+                windowManager.removeViewImmediate(view)
+            } catch (_: IllegalArgumentException) {
+            }
+            view.disposeComposition()
         }
         overlayView = null
         panelLifecycleOwner = null
@@ -313,9 +332,12 @@ private fun OverlayContent(viewModel: AxDynamicBarChipViewModel, statusBarHeight
         else with(density) { statusBarHeightPx.toDp() } + largeScreenExtra
     val chipState by viewModel.chipState.collectAsStateWithLifecycle()
     val isExpanded by viewModel.isExpanded.collectAsStateWithLifecycle()
-    val uiState by viewModel.interactor.uiState.collectAsStateWithLifecycle()
-    val isOnKeyguard by viewModel.isOnKeyguard.collectAsStateWithLifecycle()
-    val notifAlert = uiState.notificationAlert
+    val alertFlow = remember(viewModel) {
+        viewModel.interactor.uiState.map { it.notificationAlert }.distinctUntilChanged()
+    }
+    val notifAlert by alertFlow.collectAsStateWithLifecycle(
+        initialValue = viewModel.interactor.uiState.value.notificationAlert
+    )
     val compactNotifs by viewModel.interactor.settings.compactNotifications.collectAsStateWithLifecycle()
 
     val lastAlert = remember { mutableStateOf<IslandEvent.Notification?>(null) }
@@ -333,9 +355,18 @@ private fun OverlayContent(viewModel: AxDynamicBarChipViewModel, statusBarHeight
         notifVisible.targetState = showNotif
     }
 
-    LaunchedEffect(chipState) {
-        val filtered = chipState?.allEvents?.filter { it !is IslandEvent.AospChip }
-        if (filtered.isNullOrEmpty() && isExpanded) {
+    if (notifAlert == null && !notifVisible.targetState && notifVisible.isIdle &&
+        !notifVisible.currentState
+    ) {
+        lastAlert.value = null
+    }
+
+    val expandableEvents by remember {
+        derivedStateOf { chipState?.allEvents?.filter { it !is IslandEvent.AospChip }.orEmpty() }
+    }
+    val hasExpandableEvents = expandableEvents.isNotEmpty()
+    LaunchedEffect(hasExpandableEvents, isExpanded) {
+        if (!hasExpandableEvents && isExpanded) {
             viewModel.statusBarExpansion.collapse()
         }
     }
@@ -416,7 +447,7 @@ private fun OverlayContent(viewModel: AxDynamicBarChipViewModel, statusBarHeight
                 contentAlignment = Alignment.TopCenter,
             ) {
                 chipState?.let { state ->
-                    val filtered = state.allEvents.filter { it !is IslandEvent.AospChip }
+                    val filtered = expandableEvents
                     if (filtered.isEmpty()) return@let
                     Box(
                         modifier =

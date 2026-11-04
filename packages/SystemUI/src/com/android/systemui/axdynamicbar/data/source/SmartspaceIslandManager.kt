@@ -20,6 +20,7 @@ import android.app.PendingIntent
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.util.LruCache
 import com.android.axion.quicklook.SportsData
 import com.android.systemui.axdynamicbar.model.IslandEvent
 import com.android.systemui.dagger.SysUISingleton
@@ -45,6 +46,8 @@ constructor(
 
     private var allSports: List<IslandEvent.Sports> = emptyList()
     private val dismissedSportsKeys = mutableSetOf<String>()
+
+    private val iconCache = LruCache<String, Drawable>(24)
 
     private var lastNowPlayingText: String? = null
     private var dismissedNowPlayingText: String? = null
@@ -88,7 +91,7 @@ constructor(
                 return
             }
             dismissedNowPlayingText = null
-            val byMatch = Regex("""(.+?)\s+by\s+(.+)""", RegexOption.IGNORE_CASE).find(text)
+            val byMatch = NOW_PLAYING_BY_PATTERN.find(text)
             val dashParts = if (byMatch == null) text.split(" - ", " – ", limit = 2) else null
             val songTitle: String
             val artist: String
@@ -130,6 +133,7 @@ constructor(
         dismissedNowPlayingText = null
         _sportsEvents.value = emptyList()
         _nowPlayingEvent.value = null
+        iconCache.evictAll()
     }
 
     fun clearSportsEvent(key: String, team1: String? = null, team2: String? = null) {
@@ -170,11 +174,25 @@ constructor(
 
     private fun bytesToDrawable(bytes: ByteArray?): Drawable? {
         if (bytes == null || bytes.isEmpty()) return null
+        val key = "${bytes.size}:${bytes.contentHashCode()}"
+        iconCache.get(key)?.let { return it }
         return try {
-            val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size) ?: return null
-            BitmapDrawable(null, bitmap)
+            val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+            BitmapFactory.decodeByteArray(bytes, 0, bytes.size, bounds)
+            var sample = 1
+            while (maxOf(bounds.outWidth, bounds.outHeight) / (sample * 2) >= MAX_ICON_PX) {
+                sample *= 2
+            }
+            val opts = BitmapFactory.Options().apply { inSampleSize = sample }
+            val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size, opts) ?: return null
+            BitmapDrawable(null, bitmap).also { iconCache.put(key, it) }
         } catch (_: Exception) {
             null
         }
+    }
+
+    private companion object {
+        const val MAX_ICON_PX = 192
+        val NOW_PLAYING_BY_PATTERN = Regex("""(.+?)\s+by\s+(.+)""", RegexOption.IGNORE_CASE)
     }
 }

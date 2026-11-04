@@ -77,7 +77,12 @@ sealed class IslandEvent(open val priority: Int, val id: String) : Comparable<Is
     ) : IslandEvent(priority = MEDIA_PLAYING_PRIORITY, id = "media") {
         override val priority: Int
             get() = if (isPlaying) MEDIA_PLAYING_PRIORITY else MEDIA_PAUSED_PRIORITY
-        override fun withoutDrawables() = copy(albumArt = null, appIcon = null)
+        override fun withoutDrawables() =
+            copy(
+                albumArt = null,
+                appIcon = null,
+                customActions = customActions.map { it.copy(icon = null) },
+            )
     }
 
     data class Bluetooth(
@@ -329,6 +334,9 @@ sealed class IslandEvent(open val priority: Int, val id: String) : Comparable<Is
         val callStartTimeMs: Long = 0L,
         val createdAt: Long = System.currentTimeMillis(),
     ) : IslandEvent(priority = NOTIFICATION_STALE_PRIORITY, id = "notification_${sbn.key}") {
+        override fun withoutDrawables() =
+            copy(appIcon = null, senderIcon = null, notificationImage = null)
+
         override val priority: Int
             get() =
                 if (System.currentTimeMillis() - createdAt < NOTIFICATION_DECAY_MS)
