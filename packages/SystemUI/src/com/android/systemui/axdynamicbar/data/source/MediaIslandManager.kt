@@ -15,6 +15,7 @@ import android.media.session.PlaybackState
 import android.os.Handler
 import android.os.SystemClock
 import android.util.Log
+import android.util.LruCache
 import com.android.systemui.axdynamicbar.model.IslandEvent
 import com.android.systemui.dagger.SysUISingleton
 import com.android.systemui.dagger.qualifiers.Application
@@ -69,6 +70,8 @@ constructor(
         context.getSystemService(SystemMediaSessionManager::class.java)
     }
 
+    private val customActionIconCache = LruCache<String, Drawable>(16)
+
     @Volatile private var activeMediaController: MediaController? = null
     @Volatile private var activeControllerCallback: ControllerCallback? = null
 
@@ -115,6 +118,7 @@ constructor(
         }
 
         override fun onAppIconChanged(drawable: Drawable) {
+            if (sessionAppIcon === drawable) return
             sessionAppIcon = drawable
             _mediaEvent.update { event -> event?.copy(appIcon = drawable) }
         }
@@ -305,11 +309,17 @@ constructor(
         ps?.customActions?.take(2)?.mapNotNull { ca ->
             val lbl = ca.name?.toString()?.takeIf { it.isNotEmpty() } ?: return@mapNotNull null
             val act = ca.action?.takeIf { it.isNotEmpty() } ?: return@mapNotNull null
-            val icon = try {
+            val icon =
                 if (ca.icon != 0 && pkg != null) {
-                    DrawableIcon.createWithResource(pkg, ca.icon).loadDrawable(context)
+                    val key = "$pkg:${ca.icon}"
+                    customActionIconCache.get(key)
+                        ?: try {
+                            DrawableIcon.createWithResource(pkg, ca.icon).loadDrawable(context)
+                                ?.also { customActionIconCache.put(key, it) }
+                        } catch (_: Exception) {
+                            null
+                        }
                 } else null
-            } catch (_: Exception) { null }
             IslandEvent.MediaCustomAction(label = lbl, action = act, icon = icon)
         } ?: emptyList()
 
@@ -328,11 +338,14 @@ constructor(
                 val rawDuration = metadata?.getLong(MediaMetadata.METADATA_KEY_DURATION) ?: 0L
                 val duration = if (rawDuration > 0L) rawDuration else UNKNOWN_DURATION
 
+                val bound = activeMediaController
                 val controller =
-                    if (metadata != null) {
-                        findController(track, artist, null).also { setActiveController(it) }
+                    if (metadata == null) {
+                        bound
+                    } else if (bound != null && matchesTrack(bound, track, artist)) {
+                        bound
                     } else {
-                        activeMediaController
+                        findController(track, artist, null).also { setActiveController(it) }
                     }
                 val ps = controller?.playbackState
                 val pkg = controller?.packageName
@@ -447,6 +460,7 @@ constructor(
         activeMediaPackage = null
         sessionAlbumArt = null
         sessionAppIcon = null
+        customActionIconCache.evictAll()
     }
 
     fun clear() {

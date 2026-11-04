@@ -701,35 +701,38 @@ private fun KeyguardMediaSeekBar(
             },
             update = { bar ->
                 val target = (displayFraction * 10_000f).toInt().coerceIn(0, 10_000)
-                bar.progress = target
-
-                // Re-tint thumb for accent color changes (e.g. track switch)
-                (bar.thumb as? GradientDrawable)?.setColor(accentArgb)
+                if (bar.progress != target) bar.progress = target
 
                 val alpha = if (isPlaying) 255 else (255 * 0.55f).toInt()
-                bar.thumb?.alpha = alpha
+                val style = KeyguardSeekBarStyle(accentArgb, trackAlphaArgb, alpha, isPlaying && !isScrubbing)
+                if (bar.tag != style) {
+                    (bar.thumb as? GradientDrawable)?.setColor(accentArgb)
 
-                val layer = bar.progressDrawable as? LayerDrawable
+                    bar.thumb?.alpha = alpha
 
-                // Re-tint track colors
-                layer?.findDrawableByLayerId(android.R.id.background)
-                    ?.setTint(trackAlphaArgb)
-                layer?.findDrawableByLayerId(android.R.id.secondaryProgress)
-                    ?.setTint(
-                        com.android.internal.graphics.ColorUtils
-                            .setAlphaComponent(accentArgb, 60)
-                    )
+                    val layer = bar.progressDrawable as? LayerDrawable
 
-                val squiggle = layer
-                    ?.findDrawableByLayerId(android.R.id.progress) as? SquigglyProgress
+                    // Re-tint track colors
+                    layer?.findDrawableByLayerId(android.R.id.background)
+                        ?.setTint(trackAlphaArgb)
+                    layer?.findDrawableByLayerId(android.R.id.secondaryProgress)
+                        ?.setTint(
+                            com.android.internal.graphics.ColorUtils
+                                .setAlphaComponent(accentArgb, 60)
+                        )
 
-                squiggle?.apply {
-                    setTint(accentArgb)
-                    setAlpha(alpha)
-                    animate = isPlaying && !isScrubbing
+                    val squiggle = layer
+                        ?.findDrawableByLayerId(android.R.id.progress) as? SquigglyProgress
+
+                    squiggle?.apply {
+                        setTint(accentArgb)
+                        setAlpha(alpha)
+                        animate = isPlaying && !isScrubbing
+                    }
+
+                    layer?.alpha = alpha
+                    bar.tag = style
                 }
-
-                layer?.alpha = alpha
             },
             modifier = Modifier.fillMaxWidth().height(KeyguardSeekBarHeight),
         )
@@ -1078,3 +1081,10 @@ private fun KeyguardGenericPanel(
         }
     }
 }
+
+private data class KeyguardSeekBarStyle(
+    val accent: Int,
+    val track: Int,
+    val alpha: Int,
+    val animate: Boolean,
+)

@@ -82,10 +82,11 @@ internal fun TimerExpanded(event: IslandEvent.Timer, interactor: IslandActions) 
     }
     val progress = if (event.endTimeMs > 0L) remainingMs.toFloat() / totalMs else 0f
     val counting = event.endTimeMs > 0L && !event.isPaused
+    val actionPairs = remember(event.actions) { event.actions.map { it.action to it.label.toString() } }
 
     TileWithActions(
         event = event,
-        actions = event.actions.map { it.action to it.label.toString() },
+        actions = actionPairs,
         style = style,
         interactor = interactor,
         icon = {
@@ -155,9 +156,11 @@ internal fun StopwatchExpanded(event: IslandEvent.Stopwatch, interactor: IslandA
         }
     }
 
+    val actionPairs = remember(event.actions) { event.actions.map { it.action to it.label.toString() } }
+
     TileWithActions(
         event = event,
-        actions = event.actions.map { it.action to it.label.toString() },
+        actions = actionPairs,
         style = style,
         interactor = interactor,
         icon = {
@@ -199,7 +202,8 @@ private fun TileWithActions(
     title: @Composable androidx.compose.foundation.layout.ColumnScope.() -> Unit,
 ) {
     val context = LocalContext.current
-    val inline = rememberActionsFitInline(actions.map { it.first })
+    val actionList = remember(actions) { actions.map { it.first } }
+    val inline = rememberActionsFitInline(actionList)
 
     val buttons: @Composable () -> Unit = {
         if (actions.isEmpty()) {

@@ -75,21 +75,25 @@ class AppTrackingIslandManager @Inject constructor(@Application private val cont
                 val leavingPkg = currentForegroundPkg
                 currentForegroundPkg = pkg
 
+                val known = synchronized(recentApps) { recentApps.firstOrNull { it.packageName == pkg } }
+
                 val appName =
-                    try {
-                        context.packageManager
-                            .getApplicationLabel(context.packageManager.getApplicationInfo(pkg, 0))
-                            .toString()
-                    } catch (_: Exception) {
-                        pkg
-                    }
+                    known?.appName
+                        ?: try {
+                            context.packageManager
+                                .getApplicationLabel(context.packageManager.getApplicationInfo(pkg, 0))
+                                .toString()
+                        } catch (_: Exception) {
+                            pkg
+                        }
 
                 val appIcon =
-                    try {
-                        context.packageManager.getApplicationIcon(pkg)
-                    } catch (_: Exception) {
-                        null
-                    }
+                    known?.appIcon
+                        ?: try {
+                            context.packageManager.getApplicationIcon(pkg)
+                        } catch (_: Exception) {
+                            null
+                        }
 
                 val app =
                     IslandEvent.RecentApp(

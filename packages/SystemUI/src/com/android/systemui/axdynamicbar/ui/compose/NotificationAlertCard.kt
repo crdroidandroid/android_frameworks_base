@@ -745,7 +745,9 @@ private fun CallActions(
                 }
             }
             endAction?.let { action ->
-                val drawable = action.action.getIcon()?.loadDrawable(context)
+                val drawable = remember(action.action) {
+                    try { action.action.getIcon()?.loadDrawable(context) } catch (_: Exception) { null }
+                }
                 if (drawable != null) {
                     DrawableActionCircle(drawable, declineBg, declineFg) {
                         try { action.action.actionIntent?.sendWithBal(context) }
@@ -829,6 +831,8 @@ private fun ReplyField(
     val focusRequester = remember { FocusRequester() }
     val currentOnFocusChange by rememberUpdatedState(onFocusChange)
     val currentInteractor by rememberUpdatedState(interactor)
+    // Forward only real focus changes; each onFocusableRequested is an updateViewLayout.
+    val lastFocused = remember { booleanArrayOf(false) }
 
     LaunchedEffect(Unit) {
         interactor.onAlertReplyActiveChanged(true)
@@ -858,6 +862,8 @@ private fun ReplyField(
                 .padding(horizontal = SpaceLg)
                 .focusRequester(focusRequester)
                 .onFocusChanged {
+                    if (it.isFocused == lastFocused[0]) return@onFocusChanged
+                    lastFocused[0] = it.isFocused
                     interactor.onFocusableRequested?.invoke(it.isFocused)
                     onFocusChange(it.isFocused)
                 },

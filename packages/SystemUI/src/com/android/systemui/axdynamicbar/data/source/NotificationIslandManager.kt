@@ -13,6 +13,7 @@ import android.os.Parcelable
 import android.os.SystemClock
 import android.service.notification.StatusBarNotification
 import android.util.Log
+import android.util.LruCache
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Chronometer
@@ -22,7 +23,9 @@ import com.android.systemui.axdynamicbar.model.RecordingState
 import com.android.systemui.dagger.SysUISingleton
 import com.android.systemui.dagger.qualifiers.Application
 import com.android.systemui.util.ScrimUtils
+import java.util.Collections
 import java.util.Objects
+import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -31,6 +34,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @SysUISingleton
@@ -85,6 +89,14 @@ constructor(
             addAll(ALARM_PACKAGES)
             addAll(RECORDER_PACKAGES)
         }
+
+        private const val MAX_NOTIFICATION_EVENTS = 10
+        private const val MAX_SEEN_SIGNATURES = 256
+
+        private val NOW_PLAYING_BY_PATTERN = Regex("""(.+?)\s+by\s+(.+)""", RegexOption.IGNORE_CASE)
+        private val ELAPSED_PATTERN = Regex("""(\d+):(\d+)(?::(\d+))?""")
+        private val TRAILING_SEPARATOR = Regex("""\s*[·•|].*""")
+        private val LEADING_SEPARATOR = Regex("""^.*[·•|]\s*""")
     }
 
     private val _timerEvent = MutableStateFlow<IslandEvent.Timer?>(null)
@@ -143,7 +155,22 @@ constructor(
 
     var activeMediaPackageProvider: (() -> String?)? = null
 
-    private val seenSignatures = mutableMapOf<String, Long>()
+    private val seenSignatures: MutableMap<String, Long> =
+        Collections.synchronizedMap(
+            object : LinkedHashMap<String, Long>(64, 0.75f, true) {
+                override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, Long>?) =
+                    size > MAX_SEEN_SIGNATURES
+            }
+        )
+
+    private val activeNotificationKeys: MutableSet<String> = ConcurrentHashMap.newKeySet()
+    private val notificationLock = Any()
+
+    private val appLabelCache = LruCache<String, String>(64)
+    private val appIconCache = LruCache<String, Drawable>(32)
+    private val smallIconCache = LruCache<String, Drawable>(32)
+    private val iconResNameCache = LruCache<String, String>(256) // "" == no name
+    private val packageContextCache = LruCache<String, Context>(4)
 
     var onTimerEvent: ((IslandEvent.Timer) -> Unit)? = null
     var onAlarmEvent: ((IslandEvent.Alarm) -> Unit)? = null
@@ -200,21 +227,18 @@ constructor(
                     _alarmEvent.value = null
                 }
 
-                _callEvents.value =
-                    _callEvents.value.filter { it.sbn.key != sbn.key }
+                _callEvents.update { list -> list.filter { it.sbn.key != sbn.key } }
 
-                _promotedOngoingEvents.value =
-                    _promotedOngoingEvents.value.filter { it.sbn.key != sbn.key }
+                _promotedOngoingEvents.update { list -> list.filter { it.sbn.key != sbn.key } }
 
-                _sportsEvents.value =
-                    _sportsEvents.value.filter { it.key != sbn.key }
+                _sportsEvents.update { list -> list.filter { it.key != sbn.key } }
 
-                if (_nowPlayingEvent.value?.key == sbn.key) {
-                    _nowPlayingEvent.value = null
+                _nowPlayingEvent.update { if (it?.key == sbn.key) null else it }
+
+                synchronized(notificationLock) {
+                    activeNotificationKeys.remove(sbn.key)
+                    _notificationEvents.update { list -> list.filter { it.sbn.key != sbn.key } }
                 }
-
-                _notificationEvents.value =
-                    _notificationEvents.value.filter { it.sbn.key != sbn.key }
 
                 notificationRemovedFlow.tryEmit(sbn.key)
             }
@@ -427,8 +451,7 @@ constructor(
                 }
                 if (!sbn.isOngoing) {
                     dismissedPromotedKeys.remove(sbn.key)
-                    _promotedOngoingEvents.value =
-                        _promotedOngoingEvents.value.filter { it.sbn.key != sbn.key }
+                    _promotedOngoingEvents.update { list -> list.filter { it.sbn.key != sbn.key } }
                 }
                 if (sbn.isOngoing) return
                 if ("notification" in disabledTypes) return
@@ -473,20 +496,8 @@ constructor(
 
                 if (lastMessage != null && isFromSelf(lastMessage, extras)) return
 
-                val icon =
-                    try {
-                        context.packageManager.getApplicationIcon(pkg)
-                    } catch (_: Exception) {
-                        null
-                    }
-                val appName =
-                    try {
-                        context.packageManager
-                            .getApplicationLabel(context.packageManager.getApplicationInfo(pkg, 0))
-                            .toString()
-                    } catch (_: Exception) {
-                        pkg
-                    }
+                val icon = appIcon(pkg)
+                val appName = appLabel(pkg) ?: pkg
 
                 val allNotifActions = sbn.notification?.actions ?: emptyArray()
 
@@ -602,7 +613,10 @@ constructor(
                         groupKey = groupKey,
                         notificationImage = notificationImage,
                     )
-                applicationScope.launch { notificationFlow.emit(event) }
+                activeNotificationKeys.add(sbn.key)
+                if (!notificationFlow.tryEmit(event)) {
+                    applicationScope.launch { notificationFlow.emit(event) }
+                }
                 onNotificationPosted?.invoke(event)
             }
         }
@@ -618,6 +632,12 @@ constructor(
         listening = false
         ScrimUtils.get().removeListener(scrimListener)
         seenSignatures.clear()
+        activeNotificationKeys.clear()
+        appLabelCache.evictAll()
+        appIconCache.evictAll()
+        smallIconCache.evictAll()
+        iconResNameCache.evictAll()
+        packageContextCache.evictAll()
         timerJob?.cancel()
         timerJob = null
         timerNotificationKey = null
@@ -629,7 +649,7 @@ constructor(
         dismissedSportsKeys.clear()
         _alarmEvent.value = null
         _callEvents.value = emptyList()
-        _notificationEvents.value = emptyList()
+        synchronized(notificationLock) { _notificationEvents.value = emptyList() }
         _promotedOngoingEvents.value = emptyList()
         _sportsEvents.value = emptyList()
         _nowPlayingEvent.value = null
@@ -650,14 +670,18 @@ constructor(
     }
 
     fun dismissNotification(event: IslandEvent.Notification) {
-        _notificationEvents.value = _notificationEvents.value.filter { it.id != event.id }
+        synchronized(notificationLock) {
+            _notificationEvents.update { list -> list.filter { it.id != event.id } }
+        }
     }
 
     fun coalesceNotification(event: IslandEvent.Notification) {
-        val current = _notificationEvents.value.toMutableList()
-        current.removeAll { it.id == event.id }
-        current.add(0, event)
-        _notificationEvents.value = current
+        synchronized(notificationLock) {
+            if (event.sbn.key !in activeNotificationKeys) return
+            _notificationEvents.update { list ->
+                (listOf(event) + list.filter { it.id != event.id }).take(MAX_NOTIFICATION_EVENTS)
+            }
+        }
     }
 
     fun dismissAudioRecording() {
@@ -693,7 +717,7 @@ constructor(
     }
 
     fun clearCall(key: String) {
-        _callEvents.value = _callEvents.value.filter { it.sbn.key != key }
+        _callEvents.update { list -> list.filter { it.sbn.key != key } }
     }
 
     private fun handleTimer(
@@ -703,12 +727,7 @@ constructor(
         actionIntents: List<String> = emptyList(),
     ) {
         val label = extras.getText("android.title") ?: context.getString(R.string.ax_dynamic_bar_timer)
-        val icon =
-            try {
-                context.packageManager.getApplicationIcon(sbn.packageName)
-            } catch (_: Exception) {
-                null
-            }
+        val icon = appIcon(sbn.packageName)
 
         val hasPauseIntent = actionIntents.any { it == DeskClockActions.PAUSE_TIMER }
         val hasStartIntent = actionIntents.any { it == DeskClockActions.START_TIMER }
@@ -787,12 +806,7 @@ constructor(
         actionIntents: List<String> = emptyList(),
     ) {
         val label = extras.getText("android.title") ?: ""
-        val icon =
-            try {
-                context.packageManager.getApplicationIcon(sbn.packageName)
-            } catch (_: Exception) {
-                null
-            }
+        val icon = appIcon(sbn.packageName)
 
         val hasPauseIntent = actionIntents.any { it == DeskClockActions.PAUSE_STOPWATCH }
         val hasStartIntent = actionIntents.any { it == DeskClockActions.START_STOPWATCH }
@@ -826,7 +840,10 @@ constructor(
     private fun extractChronometerBase(sbn: StatusBarNotification): Long {
         try {
             val rv = sbn.notification.contentView ?: sbn.notification.bigContentView ?: return 0L
-            val pkgCtx = context.createPackageContext(sbn.packageName, Context.CONTEXT_RESTRICTED)
+            val pkgCtx =
+                packageContextCache.get(sbn.packageName)
+                    ?: context.createPackageContext(sbn.packageName, Context.CONTEXT_RESTRICTED)
+                        .also { packageContextCache.put(sbn.packageName, it) }
             val container = FrameLayout(context)
             val inflated = rv.apply(pkgCtx, container) ?: return 0L
             return findChronometer(inflated)?.base ?: 0L
@@ -863,12 +880,7 @@ constructor(
     private fun handleAlarm(sbn: StatusBarNotification, extras: Bundle) {
         val label = extras.getText("android.title") ?: context.getString(R.string.ax_dynamic_bar_alarm)
         val isRinging = sbn.notification.category == Notification.CATEGORY_ALARM
-        val icon =
-            try {
-                context.packageManager.getApplicationIcon(sbn.packageName)
-            } catch (_: Exception) {
-                null
-            }
+        val icon = appIcon(sbn.packageName)
         val event =
             IslandEvent.Alarm(
                 label = label,
@@ -881,13 +893,27 @@ constructor(
         onAlarmEvent?.invoke(event)
     }
 
-    private fun resolveAppName(packageName: String): String =
-        try {
-            val ai = context.packageManager.getApplicationInfo(packageName, 0)
-            context.packageManager.getApplicationLabel(ai).toString()
+    private fun resolveAppName(packageName: String): String = appLabel(packageName) ?: ""
+
+    private fun appLabel(pkg: String): String? {
+        appLabelCache.get(pkg)?.let { return it }
+        return try {
+            val pm = context.packageManager
+            pm.getApplicationLabel(pm.getApplicationInfo(pkg, 0)).toString()
+                .also { appLabelCache.put(pkg, it) }
         } catch (_: Exception) {
-            ""
+            null
         }
+    }
+
+    private fun appIcon(pkg: String): Drawable? {
+        appIconCache.get(pkg)?.let { return it }
+        return try {
+            context.packageManager.getApplicationIcon(pkg).also { appIconCache.put(pkg, it) }
+        } catch (_: Exception) {
+            null
+        }
+    }
 
     private fun handleCallNotification(sbn: StatusBarNotification, extras: Bundle) {
         val callerName = extras.getText("android.title")
@@ -917,12 +943,7 @@ constructor(
                 "Phone:incoming"
             else "Phone:active"
 
-        val icon =
-            try {
-                context.packageManager.getApplicationIcon(sbn.packageName)
-            } catch (_: Exception) {
-                null
-            }
+        val icon = appIcon(sbn.packageName)
 
         val callWhen = sbn.notification?.`when` ?: 0L
         val callStart = if (callWhen > 0L) callWhen else System.currentTimeMillis()
@@ -939,21 +960,23 @@ constructor(
                 actions = actions,
             )
 
-        val current = _callEvents.value.toMutableList()
-        current.removeAll { it.sbn.key == sbn.key }
-        current.add(0, event)
-        _callEvents.value = current
+        _callEvents.update { list -> listOf(event) + list.filter { it.sbn.key != sbn.key } }
     }
 
     private fun actionIconResName(action: Notification.Action, pkg: String): String? {
         val icon = action.getIcon() ?: return null
         val resId = try { icon.resId } catch (_: Exception) { 0 }
         if (resId == 0) return null
-        return try {
-            context.packageManager.getResourcesForApplication(pkg).getResourceEntryName(resId)
-        } catch (_: Exception) {
-            null
-        }
+        val key = "$pkg:$resId"
+        iconResNameCache.get(key)?.let { return it.ifEmpty { null } }
+        val name =
+            try {
+                context.packageManager.getResourcesForApplication(pkg).getResourceEntryName(resId)
+            } catch (_: Exception) {
+                null
+            }
+        iconResNameCache.put(key, name ?: "")
+        return name
     }
 
     private fun actionIntentString(action: Notification.Action): String? {
@@ -967,7 +990,7 @@ constructor(
 
     private fun parseRecorderElapsedMs(extras: Bundle): Long? {
         val text = extras.getCharSequence(Notification.EXTRA_TEXT)?.toString() ?: return null
-        val match = Regex("""(\d+):(\d+)(?::(\d+))?""").find(text) ?: return null
+        val match = ELAPSED_PATTERN.find(text) ?: return null
         val a = match.groupValues[1].toLongOrNull() ?: return null
         val b = match.groupValues[2].toLongOrNull() ?: return null
         val c = match.groupValues[3].toLongOrNull()
@@ -1044,16 +1067,15 @@ constructor(
                 isIndeterminate = indeterminate,
             )
 
-        val current = _promotedOngoingEvents.value.toMutableList()
-        current.removeAll { it.sbn.key == sbn.key }
-        current.add(0, event)
-        _promotedOngoingEvents.value = current
+        _promotedOngoingEvents.update { list ->
+            listOf(event) + list.filter { it.sbn.key != sbn.key }
+        }
     }
 
     /** Hides the ongoing notification until it is removed or stops being ongoing. */
     fun clearPromotedOngoing(key: String) {
         dismissedPromotedKeys.add(key)
-        _promotedOngoingEvents.value = _promotedOngoingEvents.value.filter { it.sbn.key != key }
+        _promotedOngoingEvents.update { list -> list.filter { it.sbn.key != key } }
     }
 
     fun clearSportsEvent(key: String, team1: String? = null, team2: String? = null) {
@@ -1065,7 +1087,7 @@ constructor(
                         e.team2Name.equals(team2, ignoreCase = true))
             }
         matching.forEach { dismissedSportsKeys.add(it.key) }
-        _sportsEvents.value = _sportsEvents.value.filter { e -> matching.none { it.key == e.key } }
+        _sportsEvents.update { list -> list.filter { e -> matching.none { it.key == e.key } } }
     }
 
     fun clearNowPlaying() {
@@ -1074,7 +1096,7 @@ constructor(
 
     private fun handleNowPlaying(sbn: StatusBarNotification, extras: Bundle) {
         val title = extras.getCharSequence("android.title")?.toString() ?: return
-        val byMatch = Regex("""(.+?)\s+by\s+(.+)""", RegexOption.IGNORE_CASE).find(title)
+        val byMatch = NOW_PLAYING_BY_PATTERN.find(title)
         val dashParts = if (byMatch == null) title.split(" - ", " – ", limit = 2) else null
         val songTitle: String
         val artist: String
@@ -1130,15 +1152,15 @@ constructor(
             score1 = scoreMatch.groupValues[2]
             score2 = scoreMatch.groupValues[3]
             team2Name = scoreMatch.groupValues[4].trim()
-                .replace(Regex("""\s*[·•|].*"""), "")
+                .replace(TRAILING_SEPARATOR, "")
         } else {
             val combined = "$title $text"
             val vsMatch = VS_PATTERN.find(combined)
             if (vsMatch != null) {
                 team1Name = vsMatch.groupValues[1].trim()
-                    .replace(Regex("""^.*[·•|]\s*"""), "")
+                    .replace(LEADING_SEPARATOR, "")
                 team2Name = vsMatch.groupValues[2].trim()
-                    .replace(Regex("""\s*[·•|].*$"""), "")
+                    .replace(TRAILING_SEPARATOR, "")
             } else if (forceCapture) {
                 val parts = text.split("·", "•", "|", " - ", " – ")
                     .map { it.trim() }.filter { it.isNotEmpty() }
@@ -1205,10 +1227,7 @@ constructor(
 
         if (sbn.key in dismissedSportsKeys) return true
 
-        val current = _sportsEvents.value.toMutableList()
-        current.removeAll { it.key == sbn.key }
-        current.add(0, event)
-        _sportsEvents.value = current
+        _sportsEvents.update { list -> listOf(event) + list.filter { it.key != sbn.key } }
         return true
     }
 
@@ -1233,16 +1252,21 @@ constructor(
     }
 
     private fun loadNotificationIcon(sbn: StatusBarNotification, pkg: String): Drawable? {
-        return try {
-            sbn.notification?.smallIcon?.loadDrawable(context)
-        } catch (_: Exception) {
-            null
-        }
-            ?: try {
-                context.packageManager.getApplicationIcon(pkg)
-            } catch (_: Exception) {
-                null
+        val small = sbn.notification?.smallIcon
+        if (small != null && small.type == Icon.TYPE_RESOURCE) {
+            val key = "${small.resPackage}:${small.resId}"
+            smallIconCache.get(key)?.let { return it }
+            val loaded = try { small.loadDrawable(context) } catch (_: Exception) { null }
+            if (loaded != null) {
+                smallIconCache.put(key, loaded)
+                return loaded
             }
+        } else if (small != null) {
+            try {
+                small.loadDrawable(context)?.let { return it }
+            } catch (_: Exception) {}
+        }
+        return appIcon(pkg)
     }
 
     private fun contentSignature(sbn: StatusBarNotification, extras: Bundle): Long {
