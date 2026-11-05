@@ -42,11 +42,19 @@ constructor(
     private val _intent = MutableStateFlow(false)
 
     val isExpanded: StateFlow<Boolean> =
-        combine(_intent, interactor.isOnKeyguard) { intent, onKg -> intent && !onKg }
+        combine(
+            _intent,
+            interactor.isOnKeyguard,
+            interactor.settings.isEnabled,
+        ) { intent, onKg, enabled -> intent && !onKg && enabled }
             .distinctUntilChanged()
             .stateIn(applicationScope, SharingStarted.Lazily, false)
 
     init {
+        interactor.settings.isEnabled
+            .onEach { if (!it) collapse() }
+            .launchIn(applicationScope)
+
         interactor.isOnKeyguard
             .onEach { if (it) collapse() }
             .launchIn(applicationScope)
@@ -72,8 +80,12 @@ constructor(
     }
 
     fun expand() {
+        if (!interactor.settings.isEnabled.value || interactor.isOnKeyguard.value ||
+            interactor.isPanelExpanded.value || interactor.qsExpansion.value > 0f ||
+            interactor.legacyShadeExpansion.value > 0f
+        ) return
         val state = interactor.uiState.value
-        if (state.events.isEmpty() || state.events.all { it is IslandEvent.AospChip }) return
+        if (!state.shouldShow || state.events.none { it !is IslandEvent.AospChip }) return
         _intent.value = true
     }
 

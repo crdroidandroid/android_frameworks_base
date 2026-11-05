@@ -4,7 +4,6 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
 import android.content.Context
-import android.content.Intent
 import android.graphics.ImageDecoder
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
@@ -203,14 +202,6 @@ constructor(
                 val artwork =
                     withContext(backgroundDispatcher) {
                         try {
-                            if (uri.scheme == "content") {
-                                try {
-                                    context.contentResolver.takePersistableUriPermission(
-                                        uri,
-                                        Intent.FLAG_GRANT_READ_URI_PERMISSION,
-                                    )
-                                } catch (_: SecurityException) {}
-                            }
                             val source = ImageDecoder.createSource(context.contentResolver, uri)
                             val bitmap =
                                 ImageDecoder.decodeBitmap(source) { decoder, info, _ ->
@@ -263,6 +254,7 @@ constructor(
     private val hotspotCallback =
         object : HotspotController.Callback {
             override fun onHotspotChanged(enabled: Boolean, numDevices: Int) {
+                if (!hotspotListening) return
                 if (enabled) {
                     if (!hotspotDismissed) {
                         _hotspotEvent.value = IslandEvent.Hotspot(numDevices = numDevices)
@@ -279,6 +271,7 @@ constructor(
         vpnJob =
             applicationScope.launch(backgroundDispatcher) {
                 vpnInteractor.vpnState.collect { state ->
+                    if (!vpnListening) return@collect
                     if (state.isEnabled) {
                         if (vpnDismissed) return@collect
                         val existing = _vpnEvent.value
@@ -303,9 +296,9 @@ constructor(
             }
     }
 
-    private var btListening = false
-    private var hotspotListening = false
-    private var vpnListening = false
+    @Volatile private var btListening = false
+    @Volatile private var hotspotListening = false
+    @Volatile private var vpnListening = false
 
     fun startBluetooth() {
         if (btListening) return
@@ -349,10 +342,11 @@ constructor(
     }
 
     fun stopVpn() {
-        if (!vpnListening) return
+        if (!vpnListening && vpnJob == null) return
         vpnListening = false
         vpnJob?.cancel()
         vpnJob = null
+        wasVpnEnabled = false
         _vpnEvent.value = null
     }
 
@@ -365,7 +359,6 @@ constructor(
     }
 
     fun stopListening() {
-        if (!listening) return
         listening = false
         stopBluetooth()
         stopHotspot()

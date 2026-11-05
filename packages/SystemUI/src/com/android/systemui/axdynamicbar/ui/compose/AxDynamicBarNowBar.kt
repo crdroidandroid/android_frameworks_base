@@ -147,37 +147,34 @@ fun AxDynamicBarNowBar(
                 Box(
                     modifier = Modifier
                         .padding(top = SpaceXs)
-                        .pointerInput(viewModel, touchSlop) {
+                        .pointerInput(viewModel, touchSlop, state?.event?.id) {
                             awaitEachGesture {
-                                awaitFirstDown(requireUnconsumed = false)
-                                var totalDragX = 0f
+                                val down = awaitFirstDown()
                                 var isDragging = false
-
+                                var canceled = false
                                 while (true) {
                                     val event = awaitPointerEvent()
-                                    val change = event.changes.firstOrNull() ?: break
-
+                                    val change = event.changes.firstOrNull { it.id == down.id } ?: break
+                                    val dx = change.position.x - down.position.x
+                                    val dy = change.position.y - down.position.y
                                     if (!change.pressed) {
-                                        change.consume()
-                                        if (isDragging) {
-                                            if (totalDragX > 0f) viewModel.cyclePrev()
-                                            else viewModel.cycleNext()
-                                        } else {
-                                            viewModel.statusBarExpansion.toggle()
+                                        if (!canceled && !change.isConsumed && state != null) {
+                                            change.consume()
+                                            if (isDragging) {
+                                                if (dx > 0f) viewModel.cyclePrev()
+                                                else viewModel.cycleNext()
+                                            } else {
+                                                viewModel.statusBarExpansion.toggle()
+                                            }
                                         }
                                         break
                                     }
-
-                                    val delta = change.positionChange()
-                                    totalDragX += delta.x
-
-                                    if (!isDragging && abs(totalDragX) > touchSlop) {
+                                    if (change.isConsumed && !isDragging) { canceled = true; break }
+                                    if (!isDragging && (abs(dx) > touchSlop || abs(dy) > touchSlop)) {
+                                        if (abs(dy) >= abs(dx)) break
                                         isDragging = true
                                     }
-
-                                    if (isDragging) {
-                                        change.consume()
-                                    }
+                                    if (isDragging) change.consume()
                                 }
                             }
                         },

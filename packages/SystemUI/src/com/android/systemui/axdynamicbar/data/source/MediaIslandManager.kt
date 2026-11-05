@@ -81,17 +81,17 @@ constructor(
         private fun isCurrent(): Boolean = activeMediaController?.sessionToken == token
 
         override fun onPlaybackStateChanged(state: PlaybackState?) {
-            if (state == null || !isCurrent()) return
+            if (!listening || state == null || !isCurrent()) return
             updatePosition(state, activeMediaController?.packageName)
         }
 
         override fun onAudioInfoChanged(info: MediaController.PlaybackInfo) {
-            if (!isCurrent()) return
+            if (!listening || !isCurrent()) return
             _mediaEvent.update { event -> event?.copy(outputDeviceName = getOutputDeviceName()) }
         }
 
         override fun onSessionDestroyed() {
-            if (!isCurrent()) return
+            if (!listening || !isCurrent()) return
             val destroyedPkg = activeMediaController?.packageName
             setActiveController(null)
             val shown = _mediaEvent.value
@@ -112,18 +112,19 @@ constructor(
         override fun onMediaColorsChanged(color: Int) {}
 
         override fun onAlbumArtChanged(drawable: Drawable?) {
-            if (sessionAlbumArt === drawable) return
+            if (!listening || sessionAlbumArt === drawable) return
             sessionAlbumArt = drawable
             _mediaEvent.update { event -> event?.copy(albumArt = drawable) }
         }
 
         override fun onAppIconChanged(drawable: Drawable) {
-            if (sessionAppIcon === drawable) return
+            if (!listening || sessionAppIcon === drawable) return
             sessionAppIcon = drawable
             _mediaEvent.update { event -> event?.copy(appIcon = drawable) }
         }
 
         override fun onMetadataChanged(track: String, artist: String) {
+            if (!listening) return
             _mediaEvent.update { event ->
                 if (event == null) return@update event
                 val normalizedTrack = track.takeUnless { it == "Unknown" } ?: event.track
@@ -199,6 +200,7 @@ constructor(
     }
 
     private fun onActiveSessionsChanged(controllers: List<MediaController>) {
+        if (!listening) return
         val event = _mediaEvent.value
         if (event == null) {
             setActiveController(
@@ -248,6 +250,7 @@ constructor(
     private var cancelProgressPolling: Runnable? = null
 
     private fun tickProgress() {
+        if (!listening) return
         _mediaEvent.update { event ->
             if (event == null || !event.isPlaying || event.duration <= 0L) return@update event
             val now = SystemClock.elapsedRealtime()
@@ -329,6 +332,7 @@ constructor(
                 metadata: MediaMetadata?,
                 @PlaybackState.State state: Int,
             ) {
+                if (!listening) return
                 val isPlaying = state == PlaybackState.STATE_PLAYING
                 val track =
                     metadata?.getString(MediaMetadata.METADATA_KEY_DISPLAY_TITLE)

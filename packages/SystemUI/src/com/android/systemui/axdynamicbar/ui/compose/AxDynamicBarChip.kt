@@ -30,6 +30,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.Alignment
@@ -109,7 +110,8 @@ fun AxDynamicBarChip(
 
     val touchSlop = LocalViewConfiguration.current.touchSlop
     val expandableController = rememberExpandableController(color = Color.Transparent, shape = ChipShape)
-    var currentExpandable by remember { mutableStateOf<SystemUiExpandable?>(null) }
+    val expandableHolder = remember { arrayOfNulls<SystemUiExpandable>(1) }
+    val currentState = rememberUpdatedState(state)
 
     val motionScheme = MaterialTheme.motionScheme
 
@@ -118,60 +120,59 @@ fun AxDynamicBarChip(
         enter = fadeIn(motionScheme.defaultEffectsSpec()) + scaleIn(initialScale = 0.8f, animationSpec = motionScheme.defaultSpatialSpec()),
         exit = fadeOut(motionScheme.fastEffectsSpec()) + scaleOut(targetScale = 0.8f, animationSpec = motionScheme.fastSpatialSpec()),
         modifier = modifier
-            .pointerInput(viewModel) {
+            .pointerInput(viewModel, state?.event?.id, isOnKeyguard, ignoreKeyguard) {
                 awaitEachGesture {
                     val down = awaitFirstDown(pass = PointerEventPass.Initial)
-                    
-                    val startX = down.position.x
-                    val startY = down.position.y
+                    val pointerId = down.id
+                    val start = down.position
                     var dragging = false
+                    var direction = 0
                     var totalDx = 0f
-                    var decided = false 
+                    var canceled = false
                     while (true) {
                         val event = awaitPointerEvent(PointerEventPass.Initial)
-                        val change = event.changes.firstOrNull() ?: break
+                        val change = event.changes.firstOrNull { it.id == pointerId } ?: break
+                        val dx = change.position.x - start.x
+                        val dy = change.position.y - start.y
                         if (!change.pressed) {
-                            
-                            if (dragging) {
-                                change.consume()
-                                if (totalDx > 0) viewModel.cyclePrev()
-                                else viewModel.cycleNext()
-                            } else if (!decided) {
-
-                                change.consume()
-                                if (viewModel.chipTapClosesPanel(down.uptimeMillis)) {
-                                    viewModel.statusBarExpansion.collapse()
-                                } else {
-                                    val current = state?.event
-                                    if (current is IslandEvent.AospChip) {
-                                        val expandable = currentExpandable
-                                        if (expandable == null ||
-                                            !viewModel.handleAospChipTap(current, expandable)) {
+                            // Allow nested controls to handle the release first. Never launch
+                            // an AOSP chip action from a tap that a child already consumed.
+                            val releaseConsumed = if (!dragging && !canceled) {
+                                awaitPointerEvent(PointerEventPass.Final)
+                                    .changes.firstOrNull { it.id == pointerId }?.isConsumed == true
+                            } else change.isConsumed
+                            if (!canceled && !releaseConsumed && (dragging || direction == 0)) {
+                                if (dragging) {
+                                    change.consume()
+                                    if (totalDx > 0f) viewModel.cyclePrev()
+                                    else viewModel.cycleNext()
+                                } else if (currentState.value != null) {
+                                    change.consume()
+                                    if (viewModel.chipTapClosesPanel(down.uptimeMillis)) {
+                                        viewModel.statusBarExpansion.collapse()
+                                    } else {
+                                        val current = currentState.value?.event
+                                        if (current is IslandEvent.AospChip) {
+                                            val expandable = expandableHolder[0]
+                                            if (expandable == null ||
+                                                !viewModel.handleAospChipTap(current, expandable)) {
+                                                viewModel.statusBarExpansion.expand()
+                                            }
+                                        } else {
                                             viewModel.statusBarExpansion.expand()
                                         }
-                                    } else {
-                                        viewModel.statusBarExpansion.expand()
                                     }
                                 }
                             }
-                            
                             break
                         }
-                        val dx = change.position.x - startX
-                        val dy = change.position.y - startY
-                        if (!decided && (abs(dx) > touchSlop || abs(dy) > touchSlop)) {
-                            if (abs(dx) >= abs(dy)) {
-                                
-                                decided = true
-                                dragging = true
-                                totalDx = dx
-                                change.consume()
-                            } else {
-                                
-                                decided = true
-                                break
-                            }
-                        } else if (dragging) {
+                        if (change.isConsumed && !dragging) { canceled = true; break }
+                        if (direction == 0 && (abs(dx) > touchSlop || abs(dy) > touchSlop)) {
+                            direction = if (abs(dx) > abs(dy)) 1 else 2
+                            if (direction == 2) break // Let the notification shade handle a vertical swipe.
+                            dragging = true
+                        }
+                        if (dragging) {
                             totalDx = dx
                             change.consume()
                         }
@@ -200,7 +201,7 @@ fun AxDynamicBarChip(
                 onClick = null,
                 defaultMinSize = false,
             ) { expandable ->
-                currentExpandable = expandable
+                expandableHolder[0] = expandable
                 AnimatedContent(
                     targetState = chipDisplayKey(displayEvent, isAlert),
                     transitionSpec = {

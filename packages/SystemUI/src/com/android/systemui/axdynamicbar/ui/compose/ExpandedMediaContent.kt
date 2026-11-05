@@ -312,11 +312,11 @@ private fun MediaSeekBar(
         if (!isPlaying || durationMs <= 0L) return@LaunchedEffect
 
         val startProgressMs = positionMs
-        val startNanos = withFrameNanos { it }
+        val startElapsedMs = android.os.SystemClock.elapsedRealtime()
         while (true) {
-            val frameNanos = withFrameNanos { it }
+            kotlinx.coroutines.delay(250L)
             if (isScrubbing) break
-            val elapsedMs = (frameNanos - startNanos) / 1_000_000L
+            val elapsedMs = android.os.SystemClock.elapsedRealtime() - startElapsedMs
             val interpolated =
                 ((startProgressMs + elapsedMs * speed) / durationMs).coerceIn(0f, 1f)
             displayFraction = interpolated
@@ -469,6 +469,12 @@ private fun MediaSeekBar(
                     }
                 },
                 modifier = Modifier.fillMaxWidth().height(SeekBarHeight),
+                onRelease = { bar ->
+                    ((bar.progressDrawable as? LayerDrawable)
+                        ?.findDrawableByLayerId(android.R.id.progress) as? SquigglyProgress)
+                        ?.animate = false
+                    bar.tag = null
+                },
             )
         }
 

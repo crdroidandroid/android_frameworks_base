@@ -42,7 +42,7 @@ constructor(
     private val _nowPlayingEvent = MutableStateFlow<IslandEvent.NowPlaying?>(null)
     val nowPlayingEvent: StateFlow<IslandEvent.NowPlaying?> = _nowPlayingEvent.asStateFlow()
 
-    private var listening = false
+    @Volatile private var listening = false
 
     private var allSports: List<IslandEvent.Sports> = emptyList()
     private val dismissedSportsKeys = mutableSetOf<String>()
@@ -54,6 +54,7 @@ constructor(
 
     private val callback = object : QuickLookClient.Callback {
         override fun onSportsUpdate(sports: List<SportsData>) {
+            if (!listening) return
             val seen = HashMap<String, Int>()
             allSports = sports.map { data ->
                 val base = "ql_sports_${data.league}|${data.team1Name}|${data.team2Name}"
@@ -79,6 +80,7 @@ constructor(
         }
 
         override fun onNowPlayingUpdate(text: String, tapAction: PendingIntent?) {
+            if (!listening) return
             if (text.isBlank()) {
                 lastNowPlayingText = null
                 dismissedNowPlayingText = null

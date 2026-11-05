@@ -41,6 +41,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -164,10 +165,13 @@ private suspend fun PointerInputScope.detectInteractionGesture(
             ev = awaitPointerEvent(PointerEventPass.Final)
         } while (!ev.changes.any { it.changedToDownIgnoreConsumed() })
         onStart()
-        do {
-            ev = awaitPointerEvent(PointerEventPass.Final)
-        } while (ev.changes.any { it.pressed })
-        onEnd()
+        try {
+            do {
+                ev = awaitPointerEvent(PointerEventPass.Final)
+            } while (ev.changes.any { it.pressed })
+        } finally {
+            onEnd()
+        }
     }
 }
 
@@ -180,6 +184,7 @@ fun NotificationAlertCard(
     initiallyCompact: Boolean = false,
     modifier: Modifier = Modifier,
 ) {
+    key(notification.sbn.key) {
     val extras = notification.sbn.notification?.extras
     val isCall = extras?.let {
         it.containsKey(Notification.EXTRA_ANSWER_INTENT) ||
@@ -305,6 +310,7 @@ fun NotificationAlertCard(
             }
           }
         }
+    }
     }
 }
 
@@ -844,6 +850,7 @@ private fun ReplyField(
         onDispose {
             currentOnFocusChange(false)
             currentInteractor.onAlertReplyActiveChanged(false)
+            currentInteractor.onFocusableRequested?.invoke(false)
         }
     }
 

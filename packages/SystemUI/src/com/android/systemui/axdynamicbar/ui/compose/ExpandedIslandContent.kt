@@ -86,18 +86,17 @@ fun ExpandedIslandContent(
             }
         }
 
-    val notifIds =
-        remember(filteredEvents) {
-            filteredEvents.filterIsInstance<IslandEvent.Notification>().map { it.id }
-        }
-    LaunchedEffect(notifIds) { notifIds.forEach { interactor.onNotificationInteraction(it) } }
-    DisposableEffect(notifIds) {
-        onDispose { notifIds.forEach { interactor.onNotificationInteractionEnd(it) } }
+    val notifIds = remember(filteredEvents) {
+        filteredEvents.filterIsInstance<IslandEvent.Notification>().map { it.id }.distinct()
+    }
+    DisposableEffect(interactor, notifIds) {
+        notifIds.forEach(interactor::onNotificationInteraction)
+        onDispose { notifIds.forEach(interactor::onNotificationInteractionEnd) }
     }
 
-    LaunchedEffect(filteredEvents) {
-        if (filteredEvents.isEmpty()) {
-            
+    val shouldCollapse = filteredEvents.isEmpty()
+    LaunchedEffect(shouldCollapse) {
+        if (shouldCollapse) {
             delay(200)
             onCollapse()
         }
