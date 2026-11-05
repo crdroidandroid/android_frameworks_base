@@ -18151,6 +18151,22 @@ public class ActivityManagerService extends IActivityManager.Stub
             }
         }
 
+        @Override
+        public int getIsolatedOwnerUid(int isolatedUid) {
+            synchronized (ActivityManagerService.this) {
+                return mProcessList.getIsolatedOwnerUidLocked(isolatedUid);
+            }
+        }
+
+        @Override
+        public void killSandboxProcessesForUid(int uid, String reason) {
+            synchronized (ActivityManagerService.this) {
+                synchronized (mProcLock) {
+                    mProcessList.killSandboxProcessesForUidLocked(uid, reason);
+                }
+            }
+        }
+
         /** @see ActivityManagerService#sendIntentSender */
         @Override
         public int sendIntentSender(IIntentSender target, IBinder allowlistToken, int code,
@@ -20195,8 +20211,13 @@ public class ActivityManagerService extends IActivityManager.Stub
     }
 
     @Override
-    public String getSandboxSpoofedSetting(String callingPackage, String settingName, int userId) {
-        return AxSandboxService.getInstance().getSpoofedSetting(callingPackage, settingName, userId);
+    public String getSandboxSpoofedSetting(String callingPackage, int callingUid,
+            String settingName) {
+        if (Binder.getCallingUid() != Process.SYSTEM_UID) {
+            throw new SecurityException("Only system may resolve Sandbox caller identity");
+        }
+        return AxSandboxService.getInstance().getSpoofedSettingForUid(
+                callingPackage, callingUid, settingName);
     }
 
     @Override

@@ -204,6 +204,15 @@ public final class Zygote {
     /** Load 4KB ELF files on 16KB device using appcompat mode */
     public static final int ENABLE_PAGE_SIZE_APP_COMPAT = 1 << 26;
 
+    /** Enable the per-process AxSandbox diagnostic privacy policy. */
+    public static final int ENABLE_AX_SANDBOX_PRIVACY = 1 << 27;
+
+    /** Virtualize the SELinux enforcement state for the AxSandbox process. */
+    public static final int ENABLE_AX_SANDBOX_SELINUX_ENFORCING = 1 << 28;
+
+    /** Hide ADB state and make the JDWP endpoint natively unavailable to AxSandbox. */
+    public static final int ENABLE_AX_SANDBOX_ADB = 1 << 29;
+
     /** No external storage should be mounted. */
     public static final int MOUNT_EXTERNAL_NONE = IVold.REMOUNT_MODE_NONE;
     /** Default external storage should be mounted. */
@@ -1050,6 +1059,17 @@ public final class Zygote {
                           "persist.debug.ptrace.enabled").equals("1");
 
     /**
+     * Returns whether the build-wide JDWP override makes every spawned app a development target.
+     *
+     * <p>This is consulted before creating an app zygote. A seccomp filter inherited by an app
+     * zygote cannot be removed from a child later, so the zygote must not be created with the ADB
+     * barrier while this development override is active.</p>
+     */
+    public static boolean isJdwpEnabledBySystemProperty() {
+        return Build.IS_ENG || (Build.IS_USERDEBUG && ENABLE_JDWP);
+    }
+
+    /**
      * Applies debugger system properties to the zygote arguments.
      *
      * For eng builds all apps are debuggable with JDWP and ptrace.
@@ -1065,7 +1085,7 @@ public final class Zygote {
      * @param args non-null; zygote spawner args
      */
     static void applyDebuggerSystemProperty(ZygoteArguments args) {
-        if (Build.IS_ENG || (Build.IS_USERDEBUG && ENABLE_JDWP)) {
+        if (isJdwpEnabledBySystemProperty()) {
             args.mRuntimeFlags |= Zygote.DEBUG_ENABLE_JDWP;
             // Also enable ptrace when JDWP is enabled for consistency with
             // before persist.debug.ptrace.enabled existed.
