@@ -23,6 +23,8 @@
 #include <map>
 #include <set>
 #include <span>
+#include <string_view>
+#include <unordered_set>
 #include <utility>
 
 #include "android-base/logging.h"
@@ -46,6 +48,22 @@ namespace {
 
 constexpr int32_t kDefaultDisplayId = 0;
 constexpr int32_t kDefaultDeviceId = 0;
+
+// Static runtime package IDs that must never be handed out to dynamic (shared library) packages.
+constexpr uint8_t kAppPackageId = 0x7f;
+// LineageSDK resources (lineageos.platform) are built with the reserved static package ID 0x3f and
+// are loaded into every process next to framework-res.
+constexpr uint8_t kLineageSdkPackageId = 0x3f;
+constexpr std::string_view kLineageSdkPackageName = "lineageos.platform";
+constexpr std::string_view kLineageSdkApkPath = "/system/framework/org.lineageos.platform-res.apk";
+
+bool IsLineageSdkPackage(const LoadedPackage& package, const ApkAssets& apk_assets) {
+  if (package.GetPackageName() == kLineageSdkPackageName) {
+    return true;
+  }
+  const auto path = apk_assets.GetPath();
+  return path.has_value() && *path == kLineageSdkApkPath;
+}
 
 using EntryValue = std::variant<Res_value, incfs::verified_map_ptr<ResTable_map_entry>>;
 
@@ -97,6 +115,10 @@ struct FindEntryResult {
   // The string pool reference to the entry's name. This uses a different string pool than
   // the global string pool, but this is hidden from the caller.
   StringPoolRef entry_string_ref;
+
+  // Whether the entry came from a package shadowing a reserved package ID
+  // (see AssetManager2::ConfiguredPackage::shadows_reserved_package_).
+  bool from_shadow_package = false;
 };
 
 struct Theme::Entry {
@@ -170,8 +192,25 @@ void AssetManager2::BuildDynamicRefTable(ApkAssetsList apk_assets) {
     apk_assets_cookies[apk_assets[i].get()] = static_cast<ApkAssetsCookie>(i);
   }
 
+  // Paths of ApkAssets containing a package that shadows a reserved package ID. Non-overlay assets
+  // are processed before overlays, so this is complete by the time overlays are attached.
+  std::unordered_set<std::string_view> shadow_apk_paths;
+
   // 0x01 is reserved for the android package.
   int next_package_id = 0x02;
+  // Never hand a shared library a runtime ID that is reserved (0x3f LineageSDK, 0x7f app) or that a
+  // static package already claimed; either would silently merge two unrelated packages into one
+  // PackageGroup.
+  const auto next_dynamic_package_id = [&]() -> int {
+    while (next_package_id < static_cast<int>(package_ids_.size()) &&
+           (next_package_id == kLineageSdkPackageId || next_package_id == kAppPackageId ||
+            package_ids_[next_package_id] != 0xff)) {
+      ++next_package_id;
+    }
+    CHECK(next_package_id < static_cast<int>(package_ids_.size()))
+        << "exhausted runtime package ids";
+    return next_package_id++;
+  };
   for (const ApkAssets* apk_assets : sorted_apk_assets) {
     std::shared_ptr<OverlayDynamicRefTable> overlay_ref_table;
     if (auto loaded_idmap = apk_assets->GetLoadedIdmap()) {
@@ -198,7 +237,8 @@ void AssetManager2::BuildDynamicRefTable(ApkAssetsList apk_assets) {
         target_package_group.overlays_.push_back(ConfiguredOverlay{
                   loaded_idmap->GetTargetResourcesMap(target_package_id, overlay_ref_table.get()),
                   apk_assets_cookies[apk_assets],
-                  IsAnyOverlayConstraintSatisfied(loaded_idmap->GetConstraints())
+                  IsAnyOverlayConstraintSatisfied(loaded_idmap->GetConstraints()),
+                  shadow_apk_paths.contains(loaded_idmap->TargetApkPath())
         });
       }
     }
@@ -208,7 +248,7 @@ void AssetManager2::BuildDynamicRefTable(ApkAssetsList apk_assets) {
       // Get the package ID or assign one if a shared library.
       int package_id;
       if (package->IsDynamic()) {
-        package_id = next_package_id++;
+        package_id = next_dynamic_package_id();
       } else {
         package_id = package->GetPackageId();
       }
@@ -223,10 +263,27 @@ void AssetManager2::BuildDynamicRefTable(ApkAssetsList apk_assets) {
         ref_table->mAppAsLib = package->IsDynamic() && package->GetPackageId() == 0x7f;
       }
 
-      // Add the package to the set of packages with the same ID.
+      // An app package compiled with the reserved LineageSDK ID (e.g. Alipay's Quinox bundles use
+      // 0x3f) lands in the same group as lineageos.platform. Mark it so lookups prefer its entries.
+      const bool shadows_reserved_package = !package->IsDynamic() &&
+          package_id == kLineageSdkPackageId && !IsLineageSdkPackage(*package, *apk_assets);
+
+      // Add the package to the set of packages with the same ID. Keep load order so that the
+      // group's first package (whose name defines the group) stays the platform package.
       PackageGroup* package_group = &package_groups_[idx];
-      package_group->packages_.emplace_back().loaded_package_ = package.get();
+      ConfiguredPackage& configured_package = package_group->packages_.emplace_back();
+      configured_package.loaded_package_ = package.get();
+      configured_package.shadows_reserved_package_ = shadows_reserved_package;
       package_group->cookies_.push_back(apk_assets_cookies[apk_assets]);
+
+      if (shadows_reserved_package) {
+        if (auto path = apk_assets->GetPath()) {
+          shadow_apk_paths.insert(*path);
+        }
+        LOG(INFO) << base::StringPrintf(
+            "Package '%s' uses reserved package ID 0x%02x; its entries take precedence",
+            package->GetPackageName().c_str(), package_id);
+      }
 
       // Add the package name -> build time ID mappings.
       for (const DynamicPackageEntry& entry : package->GetDynamicPackageMap()) {
@@ -245,11 +302,18 @@ void AssetManager2::BuildDynamicRefTable(ApkAssetsList apk_assets) {
   // Now assign the runtime IDs so that we have a build-time to runtime ID map.
   DynamicRefTable::AliasMap aliases;
   for (const auto& group : package_groups_) {
-    const std::string& package_name = group.packages_[0].loaded_package_->GetPackageName();
-    const auto name_16 = String16(package_name.c_str(), package_name.size());
-    for (auto&& inner_group : package_groups_) {
-      inner_group.dynamic_ref_table->addMapping(name_16,
-                                                group.dynamic_ref_table->mAssignedPackageId);
+    for (size_t i = 0; i < group.packages_.size(); i++) {
+      // The first package names the group. Packages shadowing a reserved ID have a different
+      // name, so register theirs too.
+      if (i != 0 && !group.packages_[i].shadows_reserved_package_) {
+        continue;
+      }
+      const std::string& package_name = group.packages_[i].loaded_package_->GetPackageName();
+      const auto name_16 = String16(package_name.c_str(), package_name.size());
+      for (auto&& inner_group : package_groups_) {
+        inner_group.dynamic_ref_table->addMapping(name_16,
+                                                  group.dynamic_ref_table->mAssignedPackageId);
+      }
     }
 
     for (const auto& package : group.packages_) {
@@ -731,6 +795,10 @@ base::expected<FindEntryResult, NullOrIOError> AssetManager2::FindEntry(
       }
       if (!assets->IsLoader()) {
         for (const auto& id_map : package_group.overlays_) {
+          if (id_map.targets_shadow_package != result->from_shadow_package) {
+            // The overlay targets the other package sharing this runtime ID.
+            continue;
+          }
           auto overlay_entry = id_map.enabled ?
                   id_map.overlay_res_maps_.Lookup(resid) : IdmapResMap::Result();
           if (!overlay_entry) {
@@ -845,6 +913,10 @@ base::expected<FindEntryResult, NullOrIOError> AssetManager2::FindEntry(
     }
   }
 
+  if (UNLIKELY(!final_result.has_value())) {
+    return base::unexpected(std::nullopt);
+  }
+
   if (UNLIKELY(logging_enabled)) {
     last_resolution_.cookie = final_result->cookie;
     last_resolution_.type_string_ref = final_result->type_string_ref;
@@ -869,6 +941,10 @@ base::expected<FindEntryResult, NullOrIOError> AssetManager2::FindEntryInternal(
   const ResTable_config* best_config = nullptr;
   uint32_t best_offset = 0U;
   uint32_t type_flags = 0U;
+  // Packages shadowing a reserved package ID have unrelated type/entry layouts, so their flags are
+  // tracked separately and only the winning side's flags are reported.
+  uint32_t shadow_type_flags = 0U;
+  bool best_is_shadow = false;
 
   // If `desired_config` is not the same as the set configuration or the caller will accept a value
   // from any configuration, then we cannot use our filtered list of types since it only it contains
@@ -898,7 +974,8 @@ base::expected<FindEntryResult, NullOrIOError> AssetManager2::FindEntryInternal(
     if (UNLIKELY(!entry_flags.has_value())) {
       return base::unexpected(entry_flags.error());
     }
-    type_flags |= entry_flags.value();
+    const bool package_is_shadow = loaded_package_impl.shadows_reserved_package_;
+    (package_is_shadow ? shadow_type_flags : type_flags) |= entry_flags.value();
 
     const FilteredConfigGroup& filtered_group = loaded_package_impl.filtered_configs_[type_idx];
     const size_t type_entry_count = (use_filtered) ? filtered_group.type_entries.size()
@@ -921,6 +998,19 @@ base::expected<FindEntryResult, NullOrIOError> AssetManager2::FindEntryInternal(
       Resolution::Step::Type resolution_type;
       if (best_config == nullptr) {
         resolution_type = Resolution::Step::Type::INITIAL;
+      } else if (package_is_shadow != best_is_shadow) {
+        // A package shadowing a reserved ID always beats the platform package when it defines the
+        // entry: the same index means a different resource in each, and config ranking (e.g. a
+        // zh-rCN LineageSDK string vs. an app's default layout) must not pick across them.
+        if (package_is_shadow) {
+          resolution_type = Resolution::Step::Type::BETTER_MATCH;
+        } else {
+          if (UNLIKELY(logging_enabled)) {
+            last_resolution_.steps.push_back(Resolution::Step{Resolution::Step::Type::SKIPPED,
+                                                              cookie, this_config.toString()});
+          }
+          continue;
+        }
       } else if (this_config.isBetterThan(*best_config, &desired_config)) {
         resolution_type = Resolution::Step::Type::BETTER_MATCH;
       } else if (package_is_loader && this_config.compare(*best_config) == 0) {
@@ -951,6 +1041,7 @@ base::expected<FindEntryResult, NullOrIOError> AssetManager2::FindEntryInternal(
 
       best_cookie = cookie;
       best_package = loaded_package;
+      best_is_shadow = package_is_shadow;
       best_type = type;
       best_config = &this_config;
       best_offset = offset.value();
@@ -985,13 +1076,14 @@ base::expected<FindEntryResult, NullOrIOError> AssetManager2::FindEntryInternal(
     .cookie = best_cookie,
     .entry = *entry,
     .config = *best_config,
-    .type_flags = type_flags,
+    .type_flags = best_is_shadow ? shadow_type_flags : type_flags,
     .entry_flags = (*best_entry_verified)->flags(),
     .dynamic_ref_table = package_group.dynamic_ref_table.get(),
     .package_name = &best_package->GetPackageName(),
     .type_string_ref = StringPoolRef(best_package->GetTypeStringPool(), best_type->id - 1),
     .entry_string_ref = StringPoolRef(best_package->GetKeyStringPool(),
                                       (*best_entry_verified)->key()),
+    .from_shadow_package = best_is_shadow,
   };
 }
 
@@ -1500,8 +1592,9 @@ base::expected<uint32_t, NullOrIOError> AssetManager2::GetResourceId(
     for (const ConfiguredPackage& package_impl : package_group.packages_) {
       const LoadedPackage* package = package_impl.loaded_package_;
       if (package_name != package->GetPackageName()) {
-        // All packages in the same group are expected to have the same package name.
-        break;
+        // Packages in a group normally share a name, but one shadowing a reserved package ID
+        // (e.g. an app bundle using 0x3f next to lineageos.platform) does not, so keep looking.
+        continue;
       }
 
       base::expected<uint32_t, NullOrIOError> resid = package->FindEntryByName(type16, entry16);

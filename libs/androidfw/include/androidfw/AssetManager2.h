@@ -381,6 +381,13 @@ class AssetManager2 {
       // A pointer to the immutable, loaded package info.
       const LoadedPackage* loaded_package_;
 
+      // True when this package claims a reserved platform package ID (0x3f, LineageSDK) without
+      // being the platform package itself, e.g. an app that compiles its own bundles with
+      // `--package-id 0x3f`. Such a package shares a PackageGroup with lineageos.platform, but its
+      // type/entry indices mean something different, so lookups must prefer the entries it
+      // actually defines instead of mixing them with LineageSDK's by configuration alone.
+      bool shadows_reserved_package_ = false;
+
       // A mutable AssetManager-specific list of configurations that match the AssetManager's
       // current configuration. This is used as an optimization to avoid checking every single
       // candidate configuration when looking up resources.
@@ -397,6 +404,11 @@ class AssetManager2 {
 
       // Enable/disable status of the overlay based on current constraints of AssetManager.
       bool enabled;
+
+      // True when the overlay targets a package that shadows a reserved package ID (see
+      // ConfiguredPackage::shadows_reserved_package_). Overlays are attached to the whole
+      // PackageGroup, so this keeps e.g. LineageSDK RROs from rewriting the shadowing app's values.
+      bool targets_shadow_package = false;
   };
 
   // Represents a logical package, which can be made up of many individual packages. Each package
