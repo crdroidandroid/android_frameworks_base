@@ -453,12 +453,12 @@ public final class PlayIntegritySpoofService {
                 case "comet":
                     return "34";
                 case "tegu":
-                case "stallion":
                     return "35";
                 case "frankel":
                 case "blazer":
                 case "mustang":
                 case "rango":
+                case "stallion":
                     return "36";
                 case "cubs":
                 case "grizzly":
@@ -542,11 +542,11 @@ public final class PlayIntegritySpoofService {
 
         props.putIfAbsent("init.svc.adbd", "stopped");
         props.putIfAbsent("sys.usb.state", "mtp");
-        props.putIfAbsent("ro.board.first_api_level", "32");
 
         String initialSdk = resolveDeviceInitialSdk(
                 mBuildFields.get("DEVICE"), mDeviceInitialSdkInt);
         if (initialSdk != null && !initialSdk.isEmpty()) {
+            props.putIfAbsent("ro.board.first_api_level", initialSdk);
             props.putIfAbsent("ro.product.first_api_level", initialSdk);
         }
         putPropIfPresent(props, "ro.build.fingerprint", mBuildFields.get("FINGERPRINT"));
