@@ -465,8 +465,10 @@ public final class DuckRkpManager {
 
     public synchronized String getKeybox() {
         if (!masterEnabled()) return null;
-        String imported = importedKeybox();
-        if (imported != null && !imported.isEmpty()) return imported;
+        String stored = importedKeybox();
+        if (stored != null && !stored.isEmpty() && (!isEnabled() || hasImportedKeybox())) {
+            return stored;
+        }
         if (!isEnabled() || mExpiresAt <= System.currentTimeMillis()) return null;
         return mGenerated;
     }
@@ -476,9 +478,14 @@ public final class DuckRkpManager {
                 Settings.Secure.SPOOF_TRICKYSTORE_KEYBOX, UserHandle.USER_SYSTEM);
     }
 
+    /**
+     * Only a keybox the user imported blocks device RKP. A keybox without the user source
+     * was fetched in the background (AxSpoofManager) and is replaced, not protected.
+     */
     private boolean hasImportedKeybox() {
         String value = importedKeybox();
-        return value != null && !value.isEmpty();
+        return value != null && !value.isEmpty() && "user".equals(
+                Settings.Secure.getStringForUser(mResolver, SOURCE_KEY, UserHandle.USER_SYSTEM));
     }
 
     private boolean isEnabled() {
