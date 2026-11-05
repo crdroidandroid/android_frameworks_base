@@ -395,7 +395,11 @@ public final class AttestationUtils {
         if (halVersion > 0 && sdkVersion >= 100) {
             return Math.min(sdkVersion, halVersion * 100);
         }
-        return 4;
+        final int firstApiLevel = SystemProperties.getInt("ro.product.first_api_level", -1);
+        if (firstApiLevel > 0) {
+            return apiLevelToAttestVersion(firstApiLevel);
+        }
+        return sdkVersion;
     }
 
     public static int getKeymasterVersion() {
@@ -404,20 +408,26 @@ public final class AttestationUtils {
     }
 
     private static int getSdkAttestVersion() {
-        switch (Build.VERSION.SDK_INT) {
-            case Build.VERSION_CODES.Q:
-            case Build.VERSION_CODES.R:
+        return apiLevelToAttestVersion(Build.VERSION.SDK_INT);
+    }
+
+    private static int apiLevelToAttestVersion(int apiLevel) {
+        switch (apiLevel) {
+            case 29:
+            case 30:
                 return 4;
-            case Build.VERSION_CODES.S:
-            case Build.VERSION_CODES.S_V2:
+            case 31:
+            case 32:
                 return 100;
-            case Build.VERSION_CODES.TIRAMISU:
+            case 33:
                 return 200;
-            case Build.VERSION_CODES.UPSIDE_DOWN_CAKE:
-            case Build.VERSION_CODES.VANILLA_ICE_CREAM:
+            case 34:
+            case 35:
                 return 300;
+            case 36:
+                return 400;
             default:
-                return Build.VERSION.SDK_INT >= 37 ? 500 : 400;
+                return apiLevel >= 37 ? 500 : 400;
         }
     }
 
