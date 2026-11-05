@@ -448,7 +448,6 @@ public class SettingsProvider extends ContentProvider {
 
     @Override
     public Bundle call(String method, String name, Bundle args) {
-        logSettingsProviderRequest("call", method, name, null, null, null);
         final @CanBeCURRENT @UserIdInt int requestingUserId = getRequestingUserId(args);
         final int callingDeviceId = getDeviceId();
 
@@ -459,31 +458,27 @@ public class SettingsProvider extends ContentProvider {
                     return null;
                 }
                 Bundle result = new Bundle();
-                final String spoofedValue = getSpoofedValueForEntrypoint(
-                        "call/" + method, name);
+                final String spoofedValue = getSpoofedValue(name);
                 result.putBoolean(Settings.CALL_METHOD_GET_AX_SANDBOX_SETTING_RESULT,
                         spoofedValue != null);
                 return result;
             }
             case Settings.CALL_METHOD_GET_CONFIG -> {
-                final String spoofedValue = getSpoofedValueForEntrypoint(
-                        "call/" + method, name);
+                final String spoofedValue = getSpoofedValue(name);
                 Setting setting = spoofedValue == null ? getConfigSetting(name) : null;
                 return packageValueForCallResult(SETTINGS_TYPE_CONFIG, name, requestingUserId,
                         Context.DEVICE_ID_DEFAULT, setting, spoofedValue,
                         isTrackingGeneration(args));
             }
             case Settings.CALL_METHOD_GET_GLOBAL -> {
-                final String spoofedValue = getSpoofedValueForEntrypoint(
-                        "call/" + method, name);
+                final String spoofedValue = getSpoofedValue(name);
                 Setting setting = spoofedValue == null ? getGlobalSetting(name) : null;
                 return packageValueForCallResult(SETTINGS_TYPE_GLOBAL, name, requestingUserId,
                         Context.DEVICE_ID_DEFAULT, setting, spoofedValue,
                         isTrackingGeneration(args));
             }
             case Settings.CALL_METHOD_GET_SECURE -> {
-                final String spoofedValue = getSpoofedValueForEntrypoint(
-                        "call/" + method, name);
+                final String spoofedValue = getSpoofedValue(name);
                 Setting setting = null;
                 if (spoofedValue == null) {
                     setting = getSecureSetting(name, requestingUserId, callingDeviceId);
@@ -499,8 +494,7 @@ public class SettingsProvider extends ContentProvider {
                         callingDeviceId, setting, spoofedValue, isTrackingGeneration(args));
             }
             case Settings.CALL_METHOD_GET_SYSTEM -> {
-                final String spoofedValue = getSpoofedValueForEntrypoint(
-                        "call/" + method, name);
+                final String spoofedValue = getSpoofedValue(name);
                 Setting setting = null;
                 if (spoofedValue == null) {
                     setting = getSystemSetting(name, requestingUserId, callingDeviceId);
@@ -689,7 +683,6 @@ public class SettingsProvider extends ContentProvider {
             Slog.v(LOG_TAG, "query() for user: " + UserHandle.getCallingUserId());
         }
 
-        logSettingsProviderRequest("query", null, null, uri, where, whereArgs);
         Arguments args = new Arguments(uri, where, whereArgs, true);
         String[] normalizedProjection = normalizeProjection(projection);
 
@@ -699,7 +692,7 @@ public class SettingsProvider extends ContentProvider {
         }
 
         if (args.name != null) {
-            String spoofed = getSpoofedValueForEntrypoint("query", args.name);
+            String spoofed = getSpoofedValue(args.name);
             if (spoofed != null) {
                 Setting setting = createSpoofedSettingForQuery(args.table, args.name, spoofed);
                 if (setting != null) {
@@ -809,8 +802,6 @@ public class SettingsProvider extends ContentProvider {
             return null;
         }
 
-        logSettingsProviderRequest("insert", null, name, uri, null, null);
-
         String value = values.getAsString(Settings.Secure.VALUE);
 
         switch (table) {
@@ -852,10 +843,6 @@ public class SettingsProvider extends ContentProvider {
         final int valuesCount = allValues.length;
         for (int i = 0; i < valuesCount; i++) {
             ContentValues values = allValues[i];
-            if (values != null) {
-                logSettingsProviderRequest("bulkInsert", null,
-                        values.getAsString(Settings.Secure.NAME), uri, null, null);
-            }
             if (insert(uri, values) != null) {
                 insertionCount++;
             }
@@ -871,8 +858,6 @@ public class SettingsProvider extends ContentProvider {
         }
 
         Arguments args = new Arguments(uri, where, whereArgs, false);
-        logSettingsProviderRequest("update", null, args.name, uri, where, whereArgs);
-
         // If a legacy table that is gone, done.
         if (REMOVED_LEGACY_TABLES.contains(args.table)) {
             return 0;
@@ -908,8 +893,6 @@ public class SettingsProvider extends ContentProvider {
         }
 
         Arguments args = new Arguments(uri, where, whereArgs, false);
-        logSettingsProviderRequest("delete", null, args.name, uri, where, whereArgs);
-
         // If a legacy table that is gone, done.
         if (REMOVED_LEGACY_TABLES.contains(args.table)) {
             return 0;
@@ -1623,12 +1606,9 @@ public class SettingsProvider extends ContentProvider {
         // Keep enumeration consistent with named Settings.Global reads. These are synthetic
         // values only; getSpoofedValue() consults the authenticated caller policy and never
         // writes the real SettingsState.
-        logSettingsProviderRequest("getAllGlobalSettings", Settings.CALL_METHOD_LIST_GLOBAL,
-                Settings.Global.ADB_ENABLED, null, null, null);
-        final String spoofedAdbEnabled = getSpoofedValueForEntrypoint(
-                "getAllGlobalSettings", Settings.Global.ADB_ENABLED);
-        final String spoofedDevelopmentSettings = getSpoofedValueForEntrypoint(
-                "getAllGlobalSettings", Settings.Global.DEVELOPMENT_SETTINGS_ENABLED);
+        final String spoofedAdbEnabled = getSpoofedValue(Settings.Global.ADB_ENABLED);
+        final String spoofedDevelopmentSettings = getSpoofedValue(
+                Settings.Global.DEVELOPMENT_SETTINGS_ENABLED);
 
         synchronized (mLock) {
             // Get the settings.
