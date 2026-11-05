@@ -330,6 +330,10 @@ internal fun SbnRemoteViewContent(sbn: StatusBarNotification, fallback: @Composa
                 }
             },
             modifier = Modifier.fillMaxWidth().clip(ShapeIconMedium),
+            onRelease = { container ->
+                container.removeAllViews()
+                container.tag = null
+            },
         )
     } else {
         fallback()

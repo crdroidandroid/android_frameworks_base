@@ -150,7 +150,7 @@ internal fun StopwatchExpanded(event: IslandEvent.Stopwatch, interactor: IslandA
     if (event.isRunning) {
         LaunchedEffect(event.startTimeMs) {
             while (true) {
-                delay(100)
+                delay(250)
                 elapsedMs = (System.currentTimeMillis() - event.startTimeMs).coerceAtLeast(0L)
             }
         }
@@ -308,7 +308,7 @@ internal fun RowScope.CompactStopwatchRow(event: IslandEvent.Stopwatch) {
     if (event.isRunning) {
         LaunchedEffect(event.startTimeMs) {
             while (true) {
-                delay(200)
+                delay(250)
                 elapsedMs = (System.currentTimeMillis() - event.startTimeMs).coerceAtLeast(0L)
             }
         }

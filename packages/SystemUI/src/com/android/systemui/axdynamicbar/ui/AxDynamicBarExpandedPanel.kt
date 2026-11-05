@@ -8,6 +8,7 @@ import android.view.Gravity
 import android.view.MotionEvent
 import android.view.ViewTreeObserver
 import android.view.WindowManager
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.animateFloatAsState
@@ -79,7 +80,8 @@ import kotlinx.coroutines.launch
 import android.view.WindowInsets
 import androidx.compose.ui.input.pointer.PointerEvent
 
-private const val EXIT_ANIM_DURATION = 300L
+private const val OVERLAY_HIDE_DELAY_MS = 400L
+private const val TAG = "AxDynamicBarExpanded"
 
 @SysUISingleton
 class AxDynamicBarExpandedPanel
@@ -91,10 +93,19 @@ constructor(
     @Main private val mainHandler: Handler,
     private val viewModel: AxDynamicBarChipViewModel,
 ) {
+    private data class OverlayState(
+        val needed: Boolean = false,
+        val expanded: Boolean = false,
+        val allowExitAnimation: Boolean = false,
+    )
+
+    private var initialized = false
+    @Volatile private var desiredState = OverlayState()
     private var overlayView: ComposeView? = null
     private var panelLifecycleOwner: PanelLifecycleOwner? = null
     private var hideOverlayJob: Job? = null
 
+    private var explicitFocusRequested = false
     private var replyCaptureActive = false
     private var imeVisible = false
     private var imeHeight = 0
@@ -113,42 +124,51 @@ constructor(
         }
 
     fun init() {
+        if (initialized) return
+        initialized = true
+
         viewModel.interactor.onCollapseRequested = { viewModel.statusBarExpansion.collapse() }
         viewModel.interactor.onFocusableRequested = { focusable -> setOverlayFocusable(focusable) }
         viewModel.interactor.onAlertReplyCaptureRequested = { enabled -> setReplyCapture(enabled) }
 
-        val needsOverlay =
-            combine(
-                viewModel.isExpanded,
-                viewModel.interactor.uiState.map { it.notificationAlert != null }
-                    .distinctUntilChanged(),
-                viewModel.isOnKeyguard,
-            ) { expanded, hasAlert, onKeyguard ->
-                !onKeyguard && (expanded || hasAlert)
-            }
-                .distinctUntilChanged()
-
-        needsOverlay
-            .onEach { needed ->
-                if (needed) {
+        combine(
+            viewModel.isExpanded,
+            viewModel.interactor.uiState.map { it.notificationAlert != null }
+                .distinctUntilChanged(),
+            viewModel.isOnKeyguard,
+            viewModel.interactor.settings.isEnabled,
+        ) { expanded, hasAlert, onKeyguard, enabled ->
+            val allowed = enabled && !onKeyguard
+            OverlayState(
+                needed = allowed && (expanded || hasAlert),
+                expanded = allowed && expanded,
+                allowExitAnimation = allowed,
+            )
+        }
+            .distinctUntilChanged()
+            .onEach { state ->
+                desiredState = state
+                ensureMainThread {
+                    if (state != desiredState) return@ensureMainThread
                     hideOverlayJob?.cancel()
                     hideOverlayJob = null
-                    showOverlay()
-                } else {
-                    
-                    hideOverlayJob?.cancel()
-                    hideOverlayJob =
-                        applicationScope.launch {
-                            delay(400)
-                            hideOverlay()
+                    if (state.needed) {
+                        showOverlayInternal()
+                        applyWindowState()
+                    } else {
+                        applyWindowState()
+                        if (!state.allowExitAnimation) {
+                            hideOverlayInternal()
+                        } else {
+                            hideOverlayJob = applicationScope.launch {
+                                delay(OVERLAY_HIDE_DELAY_MS)
+                                ensureMainThread {
+                                    if (!desiredState.needed) hideOverlayInternal()
+                                }
+                            }
                         }
+                    }
                 }
-            }
-            .launchIn(applicationScope)
-
-        viewModel.isExpanded
-            .onEach { expanded ->
-                updateOverlay(expanded)
             }
             .launchIn(applicationScope)
     }
@@ -158,12 +178,8 @@ constructor(
         else mainHandler.post(action)
     }
 
-    private fun showOverlay() {
-        ensureMainThread { showOverlayInternal() }
-    }
-
     private fun showOverlayInternal() {
-        if (overlayView != null) return
+        if (overlayView != null || !desiredState.needed) return
 
         val lifecycleOwner = PanelLifecycleOwner()
         lifecycleOwner.handleLifecycleEvent(Lifecycle.Event.ON_CREATE)
@@ -196,13 +212,16 @@ constructor(
             }
             setOnApplyWindowInsetsListener { v, insets ->
                 val visible = insets.isVisible(WindowInsets.Type.ime())
+                val wasImeVisible = imeVisible
                 val height = insets.getInsets(WindowInsets.Type.ime()).bottom
                 if (visible != imeVisible || height != imeHeight) {
                     imeVisible = visible
                     imeHeight = height
                     if (replyCaptureActive) v.requestLayout() // recompute touchable region
                 }
-                viewModel.interactor.onOverlayImeVisibilityChanged(visible)
+                if (visible != wasImeVisible) {
+                    viewModel.interactor.onOverlayImeVisibilityChanged(visible)
+                }
                 v.onApplyWindowInsets(insets)
             }
             viewTreeObserver.addOnComputeInternalInsetsListener(touchableInsetsListener)
@@ -213,19 +232,20 @@ constructor(
         view.setViewTreeOnBackPressedDispatcherOwner(lifecycleOwner)
         panelLifecycleOwner = lifecycleOwner
 
-        val isCurrentlyExpanded = viewModel.isExpanded.value
+        // This overlay is only shown when unlocked. SHOW_WHEN_LOCKED can surface a stale
+        // window during keyguard transitions and is not needed for a status-bar sub-panel.
         val flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or
             WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or
             WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR or
-            WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
             WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH or
-            if (isCurrentlyExpanded) 0
+            if (desiredState.expanded || explicitFocusRequested) 0
             else WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
 
         val params =
             WindowManager.LayoutParams(
                 WindowManager.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.WRAP_CONTENT,
+                if (replyCaptureActive) WindowManager.LayoutParams.MATCH_PARENT
+                else WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.TYPE_STATUS_BAR_SUB_PANEL,
                 flags,
                 PixelFormat.TRANSLUCENT,
@@ -237,89 +257,88 @@ constructor(
             windowManager.addView(view, params)
         } catch (e: RuntimeException) {
             view.viewTreeObserver.removeOnComputeInternalInsetsListener(touchableInsetsListener)
+            view.setOnTouchListener(null)
+            view.setOnApplyWindowInsetsListener(null)
+            lifecycleOwner.handleLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+            lifecycleOwner.handleLifecycleEvent(Lifecycle.Event.ON_STOP)
             lifecycleOwner.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+            view.disposeComposition()
             panelLifecycleOwner = null
-            android.util.Log.w("AxDynamicBarExpanded", "Unable to add overlay", e)
+            Log.w(TAG, "Unable to add overlay", e)
             return
         }
         overlayView = view
     }
 
-    private fun hideOverlay() {
-        ensureMainThread { hideOverlayInternal() }
-    }
-
     private fun hideOverlayInternal() {
-        shrinkRunnable?.let { mainHandler.removeCallbacks(it) }
-        shrinkRunnable = null
-        overlayView?.let { view ->
+        // Clear this reference first: disposal may synchronously dispatch reply/focus callbacks.
+        val view = overlayView
+        overlayView = null
+        if (view != null) {
+            view.viewTreeObserver.removeOnComputeInternalInsetsListener(touchableInsetsListener)
+            view.setOnTouchListener(null)
+            view.setOnApplyWindowInsetsListener(null)
             panelLifecycleOwner?.apply {
                 handleLifecycleEvent(Lifecycle.Event.ON_PAUSE)
                 handleLifecycleEvent(Lifecycle.Event.ON_STOP)
                 handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
             }
-            view.viewTreeObserver.removeOnComputeInternalInsetsListener(touchableInsetsListener)
-            view.setOnTouchListener(null)
-            view.setOnApplyWindowInsetsListener(null)
             try {
                 windowManager.removeViewImmediate(view)
             } catch (_: IllegalArgumentException) {
+                // A display teardown may have removed the window already.
+            } finally {
+                view.disposeComposition()
             }
-            view.disposeComposition()
         }
-        overlayView = null
         panelLifecycleOwner = null
         replyCaptureActive = false
+        explicitFocusRequested = false
         imeVisible = false
         imeHeight = 0
+        // An abandoned reply must not leave the interactor waiting for input from a dead view.
+        viewModel.interactor.onAlertReplyActiveChanged(false)
     }
 
-    private var shrinkRunnable: Runnable? = null
-
-    private fun updateOverlay(expanded: Boolean) = ensureMainThread {
-        shrinkRunnable?.let { mainHandler.removeCallbacks(it) }
-        shrinkRunnable = null
-        val view = overlayView ?: return@ensureMainThread
-        val params = view.layoutParams as? WindowManager.LayoutParams ?: return@ensureMainThread
-        if (expanded) {
-            params.flags = params.flags and WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE.inv()
-            params.height = WindowManager.LayoutParams.WRAP_CONTENT
-            windowManager.updateViewLayout(view, params)
+    private fun applyWindowState() {
+        val view = overlayView ?: return
+        val params = view.layoutParams as? WindowManager.LayoutParams ?: return
+        val focusable = desiredState.needed && (desiredState.expanded || explicitFocusRequested)
+        val flags = if (focusable) {
+            params.flags and WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE.inv()
         } else {
-            params.flags = params.flags or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+            params.flags or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+        }
+        val height = if (replyCaptureActive && desiredState.needed) {
+            WindowManager.LayoutParams.MATCH_PARENT
+        } else {
+            WindowManager.LayoutParams.WRAP_CONTENT
+        }
+        if (params.flags == flags && params.height == height) return
+        params.flags = flags
+        params.height = height
+        try {
             windowManager.updateViewLayout(view, params)
-            val runnable = Runnable {
-                val v = overlayView ?: return@Runnable
-                val p = v.layoutParams as? WindowManager.LayoutParams ?: return@Runnable
-                p.height = WindowManager.LayoutParams.WRAP_CONTENT
-                windowManager.updateViewLayout(v, p)
-            }
-            shrinkRunnable = runnable
-            mainHandler.postDelayed(runnable, EXIT_ANIM_DURATION)
+        } catch (e: IllegalArgumentException) {
+            // A pending display/window teardown can race with an IME or expansion change.
+            Log.w(TAG, "Unable to update overlay", e)
+            hideOverlayInternal()
         }
     }
 
     private fun setReplyCapture(enabled: Boolean) = ensureMainThread {
         if (replyCaptureActive == enabled) return@ensureMainThread
-        replyCaptureActive = enabled
-        val view = overlayView ?: return@ensureMainThread
-        val params = view.layoutParams as? WindowManager.LayoutParams ?: return@ensureMainThread
-        params.height =
-            if (enabled) WindowManager.LayoutParams.MATCH_PARENT
-            else WindowManager.LayoutParams.WRAP_CONTENT
-        windowManager.updateViewLayout(view, params)
+        replyCaptureActive = enabled && desiredState.needed
+        applyWindowState()
+        overlayView?.requestLayout() // refresh the touchable region around the IME
     }
 
     private fun setOverlayFocusable(focusable: Boolean) = ensureMainThread {
-        val view = overlayView ?: return@ensureMainThread
-        val params = view.layoutParams as? WindowManager.LayoutParams ?: return@ensureMainThread
-        if (focusable) {
-            params.flags = params.flags and WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE.inv()
-        } else {
-            params.flags = params.flags or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-        }
-        windowManager.updateViewLayout(view, params)
+        if (explicitFocusRequested == focusable) return@ensureMainThread
+        explicitFocusRequested = focusable && desiredState.needed
+        applyWindowState()
     }
+
 }
 
 @Composable
@@ -340,8 +359,10 @@ private fun OverlayContent(viewModel: AxDynamicBarChipViewModel, statusBarHeight
     )
     val compactNotifs by viewModel.interactor.settings.compactNotifications.collectAsStateWithLifecycle()
 
-    val lastAlert = remember { mutableStateOf<IslandEvent.Notification?>(null) }
-    if (notifAlert != null) lastAlert.value = notifAlert
+    val lastAlert = remember { mutableStateOf(notifAlert) }
+    LaunchedEffect(notifAlert) {
+        if (notifAlert != null) lastAlert.value = notifAlert
+    }
 
     val expandedVisible = remember { MutableTransitionState(false) }
     val showNotif = !isExpanded && notifAlert != null
@@ -355,10 +376,12 @@ private fun OverlayContent(viewModel: AxDynamicBarChipViewModel, statusBarHeight
         notifVisible.targetState = showNotif
     }
 
-    if (notifAlert == null && !notifVisible.targetState && notifVisible.isIdle &&
-        !notifVisible.currentState
-    ) {
-        lastAlert.value = null
+    LaunchedEffect(notifAlert, notifVisible.targetState, notifVisible.currentState, notifVisible.isIdle) {
+        if (notifAlert == null && !notifVisible.targetState && notifVisible.isIdle &&
+            !notifVisible.currentState
+        ) {
+            lastAlert.value = null
+        }
     }
 
     val expandableEvents by remember {

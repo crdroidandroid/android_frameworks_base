@@ -24,13 +24,14 @@ class AppTrackingIslandManager @Inject constructor(@Application private val cont
     companion object {
         private const val TAG = "AppTrackingIslandManager"
         private const val MAX_RECENT = 8
+        private const val MAX_LAUNCHER_CACHE = 128
     }
 
     private val _appSwitchEvent = MutableStateFlow<IslandEvent.AppSwitch?>(null)
     val appSwitchEvent: StateFlow<IslandEvent.AppSwitch?> = _appSwitchEvent.asStateFlow()
 
     private val recentApps = mutableListOf<IslandEvent.RecentApp>()
-    private var listening = false
+    @Volatile private var listening = false
     private var launcherPackage: String? = null
     private val activityManager by lazy {
         context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
@@ -54,6 +55,7 @@ class AppTrackingIslandManager @Inject constructor(@Application private val cont
     private val listener =
         object : TaskStackChangeListener {
             override fun onTaskMovedToFront(taskInfo: ActivityManager.RunningTaskInfo) {
+                if (!listening) return
                 val topActivity = taskInfo.topActivity ?: return
                 val pkg = topActivity.packageName
                 if (
@@ -105,15 +107,21 @@ class AppTrackingIslandManager @Inject constructor(@Application private val cont
                     )
 
                 synchronized(recentApps) {
+                    if (!listening) return
                     recentApps.removeAll { it.packageName == pkg }
                     recentApps.add(0, app)
                     while (recentApps.size > MAX_RECENT) recentApps.removeLast()
 
-                    if (++switchesSincePrune >= 3) {
+                    if (++switchesSincePrune >= MAX_RECENT) {
                         switchesSincePrune = 0
-                        val runningTaskIds =
-                            activityManager.getRunningTasks(MAX_RECENT).map { it.taskId }.toSet()
-                        recentApps.removeAll { it.taskId !in runningTaskIds }
+                        try {
+                            val runningTaskIds =
+                                activityManager.getRunningTasks(MAX_RECENT + 12)
+                                    .mapTo(HashSet()) { it.taskId }
+                            recentApps.removeAll { it.taskId !in runningTaskIds }
+                        } catch (e: Exception) {
+                            Log.w(TAG, "Unable to prune recent tasks", e)
+                        }
                     }
 
                     val newPreviousApp =
@@ -136,7 +144,9 @@ class AppTrackingIslandManager @Inject constructor(@Application private val cont
             }
 
             override fun onTaskRemoved(taskId: Int) {
+                if (!listening) return
                 synchronized(recentApps) {
+                    if (!listening) return
                     val removed = recentApps.removeAll { it.taskId == taskId }
                     if (removed) emitEvent()
                 }
@@ -146,6 +156,8 @@ class AppTrackingIslandManager @Inject constructor(@Application private val cont
     fun startListening() {
         if (listening) return
         listening = true
+        currentForegroundPkg = null
+        switchesSincePrune = 0
         launcherPackage = resolveLauncherPackage()
         TaskStackChangeListeners.getInstance().registerTaskStackListener(listener)
     }
@@ -153,7 +165,9 @@ class AppTrackingIslandManager @Inject constructor(@Application private val cont
     fun stopListening() {
         if (!listening) return
         listening = false
-        launcherIntentCache.clear()
+        currentForegroundPkg = null
+        switchesSincePrune = 0
+        synchronized(launcherIntentCache) { launcherIntentCache.clear() }
         TaskStackChangeListeners.getInstance().unregisterTaskStackListener(listener)
         synchronized(recentApps) {
             recentApps.clear()
@@ -177,7 +191,17 @@ class AppTrackingIslandManager @Inject constructor(@Application private val cont
     }
 
     fun switchToApp(taskId: Int) {
+        if (!listening || taskId < 0) return
+        val tracked = synchronized(recentApps) {
+            recentApps.firstOrNull { it.taskId == taskId }
+                ?: _appSwitchEvent.value?.previousApp?.takeIf { it.taskId == taskId }
+        } ?: return
         try {
+            val running = activityManager.getRunningTasks(100)
+                .firstOrNull { it.taskId == taskId } ?: return
+            if (running.baseActivity?.packageName != tracked.packageName &&
+                running.topActivity?.packageName != tracked.packageName
+            ) return
             activityManager.moveTaskToFront(taskId, 0)
         } catch (e: Exception) {
             Log.w(TAG, "Failed to switch to task $taskId", e)
@@ -228,9 +252,13 @@ class AppTrackingIslandManager @Inject constructor(@Application private val cont
         }
     }
 
-    private val launcherIntentCache = HashMap<String, Boolean>()
+    private val launcherIntentCache =
+        object : LinkedHashMap<String, Boolean>(MAX_LAUNCHER_CACHE, 0.75f, true) {
+            override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, Boolean>?): Boolean =
+                size > MAX_LAUNCHER_CACHE
+        }
 
-    private fun hasLauncherIntent(pkg: String): Boolean =
+    private fun hasLauncherIntent(pkg: String): Boolean = synchronized(launcherIntentCache) {
         launcherIntentCache.getOrPut(pkg) {
             val intent = Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER).setPackage(pkg)
             try {
@@ -239,6 +267,7 @@ class AppTrackingIslandManager @Inject constructor(@Application private val cont
                 false
             }
         }
+    }
 
     private fun resolveLauncherPackage(): String? =
         try {

@@ -67,7 +67,13 @@ constructor(
             ) { bouncer, shadeFull, chip ->
                 !bouncer && shadeFull && chip
             }
-        combine(contextAndDoze, shadeAndBouncer) { a, b -> a && b }
+        val settingsAllowKeyguard = combine(
+            interactor.settings.isEnabled,
+            interactor.settings.isKeyguardEnabled,
+        ) { enabled, keyguardEnabled -> enabled && keyguardEnabled }
+        combine(contextAndDoze, shadeAndBouncer, settingsAllowKeyguard) { a, b, enabled ->
+            a && b && enabled
+        }
             .distinctUntilChanged()
             .stateIn(applicationScope, SharingStarted.Eagerly, false)
     }
@@ -85,13 +91,17 @@ constructor(
     }
 
     init {
+        canShow
+            .onEach { if (!it) collapse() }
+            .launchIn(applicationScope)
+
         interactor.isOnKeyguard
             .onEach { if (!it) collapse() }
             .launchIn(applicationScope)
     }
 
     fun expand() {
-        if (interactor.uiState.value.topEvent == null) return
+        if (!canShow.value || interactor.uiState.value.topEvent == null) return
         _intent.value = true
     }
 

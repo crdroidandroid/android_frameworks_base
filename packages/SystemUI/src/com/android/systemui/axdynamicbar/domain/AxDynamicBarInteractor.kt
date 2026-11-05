@@ -231,6 +231,8 @@ constructor(
                 if (enabled) repository.startListening()
                 else {
                     repository.stopListening()
+                    dismissNotificationAlert()
+                    repository.media.stopProgressPolling()
                     autoDismissJobs.values.forEach { it.cancel() }
                     autoDismissJobs.clear()
                     dismissedEventIds.clear()
@@ -510,7 +512,7 @@ constructor(
     private fun showNotificationAlert(
         notification: IslandEvent.Notification,
     ) {
-        if (panelBlocking || statusBlocking || _isOnKeyguard.value) return
+        if (!settings.isEnabled.value || panelBlocking || statusBlocking || _isOnKeyguard.value) return
         if (shouldSuppressForDndOrRinger(notification)) return
         val current = _uiState.value
         val existingAlert = current.notificationAlert
@@ -606,6 +608,7 @@ constructor(
     }
 
     private fun scheduleAutoDismiss(event: IslandEvent, delayOverride: Long? = null) {
+        if (!settings.isEnabled.value) return
         val ms = delayOverride ?: event.behavior.autoDismissMs ?: return
         val eventId = event.id
         autoDismissJobs[eventId]?.cancel()

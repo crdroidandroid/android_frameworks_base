@@ -26,7 +26,7 @@ constructor(
     private val _torchEvent = MutableStateFlow<IslandEvent.Torch?>(null)
     val torchEvent: StateFlow<IslandEvent.Torch?> = _torchEvent.asStateFlow()
 
-    private var listening = false
+    @Volatile private var listening = false
     private var levelJob: Job? = null
     private var isRetainingOffFromSlider = false
 
@@ -36,6 +36,7 @@ constructor(
     private val listener =
         object : FlashlightController.FlashlightListener {
             override fun onFlashlightChanged(enabled: Boolean) {
+                if (!listening) return
                 if (enabled) {
                     isRetainingOffFromSlider = false
                     _torchEvent.value = IslandEvent.Torch()
@@ -50,10 +51,12 @@ constructor(
             }
 
             override fun onFlashlightError() {
+                if (!listening) return
                 clear()
             }
 
             override fun onFlashlightAvailabilityChanged(available: Boolean) {
+                if (!listening) return
                 if (!available) {
                     clear()
                 }
@@ -61,11 +64,12 @@ constructor(
         }
 
     private fun startLevelObserver() {
-        if (!FlashlightStrength.isEnabled) return
+        if (!listening || !FlashlightStrength.isEnabled || levelJob?.isActive == true) return
         levelJob?.cancel()
         levelJob =
             scope.launch {
                 flashlightInteractor.state.collect { model ->
+                    if (!listening) return@collect
                     when (model) {
                         is FlashlightModel.Available.Level -> {
                             if (model.enabled) {
@@ -113,6 +117,7 @@ constructor(
         listening = false
         flashlightController.removeCallback(listener)
         stopLevelObserver()
+        isRetainingOffFromSlider = false
         _torchEvent.value = null
     }
 

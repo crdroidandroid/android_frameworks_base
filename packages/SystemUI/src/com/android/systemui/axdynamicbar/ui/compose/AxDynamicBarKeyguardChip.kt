@@ -207,25 +207,29 @@ fun AxDynamicBarKeyguardChip(
             exit = fadeOut(motionScheme.fastEffectsSpec()) + scaleOut(targetScale = 0.9f, animationSpec = motionScheme.fastSpatialSpec()),
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .pointerInput(viewModel) {
+                .pointerInput(viewModel, state?.event?.id) {
                     awaitEachGesture {
                         val down = awaitFirstDown(pass = PointerEventPass.Initial)
-                        val startX = down.position.x
+                        val start = down.position
                         var dragging = false
                         var totalDx = 0f
+                        var canceled = false
                         while (true) {
                             val event = awaitPointerEvent(PointerEventPass.Initial)
-                            val change = event.changes.firstOrNull() ?: break
+                            val change = event.changes.firstOrNull { it.id == down.id } ?: break
+                            val dx = change.position.x - start.x
+                            val dy = change.position.y - start.y
                             if (!change.pressed) {
-                                if (dragging) {
+                                if (dragging && !canceled && !change.isConsumed) {
                                     change.consume()
-                                    if (totalDx > 0) viewModel.cyclePrev()
+                                    if (totalDx > 0f) viewModel.cyclePrev()
                                     else viewModel.cycleNext()
                                 }
                                 break
                             }
-                            val dx = change.position.x - startX
-                            if (!dragging && abs(dx) > touchSlop) {
+                            if (change.isConsumed && !dragging) { canceled = true; break }
+                            if (!dragging && (abs(dx) > touchSlop || abs(dy) > touchSlop)) {
+                                if (abs(dy) >= abs(dx)) break
                                 dragging = true
                             }
                             if (dragging) {
