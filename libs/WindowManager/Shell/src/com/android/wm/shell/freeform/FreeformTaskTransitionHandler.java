@@ -187,8 +187,11 @@ public class FreeformTaskTransitionHandler
             @NonNull Transitions.TransitionFinishCallback finishCallback) {
         ArrayList<Animator> animations = mAnimations.get(mergeTarget);
         if (animations == null) return;
+        // end() runs onAnimationEnd synchronously and the listeners remove the animator from
+        // this list, so end a copy.
+        final ArrayList<Animator> animationsToEnd = new ArrayList<>(animations);
         mAnimExecutor.execute(() -> {
-            for (Animator anim : animations) {
+            for (Animator anim : animationsToEnd) {
                 anim.end();
             }
         });
