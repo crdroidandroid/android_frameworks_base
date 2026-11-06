@@ -33,6 +33,8 @@ import static com.android.systemui.theme.ThemeOverlayApplier.OVERLAY_CATEGORY_TH
 import static com.android.systemui.theme.ThemeOverlayApplier.OVERLAY_COLOR_BOTH;
 import static com.android.systemui.theme.ThemeOverlayApplier.OVERLAY_LUMINANCE_FACTOR;
 import static com.android.systemui.theme.ThemeOverlayApplier.OVERLAY_CHROMA_FACTOR;
+import static com.android.systemui.theme.ThemeOverlayApplier.OVERLAY_PRIMARY_CHROMA_BOOST;
+import static com.android.systemui.theme.ThemeOverlayApplier.OVERLAY_PALETTE_PREFIX;
 import static com.android.systemui.theme.ThemeOverlayApplier.OVERLAY_WHOLE_PALETTE;
 import static com.android.systemui.theme.ThemeOverlayApplier.OVERLAY_TINT_BACKGROUND;
 import static com.android.systemui.theme.ThemeOverlayApplier.OVERLAY_COLOR_INDEX;
@@ -98,6 +100,7 @@ import com.google.ux.material.libmonet.dynamiccolor.ColorSpec.SpecVersion;
 import com.google.ux.material.libmonet.dynamiccolor.DynamicColor;
 import com.google.ux.material.libmonet.dynamiccolor.DynamicScheme;
 import com.google.ux.material.libmonet.dynamiccolor.MaterialDynamicColors;
+import com.google.ux.material.libmonet.hct.Hct;
 
 import kotlinx.coroutines.flow.Flow;
 import kotlinx.coroutines.flow.StateFlow;
@@ -137,6 +140,9 @@ public class ThemeOverlayController implements CoreStartable, Dumpable {
     private static final boolean DEBUG = false;
 
     private static final String KEY_COLOR_PALETTE_VERSION = "global_color_palette_version";
+    private static final String[] PALETTE_NAMES = {
+            "primary", "secondary", "tertiary", "neutral"
+    };
 
     // The wallpaper colors source is always the home wallpaper.
     private static final int WALLPAPER_COLORS_SOURCE = WallpaperManager.FLAG_SYSTEM;
@@ -191,6 +197,7 @@ public class ThemeOverlayController implements CoreStartable, Dumpable {
     private final UserScopedService<UiModeManager> mUiModeManagerProvider;
     private ColorScheme mDarkColorScheme;
     private ColorScheme mLightColorScheme;
+    private float[] mPaletteValueFactors = {1f, 1f, 1f, 1f};
 
     // Defers changing themes until Setup Wizard is done.
     private boolean mDeferredThemeEvaluation;
@@ -740,46 +747,89 @@ public class ThemeOverlayController implements CoreStartable, Dumpable {
     private void createOverlays(int color) {
         final float luminanceFactor = fetchLuminanceFactorFromSetting();
         final float chromaFactor = fetchChromaFactorFromSetting();
+        final float[] paletteChromas = fetchPaletteFactors("chroma");
+        final float[] paletteValues = fetchPaletteFactors("value");
+        mPaletteValueFactors = paletteValues;
         final boolean wholePalette = fetchWholePaletteFromSetting();
         final boolean tintBg = fetchTintBackgroundFromSetting();
         final Integer bgColor = fetchBgColorFromSetting();
         mDarkColorScheme = new ColorScheme(List.of(color), true /* isDark */, mThemeStyle, mContrast,
                 SpecVersion.SPEC_2026, DynamicScheme.DEFAULT_PLATFORM,
-                luminanceFactor, chromaFactor, wholePalette, tintBg, bgColor);
+                luminanceFactor, chromaFactor, paletteChromas, paletteValues,
+                wholePalette, tintBg, bgColor);
         mLightColorScheme = new ColorScheme(List.of(color), false /* isDark */, mThemeStyle,
                 mContrast, SpecVersion.SPEC_2026, DynamicScheme.DEFAULT_PLATFORM,
-                luminanceFactor, chromaFactor, wholePalette, tintBg, bgColor);
+                luminanceFactor, chromaFactor, paletteChromas, paletteValues,
+                wholePalette, tintBg, bgColor);
         mColorScheme = isNightMode() ? mDarkColorScheme : mLightColorScheme;
 
         mAccentOverlay = newFabricatedOverlay("accent");
-        assignColorsToOverlay(mAccentOverlay, DynamicColors.getAllAccentPalette(luminanceFactor, chromaFactor, wholePalette));
+        assignColorsToOverlay(mAccentOverlay,
+                DynamicColors.getAllAccentPalette(
+                        luminanceFactor, chromaFactor, wholePalette, paletteValues));
 
         mNeutralOverlay = newFabricatedOverlay("neutral");
         if (tintBg) {
-            assignColorsToOverlay(mNeutralOverlay, DynamicColors.getAllNeutralPalette(luminanceFactor, chromaFactor, wholePalette));
+            assignColorsToOverlay(mNeutralOverlay,
+                    DynamicColors.getAllNeutralPalette(
+                            luminanceFactor, chromaFactor, wholePalette, paletteValues[3]));
         } else {
-            assignColorsToOverlay(mNeutralOverlay, DynamicColors.getAllNeutralPalette());
+            assignColorsToOverlay(mNeutralOverlay,
+                    DynamicColors.getAllNeutralPalette(1f, 1f, false, paletteValues[3]));
         }
 
         mDynamicOverlay = newFabricatedOverlay("dynamic");
         // Themed Colors
-        assignColorsToOverlay(mDynamicOverlay, DynamicColors.getAllDynamicColorsMapped());
+        assignColorsToOverlay(mDynamicOverlay, DynamicColors.getAllDynamicColorsMapped(), true);
         // Fixed Colors
-        assignColorsToOverlay(mDynamicOverlay, DynamicColors.getFixedColorsMapped());
+        assignColorsToOverlay(mDynamicOverlay, DynamicColors.getFixedColorsMapped(), true);
         // Custom Colors
-        assignColorsToOverlay(mDynamicOverlay, DynamicColors.getCustomColorsMapped());
+        assignColorsToOverlay(mDynamicOverlay, DynamicColors.getCustomColorsMapped(), true);
     }
 
     private void assignColorsToOverlay(FabricatedOverlay overlay,
             List<Pair<String, DynamicColor>> colors) {
+        assignColorsToOverlay(overlay, colors, false);
+    }
+
+    private void assignColorsToOverlay(FabricatedOverlay overlay,
+            List<Pair<String, DynamicColor>> colors, boolean adjustDynamicValue) {
         colors.forEach(p -> {
             String prefix = "android:color/system_" + p.first;
 
             overlay.setResourceValue(prefix + "_light", TYPE_INT_COLOR_ARGB8,
-                    p.second.getArgb(mLightColorScheme.getMaterialScheme()), null);
+                    adjustDynamicValue
+                            ? getAdjustedDynamicArgb(p.second, mLightColorScheme)
+                            : p.second.getArgb(mLightColorScheme.getMaterialScheme()), null);
             overlay.setResourceValue(prefix + "_dark", TYPE_INT_COLOR_ARGB8,
-                    p.second.getArgb(mDarkColorScheme.getMaterialScheme()), null);
+                    adjustDynamicValue
+                            ? getAdjustedDynamicArgb(p.second, mDarkColorScheme)
+                            : p.second.getArgb(mDarkColorScheme.getMaterialScheme()), null);
         });
+    }
+
+    private int getAdjustedDynamicArgb(DynamicColor color, ColorScheme scheme) {
+        DynamicScheme dynamicScheme = scheme.getMaterialScheme();
+        final int original = color.getArgb(dynamicScheme);
+        if (color.palette == null) return original;
+
+        final var palette = color.palette.apply(dynamicScheme);
+        float factor = 1f;
+        if (palette == dynamicScheme.primaryPalette) {
+            factor = mPaletteValueFactors[0];
+        } else if (palette == dynamicScheme.secondaryPalette) {
+            factor = mPaletteValueFactors[1];
+        } else if (palette == dynamicScheme.tertiaryPalette) {
+            factor = mPaletteValueFactors[2];
+        } else if (palette == dynamicScheme.neutralPalette
+                || palette == dynamicScheme.neutralVariantPalette) {
+            factor = mPaletteValueFactors[3];
+        }
+        if (factor == 1f) return original;
+
+        Hct hct = Hct.fromInt(original);
+        hct.setTone(Math.max(0d, Math.min(100d, hct.getTone() * factor)));
+        return (original & 0xff000000) | (hct.toInt() & 0x00ffffff);
     }
 
     /**
@@ -806,18 +856,15 @@ public class ThemeOverlayController implements CoreStartable, Dumpable {
                     && res.getColor(android.R.color.system_neutral2_500, theme)
                     == mColorScheme.getNeutral2().getS500()
                     && res.getColor(android.R.color.system_outline_variant_dark, theme)
-                    == dynamicColors.outlineVariant().getArgb(mDarkColorScheme.getMaterialScheme())
+                    == getAdjustedDynamicArgb(dynamicColors.outlineVariant(), mDarkColorScheme)
                     && res.getColor(android.R.color.system_outline_variant_light, theme)
-                    == dynamicColors.outlineVariant().getArgb(mLightColorScheme.getMaterialScheme())
+                    == getAdjustedDynamicArgb(dynamicColors.outlineVariant(), mLightColorScheme)
                     && res.getColor(android.R.color.system_primary_container_dark, theme)
-                    == dynamicColors.primaryContainer().getArgb(
-                    mDarkColorScheme.getMaterialScheme())
+                    == getAdjustedDynamicArgb(dynamicColors.primaryContainer(), mDarkColorScheme)
                     && res.getColor(android.R.color.system_primary_container_light, theme)
-                    == dynamicColors.primaryContainer().getArgb(
-                    mLightColorScheme.getMaterialScheme())
+                    == getAdjustedDynamicArgb(dynamicColors.primaryContainer(), mLightColorScheme)
                     && res.getColor(android.R.color.system_primary_fixed, theme)
-                    == dynamicColors.primaryFixed().getArgb(
-                    mLightColorScheme.getMaterialScheme()))) {
+                    == getAdjustedDynamicArgb(dynamicColors.primaryFixed(), mLightColorScheme))) {
                 return false;
             }
         }
@@ -1079,6 +1126,34 @@ public class ThemeOverlayController implements CoreStartable, Dumpable {
             }
         }
         return 1f;
+    }
+
+    private float[] fetchPaletteFactors(String component) {
+        final float[] factors = {1f, 1f, 1f, 1f};
+        final String overlayPackageJson = mSecureSettings.getStringForUser(
+                Settings.Secure.THEME_CUSTOMIZATION_OVERLAY_PACKAGES,
+                mUserTracker.getUserId());
+        if (!TextUtils.isEmpty(overlayPackageJson)) {
+            try {
+                JSONObject object = new JSONObject(overlayPackageJson);
+                final boolean isChroma = "chroma".equals(component);
+                for (int i = 0; i < PALETTE_NAMES.length; i++) {
+                    final String key = OVERLAY_PALETTE_PREFIX + PALETTE_NAMES[i]
+                            + "_" + component;
+                    // Preserve the previous Primary chroma boost until changed in Settings.
+                    final double fallback = isChroma && i == 0
+                            ? 100d + object.optDouble(OVERLAY_PRIMARY_CHROMA_BOOST, 0d)
+                            : 100d;
+                    double percent = object.optDouble(key, fallback);
+                    if (Double.isFinite(percent)) {
+                        factors[i] = (float) (Math.max(0d, Math.min(600d, percent)) / 100d);
+                    }
+                }
+            } catch (JSONException | IllegalArgumentException e) {
+                Log.i(TAG, "Failed to parse Monet palette factors.", e);
+            }
+        }
+        return factors;
     }
 
     private boolean fetchWholePaletteFromSetting() {
