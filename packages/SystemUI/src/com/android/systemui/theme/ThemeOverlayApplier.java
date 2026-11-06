@@ -91,6 +91,12 @@ public class ThemeOverlayApplier implements Dumpable {
 
     static final String OVERLAY_CHROMA_FACTOR = "android.theme.customization.chroma_factor";
 
+    static final String OVERLAY_PRIMARY_CHROMA_BOOST =
+            "android.theme.customization.primary_chroma_boost";
+
+    static final String OVERLAY_PALETTE_PREFIX =
+            "android.theme.customization.palette_";
+
     static final String OVERLAY_WHOLE_PALETTE = "android.theme.customization.whole_palette";
 
     static final String OVERLAY_TINT_BACKGROUND = "android.theme.customization.tint_background";
