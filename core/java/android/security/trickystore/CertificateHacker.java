@@ -22,6 +22,7 @@ import com.android.internal.org.bouncycastle.crypto.digests.SHA256Digest;
 import com.android.internal.org.bouncycastle.crypto.params.ECDomainParameters;
 import com.android.internal.org.bouncycastle.crypto.params.ECPrivateKeyParameters;
 import com.android.internal.org.bouncycastle.crypto.params.RSAKeyParameters;
+import com.android.internal.org.bouncycastle.crypto.params.RSAPrivateCrtKeyParameters;
 import com.android.internal.org.bouncycastle.crypto.signers.ECDSASigner;
 import com.android.internal.org.bouncycastle.crypto.signers.RSADigestSigner;
 import com.android.internal.org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPrivateKey;
@@ -225,7 +226,11 @@ public final class CertificateHacker {
             return new ECContentSigner(sigAlgId, keyParam);
         } else if (privateKey instanceof RSAPrivateCrtKey) {
             RSAPrivateCrtKey rsaKey = (RSAPrivateCrtKey) privateKey;
-            RSAKeyParameters keyParam = new RSAKeyParameters(true, rsaKey.getModulus(), rsaKey.getPrivateExponent());
+            RSAKeyParameters keyParam = new RSAPrivateCrtKeyParameters(
+                    rsaKey.getModulus(), rsaKey.getPublicExponent(),
+                    rsaKey.getPrivateExponent(), rsaKey.getPrimeP(),
+                    rsaKey.getPrimeQ(), rsaKey.getPrimeExponentP(),
+                    rsaKey.getPrimeExponentQ(), rsaKey.getCrtCoefficient());
             return new RSAContentSigner(sigAlgId, keyParam);
         }
 
