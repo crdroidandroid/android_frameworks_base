@@ -42,6 +42,7 @@ public final class AttestationUtils {
 
     private static volatile byte[] sBootKey;
     private static volatile byte[] sBootHash;
+    private static volatile byte[] sModuleHash;
     private static volatile boolean sTeeBroken = false;
     private static volatile boolean sBootKeyFallback;
     private static volatile boolean sBootHashFallback;
@@ -50,20 +51,35 @@ public final class AttestationUtils {
     private AttestationUtils() {}
 
     public static byte[] getModuleHash() {
-        try {
-            byte[] modulesDer = KeyStore2.getInstance()
-                    .getSupplementaryAttestationInfo(Tag.MODULE_HASH);
-            if (modulesDer == null || modulesDer.length == 0) {
-                Log.w(TAG, "MODULE_HASH supplementary data unavailable");
+        byte[] cached = sModuleHash;
+        if (cached != null) {
+            return cached.length == 0 ? null : cached;
+        }
+        synchronized (AttestationUtils.class) {
+            cached = sModuleHash;
+            if (cached != null) {
+                return cached.length == 0 ? null : cached;
+            }
+            try {
+                byte[] modulesDer = KeyStore2.getInstance()
+                        .getSupplementaryAttestationInfo(Tag.MODULE_HASH);
+                if (modulesDer == null || modulesDer.length == 0) {
+                    Log.w(TAG, "MODULE_HASH supplementary data unavailable");
+                    sModuleHash = new byte[0];
+                    return null;
+                }
+                cached = MessageDigest.getInstance("SHA-256").digest(modulesDer);
+                sModuleHash = cached;
+                return cached;
+            } catch (KeyStoreException | java.security.NoSuchAlgorithmException e) {
+                Log.w(TAG, "Unable to calculate MODULE_HASH from Keystore2", e);
+                sModuleHash = new byte[0];
+                return null;
+            } catch (RuntimeException e) {
+                Log.w(TAG, "MODULE_HASH query failed", e);
+                sModuleHash = new byte[0];
                 return null;
             }
-            return MessageDigest.getInstance("SHA-256").digest(modulesDer);
-        } catch (KeyStoreException | java.security.NoSuchAlgorithmException e) {
-            Log.w(TAG, "Unable to calculate MODULE_HASH from Keystore2", e);
-            return null;
-        } catch (RuntimeException e) {
-            Log.w(TAG, "MODULE_HASH query failed", e);
-            return null;
         }
     }
 
@@ -433,10 +449,10 @@ public final class AttestationUtils {
 
     private static int getKeyMintAidlVersion() {
         int cached = sKeyMintAidlVersion;
-        if (cached > 0) return cached;
+        if (cached != 0) return cached;
         synchronized (AttestationUtils.class) {
             cached = sKeyMintAidlVersion;
-            if (cached > 0) return cached;
+            if (cached != 0) return cached;
 
             int declared = findDeclaredKeyMintVersion();
             if (declared < 1) declared = findVintfKeyMintVersion();
@@ -450,6 +466,7 @@ public final class AttestationUtils {
                         + ", runtime=" + running + ", effective=" + detected);
                 return detected;
             }
+            sKeyMintAidlVersion = -1;
             Log.w(TAG, "KeyMint HAL version unavailable; using Android SDK fallback");
             return -1;
         }
