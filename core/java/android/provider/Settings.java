@@ -7677,6 +7677,9 @@ public final class Settings {
          * 0 = Fade (stock ColorFade behaviour, default)
          * 1 = CRT (ElectronBeam)
          * 2 = Scale (ElectronBeam)
+         * 3 = Iris (ElectronBeam)
+         * 4 = Desaturate (ElectronBeam)
+         * 5 = Shutter (ElectronBeam)
          * @hide
          */
         public static final String SCREEN_OFF_ANIMATION = "screen_off_animation";

@@ -44,6 +44,15 @@ interface ScreenStateAnimator {
     /** Turning off: the content shrinks into the centre while dimming (ElectronBeam only). */
     int MODE_SCALE_DOWN = 3;
 
+    /** Turning off: a soft-edged circle closes onto the centre (ElectronBeam only). */
+    int MODE_IRIS = 4;
+
+    /** Turning off: colour drains to grey, then the picture fades out (ElectronBeam only). */
+    int MODE_DESATURATE = 5;
+
+    /** Turning off: black shutters slide in from both edges (ElectronBeam only). */
+    int MODE_SHUTTER = 6;
+
     boolean prepare(Context context, int mode);
 
     void dismissResources();
