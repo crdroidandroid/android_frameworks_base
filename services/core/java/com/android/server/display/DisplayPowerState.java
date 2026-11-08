@@ -84,18 +84,19 @@ final class DisplayPowerState {
     private ScreenStateAnimator mColorFade;
 
     DisplayPowerState(
-            DisplayBlanker blanker, int screenAnimatorMode, int displayId, int displayState) {
-        this(blanker, screenAnimatorMode, displayId, displayState, BackgroundThread.getExecutor());
+            DisplayBlanker blanker, ScreenStateAnimator colorFade, int displayId,
+            int displayState) {
+        this(blanker, colorFade, displayId, displayState, BackgroundThread.getExecutor());
     }
 
     @VisibleForTesting
     DisplayPowerState(
-            DisplayBlanker blanker, int screenAnimatorMode, int displayId, int displayState,
+            DisplayBlanker blanker, ScreenStateAnimator colorFade, int displayId, int displayState,
             Executor asyncDestroyExecutor) {
         mHandler = new Handler(true /*async*/);
         mChoreographer = Choreographer.getInstance();
         mBlanker = blanker;
-        setScreenStateAnimator(screenAnimatorMode);
+        mColorFade = colorFade;
         mPhotonicModulator = new PhotonicModulator();
         mPhotonicModulator.start();
         mDisplayId = displayId;
@@ -117,15 +118,37 @@ final class DisplayPowerState {
         mColorFadeReady = true;
     }
 
-    public void setScreenStateAnimator(int mode) {
-        if (mColorFade != null) {
-            mColorFade.dismiss();
+    /**
+     * Returns the animator used for screen state transitions, or null if the color fade
+     * is disabled for this display.
+     */
+    ScreenStateAnimator getScreenStateAnimator() {
+        return mColorFade;
+    }
+
+    /**
+     * Replaces the animator used for screen state transitions.
+     *
+     * The swap is refused while a transition is prepared: either an animation is running,
+     * or the screen is off and the animator's surface is the black cover hiding the
+     * display content. Callers should retry once nothing is prepared.
+     *
+     * @return true if the requested animator is installed.
+     */
+    boolean setScreenStateAnimator(ScreenStateAnimator animator) {
+        if (mStopped || mColorFadePrepared) {
+            return false;
         }
-        if (mode == DisplayPowerController.SCREEN_OFF_FADE) {
-            mColorFade = new ColorFade(Display.DEFAULT_DISPLAY);
-        } else {
-            mColorFade = new ElectronBeam(Display.DEFAULT_DISPLAY);
+        if (mColorFade == animator) {
+            return true;
         }
+        final ScreenStateAnimator old = mColorFade;
+        mColorFade = animator;
+        if (old != null) {
+            old.dismiss();
+            old.destroy();
+        }
+        return true;
     }
 
     public static final FloatProperty<DisplayPowerState> COLOR_FADE_LEVEL =
