@@ -55,8 +55,9 @@ import java.nio.FloatBuffer;
 
 /**
  * <p>
- * Animates a screen transition from on to off by applying a CRT-style
- * ("electron beam") collapse or a scale-down to a screenshot.
+ * Animates a screen transition from on to off by applying an effect to a screenshot:
+ * a CRT-style ("electron beam") collapse, scale-down, iris close, desaturate-then-fade
+ * or shutter close.
  * </p><p>
  * This is the classic KitKat ElectronBeam effect, ported to the same surface and EGL
  * plumbing as {@link ColorFade}: a container layer with a BLAST child for GL rendering,
@@ -93,6 +94,18 @@ final class ElectronBeam implements ScreenStateAnimator {
     private static final int EGL_GL_COLORSPACE_DISPLAY_P3_PASSTHROUGH_EXT = 0x3490;
     private static final int EGL_PROTECTED_CONTENT_EXT = 0x32C0;
 
+    // MODE_DESATURATE: colour is fully drained once the level drops below
+    // DESATURATE_SATURATION_END, and the fade to black starts below DESATURATE_FADE_START.
+    // The two phases overlap slightly so the motion never stalls.
+    private static final float DESATURATE_SATURATION_END = 0.35f;
+    private static final float DESATURATE_FADE_START = 0.65f;
+
+    // MODE_IRIS: width of the soft edge, as a fraction of the shorter display side.
+    private static final float IRIS_FEATHER_FRACTION = 0.03f;
+
+    // MODE_SHUTTER: brightness of the content still visible when the shutters meet.
+    private static final float SHUTTER_MIN_BRIGHTNESS = 0.6f;
+
     // Shaders are kept inline so the feature does not need new framework raw resources.
     private static final String TEX_VERTEX_SHADER =
             "uniform mat4 u_proj;\n"
@@ -114,9 +127,22 @@ final class ElectronBeam implements ScreenStateAnimator {
             + "#endif\n"
             + "uniform samplerExternalOES u_texture;\n"
             + "uniform float u_brightness;\n"
+            + "uniform float u_saturation;\n"
+            + "uniform vec2 u_iris_center;\n"
+            + "uniform float u_iris_radius;\n"   // < 0 disables the iris mask
+            + "uniform float u_iris_feather;\n"
             + "varying vec2 v_uv;\n"
             + "void main() {\n"
-            + "    gl_FragColor = vec4(texture2D(u_texture, v_uv).rgb * u_brightness, 1.0);\n"
+            + "    vec3 c = texture2D(u_texture, v_uv).rgb;\n"
+            + "    float luma = dot(c, vec3(0.2126, 0.7152, 0.0722));\n"
+            + "    c = mix(vec3(luma), c, u_saturation);\n"
+            + "    float mask = 1.0;\n"
+            + "    if (u_iris_radius >= 0.0) {\n"
+            + "        float d = distance(gl_FragCoord.xy, u_iris_center);\n"
+            + "        mask = 1.0 - smoothstep(u_iris_radius - u_iris_feather,\n"
+            + "                u_iris_radius, d);\n"
+            + "    }\n"
+            + "    gl_FragColor = vec4(c * (u_brightness * mask), 1.0);\n"
             + "}\n";
 
     private static final String SOLID_VERTEX_SHADER =
@@ -170,6 +196,7 @@ final class ElectronBeam implements ScreenStateAnimator {
     // Textured program.
     private int mTexProgram;
     private int mTexPosLoc, mTexUvLoc, mTexProjLoc, mTexMatrixLoc, mTexUnitLoc, mBrightnessLoc;
+    private int mSaturationLoc, mIrisCenterLoc, mIrisRadiusLoc, mIrisFeatherLoc;
 
     // Solid colour program.
     private int mSolidProgram;
@@ -290,7 +317,9 @@ final class ElectronBeam implements ScreenStateAnimator {
         // times.  The rest of the animation should run smoothly thereafter.
         // The frames we draw here aren't visible because we are essentially just
         // painting the screenshot as-is.
-        if (mMode == MODE_COOL_DOWN || mMode == MODE_SCALE_DOWN) {
+        // Every GL mode except MODE_WARM_UP is a screen-off effect whose first frame
+        // (level 1.0) is the unmodified screenshot.
+        if (mMode != MODE_WARM_UP) {
             for (int i = 0; i < DEJANK_FRAMES; i++) {
                 draw(1.0f);
             }
@@ -359,6 +388,10 @@ final class ElectronBeam implements ScreenStateAnimator {
         mTexMatrixLoc = GLES20.glGetUniformLocation(mTexProgram, "u_tex");
         mTexUnitLoc = GLES20.glGetUniformLocation(mTexProgram, "u_texture");
         mBrightnessLoc = GLES20.glGetUniformLocation(mTexProgram, "u_brightness");
+        mSaturationLoc = GLES20.glGetUniformLocation(mTexProgram, "u_saturation");
+        mIrisCenterLoc = GLES20.glGetUniformLocation(mTexProgram, "u_iris_center");
+        mIrisRadiusLoc = GLES20.glGetUniformLocation(mTexProgram, "u_iris_radius");
+        mIrisFeatherLoc = GLES20.glGetUniformLocation(mTexProgram, "u_iris_feather");
 
         mSolidPosLoc = GLES20.glGetAttribLocation(mSolidProgram, "a_pos");
         mSolidProjLoc = GLES20.glGetUniformLocation(mSolidProgram, "u_proj");
@@ -480,15 +513,29 @@ final class ElectronBeam implements ScreenStateAnimator {
             GLES20.glClearColor(0f, 0f, 0f, 1f);
             GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
 
-            // Draw the frame.
-            if (mMode == MODE_WARM_UP || mMode == MODE_COOL_DOWN) {
-                if (level < HSTRETCH_DURATION) {
-                    drawHStretch(1.0f - (level / HSTRETCH_DURATION));
-                } else {
-                    drawVStretch(1.0f - ((level - HSTRETCH_DURATION) / VSTRETCH_DURATION));
-                }
-            } else if (mMode == MODE_SCALE_DOWN) {
-                drawScaled(level);
+            // Draw the frame. Every effect must be the plain screenshot at level 1.0 and
+            // pure black at level 0.0, because the last frame stays up as the cover.
+            switch (mMode) {
+                case MODE_WARM_UP:
+                case MODE_COOL_DOWN:
+                    if (level < HSTRETCH_DURATION) {
+                        drawHStretch(1.0f - (level / HSTRETCH_DURATION));
+                    } else {
+                        drawVStretch(1.0f - ((level - HSTRETCH_DURATION) / VSTRETCH_DURATION));
+                    }
+                    break;
+                case MODE_SCALE_DOWN:
+                    drawScaled(level);
+                    break;
+                case MODE_IRIS:
+                    drawIris(level);
+                    break;
+                case MODE_DESATURATE:
+                    drawDesaturate(level);
+                    break;
+                case MODE_SHUTTER:
+                    drawShutter(level);
+                    break;
             }
 
             if (checkGlErrors("drawFrame")) {
@@ -517,6 +564,76 @@ final class ElectronBeam implements ScreenStateAnimator {
         setQuad(mVertexBuffer, (mDisplayWidth - w) * 0.5f, (mDisplayHeight - h) * 0.5f, w, h);
         // Dimming is done in the shader: no blending, so the output stays fully opaque.
         drawTexturedQuad(s);
+    }
+
+    /**
+     * Draws a frame where a soft-edged circle closes onto the centre of the screen.
+     *
+     * @param level 1.0 is fully open, 0.0 is closed / black.
+     */
+    private void drawIris(float level) {
+        final float feather =
+                Math.max(2.0f, Math.min(mDisplayWidth, mDisplayHeight) * IRIS_FEATHER_FRACTION);
+        final float halfDiagonal = 0.5f * (float) Math.hypot(mDisplayWidth, mDisplayHeight);
+        // At level 1.0 the inner edge of the feather sits outside the corners, so nothing is
+        // masked; at 0.0 the radius is 0 and every pixel is outside the circle.
+        final float radius = (halfDiagonal + feather) * level;
+        if (DEBUG) {
+            Slog.d(TAG, "drawIris: level=" + level + ", radius=" + radius);
+        }
+        setQuad(mVertexBuffer, 0, 0, mDisplayWidth, mDisplayHeight);
+        // gl_FragCoord is in surface (natural) pixels, so the centre is rotation independent.
+        drawTexturedQuad(1.0f, 1.0f, radius, feather);
+    }
+
+    /**
+     * Draws a frame where the colour drains out of the picture, which then fades to black.
+     *
+     * @param level 1.0 is the original picture, 0.0 is black.
+     */
+    private void drawDesaturate(float level) {
+        final float saturation = smoothstep(DESATURATE_SATURATION_END, 1.0f, level);
+        final float brightness = smoothstep(0.0f, DESATURATE_FADE_START, level);
+        if (DEBUG) {
+            Slog.d(TAG, "drawDesaturate: level=" + level + ", saturation=" + saturation
+                    + ", brightness=" + brightness);
+        }
+        setQuad(mVertexBuffer, 0, 0, mDisplayWidth, mDisplayHeight);
+        drawTexturedQuad(brightness, saturation, -1.0f, 0.0f);
+    }
+
+    /**
+     * Draws a frame where black shutters slide in from the top and bottom edges (from the
+     * user's point of view) and meet in the middle, while the content behind them dims.
+     *
+     * @param level 1.0 is fully open, 0.0 is closed / black.
+     */
+    private void drawShutter(float level) {
+        final float userH = mSwapAxes ? mDisplayWidth : mDisplayHeight;
+        // Each shutter covers half the screen when closed; round up so they always meet.
+        final float panel = (float) Math.ceil(userH * 0.5f * (1.0f - level));
+        if (DEBUG) {
+            Slog.d(TAG, "drawShutter: level=" + level + ", panel=" + panel);
+        }
+
+        setQuad(mVertexBuffer, 0, 0, mDisplayWidth, mDisplayHeight);
+        drawTexturedQuad(SHUTTER_MIN_BRIGHTNESS + (1.0f - SHUTTER_MIN_BRIGHTNESS) * level);
+
+        if (panel <= 0.0f) {
+            return;
+        }
+        if (mSwapAxes) {
+            // The user's vertical axis is the natural horizontal one.
+            setQuad(mVertexBuffer, 0, 0, panel, mDisplayHeight);
+            drawSolidQuad(0f, 0f, 0f, 1f);
+            setQuad(mVertexBuffer, mDisplayWidth - panel, 0, panel, mDisplayHeight);
+            drawSolidQuad(0f, 0f, 0f, 1f);
+        } else {
+            setQuad(mVertexBuffer, 0, 0, mDisplayWidth, panel);
+            drawSolidQuad(0f, 0f, 0f, 1f);
+            setQuad(mVertexBuffer, 0, mDisplayHeight - panel, mDisplayWidth, panel);
+            drawSolidQuad(0f, 0f, 0f, 1f);
+        }
     }
 
     /**
@@ -588,10 +705,25 @@ final class ElectronBeam implements ScreenStateAnimator {
     }
 
     private void drawTexturedQuad(float brightness) {
+        drawTexturedQuad(brightness, 1.0f, -1.0f, 0.0f);
+    }
+
+    /**
+     * @param brightness multiplier applied to the colour, 0..1
+     * @param saturation 1.0 keeps the original colour, 0.0 is greyscale
+     * @param irisRadius radius of the visible circle in surface pixels, or < 0 to disable
+     * @param irisFeather width of the soft iris edge in surface pixels (> 0 when enabled)
+     */
+    private void drawTexturedQuad(float brightness, float saturation, float irisRadius,
+            float irisFeather) {
         GLES20.glUseProgram(mTexProgram);
         GLES20.glUniformMatrix4fv(mTexProjLoc, 1, false, mProjMatrix, 0);
         GLES20.glUniformMatrix4fv(mTexMatrixLoc, 1, false, mTexMatrix, 0);
         GLES20.glUniform1f(mBrightnessLoc, brightness);
+        GLES20.glUniform1f(mSaturationLoc, saturation);
+        GLES20.glUniform2f(mIrisCenterLoc, mDisplayWidth * 0.5f, mDisplayHeight * 0.5f);
+        GLES20.glUniform1f(mIrisRadiusLoc, irisRadius);
+        GLES20.glUniform1f(mIrisFeatherLoc, irisFeather);
 
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
         GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, mTexNames[0]);
@@ -1035,6 +1167,15 @@ final class ElectronBeam implements ScreenStateAnimator {
 
     private static float sigmoid(float x, float s) {
         return 1.0f / (1.0f + (float) Math.exp(-x * s));
+    }
+
+    /**
+     * GLSL-style smoothstep: 0 below edge0, 1 above edge1, smooth Hermite in between.
+     */
+    private static float smoothstep(float edge0, float edge1, float x) {
+        float t = (x - edge0) / (edge1 - edge0);
+        t = Math.max(0.0f, Math.min(1.0f, t));
+        return t * t * (3.0f - 2.0f * t);
     }
 
     private static FloatBuffer createNativeFloatBuffer(int size) {
