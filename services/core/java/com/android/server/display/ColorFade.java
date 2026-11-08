@@ -158,6 +158,7 @@ final class ColorFade implements ScreenStateAnimator {
      * @param mode The desired mode for the upcoming animation.
      * @return True if the color fade is ready, false if it is uncontrollable.
      */
+    @Override
     public boolean prepare(Context context, int mode) {
         if (DEBUG) {
             Slog.d(TAG, "prepare: mode=" + mode);
@@ -369,6 +370,7 @@ final class ColorFade implements ScreenStateAnimator {
      * This function destroys the resources that are created for the color fade
      * animation but does not clean up the surface.
      */
+    @Override
     public void dismissResources() {
         if (DEBUG) {
             Slog.d(TAG, "dismissResources");
@@ -398,6 +400,7 @@ final class ColorFade implements ScreenStateAnimator {
      * turned off, it is a good idea to defer dismissing the animation until the
      * color fade has been turned back on fully.
      */
+    @Override
     public void dismiss() {
         if (DEBUG) {
             Slog.d(TAG, "dismiss");
@@ -416,6 +419,7 @@ final class ColorFade implements ScreenStateAnimator {
      * This method should be called when the ColorFade is no longer in use; i.e. when
      * the {@link #mDisplayId display} has been removed.
      */
+    @Override
     public void destroy() {
         if (DEBUG) {
             Slog.d(TAG, "destroy");
@@ -431,10 +435,14 @@ final class ColorFade implements ScreenStateAnimator {
                 } finally {
                     detachEglContext();
                 }
+                mCreatedResources = false;
             }
-            destroyEglContext();
             destroySurface();
+            mPrepared = false;
         }
+        // The EGL context outlives dismiss(), so it must be released even when we are not
+        // prepared any more (e.g. when the animator is swapped for another one).
+        destroyEglContext();
     }
 
     /**
@@ -444,6 +452,7 @@ final class ColorFade implements ScreenStateAnimator {
      * @param level The color fade level.
      * @return True if successful.
      */
+    @Override
     public boolean draw(float level) {
         if (DEBUG) {
             Slog.d(TAG, "drawFrame: level=" + level);
@@ -711,7 +720,8 @@ final class ColorFade implements ScreenStateAnimator {
             }
             mEglContext = EGL14.eglCreateContext(mEglDisplay, mEglConfig, EGL14.EGL_NO_CONTEXT,
                     eglContextAttribList, 0);
-            if (mEglContext == null) {
+            if (mEglContext == null || mEglContext == EGL14.EGL_NO_CONTEXT) {
+                mEglContext = null;
                 logEglError("eglCreateContext");
                 return false;
             }
@@ -751,7 +761,8 @@ final class ColorFade implements ScreenStateAnimator {
             // turn our SurfaceControl into a Surface
             mEglSurface = EGL14.eglCreateWindowSurface(mEglDisplay, mEglConfig, mSurface,
                     eglSurfaceAttribList, 0);
-            if (mEglSurface == null) {
+            if (mEglSurface == null || mEglSurface == EGL14.EGL_NO_SURFACE) {
+                mEglSurface = null;
                 logEglError("eglCreateWindowSurface");
                 return false;
             }
@@ -824,6 +835,7 @@ final class ColorFade implements ScreenStateAnimator {
     private void destroyEglContext() {
         if (mEglDisplay != null && mEglContext != null) {
             EGL14.eglDestroyContext(mEglDisplay, mEglContext);
+            mEglContext = null;
         }
     }
 
@@ -853,6 +865,7 @@ final class ColorFade implements ScreenStateAnimator {
         return hadError;
     }
 
+    @Override
     public void dump(PrintWriter pw) {
         pw.println();
         pw.println("Color Fade State:");
