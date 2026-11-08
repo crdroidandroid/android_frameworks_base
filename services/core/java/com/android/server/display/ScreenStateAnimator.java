@@ -17,26 +17,42 @@
 
 package com.android.server.display;
 
-import java.io.PrintWriter;
-
 import android.content.Context;
 
-/** @hide */
-public interface ScreenStateAnimator {
-    public static final int MODE_WARM_UP = 0;
-    public static final int MODE_COOL_DOWN = 1;
-    public static final int MODE_FADE = 2;
-    public static final int MODE_SCALE_DOWN = 3;
+import java.io.PrintWriter;
 
-    public boolean prepare(Context context, int mode);
+/**
+ * Common contract for the surfaces that animate a display power transition
+ * ({@link ColorFade} and {@link ElectronBeam}).
+ *
+ * All methods must be called on the {@link DisplayPowerController} handler thread,
+ * except {@link #destroy()} which may also be called from the async destroy executor
+ * once the owning {@link DisplayPowerState} has been stopped.
+ *
+ * @hide
+ */
+interface ScreenStateAnimator {
+    /** Turning on: the content appears. */
+    int MODE_WARM_UP = 0;
 
-    public default void dismissResources() {}
+    /** Turning off: the "signature" effect (gamma fade for ColorFade, CRT for ElectronBeam). */
+    int MODE_COOL_DOWN = 1;
 
-    public void dismiss();
+    /** A plain black colour layer whose alpha follows the level. */
+    int MODE_FADE = 2;
 
-    public void destroy();
+    /** Turning off: the content shrinks into the centre while dimming (ElectronBeam only). */
+    int MODE_SCALE_DOWN = 3;
 
-    public boolean draw(float level);
+    boolean prepare(Context context, int mode);
 
-    public void dump(PrintWriter pw);
+    void dismissResources();
+
+    void dismiss();
+
+    void destroy();
+
+    boolean draw(float level);
+
+    void dump(PrintWriter pw);
 }

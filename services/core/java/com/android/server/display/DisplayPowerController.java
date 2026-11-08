@@ -35,7 +35,6 @@ import android.annotation.SuppressLint;
 import android.annotation.UserIdInt;
 import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -445,11 +444,12 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
     private ObjectAnimator mColorFadeOffAnimator;
     private DualRampAnimator<DisplayPowerState> mScreenBrightnessRampAnimator;
 
-    // Screen-off animation
-    private int mScreenOffAnimation;
+    // Screen-off animation style, see Settings.System.SCREEN_OFF_ANIMATION.
+    // Must only be accessed on the handler thread.
     static final int SCREEN_OFF_FADE = 0;
     static final int SCREEN_OFF_CRT = 1;
     static final int SCREEN_OFF_SCALE = 2;
+    private int mScreenOffAnimation = SCREEN_OFF_FADE;
 
     // True if this DisplayPowerController has been stopped and should no longer be running.
     private boolean mStopped;
@@ -727,6 +727,7 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
         }
 
         handleBrightnessModeChange();
+        handleScreenOffAnimationChange();
         if (mBrightnessTracker != null) {
             mBrightnessTracker.onSwitchUser(newUserId);
         }
@@ -987,48 +988,96 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
         }
     }
 
-    private int getScreenAnimationModeForDisplayState(int displayState) {
-        switch (mScreenOffAnimation) {
-            case SCREEN_OFF_FADE:
-                return ScreenStateAnimator.MODE_FADE;
+    private int readScreenOffAnimationSetting() {
+        final int style = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.SCREEN_OFF_ANIMATION, SCREEN_OFF_FADE, UserHandle.USER_CURRENT);
+        switch (style) {
             case SCREEN_OFF_CRT:
-                if (displayState == Display.STATE_OFF) {
-                    return ScreenStateAnimator.MODE_COOL_DOWN;
-                } else {
-                    return ScreenStateAnimator.MODE_FADE;
-                }
             case SCREEN_OFF_SCALE:
-                if (displayState == Display.STATE_OFF) {
-                    return ScreenStateAnimator.MODE_SCALE_DOWN;
-                } else {
-                    return ScreenStateAnimator.MODE_FADE;
-                }
+                return style;
             default:
-                return ScreenStateAnimator.MODE_FADE;
+                return SCREEN_OFF_FADE;
         }
     }
 
-    private void initialize(int displayState) {
-        final ContentResolver cr = mContext.getContentResolver();
-        final ContentObserver observer = new ContentObserver(mHandler) {
-            @Override
-            public void onChange(boolean selfChange, Uri uri) {
-                mScreenOffAnimation = Settings.System.getIntForUser(cr,
-                        Settings.System.SCREEN_OFF_ANIMATION,
-                        SCREEN_OFF_FADE, UserHandle.USER_CURRENT);
-                if (mPowerState != null) {
-                    mPowerState.setScreenStateAnimator(mScreenOffAnimation);
-                }
-            }
-        };
-        cr.registerContentObserver(Settings.System.getUriFor(
-                Settings.System.SCREEN_OFF_ANIMATION),
-                false, observer, UserHandle.USER_ALL);
-        mScreenOffAnimation = Settings.System.getIntForUser(cr,
-                Settings.System.SCREEN_OFF_ANIMATION,
-                SCREEN_OFF_FADE, UserHandle.USER_CURRENT);
+    @Nullable
+    private ScreenStateAnimator createScreenStateAnimator(int style) {
+        if (!mColorFadeEnabled) {
+            return null;
+        }
+        return style == SCREEN_OFF_FADE
+                ? new ColorFade(mDisplayId) : new ElectronBeam(mDisplayId);
+    }
 
-        mPowerState = mInjector.getDisplayPowerState(mBlanker, mScreenOffAnimation, mDisplayId, displayState);
+    /**
+     * Makes the animator held by {@link #mPowerState} match the user's screen-off style.
+     * The swap is refused by DisplayPowerState while a transition surface is prepared
+     * (animation running, or the black cover shown while the screen is off); in that case
+     * it is retried right before the next screen-off transition.
+     */
+    private void updateScreenStateAnimator() {
+        if (mPowerState == null || !mColorFadeEnabled) {
+            return;
+        }
+        final boolean wantElectronBeam = mScreenOffAnimation != SCREEN_OFF_FADE;
+        final boolean haveElectronBeam =
+                mPowerState.getScreenStateAnimator() instanceof ElectronBeam;
+        if (wantElectronBeam == haveElectronBeam) {
+            return;
+        }
+        if (!mPowerState.setScreenStateAnimator(createScreenStateAnimator(mScreenOffAnimation))
+                && DEBUG) {
+            Slog.d(mTag, "Screen state animator busy, deferring switch");
+        }
+    }
+
+    private void handleScreenOffAnimationChange() {
+        mScreenOffAnimation = readScreenOffAnimationSetting();
+        updateScreenStateAnimator();
+    }
+
+    /**
+     * Picks the ScreenStateAnimator mode for a transition, based on the animator that is
+     * actually installed (it may lag behind the setting while a swap is deferred).
+     *
+     * @param turningOff true for the screen-off transition, false for the black cover used
+     *                   while turning the display on / leaving doze.
+     */
+    private int getScreenAnimationMode(boolean turningOff) {
+        final ScreenStateAnimator animator =
+                mPowerState != null ? mPowerState.getScreenStateAnimator() : null;
+        if (animator instanceof ElectronBeam) {
+            if (!turningOff) {
+                // A plain black cover is all that is needed while turning on.
+                return ScreenStateAnimator.MODE_FADE;
+            }
+            switch (mScreenOffAnimation) {
+                case SCREEN_OFF_CRT:
+                    return ScreenStateAnimator.MODE_COOL_DOWN;
+                case SCREEN_OFF_SCALE:
+                    return ScreenStateAnimator.MODE_SCALE_DOWN;
+                default:
+                    return ScreenStateAnimator.MODE_FADE;
+            }
+        }
+        // Stock ColorFade behaviour.
+        if (mColorFadeFadesConfig) {
+            return ScreenStateAnimator.MODE_FADE;
+        }
+        return turningOff ? ScreenStateAnimator.MODE_COOL_DOWN : ScreenStateAnimator.MODE_WARM_UP;
+    }
+
+    private boolean prepareScreenOffAnimation() {
+        // Nothing is prepared at this point (screen is on, level is 1), so a pending
+        // animator switch can be applied safely now.
+        updateScreenStateAnimator();
+        return mPowerState.prepareColorFade(mContext, getScreenAnimationMode(true));
+    }
+
+    private void initialize(int displayState) {
+        mScreenOffAnimation = readScreenOffAnimationSetting();
+        mPowerState = mInjector.getDisplayPowerState(mBlanker,
+                createScreenStateAnimator(mScreenOffAnimation), mDisplayId, displayState);
 
         if (mColorFadeEnabled) {
             mColorFadeOffAnimator = ObjectAnimator.ofFloat(
@@ -1072,6 +1121,9 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
                 /* notifyForDescendants= */ false, mSettingsObserver, UserHandle.USER_ALL);
         mContext.getContentResolver().registerContentObserver(
                 LineageSettings.System.getUriFor(LineageSettings.System.AUTO_BRIGHTNESS_ONE_SHOT),
+                false /*notifyForDescendants*/, mSettingsObserver, UserHandle.USER_ALL);
+        mContext.getContentResolver().registerContentObserver(
+                Settings.System.getUriFor(Settings.System.SCREEN_OFF_ANIMATION),
                 false /*notifyForDescendants*/, mSettingsObserver, UserHandle.USER_ALL);
         handleBrightnessModeChange();
     }
@@ -2279,8 +2331,7 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
                 && target != Display.STATE_OFF)) {
             // ensure ColorFade is present.
             // TODO(b/428688446): ColorFade.MODE_FADE should be enough here.
-            mPowerState.prepareColorFade(mContext,
-                    getScreenAnimationModeForDisplayState(Display.STATE_ON));
+            mPowerState.prepareColorFade(mContext, getScreenAnimationMode(false));
         }
 
         if (mDisplayBlanksAfterDozeConfig
@@ -2289,8 +2340,7 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
             // Skip the screen off animation and add a black surface to hide the
             // contents of the screen.
             // TODO(b/428688446): ColorFade.MODE_FADE should be enough here.
-            mPowerState.prepareColorFade(mContext,
-                    getScreenAnimationModeForDisplayState(Display.STATE_ON));
+            mPowerState.prepareColorFade(mContext, getScreenAnimationMode(false));
             if (mColorFadeOffAnimator != null) {
                 mColorFadeOffAnimator.end();
             }
@@ -2394,8 +2444,7 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
                 mPendingScreenOff = false;
                 mPowerState.dismissColorFadeResources();
             } else if (performScreenOffTransition
-                    && mPowerState.prepareColorFade(mContext,
-                    getScreenAnimationModeForDisplayState(Display.STATE_OFF))
+                    && prepareScreenOffAnimation()
                     && mPowerState.getScreenState() != Display.STATE_OFF) {
                 // Perform the screen off animation.
                 mColorFadeOffAnimator.start();
@@ -2675,6 +2724,7 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
         pw.println("  mPendingScreenOnUnblocker=" + mPendingScreenOnUnblocker);
         pw.println("  mPendingScreenOffUnblocker=" + mPendingScreenOffUnblocker);
         pw.println("  mPendingScreenOff=" + mPendingScreenOff);
+        pw.println("  mScreenOffAnimation=" + mScreenOffAnimation);
         pw.println("  mReportedToPolicy="
                 + reportedToPolicyToString(mReportedScreenStateToPolicy));
         pw.println("  mIsRbcActive=" + mIsRbcActive);
@@ -3105,6 +3155,9 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
                 Slog.i(mTag, "Update for charging experience. Enable: "
                         + mIsWearChargingExperienceEnabled);
                 sendUpdatePowerState();
+            } else if (uri.equals(
+                    Settings.System.getUriFor(Settings.System.SCREEN_OFF_ANIMATION))) {
+                handleScreenOffAnimationChange();
             } else {
                 handleSettingsChange();
             }
@@ -3217,9 +3270,10 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
             return SystemClock::uptimeMillis;
         }
 
-        DisplayPowerState getDisplayPowerState(DisplayBlanker blanker, int screenOffAnimation,
-                int displayId, int displayState) {
-            return new DisplayPowerState(blanker, screenOffAnimation, displayId, displayState);
+        DisplayPowerState getDisplayPowerState(DisplayBlanker blanker,
+                @Nullable ScreenStateAnimator screenStateAnimator, int displayId,
+                int displayState) {
+            return new DisplayPowerState(blanker, screenStateAnimator, displayId, displayState);
         }
 
         DualRampAnimator<DisplayPowerState> getDualRampAnimator(DisplayPowerState dps,
