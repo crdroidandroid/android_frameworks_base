@@ -719,7 +719,8 @@ public final class AttestationUtils {
     }
 
     private static boolean isValidPatchDate(int year, int month, int day) {
-        return year >= 1 && year <= 9999 && month >= 1 && month <= 12
+        return year >= 2024 && year <= java.time.Year.now().getValue()
+                && month >= 1 && month <= 12
                 && day >= 1 && day <= java.time.YearMonth.of(year, month).lengthOfMonth();
     }
 
@@ -742,10 +743,11 @@ public final class AttestationUtils {
             return isLong ? date[0] * 10000 + date[1] * 100 + date[2]
                     : date[0] * 100 + date[1];
         }
-        // Retain the previous fixed fallback instead of asserting today's date is a
-        // device security patch. Invalid configured patch levels are ignored above.
+        // Fixed fallback instead of asserting today's date is a device security patch.
+        // Invalid configured patch levels are ignored above. Respect the requested form
+        // so vendor/boot (YYYYMMDD) do not fall back to a month-only value.
         Log.e(TAG, "Invalid patch level format: " + patchString);
-        return 202404;
+        return isLong ? 20240401 : 202404;
     }
 
     public static byte[] computeModuleHash() {
