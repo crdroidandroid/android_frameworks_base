@@ -22,6 +22,7 @@ import static com.android.systemui.doze.DozeMachine.State.DOZE_AOD_DOCKED;
 import static com.android.systemui.doze.DozeMachine.State.DOZE_AOD_MINMODE;
 import static com.android.systemui.doze.DozeMachine.State.DOZE_PULSE_DONE;
 import static com.android.systemui.doze.DozeMachine.State.DOZE_PULSING;
+import static com.android.systemui.doze.DozeMachine.State.DOZE_PULSING_WITHOUT_UI;
 import static com.android.systemui.doze.DozeMachine.State.DOZE_REQUEST_PULSE;
 import static com.android.systemui.doze.DozeMachine.State.DOZE_SUSPEND_TRIGGERS;
 import static com.android.systemui.doze.DozeMachine.State.FINISH;
@@ -343,6 +344,48 @@ public class DozeMachineTest extends SysuiTestCase {
 
         verify(mPartMock).transitionTo(DOZE_PULSE_DONE, DOZE);
         assertEquals(DOZE, mMachine.getState());
+    }
+
+    @Test
+    public void testPulseDone_wakeAndUnlocking_goesToFinish() {
+        when(mAmbientDisplayConfigMock.alwaysOnEnabled(anyInt())).thenReturn(false);
+        mMachine.requestState(INITIALIZED);
+        mMachine.requestPulse(DozeLog.PULSE_REASON_NOTIFICATION);
+        mMachine.requestState(DOZE_PULSING_WITHOUT_UI);
+        when(mHost.isWakeAndUnlocking()).thenReturn(true);
+
+        mMachine.requestState(DOZE_PULSE_DONE);
+
+        verify(mPartMock).transitionTo(DOZE_PULSE_DONE, FINISH);
+        verify(mPartMock, never()).transitionTo(DOZE_PULSE_DONE, DOZE);
+        assertEquals(FINISH, mMachine.getState());
+        assertTrue(mServiceFake.finished);
+    }
+
+    @Test
+    public void testPulseDone_wakeAndUnlocking_alwaysOnEnabled_goesToFinish() {
+        when(mAmbientDisplayConfigMock.alwaysOnEnabled(anyInt())).thenReturn(true);
+        mMachine.requestState(INITIALIZED);
+        mMachine.requestPulse(DozeLog.PULSE_REASON_NOTIFICATION);
+        mMachine.requestState(DOZE_PULSING);
+        when(mHost.isWakeAndUnlocking()).thenReturn(true);
+
+        mMachine.requestState(DOZE_PULSE_DONE);
+
+        verify(mPartMock).transitionTo(DOZE_PULSE_DONE, FINISH);
+        assertEquals(FINISH, mMachine.getState());
+    }
+
+    @Test
+    public void testInitialize_wakeAndUnlocking_goesToDoze() {
+        when(mHost.isWakeAndUnlocking()).thenReturn(true);
+        when(mAmbientDisplayConfigMock.alwaysOnEnabled(anyInt())).thenReturn(false);
+
+        mMachine.requestState(INITIALIZED);
+
+        verify(mPartMock).transitionTo(INITIALIZED, DOZE);
+        assertEquals(DOZE, mMachine.getState());
+        assertFalse(mServiceFake.finished);
     }
 
     @Test
