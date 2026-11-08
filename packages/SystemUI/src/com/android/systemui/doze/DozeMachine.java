@@ -454,11 +454,13 @@ public class DozeMachine {
                         MinModeManagerUtilsKt.isMinModeAvailable(mMinModeManager.get())) {
                     nextState = State.DOZE_AOD_MINMODE;
                 } else if (state != State.INITIALIZED && (wakefulness == WAKEFULNESS_AWAKE
-                        || wakefulness == WAKEFULNESS_WAKING
-                        || mDozeHost.isWakeAndUnlocking())) {
+                        || wakefulness == WAKEFULNESS_WAKING)) {
+                    nextState = State.FINISH;
+                } else if (state == State.DOZE_PULSE_DONE && mDozeHost.isWakeAndUnlocking()) {
                     // A biometric wake and unlock ends the pulse before PowerManager starts
                     // waking up. Going back to DOZE then would turn the display off (without
                     // AOD) just before it is turned on again.
+                    Log.i(TAG, "Pulse ended by biometric wake and unlock, finishing doze");
                     nextState = State.FINISH;
                 } else if (mDockManager.isDocked()) {
                     nextState = mDockManager.isHidden() ? State.DOZE : State.DOZE_AOD_DOCKED;
