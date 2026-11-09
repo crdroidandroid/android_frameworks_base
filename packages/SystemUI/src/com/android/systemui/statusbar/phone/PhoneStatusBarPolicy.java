@@ -294,7 +294,7 @@ public class PhoneStatusBarPolicy
 
         // bluetooth status
         mShowBluetoothBattery = Settings.System.getIntForUser(mContext.getContentResolver(),
-            BLUETOOTH_SHOW_BATTERY, 1, UserHandle.USER_CURRENT) != 0;
+            Settings.System.BLUETOOTH_SHOW_BATTERY, 1, UserHandle.USER_CURRENT) != 0;
         updateBluetooth();
 
         // Alarm clock
