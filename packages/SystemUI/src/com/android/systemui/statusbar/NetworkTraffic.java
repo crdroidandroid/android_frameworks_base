@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2019-2025 crDroid Android Project
+ * Copyright (C) 2019-2026 crDroid Android Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,11 @@ package com.android.systemui.statusbar;
 
 import static com.android.systemui.statusbar.StatusBarIconView.STATE_ICON;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.Typeface;
@@ -30,119 +34,64 @@ import android.net.NetworkCapabilities;
 import android.net.NetworkRequest;
 import android.net.TrafficStats;
 import android.os.Handler;
-import android.os.Message;
+import android.os.HandlerThread;
+import android.os.Looper;
+import android.os.PowerManager;
+import android.os.Process;
 import android.os.SystemClock;
 import android.provider.Settings;
-import android.text.Spanned;
 import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
+import android.util.ArrayMap;
+import android.util.ArraySet;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.TextView;
 
-import androidx.core.content.res.ResourcesCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
-
 import com.android.systemui.Dependency;
-import com.android.systemui.res.R;
 import com.android.systemui.plugins.DarkIconDispatcher;
 import com.android.systemui.plugins.DarkIconDispatcher.DarkReceiver;
-import com.android.systemui.statusbar.StatusIconDisplayable;
-
+import com.android.systemui.res.R;
 import com.android.systemui.tuner.TunerService;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.stream.Stream;
 
-/** @hide */
-public class NetworkTraffic extends TextView implements TunerService.Tunable,
-        DarkReceiver, StatusIconDisplayable {
-
-    private static final String TAG = "NetworkTraffic";
-
-    // This must match the interface prefix in Connectivity's clatd.c.
-    private static final String CLAT_PREFIX = "v4-";
+/**
+ * Status bar network traffic indicator.
+ *
+ * @hide
+ */
+public class NetworkTraffic extends TextView implements DarkReceiver, StatusIconDisplayable {
 
     private static final int MODE_UPSTREAM_AND_DOWNSTREAM = 0;
     private static final int MODE_UPSTREAM_ONLY = 1;
     private static final int MODE_DOWNSTREAM_ONLY = 2;
 
-    private static final int MESSAGE_TYPE_PERIODIC_REFRESH = 0;
-    private static final int MESSAGE_TYPE_UPDATE_VIEW = 1;
-    private static final int MESSAGE_TYPE_ADD_NETWORK = 2;
-    private static final int MESSAGE_TYPE_REMOVE_NETWORK = 3;
-
-    private static final int Kilo = 1000;
-    private static final int Mega = Kilo * Kilo;
-    private static final int Giga = Mega * Kilo;
-
-    private static final String NETWORK_TRAFFIC_ENABLED =
-            "system:" + Settings.System.NETWORK_TRAFFIC_ENABLED;
-    private static final String NETWORK_TRAFFIC_MODE =
-            "system:" + Settings.System.NETWORK_TRAFFIC_MODE;
-    private static final String NETWORK_TRAFFIC_AUTOHIDE =
-            "system:" + Settings.System.NETWORK_TRAFFIC_AUTOHIDE;
-    private static final String NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD =
-            "system:" + Settings.System.NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD;
-    private static final String NETWORK_TRAFFIC_UNITS =
-            "system:" + Settings.System.NETWORK_TRAFFIC_UNITS;
-    private static final String NETWORK_TRAFFIC_REFRESH_INTERVAL =
-            "system:" + Settings.System.NETWORK_TRAFFIC_REFRESH_INTERVAL;
-    private static final String NETWORK_TRAFFIC_HIDEARROW =
-            "system:" + Settings.System.NETWORK_TRAFFIC_HIDEARROW;
-
-    private int mMode = MODE_UPSTREAM_AND_DOWNSTREAM;
-    private int mSubMode = MODE_UPSTREAM_AND_DOWNSTREAM;
-    private boolean mIsActive;
-    private boolean mTrafficActive;
-    private long mTxBytes;
-    private long mRxBytes;
-    private long mLastTxBytes;
-    private long mLastRxBytes;
-    private long mLastUpdateTime;
-    private boolean mAutoHide;
-    private long mAutoHideThreshold;
-    private int mUnits;
-    private int mTint = Color.WHITE;
-
-    private Drawable mDrawable;
-
-    private int mRefreshInterval = 2;
-
-    private boolean mAttached;
-    private boolean mHideArrows;
-
-    private boolean mVisible = true;
-
-    private ConnectivityManager mConnectivityManager;
-    private final Handler mTrafficHandler;
-
-    private final AbsoluteSizeSpan mSpeedAbsoluteSizeSpan = new AbsoluteSizeSpan(7, true);
-    private final AbsoluteSizeSpan mUnitAbsoluteSizeSpan = new AbsoluteSizeSpan(6, true);
-    private final DecimalFormat mDecimalFormat_0_2 = new DecimalFormat("0.##");
-    private final DecimalFormat mDecimalFormat_2_0 = new DecimalFormat("##0");
-    private final DecimalFormat mDecimalFormat_1_1 = new DecimalFormat("#0.#");
-
-    private boolean mEnabled = false;
-    private volatile boolean mHasValidatedInternet;
-
-    private final HashMap<Network, LinkProperties> mLinkPropertiesMap = new HashMap<>();
-    // Used to indicate that the set of sources contributing
-    // to current stats have changed.
-    private boolean mNetworksChanged = true;
-
-    private int mVisibleState = STATE_ICON;
+    private final Monitor mMonitor;
 
     private String mSlot;
-
+    private boolean mBlocked;
+    private boolean mTintManagedExternally;
     private boolean mColorIsStatic;
+    private int mTint = Color.WHITE;
 
+    private boolean mAttached;
+    private boolean mListening;
+    private int mVisibleState = STATE_ICON;
+    private boolean mWantVisible;
+    private boolean mShown;
+    private boolean mHideArrows;
     private int mCurrentWidth = -1;
+
+    private CharSequence mAppliedText;
+    private int mDrawableResId;
+    private Drawable mDrawable;
 
     public NetworkTraffic(Context context) {
         this(context, null);
@@ -154,195 +103,36 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable,
 
     public NetworkTraffic(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        mContext = context;
-        mConnectivityManager =
-                (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-        mTrafficHandler = new Handler(mContext.getMainLooper()) {
-            @Override
-            public void handleMessage(Message msg) {
-                switch (msg.what) {
-                    case MESSAGE_TYPE_PERIODIC_REFRESH:
-                        recalculateStats();
-                        displayStatsAndReschedule();
-                        break;
+        mMonitor = Monitor.get(context);
 
-                    case MESSAGE_TYPE_UPDATE_VIEW:
-                        displayStatsAndReschedule();
-                        break;
+        // Static styling, applied once instead of on every "enabled" tuning callback.
+        setLines(2);
+        setMaxLines(2);
+        final String txtFont = getResources().getString(
+                com.android.internal.R.string.config_bodyFontFamily);
+        setTypeface(Typeface.create(txtFont, Typeface.BOLD));
+        setLineSpacing(0f, 0.95f);
+        setLayoutDirection(View.LAYOUT_DIRECTION_LOCALE);
+        setTextDirection(View.TEXT_DIRECTION_LOCALE);
+        setTextAlignment(View.TEXT_ALIGNMENT_VIEW_END);
+        setGravity(Gravity.END | Gravity.CENTER_VERTICAL);
+        setElegantTextHeight(false);
+        setIncludeFontPadding(false);
+        super.setTextColor(mTint);
 
-                    case MESSAGE_TYPE_ADD_NETWORK:
-                        final LinkPropertiesHolder lph = (LinkPropertiesHolder) msg.obj;
-                        mLinkPropertiesMap.put(lph.getNetwork(), lph.getLinkProperties());
-                        mNetworksChanged = true;
-                        updateViews();
-                        break;
-
-                    case MESSAGE_TYPE_REMOVE_NETWORK:
-                        mLinkPropertiesMap.remove((Network) msg.obj);
-                        mNetworksChanged = true;
-                        updateViews();
-                        break;
-                }
-            }
-
-            private void recalculateStats() {
-                final long now = SystemClock.elapsedRealtime();
-                long timeDelta = now - mLastUpdateTime; /* ms */
-
-                if (mLastUpdateTime == 0 || timeDelta <= 500) {
-                    mLastTxBytes = 0;
-                    mLastRxBytes = 0;
-                    mLastUpdateTime = now;
-                    return;
-                }
-
-                // Sum tx and rx bytes from all sources of interest
-                long txBytes = 0;
-                long rxBytes = 0;
-                // Add interface stats, including stats from Clat's IPv4 interface
-                // (for applicable IPv6 networks). Stats are 0 if it doesn't exist.
-                final String[] ifaces = mLinkPropertiesMap.values().stream()
-                        .map(LinkProperties::getInterfaceName)
-                        .filter(iface -> iface != null && !iface.isEmpty())
-                        .distinct()
-                        .flatMap(iface -> Stream.of(iface, CLAT_PREFIX + iface))
-                        .toArray(String[]::new);
-                for (String iface : ifaces) {
-                    final long ifaceTxBytes = TrafficStats.getTxBytes(iface);
-                    final long ifaceRxBytes = TrafficStats.getRxBytes(iface);
-                    txBytes += ifaceTxBytes;
-                    rxBytes += ifaceRxBytes;
-                }
-
-                final long txBytesDelta = txBytes - mLastTxBytes;
-                final long rxBytesDelta = rxBytes - mLastRxBytes;
-
-                if (!mNetworksChanged && timeDelta > 0 && txBytesDelta >= 0 && rxBytesDelta >= 0) {
-                    mTxBytes = (long) (txBytesDelta / (timeDelta / 1000f));
-                    mRxBytes = (long) (rxBytesDelta / (timeDelta / 1000f));
-                } else if (mNetworksChanged) {
-                    mTxBytes = 0;
-                    mRxBytes = 0;
-                    mNetworksChanged = false;
-                }
-                mLastTxBytes = txBytes;
-                mLastRxBytes = rxBytes;
-                mLastUpdateTime = now;
-            }
-
-            private void displayStatsAndReschedule() {
-                final boolean showUpstream =
-                        mMode == MODE_UPSTREAM_ONLY || mMode == MODE_UPSTREAM_AND_DOWNSTREAM;
-                final boolean showDownstream =
-                        mMode == MODE_DOWNSTREAM_ONLY || mMode == MODE_UPSTREAM_AND_DOWNSTREAM;
-                final boolean aboveThreshold = (showUpstream && mTxBytes > mAutoHideThreshold)
-                        || (showDownstream && mRxBytes > mAutoHideThreshold);
-                mIsActive = mAttached
-                        && mHasValidatedInternet
-                        && (!mAutoHide || aboveThreshold);
-
-                int submode = MODE_UPSTREAM_AND_DOWNSTREAM;
-                final boolean trafficactive = (mTxBytes > 0 || mRxBytes > 0);
-
-                clearHandlerCallbacks();
-
-                if (mEnabled && mIsActive) {
-                    CharSequence output = "";
-                    if (showUpstream && showDownstream) {
-                        if (mTxBytes > mRxBytes) {
-                            output = formatOutput(mTxBytes);
-                            submode = MODE_UPSTREAM_ONLY;
-                        } else if (mTxBytes < mRxBytes) {
-                            output = formatOutput(mRxBytes);
-                            submode = MODE_DOWNSTREAM_ONLY;
-                        } else {
-                            output = formatOutput(mRxBytes);
-                            submode = MODE_UPSTREAM_AND_DOWNSTREAM;
-                        }
-                    } else if (showDownstream) {
-                        output = formatOutput(mRxBytes);
-                    } else if (showUpstream) {
-                        output = formatOutput(mTxBytes);
-                    }
-
-                    // Update view if there's anything new to show
-                    if (!TextUtils.equals(output, getText())) {
-                        setText(output);
-                    }
-                }
-
-                updateVisibility();
-
-                if (mVisible && (mSubMode != submode ||
-                        mTrafficActive != trafficactive)) {
-                    mSubMode = submode;
-                    mTrafficActive = trafficactive;
-                    setTrafficDrawable();
-                }
-
-                // Schedule periodic refresh
-                if (mEnabled && mAttached) {
-                    mTrafficHandler.sendEmptyMessageDelayed(MESSAGE_TYPE_PERIODIC_REFRESH,
-                            mRefreshInterval * 1000);
-                }
-            }
-
-            private CharSequence formatOutput(long speed) {
-                String unit;
-                String formatSpeed;
-                SpannableString spanUnitString;
-                SpannableString spanSpeedString;
-                String gunit, munit, kunit;
-
-                if (mUnits == 0) {
-                    // speed is in bytes, convert to bits
-                    speed = speed * 8;
-                    gunit = mContext.getString(R.string.gigabitspersecond_short);
-                    munit = mContext.getString(R.string.megabitspersecond_short);
-                    kunit = mContext.getString(R.string.kilobitspersecond_short);
-                } else {
-                    gunit = mContext.getString(R.string.gigabytespersecond_short);
-                    munit = mContext.getString(R.string.megabytespersecond_short);
-                    kunit = mContext.getString(R.string.kilobytespersecond_short);
-                }
-
-                if (speed >= Giga) {
-                    unit = gunit;
-                    formatSpeed = mDecimalFormat_0_2.format(speed / (float)Giga);
-                } else if (speed >= 100 * Mega) {
-                    unit = munit;
-                    formatSpeed = mDecimalFormat_2_0.format(speed / (float)Mega);
-                } else if (speed >= 10 * Mega) {
-                    unit = munit;
-                    formatSpeed = mDecimalFormat_1_1.format(speed / (float)Mega);
-                } else if (speed >= Mega) {
-                    unit = munit;
-                    formatSpeed = mDecimalFormat_0_2.format(speed / (float)Mega);
-                } else if (speed >= 100 * Kilo) {
-                    unit = kunit;
-                    formatSpeed = mDecimalFormat_2_0.format(speed / (float)Kilo);
-                } else if (speed >= 10 * Kilo) {
-                    unit = kunit;
-                    formatSpeed = mDecimalFormat_1_1.format(speed / (float)Kilo);
-                } else {
-                    unit = kunit;
-                    formatSpeed = mDecimalFormat_0_2.format(speed / (float)Kilo);
-                }
-                spanSpeedString = new SpannableString(formatSpeed);
-                spanSpeedString.setSpan(mSpeedAbsoluteSizeSpan, 0, (formatSpeed).length(),
-                        Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-
-                spanUnitString = new SpannableString(unit);
-                spanUnitString.setSpan(mUnitAbsoluteSizeSpan, 0, (unit).length(),
-                        Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-                return TextUtils.concat(spanSpeedString, "\n", spanUnitString);
-            }
-        };
+        // Nothing to show until the monitor says otherwise.
+        setVisibility(View.GONE);
     }
 
     public static NetworkTraffic fromContext(Context context, String slot) {
+        return fromContext(context, slot, false);
+    }
+
+    public static NetworkTraffic fromContext(Context context, String slot, boolean blocked) {
         NetworkTraffic v = new NetworkTraffic(context);
-        v.setSlot(slot);
+        v.mSlot = slot;
+        v.mBlocked = blocked;
+        v.mTintManagedExternally = true;
         return v;
     }
 
@@ -350,29 +140,138 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable,
         mSlot = slot;
     }
 
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        if (mAttached) return;
+        mAttached = true;
+        if (!mTintManagedExternally) {
+            Dependency.get(DarkIconDispatcher.class).addDarkReceiver(this);
+        }
+        if (!mBlocked) {
+            mListening = true;
+            mMonitor.addListener(this);
+        }
+    }
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (!mAttached) return;
+        mAttached = false;
+        if (mListening) {
+            mListening = false;
+            mMonitor.removeListener(this);
+        }
+        if (!mTintManagedExternally) {
+            Dependency.get(DarkIconDispatcher.class).removeDarkReceiver(this);
+        }
+    }
+
+    @Override
+    protected void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mCurrentWidth = -1;
+        mDrawableResId = -1;
+        mMonitor.onConfigurationChanged();
+        if (mListening) {
+            onTrafficStateChanged();
+        } else {
+            updateWidth();
+        }
+    }
+
+    private void onTrafficStateChanged() {
+        final Monitor m = mMonitor;
+        final boolean want = m.mShow;
+        if (want) {
+            if (m.mText != mAppliedText) {
+                mAppliedText = m.mText;
+                setText(m.mText);
+            }
+            updateDrawable(m.mDrawableRes);
+        }
+        if (want != mWantVisible || m.mArrowsHidden != mHideArrows || mCurrentWidth < 0) {
+            final boolean wantChanged = want != mWantVisible;
+            mWantVisible = want;
+            mHideArrows = m.mArrowsHidden;
+            updateWidth();
+            if (wantChanged) {
+                requestLayout();
+            }
+        }
+        updateVisibility();
+    }
+
+    private boolean canShowTraffic() {
+        if (!mAttached || mBlocked || getWindowVisibility() != View.VISIBLE) return false;
+        final ViewParent parent = getParent();
+        return parent instanceof View && ((View) parent).isShown();
+    }
+
+    private void updateVisibility() {
+        final boolean shown = mWantVisible && mVisibleState == STATE_ICON;
+        if (shown != mShown) {
+            mShown = shown;
+            setVisibility(shown ? View.VISIBLE : View.GONE);
+        }
+    }
+
+    private void updateWidth() {
+        final ViewGroup.LayoutParams lp = getLayoutParams();
+        if (lp == null) return;
+        int width = 0;
+        if (mWantVisible) {
+            final float density = getResources().getDisplayMetrics().density;
+            width = (int) ((mHideArrows ? 18 : 30) * density);
+        }
+        if (width == mCurrentWidth && lp.width == width) return;
+        mCurrentWidth = width;
+        lp.width = width;
+        setLayoutParams(lp);
+    }
+
+    private void updateDrawable(int resId) {
+        if (resId == mDrawableResId) return;
+        mDrawableResId = resId;
+        Drawable drawable = null;
+        if (resId != 0) {
+            drawable = getContext().getDrawable(resId);
+            if (drawable != null) {
+                // mutate(): vector constant state (incl. tint) is shared between instances,
+                // e.g. dark status bar vs. white shade header.
+                drawable = drawable.mutate();
+                drawable.setTint(mTint);
+            }
+        }
+        mDrawable = drawable;
+        setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, drawable, null);
+    }
+
     @Override
     public void setTextColor(int color) {
-        super.setTextColor(color);
         mTint = color;
+        super.setTextColor(color);
         if (mDrawable != null) {
-            DrawableCompat.setTint(mDrawable, mTint);
+            mDrawable.setTint(color);
         }
     }
 
     @Override
     public void onDarkChanged(ArrayList<Rect> areas, float darkIntensity, int tint) {
-        if (mColorIsStatic)
-            return;
-
-        mTint = DarkIconDispatcher.getTint(areas, this, tint);
-        setTextColor(mTint);
+        if (mColorIsStatic) return;
+        final int newTint = DarkIconDispatcher.getTint(areas, this, tint);
+        if (newTint != mTint) {
+            setTextColor(newTint);
+        }
     }
 
     @Override
     public void setStaticDrawableColor(int color) {
         mColorIsStatic = true;
-        mTint = color;
-        setTextColor(mTint);
+        if (color != mTint) {
+            setTextColor(color);
+        }
     }
 
     @Override
@@ -386,7 +285,11 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable,
 
     @Override
     public boolean isIconVisible() {
-        return mEnabled;
+        return mWantVisible;
+    }
+
+    public boolean isIconBlocked() {
+        return mBlocked;
     }
 
     @Override
@@ -396,269 +299,540 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable,
 
     @Override
     public void setVisibleState(int state, boolean animate) {
+        if (state == mVisibleState) return;
         mVisibleState = state;
         updateVisibility();
     }
 
-    // Network tracking related variables
-    private NetworkRequest mRequest = new NetworkRequest.Builder()
-            .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-            .addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)
-            .build();
+    @Override
+    public String toString() {
+        return "NetworkTraffic(slot=" + mSlot + " blocked=" + mBlocked + " want=" + mWantVisible
+                + " visibleState=" + mVisibleState + " shown=" + mShown + ")";
+    }
 
-    private ConnectivityManager.NetworkCallback mNetworkCallback =
-            new ConnectivityManager.NetworkCallback() {
-                @Override
-                public void onLinkPropertiesChanged(Network network,
-                        LinkProperties linkProperties) {
-                    if (mTrafficHandler != null) {
-                        Message msg = Message.obtain(mTrafficHandler,
-                                MESSAGE_TYPE_ADD_NETWORK,
-                                new LinkPropertiesHolder(network, linkProperties));
-                        mTrafficHandler.sendMessage(msg);
+    /**
+     * Process-wide traffic sampler shared by all {@link NetworkTraffic} views.
+     * Everything is main-thread only unless marked "bg".
+     */
+    private static final class Monitor implements TunerService.Tunable {
+
+        private static final String TAG = "NetworkTraffic";
+
+        // This must match the interface prefix in Connectivity's clatd.c.
+        private static final String CLAT_PREFIX = "v4-";
+
+        private static final long KILO = 1000L;
+        private static final long MEGA = KILO * KILO;
+        private static final long GIGA = MEGA * KILO;
+
+        private static final long MIN_SAMPLE_INTERVAL_MS = 500L;
+
+        private static final String NETWORK_TRAFFIC_ENABLED =
+                "system:" + Settings.System.NETWORK_TRAFFIC_ENABLED;
+        private static final String NETWORK_TRAFFIC_MODE =
+                "system:" + Settings.System.NETWORK_TRAFFIC_MODE;
+        private static final String NETWORK_TRAFFIC_AUTOHIDE =
+                "system:" + Settings.System.NETWORK_TRAFFIC_AUTOHIDE;
+        private static final String NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD =
+                "system:" + Settings.System.NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD;
+        private static final String NETWORK_TRAFFIC_UNITS =
+                "system:" + Settings.System.NETWORK_TRAFFIC_UNITS;
+        private static final String NETWORK_TRAFFIC_REFRESH_INTERVAL =
+                "system:" + Settings.System.NETWORK_TRAFFIC_REFRESH_INTERVAL;
+        private static final String NETWORK_TRAFFIC_HIDEARROW =
+                "system:" + Settings.System.NETWORK_TRAFFIC_HIDEARROW;
+
+        private static Monitor sInstance;
+
+        static Monitor get(Context context) {
+            if (sInstance == null) {
+                sInstance = new Monitor(context.getApplicationContext());
+            }
+            return sInstance;
+        }
+
+        private final Context mContext;
+        private final ConnectivityManager mConnectivityManager;
+        private final PowerManager mPowerManager;
+        private final TunerService mTunerService;
+        private final Handler mMainHandler = new Handler(Looper.getMainLooper());
+        private final Handler mBgHandler;
+        private final ArraySet<NetworkTraffic> mListeners = new ArraySet<>();
+        private final Runnable mTick = this::onTick;
+
+        private final NetworkRequest mRequest = new NetworkRequest.Builder()
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)
+                .build();
+
+        private final AbsoluteSizeSpan mSpeedSpan = new AbsoluteSizeSpan(7, true);
+        private final AbsoluteSizeSpan mUnitSpan = new AbsoluteSizeSpan(6, true);
+        private DecimalFormat mFormat02;
+        private DecimalFormat mFormat20;
+        private DecimalFormat mFormat11;
+
+        private boolean mEnabled;
+        private int mMode = MODE_UPSTREAM_AND_DOWNSTREAM;
+        private boolean mAutoHide;
+        private long mAutoHideThreshold;
+        private int mUnits = 1;
+        private long mRefreshIntervalMs = 2000L;
+        private boolean mHideArrows;
+
+        private boolean mTunablesRegistered;
+        private boolean mRunning;
+        private boolean mReceiverRegistered;
+        private boolean mScreenOn = true;
+        private boolean mHasInternet;
+        private boolean mResetBaseline = true;
+        private long mTxRate;
+        private long mRxRate;
+        private volatile TrafficCallback mTrafficCallback;
+        private volatile DefaultCallback mDefaultCallback;
+
+        private boolean mShow;
+        private CharSequence mText = "";
+        private int mDrawableRes;
+        private boolean mArrowsHidden;
+        private String mLastNumber;
+        private int mLastUnitRes;
+
+        private final ArrayMap<Network, String> mBgIfaces = new ArrayMap<>();
+        private final ArraySet<String> mBgIfaceNames = new ArraySet<>();
+        private boolean mBgNetworksChanged = true;
+        private long mBgLastTx;
+        private long mBgLastRx;
+        private long mBgLastTime;
+
+        private final BroadcastReceiver mScreenReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                final boolean on = Intent.ACTION_SCREEN_ON.equals(intent.getAction());
+                if (on == mScreenOn) return;
+                mScreenOn = on;
+                if (on) {
+                    kickTick();
+                } else {
+                    mMainHandler.removeCallbacks(mTick);
+                    mResetBaseline = true;
+                }
+            }
+        };
+
+        private Monitor(Context context) {
+            mContext = context;
+            mConnectivityManager = context.getSystemService(ConnectivityManager.class);
+            mPowerManager = context.getSystemService(PowerManager.class);
+            mTunerService = Dependency.get(TunerService.class);
+            final HandlerThread thread =
+                    new HandlerThread(TAG, Process.THREAD_PRIORITY_BACKGROUND);
+            thread.start();
+            mBgHandler = new Handler(thread.getLooper());
+            createFormatters();
+        }
+
+        private void createFormatters() {
+            mFormat02 = new DecimalFormat("0.##");
+            mFormat20 = new DecimalFormat("##0");
+            mFormat11 = new DecimalFormat("#0.#");
+        }
+
+        void addListener(NetworkTraffic view) {
+            if (!mListeners.add(view)) return;
+            if (!mTunablesRegistered) {
+                mTunablesRegistered = true;
+                // Fires onTuningChanged() synchronously for every key.
+                mTunerService.addTunable(this,
+                        NETWORK_TRAFFIC_ENABLED,
+                        NETWORK_TRAFFIC_MODE,
+                        NETWORK_TRAFFIC_AUTOHIDE,
+                        NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD,
+                        NETWORK_TRAFFIC_UNITS,
+                        NETWORK_TRAFFIC_REFRESH_INTERVAL,
+                        NETWORK_TRAFFIC_HIDEARROW);
+            }
+            updateRunning();
+            view.onTrafficStateChanged();
+        }
+
+        void removeListener(NetworkTraffic view) {
+            if (!mListeners.remove(view)) return;
+            if (mListeners.isEmpty() && mTunablesRegistered) {
+                mTunablesRegistered = false;
+                mTunerService.removeTunable(this);
+            }
+            updateRunning();
+        }
+
+        void onConfigurationChanged() {
+            createFormatters();
+            mLastNumber = null;
+            mLastUnitRes = 0;
+            updateDisplay();
+        }
+
+        @Override
+        public void onTuningChanged(String key, String newValue) {
+            if (key == null) return;
+            switch (key) {
+                case NETWORK_TRAFFIC_ENABLED:
+                    mEnabled = TunerService.parseIntegerSwitch(newValue, false);
+                    updateRunning();
+                    break;
+                case NETWORK_TRAFFIC_MODE:
+                    mMode = TunerService.parseInteger(newValue, MODE_UPSTREAM_AND_DOWNSTREAM);
+                    break;
+                case NETWORK_TRAFFIC_AUTOHIDE:
+                    mAutoHide = TunerService.parseIntegerSwitch(newValue, false);
+                    break;
+                case NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD:
+                    // kB -> bytes
+                    mAutoHideThreshold =
+                            Math.max(0, TunerService.parseInteger(newValue, 0)) * KILO;
+                    break;
+                case NETWORK_TRAFFIC_UNITS:
+                    mUnits = TunerService.parseInteger(newValue, 1);
+                    mLastNumber = null;
+                    break;
+                case NETWORK_TRAFFIC_REFRESH_INTERVAL:
+                    mRefreshIntervalMs =
+                            Math.max(1, TunerService.parseInteger(newValue, 2)) * 1000L;
+                    break;
+                case NETWORK_TRAFFIC_HIDEARROW:
+                    mHideArrows = TunerService.parseIntegerSwitch(newValue, false);
+                    break;
+                default:
+                    return;
+            }
+            updateDisplay();
+        }
+
+        private void updateRunning() {
+            final boolean run = mEnabled && !mListeners.isEmpty();
+            if (run == mRunning) return;
+            if (run) {
+                start();
+            } else {
+                stop();
+            }
+            updateDisplay();
+        }
+
+        private void start() {
+            mRunning = true;
+            mScreenOn = mPowerManager == null || mPowerManager.isInteractive();
+            mHasInternet = false;
+            mResetBaseline = true;
+
+            final IntentFilter filter = new IntentFilter();
+            filter.addAction(Intent.ACTION_SCREEN_ON);
+            filter.addAction(Intent.ACTION_SCREEN_OFF);
+            mContext.registerReceiver(mScreenReceiver, filter, null, mMainHandler,
+                    Context.RECEIVER_NOT_EXPORTED);
+            mReceiverRegistered = true;
+
+            mBgHandler.post(() -> {
+                mBgIfaces.clear();
+                mBgNetworksChanged = true;
+            });
+            final TrafficCallback trafficCallback = new TrafficCallback();
+            final DefaultCallback defaultCallback = new DefaultCallback();
+            mTrafficCallback = trafficCallback;
+            mDefaultCallback = defaultCallback;
+            mConnectivityManager.registerNetworkCallback(mRequest, trafficCallback, mBgHandler);
+            mConnectivityManager.registerDefaultNetworkCallback(defaultCallback, mBgHandler);
+        }
+
+        private void stop() {
+            mRunning = false;
+            mMainHandler.removeCallbacks(mTick);
+            if (mReceiverRegistered) {
+                mReceiverRegistered = false;
+                mContext.unregisterReceiver(mScreenReceiver);
+            }
+            final TrafficCallback trafficCallback = mTrafficCallback;
+            final DefaultCallback defaultCallback = mDefaultCallback;
+            // Clearing these first makes any already-queued bg callbacks no-ops.
+            mTrafficCallback = null;
+            mDefaultCallback = null;
+            unregister(trafficCallback);
+            unregister(defaultCallback);
+            mHasInternet = false;
+            mTxRate = 0;
+            mRxRate = 0;
+            mResetBaseline = true;
+        }
+
+        private void unregister(ConnectivityManager.NetworkCallback callback) {
+            if (callback == null) return;
+            try {
+                mConnectivityManager.unregisterNetworkCallback(callback);
+            } catch (IllegalArgumentException e) {
+                // Not registered
+            }
+        }
+
+        private void kickTick() {
+            mResetBaseline = true;
+            mMainHandler.removeCallbacks(mTick);
+            mMainHandler.post(mTick);
+        }
+
+        private void onTick() {
+            mMainHandler.removeCallbacks(mTick);
+            if (!mRunning || !mScreenOn || !mHasInternet) {
+                // Restarted by screen-on / internet-regained, which also reset the baseline.
+                mResetBaseline = true;
+                return;
+            }
+            if (anyListenerCanShow()) {
+                final boolean reset = mResetBaseline;
+                mResetBaseline = false;
+                mBgHandler.post(() -> sample(reset));
+            } else {
+                // Nothing on screen (immersive app, collapsed shade, ...): skip the binder
+                // calls, keep a cheap tick to notice when a view becomes visible again.
+                mResetBaseline = true;
+            }
+            mMainHandler.postDelayed(mTick, mRefreshIntervalMs);
+        }
+
+        private boolean anyListenerCanShow() {
+            for (int i = mListeners.size() - 1; i >= 0; i--) {
+                if (mListeners.valueAt(i).canShowTraffic()) return true;
+            }
+            return false;
+        }
+
+        private void sample(boolean resetBaseline) {
+            if (mTrafficCallback == null) return; // stopped meanwhile
+
+            final long now = SystemClock.elapsedRealtime();
+            final boolean baselineValid =
+                    !resetBaseline && !mBgNetworksChanged && mBgLastTime > 0;
+            final long timeDelta = now - mBgLastTime;
+            if (baselineValid && timeDelta < MIN_SAMPLE_INTERVAL_MS) {
+                // Too close to the previous sample: keep the baseline, skip the IPC.
+                return;
+            }
+
+            final ArraySet<String> names = mBgIfaceNames;
+            names.clear();
+            for (int i = 0, n = mBgIfaces.size(); i < n; i++) {
+                final String iface = mBgIfaces.valueAt(i);
+                if (TextUtils.isEmpty(iface)) continue;
+                names.add(iface);
+                // Clat's IPv4 interface for IPv6-only networks.
+                names.add(CLAT_PREFIX + iface);
+            }
+
+            long txBytes = 0;
+            long rxBytes = 0;
+            for (int i = 0, n = names.size(); i < n; i++) {
+                final String iface = names.valueAt(i);
+                // Missing interfaces report UNSUPPORTED (-1), not 0.
+                final long tx = TrafficStats.getTxBytes(iface);
+                if (tx > 0) txBytes += tx;
+                final long rx = TrafficStats.getRxBytes(iface);
+                if (rx > 0) rxBytes += rx;
+            }
+
+            long txRate = 0;
+            long rxRate = 0;
+            if (baselineValid && timeDelta > 0) {
+                final long txDelta = txBytes - mBgLastTx;
+                final long rxDelta = rxBytes - mBgLastRx;
+                if (txDelta >= 0 && rxDelta >= 0) {
+                    txRate = txDelta * 1000L / timeDelta;
+                    rxRate = rxDelta * 1000L / timeDelta;
+                }
+            }
+            mBgNetworksChanged = false;
+            mBgLastTx = txBytes;
+            mBgLastRx = rxBytes;
+            mBgLastTime = now;
+
+            final long finalTx = txRate;
+            final long finalRx = rxRate;
+            mMainHandler.post(() -> onSample(finalTx, finalRx));
+        }
+
+        private void onSample(long txRate, long rxRate) {
+            if (!mRunning) return;
+            mTxRate = txRate;
+            mRxRate = rxRate;
+            updateDisplay();
+        }
+
+        private void onInternetChanged(boolean hasInternet) {
+            if (!mRunning || hasInternet == mHasInternet) return;
+            mHasInternet = hasInternet;
+            if (hasInternet) {
+                kickTick();
+            } else {
+                mMainHandler.removeCallbacks(mTick);
+                mTxRate = 0;
+                mRxRate = 0;
+            }
+            updateDisplay();
+        }
+
+        private void updateDisplay() {
+            final boolean showUpstream =
+                    mMode == MODE_UPSTREAM_ONLY || mMode == MODE_UPSTREAM_AND_DOWNSTREAM;
+            final boolean showDownstream =
+                    mMode == MODE_DOWNSTREAM_ONLY || mMode == MODE_UPSTREAM_AND_DOWNSTREAM;
+            final long tx = mTxRate;
+            final long rx = mRxRate;
+            final boolean aboveThreshold = (showUpstream && tx > mAutoHideThreshold)
+                    || (showDownstream && rx > mAutoHideThreshold);
+            final boolean active = mRunning && mHasInternet && (!mAutoHide || aboveThreshold);
+
+            int subMode = MODE_UPSTREAM_AND_DOWNSTREAM;
+            CharSequence text = mText;
+            if (active) {
+                if (showUpstream && showDownstream) {
+                    if (tx > rx) {
+                        text = buildText(tx);
+                        subMode = MODE_UPSTREAM_ONLY;
+                    } else if (tx < rx) {
+                        text = buildText(rx);
+                        subMode = MODE_DOWNSTREAM_ONLY;
+                    } else {
+                        text = buildText(rx);
                     }
+                } else if (showDownstream) {
+                    text = buildText(rx);
+                } else if (showUpstream) {
+                    text = buildText(tx);
                 }
+            }
+            final boolean show = active && !TextUtils.isEmpty(text);
 
-                @Override
-                public void onAvailable(Network network) {
-                    LinkProperties lp = mConnectivityManager == null ? null : 
-                        mConnectivityManager.getLinkProperties(network);
-                    if (lp != null && mTrafficHandler != null) {
-                        Message msg = Message.obtain(mTrafficHandler,
-                                MESSAGE_TYPE_ADD_NETWORK,
-                                new LinkPropertiesHolder(network, lp));
-                        mTrafficHandler.sendMessage(msg);
-                    }
-                }
+            final int drawableRes;
+            if (mHideArrows) {
+                drawableRes = 0;
+            } else if (tx <= 0 && rx <= 0) {
+                drawableRes = R.drawable.stat_sys_network_traffic;
+            } else if (mMode == MODE_UPSTREAM_ONLY || subMode == MODE_UPSTREAM_ONLY) {
+                drawableRes = R.drawable.stat_sys_network_traffic_up;
+            } else if (mMode == MODE_DOWNSTREAM_ONLY || subMode == MODE_DOWNSTREAM_ONLY) {
+                drawableRes = R.drawable.stat_sys_network_traffic_down;
+            } else {
+                drawableRes = R.drawable.stat_sys_network_traffic_updown;
+            }
 
-                @Override
-                public void onLost(Network network) {
-                    if (mTrafficHandler != null) {
-                        Message msg = Message.obtain(mTrafficHandler,
-                            MESSAGE_TYPE_REMOVE_NETWORK, network);
-                        mTrafficHandler.sendMessage(msg);
-                    }
-                }
-            };
-
-    private boolean hasValidatedInternet(Network network) {
-        if (network == null) return false;
-        NetworkCapabilities caps = mConnectivityManager.getNetworkCapabilities(network);
-        return caps != null
-                && caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
-                && caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
-    }
-
-    private final ConnectivityManager.NetworkCallback mDefaultNetworkCallback =
-            new ConnectivityManager.NetworkCallback() {
-                @Override
-                public void onAvailable(Network network) {
-                    mHasValidatedInternet = hasValidatedInternet(network);
-                    updateViews();
-                }
-
-                @Override
-                public void onCapabilitiesChanged(Network network, NetworkCapabilities caps) {
-                    mHasValidatedInternet = caps != null
-                            && caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
-                            && caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
-                    updateViews();
-                }
-
-                @Override
-                public void onLost(Network network) {
-                    mHasValidatedInternet = false;
-                    updateViews();
-                }
-            };
-
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-
-        if (!mAttached) {
-            mAttached = true;
-            final TunerService tunerService = Dependency.get(TunerService.class);
-            tunerService.addTunable(this, NETWORK_TRAFFIC_ENABLED);
-            tunerService.addTunable(this, NETWORK_TRAFFIC_MODE);
-            tunerService.addTunable(this, NETWORK_TRAFFIC_AUTOHIDE);
-            tunerService.addTunable(this, NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD);
-            tunerService.addTunable(this, NETWORK_TRAFFIC_UNITS);
-            tunerService.addTunable(this, NETWORK_TRAFFIC_REFRESH_INTERVAL);
-            tunerService.addTunable(this, NETWORK_TRAFFIC_HIDEARROW);
-
-            mHasValidatedInternet = hasValidatedInternet(mConnectivityManager.getActiveNetwork());
-            mConnectivityManager.registerNetworkCallback(mRequest, mNetworkCallback);
-            mConnectivityManager.registerDefaultNetworkCallback(mDefaultNetworkCallback);
-
-            Dependency.get(DarkIconDispatcher.class).addDarkReceiver(this);
-
-            updateViews();
-        }
-    }
-
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        if (mAttached) {
-            clearHandlerCallbacks();
-            mConnectivityManager.unregisterNetworkCallback(mDefaultNetworkCallback);
-            mConnectivityManager.unregisterNetworkCallback(mNetworkCallback);
-            Dependency.get(DarkIconDispatcher.class).removeDarkReceiver(this);
-            Dependency.get(TunerService.class).removeTunable(this);
-            mDrawable = null;
-            setCompoundDrawables(null, null, null, null);
-            mAttached = false;
-        }
-    }
-
-    @Override
-    public void onRtlPropertiesChanged(int layoutDirection) {
-        super.onRtlPropertiesChanged(layoutDirection);
-        if (mAttached && mDrawable != null) {
-            setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, mDrawable, null);
-        }
-    }
-
-    private void updateVisibility() {
-        boolean visible = mEnabled && mIsActive
-                && !TextUtils.isEmpty(getText())
-                && mVisibleState == STATE_ICON;
-
-        if (visible != mVisible) {
-            mVisible = visible;
-            setFixedWidth();
-            setVisibility(mVisible ? View.VISIBLE : View.GONE);
-        }
-    }
-
-    private void setFixedWidth() {
-        int requiredWidth = 0;
-        if (mVisible && !mHideArrows) {
-            requiredWidth = (int) (30 * getResources().getDisplayMetrics().density);
-        } else if (mVisible) {
-            requiredWidth = (int) (18 * getResources().getDisplayMetrics().density);
-        }
-        if (requiredWidth == mCurrentWidth) return;
-        ViewGroup.LayoutParams lp = getLayoutParams();
-        if (lp != null) {
-            mCurrentWidth = requiredWidth;
-            lp.width = requiredWidth;
-            setLayoutParams(lp);
-        }
-    }
-
-    @Override
-    public void onTuningChanged(String key, String newValue) {
-        switch (key) {
-            case NETWORK_TRAFFIC_ENABLED:
-                mEnabled =
-                        TunerService.parseIntegerSwitch(newValue, false);
-                if (mEnabled) {
-                    setLines(2);
-                    setMaxLines(2);
-                    String txtFont = getResources().getString(com.android.internal.R.string.config_bodyFontFamily);
-                    setTypeface(Typeface.create(txtFont, Typeface.BOLD));
-                    setLineSpacing(0f, 0.95f);
-                    setLayoutDirection(View.LAYOUT_DIRECTION_LOCALE);
-                    setTextDirection(View.TEXT_DIRECTION_LOCALE);
-                    setTextAlignment(View.TEXT_ALIGNMENT_VIEW_END);
-                    setGravity(Gravity.END|Gravity.CENTER_VERTICAL);
-                    setElegantTextHeight(false);
-                    setIncludeFontPadding(false);
-                }
-                updateViews();
-                break;
-            case NETWORK_TRAFFIC_MODE:
-                mMode =
-                        TunerService.parseInteger(newValue, 0);
-                updateViews();
-                setTrafficDrawable();
-                break;
-            case NETWORK_TRAFFIC_AUTOHIDE:
-                mAutoHide =
-                        TunerService.parseIntegerSwitch(newValue, false);
-                updateViews();
-                break;
-            case NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD:
-                int autohidethreshold =
-                        TunerService.parseInteger(newValue, 0);
-                mAutoHideThreshold = autohidethreshold * Kilo; /* Convert kB to Bytes */
-                updateViews();
-                break;
-            case NETWORK_TRAFFIC_UNITS:
-                mUnits =
-                        TunerService.parseInteger(newValue, 1);
-                updateViews();
-                break;
-            case NETWORK_TRAFFIC_REFRESH_INTERVAL:
-                mRefreshInterval =
-                        TunerService.parseInteger(newValue, 2);
-                updateViews();
-                break;
-            case NETWORK_TRAFFIC_HIDEARROW:
-                mHideArrows =
-                        TunerService.parseIntegerSwitch(newValue, false);
-                setTrafficDrawable();
-                setFixedWidth();
-                break;
-            default:
-                break;
-        }
-    }
-
-    private void updateViews() {
-        if (mEnabled) {
-            mTrafficHandler.removeMessages(MESSAGE_TYPE_UPDATE_VIEW);
-            mTrafficHandler.sendEmptyMessageDelayed(MESSAGE_TYPE_UPDATE_VIEW, 1000);
-        }
-    }
-
-    private void clearHandlerCallbacks() {
-        mTrafficHandler.removeCallbacksAndMessages(null);
-    }
-
-    private void setTrafficDrawable() {
-        final int drawableResId;
-        if (mHideArrows) {
-            drawableResId = 0;
-        } else if (!mTrafficActive) {
-            drawableResId = R.drawable.stat_sys_network_traffic;
-        } else if (mMode == MODE_UPSTREAM_ONLY || mSubMode == MODE_UPSTREAM_ONLY) {
-            drawableResId = R.drawable.stat_sys_network_traffic_up;
-        } else if (mMode == MODE_DOWNSTREAM_ONLY || mSubMode == MODE_DOWNSTREAM_ONLY) {
-            drawableResId = R.drawable.stat_sys_network_traffic_down;
-        } else if (mMode == MODE_UPSTREAM_AND_DOWNSTREAM) {
-            drawableResId = R.drawable.stat_sys_network_traffic_updown;
-        } else {
-            drawableResId = 0;
-        }
-        final Drawable drawable = mHideArrows ? null
-            : ResourcesCompat.getDrawable(getResources(), drawableResId, getContext().getTheme());
-        if (drawable != null) {
-            DrawableCompat.setTint(drawable, mTint);
-        }
-        if (mDrawable != drawable) {
-            mDrawable = drawable;
-            setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, mDrawable, null);
-        }
-    }
-
-    private static class LinkPropertiesHolder {
-        private final Network mNetwork;
-        private final LinkProperties mLinkProperties;
-
-        public LinkPropertiesHolder(Network network, LinkProperties linkProperties) {
-            mNetwork = network;
-            mLinkProperties = linkProperties;
+            if (show == mShow && text == mText && drawableRes == mDrawableRes
+                    && mHideArrows == mArrowsHidden) {
+                return;
+            }
+            mShow = show;
+            mText = text;
+            mDrawableRes = drawableRes;
+            mArrowsHidden = mHideArrows;
+            for (int i = mListeners.size() - 1; i >= 0; i--) {
+                mListeners.valueAt(i).onTrafficStateChanged();
+            }
         }
 
-        public Network getNetwork() {
-            return mNetwork;
+        private CharSequence buildText(long speed) {
+            final boolean bits = mUnits == 0;
+            if (bits) speed *= 8;
+
+            final String number;
+            final int unitRes;
+            if (speed >= GIGA) {
+                number = mFormat02.format(speed / (double) GIGA);
+                unitRes = bits ? R.string.gigabitspersecond_short
+                        : R.string.gigabytespersecond_short;
+            } else if (speed >= 100 * MEGA) {
+                number = mFormat20.format(speed / (double) MEGA);
+                unitRes = bits ? R.string.megabitspersecond_short
+                        : R.string.megabytespersecond_short;
+            } else if (speed >= 10 * MEGA) {
+                number = mFormat11.format(speed / (double) MEGA);
+                unitRes = bits ? R.string.megabitspersecond_short
+                        : R.string.megabytespersecond_short;
+            } else if (speed >= MEGA) {
+                number = mFormat02.format(speed / (double) MEGA);
+                unitRes = bits ? R.string.megabitspersecond_short
+                        : R.string.megabytespersecond_short;
+            } else if (speed >= 100 * KILO) {
+                number = mFormat20.format(speed / (double) KILO);
+                unitRes = bits ? R.string.kilobitspersecond_short
+                        : R.string.kilobytespersecond_short;
+            } else if (speed >= 10 * KILO) {
+                number = mFormat11.format(speed / (double) KILO);
+                unitRes = bits ? R.string.kilobitspersecond_short
+                        : R.string.kilobytespersecond_short;
+            } else {
+                number = mFormat02.format(speed / (double) KILO);
+                unitRes = bits ? R.string.kilobitspersecond_short
+                        : R.string.kilobytespersecond_short;
+            }
+
+            if (unitRes == mLastUnitRes && number.equals(mLastNumber)) {
+                return mText;
+            }
+            mLastUnitRes = unitRes;
+            mLastNumber = number;
+
+            final String unit = mContext.getString(unitRes);
+            final SpannableString speedString = new SpannableString(number);
+            speedString.setSpan(mSpeedSpan, 0, number.length(),
+                    Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+            final SpannableString unitString = new SpannableString(unit);
+            unitString.setSpan(mUnitSpan, 0, unit.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+            return TextUtils.concat(speedString, "\n", unitString);
         }
 
-        public LinkProperties getLinkProperties() {
-            return mLinkProperties;
+        private final class TrafficCallback extends ConnectivityManager.NetworkCallback {
+            // onAvailable() is always followed by onLinkPropertiesChanged(), no IPC needed.
+            @Override
+            public void onLinkPropertiesChanged(Network network, LinkProperties lp) {
+                if (mTrafficCallback != this) return;
+                final String iface = lp.getInterfaceName();
+                final int index = mBgIfaces.indexOfKey(network);
+                if (index >= 0 && TextUtils.equals(iface, mBgIfaces.valueAt(index))) return;
+                mBgIfaces.put(network, iface);
+                mBgNetworksChanged = true;
+            }
+
+            @Override
+            public void onLost(Network network) {
+                if (mTrafficCallback != this) return;
+                final int index = mBgIfaces.indexOfKey(network);
+                if (index < 0) return;
+                mBgIfaces.removeAt(index);
+                mBgNetworksChanged = true;
+            }
+        }
+
+        private final class DefaultCallback extends ConnectivityManager.NetworkCallback {
+            private int mLastReported = -1; // bg
+
+            @Override
+            public void onCapabilitiesChanged(Network network, NetworkCapabilities caps) {
+                // Fires on every signal strength change on cellular: dedupe before posting.
+                report(caps != null
+                        && caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+                        && caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET));
+            }
+
+            @Override
+            public void onLost(Network network) {
+                report(false);
+            }
+
+            private void report(boolean hasInternet) {
+                if (mDefaultCallback != this) return;
+                final int value = hasInternet ? 1 : 0;
+                if (value == mLastReported) return;
+                mLastReported = value;
+                mMainHandler.post(() -> {
+                    if (mDefaultCallback == this) onInternetChanged(hasInternet);
+                });
+            }
         }
     }
 }
