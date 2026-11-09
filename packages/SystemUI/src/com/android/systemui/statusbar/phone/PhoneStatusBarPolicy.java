@@ -354,11 +354,6 @@ public class PhoneStatusBarPolicy
         mIconController.setIconVisibility(mSlotNfc, false);
         updateNfc();
 
-        // network traffic
-        mShowNetworkTraffic = Settings.System.getIntForUser(mContext.getContentResolver(),
-            NETWORK_TRAFFIC_ENABLED, 0, UserHandle.USER_CURRENT) == 1;
-        mIconController.setNetworkTraffic(mSlotNetworkTraffic);
-
         mRotationLockController.addCallback(this);
         mBluetooth.addCallback(this);
         mProvisionedController.addCallback(this);

@@ -191,7 +191,7 @@ public class IconManager implements DemoModeCommandReceiver {
             case TYPE_ICON -> addIcon(index, slot, blocked, holder.getIcon());
             case TYPE_WIFI_NEW -> addNewWifiIcon(index, slot);
             case TYPE_MOBILE_NEW -> addNewMobileIcon(index, slot, holder.getTag());
-            case TYPE_NETWORK_TRAFFIC -> addNetworkTraffic(index, slot);
+            case TYPE_NETWORK_TRAFFIC -> addNetworkTraffic(index, slot, blocked);
             case TYPE_BINDABLE ->
                 // Safe cast, since only BindableIconHolders can set this tag on themselves
                     addBindableIcon((BindableIconHolder) holder, index);
@@ -258,8 +258,8 @@ public class IconManager implements DemoModeCommandReceiver {
         return view;
     }
 
-    private NetworkTraffic addNetworkTraffic(int index, String slot) {
-        NetworkTraffic view = onCreateNetworkTraffic(slot);
+    private NetworkTraffic addNetworkTraffic(int index, String slot, boolean blocked) {
+        NetworkTraffic view = NetworkTraffic.fromContext(mContext, slot, blocked);
         mGroup.addView(view, index, onCreateLayoutParams(Shape.WRAP_CONTENT));
         return view;
     }
@@ -299,11 +299,6 @@ public class IconManager implements DemoModeCommandReceiver {
                             mMobileIconsViewModel.get().viewModelForSub(subId, mLocation)
                     );
         }
-    }
-
-    private NetworkTraffic onCreateNetworkTraffic(String slot) {
-        NetworkTraffic view = NetworkTraffic.fromContext(mContext, slot);
-        return view;
     }
 
     protected LinearLayout.LayoutParams onCreateLayoutParams(Shape shape) {
@@ -359,6 +354,7 @@ public class IconManager implements DemoModeCommandReceiver {
             case TYPE_MOBILE_NEW:
             case TYPE_WIFI_NEW:
             case TYPE_BINDABLE:
+            case TYPE_NETWORK_TRAFFIC:
                 // Nothing, the new icons update themselves
                 return;
             default:
@@ -422,10 +418,18 @@ public class IconManager implements DemoModeCommandReceiver {
     /** Updates the layout params for an icon view. */
     public void reloadIconLayoutParams(int viewIndex, StatusBarIconHolder holder) {
         reloadDimens();
+        View view = mGroup.getChildAt(viewIndex);
+        if (view == null) {
+            return;
+        }
         if (holder.getIcon() != null) {
-            View view = mGroup.getChildAt(viewIndex);
-            if (view != null) {
-                view.setLayoutParams(onCreateLayoutParams(holder.getIcon().shape));
+            view.setLayoutParams(onCreateLayoutParams(holder.getIcon().shape));
+        } else if (holder.getType() == TYPE_NETWORK_TRAFFIC && view instanceof NetworkTraffic) {
+            // Width is owned by NetworkTraffic itself; only follow icon height changes.
+            ViewGroup.LayoutParams lp = view.getLayoutParams();
+            if (lp != null && lp.height != mIconSize) {
+                lp.height = mIconSize;
+                view.setLayoutParams(lp);
             }
         }
     }
