@@ -68,12 +68,12 @@
     <string name="onthego_channel_name">اصلی</string>
     <string name="global_action_onthego">در حرکت</string>
     <string name="onthego_dialog_title">در حرکت</string>
-    <string name="onthego_opacity_title">Camera opacity</string>
-    <string name="onthego_opacity_default">50%</string>
-    <string name="onthego_restart_title">Restart on camera switch</string>
-    <string name="onthego_restart_summary">Briefly restart the preview when the camera changes</string>
-    <string name="onthego_front_camera_title">Front camera</string>
-    <string name="onthego_front_camera_summary">Use the front camera instead of the rear</string>
+    <string name="onthego_opacity_title">شفافیت دوربین</string>
+    <string name="onthego_opacity_default">۵۰٪</string>
+    <string name="onthego_restart_title">راه‌اندازی مجدد هنگام تغییر دوربین</string>
+    <string name="onthego_restart_summary">بازنشانی مختصر پیشنمایش هنگام تغییر دوربین</string>
+    <string name="onthego_front_camera_title">دوربین جلو</string>
+    <string name="onthego_front_camera_summary">استفاده از دوربین جلو به‌جای دوربین پشت</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">مصرف امروز</string>
     <string name="usage_data_weekly">مصرفی این هفته</string>
