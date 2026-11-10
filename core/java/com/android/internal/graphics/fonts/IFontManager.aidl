@@ -40,4 +40,12 @@ interface IFontManager {
     int clearCustomFont();
 
     @nullable String getCustomFontName();
+
+    int installCustomEmoji(in ParcelFileDescriptor fontFd);
+
+    int clearCustomEmoji();
+
+    @nullable String getCustomEmojiName();
+
+    int applyCustomEmojiToApps();
 }
