@@ -442,6 +442,57 @@ public class FontManager {
     }
 
     /**
+     * Puts the font in front of the system emoji fallbacks, for processes started from now on.
+     *
+     * @hide
+     */
+    @RequiresPermission(Manifest.permission.UPDATE_FONTS)
+    public @ResultCode int installCustomEmoji(@NonNull ParcelFileDescriptor fontFd) {
+        Objects.requireNonNull(fontFd);
+        try {
+            return mIFontManager.installCustomEmoji(fontFd);
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
+    }
+
+    /** @hide */
+    @RequiresPermission(Manifest.permission.UPDATE_FONTS)
+    public @ResultCode int clearCustomEmoji() {
+        try {
+            return mIFontManager.clearCustomEmoji();
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
+    }
+
+    /** @hide */
+    @RequiresPermission(Manifest.permission.UPDATE_FONTS)
+    public @Nullable String getCustomEmojiName() {
+        try {
+            return mIFontManager.getCustomEmojiName();
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
+    }
+
+    /**
+     * Copies the custom emoji font over the emoji fonts that apps bundle or download, and
+     * stops the GMS font provider from serving its own. Blocking.
+     *
+     * @return the number of app files written, or a negative {@code RESULT_*} code
+     * @hide
+     */
+    @RequiresPermission(Manifest.permission.UPDATE_FONTS)
+    public int applyCustomEmojiToApps() {
+        try {
+            return mIFontManager.applyCustomEmojiToApps();
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
+    }
+
+    /**
      * Factory method of the FontManager.
      *
      * Do not use this method directly. Use getSystemService(Context.FONT_SERVICE) instead.
