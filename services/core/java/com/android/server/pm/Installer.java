@@ -412,6 +412,37 @@ public class Installer extends SystemService {
     }
 
     /**
+     * Overwrites the emoji fonts an app keeps in its data with {@code fontFd}, and writes it
+     * read-only to each of {@code lockedFiles}. Returns the number of files written.
+     */
+    public int replaceAppEmojiFonts(@Nullable String uuid, @NonNull String packageName,
+            @UserIdInt int userId, @AppIdInt int appId, @NonNull ParcelFileDescriptor fontFd,
+            @NonNull String[] lockedFiles) throws InstallerException {
+        if (!checkBeforeRemote()) return 0;
+        try {
+            return mInstalld.replaceAppEmojiFonts(uuid, packageName, userId, appId, fontFd,
+                    lockedFiles);
+        } catch (Exception e) {
+            throw InstallerException.from(e);
+        }
+    }
+
+    /**
+     * Empties a directory relative to the app's CE data dir; with {@code block} it is also
+     * created if missing and made inaccessible to the app.
+     */
+    public void clearAppDataSubdir(@Nullable String uuid, @NonNull String packageName,
+            @UserIdInt int userId, @AppIdInt int appId, @NonNull String relativePath,
+            boolean block) throws InstallerException {
+        if (!checkBeforeRemote()) return;
+        try {
+            mInstalld.clearAppDataSubdir(uuid, packageName, userId, appId, relativePath, block);
+        } catch (Exception e) {
+            throw InstallerException.from(e);
+        }
+    }
+
+    /**
      * Remove all invalid dirs under app data folder.
      * All dirs are supposed to be valid file and package names.
      */

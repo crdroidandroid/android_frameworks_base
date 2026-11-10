@@ -73,6 +73,7 @@ public final class FontManagerService extends IFontManager.Stub {
 
     private static final String FONT_FILES_DIR = "/data/fonts/files";
     private static final String CONFIG_XML_FILE = "/data/fonts/config/config.xml";
+    private static final String EMOJI_DIR = "/data/fonts/emoji";
     /** Prefix of the throwaway file used to test fs-verity. Must stay out of font loading. */
     private static final String FSVERITY_PROBE_PREFIX = ".fsverity_probe";
 
@@ -186,6 +187,90 @@ public final class FontManagerService extends IFontManager.Stub {
                 "UPDATE_FONTS permission required.");
         synchronized (mUpdatableFontDirLock) {
             return mUpdatableFontDir == null ? null : mUpdatableFontDir.getCustomFontName();
+        }
+    }
+
+    @RequiresPermission(Manifest.permission.UPDATE_FONTS)
+    @Override
+    public int installCustomEmoji(@NonNull ParcelFileDescriptor fontFd) {
+        Objects.requireNonNull(fontFd);
+        getContext().enforceCallingPermission(Manifest.permission.UPDATE_FONTS,
+                "UPDATE_FONTS permission required.");
+        try {
+            synchronized (mUpdatableFontDirLock) {
+                if (mUpdatableFontDir == null) {
+                    return FontManager.RESULT_ERROR_FONT_UPDATER_DISABLED;
+                }
+                mUpdatableFontDir.installCustomEmoji(fontFd.getFileDescriptor());
+                updateSerializedFontMap();
+            }
+            return FontManager.RESULT_SUCCESS;
+        } catch (SystemFontException e) {
+            Slog.e(TAG, "Failed to install custom emoji", e);
+            return e.getErrorCode();
+        } finally {
+            try {
+                fontFd.close();
+            } catch (IOException e) {
+                Slog.w(TAG, "Failed to close custom emoji fd", e);
+            }
+        }
+    }
+
+    @RequiresPermission(Manifest.permission.UPDATE_FONTS)
+    @Override
+    public int clearCustomEmoji() {
+        getContext().enforceCallingPermission(Manifest.permission.UPDATE_FONTS,
+                "UPDATE_FONTS permission required.");
+        try {
+            synchronized (mUpdatableFontDirLock) {
+                if (mUpdatableFontDir == null) {
+                    return FontManager.RESULT_ERROR_FONT_UPDATER_DISABLED;
+                }
+                mUpdatableFontDir.clearCustomEmoji();
+                updateSerializedFontMap();
+            }
+        } catch (SystemFontException e) {
+            Slog.e(TAG, "Failed to clear custom emoji", e);
+            return e.getErrorCode();
+        }
+        mAppEmojiReplacer.restoreGmsFontProvider();
+        return FontManager.RESULT_SUCCESS;
+    }
+
+    @RequiresPermission(Manifest.permission.UPDATE_FONTS)
+    @Override
+    @Nullable
+    public String getCustomEmojiName() {
+        getContext().enforceCallingPermission(Manifest.permission.UPDATE_FONTS,
+                "UPDATE_FONTS permission required.");
+        synchronized (mUpdatableFontDirLock) {
+            return mUpdatableFontDir == null ? null : mUpdatableFontDir.getCustomEmojiName();
+        }
+    }
+
+    @RequiresPermission(Manifest.permission.UPDATE_FONTS)
+    @Override
+    public int applyCustomEmojiToApps() {
+        getContext().enforceCallingPermission(Manifest.permission.UPDATE_FONTS,
+                "UPDATE_FONTS permission required.");
+        File emoji;
+        synchronized (mUpdatableFontDirLock) {
+            if (mUpdatableFontDir == null) {
+                return FontManager.RESULT_ERROR_FONT_UPDATER_DISABLED;
+            }
+            emoji = mUpdatableFontDir.getCustomEmojiFile();
+        }
+        if (emoji == null) {
+            return FontManager.RESULT_ERROR_FONT_NOT_FOUND;
+        }
+        // Holds the inode open, so a concurrent install or clear can't change what apps get.
+        try (ParcelFileDescriptor fd =
+                ParcelFileDescriptor.open(emoji, ParcelFileDescriptor.MODE_READ_ONLY)) {
+            return mAppEmojiReplacer.apply(fd);
+        } catch (IOException e) {
+            Slog.e(TAG, "Failed to open custom emoji", e);
+            return FontManager.RESULT_ERROR_FAILED_TO_OPEN_FONT_FILE;
         }
     }
 
@@ -322,6 +407,8 @@ public final class FontManagerService extends IFontManager.Stub {
     @Nullable
     private UpdatableFontDir mUpdatableFontDir;
 
+    private final AppEmojiReplacer mAppEmojiReplacer;
+
     /**
      * Definite fs-verity probe result for {@link #FONT_FILES_DIR} on devices that shipped
      * before Android 11. Null until the probe can determine support.
@@ -346,6 +433,7 @@ public final class FontManagerService extends IFontManager.Stub {
         }
         mContext = context;
         mIsSafeMode = safeMode;
+        mAppEmojiReplacer = new AppEmojiReplacer(context);
 
         if (Flags.useOptimizedBoottimeFontLoading()) {
             Slog.i(TAG, "Using optimized boot-time font loading.");
@@ -397,7 +485,7 @@ public final class FontManagerService extends IFontManager.Stub {
         }
 
         return new UpdatableFontDir(new File(FONT_FILES_DIR), new OtfFontFileParser(),
-                new FsverityUtilImpl(certs), new File(CONFIG_XML_FILE));
+                new FsverityUtilImpl(certs), new File(CONFIG_XML_FILE), new File(EMOJI_DIR));
     }
 
     @GuardedBy("mUpdatableFontDirLock")
