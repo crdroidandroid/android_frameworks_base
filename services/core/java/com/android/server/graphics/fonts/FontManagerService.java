@@ -26,6 +26,7 @@ import android.graphics.fonts.FontFamily;
 import android.graphics.fonts.FontManager;
 import android.graphics.fonts.FontUpdateRequest;
 import android.graphics.fonts.SystemFonts;
+import android.os.Binder;
 import android.os.Build;
 import android.os.ParcelFileDescriptor;
 import android.os.ResultReceiver;
@@ -133,14 +134,7 @@ public final class FontManagerService extends IFontManager.Stub {
                 "UPDATE_FONTS permission required.");
         try {
             synchronized (mUpdatableFontDirLock) {
-                // Boot may have run before the font directory was available. Try again now.
-                if (mUpdatableFontDir == null) {
-                    mUpdatableFontDir = createUpdatableFontDir();
-                    if (mUpdatableFontDir != null) {
-                        mUpdatableFontDir.loadFontFileMap();
-                    }
-                }
-                if (mUpdatableFontDir == null) {
+                if (!ensureUpdatableFontDirLocked()) {
                     return FontManager.RESULT_ERROR_FONT_UPDATER_DISABLED;
                 }
                 mUpdatableFontDir.installCustomFont(fontFd.getFileDescriptor());
@@ -198,7 +192,7 @@ public final class FontManagerService extends IFontManager.Stub {
                 "UPDATE_FONTS permission required.");
         try {
             synchronized (mUpdatableFontDirLock) {
-                if (mUpdatableFontDir == null) {
+                if (!ensureUpdatableFontDirLocked()) {
                     return FontManager.RESULT_ERROR_FONT_UPDATER_DISABLED;
                 }
                 mUpdatableFontDir.installCustomEmoji(fontFd.getFileDescriptor());
@@ -234,7 +228,7 @@ public final class FontManagerService extends IFontManager.Stub {
             Slog.e(TAG, "Failed to clear custom emoji", e);
             return e.getErrorCode();
         }
-        mAppEmojiReplacer.restoreGmsFontProvider();
+        mAppEmojiReplacer.restore();
         return FontManager.RESULT_SUCCESS;
     }
 
@@ -254,23 +248,32 @@ public final class FontManagerService extends IFontManager.Stub {
     public int applyCustomEmojiToApps() {
         getContext().enforceCallingPermission(Manifest.permission.UPDATE_FONTS,
                 "UPDATE_FONTS permission required.");
-        File emoji;
+        final int callingUid = Binder.getCallingUid();
+        // Opened under the lock, so the fd is the font that is active right now. Holding it
+        // keeps that inode for the whole run, whatever a concurrent install or clear does.
+        ParcelFileDescriptor fd;
         synchronized (mUpdatableFontDirLock) {
             if (mUpdatableFontDir == null) {
                 return FontManager.RESULT_ERROR_FONT_UPDATER_DISABLED;
             }
-            emoji = mUpdatableFontDir.getCustomEmojiFile();
+            File emoji = mUpdatableFontDir.getCustomEmojiFile();
+            if (emoji == null) {
+                return FontManager.RESULT_ERROR_FONT_NOT_FOUND;
+            }
+            try {
+                fd = ParcelFileDescriptor.open(emoji, ParcelFileDescriptor.MODE_READ_ONLY);
+            } catch (IOException e) {
+                Slog.e(TAG, "Failed to open custom emoji", e);
+                return FontManager.RESULT_ERROR_FAILED_TO_OPEN_FONT_FILE;
+            }
         }
-        if (emoji == null) {
-            return FontManager.RESULT_ERROR_FONT_NOT_FOUND;
-        }
-        // Holds the inode open, so a concurrent install or clear can't change what apps get.
-        try (ParcelFileDescriptor fd =
-                ParcelFileDescriptor.open(emoji, ParcelFileDescriptor.MODE_READ_ONLY)) {
-            return mAppEmojiReplacer.apply(fd);
+        // Not under mUpdatableFontDirLock: this calls installd for every app and can take a
+        // while. AppEmojiReplacer serializes concurrent runs itself.
+        try (ParcelFileDescriptor font = fd) {
+            return mAppEmojiReplacer.apply(font, callingUid);
         } catch (IOException e) {
-            Slog.e(TAG, "Failed to open custom emoji", e);
-            return FontManager.RESULT_ERROR_FAILED_TO_OPEN_FONT_FILE;
+            Slog.w(TAG, "Failed to close custom emoji fd", e);
+            return FontManager.RESULT_SUCCESS;
         }
     }
 
@@ -429,7 +432,8 @@ public final class FontManagerService extends IFontManager.Stub {
             Context context, boolean safeMode, CompletableFuture<Void> serviceStarted) {
         if (safeMode) {
             Slog.i(TAG, "Entering safe mode. Deleting all font updates.");
-            UpdatableFontDir.deleteAllFiles(new File(FONT_FILES_DIR), new File(CONFIG_XML_FILE));
+            UpdatableFontDir.deleteAllFiles(new File(FONT_FILES_DIR), new File(CONFIG_XML_FILE),
+                    new File(EMOJI_DIR));
         }
         mContext = context;
         mIsSafeMode = safeMode;
@@ -486,6 +490,21 @@ public final class FontManagerService extends IFontManager.Stub {
 
         return new UpdatableFontDir(new File(FONT_FILES_DIR), new OtfFontFileParser(),
                 new FsverityUtilImpl(certs), new File(CONFIG_XML_FILE), new File(EMOJI_DIR));
+    }
+
+    /**
+     * Boot may have run before the font directory was available. Tries again, and returns
+     * whether {@link #mUpdatableFontDir} can be used.
+     */
+    @GuardedBy("mUpdatableFontDirLock")
+    private boolean ensureUpdatableFontDirLocked() {
+        if (mUpdatableFontDir == null) {
+            mUpdatableFontDir = createUpdatableFontDir();
+            if (mUpdatableFontDir != null) {
+                mUpdatableFontDir.loadFontFileMap();
+            }
+        }
+        return mUpdatableFontDir != null;
     }
 
     @GuardedBy("mUpdatableFontDirLock")
@@ -631,7 +650,8 @@ public final class FontManagerService extends IFontManager.Stub {
      * This method is only for {@link FontManagerShellCommand}.
      */
     /* package */ void clearUpdates() {
-        UpdatableFontDir.deleteAllFiles(new File(FONT_FILES_DIR), new File(CONFIG_XML_FILE));
+        UpdatableFontDir.deleteAllFiles(new File(FONT_FILES_DIR), new File(CONFIG_XML_FILE),
+                new File(EMOJI_DIR));
         initialize();
     }
 
