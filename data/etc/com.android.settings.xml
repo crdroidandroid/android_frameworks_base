@@ -72,5 +72,7 @@
         <permission name="android.permission.SET_BIOMETRIC_DIALOG_ADVANCED" />
         <permission name="android.permission.MANAGE_SAFETY_CENTER" />
         <permission name="android.permission.CONTROL_SIM_AUTO_PIN_MANAGEMENT"/>
+        <permission name="android.permission.KILL_UID"/>
+        <permission name="android.permission.UPDATE_FONTS"/>
     </privapp-permissions>
 </permissions>
