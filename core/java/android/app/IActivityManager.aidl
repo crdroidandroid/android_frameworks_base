@@ -1115,5 +1115,6 @@ interface IActivityManager {
     boolean isSandboxSpoofSettingEnabled(String packageName, String settingKey, int userId);
     void setSandboxSpoofSettingEnabled(String packageName, String settingKey, boolean enabled, int userId);
     List<String> getSandboxEnabledSpoofSettings(String packageName, int userId);
-    String getSandboxSpoofedSetting(String callingPackage, String settingName, int userId);
+    String getSandboxSpoofedSetting(@nullable String callingPackage, int callingUid,
+            String settingName);
 }

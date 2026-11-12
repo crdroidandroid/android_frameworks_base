@@ -1011,6 +1011,18 @@ public abstract class ActivityManagerInternal {
     @Nullable
     public abstract List<Integer> getIsolatedProcesses(int uid);
 
+    /**
+     * Returns the application UID that currently owns an isolated process UID, or
+     * {@link android.os.Process#INVALID_UID} when the process is no longer tracked.
+     */
+    public abstract int getIsolatedOwnerUid(int isolatedUid);
+
+    /**
+     * Kills the isolated and SDK sandbox processes associated with an application UID, together
+     * with any app zygote that could otherwise retain the previous process policy.
+     */
+    public abstract void killSandboxProcessesForUid(int uid, String reason);
+
     /** @see ActivityManagerService#sendIntentSender */
     public abstract int sendIntentSender(IIntentSender target, IBinder allowlistToken, int code,
             Intent intent, String resolvedType,

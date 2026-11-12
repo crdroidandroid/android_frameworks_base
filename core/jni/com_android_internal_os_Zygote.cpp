@@ -19,6 +19,7 @@
 
 #include "com_android_internal_os_Zygote.h"
 
+#include <stddef.h>
 #include <algorithm>
 #include <array>
 #include <atomic>
@@ -34,9 +35,13 @@
 #include <android/fdsan.h>
 #include <arpa/inet.h>
 #include <dirent.h>
+#include <dlfcn.h>
+#include <errno.h>
 #include <fcntl.h>
 #include <grp.h>
 #include <inttypes.h>
+#include <linux/filter.h>
+#include <linux/seccomp.h>
 #include <malloc.h>
 #include <mntent.h>
 #include <signal.h>
@@ -50,6 +55,7 @@
 #include <sys/resource.h>
 #include <sys/socket.h>
 #include <sys/stat.h>
+#include <sys/syscall.h>
 #include <sys/system_properties.h>
 #include <sys/time.h>
 #include <sys/types.h>
@@ -352,6 +358,9 @@ enum RuntimeFlags : uint32_t {
     PROFILEABLE = 1 << 24,
     DEBUG_ENABLE_PTRACE = 1 << 25,
     ENABLE_PAGE_SIZE_APP_COMPAT = 1 << 26,
+    ENABLE_AX_SANDBOX_PRIVACY = 1 << 27,
+    ENABLE_AX_SANDBOX_SELINUX_ENFORCING = 1 << 28,
+    ENABLE_AX_SANDBOX_ADB = 1 << 29,
 };
 
 enum UnsolicitedZygoteMessageTypes : uint32_t {
@@ -652,6 +661,82 @@ static void SetUpSeccompFilter(uid_t uid, bool is_child_zygote) {
   } else {
     set_system_seccomp_filter();
   }
+}
+
+// Hide the init-created adbd control socket only in the selected process mount
+// namespace. A native probe can invoke connect(2) directly and distinguish the
+// live socket from a stopped adbd by the resulting errno, so libc interposition
+// is not sufficient. Binding /dev/null over the pathname makes AF_UNIX connect
+// return ECONNREFUSED while leaving all other Unix and Internet sockets intact.
+static void MaskAxSandboxAdbSocket(uid_t target_uid, fail_fn_t fail_fn) {
+  constexpr const char* kAdbdSocket = "/dev/socket/adbd";
+  constexpr const char* kRefusedEndpoint = "/dev/null";
+
+  struct stat target_stat = {};
+  if (TEMP_FAILURE_RETRY(lstat(kAdbdSocket, &target_stat)) == -1) {
+    const int saved_errno = errno;
+    if (saved_errno == ENOENT) {
+      ALOGI("AxSandboxAdb: unavailable pid=%d target_uid=%u path=%s",
+            getpid(), target_uid, kAdbdSocket);
+      return;
+    }
+    fail_fn(CREATE_ERROR("Failed to inspect %s for AxSandbox ADB: %s",
+                         kAdbdSocket, strerror(saved_errno)));
+    return;
+  }
+  if (!S_ISSOCK(target_stat.st_mode)) {
+    ALOGI("AxSandboxAdb: already masked pid=%d target_uid=%u path=%s",
+          getpid(), target_uid, kAdbdSocket);
+    return;
+  }
+
+  if (TEMP_FAILURE_RETRY(
+          mount(kRefusedEndpoint, kAdbdSocket, nullptr, MS_BIND, nullptr)) == -1) {
+    const int saved_errno = errno;
+    if (saved_errno == ENOENT) {
+      ALOGI("AxSandboxAdb: unavailable pid=%d target_uid=%u path=%s",
+            getpid(), target_uid, kAdbdSocket);
+      return;
+    }
+    fail_fn(CREATE_ERROR("Failed to mask %s for AxSandbox ADB: %s",
+                         kAdbdSocket, strerror(saved_errno)));
+    return;
+  }
+  ALOGI("AxSandboxAdb: masked pid=%d target_uid=%u path=%s source=%s",
+        getpid(), target_uid, kAdbdSocket, kRefusedEndpoint);
+}
+
+// The ART JDWP client and a confirmed direct-syscall detector both create an
+// AF_UNIX/SOCK_SEQPACKET socket before connecting to @jdwp-control. Classic
+// seccomp cannot inspect the userspace sockaddr passed to connect(2), so reject
+// only that socket type for selected processes. SOCK_STREAM, SOCK_DGRAM, TCP,
+// UDP, and socketpair-based IPC remain available.
+static void SetUpAxSandboxAdbSeqpacketFilter(uid_t target_uid, fail_fn_t fail_fn) {
+  constexpr uint32_t kSocketTypeMask = 0xf;
+  struct sock_filter filter[] = {
+      BPF_STMT(BPF_LD | BPF_W | BPF_ABS, offsetof(struct seccomp_data, nr)),
+      BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, __NR_socket, 0, 6),
+      BPF_STMT(BPF_LD | BPF_W | BPF_ABS, offsetof(struct seccomp_data, args[0])),
+      BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, AF_UNIX, 0, 4),
+      BPF_STMT(BPF_LD | BPF_W | BPF_ABS, offsetof(struct seccomp_data, args[1])),
+      BPF_STMT(BPF_ALU | BPF_AND | BPF_K, kSocketTypeMask),
+      BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, SOCK_SEQPACKET, 0, 1),
+      BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ERRNO | ECONNREFUSED),
+      BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ALLOW),
+  };
+  struct sock_fprog program = {
+      .len = static_cast<unsigned short>(sizeof(filter) / sizeof(filter[0])),
+      .filter = filter,
+  };
+
+  if (prctl(PR_SET_SECCOMP, SECCOMP_MODE_FILTER, &program) == -1) {
+    fail_fn(CREATE_ERROR("prctl(PR_SET_SECCOMP, AxSandbox ADB filter) failed: %s",
+                         strerror(errno)));
+    return;
+  }
+  ALOGI("AxSandboxAdb: filtered pid=%d target_uid=%u "
+        "rule=unix_seqpacket_socket_errno_%d",
+        getpid(), target_uid, ECONNREFUSED);
 }
 
 static void EnableKeepCapabilities(fail_fn_t fail_fn) {
@@ -1904,6 +1989,63 @@ static void SpecializeCommon(JNIEnv* env, uid_t uid, gid_t gid, jintArray gids, 
                              bool is_top_app, jobjectArray pkg_data_info_list,
                              jobjectArray allowlisted_data_info_list, bool mount_data_dirs,
                              bool mount_storage_dirs, bool mount_sysprop_overrides) {
+    // This runs in the freshly forked child before application code. Keep the policy in
+    // process-local libc state so native reads do not need Binder calls or global UID rules.
+    const bool privacy_enabled =
+            (runtime_flags & RuntimeFlags::ENABLE_AX_SANDBOX_PRIVACY) != 0;
+    const bool selinux_enforcing_enabled =
+            (runtime_flags & RuntimeFlags::ENABLE_AX_SANDBOX_SELINUX_ENFORCING) != 0;
+    // AxSandbox ADB isolation owns the process even when the build-wide debugger property is
+    // enabled. DEBUG_ENABLE_JDWP is consumed by ART, so force it for this path. The
+    // per-process mount mask, libc endpoint filter, and adbd peer gate isolate
+    // the known control endpoints; ordinary Unix IPC and networking remain available.
+    const bool adb_enabled =
+            (runtime_flags & RuntimeFlags::ENABLE_AX_SANDBOX_ADB) != 0;
+    if (adb_enabled) {
+        runtime_flags |= RuntimeFlags::DEBUG_ENABLE_JDWP;
+        ALOGI("AxSandboxAdb: decision pid=%d target_uid=%u adb_flag=1 jdwp_flag=%d effective=%d",
+              getpid(), uid, (runtime_flags & RuntimeFlags::DEBUG_ENABLE_JDWP) != 0,
+              adb_enabled);
+    }
+    using SetEnabledFn = void (*)(bool);
+    static const auto set_enabled = reinterpret_cast<SetEnabledFn>(
+            dlsym(RTLD_DEFAULT, "custom_rom_hide_set_enabled"));
+    if (set_enabled != nullptr) {
+        set_enabled(privacy_enabled);
+    }
+    using SetAdbEnabledFn = void (*)(bool);
+    static const auto set_adb_enabled = reinterpret_cast<SetAdbEnabledFn>(
+            dlsym(RTLD_DEFAULT, "custom_rom_hide_set_adb_enabled"));
+    if (set_adb_enabled != nullptr) {
+        set_adb_enabled(adb_enabled);
+    }
+    using SetSelinuxEnforcingEnabledFn = void (*)(bool);
+    static const auto set_selinux_enforcing_enabled =
+            reinterpret_cast<SetSelinuxEnforcingEnabledFn>(
+                    dlsym(RTLD_DEFAULT,
+                            "custom_rom_hide_set_selinux_enforcing_enabled"));
+    if (set_selinux_enforcing_enabled != nullptr) {
+        set_selinux_enforcing_enabled(selinux_enforcing_enabled);
+    }
+    if (privacy_enabled) {
+        setenv("BIONIC_AX_SANDBOX_PRIVACY", "1", 1);
+    } else {
+        unsetenv("BIONIC_AX_SANDBOX_PRIVACY");
+    }
+    if (adb_enabled) {
+        setenv("BIONIC_AX_SANDBOX_ADB", "1", 1);
+    } else {
+        unsetenv("BIONIC_AX_SANDBOX_ADB");
+    }
+    if (selinux_enforcing_enabled) {
+        setenv("BIONIC_AX_SANDBOX_SELINUX_ENFORCING", "1", 1);
+    } else {
+        unsetenv("BIONIC_AX_SANDBOX_SELINUX_ENFORCING");
+    }
+    runtime_flags &= ~RuntimeFlags::ENABLE_AX_SANDBOX_PRIVACY;
+    runtime_flags &= ~RuntimeFlags::ENABLE_AX_SANDBOX_SELINUX_ENFORCING;
+    runtime_flags &= ~RuntimeFlags::ENABLE_AX_SANDBOX_ADB;
+
     const char* process_name = is_system_server ? "system_server" : "zygote";
     auto fail_fn = std::bind(ZygoteFailure, env, process_name, managed_nice_name, _1);
     auto extract_fn = std::bind(ExtractJString, env, process_name, managed_nice_name, _1);
@@ -1936,6 +2078,10 @@ static void SpecializeCommon(JNIEnv* env, uid_t uid, gid_t gid, jintArray gids, 
 
     // Make sure app is running in its own mount namespace before isolating its data directories.
     ensureInAppMountNamespace(fail_fn);
+
+    if (adb_enabled) {
+        MaskAxSandboxAdbSocket(uid, fail_fn);
+    }
 
     // Isolate app data, jit profile and sandbox data directories by overlaying a tmpfs on those
     // dirs and bind mount all related packages separately.
@@ -2017,6 +2163,12 @@ static void SpecializeCommon(JNIEnv* env, uid_t uid, gid_t gid, jintArray gids, 
 
     if (setresgid(gid, gid, gid) == -1) {
         fail_fn(CREATE_ERROR("setresgid(%d) failed: %s", gid, strerror(errno)));
+    }
+
+    // Child zygotes inherit the filter installed while their parent was still
+    // privileged. The primary Zygote installs it before dropping root.
+    if (adb_enabled && getuid() == 0) {
+        SetUpAxSandboxAdbSeqpacketFilter(uid, fail_fn);
     }
 
     // Must be called when the new process still has CAP_SYS_ADMIN, in this case,
