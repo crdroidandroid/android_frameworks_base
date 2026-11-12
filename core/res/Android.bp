@@ -137,6 +137,10 @@ android_app {
         // Framework resources benefit tremendously from enabling sparse encoding, saving tens
         // of MBs in size and RAM use.
         "--enable-sparse-encoding",
+
+        // Pin private resources to the IDs required by Google prebuilts.
+        "--stable-ids",
+        "frameworks/base/core/res/google-stable-ids.txt",
     ],
 
     resource_zips: [
