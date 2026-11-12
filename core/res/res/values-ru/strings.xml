@@ -286,17 +286,17 @@
     <string name="global_action_bug_report" msgid="5127867163044170003">"Отчет об ошибке"</string>
     <string name="global_action_feedback" msgid="3480836834202300036">"Отзыв"</string>
     <string name="global_action_logout" msgid="6093581310002476511">"Закончить сеанс"</string>
-    <string name="global_action_screenshot" msgid="2610053466156478564">"Скриншот"</string>
+    <string name="global_action_screenshot" msgid="2610053466156478564">"Снимок экрана"</string>
     <string name="global_action_standby" msgid="6786920589970257642">"Режим ожидания"</string>
     <string name="bugreport_title" msgid="8549990811777373050">"Отчет об ошибке"</string>
     <string name="bugreport_message" msgid="5212529146119624326">"Информация о текущем состоянии вашего устройства будет собрана и отправлена по электронной почте. Подготовка отчета займет некоторое время."</string>
     <string name="bugreport_option_interactive_title" msgid="7968287837902871289">"Интерактивный отчет"</string>
-    <string name="bugreport_option_interactive_summary" msgid="8493795476325339542">"Рекомендуем этот вариант в большинстве случаев, чтобы отслеживать статус отчета, указывать дополнительные данные о проблеме и делать скриншоты. Некоторые разделы могут быть исключены, чтобы сократить время подготовки отчета."</string>
+    <string name="bugreport_option_interactive_summary" msgid="8493795476325339542">"Рекомендуем этот вариант в большинстве случаев, чтобы отслеживать статус отчёта, указывать дополнительные данные о проблеме и делать снимки экрана. Некоторые разделы могут быть исключены, чтобы сократить время подготовки отчёта."</string>
     <string name="bugreport_option_full_title" msgid="7681035745950045690">"Подробный отчет"</string>
-    <string name="bugreport_option_full_summary" msgid="1975130009258435885">"Выберите этот вариант, если устройство не реагирует на ваши действия или работает слишком медленно, а также если вы хотите включить все разделы отчета. Вы не сможете сделать скриншот или указать дополнительные сведения."</string>
-    <string name="bugreport_countdown" msgid="6418620521782120755">"{count,plural, =1{Скриншот для отчета об ошибке будет сделан через # секунду.}one{Скриншот для отчета об ошибке будет сделан через # секунду.}few{Скриншот для отчета об ошибке будет сделан через # секунды.}many{Скриншот для отчета об ошибке будет сделан через # секунд.}other{Скриншот для отчета об ошибке будет сделан через # секунды.}}"</string>
-    <string name="bugreport_screenshot_success_toast" msgid="7986095104151473745">"Вместе с отчетом об ошибке был сделан скриншот."</string>
-    <string name="bugreport_screenshot_failure_toast" msgid="6736320861311294294">"Не удалось сделать скриншот с информацией об ошибке."</string>
+    <string name="bugreport_option_full_summary" msgid="1975130009258435885">"Выберите этот вариант, если устройство не реагирует на ваши действия или работает слишком медленно, а также если вы хотите включить все разделы отчёта. Вы не сможете сделать снимок экрана или указать дополнительные сведения."</string>
+    <string name="bugreport_countdown" msgid="6418620521782120755">"{count,plural, =1{Снимок экрана для отчета об ошибке будет сделан через # секунду.}one{Снимок экрана для отчёта об ошибке будет сделан через # секунду.}few{Снимок экрана для отчёта об ошибке будет сделан через # секунды.}many{Снимок экрана для отчёта об ошибке будет сделан через # секунд.}other{Снимок экрана для отчёта об ошибке будет сделан через # секунды.}}"</string>
+    <string name="bugreport_screenshot_success_toast" msgid="7986095104151473745">"Вместе с отчетом об ошибке был сделан снимок экрана."</string>
+    <string name="bugreport_screenshot_failure_toast" msgid="6736320861311294294">"Не удалось сделать снимок экрана с информацией об ошибке."</string>
     <string name="global_action_toggle_silent_mode" msgid="8464352592860372188">"Режим без звука"</string>
     <string name="global_action_silent_mode_on_status" msgid="2371892537738632013">"Выключить"</string>
     <string name="global_action_silent_mode_off_status" msgid="6608006545950920042">"Включить"</string>
@@ -392,7 +392,7 @@
     <string name="capability_desc_canPerformGestures" msgid="6619457251067929726">"Может выполнять жесты нажатия, пролистывания, масштабирования и т. д."</string>
     <string name="capability_title_canCaptureFingerprintGestures" msgid="1189053104594608091">"Регистрировать жесты на сканере отпечатков пальцев"</string>
     <string name="capability_desc_canCaptureFingerprintGestures" msgid="6861869337457461274">"Использовать сканер отпечатков пальцев для дополнительных жестов."</string>
-    <string name="capability_title_canTakeScreenshot" msgid="3895812893130071930">"Создавать скриншоты"</string>
+    <string name="capability_title_canTakeScreenshot" msgid="3895812893130071930">"Cнимки экрана"</string>
     <string name="capability_desc_canTakeScreenshot" msgid="7762297374317934052">"Создавать снимки экрана."</string>
     <string name="dream_preview_title" msgid="5570751491996100804">"<xliff:g id="DREAM_NAME">%1$s</xliff:g>: предпросмотр"</string>
     <string name="dream_accessibility_action_click" msgid="7392398629967797805">"закрыть"</string>
@@ -1422,7 +1422,7 @@
     <string name="volume_notification" msgid="6864412249031660057">"Громкость уведомления"</string>
     <string name="volume_unknown" msgid="4041914008166576293">"Громкость"</string>
     <string name="volume_icon_description_bluetooth" msgid="7540388479345558400">"Громкость Bluetooth-устройства"</string>
-    <string name="volume_icon_description_ringer" msgid="2187800636867423459">"Громкость рингтона"</string>
+    <string name="volume_icon_description_ringer" msgid="2187800636867423459">"Громкость вызова"</string>
     <string name="volume_icon_description_incall" msgid="4491255105381227919">"Громкость разговора"</string>
     <string name="volume_icon_description_media" msgid="4997633254078171233">"Громкость мультимедиа"</string>
     <string name="volume_icon_description_notification" msgid="579091344110747279">"Громкость уведомлений"</string>
@@ -2381,7 +2381,7 @@
     <string name="accessibility_system_action_quick_settings_label" msgid="4583900123506773783">"Быстрые настройки"</string>
     <string name="accessibility_system_action_power_dialog_label" msgid="8095341821683910781">"Диалоговое окно питания"</string>
     <string name="accessibility_system_action_lock_screen_label" msgid="5484190691945563838">"Заблокированный экран"</string>
-    <string name="accessibility_system_action_screenshot_label" msgid="3581566515062741676">"Скриншот"</string>
+    <string name="accessibility_system_action_screenshot_label" msgid="3581566515062741676">"Снимок экрана"</string>
     <string name="accessibility_system_action_headset_hook_label" msgid="8524691721287425468">"Повесить гарнитуру"</string>
     <string name="accessibility_system_action_on_screen_a11y_shortcut_label" msgid="8488701469459210309">"Действие для быстрого включения"</string>
     <string name="accessibility_system_action_on_screen_a11y_shortcut_chooser_label" msgid="1057878690209817886">"Выбор действия для быстрого включения"</string>

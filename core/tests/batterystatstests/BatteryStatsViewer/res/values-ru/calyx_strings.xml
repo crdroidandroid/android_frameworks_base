@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: 2023 The Calyx Institute
+     SPDX-License-Identifier: Apache-2.0
+-->
 <resources>
-    <string name="app_name">Просмотр статистики использования батареи</string>
-    <string name="header">Статистика использования батареи</string>
+    <string name="app_name">Статистика батареи</string>
+    <string name="header">Статистика батареи</string>
     <string name="display_dashboard_summary">Просмотр подробной статистики использования батареи</string>
 </resources>
