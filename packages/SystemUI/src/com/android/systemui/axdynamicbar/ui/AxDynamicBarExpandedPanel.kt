@@ -238,7 +238,7 @@ constructor(
             WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or
             WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR or
             WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH or
-            if (desiredState.expanded || explicitFocusRequested) 0
+            if (explicitFocusRequested) 0
             else WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
 
         val params =
@@ -303,7 +303,7 @@ constructor(
     private fun applyWindowState() {
         val view = overlayView ?: return
         val params = view.layoutParams as? WindowManager.LayoutParams ?: return
-        val focusable = desiredState.needed && (desiredState.expanded || explicitFocusRequested)
+        val focusable = desiredState.needed && explicitFocusRequested
         val flags = if (focusable) {
             params.flags and WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE.inv()
         } else {
