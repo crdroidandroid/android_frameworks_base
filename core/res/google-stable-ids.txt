@@ -1,0 +1,4 @@
+android:color/materialColorOnSecondaryContainer = 0x010602c7
+android:color/materialColorOnSurfaceVariant = 0x010602cb
+android:color/materialColorSecondaryContainer = 0x010602df
+android:color/materialColorSurfaceContainer = 0x010602e6
