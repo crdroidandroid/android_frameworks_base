@@ -97,9 +97,9 @@
     <string name="ax_dynamic_bar_connecting">در حال اتصال...\u2026</string>
     <string name="ax_dynamic_bar_one_device">1 دستگاه</string>
     <string name="ax_dynamic_bar_bluetooth_device">دستگاه بلوتوث</string>
-    <string name="ax_dynamic_bar_left_earbud">Left earbud</string>
-    <string name="ax_dynamic_bar_right_earbud">Right earbud</string>
-    <string name="ax_dynamic_bar_earbuds_case">Case</string>
+    <string name="ax_dynamic_bar_left_earbud">ایرپاد چپ</string>
+    <string name="ax_dynamic_bar_right_earbud">ایرپاد راست</string>
+    <string name="ax_dynamic_bar_earbuds_case">کیس</string>
     <string name="ax_dynamic_bar_apps_count"><xliff:g id="count" example="2">%d</xliff:g> برنامه ها</string>
     <string name="ax_dynamic_bar_just_now">همین الان</string>
     <string name="ax_dynamic_bar_mins_ago"><xliff:g id="count" example="5">%d</xliff:g>دقیقه پیش</string>
@@ -157,15 +157,15 @@
     <string name="smartspace_content_desc">در یک نگاه</string>
     <string name="smartspace_flight_qr_code">کد QR</string>
     <!-- Content description for the smartspace paging arrows [CHAR LIMIT=NONE] -->
-    <string name="accessibility_smartspace_previous_page">Previous page</string>
-    <string name="accessibility_smartspace_next_page">Next page</string>
+    <string name="accessibility_smartspace_previous_page">صفحه قبلی</string>
+    <string name="accessibility_smartspace_next_page">صفحه بعدی</string>
     <!-- Ambient indication -->
-    <string name="accessibility_action_expand">Expand</string>
-    <string name="accessibility_now_playing_container_recognition_result_content_description">Identified song. %1$s, %2$s.</string>
-    <string name="accessibility_now_playing_container_song_searching_content_description">Identifying song</string>
-    <string name="accessibility_now_playing_like_icon">Add to favorites</string>
-    <string name="accessibility_now_playing_play_icon">Play on Default Music Player</string>
-    <string name="accessibility_now_playing_unlike_icon">Remove from favorites</string>
+    <string name="accessibility_action_expand">گشودن</string>
+    <string name="accessibility_now_playing_container_recognition_result_content_description">آهنگ شناسایی شد. %1$s، %2$s.</string>
+    <string name="accessibility_now_playing_container_song_searching_content_description">شناسایی آهنگ</string>
+    <string name="accessibility_now_playing_like_icon">افزودن به علاقه‌مندی‌ها</string>
+    <string name="accessibility_now_playing_play_icon">پخش با پخش‌کننده موسیقی پیش‌فرض</string>
+    <string name="accessibility_now_playing_unlike_icon">حذف از علاقه‌مندی‌ها</string>
     <string name="now_playing_label">در حال پخش</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">ویژگی در حرکت فعال شد</string>
@@ -179,12 +179,12 @@
     <string name="onthego_channel_name">اصلی</string>
     <string name="global_action_onthego">در حرکت</string>
     <string name="onthego_dialog_title">در حرکت</string>
-    <string name="onthego_opacity_title">Camera opacity</string>
-    <string name="onthego_opacity_default">50%</string>
-    <string name="onthego_restart_title">Restart on camera switch</string>
-    <string name="onthego_restart_summary">Briefly restart the preview when the camera changes</string>
-    <string name="onthego_front_camera_title">Front camera</string>
-    <string name="onthego_front_camera_summary">Use the front camera instead of the rear</string>
+    <string name="onthego_opacity_title">شفافیت دوربین</string>
+    <string name="onthego_opacity_default">۵۰٪</string>
+    <string name="onthego_restart_title">راه‌اندازی مجدد هنگام تغییر دوربین</string>
+    <string name="onthego_restart_summary">بازنشانی مختصر پیشنمایش هنگام تغییر دوربین</string>
+    <string name="onthego_front_camera_title">دوربین جلو</string>
+    <string name="onthego_front_camera_summary">استفاده از دوربین جلو به‌جای دوربین پشت</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">مصرف امروز</string>
     <string name="usage_data_weekly">مصرفی این هفته</string>
@@ -196,8 +196,8 @@
     <!-- Label for UI element which allows to use lens on screenshot [CHAR LIMIT=30] -->
     <string name="screenshot_lens_label">لنز</string>
     <!-- Per-app volume panel -->
-    <string name="app_volume">App volume</string>
-    <string name="app_volume_no_active_apps">No active audio playback</string>
+    <string name="app_volume">صدای برنامه</string>
+    <string name="app_volume_no_active_apps">هیچ پخش صوتی فعالی وجود ندارد</string>
     <!-- Sound QS Tile -->
     <string name="quick_settings_sound_label">صدا</string>
     <string name="quick_settings_sound_ring">زنگ</string>
