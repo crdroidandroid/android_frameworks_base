@@ -3779,19 +3779,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             if (mThreeFingersSwipe != null) {
                 final boolean threeFingersEnabled = mThreeFingersSwipeHasAction;
                 if (threeFingersEnabled != mThreeFingersSwipeRegistered) {
-                    if (threeFingersEnabled) {
-                        mWindowManagerFuncs.registerPointerEventListener(
-                                mThreeFingersSwipe, DEFAULT_DISPLAY);
-                    } else {
-                        mWindowManagerFuncs.unregisterPointerEventListener(
-                                mThreeFingersSwipe, DEFAULT_DISPLAY);
-                    }
+                    mThreeFingersSwipe.setEnabled(threeFingersEnabled);
                     mThreeFingersSwipeRegistered = threeFingersEnabled;
-                    try {
-                        mActivityManagerService.setThreeFingersSwipeActive(threeFingersEnabled);
-                    } catch (Exception e) {
-                        // Do nothing
-                    }
                 }
             }
         }
@@ -7057,14 +7046,19 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         mThreeFingersSwipe = new ThreeFingersSwipeListener(mContext, new ThreeFingersSwipeListener.Callbacks() {
             @Override
             public void onSwipeThreeFingers() {
-                if (mThreeFingersSwipeAction == Action.NOTHING)
-                    return;
-                long now = SystemClock.uptimeMillis();
-                KeyEvent event = new KeyEvent(now, now, KeyEvent.ACTION_DOWN,
-                        KeyEvent.KEYCODE_SYSRQ, 0, 0, KeyCharacterMap.VIRTUAL_KEYBOARD, 0,
-                        KeyEvent.FLAG_FROM_SYSTEM, InputDevice.SOURCE_TOUCHSCREEN);
-                performKeyAction(mThreeFingersSwipeAction, event);
-                performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, "Three Fingers Swipe");
+                mHandler.post(() -> {
+                    final Action action = mThreeFingersSwipeAction;
+                    if (action == null || action == Action.NOTHING) {
+                        return;
+                    }
+                    long now = SystemClock.uptimeMillis();
+                    KeyEvent event = new KeyEvent(now, now, KeyEvent.ACTION_DOWN,
+                            KeyEvent.KEYCODE_SYSRQ, 0, 0, KeyCharacterMap.VIRTUAL_KEYBOARD, 0,
+                            KeyEvent.FLAG_FROM_SYSTEM, InputDevice.SOURCE_TOUCHSCREEN);
+                    performKeyAction(action, event);
+                    performHapticFeedback(HapticFeedbackConstants.LONG_PRESS,
+                            "Three Fingers Swipe");
+                });
             }
         });
 
