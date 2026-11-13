@@ -1062,13 +1062,6 @@ interface IActivityManager {
             in String compilationReason);
 
     /**
-     *  Should disable touch if three fingers swipe enabled
-     */
-    boolean isThreeFingersSwipeActive();
-    void setThreeFingersSwipeActive(boolean active);
-    void setThreeGestureStateActive(boolean active);
-
-    /**
      *  Force full screen for devices with cutout
      */
     boolean shouldForceCutoutFullscreen(in String packageName);
