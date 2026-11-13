@@ -17,16 +17,25 @@
 
 package com.android.server.policy;
 
-import android.app.ActivityManager;
 import android.content.Context;
-import android.os.RemoteException;
-import android.os.UserHandle;
-import android.provider.Settings;
+import android.hardware.input.InputManager;
+import android.os.Handler;
+import android.os.Process;
 import android.util.DisplayMetrics;
+import android.util.Slog;
+import android.view.Display;
+import android.view.InputDevice;
+import android.view.InputEvent;
+import android.view.InputEventReceiver;
+import android.view.InputMonitor;
 import android.view.MotionEvent;
-import android.view.WindowManagerPolicyConstants.PointerEventListener;
 
-public class ThreeFingersSwipeListener implements PointerEventListener {
+import com.android.server.ServiceThread;
+
+/**
+ * Detects a three fingers swipe down on the default display.
+ */
+public class ThreeFingersSwipeListener {
 
     private static final String TAG = "ThreeFingersSwipeListener";
     private static final int THREE_GESTURE_STATE_NONE = 0;
@@ -34,20 +43,25 @@ public class ThreeFingersSwipeListener implements PointerEventListener {
     private static final int THREE_GESTURE_STATE_DETECTED_FALSE = 2;
     private static final int THREE_GESTURE_STATE_DETECTED_TRUE = 3;
     private static final int THREE_GESTURE_STATE_NO_DETECT = 4;
-    private float[] mInitMotionY;
-    private int[] mPointerIds;
+
     private final Context mContext;
-    private int mThreeGestureState = THREE_GESTURE_STATE_NONE;
-    private int mThreeGestureThreshold;
-    private int mThreshold;
-    private float mDensity;
-    private int mScreenHeight;
-    private int mScreenWidth;
     private final Callbacks mCallbacks;
+    private final Handler mHandler;
+
+    private final float[] mInitMotionY = new float[3];
+    private final int[] mPointerIds = new int[3];
+    private final int mThreeGestureThreshold;
+    private final int mThreshold;
+    private final float mDensity;
+    private final int mScreenHeight;
+    private final int mScreenWidth;
+
+    private int mThreeGestureState = THREE_GESTURE_STATE_NONE;
+    private boolean mEnabled;
+    private InputMonitor mInputMonitor;
+    private InputEventReceiver mInputEventReceiver;
 
     public ThreeFingersSwipeListener(Context context, Callbacks callbacks) {
-        mPointerIds = new int[3];
-        mInitMotionY = new float[3];
         mCallbacks = callbacks;
         mContext = context;
         DisplayMetrics displayMetrics = mContext.getResources().getDisplayMetrics();
@@ -57,15 +71,63 @@ public class ThreeFingersSwipeListener implements PointerEventListener {
         mScreenHeight = displayMetrics.heightPixels;
         mScreenWidth = displayMetrics.widthPixels;
 
-        // reset the setting flag on init
-        try {
-            ActivityManager.getService().setThreeGestureStateActive(false);
-        } catch (RemoteException e) {}
+        ServiceThread thread = new ServiceThread(TAG,
+                Process.THREAD_PRIORITY_DISPLAY, false /* allowIo */);
+        thread.start();
+        mHandler = new Handler(thread.getLooper());
     }
 
-    @Override
-    public void onPointerEvent(MotionEvent event) {
-        if (event.getAction() == 0) {
+    public void setEnabled(boolean enabled) {
+        mHandler.post(() -> setEnabledInternal(enabled));
+    }
+
+    private void setEnabledInternal(boolean enabled) {
+        if (mEnabled == enabled) {
+            return;
+        }
+        mEnabled = enabled;
+        if (enabled) {
+            try {
+                mInputMonitor = mContext.getSystemService(InputManager.class)
+                        .monitorGestureInput(TAG, Display.DEFAULT_DISPLAY);
+                mInputEventReceiver = new InputEventReceiver(
+                        mInputMonitor.getInputChannel(), mHandler.getLooper()) {
+                    @Override
+                    public void onInputEvent(InputEvent event) {
+                        try {
+                            if (event instanceof MotionEvent
+                                    && event.isFromSource(InputDevice.SOURCE_TOUCHSCREEN)) {
+                                onPointerEvent((MotionEvent) event);
+                            }
+                        } finally {
+                            finishInputEvent(event, false /* handled */);
+                        }
+                    }
+                };
+            } catch (Exception e) {
+                Slog.e(TAG, "Failed to create input monitor", e);
+                disposeMonitor();
+                mEnabled = false;
+            }
+        } else {
+            disposeMonitor();
+        }
+        mThreeGestureState = THREE_GESTURE_STATE_NONE;
+    }
+
+    private void disposeMonitor() {
+        if (mInputEventReceiver != null) {
+            mInputEventReceiver.dispose();
+            mInputEventReceiver = null;
+        }
+        if (mInputMonitor != null) {
+            mInputMonitor.dispose();
+            mInputMonitor = null;
+        }
+    }
+
+    private void onPointerEvent(MotionEvent event) {
+        if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
             changeThreeGestureState(THREE_GESTURE_STATE_NONE);
         } else if (mThreeGestureState == THREE_GESTURE_STATE_NONE && event.getPointerCount() == 3) {
             if (checkIsStartThreeGesture(event)) {
@@ -85,16 +147,13 @@ public class ThreeFingersSwipeListener implements PointerEventListener {
             }
             if (event.getActionMasked() == MotionEvent.ACTION_MOVE) {
                 float distance = 0.0f;
-                int i = 0;
-                while (i < 3) {
+                for (int i = 0; i < 3; i++) {
                     int index = event.findPointerIndex(mPointerIds[i]);
                     if (index < 0 || index >= 3) {
                         changeThreeGestureState(THREE_GESTURE_STATE_DETECTED_FALSE);
                         return;
-                    } else {
-                        distance += event.getY(index) - mInitMotionY[i];
-                        i++;
                     }
+                    distance += event.getY(index) - mInitMotionY[i];
                 }
                 if (distance >= ((float) mThreeGestureThreshold)) {
                     changeThreeGestureState(THREE_GESTURE_STATE_DETECTED_TRUE);
@@ -105,13 +164,12 @@ public class ThreeFingersSwipeListener implements PointerEventListener {
     }
 
     private void changeThreeGestureState(int state) {
-        if (mThreeGestureState != state){
-            mThreeGestureState = state;
-            boolean active = mThreeGestureState == THREE_GESTURE_STATE_DETECTED_TRUE ||
-                    mThreeGestureState == THREE_GESTURE_STATE_DETECTING;
-            try {
-                ActivityManager.getService().setThreeGestureStateActive(active);
-            } catch (RemoteException e) {}
+        if (mThreeGestureState == state) {
+            return;
+        }
+        mThreeGestureState = state;
+        if (state == THREE_GESTURE_STATE_DETECTING && mInputMonitor != null) {
+            mInputMonitor.pilferPointers();
         }
     }
 
@@ -120,9 +178,9 @@ public class ThreeFingersSwipeListener implements PointerEventListener {
             return false;
         }
         float minX = Float.MAX_VALUE;
-        float maxX = Float.MIN_VALUE;
+        float maxX = -Float.MAX_VALUE;
         float minY = Float.MAX_VALUE;
-        float maxY = Float.MIN_VALUE;
+        float maxY = -Float.MAX_VALUE;
         for (int i = 0; i < event.getPointerCount(); i++) {
             float x = event.getX(i);
             float y = event.getY(i);
@@ -135,7 +193,7 @@ public class ThreeFingersSwipeListener implements PointerEventListener {
             minY = Math.min(minY, y);
         }
         if (maxY - minY <= mDensity * 150.0f) {
-            return maxX - minX <= ((float) (mScreenWidth < mScreenHeight ? mScreenWidth : mScreenHeight));
+            return maxX - minX <= ((float) Math.min(mScreenWidth, mScreenHeight));
         }
         return false;
     }
