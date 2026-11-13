@@ -1789,8 +1789,8 @@ public class ActivityManagerService extends IActivityManager.Stub
     static final HostingRecord sNullHostingRecord =
             new HostingRecord(HostingRecord.HOSTING_TYPE_EMPTY);
 
-    private boolean mThreeFingersSwipeEnabled;
-    private boolean mThreeFingerGestureActive;
+    private volatile boolean mThreeFingersSwipeEnabled;
+    private volatile boolean mThreeFingerGestureActive;
 
     /**
      * Used to notify activity lifecycle events.
