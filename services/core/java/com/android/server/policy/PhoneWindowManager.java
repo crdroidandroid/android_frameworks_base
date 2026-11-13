@@ -702,7 +702,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     boolean mHardwareKeysDisable = false;
     boolean mSwapCapacitiveKeys = false;
     ANBIHandler mANBIHandler;
-    private boolean mANBIEnabled;
+    private volatile boolean mANBIEnabled;
+    private final Object mPointerListenerLock = new Object();
+    private boolean mANBIRegistered;
+    private boolean mThreeFingersSwipeRegistered;
 
     // Tracks user-customisable behavior for certain key events
     private Action mBackLongPressAction;
@@ -717,7 +720,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private Action mAppSwitchDoubleTapAction;
     private Action mCornerLongSwipeAction;
     private Action mEdgeLongSwipeAction;
-    private Action mThreeFingersSwipeAction;
+    // Read from the input thread in ThreeFingersSwipeListener callback.
+    private volatile Action mThreeFingersSwipeAction;
 
     // support for activating the lock screen while the screen is on
     private HashSet<Integer> mAllowLockscreenWhenOnDisplays = new HashSet<>();
@@ -851,7 +855,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private ScreenshotHelper mScreenshotHelper;
 
     private ThreeFingersSwipeListener mThreeFingersSwipe;
-    private boolean mThreeFingersSwipeHasAction;
+    private volatile boolean mThreeFingersSwipeHasAction;
 
     private PocketManager mPocketManager;
     private PocketLock mPocketLock;
@@ -3474,20 +3478,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 LineageSettings.System.KEY_THREE_FINGERS_SWIPE_ACTION,
                 Action.NOTHING);
 
-        if (mThreeFingersSwipe != null && mThreeFingersSwipeAction != threeFingersSwipeAction) {
+        if (mThreeFingersSwipe != null) {
             mThreeFingersSwipeAction = threeFingersSwipeAction;
-            if (mThreeFingersSwipeAction != Action.NOTHING && !mThreeFingersSwipeHasAction) {
-                mThreeFingersSwipeHasAction = true;
-                mWindowManagerFuncs.registerPointerEventListener(mThreeFingersSwipe, DEFAULT_DISPLAY);
-            } else if (mThreeFingersSwipeAction == Action.NOTHING && mThreeFingersSwipeHasAction) {
-                mWindowManagerFuncs.unregisterPointerEventListener(mThreeFingersSwipe, DEFAULT_DISPLAY);
-                mThreeFingersSwipeHasAction = false;
-            }
-            try {
-                mActivityManagerService.setThreeFingersSwipeActive(mThreeFingersSwipeHasAction);
-            } catch (Exception e) {
-                // Do nothing
-            }
+            mThreeFingersSwipeHasAction = threeFingersSwipeAction != Action.NOTHING;
         }
 
         mShortPressOnWindowBehavior = SHORT_PRESS_WINDOW_NOTHING;
@@ -3609,14 +3602,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
             boolean ANBIEnabled = Settings.System.getIntForUser(resolver,
                     Settings.System.ANBI_ENABLED, 0, UserHandle.USER_CURRENT) == 1;
-            if (mANBIHandler != null && mANBIEnabled != ANBIEnabled) {
-                mANBIEnabled = ANBIEnabled;
-                if (mANBIEnabled) {
-                    mWindowManagerFuncs.registerPointerEventListener(mANBIHandler, DEFAULT_DISPLAY);
-                } else {
-                    mWindowManagerFuncs.unregisterPointerEventListener(mANBIHandler, DEFAULT_DISPLAY);
-                }
-            }
+            mANBIEnabled = ANBIEnabled;
 
             updateKeyAssignments();
 
@@ -3702,11 +3688,52 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 updateKidsModeSettings = true;
             }
         }
+        updatePointerEventListeners();
         if (updateKidsModeSettings) {
             updateKidsModeSettings(kidsModeEnabled);
         }
         if (updateRotation) {
             updateRotation(true);
+        }
+    }
+
+    private void updatePointerEventListeners() {
+        if (Thread.holdsLock(mLock)) {
+            Slog.wtf(TAG, "updatePointerEventListeners called with mLock held");
+        }
+        synchronized (mPointerListenerLock) {
+            if (mANBIHandler != null) {
+                final boolean anbiEnabled = mANBIEnabled;
+                if (anbiEnabled != mANBIRegistered) {
+                    if (anbiEnabled) {
+                        mWindowManagerFuncs.registerPointerEventListener(
+                                mANBIHandler, DEFAULT_DISPLAY);
+                    } else {
+                        mWindowManagerFuncs.unregisterPointerEventListener(
+                                mANBIHandler, DEFAULT_DISPLAY);
+                    }
+                    mANBIRegistered = anbiEnabled;
+                }
+            }
+
+            if (mThreeFingersSwipe != null) {
+                final boolean threeFingersEnabled = mThreeFingersSwipeHasAction;
+                if (threeFingersEnabled != mThreeFingersSwipeRegistered) {
+                    if (threeFingersEnabled) {
+                        mWindowManagerFuncs.registerPointerEventListener(
+                                mThreeFingersSwipe, DEFAULT_DISPLAY);
+                    } else {
+                        mWindowManagerFuncs.unregisterPointerEventListener(
+                                mThreeFingersSwipe, DEFAULT_DISPLAY);
+                    }
+                    mThreeFingersSwipeRegistered = threeFingersEnabled;
+                    try {
+                        mActivityManagerService.setThreeFingersSwipeActive(threeFingersEnabled);
+                    } catch (Exception e) {
+                        // Do nothing
+                    }
+                }
+            }
         }
     }
 
