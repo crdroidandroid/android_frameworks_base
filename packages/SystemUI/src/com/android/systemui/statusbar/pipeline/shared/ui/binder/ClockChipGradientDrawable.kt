@@ -15,6 +15,7 @@
  */
 package com.android.systemui.statusbar.pipeline.shared.ui.binder
 
+import android.content.Context
 import android.graphics.Canvas
 import android.graphics.ColorFilter
 import android.graphics.LinearGradient
@@ -24,6 +25,7 @@ import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.Shader
 import android.graphics.drawable.Drawable
+import com.android.internal.R as internalR
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.min
@@ -100,5 +102,27 @@ class ClockChipGradientDrawable(
 
     companion object {
         const val CORNER_RADIUS_PILL = -1f
+
+        /** Follow the Material accent palette (primary -> secondary). */
+        const val COLOR_MODE_AUTO = 0
+        /** Use the colours picked in Settings. */
+        const val COLOR_MODE_CUSTOM = 1
+
+        @JvmStatic
+        fun accentColors(context: Context): Pair<Int, Int> =
+            context.getColor(internalR.color.materialColorPrimary) to
+                context.getColor(internalR.color.materialColorSecondary)
+
+        @JvmStatic
+        fun resolveColors(
+            colorMode: Int,
+            customStart: Int,
+            customEnd: Int,
+            accent: Pair<Int, Int>,
+        ): Pair<Int, Int> {
+            if (colorMode != COLOR_MODE_CUSTOM) return accent
+            return (if (customStart != 0) customStart else accent.first) to
+                (if (customEnd != 0) customEnd else accent.second)
+        }
     }
 }
