@@ -7067,6 +7067,12 @@ public final class Settings {
         public static final String STATUSBAR_CLOCK_CHIP = "statusbar_clock_chip";
 
         /**
+         * Clock chip gradient color mode
+         * @hide
+         */
+        public static final String STATUSBAR_CLOCK_CHIP_GRADIENT_COLOR_MODE = "statusbar_clock_chip_gradient_color_mode";
+
+        /**
          * Clock chip custom gradient – start
          * @hide
          */
