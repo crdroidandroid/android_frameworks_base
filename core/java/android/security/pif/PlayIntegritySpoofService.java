@@ -289,6 +289,9 @@ public final class PlayIntegritySpoofService {
                 expandFingerprint(fingerprint);
             }
 
+            mBuildFields.put("DEVICE_INITIAL_SDK_INT",
+                    resolveDeviceInitialSdk(mBuildFields.get("DEVICE"), mDeviceInitialSdkInt));
+
             if (mBuildFields.isEmpty() && mSystemProps.isEmpty()) {
                 mConfigLoaded = false;
                 Log.w(TAG, "PIF config contains no usable fields, ignoring");
@@ -869,11 +872,12 @@ public final class PlayIntegritySpoofService {
                 return true;
             }
 
-            if (field.getType() != String.class) {
+            Object newValue = coerceFieldValue(field.getType(), value, fieldName);
+            if (newValue == null) {
                 return false;
             }
 
-            setStaticField(field, value);
+            setStaticField(field, newValue);
 
             if (mVerboseLogs > 0 || mDebug) {
                 Log.d(TAG + "/Java:" + logSuffix, "[" + fieldName + "]: " + oldValue + " -> " + value);
@@ -883,6 +887,22 @@ public final class PlayIntegritySpoofService {
             Log.e(TAG, "Failed to spoof " + fieldName + ": " + e);
             return false;
         }
+    }
+
+    private Object coerceFieldValue(Class<?> type, String value, String fieldName) {
+        if (type == String.class) return value;
+        try {
+            if (type == int.class) return Integer.parseInt(value);
+            if (type == long.class) return Long.parseLong(value);
+            if (type == boolean.class) return Boolean.parseBoolean(value);
+        } catch (NumberFormatException e) {
+            Log.w(TAG, "Couldn't convert '" + value + "' to " + type.getSimpleName()
+                    + " for " + fieldName);
+            return null;
+        }
+        if (mVerboseLogs > 1) Log.d(TAG, "Unsupported Build field type for "
+                + fieldName + ": " + type.getSimpleName());
+        return null;
     }
 
     private boolean hasField(Class<?> clazz, String fieldName) {
