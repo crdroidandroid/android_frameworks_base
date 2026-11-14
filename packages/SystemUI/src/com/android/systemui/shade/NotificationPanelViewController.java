@@ -3086,8 +3086,7 @@ public final class NotificationPanelViewController implements
         return !isDirectionUpwards(x, y);
     }
 
-    @Override
-    public void fling(float vel, boolean expand, boolean expandBecauseOfFalsing) {
+    private void fling(float vel, boolean expand, boolean expandBecauseOfFalsing) {
         fling(vel, expand, 1.0f /* collapseSpeedUpFactor */, expandBecauseOfFalsing);
     }
 
