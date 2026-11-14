@@ -543,6 +543,7 @@ public final class NotificationPanelViewController implements
 
     private boolean mBrightnessControl;
     private boolean mBrightnessControlLockscreen;
+    private boolean mBrightnessControlEngaged;
 
     private FadingEdgeLayout mQsHeaderLayout;
     private ImageView mQsHeaderImageView;
@@ -4187,10 +4188,6 @@ public final class NotificationPanelViewController implements
             if (event.getAction() == MotionEvent.ACTION_UP
                     || event.getAction() == MotionEvent.ACTION_CANCEL) {
                 mBlockingExpansionForCurrentTouch = false;
-                if (mBrightnessControl) {
-                    mCentralSurfaces.onBrightnessChanged(true);
-                    mCentralSurfaces.cancelBrightnessControl();
-                }
             }
             // When touch focus transfer happens, ACTION_DOWN->ACTION_UP may happen immediately
             // without any ACTION_MOVE event.
@@ -4228,29 +4225,38 @@ public final class NotificationPanelViewController implements
                 mShadeLog.d("Touch has same down time as Status Bar long press. Ignoring.");
                 return false;
             }
+            if (mBrightnessControl) {
+                final int action = event.getActionMasked();
+                if (mBrightnessControlEngaged) {
+                    mCentralSurfaces.brightnessControl(event);
+                    if (action == MotionEvent.ACTION_DOWN
+                            || action == MotionEvent.ACTION_UP
+                            || action == MotionEvent.ACTION_CANCEL) {
+                        mBrightnessControlEngaged = false;
+                        mCentralSurfaces.onBrightnessChanged(true);
+                        mCentralSurfaces.cancelBrightnessControl();
+                     }
+                    return true;
+                }
+                if (!handled) {
+                    final int actionIndex = event.getActionIndex();
+                    final float swipeY = event.getY(actionIndex);
+                    if (swipeY < mStatusBarMinHeight &&
+                            ((mBarState != KEYGUARD && isFullyCollapsed()) ||
+                            (mBarState == KEYGUARD && mBrightnessControlLockscreen))) {
+                        if (mCentralSurfaces.brightnessControl(event)) {
+                            mBrightnessControlEngaged = true;
+                            return true;
+                        }
+                    }
+                }
+            }
             if (!mHeadsUpTouchHelper.isTrackingHeadsUp() && mQsController.handleTouch(
                     event, isFullyCollapsed(), isShadeOrQsHeightAnimationRunning())) {
-                if (mBrightnessControl) {
-                    mCentralSurfaces.cancelBrightnessControl();
-                }
                 if (event.getActionMasked() != MotionEvent.ACTION_MOVE) {
                     mShadeLog.logMotionEvent(event, "onTouch: handleQsTouch handled event");
                 }
                 return true;
-            }
-            if (mBrightnessControl) {
-                final int actionIndex = event.getActionIndex();
-                final float swipeY = event.getY(actionIndex);
-                if (swipeY < mStatusBarMinHeight &&
-                        (mBarState != KEYGUARD || mBrightnessControlLockscreen)) {
-                    mCentralSurfaces.brightnessControl(event);
-                    final int action = event.getActionMasked();
-                    if (action == MotionEvent.ACTION_UP
-                            || action == MotionEvent.ACTION_CANCEL) {
-                        mCentralSurfaces.onBrightnessChanged(true);
-                    }
-                    return true;
-                }
             }
             if (event.getActionMasked() == MotionEvent.ACTION_DOWN && isFullyCollapsed()) {
                 mMetricsLogger.count(COUNTER_PANEL_OPEN, 1);
