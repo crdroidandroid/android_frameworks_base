@@ -662,11 +662,15 @@ constructor(
             .logAlphaForTable(columnName = "alphaForShadeAndQsExpansion")
             .dumpWhileCollecting("alphaForShadeAndQsExpansion")
 
-    private fun alphaForBouncerExpansion(bouncerExpansion: Float): Float {
+    private fun alphaForBouncerExpansion(
+        bouncerExpansion: Float,
+        transitioningToBouncer: Boolean,
+    ): Float {
         // The shade content fades out faster than the bouncer comes in.
         // See lockscreenToOverlayTransition for the definition of how
         // the rest of the content behaves during the transition.
-        return maxOf(0f, 1f - bouncerExpansion * 5f)
+        val multiplier = if (transitioningToBouncer) 20f else 5f
+        return maxOf(0f, 1f - bouncerExpansion * multiplier)
     }
 
     val panelAlpha = keyguardInteractor.panelAlpha
@@ -694,7 +698,19 @@ constructor(
                     sceneInteractor.transitionStateFlow
                         .map { it is ObservableTransitionState.Idle }
                         .distinctUntilChanged(),
-                ) { bouncerExpansion, isNotificationsExpanded, inLockscreenTransition, isIdle ->
+                    sceneInteractor.transitionStateFlow
+                        .map { state ->
+                            state is ObservableTransitionState.Transition &&
+                                state.toContent == Overlays.Bouncer
+                        }
+                        .distinctUntilChanged(),
+                ) {
+                    bouncerExpansion,
+                    isNotificationsExpanded,
+                    inLockscreenTransition,
+                    isIdle,
+                    transitioningToBouncer,
+                    ->
                     if (isNotificationsExpanded) {
                         // While the notifications Shade is expanded, always keep the shade opaque.
                         // This is expected during the transition to bouncer and as long the bouncer
@@ -709,7 +725,7 @@ constructor(
                         // keyguard states on the lockscreen scene). Otherwise, let any other
                         // relevant transition values declare the alpha if necessary.
                         if (inLockscreenTransition) {
-                            emit(alphaForBouncerExpansion(bouncerExpansion))
+                            emit(alphaForBouncerExpansion(bouncerExpansion, transitioningToBouncer))
                         }
                     } else if (isIdle) {
                         // Once bouncer is fully gone *and* the system is at rest, emit 1 to make
