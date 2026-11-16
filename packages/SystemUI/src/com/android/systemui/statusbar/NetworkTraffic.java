@@ -220,10 +220,17 @@ public class NetworkTraffic extends TextView implements DarkReceiver, StatusIcon
     }
 
     private void updateVisibility() {
-        final boolean shown = mWantVisible && mVisibleState == STATE_ICON;
-        if (shown != mShown) {
-            mShown = shown;
-            setVisibility(shown ? View.VISIBLE : View.GONE);
+        final int visibility;
+        if (!mWantVisible) {
+            visibility = View.GONE;
+        } else if (mVisibleState == STATE_ICON) {
+            visibility = View.VISIBLE;
+        } else {
+            visibility = View.INVISIBLE;
+        }
+        mShown = visibility == View.VISIBLE;
+        if (getVisibility() != visibility) {
+            setVisibility(visibility);
         }
     }
 
