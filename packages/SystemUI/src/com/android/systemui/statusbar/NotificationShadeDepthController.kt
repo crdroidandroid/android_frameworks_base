@@ -655,7 +655,10 @@ constructor(
                 }
             }
         } else {
-            animateBlur(false, 0f)
+            if (isBlurred || shadeAnimation.radius != 0f) {
+                shadeAnimation.skipTo(0)
+            }
+            isBlurred = false
             isClosed = true
             isOpen = false
         }

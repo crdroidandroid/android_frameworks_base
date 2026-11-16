@@ -263,7 +263,7 @@ class NotificationShadeDepthControllerTest : SysuiTestCase() {
 
         statusBarState = StatusBarState.KEYGUARD
         statusBarStateListener.onStateChanged(statusBarState)
-        verify(shadeAnimation).animateTo(eq(0))
+        verify(shadeAnimation).skipTo(eq(0))
     }
 
     @Test
@@ -273,7 +273,7 @@ class NotificationShadeDepthControllerTest : SysuiTestCase() {
         clearInvocations(choreographer)
         statusBarState = StatusBarState.KEYGUARD
         statusBarStateListener.onStateChanged(statusBarState)
-        verify(shadeAnimation).animateTo(eq(0))
+        verify(shadeAnimation).skipTo(eq(0))
 
         clearInvocations(shadeAnimation)
         statusBarState = StatusBarState.SHADE
