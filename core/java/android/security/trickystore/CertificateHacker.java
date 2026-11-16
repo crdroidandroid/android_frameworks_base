@@ -1,5 +1,6 @@
 package android.security.trickystore;
 
+import android.os.Build;
 import android.util.Log;
 
 import com.android.internal.org.bouncycastle.asn1.ASN1Boolean;
@@ -39,6 +40,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.PrivateKey;
 import java.security.cert.Certificate;
@@ -47,7 +49,7 @@ import java.security.cert.X509Certificate;
 import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.RSAPrivateCrtKey;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -95,11 +97,10 @@ public final class CertificateHacker {
             }
             ASN1Sequence teeEnforced = (ASN1Sequence) encodables[7];
 
-            // Attestation-ID (hardware identity) overrides. Empty here: the leaf's
-            // real BRAND/DEVICE/PRODUCT/MANUFACTURER/MODEL tags pass through untouched.
-            // If a Build-spoof subsystem is added later, populate this map (tag -> UTF-8
-            // bytes) and the drop/re-add logic below keeps the certified identity and the
-            // GMS-visible Build fields in agreement.
+            // Attestation-ID (hardware identity) overrides, keyed by KeyMint tag
+            // number. The leaf's real BRAND/DEVICE/PRODUCT/MANUFACTURER/MODEL tags are
+            // replaced with the process's (possibly spoofed) Build values so the
+            // certified identity and the GMS-visible Build fields stay in agreement.
             Map<Integer, byte[]> attestationIdOverrides = getAttestationIdOverrides();
 
             ASN1EncodableVector vector = new ASN1EncodableVector();
@@ -335,15 +336,27 @@ public final class CertificateHacker {
      * Hardware-identity (attestation-ID) overrides, keyed by KeyMint tag number
      * (710 BRAND, 711 DEVICE, 712 PRODUCT, 716 MANUFACTURER, 717 MODEL).
      *
-     * This build has no Build-spoof subsystem, so the map is empty and the leaf's
-     * real identity tags pass through unchanged. To integrate one later, return a
-     * populated map here (tag -> UTF-8 bytes); hackCertificateChain() already drops
-     * the originals for any tag present in this map and hackAttestExtension() re-adds
-     * the override, so the attestation cert and the GMS-visible Build fields stay
-     * consistent with no other changes.
+     * PlayIntegritySpoofService spoofs the Build fields in the GMS process, so a
+     * re-signed hardware leaf must carry that same identity or the attestation
+     * cert and the GMS-visible Build fields would disagree. Each tag is overridden
+     * with the process's (possibly spoofed) Build value; empty values are left
+     * alone so the hardware identity passes through unchanged for those tags.
      */
     private static Map<Integer, byte[]> getAttestationIdOverrides() {
-        return Collections.emptyMap();
+        Map<Integer, byte[]> overrides = new HashMap<>();
+        putIdentityOverride(overrides, 710, Build.BRAND);
+        putIdentityOverride(overrides, 711, Build.DEVICE);
+        putIdentityOverride(overrides, 712, Build.PRODUCT);
+        putIdentityOverride(overrides, 716, Build.MANUFACTURER);
+        putIdentityOverride(overrides, 717, Build.MODEL);
+        return overrides;
+    }
+
+    private static void putIdentityOverride(Map<Integer, byte[]> overrides, int tag, String value) {
+        if (value == null || value.isEmpty()) {
+            return;
+        }
+        overrides.put(tag, value.getBytes(StandardCharsets.UTF_8));
     }
 
     private static Extension hackAttestExtension(
