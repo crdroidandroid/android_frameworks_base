@@ -102,10 +102,16 @@ constructor(
         val bounceables =
             remember(sizedTiles) { List(sizedTiles.size) { BounceableTileViewModel() } }
         val spans by remember(sizedTiles) { derivedStateOf { sizedTiles.fastMap { it.width } } }
+        val spacingScale = (4f / columns.coerceAtLeast(1)).coerceAtMost(1f)
+        val columnSpacing = dimensionResource(R.dimen.qs_tile_margin_horizontal) * spacingScale
+        val rowSpacing =
+            if (classicStyle) columnSpacing
+            else dimensionResource(R.dimen.qs_tile_margin_vertical) * spacingScale
+
         VerticalSpannedGrid(
             columns = columns,
-            columnSpacing = dimensionResource(R.dimen.qs_tile_margin_horizontal),
-            rowSpacing = dimensionResource(R.dimen.qs_tile_margin_vertical),
+            columnSpacing = columnSpacing,
+            rowSpacing = rowSpacing,
             spans = spans,
             keys = { sizedTiles[it].tile.spec },
             modifier = modifier,
