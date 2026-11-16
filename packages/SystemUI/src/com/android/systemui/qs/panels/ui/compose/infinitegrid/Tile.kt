@@ -283,14 +283,16 @@ fun ContentScope.Tile(
                             .fillMaxWidth()
                             .height(tileHeight)
                             .tileToggleAnimation(animationStyle, uiState.visualState)
-                            .bounceable(
-                                currentBounceableInfo.bounceable,
-                                currentBounceableInfo.previousTile,
-                                currentBounceableInfo.nextTile,
-                                orientation = Orientation.Horizontal,
-                                bounceEnd = currentBounceableInfo.bounceEnd,
-                                interactionSource = interactionSource,
-                            ),
+                            .thenIf(!classicStyle && !iconOnly) {
+                                Modifier.bounceable(
+                                    currentBounceableInfo.bounceable,
+                                    currentBounceableInfo.previousTile,
+                                    currentBounceableInfo.nextTile,
+                                    orientation = Orientation.Horizontal,
+                                    bounceEnd = currentBounceableInfo.bounceEnd,
+                                    interactionSource = interactionSource,
+                                )
+                            },
                 ) { expandable ->
                     // Use main click on long press for small, available dual target tiles.
                     // Open settings otherwise.
@@ -314,9 +316,9 @@ fun ContentScope.Tile(
                             }
                             .takeIf { !useLongClickToSettings || uiState.handlesSettingsClick }
 
-                    // Bounce the tile's container if it is toggleable and is not a large
-                    // dual target tile. These don't toggle on main click.
-                    val bounceContainer = uiState.isToggleable && (iconOnly || !isDualTarget)
+                    // Square tiles bounce their content without resizing neighboring tiles.
+                    val bounceContainer =
+                        !classicStyle && !iconOnly && uiState.isToggleable && !isDualTarget
                     val click: (() -> Unit)? =
                         onClick@{
                                 if (!isClickable) return@onClick
