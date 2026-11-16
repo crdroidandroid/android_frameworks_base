@@ -15,6 +15,7 @@ import javax.inject.Inject
 import kotlin.math.abs
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -149,6 +150,12 @@ constructor(
             .stateIn(applicationScope, SharingStarted.Lazily, "")
 
     val isOnKeyguard: StateFlow<Boolean> = interactor.isOnKeyguard
+
+    val isShowingOnStatusBar: Flow<Boolean> =
+        combine(isEnabled, chipState, isOnKeyguard) { enabled, state, onKeyguard ->
+                enabled && state != null && !onKeyguard
+            }
+            .distinctUntilChanged()
 
     val isKeyguardFadingAway: StateFlow<Boolean> = interactor.isKeyguardFadingAway
 
