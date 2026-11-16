@@ -25,10 +25,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.toMutableStateList
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.util.fastMap
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.android.compose.animation.scene.ContentScope
@@ -41,6 +41,8 @@ import com.android.systemui.qs.panels.ui.compose.EditTileListState
 import com.android.systemui.qs.panels.ui.compose.PaginatableGridLayout
 import com.android.systemui.qs.panels.ui.compose.TileListener
 import com.android.systemui.qs.panels.ui.compose.bounceableInfo
+import com.android.systemui.qs.panels.ui.compose.qsTileColumnSpacing
+import com.android.systemui.qs.panels.ui.compose.qsTileRowSpacing
 import com.android.systemui.qs.panels.ui.viewmodel.BounceableTileViewModel
 import com.android.systemui.qs.panels.ui.viewmodel.DetailsViewModel
 import com.android.systemui.qs.panels.ui.viewmodel.EditTileViewModel
@@ -50,7 +52,6 @@ import com.android.systemui.qs.panels.ui.viewmodel.TextFeedbackContentViewModel
 import com.android.systemui.qs.panels.ui.viewmodel.TileViewModel
 import com.android.systemui.qs.pipeline.shared.TileSpec
 import com.android.systemui.qs.shared.ui.QuickSettings.Elements.toElementKey
-import com.android.systemui.res.R
 import com.android.systemui.shade.shared.flag.DualShadeFlag
 import javax.inject.Inject
 import kotlinx.coroutines.launch
@@ -104,8 +105,9 @@ constructor(
         val spans by remember(sizedTiles) { derivedStateOf { sizedTiles.fastMap { it.width } } }
         VerticalSpannedGrid(
             columns = columns,
-            columnSpacing = dimensionResource(R.dimen.qs_tile_margin_horizontal),
-            rowSpacing = dimensionResource(R.dimen.qs_tile_margin_vertical),
+            verticalAlignment = Alignment.CenterVertically,
+            columnSpacing = qsTileColumnSpacing(columns),
+            rowSpacing = qsTileRowSpacing(columns, classicStyle),
             spans = spans,
             keys = { sizedTiles[it].tile.spec },
             modifier = modifier,
@@ -127,6 +129,10 @@ constructor(
                             columns = columns,
                             isFirstInRow = isFirstInColumn,
                             isLastInRow = isLastInColumn,
+                            bouncesContainer = { index ->
+                                !classicStyle &&
+                                    !iconTilesViewModel.isIconTile(sizedTiles[index].tile.spec)
+                            },
                         ),
                     detailsViewModel = detailsViewModel,
                     isVisible = listening,
