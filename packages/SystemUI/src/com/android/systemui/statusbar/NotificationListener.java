@@ -152,15 +152,24 @@ public class NotificationListener extends NotificationListenerWithPlugins implem
             if (!isKeyInRankingMap(key, rankingMap)) {
                 Log.wtf(TAG, "Missing ranking after plugins for " + key);
             }
+            final boolean isSilent = isSilent(key, rankingMap);
             mMainExecutor.execute(() -> {
                 for (NotificationHandler handler : mNotificationHandlers) {
                     handler.onNotificationPosted(sbn, rankingMap);
                 }
-                ScrimUtils.get().onNotificationPosted(sbn);
+                ScrimUtils.get().onNotificationPosted(sbn, isSilent);
             });
         } else if (isKeyInRankingMap(key, rankingMap)) {
             Log.wtf(TAG, "Plugin prevented post but left ranking " + key);
         }
+    }
+
+    private static boolean isSilent(String key, RankingMap rankingMap) {
+        final Ranking ranking = new Ranking();
+        if (rankingMap == null || !rankingMap.getRanking(key, ranking)) return false;
+        return ranking.getImportance() < NotificationManager.IMPORTANCE_DEFAULT
+                || (ranking.getSuppressedVisualEffects()
+                        & NotificationManager.Policy.SUPPRESSED_EFFECT_PEEK) != 0;
     }
 
     @Override
