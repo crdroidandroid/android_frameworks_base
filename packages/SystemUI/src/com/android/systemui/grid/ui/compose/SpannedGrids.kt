@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.semantics.CollectionInfo
@@ -111,6 +112,7 @@ fun VerticalSpannedGrid(
     rowSpacing: Dp,
     spans: List<Int>,
     modifier: Modifier = Modifier,
+    verticalAlignment: Alignment.Vertical = Alignment.Top,
     keys: (spanIndex: Int) -> Any = { it },
     composables:
         @Composable
@@ -123,6 +125,7 @@ fun VerticalSpannedGrid(
         spans = spans,
         isVertical = true,
         modifier = modifier,
+        verticalAlignment = verticalAlignment,
         keys = keys,
         composables = composables,
     )
@@ -136,6 +139,7 @@ private fun SpannedGrid(
     spans: List<Int>,
     isVertical: Boolean,
     modifier: Modifier = Modifier,
+    verticalAlignment: Alignment.Vertical = Alignment.Top,
     keys: (spanIndex: Int) -> Any = { it },
     composables:
         @Composable
@@ -243,6 +247,7 @@ private fun SpannedGrid(
         var mainAxisTotalSize = mainAxisTotalGaps
         var currentMainAxis = 0
         var currentMainAxisMax = 0
+        val mainAxisGroupSizes = IntArray(totalMainAxisGroups)
         val placeables =
             measurables.fastMapIndexed { index, measurable ->
                 val span = spans[index]
@@ -256,6 +261,8 @@ private fun SpannedGrid(
                     )
                     .also {
                         val placeableSize = if (isVertical) it.height else it.width
+                        mainAxisGroupSizes[position.first] =
+                            max(mainAxisGroupSizes[position.first], placeableSize)
                         if (position.first != currentMainAxis) {
                             // New row -- Add the max size to the total and reset the max
                             mainAxisTotalSize += currentMainAxisMax
@@ -296,7 +303,11 @@ private fun SpannedGrid(
                     }
                 val y =
                     if (isVertical) {
-                        currentMainAxisPosition
+                        currentMainAxisPosition +
+                            verticalAlignment.align(
+                                placeable.height,
+                                mainAxisGroupSizes[positions[index].first],
+                            )
                     } else {
                         startPositions[slot]
                     }

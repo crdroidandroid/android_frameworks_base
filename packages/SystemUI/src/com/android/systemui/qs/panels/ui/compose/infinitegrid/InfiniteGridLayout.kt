@@ -25,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.toMutableStateList
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
@@ -110,6 +111,7 @@ constructor(
 
         VerticalSpannedGrid(
             columns = columns,
+            verticalAlignment = Alignment.CenterVertically,
             columnSpacing = columnSpacing,
             rowSpacing = rowSpacing,
             spans = spans,
