@@ -1310,8 +1310,14 @@ fun EditTile(
                     // Always display the tile using the large size and trust the parent composable
                     // to clip the content as needed. This stop the labels from being truncated.
                     val width =
-                        max?.roundToInt()?.takeIf { it > constraints.maxWidth }
-                            ?: constraints.maxWidth
+                        maxOf(
+                            max?.roundToInt() ?: 0,
+                            constraints.maxWidth,
+                            (toggleTargetSize +
+                                    defaultStartPadding +
+                                    CommonTileDefaults.TileEndPadding)
+                                .roundToPx(),
+                        )
                     val placeable =
                         measurable.measure(constraints.copy(minWidth = width, maxWidth = width))
 

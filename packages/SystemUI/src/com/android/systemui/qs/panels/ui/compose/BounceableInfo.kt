@@ -28,7 +28,11 @@ data class BounceableInfo(
     val previousTile: Bounceable?,
     val nextTile: Bounceable?,
     val bounceEnd: Boolean,
-)
+) {
+    /** Whether the container has any side it can grow towards when bouncing. */
+    val canBounceContainer: Boolean
+        get() = previousTile != null || nextTile != null || bounceEnd
+}
 
 fun List<BounceableTileViewModel>.bounceableInfo(
     sizedTile: SizedTile<TileViewModel>,
@@ -37,15 +41,19 @@ fun List<BounceableTileViewModel>.bounceableInfo(
     columns: Int,
     isFirstInRow: Boolean,
     isLastInRow: Boolean,
+    bouncesContainer: (index: Int) -> Boolean = { true },
 ): BounceableInfo {
     // A tile may be the last in the row without being on the last column
     val onLastColumn = sizedTile.onLastColumn(column, columns)
 
-    // Only look for neighbor bounceables if they are on the same row
-    val previousTile = getOrNull(index - 1)?.takeIf { !isFirstInRow }
-    val nextTile = getOrNull(index + 1)?.takeIf { !isLastInRow }
+    // Only look for neighbor bounceables if they are on the same row. Neighbors that don't bounce
+    // their container never shrink to make room, so don't grow towards them either.
+    val nextBounces = !isLastInRow && bouncesContainer(index + 1)
+    val previousTile = getOrNull(index - 1)?.takeIf { !isFirstInRow && bouncesContainer(index - 1) }
+    val nextTile = getOrNull(index + 1)?.takeIf { nextBounces }
+    val bounceEnd = !onLastColumn && (isLastInRow || nextBounces)
 
-    return BounceableInfo(this[index], previousTile, nextTile, !onLastColumn)
+    return BounceableInfo(this[index], previousTile, nextTile, bounceEnd)
 }
 
 private fun <T> SizedTile<T>.onLastColumn(column: Int, columns: Int): Boolean {

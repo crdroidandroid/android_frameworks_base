@@ -41,6 +41,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -68,6 +70,12 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.layout.Measurable
+import androidx.compose.ui.layout.MeasureResult
+import androidx.compose.ui.layout.MeasureScope
+import androidx.compose.ui.node.LayoutModifierNode
+import androidx.compose.ui.node.ModifierNodeElement
+import androidx.compose.ui.node.invalidateMeasurement
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -79,9 +87,11 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.semantics.toggleableState
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.constrainHeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.trace
 import com.android.app.tracing.coroutines.launchTraced as launch
@@ -203,11 +213,11 @@ fun ContentScope.Tile(
         val classicStyle = rememberQSPanelStyle()
         val iconShapeKey = rememberQSTileIconShapeKey()
         val labelHide = classicStyle && rememberQSTileLabelHide()
-        val tileHeight = if (!classicStyle || labelHide) {
-            CommonTileDefaults.TileHeight
-        } else {
-            CommonTileDefaults.TileHeight + 32.dp
-        }
+        // Classic and icon-only tiles are capped to their cell width so that they stay square
+        // (or circular) in dense grids. Large tiles keep the fixed height.
+        val compactTile = classicStyle || iconOnly
+        val tileHeight = CommonTileDefaults.TileHeight
+        val labelHeight = if (classicStyle && !labelHide) ClassicTileLabelHeight else 0.dp
 
         val shapeMode = rememberTileShapeMode()
         val animationStyle = rememberQSTileAnimationStyle()
@@ -271,23 +281,33 @@ fun ContentScope.Tile(
                     modifier
                         .then(surfaceRevealModifier)
                         .thenIf(!wantCircle) {
-                            modifier.borderOnFocus(
+                            Modifier.borderOnFocus(
                                 color = focusBorderColor,
                                 outerShape.topEnd,
                             )
                         }
                         .sysuiResTag("tile_expandable")
                         .fillMaxWidth()
-                        .height(tileHeight)
+                        .then(
+                            if (compactTile) {
+                                Modifier.compactTileHeight(tileHeight, labelHeight)
+                            } else {
+                                Modifier.height(tileHeight)
+                            }
+                        )
                         .tileToggleAnimation(animationStyle, uiState.visualState)
-                        .bounceable(
-                            currentBounceableInfo.bounceable,
-                            currentBounceableInfo.previousTile,
-                            currentBounceableInfo.nextTile,
-                            orientation = Orientation.Horizontal,
-                            bounceEnd = currentBounceableInfo.bounceEnd,
-                            interactionSource = interactionSource,
-                        ),
+                        // Compact tiles bounce their content instead, so that they keep their
+                        // aspect ratio and don't resize their neighbors.
+                        .thenIf(!compactTile) {
+                            Modifier.bounceable(
+                                currentBounceableInfo.bounceable,
+                                currentBounceableInfo.previousTile,
+                                currentBounceableInfo.nextTile,
+                                orientation = Orientation.Horizontal,
+                                bounceEnd = currentBounceableInfo.bounceEnd,
+                                interactionSource = interactionSource,
+                            )
+                        },
             ) { expandable ->
                 // Use main click on long press for small, available dual target tiles.
                 // Open settings otherwise.
@@ -311,9 +331,14 @@ fun ContentScope.Tile(
                         }
                         .takeIf { !useLongClickToSettings || uiState.handlesSettingsClick }
 
-                // Bounce the tile's container if it is toggleable and is not a large
-                // dual target tile. These don't toggle on main click.
-                val bounceContainer = uiState.isToggleable && (iconOnly || !isDualTarget)
+                // Bounce the tile's container if it is a toggleable large tile that is not dual
+                // target (these don't toggle on main click) and has room to grow. Compact tiles
+                // always bounce their content.
+                val bounceContainer =
+                    !compactTile &&
+                        uiState.isToggleable &&
+                        !isDualTarget &&
+                        currentBounceableInfo.canBounceContainer
                 val click: (() -> Unit)? =
                     onClick@{
                             if (!isClickable) return@onClick
@@ -339,8 +364,12 @@ fun ContentScope.Tile(
                             coroutineScope.launch {
                                 // Bounce the content of the tile if we're not animating the
                                 // container.
+                                // Classic tiles only render the icon bounce (no text bounce), so
+                                // use it for them even when they aren't icon only.
                                 if (!bounceContainer) {
-                                    currentBounceableInfo.bounceable.animateContentBounce(iconOnly)
+                                    currentBounceableInfo.bounceable.animateContentBounce(
+                                        iconOnly || classicStyle
+                                    )
                                 }
                             }
                             if (uiState.isToggleable && iconOnly) {
@@ -354,14 +383,15 @@ fun ContentScope.Tile(
                     Box(Modifier.fillMaxSize()) {
                         Box(
                             modifier = Modifier
-                                .thenIf(classicStyle) { 
+                                .thenIf(classicStyle) {
                                     Modifier
-                                        .fillMaxSize() 
+                                        .fillMaxSize()
                                         .align(Alignment.TopCenter)
                                 }
                                 .thenIf(!classicStyle) {
                                     Modifier
-                                        .size(tileHeight)
+                                        .fillMaxHeight()
+                                        .aspectRatio(1f, matchHeightConstraintsFirst = true)
                                         .align(Alignment.Center)
                                         .clip(CircleShape)
                                         .then(
@@ -461,6 +491,45 @@ fun ContentScope.Tile(
                 }
             }
         }
+    }
+}
+
+/** Height of the label area below the icon of classic tiles. */
+private val ClassicTileLabelHeight = 32.dp
+
+/**
+ * Sets the height of a compact tile to its icon box size, capped by the incoming width so that the
+ * icon box stays square in dense grids, plus [extraHeight] for the labels.
+ */
+private fun Modifier.compactTileHeight(maxIconBoxSize: Dp, extraHeight: Dp): Modifier =
+    this then CompactTileHeightElement(maxIconBoxSize, extraHeight)
+
+private data class CompactTileHeightElement(val maxIconBoxSize: Dp, val extraHeight: Dp) :
+    ModifierNodeElement<CompactTileHeightNode>() {
+    override fun create() = CompactTileHeightNode(maxIconBoxSize, extraHeight)
+
+    override fun update(node: CompactTileHeightNode) {
+        if (node.maxIconBoxSize != maxIconBoxSize || node.extraHeight != extraHeight) {
+            node.maxIconBoxSize = maxIconBoxSize
+            node.extraHeight = extraHeight
+            node.invalidateMeasurement()
+        }
+    }
+}
+
+private class CompactTileHeightNode(var maxIconBoxSize: Dp, var extraHeight: Dp) :
+    Modifier.Node(), LayoutModifierNode {
+    override fun MeasureScope.measure(
+        measurable: Measurable,
+        constraints: Constraints,
+    ): MeasureResult {
+        val maxBoxPx = maxIconBoxSize.roundToPx()
+        val boxPx =
+            if (constraints.hasBoundedWidth) minOf(maxBoxPx, constraints.maxWidth) else maxBoxPx
+        val height = constraints.constrainHeight(boxPx + extraHeight.roundToPx())
+        val placeable =
+            measurable.measure(constraints.copy(minHeight = height, maxHeight = height))
+        return layout(placeable.width, placeable.height) { placeable.place(0, 0) }
     }
 }
 
