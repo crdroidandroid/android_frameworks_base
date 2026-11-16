@@ -78,6 +78,7 @@ import com.android.systemui.statusbar.pipeline.battery.ui.viewmodel.BatteryViewM
 import com.android.systemui.statusbar.pipeline.shared.domain.interactor.HomeStatusBarIconBlockListInteractor
 import com.android.systemui.statusbar.pipeline.shared.domain.interactor.HomeStatusBarInteractor
 import com.android.systemui.statusbar.pipeline.shared.domain.interactor.StatusBarVisibilityInteractor
+import com.android.systemui.axdynamicbar.ui.AxDynamicBarChipViewModel
 import com.android.systemui.statusbar.pipeline.shared.ui.model.ChipsVisibilityModel
 import com.android.systemui.statusbar.pipeline.shared.ui.model.SystemInfoCombinedVisibilityModel
 import com.android.systemui.statusbar.pipeline.shared.ui.model.VisibilityModel
@@ -311,6 +312,7 @@ constructor(
     private val userLogoutInteractor: UserLogoutInteractor,
     private val scrollToTopInteractor: ScrollToTopInteractor,
     private val headsUpNotificationInteractor: HeadsUpNotificationInteractor,
+    axDynamicBarChipViewModel: AxDynamicBarChipViewModel,
 ) : HomeStatusBarViewModel, HydratedActivatable(enableEnqueuedActivations = true) {
 
     val logger = loggerFactory.getOrCreate(logBufferName(thisDisplayId), 60)
@@ -555,8 +557,10 @@ constructor(
         combine(
             hasOngoingActivityChips,
             statusBarVisibilityInteractor.canShowOngoingActivityChips,
-        ) { hasChips, canShowChips ->
-            hasChips && canShowChips
+            axDynamicBarChipViewModel.isEnabled,
+            axDynamicBarChipViewModel.chipState,
+        ) { hasChips, canShowChips, axEnabled, axChip ->
+            (hasChips && canShowChips) || (axEnabled && axChip != null)
         }
 
     override val hideStartSideContentForHeadsUp: Flow<Boolean> =
