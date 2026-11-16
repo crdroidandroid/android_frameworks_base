@@ -83,6 +83,7 @@ public class NotificationBackgroundView extends View implements Dumpable,
     private boolean mBlurBackgroundEnabled;
     // When true, the blur region is forced to alpha 0 (dropped from the aggregator) but kept around.
     private boolean mBlurRegionSuppressed;
+    private boolean mBlurHiddenInShelf;
     private int mBlurViewAlpha = 255;
     private final Rect mBlurBounds = new Rect();
 
@@ -401,6 +402,14 @@ public class NotificationBackgroundView extends View implements Dumpable,
         super.onDetachedFromWindow();
     }
 
+    @Override
+    public void onVisibilityAggregated(boolean isVisible) {
+        super.onVisibilityAggregated(isVisible);
+        if (mBackgroundBlurDrawable != null && mBackgroundBlurDrawable.isVisible() != isVisible) {
+            mBackgroundBlurDrawable.setVisible(isVisible, false);
+        }
+    }
+
     private void createBlurDrawable() {
         if (mBackgroundBlurDrawable != null || getViewRootImpl() == null) {
             return;
@@ -411,6 +420,9 @@ public class NotificationBackgroundView extends View implements Dumpable,
         mBackgroundBlurDrawable.setXfermode(null);
         mBackgroundBlurDrawable.setCallback(this);
         mBackgroundBlurDrawable.setColor(mTintColor != 0 ? mTintColor : mNormalColor);
+        if (!isAggregatedVisible()) {
+            mBackgroundBlurDrawable.setVisible(false, false);
+        }
         updateBlurAlpha();
         updateBackgroundRadii();
         invalidate();
@@ -430,8 +442,20 @@ public class NotificationBackgroundView extends View implements Dumpable,
         if (mBackgroundBlurDrawable == null) {
             return;
         }
-        final int alpha = mBlurRegionSuppressed ? 0 : mDrawableAlpha * mBlurViewAlpha / 255;
+        final int alpha = mBlurRegionSuppressed || mBlurHiddenInShelf
+                ? 0 : mDrawableAlpha * mBlurViewAlpha / 255;
         mBackgroundBlurDrawable.setAlpha(alpha);
+    }
+
+    public void setBlurHiddenInShelf(boolean hidden) {
+        if (mBlurHiddenInShelf == hidden) {
+            return;
+        }
+        mBlurHiddenInShelf = hidden;
+        if (mBackgroundBlurDrawable != null) {
+            updateBlurAlpha();
+            invalidate();
+        }
     }
 
     public void setBlurViewAlpha(float alpha) {
