@@ -132,6 +132,7 @@ fun ClassicTileContent(
     iconShapeKey: String,
     colors: TileColors,
     labelHide: Boolean,
+    iconBoxSize: Dp,
     modifier: Modifier = Modifier,
 ) {
     val isNoBackground = iconShapeKey in QSTileIconShapes.NO_BACKGROUND_KEYS
@@ -155,7 +156,6 @@ fun ClassicTileContent(
     val animatedColor by animateColorAsState(colors.background, label = "QSTileCircleBgColor")
     val animatedOutlineColor by animateColorAsState(colors.outline, label = "QSTileOutlineColor")
 
-    val iconBoxSize = CommonTileDefaults.TileHeight
     val iconSize = CommonTileDefaults.LargeTileIconSize
 
     Column(
