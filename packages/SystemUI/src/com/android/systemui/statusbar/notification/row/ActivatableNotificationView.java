@@ -895,6 +895,14 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
     }
 
     @Override
+    public void setInShelf(boolean inShelf) {
+        super.setInShelf(inShelf);
+        if (mBackgroundNormal != null) {
+            mBackgroundNormal.setBlurHiddenInShelf(inShelf);
+        }
+    }
+
+    @Override
     public void setAlpha(float alpha) {
         super.setAlpha(alpha);
         if (mBackgroundNormal != null) {
