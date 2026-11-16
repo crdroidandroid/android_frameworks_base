@@ -251,7 +251,7 @@ constructor(
                 notificationRemovedFlow.tryEmit(sbn.key)
             }
 
-            override fun onNotificationPosted(sbn: StatusBarNotification) {
+            override fun onNotificationPosted(sbn: StatusBarNotification, isSilent: Boolean) {
                 if (!listening) return
                 val pkg = sbn.packageName ?: return
                 val extras = sbn.notification?.extras ?: return
@@ -464,6 +464,17 @@ constructor(
                 }
                 if (sbn.isOngoing) return
                 if ("notification" in disabledTypes) return
+                if (isSilent) {
+                    seenSignatures.remove(sbn.key)
+                    synchronized(notificationLock) {
+                        if (activeNotificationKeys.remove(sbn.key)) {
+                            _notificationEvents.update { list ->
+                                list.filter { it.sbn.key != sbn.key }
+                            }
+                        }
+                    }
+                    return
+                }
                 val category = sbn.notification?.category
                 if (category == Notification.CATEGORY_TRANSPORT) return
                 if (category == Notification.CATEGORY_SERVICE && !hasProgress) return
