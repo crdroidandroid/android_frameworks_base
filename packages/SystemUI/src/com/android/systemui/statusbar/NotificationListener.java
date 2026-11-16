@@ -152,11 +152,14 @@ public class NotificationListener extends NotificationListenerWithPlugins implem
             if (!isKeyInRankingMap(key, rankingMap)) {
                 Log.wtf(TAG, "Missing ranking after plugins for " + key);
             }
+            final Ranking ranking = new Ranking();
+            final boolean isSilent = rankingMap.getRanking(key, ranking)
+                    && ranking.getImportance() < NotificationManager.IMPORTANCE_DEFAULT;
             mMainExecutor.execute(() -> {
                 for (NotificationHandler handler : mNotificationHandlers) {
                     handler.onNotificationPosted(sbn, rankingMap);
                 }
-                ScrimUtils.get().onNotificationPosted(sbn);
+                ScrimUtils.get().onNotificationPosted(sbn, isSilent);
             });
         } else if (isKeyInRankingMap(key, rankingMap)) {
             Log.wtf(TAG, "Plugin prevented post but left ranking " + key);
