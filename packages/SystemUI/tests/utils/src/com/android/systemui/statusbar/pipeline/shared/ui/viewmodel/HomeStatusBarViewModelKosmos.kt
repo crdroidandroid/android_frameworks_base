@@ -18,6 +18,7 @@ package com.android.systemui.statusbar.pipeline.shared.ui.viewmodel
 
 import android.content.res.mainResources
 import android.content.testableContext
+import com.android.systemui.axdynamicbar.ui.axDynamicBarChipViewModel
 import com.android.systemui.desktop.domain.interactor.desktopInteractor
 import com.android.systemui.keyguard.domain.interactor.keyguardInteractor
 import com.android.systemui.keyguard.domain.interactor.keyguardTransitionInteractor
@@ -42,6 +43,7 @@ import com.android.systemui.statusbar.layout.ui.viewmodel.statusBarBoundsViewMod
 import com.android.systemui.statusbar.layout.ui.viewmodel.statusBarContentInsetsViewModel
 import com.android.systemui.statusbar.notification.domain.interactor.activeNotificationsInteractor
 import com.android.systemui.statusbar.notification.icon.domain.interactor.statusBarNotificationIconsInteractor
+import com.android.systemui.statusbar.notification.stack.domain.interactor.headsUpNotificationInteractor
 import com.android.systemui.statusbar.phone.domain.interactor.darkIconInteractor
 import com.android.systemui.statusbar.phone.domain.interactor.lightsOutInteractor
 import com.android.systemui.statusbar.pipeline.battery.ui.viewmodel.batteryViewModelBasedOnSettingFactory
@@ -113,6 +115,8 @@ var Kosmos.homeStatusBarViewModelFactory: (Int) -> HomeStatusBarViewModel by
                 deviceProvisioningInteractor = deviceProvisioningInteractor,
                 userLogoutInteractor = userLogoutInteractor,
                 scrollToTopInteractor = scrollToTopInteractor,
+                headsUpNotificationInteractor = headsUpNotificationInteractor,
+                axDynamicBarChipViewModel = axDynamicBarChipViewModel,
             )
         }
     }
