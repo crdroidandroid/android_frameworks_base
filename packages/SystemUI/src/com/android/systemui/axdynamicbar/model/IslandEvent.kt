@@ -1,6 +1,7 @@
 package com.android.systemui.axdynamicbar.model
 
 import android.app.Notification
+import android.app.PendingIntent
 import android.app.RemoteInput
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -56,6 +57,7 @@ sealed class IslandEvent(open val priority: Int, val id: String) : Comparable<Is
         val actions: List<NotificationAction> = emptyList(),
         val appIcon: Drawable? = null,
         val pausedDurationMs: Long = 0L,
+        val contentIntent: PendingIntent? = null,
     ) : IslandEvent(priority = 84, id = "audio_recording") {
         override fun withoutDrawables() = copy(appIcon = null)
     }
@@ -216,6 +218,7 @@ sealed class IslandEvent(open val priority: Int, val id: String) : Comparable<Is
         val appIcon: Drawable? = null,
         val isPaused: Boolean = false,
         val actions: List<NotificationAction> = emptyList(),
+        val contentIntent: PendingIntent? = null,
     ) : IslandEvent(priority = 45, id = "timer") {
         override fun withoutDrawables() = copy(appIcon = null)
     }
@@ -226,6 +229,7 @@ sealed class IslandEvent(open val priority: Int, val id: String) : Comparable<Is
         val isRunning: Boolean = true,
         val appIcon: Drawable? = null,
         val actions: List<NotificationAction> = emptyList(),
+        val contentIntent: PendingIntent? = null,
     ) : IslandEvent(priority = 44, id = "stopwatch") {
         override fun withoutDrawables() = copy(appIcon = null)
     }
@@ -235,6 +239,7 @@ sealed class IslandEvent(open val priority: Int, val id: String) : Comparable<Is
         val triggerTimeMs: Long = 0L,
         val isRinging: Boolean = false,
         val appIcon: Drawable? = null,
+        val contentIntent: PendingIntent? = null,
     ) : IslandEvent(priority = 48, id = "alarm") {
         override val behavior = EventBehavior(autoDismissMs = 5000L)
         override fun withoutDrawables() = copy(appIcon = null)
