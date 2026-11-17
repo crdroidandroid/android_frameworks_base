@@ -58,6 +58,10 @@ constructor(
     var isPendingSharedTransition = false
         private set
 
+    fun resetPendingSharedTransition() {
+        isPendingSharedTransition = false
+    }
+
     private val currentUserHandle: UserHandle
         get() = userRepository.getSelectedUserInfo().userHandle
 

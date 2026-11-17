@@ -141,6 +141,7 @@ constructor(
 
     fun reset() {
         animationController.cancel()
+        animationController.resetViewState()
         isPendingSharedTransition = false
         viewModel.reset()
     }

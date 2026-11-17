@@ -185,7 +185,7 @@ internal constructor(
         scrollCaptureExecutor.longScreenshotHolder.foregroundAppName = packageLabel
 
         if (screenshot.type == TAKE_SCREENSHOT_SELECTED_REGION) {
-            startPartialScreenshotActivity(Process.myUserHandle())
+            startPartialScreenshotActivity(Process.myUserHandle(), requestCallback)
             finisher.accept(null)
             return
         }
@@ -418,16 +418,23 @@ internal constructor(
         }
     }
 
-    private fun startPartialScreenshotActivity(owner: UserHandle) {
+    private fun startPartialScreenshotActivity(
+        owner: UserHandle,
+        requestCallback: TakeScreenshotService.RequestCallback,
+    ) {
         scrollCaptureExecutor.executeBatchScrollCapture(
             BitmapScreenshot(context, imageCapture.captureDisplay(display.displayId, null)),
             {
-                val intent = actionIntentCreator.createLongScreenshotIntent(owner, Uri.EMPTY)
-                val options = ActivityOptions.makeBasic()
-                options.setLaunchDisplayId(context.displayId)
-                context.startActivity(intent, options.toBundle())
+                try {
+                    val intent = actionIntentCreator.createLongScreenshotIntent(owner, Uri.EMPTY)
+                    val options = ActivityOptions.makeBasic()
+                    options.setLaunchDisplayId(context.displayId)
+                    context.startActivity(intent, options.toBundle())
 
-                statusBarManager.collapsePanels()
+                    statusBarManager.collapsePanels()
+                } finally {
+                    requestCallback.onFinish()
+                }
             },
             { _: Rect, onTransitionEnd: Runnable, _: LongScreenshot ->
                 onTransitionEnd.run()
@@ -566,6 +573,7 @@ internal constructor(
     /** Reset screenshot view and then call onCompleteRunnable */
     private fun finishDismiss() {
         Log.d(TAG, "finishDismiss")
+        actionExecutor.resetPendingSharedTransition()
         actionsController.endScreenshotSession()
         scrollCaptureExecutor.close()
         currentRequestCallbacks.forEach { it.onFinish() }

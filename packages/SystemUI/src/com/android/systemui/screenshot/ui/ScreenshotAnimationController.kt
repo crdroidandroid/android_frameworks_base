@@ -297,6 +297,18 @@ class ScreenshotAnimationController(
         dismissalSpring?.cancel()
     }
 
+    fun resetViewState() {
+        for (view in fadeUI) {
+            view.alpha = 1f
+        }
+        screenshotPreview.alpha = 1f
+        screenshotPreview.transitionAlpha = 1f
+        scrollingScrim.alpha = 1f
+        scrollingScrim.imageTintList = null
+        scrollTransitionPreview.alpha = 1f
+        scrollTransitionPreview.visibility = View.GONE
+    }
+
     private fun getActionsAnimator(): Animator {
         val startingOffset = view.height - actionContainer.top
         val actionsYAnimator =
