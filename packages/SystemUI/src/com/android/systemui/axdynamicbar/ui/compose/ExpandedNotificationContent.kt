@@ -113,9 +113,7 @@ internal fun NotificationExpanded(
 
     Column(
         modifier = Modifier.fillMaxWidth().clickable {
-            try { event.sbn.notification?.contentIntent?.sendWithBal(context) }
-            catch (_: Exception) {}
-            interactor.collapseIsland()
+            if (event.contentIntent.trySendWithBal(context)) interactor.collapseIsland()
         },
         verticalArrangement = Arrangement.spacedBy(SpaceMd),
     ) {
@@ -660,10 +658,9 @@ private fun GroupedNotificationRow(
                         modifier = Modifier.weight(1f),
                         compact = true,
                         onClick = {
-                            try {
-                                event.sbn.notification?.contentIntent?.sendWithBal(context)
-                            } catch (_: Exception) {}
-                            interactor.collapseIsland()
+                            if (event.contentIntent.trySendWithBal(context)) {
+                                interactor.collapseIsland()
+                            }
                         },
                     )
 

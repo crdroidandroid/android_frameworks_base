@@ -804,3 +804,28 @@ internal fun PendingIntent.sendWithBal(context: Context, fillIntent: Intent? = n
     )
     send(context, 0, fillIntent, null, null, null, options.toBundle())
 }
+
+internal fun PendingIntent?.trySendWithBal(context: Context): Boolean {
+    if (this == null) return false
+    return try {
+        sendWithBal(context)
+        true
+    } catch (_: PendingIntent.CanceledException) {
+        false
+    }
+}
+
+internal val IslandEvent.contentIntent: PendingIntent?
+    get() =
+        when (this) {
+            is IslandEvent.PromotedOngoing -> sbn.notification?.contentIntent
+            is IslandEvent.Sports -> sbn?.notification?.contentIntent
+            is IslandEvent.NowPlaying -> sbn?.notification?.contentIntent
+            is IslandEvent.Call -> sbn.notification?.contentIntent
+            is IslandEvent.Notification -> sbn.notification?.contentIntent
+            is IslandEvent.AudioRecording -> contentIntent
+            is IslandEvent.Timer -> contentIntent
+            is IslandEvent.Stopwatch -> contentIntent
+            is IslandEvent.Alarm -> contentIntent
+            else -> null
+        }

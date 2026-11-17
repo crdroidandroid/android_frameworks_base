@@ -392,6 +392,7 @@ constructor(
                                 startTimeMs = startTime,
                                 actions = notifActions,
                                 pausedDurationMs = 0L,
+                                contentIntent = sbn.notification?.contentIntent,
                             )
                         )
                         return
@@ -416,6 +417,7 @@ constructor(
                             appName = title.ifEmpty { existing.appName },
                             state = RecordingState.SAVED,
                             actions = notifActions,
+                            contentIntent = sbn.notification?.contentIntent,
                         )
                     )
                     return
@@ -785,6 +787,7 @@ constructor(
                 appIcon = icon,
                 isPaused = isPaused,
                 actions = actions,
+                contentIntent = sbn.notification?.contentIntent,
             )
         timerNotificationKey = sbn.key
         lastTimer = event
@@ -842,6 +845,7 @@ constructor(
                 isRunning = isRunning,
                 appIcon = icon,
                 actions = actions,
+                contentIntent = sbn.notification?.contentIntent,
             )
         stopwatchNotificationKey = sbn.key
         if (sbn.key != stopwatchDismissedKey) _stopwatchEvent.value = event
@@ -897,6 +901,7 @@ constructor(
                 triggerTimeMs = sbn.notification.`when`,
                 isRinging = isRinging,
                 appIcon = icon,
+                contentIntent = sbn.notification?.contentIntent,
             )
         alarmNotificationKey = sbn.key
         _alarmEvent.value = event

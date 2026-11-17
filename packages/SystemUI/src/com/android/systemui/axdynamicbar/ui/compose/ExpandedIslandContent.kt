@@ -166,7 +166,18 @@ fun ExpandedIslandContent(
                     if (event is IslandEvent.Media) {
                         MediaCard(event, interactor)
                     } else {
-                        PrimaryCard {
+                        val context = LocalContext.current
+                        val tapModifier =
+                            if (event.contentIntent != null) {
+                                Modifier.clickable {
+                                    if (event.contentIntent.trySendWithBal(context)) {
+                                        interactor.collapseIsland()
+                                    }
+                                }
+                            } else {
+                                Modifier
+                            }
+                        PrimaryCard(modifier = tapModifier) {
                             // Hoisted: the specs are read inside the non-composable transitionSpec.
                             val motionScheme = MaterialTheme.motionScheme
                             AnimatedContent(
@@ -254,9 +265,7 @@ internal fun CallExpanded(event: IslandEvent.Call, interactor: IslandActions) {
         modifier = Modifier
             .fillMaxWidth()
             .clickable {
-                try { event.sbn.notification?.contentIntent?.sendWithBal(context) }
-                catch (_: Exception) {}
-                interactor.collapseIsland()
+                if (event.contentIntent.trySendWithBal(context)) interactor.collapseIsland()
             },
         verticalArrangement = Arrangement.spacedBy(SpaceMd),
     ) {
@@ -372,12 +381,13 @@ private fun CallElapsedTimer(startTimeMs: Long, color: Color) {
  * painted here.
  */
 @Composable
-internal fun PrimaryCard(content: @Composable () -> Unit) {
+internal fun PrimaryCard(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
     Box(
         modifier =
             Modifier.fillMaxWidth()
                 .clip(ShapeCard)
                 .islandBlur(RadiusCard, CardBg)
+                .then(modifier)
     ) {
         Box(modifier = Modifier.padding(SpaceXxl)) { content() }
     }
