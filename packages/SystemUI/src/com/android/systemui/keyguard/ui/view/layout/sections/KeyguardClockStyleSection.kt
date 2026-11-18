@@ -21,13 +21,18 @@ import android.view.ViewGroup
 import androidx.constraintlayout.widget.Barrier
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import com.android.systemui.clocks.ClockStyle
 import com.android.systemui.keyguard.domain.interactor.KeyguardClockInteractor
+import com.android.systemui.keyguard.shared.model.ClockSize
 import com.android.systemui.keyguard.shared.model.KeyguardSection
 import com.android.systemui.keyguard.ui.viewmodel.KeyguardSmartspaceViewModel
+import com.android.systemui.lifecycle.repeatWhenAttached
 import com.android.systemui.res.R
 import com.android.systemui.shared.R as sharedR
 import javax.inject.Inject
+import kotlinx.coroutines.DisposableHandle
 
 class KeyguardClockStyleSection
 @Inject
@@ -39,6 +44,7 @@ constructor(
     
     private var clockStyleView: ClockStyle? = null
     private var isCustomClockEnabled: Boolean = false
+    private var disposableHandle: DisposableHandle? = null
     
     override fun addViews(constraintLayout: ConstraintLayout) {
         
@@ -66,9 +72,26 @@ constructor(
     }
     
     override fun bindData(constraintLayout: ConstraintLayout) {
+        disposableHandle?.dispose()
+        disposableHandle = null
         clockStyleView?.let { clockView ->
             clockView.onTimeChanged()
             clockView.requestLayout()
+
+            // Grow and shrink with the lockscreen clock size, like the plugin clocks
+            disposableHandle =
+                clockView.repeatWhenAttached {
+                    repeatOnLifecycle(Lifecycle.State.CREATED) {
+                        var firstUpdate = true
+                        keyguardClockInteractor.clockSize.collect { size ->
+                            clockView.setLargeClock(
+                                large = size == ClockSize.LARGE,
+                                animate = !firstUpdate,
+                            )
+                            firstUpdate = false
+                        }
+                    }
+                }
         }
     }
     
@@ -123,6 +146,8 @@ constructor(
     }
     
     override fun removeViews(constraintLayout: ConstraintLayout) {
+        disposableHandle?.dispose()
+        disposableHandle = null
         clockStyleView?.let { clockView ->
             (clockView.parent as? ViewGroup)?.removeView(clockView)
         }

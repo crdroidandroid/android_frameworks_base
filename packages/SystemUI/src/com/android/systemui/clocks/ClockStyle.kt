@@ -4,12 +4,16 @@
  */
 package com.android.systemui.clocks
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.res.Configuration
 import android.graphics.Color
+import android.graphics.Rect
+import android.graphics.RectF
 import android.graphics.Typeface
 import android.os.Handler
 import android.os.Looper
@@ -27,6 +31,7 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextClock
 import android.widget.TextView
+import com.android.app.animation.Interpolators
 import com.android.systemui.Dependency
 import com.android.systemui.plugins.statusbar.StatusBarStateController
 import com.android.systemui.res.R
@@ -66,6 +71,28 @@ class ClockStyle @JvmOverloads constructor(
     private var currentShiftY = 0
 
     private var pendingLayoutListener: View.OnLayoutChangeListener? = null
+
+    // Dynamic clock size: the whole frame is scaled up while the large clock is requested, so it
+    // never fights the user size scale or the AOD animation applied to the clock view itself.
+    private var clockFrame: View? = null
+    private var isLargeClock = false
+    private var largeClockScale = 1f // 1f means the current style is too big to grow
+    private var sizeAnimTarget: Float? = null
+
+    private val sizeAnimListener =
+        object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator) {
+                sizeAnimTarget = null
+            }
+        }
+
+    private val frameLayoutListener =
+        View.OnLayoutChangeListener { v, l, t, r, b, ol, ot, oR, ob ->
+            if (r - l != oR - ol || b - t != ob - ot) {
+                // Size changed (style inflated, config change...): re-evaluate the large scale
+                post { applySizeScale(animate = false) }
+            }
+        }
 
     private val screenReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -114,6 +141,9 @@ class ClockStyle @JvmOverloads constructor(
     override fun onFinishInflate() {
         super.onFinishInflate()
         clockStub = findViewById(R.id.clock_view_stub)
+        clockFrame = findViewById<View?>(R.id.clock_frame)?.also {
+            it.addOnLayoutChangeListener(frameLayoutListener)
+        }
         updateClockView()
     }
 
@@ -160,6 +190,7 @@ class ClockStyle @JvmOverloads constructor(
         handler.removeCallbacks(burnInProtectionRunnable)
         handler.removeCallbacks(aodTickRunnable)
         currentClockView?.animate()?.cancel()
+        clockFrame?.animate()?.cancel()
         removePendingLayoutListener()
         runCatching { context.unregisterReceiver(screenReceiver) }
         callbacksRegistered = false
@@ -341,6 +372,156 @@ class ClockStyle @JvmOverloads constructor(
         forceTimeUpdate()
         visibility = if (clockStyle != 0) View.VISIBLE else View.GONE
         if (isDozing && clockStyle != 0) startAodTick()
+        // A new style gets its large scale once laid out, see applyClockScale()
+        largeClockScale = 1f
+        if (currentClockView == null) applySizeScale(animate = false)
+    }
+
+    /**
+     * Follows the lockscreen clock size, like the plugin clocks do: large while there is nothing
+     * else on the lockscreen, small once notifications or media show up. Styles that are already
+     * too big to grow stay as they are.
+     */
+    fun setLargeClock(large: Boolean, animate: Boolean) {
+        if (isLargeClock == large) return
+        isLargeClock = large
+        applySizeScale(animate)
+    }
+
+    private fun applySizeScale(animate: Boolean) {
+        val frame = clockFrame ?: return
+        if (currentClockView == null || clockStyle == 0) {
+            sizeAnimTarget = null
+            frame.animate().cancel()
+            frame.scaleX = 1f
+            frame.scaleY = 1f
+            return
+        }
+        if (frame.width > 0 && width > 0) updateLargeClockScale(frame)
+        val target = if (isLargeClock) largeClockScale else 1f
+        // Let a running size animation finish instead of jumping to the same target
+        if (sizeAnimTarget == target) return
+        if (frame.scaleX == target && frame.scaleY == target) return
+        frame.animate().cancel()
+        if (animate && isAttachedToWindow && isShown) {
+            sizeAnimTarget = target
+            frame.animate()
+                .scaleX(target)
+                .scaleY(target)
+                .setDuration(SIZE_ANIM_MS)
+                .setInterpolator(Interpolators.EMPHASIZED)
+                .setListener(sizeAnimListener)
+                .start()
+        } else {
+            frame.scaleX = target
+            frame.scaleY = target
+        }
+    }
+
+    /**
+     * Picks how much the current style may grow, and the pivot to grow from, so that the visible
+     * content stays on screen: left/right aligned styles grow from their edge, centered ones from
+     * the center, and everything grows downwards from the top of the content.
+     */
+    private fun updateLargeClockScale(frame: View) {
+        val content = computeContentBounds(frame)
+        if (content == null || content.width() <= 0f || content.height() <= 0f) {
+            largeClockScale = 1f
+            return
+        }
+        val density = resources.displayMetrics.density
+        val edge = LARGE_CLOCK_EDGE_MARGIN_DP * density
+        val styleWidth = width.toFloat()
+        // content is in this view's coordinates, the frame pivot in the frame's coordinates
+        val pivotX: Float
+        val widthLimit: Float
+        if (kotlin.math.abs(content.centerX() - styleWidth / 2f) <= CENTER_TOLERANCE_DP * density) {
+            pivotX = content.centerX()
+            val halfSpace = minOf(pivotX - edge, styleWidth - edge - pivotX)
+            widthLimit = halfSpace / (content.width() / 2f)
+        } else if (content.centerX() < styleWidth / 2f) {
+            pivotX = content.left
+            widthLimit = (styleWidth - edge - pivotX) / content.width()
+        } else {
+            pivotX = content.right
+            widthLimit = (pivotX - edge) / content.width()
+        }
+        val heightLimit =
+            resources.displayMetrics.heightPixels * LARGE_CLOCK_MAX_HEIGHT_FRACTION /
+                content.height()
+        val scale = minOf(LARGE_CLOCK_SCALE, widthLimit, heightLimit)
+        largeClockScale = if (scale >= MIN_LARGE_CLOCK_SCALE) scale else 1f
+        frame.pivotX = pivotX - frame.left
+        frame.pivotY = content.top - frame.top
+    }
+
+    /** Union of the visible content of the clock (text, images, backgrounds), in our coordinates. */
+    private fun computeContentBounds(frame: View): RectF? {
+        val clock = currentClockView ?: return null
+        val bounds = RectF()
+        var found = false
+        val rect = Rect()
+
+        fun add(view: View, left: Int, top: Int, right: Int, bottom: Int) {
+            rect.set(left, top, right, bottom)
+            if (view !== clock) (clock as? ViewGroup)?.offsetDescendantRectToMyCoords(view, rect)
+            if (found) {
+                bounds.union(rect.left.toFloat(), rect.top.toFloat(), rect.right.toFloat(), rect.bottom.toFloat())
+            } else {
+                bounds.set(rect)
+                found = true
+            }
+        }
+
+        fun visit(view: View) {
+            if (view.visibility != View.VISIBLE || view.width == 0 || view.height == 0) return
+            if (view is ViewGroup && view.childCount > 0) {
+                if (view !== clock && view.background != null) {
+                    add(view, 0, 0, view.width, view.height)
+                }
+                for (i in 0 until view.childCount) visit(view.getChildAt(i))
+            } else if (view is TextView && view.layout != null && view.layout.lineCount > 0) {
+                // Only the text itself, a match_parent TextView would claim the full width
+                val layout = view.layout
+                var lineLeft = Float.MAX_VALUE
+                var lineRight = 0f
+                for (i in 0 until layout.lineCount) {
+                    lineLeft = minOf(lineLeft, layout.getLineLeft(i))
+                    lineRight = maxOf(lineRight, layout.getLineRight(i))
+                }
+                val textLeft = (view.totalPaddingLeft + lineLeft).toInt().coerceAtLeast(0)
+                val textRight =
+                    (view.totalPaddingLeft + lineRight).toInt().coerceIn(textLeft, view.width)
+                add(view, textLeft, 0, textRight, view.height)
+            } else {
+                add(view, 0, 0, view.width, view.height)
+            }
+        }
+        visit(clock)
+        if (!found) return null
+
+        // Account for the user size scale applied on the clock view. Don't read clock.scaleX:
+        // while dozing (or mid AOD animation) it holds the AOD scale down instead.
+        val s = getScaleFactor()
+        val px = clock.pivotX
+        val py = clock.pivotY
+        bounds.set(
+            px + (bounds.left - px) * s,
+            py + (bounds.top - py) * s,
+            px + (bounds.right - px) * s,
+            py + (bounds.bottom - py) * s,
+        )
+        // clock view -> frame -> this
+        var offsetX = clock.left.toFloat()
+        var offsetY = clock.top.toFloat()
+        var parent = clock.parent as? View
+        while (parent != null && parent !== frame) {
+            offsetX += parent.left
+            offsetY += parent.top
+            parent = parent.parent as? View
+        }
+        bounds.offset(offsetX + frame.left, offsetY + frame.top)
+        return bounds
     }
 
     private fun cacheClockViews(root: View) {
@@ -449,6 +630,8 @@ class ClockStyle @JvmOverloads constructor(
         view.pivotX = view.width / 2f
         view.pivotY = 0f
         disableClippingOnParents(view)
+        // What fits on screen at the large size depends on the scale above
+        applySizeScale(animate = false)
     }
 
     private fun applyClockScaleAfterLayout(view: View) {
@@ -597,6 +780,14 @@ class ClockStyle @JvmOverloads constructor(
         private const val BURN_IN_PROTECTION_MAX_SHIFT = 4
 
         private const val AOD_SCALE_DOWN = 0.85f
+
+        // Dynamic clock size
+        private const val LARGE_CLOCK_SCALE = 1.35f
+        private const val MIN_LARGE_CLOCK_SCALE = 1.08f
+        private const val LARGE_CLOCK_MAX_HEIGHT_FRACTION = 0.4f
+        private const val LARGE_CLOCK_EDGE_MARGIN_DP = 16
+        private const val CENTER_TOLERANCE_DP = 24
+        private const val SIZE_ANIM_MS = 500L
         private const val AOD_ANIM_OUT_MS = 300L
         private const val AOD_ANIM_IN_MS = 400L
     }

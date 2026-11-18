@@ -47,7 +47,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -118,14 +117,8 @@ constructor(
 
     override val forcedClockSize: Flow<ClockSize?> =
         if (featureFlags.isEnabled(Flags.LOCKSCREEN_ENABLE_LANDSCAPE)) {
-            combine(
-                configurationRepository.onAnyConfigurationChange.onStart { emit(Unit) },
-                isCustomClockEnabled,
-            ) { _, customClockEnabled ->
-                if (
-                    context.resources.getBoolean(R.bool.force_small_clock_on_lockscreen) ||
-                    customClockEnabled
-                ) {
+            configurationRepository.onAnyConfigurationChange.map {
+                if (context.resources.getBoolean(R.bool.force_small_clock_on_lockscreen)) {
                     ClockSize.SMALL
                 } else {
                     null
@@ -143,11 +136,7 @@ constructor(
     override val selectedClockSize: StateFlow<ClockSizeSetting> =
         secureSettings
             .observerFlow(
-                names =
-                    arrayOf(
-                        Settings.Secure.LOCKSCREEN_USE_DOUBLE_LINE_CLOCK,
-                        Settings.Secure.LOCK_SCREEN_CUSTOM_CLOCK_STYLE,
-                    ),
+                names = arrayOf(Settings.Secure.LOCKSCREEN_USE_DOUBLE_LINE_CLOCK),
                 userId = UserHandle.USER_ALL,
             )
             .onStart { emit(Unit) } // Forces an initial update.
@@ -191,20 +180,18 @@ constructor(
                 initialValue = null,
             )
 
+    // Custom clock styles follow the same dynamic/small selection as the plugin clocks; styles
+    // that are too big to grow just keep their size, see ClockStyle#setLargeClock.
     private fun getClockSize(): ClockSizeSetting {
-        val isDoubleLineClock = secureSettings.getIntForUser(
-            Settings.Secure.LOCKSCREEN_USE_DOUBLE_LINE_CLOCK,
-            context.resources.getInteger(
-                com.android.internal.R.integer.config_doublelineClockDefault
-            ),
-            UserHandle.USER_CURRENT
+        return ClockSizeSetting.fromSettingValue(
+            secureSettings.getIntForUser(
+                Settings.Secure.LOCKSCREEN_USE_DOUBLE_LINE_CLOCK,
+                context.resources.getInteger(
+                    com.android.internal.R.integer.config_doublelineClockDefault
+                ),
+                UserHandle.USER_CURRENT,
+            )
         )
-        val clockSettingValue = if (readCustomClockEnabled()) {
-            0
-        } else {
-            isDoubleLineClock
-        }
-        return ClockSizeSetting.fromSettingValue(clockSettingValue)
     }
 
     private fun readCustomClockEnabled(): Boolean =
