@@ -26,6 +26,8 @@ class FakeKeyguardSmartspaceRepository : KeyguardSmartspaceRepository {
     override val bcSmartspaceVisibility: StateFlow<Int> = _bcSmartspaceVisibility
     private val _isWeatherEnabled = MutableStateFlow(true)
     override val isWeatherEnabled: StateFlow<Boolean> = _isWeatherEnabled
+    private val _isOmniWeatherEnabled = MutableStateFlow(false)
+    override val isOmniWeatherEnabled: StateFlow<Boolean> = _isOmniWeatherEnabled
 
     override fun setBcSmartspaceVisibility(visibility: Int) {
         _bcSmartspaceVisibility.value = visibility
@@ -33,5 +35,9 @@ class FakeKeyguardSmartspaceRepository : KeyguardSmartspaceRepository {
 
     fun setIsWeatherEnabled(isEnabled: Boolean) {
         _isWeatherEnabled.value = isEnabled
+    }
+
+    fun setIsOmniWeatherEnabled(isEnabled: Boolean) {
+        _isOmniWeatherEnabled.value = isEnabled
     }
 }

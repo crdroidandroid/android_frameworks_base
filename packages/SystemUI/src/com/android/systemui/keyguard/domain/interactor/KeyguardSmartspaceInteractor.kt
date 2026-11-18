@@ -29,6 +29,8 @@ constructor(
 ) {
     val bcSmartspaceVisibility: StateFlow<Int> = keyguardSmartspaceRepository.bcSmartspaceVisibility
     val isWeatherEnabled: StateFlow<Boolean> = keyguardSmartspaceRepository.isWeatherEnabled
+    val isOmniWeatherEnabled: StateFlow<Boolean> =
+        keyguardSmartspaceRepository.isOmniWeatherEnabled
 
     fun setBcSmartspaceVisibility(visibility: Int) {
         keyguardSmartspaceRepository.setBcSmartspaceVisibility(visibility)

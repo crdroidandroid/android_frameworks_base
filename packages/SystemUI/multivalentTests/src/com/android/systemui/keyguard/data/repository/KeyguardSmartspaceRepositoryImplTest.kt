@@ -51,6 +51,7 @@ class KeyguardSmartspaceRepositoryImplTest : SysuiTestCase() {
         underTest =
             KeyguardSmartspaceRepositoryImpl(
                 secureSettings = fakeSettings,
+                systemSettings = fakeSettings,
                 userTracker = fakeUserTracker,
                 applicationScope = scope.backgroundScope,
             )

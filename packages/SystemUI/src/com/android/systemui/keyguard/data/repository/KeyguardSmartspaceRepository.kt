@@ -23,6 +23,7 @@ import com.android.systemui.dagger.SysUISingleton
 import com.android.systemui.dagger.qualifiers.Application
 import com.android.systemui.settings.UserTracker
 import com.android.systemui.util.settings.SecureSettings
+import com.android.systemui.util.settings.SystemSettings
 import com.android.systemui.util.settings.SettingsProxyExt.observerFlow
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
@@ -38,6 +39,9 @@ interface KeyguardSmartspaceRepository {
     val bcSmartspaceVisibility: StateFlow<Int>
     val isWeatherEnabled: StateFlow<Boolean>
 
+    /** Whether the OmniJaws lockscreen weather setting is on. */
+    val isOmniWeatherEnabled: StateFlow<Boolean>
+
     fun setBcSmartspaceVisibility(visibility: Int)
 }
 
@@ -46,6 +50,7 @@ class KeyguardSmartspaceRepositoryImpl
 @Inject
 constructor(
     private val secureSettings: SecureSettings,
+    private val systemSettings: SystemSettings,
     private val userTracker: UserTracker,
     @Application private val applicationScope: CoroutineScope,
 ) : KeyguardSmartspaceRepository {
@@ -65,6 +70,20 @@ constructor(
                 initialValue = getLockscreenWeatherEnabled()
             )
 
+    override val isOmniWeatherEnabled: StateFlow<Boolean> =
+        systemSettings
+            .observerFlow(
+                names = arrayOf(Settings.System.LOCKSCREEN_WEATHER_ENABLED),
+                userId = UserHandle.USER_ALL,
+            )
+            .onStart { emit(Unit) }
+            .map { getOmniWeatherEnabled() }
+            .stateIn(
+                scope = applicationScope,
+                started = SharingStarted.WhileSubscribed(),
+                initialValue = getOmniWeatherEnabled()
+            )
+
     override fun setBcSmartspaceVisibility(visibility: Int) {
         _bcSmartspaceVisibility.value = visibility
     }
@@ -73,6 +92,14 @@ constructor(
         return secureSettings.getIntForUser(
             Settings.Secure.LOCKSCREEN_SMARTSPACE_ENABLED,
             1,
+            userTracker.userId
+        ) == 1
+    }
+
+    private fun getOmniWeatherEnabled(): Boolean {
+        return systemSettings.getIntForUser(
+            Settings.System.LOCKSCREEN_WEATHER_ENABLED,
+            0,
             userTracker.userId
         ) == 1
     }

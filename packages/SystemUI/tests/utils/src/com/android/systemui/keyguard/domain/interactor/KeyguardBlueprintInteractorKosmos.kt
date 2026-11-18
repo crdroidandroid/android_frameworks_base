@@ -33,5 +33,6 @@ val Kosmos.keyguardBlueprintInteractor by
             configurationInteractor = configurationInteractor,
             fingerprintPropertyInteractor = fingerprintPropertyInteractor,
             smartspaceSection = keyguardSmartspaceSection,
+            keyguardSmartspaceInteractor = keyguardSmartspaceInteractor,
         )
     }

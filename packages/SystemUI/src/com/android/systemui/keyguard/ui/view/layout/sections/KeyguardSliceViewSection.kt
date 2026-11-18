@@ -62,17 +62,21 @@ constructor(
     val keyguardSmartspaceViewModel: KeyguardSmartspaceViewModel,
 ) : KeyguardSection() {
     private lateinit var sliceView: KeyguardSliceView
+
+    // Snapshot taken in addViews() so that the other callbacks match what was inflated.
+    private var shouldShowSliceView: Boolean = false
     private var disposableHandle: DisposableHandle? = null
 
     override fun addViews(constraintLayout: ConstraintLayout) {
-        if (smartspaceController.isEnabled) return
+        shouldShowSliceView = !smartspaceController.isEnabled
+        if (!shouldShowSliceView) return
         sliceView =
             layoutInflater.inflate(R.layout.keyguard_slice_view, null, false) as KeyguardSliceView
         constraintLayout.addView(sliceView)
     }
 
     override fun bindData(constraintLayout: ConstraintLayout) {
-        if (smartspaceController.isEnabled) return
+        if (!shouldShowSliceView) return
         val controller =
             KeyguardSliceViewController(
                 handler,
@@ -99,7 +103,7 @@ constructor(
     }
 
     override fun applyConstraints(constraintSet: ConstraintSet) {
-        if (smartspaceController.isEnabled) return
+        if (!shouldShowSliceView) return
         val dateWeatherPaddingStart = KeyguardSmartspaceViewModel.getDateWeatherStartMargin(context)
         constraintSet.apply {
             connect(
@@ -139,7 +143,10 @@ constructor(
     }
 
     override fun removeViews(constraintLayout: ConstraintLayout) {
-        if (smartspaceController.isEnabled) return
+        if (!shouldShowSliceView) return
+        disposableHandle?.dispose()
+        disposableHandle = null
         constraintLayout.removeView(R.id.keyguard_slice_view)
+        shouldShowSliceView = false
     }
 }
