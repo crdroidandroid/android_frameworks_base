@@ -30,6 +30,7 @@ import com.android.systemui.keyguard.shared.model.KeyguardSection
 import com.android.systemui.keyguard.ui.viewmodel.KeyguardSmartspaceViewModel
 import com.android.systemui.lifecycle.repeatWhenAttached
 import com.android.systemui.res.R
+import com.android.systemui.shade.ShadeDisplayAware
 import com.android.systemui.shared.R as sharedR
 import javax.inject.Inject
 import kotlinx.coroutines.DisposableHandle
@@ -37,7 +38,7 @@ import kotlinx.coroutines.DisposableHandle
 class KeyguardClockStyleSection
 @Inject
 constructor(
-    private val context: Context,
+    @ShadeDisplayAware private val context: Context,
     private val keyguardClockInteractor: KeyguardClockInteractor,
     private val keyguardSmartspaceViewModel: KeyguardSmartspaceViewModel,
 ) : KeyguardSection() {

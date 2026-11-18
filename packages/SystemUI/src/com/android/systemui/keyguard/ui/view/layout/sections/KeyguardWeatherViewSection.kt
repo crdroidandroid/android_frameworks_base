@@ -28,6 +28,7 @@ import com.android.systemui.customization.clocks.R as clocksR
 import com.android.systemui.keyguard.shared.model.KeyguardSection
 import com.android.systemui.keyguard.ui.viewmodel.KeyguardSmartspaceViewModel
 import com.android.systemui.res.R
+import com.android.systemui.shade.ShadeDisplayAware
 import com.android.systemui.statusbar.lockscreen.LockscreenSmartspaceController
 import javax.inject.Inject
 
@@ -36,7 +37,7 @@ import com.android.systemui.weather.WeatherInfoView
 class KeyguardWeatherViewSection
 @Inject
 constructor(
-    private val context: Context,
+    @ShadeDisplayAware private val context: Context,
     val layoutInflater: LayoutInflater,
     val smartspaceController: LockscreenSmartspaceController,
     val keyguardSmartspaceViewModel: KeyguardSmartspaceViewModel,
