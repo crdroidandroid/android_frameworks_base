@@ -52,6 +52,13 @@ class FakeKeyguardClockRepository() : KeyguardClockRepository {
 
     override val clockEventController: ClockEventController = mock()
 
+    private val _isCustomClockEnabled = MutableStateFlow(false)
+    override val isCustomClockEnabled: StateFlow<Boolean> = _isCustomClockEnabled
+
+    fun setCustomClockEnabled(enabled: Boolean) {
+        _isCustomClockEnabled.value = enabled
+    }
+
     override fun setClockSize(size: ClockSize) {
         _clockSize.value = size
         _forcedClockSize.value = size

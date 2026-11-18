@@ -80,6 +80,9 @@ constructor(
 
     val forcedClockSize: Flow<ClockSize?> = keyguardClockRepository.forcedClockSize
 
+    /** Whether a custom lockscreen clock style replaces the clock plugin views. */
+    val isCustomClockEnabled: StateFlow<Boolean> = keyguardClockRepository.isCustomClockEnabled
+
     val currentClockId: Flow<ClockId> = keyguardClockRepository.currentClockId
 
     val currentClockFontAxesWidth: Float?

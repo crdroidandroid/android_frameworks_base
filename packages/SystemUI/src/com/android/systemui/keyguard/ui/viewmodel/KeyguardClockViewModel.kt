@@ -73,6 +73,9 @@ constructor(
 
     val clockSize: StateFlow<ClockSize> = keyguardClockInteractor.clockSize
 
+    /** Whether a custom lockscreen clock style replaces the clock plugin views. */
+    val isCustomClockEnabled: StateFlow<Boolean> = keyguardClockInteractor.isCustomClockEnabled
+
     val isLargeClockVisible: StateFlow<Boolean> =
         clockSize
             .map { it == ClockSize.LARGE }

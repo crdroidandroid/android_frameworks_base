@@ -25,10 +25,12 @@ import com.android.systemui.dagger.SysUISingleton
 import com.android.systemui.dagger.qualifiers.Application
 import com.android.systemui.keyguard.data.repository.KeyguardBlueprintRepository
 import com.android.systemui.keyguard.shared.model.KeyguardBlueprint
+import com.android.systemui.keyguard.shared.model.KeyguardSection
 import com.android.systemui.keyguard.ui.view.layout.blueprints.DefaultKeyguardBlueprint
 import com.android.systemui.keyguard.ui.view.layout.blueprints.SplitShadeKeyguardBlueprint
 import com.android.systemui.keyguard.ui.view.layout.blueprints.transitions.IntraBlueprintTransition.Config
 import com.android.systemui.keyguard.ui.view.layout.blueprints.transitions.IntraBlueprintTransition.Type
+import com.android.systemui.keyguard.ui.view.layout.sections.KeyguardClockStyleSection
 import com.android.systemui.keyguard.ui.view.layout.sections.KeyguardSliceViewSection
 import com.android.systemui.keyguard.ui.view.layout.sections.KeyguardWeatherViewSection
 import com.android.systemui.keyguard.ui.view.layout.sections.SmartspaceSection
@@ -138,13 +140,22 @@ constructor(
         return keyguardBlueprintRepository.blueprint.value
     }
 
-    fun rebuildSmartspaceSections() {
-        val sections =
-            getCurrentBlueprint().sections.filter {
-                it is SmartspaceSection ||
-                    it is KeyguardSliceViewSection ||
-                    it is KeyguardWeatherViewSection
-            }
+    fun rebuildSmartspaceSections() = rebuildSections { it.dependsOnSmartspace() }
+
+    /**
+     * Rebuilds the sections whose views depend on whether a custom clock style is enabled, so
+     * switching between the plugin clock and a custom clock style applies without restarting.
+     */
+    fun rebuildCustomClockSections() =
+        rebuildSections { it is KeyguardClockStyleSection || it.dependsOnSmartspace() }
+
+    private fun KeyguardSection.dependsOnSmartspace(): Boolean =
+        this is SmartspaceSection ||
+            this is KeyguardSliceViewSection ||
+            this is KeyguardWeatherViewSection
+
+    private fun rebuildSections(predicate: (KeyguardSection) -> Boolean) {
+        val sections = getCurrentBlueprint().sections.filter(predicate)
         refreshBlueprint(Config(Type.NoTransition, rebuildSections = sections))
     }
 

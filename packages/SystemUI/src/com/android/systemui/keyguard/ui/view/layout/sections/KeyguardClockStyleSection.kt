@@ -16,25 +16,24 @@
 package com.android.systemui.keyguard.ui.view.layout.sections
 
 import android.content.Context
-import android.os.UserHandle
 import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.Barrier
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import com.android.systemui.clocks.ClockStyle
+import com.android.systemui.keyguard.domain.interactor.KeyguardClockInteractor
 import com.android.systemui.keyguard.shared.model.KeyguardSection
 import com.android.systemui.keyguard.ui.viewmodel.KeyguardSmartspaceViewModel
 import com.android.systemui.res.R
 import com.android.systemui.shared.R as sharedR
-import com.android.systemui.util.settings.SecureSettings
 import javax.inject.Inject
 
 class KeyguardClockStyleSection
 @Inject
 constructor(
     private val context: Context,
-    private val secureSettings: SecureSettings,
+    private val keyguardClockInteractor: KeyguardClockInteractor,
     private val keyguardSmartspaceViewModel: KeyguardSmartspaceViewModel,
 ) : KeyguardSection() {
     
@@ -43,11 +42,9 @@ constructor(
     
     override fun addViews(constraintLayout: ConstraintLayout) {
         
-        val clockStyle = secureSettings.getIntForUser(
-            ClockStyle.CLOCK_STYLE_KEY, 0, UserHandle.USER_CURRENT
-        )
-        isCustomClockEnabled = clockStyle != 0
-        
+        // Snapshot: the blueprint rebuilds this section whenever the setting flips
+        isCustomClockEnabled = keyguardClockInteractor.isCustomClockEnabled.value
+
         if (!isCustomClockEnabled) return
         
         constraintLayout.findViewById<View?>(R.id.clock_ls)?.let { existingView ->
@@ -130,5 +127,6 @@ constructor(
             (clockView.parent as? ViewGroup)?.removeView(clockView)
         }
         clockStyleView = null
+        isCustomClockEnabled = false
     }
 }

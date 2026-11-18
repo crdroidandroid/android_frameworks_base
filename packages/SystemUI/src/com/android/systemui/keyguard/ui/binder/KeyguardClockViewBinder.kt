@@ -16,8 +16,6 @@
 
 package com.android.systemui.keyguard.ui.binder
 
-import android.os.UserHandle
-import android.provider.Settings
 import android.transition.AutoTransition
 import android.transition.TransitionManager
 import android.transition.TransitionSet
@@ -65,6 +63,7 @@ object KeyguardClockViewBinder {
         aodBurnInViewModel: AodBurnInViewModel,
     ): DisposableHandle {
         val disposables = DisposableHandles()
+        var lastCustomClockEnabled = viewModel.isCustomClockEnabled.value
         disposables +=
             keyguardRootView.repeatWhenAttached {
                 repeatOnLifecycle(Lifecycle.State.CREATED) {
@@ -80,33 +79,49 @@ object KeyguardClockViewBinder {
                     // When changing to new clock, we need to remove old views from burnInLayer
                     var lastClock: ClockController? = null
                     launch {
-                            viewModel.currentClock.collect { currentClock ->
-                                if (lastClock != currentClock) {
-                                    cleanupClockViews(
-                                        lastClock,
-                                        keyguardRootView,
-                                        viewModel.burnInLayer,
-                                    )
-                                    lastClock = currentClock
+                            combine(viewModel.currentClock, viewModel.isCustomClockEnabled) {
+                                    clock,
+                                    customClockEnabled ->
+                                    clock to customClockEnabled
                                 }
+                                .collect { (currentClock, isCustomClockEnabled) ->
+                                    if (lastClock != currentClock) {
+                                        cleanupClockViews(
+                                            lastClock,
+                                            keyguardRootView,
+                                            viewModel.burnInLayer,
+                                        )
+                                        lastClock = currentClock
+                                    }
 
-                                val isCustomClockEnabled = Settings.Secure.getIntForUser(
-                                    keyguardRootView.context.contentResolver,
-                                    Settings.Secure.LOCK_SCREEN_CUSTOM_CLOCK_STYLE,
-                                    0,
-                                    UserHandle.USER_CURRENT
-                                ) != 0
+                                    if (isCustomClockEnabled) {
+                                        // Custom clock styles replace the plugin clock entirely
+                                        cleanupClockViews(
+                                            currentClock,
+                                            keyguardRootView,
+                                            viewModel.burnInLayer,
+                                        )
+                                    } else {
+                                        addClockViews(currentClock, keyguardRootView)
+                                        updateBurnInLayer(
+                                            keyguardRootView,
+                                            viewModel,
+                                            viewModel.clockSize.value,
+                                        )
+                                    }
+                                    applyConstraints(clockSection, keyguardRootView, true)
 
-                                addClockViews(currentClock, keyguardRootView, isCustomClockEnabled)
-                                updateBurnInLayer(
-                                    keyguardRootView,
-                                    viewModel,
-                                    viewModel.clockSize.value,
-                                    isCustomClockEnabled,
-                                )
-                                applyConstraints(clockSection, keyguardRootView, true)
-                                currentClock?.apply { eventListeners.fire { onChangeComplete() } }
-                            }
+                                    // Sections depending on the clock type decide what to inflate
+                                    // in addViews(), so they have to be rebuilt on a switch.
+                                    if (lastCustomClockEnabled != isCustomClockEnabled) {
+                                        lastCustomClockEnabled = isCustomClockEnabled
+                                        blueprintInteractor.rebuildCustomClockSections()
+                                    }
+
+                                    currentClock?.apply {
+                                        eventListeners.fire { onChangeComplete() }
+                                    }
+                                }
                         }
                         .invokeOnCompletion {
                             cleanupClockViews(lastClock, keyguardRootView, viewModel.burnInLayer)
@@ -115,13 +130,9 @@ object KeyguardClockViewBinder {
 
                     launch {
                         viewModel.clockSize.collect { clockSize ->
-                            val isCustomClockEnabled = Settings.Secure.getIntForUser(
-                                keyguardRootView.context.contentResolver,
-                                Settings.Secure.LOCK_SCREEN_CUSTOM_CLOCK_STYLE,
-                                0,
-                                UserHandle.USER_CURRENT
-                            ) != 0
-                            updateBurnInLayer(keyguardRootView, viewModel, clockSize, isCustomClockEnabled)
+                            if (!viewModel.isCustomClockEnabled.value) {
+                                updateBurnInLayer(keyguardRootView, viewModel, clockSize)
+                            }
                             blueprintInteractor.refreshBlueprint(Type.ClockSize)
                         }
                     }
@@ -226,10 +237,7 @@ object KeyguardClockViewBinder {
         keyguardRootView: ConstraintLayout,
         viewModel: KeyguardClockViewModel,
         clockSize: ClockSize,
-        isCustomClockEnabled: Boolean,
     ) {
-        if (isCustomClockEnabled) return
-
         val burnInLayer = viewModel.burnInLayer
         val clockController = viewModel.currentClock.value
         // Large clocks won't be added to or removed from burn in layer
@@ -263,11 +271,7 @@ object KeyguardClockViewBinder {
     }
 
     @VisibleForTesting
-    fun addClockViews(
-        clockController: ClockController?,
-        rootView: ConstraintLayout,
-        isCustomClockEnabled: Boolean,
-    ) {
+    fun addClockViews(clockController: ClockController?, rootView: ConstraintLayout) {
         // We'll collect the same clock when exiting wallpaper picker without changing clock
         // so we need to remove clock views from parent before addView again
         clockController?.let { clock ->
@@ -275,17 +279,13 @@ object KeyguardClockViewBinder {
                 if (it.parent != null) {
                     (it.parent as ViewGroup).removeView(it)
                 }
-                if (!isCustomClockEnabled) {
-                    rootView.addView(it).apply { it.visibility = INVISIBLE }
-                }
+                rootView.addView(it).apply { it.visibility = INVISIBLE }
             }
             clock.largeClock.layout.views.forEach {
                 if (it.parent != null) {
                     (it.parent as ViewGroup).removeView(it)
                 }
-                if (!isCustomClockEnabled) {
-                    rootView.addView(it).apply { it.visibility = INVISIBLE }
-                }
+                rootView.addView(it).apply { it.visibility = INVISIBLE }
             }
         }
     }
