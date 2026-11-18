@@ -428,6 +428,22 @@ public class Installer extends SystemService {
     }
 
     /**
+     * Undoes {@link #replaceAppEmojiFonts}: deletes the emoji fonts an app keeps in its data and
+     * each of {@code lockedFiles} that is root-owned, so the app fetches its own font again.
+     * Returns the number of files removed.
+     */
+    public int removeAppEmojiFonts(@Nullable String uuid, @NonNull String packageName,
+            @UserIdInt int userId, @AppIdInt int appId, @NonNull String[] lockedFiles)
+            throws InstallerException {
+        if (!checkBeforeRemote()) return 0;
+        try {
+            return mInstalld.removeAppEmojiFonts(uuid, packageName, userId, appId, lockedFiles);
+        } catch (Exception e) {
+            throw InstallerException.from(e);
+        }
+    }
+
+    /**
      * Empties a directory relative to the app's CE data dir; with {@code block} it is also
      * created if missing and made inaccessible to the app.
      */

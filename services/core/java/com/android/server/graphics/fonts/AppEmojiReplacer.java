@@ -94,21 +94,63 @@ final class AppEmojiReplacer {
     }
 
     /**
-     * Undoes what {@link #apply} did that would otherwise outlive the custom emoji: the GMS
-     * font provider is re-enabled and Messenger may download fonts again.
+     * Undoes what {@link #apply} did, which would otherwise outlive the custom emoji: the GMS
+     * font provider is re-enabled, Messenger may download fonts again, and the emoji fonts that
+     * were overwritten in app data are deleted so each app fetches its own again.
+     *
+     * <p>Runs for every app, whether or not {@link #apply} ever ran: the replaced files stay
+     * behind after the custom font is cleared, so this also repairs a device that is already in
+     * that state.
+     *
+     * @param callerUid the app that asked; it is never force-stopped under its own feet
      */
-    synchronized void restore() {
+    synchronized void restore(int callerUid) {
         final long token = Binder.clearCallingIdentity();
         try {
+            Installer installer = getInstaller();
             UserManager um = mContext.getSystemService(UserManager.class);
             for (UserInfo user : um.getAliveUsers()) {
                 setGmsFontComponentsEnabled(user.id, true);
-                if (um.isUserUnlocked(user.id)) {
-                    unblockMessengerFonts(user.id);
+                if (!um.isUserUnlocked(user.id)) {
+                    continue;
+                }
+                unblockMessengerFonts(user.id);
+                List<ApplicationInfo> apps = mContext.getPackageManager()
+                        .getInstalledApplicationsAsUser(0, user.id);
+                for (ApplicationInfo app : apps) {
+                    restoreApp(installer, app, user.id, callerUid);
                 }
             }
         } finally {
             Binder.restoreCallingIdentity(token);
+        }
+    }
+
+    private void restoreApp(Installer installer, ApplicationInfo app, int userId,
+            int callerUid) {
+        String pkg = app.packageName;
+        int appId = UserHandle.getAppId(app.uid);
+        if (appId < Process.FIRST_APPLICATION_UID || appId > Process.LAST_APPLICATION_UID) {
+            return;
+        }
+        String uuid = app.volumeUuid;
+        int removed = 0;
+        boolean touched = false;
+        try {
+            removed = installer.removeAppEmojiFonts(uuid, pkg, userId, appId,
+                    LOCKED_FILES.getOrDefault(pkg, NO_FILES));
+            if (CACHE_CLEARED_PACKAGES.contains(pkg)) {
+                // Rendered emoji are cached too, so Gboard would keep showing the old ones.
+                for (String dir : CACHE_DIRS) {
+                    installer.clearAppDataSubdir(uuid, pkg, userId, appId, dir, false);
+                }
+                touched = true;
+            }
+        } catch (InstallerException e) {
+            Slog.w(TAG, "Failed to restore emoji fonts of " + pkg + " for user " + userId, e);
+        }
+        if ((removed > 0 || touched) && canForceStop(app, callerUid)) {
+            mContext.getSystemService(ActivityManager.class).forceStopPackageAsUser(pkg, userId);
         }
     }
 

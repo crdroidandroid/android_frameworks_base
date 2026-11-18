@@ -216,6 +216,7 @@ public final class FontManagerService extends IFontManager.Stub {
     public int clearCustomEmoji() {
         getContext().enforceCallingPermission(Manifest.permission.UPDATE_FONTS,
                 "UPDATE_FONTS permission required.");
+        final int callingUid = Binder.getCallingUid();
         try {
             synchronized (mUpdatableFontDirLock) {
                 if (mUpdatableFontDir == null) {
@@ -228,7 +229,8 @@ public final class FontManagerService extends IFontManager.Stub {
             Slog.e(TAG, "Failed to clear custom emoji", e);
             return e.getErrorCode();
         }
-        mAppEmojiReplacer.restore();
+        // Not under mUpdatableFontDirLock: this calls installd for every app.
+        mAppEmojiReplacer.restore(callingUid);
         return FontManager.RESULT_SUCCESS;
     }
 
