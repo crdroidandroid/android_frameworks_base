@@ -117,8 +117,16 @@ final class AppEmojiReplacer {
                 unblockMessengerFonts(user.id);
                 List<ApplicationInfo> apps = mContext.getPackageManager()
                         .getInstalledApplicationsAsUser(0, user.id);
+                int removed = 0;
                 for (ApplicationInfo app : apps) {
-                    restoreApp(installer, app, user.id, callerUid);
+                    removed += restoreApp(installer, app, user.id, callerUid);
+                }
+                if (removed > 0) {
+                    for (ApplicationInfo app : apps) {
+                        if (CACHE_CLEARED_PACKAGES.contains(app.packageName)) {
+                            clearCaches(installer, app, user.id, callerUid);
+                        }
+                    }
                 }
             }
         } finally {
@@ -126,30 +134,37 @@ final class AppEmojiReplacer {
         }
     }
 
-    private void restoreApp(Installer installer, ApplicationInfo app, int userId,
-            int callerUid) {
+    private int restoreApp(Installer installer, ApplicationInfo app, int userId, int callerUid) {
         String pkg = app.packageName;
         int appId = UserHandle.getAppId(app.uid);
         if (appId < Process.FIRST_APPLICATION_UID || appId > Process.LAST_APPLICATION_UID) {
-            return;
+            return 0;
         }
-        String uuid = app.volumeUuid;
         int removed = 0;
-        boolean touched = false;
         try {
-            removed = installer.removeAppEmojiFonts(uuid, pkg, userId, appId,
+            removed = installer.removeAppEmojiFonts(app.volumeUuid, pkg, userId, appId,
                     LOCKED_FILES.getOrDefault(pkg, NO_FILES));
-            if (CACHE_CLEARED_PACKAGES.contains(pkg)) {
-                // Rendered emoji are cached too, so Gboard would keep showing the old ones.
-                for (String dir : CACHE_DIRS) {
-                    installer.clearAppDataSubdir(uuid, pkg, userId, appId, dir, false);
-                }
-                touched = true;
-            }
         } catch (InstallerException e) {
             Slog.w(TAG, "Failed to restore emoji fonts of " + pkg + " for user " + userId, e);
         }
-        if ((removed > 0 || touched) && canForceStop(app, callerUid)) {
+        if (removed > 0 && canForceStop(app, callerUid)) {
+            mContext.getSystemService(ActivityManager.class).forceStopPackageAsUser(pkg, userId);
+        }
+        return removed;
+    }
+
+    private void clearCaches(Installer installer, ApplicationInfo app, int userId,
+            int callerUid) {
+        String pkg = app.packageName;
+        int appId = UserHandle.getAppId(app.uid);
+        try {
+            for (String dir : CACHE_DIRS) {
+                installer.clearAppDataSubdir(app.volumeUuid, pkg, userId, appId, dir, false);
+            }
+        } catch (InstallerException e) {
+            Slog.w(TAG, "Failed to clear caches of " + pkg + " for user " + userId, e);
+        }
+        if (canForceStop(app, callerUid)) {
             mContext.getSystemService(ActivityManager.class).forceStopPackageAsUser(pkg, userId);
         }
     }
