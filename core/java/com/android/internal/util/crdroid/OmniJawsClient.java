@@ -83,6 +83,7 @@ public class OmniJawsClient {
     private static final String COL_SUNSET = "sunset";
     private static final String COL_CITY_ID = "city_id";
     private static final String COL_AQI = "aqi";
+    private static final String COL_AQI_SCALE = "aqi_scale";
     private static final String COL_PM25 = "pm25";
     private static final String COL_PM10 = "pm10";
 
@@ -104,7 +105,8 @@ public class OmniJawsClient {
             COL_HUMIDITY, COL_CONDITION, COL_FORECAST_LOW, COL_FORECAST_HIGH, COL_FORECAST_CONDITION,
             COL_FORECAST_CONDITION_CODE, COL_TIME_STAMP, COL_FORECAST_DATE, COL_PIN_WHEEL,
             COL_FEELS_LIKE, COL_PRESSURE, COL_UVI, COL_VISIBILITY, COL_DEW_POINT,
-            COL_SUNRISE, COL_SUNSET, COL_CITY_ID, COL_AQI, COL_PM25, COL_PM10
+            COL_SUNRISE, COL_SUNSET, COL_CITY_ID, COL_AQI, COL_AQI_SCALE,
+            COL_PM25, COL_PM10
     };
 
     public static final String[] SETTINGS_PROJECTION = {
@@ -115,6 +117,9 @@ public class OmniJawsClient {
             COL_HOURLY_TEMPERATURE, COL_HOURLY_CONDITION_CODE, COL_HOURLY_CONDITION,
             COL_HOURLY_TIMESTAMP, COL_HOURLY_HUMIDITY, COL_HOURLY_WIND_SPEED
     };
+
+    public static final String AQI_SCALE_US = "us";
+    public static final String AQI_SCALE_IN = "in";
 
     private static final DecimalFormat sNoDigitsFormat = new DecimalFormat("0");
 
@@ -222,6 +227,7 @@ public class OmniJawsClient {
                 final int colSunset = weatherCursor.getColumnIndex(COL_SUNSET);
                 final int colCityId = weatherCursor.getColumnIndex(COL_CITY_ID);
                 final int colAqi = weatherCursor.getColumnIndex(COL_AQI);
+                final int colAqiScale = weatherCursor.getColumnIndex(COL_AQI_SCALE);
                 final int colPm25 = weatherCursor.getColumnIndex(COL_PM25);
                 final int colPm10 = weatherCursor.getColumnIndex(COL_PM10);
 
@@ -254,6 +260,8 @@ public class OmniJawsClient {
                         info.sunrise = getLong(weatherCursor, colSunrise, 0L);
                         info.sunset = getLong(weatherCursor, colSunset, 0L);
                         info.aqi = getNullableInt(weatherCursor, colAqi, -1);
+                        info.aqiScale = AQI_SCALE_IN.equals(getString(weatherCursor, colAqiScale))
+                                ? AQI_SCALE_IN : AQI_SCALE_US;
                         info.pm25 = getFloat(weatherCursor, colPm25);
                         info.pm10 = getFloat(weatherCursor, colPm10);
                     } else {
@@ -596,6 +604,7 @@ public class OmniJawsClient {
         public long sunset;
         /** US AQI (0-500), -1 when unknown. */
         public int aqi = -1;
+        public String aqiScale = AQI_SCALE_US;
         /** Particulates in ug/m3, NaN when unknown. */
         public float pm25 = Float.NaN;
         public float pm10 = Float.NaN;
