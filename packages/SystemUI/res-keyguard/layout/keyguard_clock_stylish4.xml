@@ -61,7 +61,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:format12Hour="hh • mm a"
-                android:format24Hour="kk • mm a"
+                android:format24Hour="HH • mm"
                 android:includeFontPadding="false"
                 android:layout_marginBottom="2dp"
                 android:tag="accent1"
