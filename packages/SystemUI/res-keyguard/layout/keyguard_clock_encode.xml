@@ -43,7 +43,7 @@
         android:layout_marginTop="4dp"
         android:layout_gravity="center"
         android:format12Hour="a - EEE, MMM d"
-        android:format24Hour="a - EEE, MMM d"/>
+        android:format24Hour="EEE, MMM d"/>
 
     <LinearLayout
         android:layout_width="match_parent"

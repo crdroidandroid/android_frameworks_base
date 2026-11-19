@@ -39,7 +39,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:format12Hour="mm"
-                android:format24Hour="MM"
+                android:format24Hour="mm"
                 android:fontFamily="@font/general_sans"
                 android:textSize="47sp"
                 android:textColor="@android:color/system_accent1_900"

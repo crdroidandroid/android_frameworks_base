@@ -55,7 +55,8 @@
                 android:layout_gravity="center_horizontal"
                 android:textStyle="bold"
                 android:textColor="@android:color/white"
-                android:format12Hour="hh:mm a"/>
+                android:format12Hour="hh:mm a"
+                android:format24Hour="HH:mm"/>
 
             <View
                 android:id="@+id/bottom_bar"
