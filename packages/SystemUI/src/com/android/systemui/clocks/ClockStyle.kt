@@ -483,13 +483,19 @@ class ClockStyle @JvmOverloads constructor(
             } else if (view is TextView && view.layout != null && view.layout.lineCount > 0) {
                 // Only the text itself, a match_parent TextView would claim the full width
                 val layout = view.layout
+                val textArea = view.width - view.totalPaddingLeft - view.totalPaddingRight
+                if (layout.width > textArea) {
+                    add(view, 0, 0, view.width, view.height)
+                    return
+                }
                 var lineLeft = Float.MAX_VALUE
                 var lineRight = 0f
                 for (i in 0 until layout.lineCount) {
                     lineLeft = minOf(lineLeft, layout.getLineLeft(i))
                     lineRight = maxOf(lineRight, layout.getLineRight(i))
                 }
-                val textLeft = (view.totalPaddingLeft + lineLeft).toInt().coerceAtLeast(0)
+                val textLeft =
+                    (view.totalPaddingLeft + lineLeft).toInt().coerceIn(0, view.width)
                 val textRight =
                     (view.totalPaddingLeft + lineRight).toInt().coerceIn(textLeft, view.width)
                 add(view, textLeft, 0, textRight, view.height)
