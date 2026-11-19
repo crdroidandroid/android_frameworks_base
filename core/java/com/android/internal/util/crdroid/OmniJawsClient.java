@@ -82,6 +82,9 @@ public class OmniJawsClient {
     private static final String COL_SUNRISE = "sunrise";
     private static final String COL_SUNSET = "sunset";
     private static final String COL_CITY_ID = "city_id";
+    private static final String COL_AQI = "aqi";
+    private static final String COL_PM25 = "pm25";
+    private static final String COL_PM10 = "pm10";
 
     private static final String COL_ENABLED = "enabled";
     private static final String COL_UNITS = "units";
@@ -101,7 +104,7 @@ public class OmniJawsClient {
             COL_HUMIDITY, COL_CONDITION, COL_FORECAST_LOW, COL_FORECAST_HIGH, COL_FORECAST_CONDITION,
             COL_FORECAST_CONDITION_CODE, COL_TIME_STAMP, COL_FORECAST_DATE, COL_PIN_WHEEL,
             COL_FEELS_LIKE, COL_PRESSURE, COL_UVI, COL_VISIBILITY, COL_DEW_POINT,
-            COL_SUNRISE, COL_SUNSET, COL_CITY_ID
+            COL_SUNRISE, COL_SUNSET, COL_CITY_ID, COL_AQI, COL_PM25, COL_PM10
     };
 
     public static final String[] SETTINGS_PROJECTION = {
@@ -218,6 +221,9 @@ public class OmniJawsClient {
                 final int colSunrise = weatherCursor.getColumnIndex(COL_SUNRISE);
                 final int colSunset = weatherCursor.getColumnIndex(COL_SUNSET);
                 final int colCityId = weatherCursor.getColumnIndex(COL_CITY_ID);
+                final int colAqi = weatherCursor.getColumnIndex(COL_AQI);
+                final int colPm25 = weatherCursor.getColumnIndex(COL_PM25);
+                final int colPm10 = weatherCursor.getColumnIndex(COL_PM10);
 
                 final int colForecastLow = weatherCursor.getColumnIndex(COL_FORECAST_LOW);
                 final int colForecastHigh = weatherCursor.getColumnIndex(COL_FORECAST_HIGH);
@@ -247,6 +253,9 @@ public class OmniJawsClient {
                         info.dewPoint = getFloat(weatherCursor, colDewPoint);
                         info.sunrise = getLong(weatherCursor, colSunrise, 0L);
                         info.sunset = getLong(weatherCursor, colSunset, 0L);
+                        info.aqi = getNullableInt(weatherCursor, colAqi, -1);
+                        info.pm25 = getFloat(weatherCursor, colPm25);
+                        info.pm10 = getFloat(weatherCursor, colPm10);
                     } else {
                         DayForecast day = new DayForecast();
                         day.low = getFormattedValue(getFloat(weatherCursor, colForecastLow));
@@ -340,9 +349,20 @@ public class OmniJawsClient {
         }
     }
 
+    // Null (unknown, or a service without the column) maps to def instead of 0.
+    private static int getNullableInt(Cursor c, int col, int def) {
+        if (col == -1) return def;
+        try {
+            return c.isNull(col) ? def : c.getInt(col);
+        } catch (Exception e) {
+            return def;
+        }
+    }
+
     private static float getFloat(Cursor c, int col) {
         if (col == -1) return Float.NaN;
         try {
+            if (c.isNull(col)) return Float.NaN;
             return c.getFloat(col);
         } catch (Exception e) {
             return Float.NaN;
@@ -574,6 +594,11 @@ public class OmniJawsClient {
         public float dewPoint = Float.NaN;
         public long sunrise;
         public long sunset;
+        /** US AQI (0-500), -1 when unknown. */
+        public int aqi = -1;
+        /** Particulates in ug/m3, NaN when unknown. */
+        public float pm25 = Float.NaN;
+        public float pm10 = Float.NaN;
         public List<HourlyForecast> hourlyForecasts;
 
         public String getLastUpdateTime() {
