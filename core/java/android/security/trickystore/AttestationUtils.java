@@ -406,14 +406,14 @@ public final class AttestationUtils {
     }
 
     public static int getAttestVersion() {
+        final int firstApiLevel = SystemProperties.getInt("ro.product.first_api_level", -1);
+        if (firstApiLevel > 0) {
+            return apiLevelToAttestVersion(firstApiLevel);
+        }
         final int sdkVersion = getSdkAttestVersion();
         final int halVersion = getKeyMintAidlVersion();
         if (halVersion > 0 && sdkVersion >= 100) {
             return Math.min(sdkVersion, halVersion * 100);
-        }
-        final int firstApiLevel = SystemProperties.getInt("ro.product.first_api_level", -1);
-        if (firstApiLevel > 0) {
-            return apiLevelToAttestVersion(firstApiLevel);
         }
         return sdkVersion;
     }
