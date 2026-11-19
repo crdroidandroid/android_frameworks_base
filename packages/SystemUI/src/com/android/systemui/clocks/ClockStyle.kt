@@ -18,6 +18,7 @@ import android.graphics.Typeface
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
+import android.text.Layout
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -484,15 +485,17 @@ class ClockStyle @JvmOverloads constructor(
                 // Only the text itself, a match_parent TextView would claim the full width
                 val layout = view.layout
                 val textArea = view.width - view.totalPaddingLeft - view.totalPaddingRight
-                if (layout.width > textArea) {
-                    add(view, 0, 0, view.width, view.height)
-                    return
-                }
                 var lineLeft = Float.MAX_VALUE
                 var lineRight = 0f
                 for (i in 0 until layout.lineCount) {
                     lineLeft = minOf(lineLeft, layout.getLineLeft(i))
                     lineRight = maxOf(lineRight, layout.getLineRight(i))
+                }
+                if (layout.width > textArea) {
+                    val textWidth = lineRight - lineLeft
+                    val start = scrolledTextStart(layout, textWidth, textArea.toFloat())
+                    lineLeft = start
+                    lineRight = start + textWidth
                 }
                 val textLeft =
                     (view.totalPaddingLeft + lineLeft).toInt().coerceIn(0, view.width)
@@ -528,6 +531,20 @@ class ClockStyle @JvmOverloads constructor(
         }
         bounds.offset(offsetX + frame.left, offsetY + frame.top)
         return bounds
+    }
+
+    private fun scrolledTextStart(layout: Layout, textWidth: Float, area: Float): Float {
+        val rtl = layout.getParagraphDirection(0) == Layout.DIR_RIGHT_TO_LEFT
+        val alignment = layout.getParagraphAlignment(0)
+        val alignRight =
+            when (alignment) {
+                Layout.Alignment.ALIGN_CENTER ->
+                    if (textWidth < area) return (area - textWidth) / 2 else rtl
+                Layout.Alignment.ALIGN_NORMAL -> rtl
+                Layout.Alignment.ALIGN_OPPOSITE -> !rtl
+                else -> alignment.name == "ALIGN_RIGHT"
+            }
+        return if (alignRight) area - textWidth else 0f
     }
 
     private fun cacheClockViews(root: View) {
