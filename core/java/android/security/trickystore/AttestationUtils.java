@@ -647,6 +647,11 @@ public final class AttestationUtils {
             Integer parsed = parsePatchLevel(level.vendor, isLong);
             if (parsed != null) return parsed;
         }
+        String vendor = SystemProperties.get("ro.vendor.build.security_patch", "");
+        if (!vendor.isEmpty()) {
+            Integer parsed = parsePatchLevel(vendor, isLong);
+            if (parsed != null) return parsed;
+        }
         return convertPatchLevel(Build.VERSION.SECURITY_PATCH, isLong);
     }
 
