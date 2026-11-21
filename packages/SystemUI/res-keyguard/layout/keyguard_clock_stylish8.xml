@@ -4,17 +4,17 @@
     android:id="@+id/clock_frame"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="start|top"
-    android:gravity="start|top"
+    android:layout_gravity="center|top"
+    android:gravity="center|top"
     android:orientation="vertical">
 
     <TextClock
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
-        android:fontFamily="@font/astthillabeltaden"
-        android:format12Hour="EEEE"
-        android:format24Hour="EEEE"
+        android:fontFamily="@font/Lastochka"
+        android:format12Hour=" EEEE "
+        android:format24Hour=" EEEE "
         android:includeFontPadding="false"
         android:tag="text1|nolineheight"
         android:textColor="#FFFFFF"
