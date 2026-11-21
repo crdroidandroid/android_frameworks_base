@@ -138,6 +138,7 @@ import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.app.UiModeManager;
+import android.app.contextualsearch.ContextualSearchManager;
 import android.bluetooth.BluetoothProfile;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
@@ -2397,12 +2398,16 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 return false;
             case PLAY_PAUSE_MUSIC:
             case CYCLE_RINGER_MODE:
+            case SILENCE_CALL:
                 return true;
             case LAUNCH_CAMERA:
             case SLEEP:
             case SCREENSHOT:
             case PARTIAL_SCREENSHOT:
+            case POWER_MENU:
                 return isScreenOn();
+            case CONTEXTUAL_SEARCH:
+                return isScreenOn() && !keyguardOn();
             default:
                 return !keyguardOn();
         }
@@ -2482,8 +2487,38 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             case QS_PANEL:
                 toggleQsPanel();
                 break;
+            case POWER_MENU:
+                showGlobalActions();
+                break;
+            case CONTEXTUAL_SEARCH:
+                startContextualSearch();
+                break;
+            case SILENCE_CALL:
+                silenceIncomingCall();
+                break;
             default:
                 break;
+        }
+    }
+
+    private void startContextualSearch() {
+        final ContextualSearchManager csm =
+                mContext.getSystemService(ContextualSearchManager.class);
+        if (csm == null) {
+            Slog.w(TAG, "Contextual search is not available");
+            return;
+        }
+        try {
+            csm.startContextualSearch(ContextualSearchManager.ENTRYPOINT_SYSTEM_ACTION);
+        } catch (Exception e) {
+            Slog.w(TAG, "Failed to start contextual search", e);
+        }
+    }
+
+    private void silenceIncomingCall() {
+        final TelecomManager telecomManager = getTelecommService();
+        if (telecomManager != null && telecomManager.isRinging()) {
+            telecomManager.silenceRinger();
         }
     }
 
