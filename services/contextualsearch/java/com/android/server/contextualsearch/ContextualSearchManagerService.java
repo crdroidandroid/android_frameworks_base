@@ -459,7 +459,7 @@ public class ContextualSearchManagerService extends SystemService {
 
     private void enforcePermission(@NonNull final String func) {
         final Context ctx = getContext();
-        if (!(ctx.checkCallingPermission(ACCESS_CONTEXTUAL_SEARCH) == PERMISSION_GRANTED
+        if (!(ctx.checkCallingOrSelfPermission(ACCESS_CONTEXTUAL_SEARCH) == PERMISSION_GRANTED
                 || isCallerTemporary())) {
             final String msg = "Permission Denial: Cannot call " + func + " from pid="
                     + Binder.getCallingPid() + ", uid=" + Binder.getCallingUid();
