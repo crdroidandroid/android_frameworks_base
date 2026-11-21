@@ -691,7 +691,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private volatile boolean mANBIEnabled;
     private final Object mPointerListenerLock = new Object();
     private boolean mANBIRegistered;
-    private boolean mThreeFingersSwipeRegistered;
 
     // Tracks user-customisable behavior for certain key events
     private Action mBackLongPressAction;
@@ -3777,11 +3776,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
 
             if (mThreeFingersSwipe != null) {
-                final boolean threeFingersEnabled = mThreeFingersSwipeHasAction;
-                if (threeFingersEnabled != mThreeFingersSwipeRegistered) {
-                    mThreeFingersSwipe.setEnabled(threeFingersEnabled);
-                    mThreeFingersSwipeRegistered = threeFingersEnabled;
-                }
+                mThreeFingersSwipe.setEnabled(mThreeFingersSwipeHasAction);
             }
         }
     }
@@ -6527,6 +6522,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
         setPendingWakingUpGroup(Display.INVALID_DISPLAY_GROUP);
         mKeyguardDelegate.onFinishedWakingUp();
+        if (mThreeFingersSwipe != null && mThreeFingersSwipeHasAction) {
+            mThreeFingersSwipe.refresh();
+        }
         if (mDisplayFoldController != null) {
             mDisplayFoldController.finishedWakingUp();
         }
