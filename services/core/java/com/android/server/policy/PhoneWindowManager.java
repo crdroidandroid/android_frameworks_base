@@ -2541,12 +2541,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (lineageos.content.Intent.ACTION_QUICK_TAP.equals(intent.getAction())) {
-                performQuickTapAction();
+                performQuickTapAction(intent.getIntExtra(
+                        lineageos.content.Intent.EXTRA_QUICK_TAP_HAPTIC_EFFECT, -1));
             }
         }
     };
 
-    private void performQuickTapAction() {
+    private void performQuickTapAction(int hapticEffect) {
         final Action action = mQuickTapAction;
         if (action == Action.NOTHING) {
             return;
@@ -2565,6 +2566,26 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 KeyEvent.KEYCODE_SYSRQ, 0, 0, KeyCharacterMap.VIRTUAL_KEYBOARD, 0,
                 KeyEvent.FLAG_FROM_SYSTEM, InputDevice.SOURCE_UNKNOWN);
         performKeyAction(action, event, LineageSettings.System.KEY_QUICK_TAP_ACTION);
+        performQuickTapHapticFeedback(action, hapticEffect);
+    }
+
+    private void performQuickTapHapticFeedback(Action action, int hapticEffect) {
+        // Cycling the ringer mode plays its own haptic.
+        if (action == Action.CYCLE_RINGER_MODE) {
+            return;
+        }
+        switch (hapticEffect) {
+            case VibrationEffect.EFFECT_TICK:
+            case VibrationEffect.EFFECT_DOUBLE_CLICK:
+            case VibrationEffect.EFFECT_HEAVY_CLICK:
+                mVibrator.vibrate(VibrationEffect.get(hapticEffect),
+                        VibrationAttributes.createForUsage(
+                                VibrationAttributes.USAGE_HARDWARE_FEEDBACK));
+                break;
+            default:
+                performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, "Quick Tap");
+                break;
+        }
     }
 
     private void launchAppForKeyAction(String actionSetting) {
