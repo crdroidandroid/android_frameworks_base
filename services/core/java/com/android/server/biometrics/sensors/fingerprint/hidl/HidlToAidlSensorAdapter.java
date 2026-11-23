@@ -125,10 +125,12 @@ public class HidlToAidlSensorAdapter extends Sensor implements IHwBinder.DeathRe
     @Override
     public void serviceDied(long cookie) {
         Slog.d(TAG, "Fingerprint HAL died.");
-        mSession = null;
-        mDaemon = null;
-        mCurrentUserId = UserHandle.USER_NULL;
-        onBinderDied();
+        getHandler().post(() -> {
+            mSession = null;
+            mDaemon = null;
+            mCurrentUserId = UserHandle.USER_NULL;
+            onBinderDied();
+        });
     }
 
     @Override
