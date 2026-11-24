@@ -194,6 +194,8 @@ sealed class IslandEvent(open val priority: Int, val id: String) : Comparable<Is
         val key: String,
         val sbn: StatusBarNotification? = null,
         val appIcon: Drawable? = null,
+        /** Tap target for events that do not come from a notification. */
+        val contentIntent: PendingIntent? = null,
     ) : IslandEvent(priority = 73, id = "sports_$key") {
         override fun withoutDrawables() = copy(team1Icon = null, team2Icon = null, appIcon = null)
     }
@@ -207,6 +209,8 @@ sealed class IslandEvent(open val priority: Int, val id: String) : Comparable<Is
         val sbn: StatusBarNotification? = null,
         val appIcon: Drawable? = null,
         val actions: List<NotificationAction> = emptyList(),
+        /** Tap target for events that do not come from a notification. */
+        val contentIntent: PendingIntent? = null,
     ) : IslandEvent(priority = 42, id = "now_playing") {
         override fun withoutDrawables() = copy(appIcon = null)
     }

@@ -394,7 +394,10 @@ constructor(
                 repository.smartspace.clearSportsEvent(event.key, event.team1Name, event.team2Name)
                 repository.notification.clearSportsEvent(event.key, event.team1Name, event.team2Name)
             }
-            is IslandEvent.NowPlaying -> repository.smartspace.dismissNowPlaying()
+            is IslandEvent.NowPlaying -> {
+                repository.smartspace.dismissNowPlaying()
+                repository.notification.clearNowPlaying()
+            }
             is IslandEvent.PromotedOngoing ->
                 repository.notification.clearPromotedOngoing(event.sbn.key)
             is IslandEvent.Media -> repository.media.clear()

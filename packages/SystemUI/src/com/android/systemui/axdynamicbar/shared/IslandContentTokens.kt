@@ -819,8 +819,8 @@ internal val IslandEvent.contentIntent: PendingIntent?
     get() =
         when (this) {
             is IslandEvent.PromotedOngoing -> sbn.notification?.contentIntent
-            is IslandEvent.Sports -> sbn?.notification?.contentIntent
-            is IslandEvent.NowPlaying -> sbn?.notification?.contentIntent
+            is IslandEvent.Sports -> contentIntent ?: sbn?.notification?.contentIntent
+            is IslandEvent.NowPlaying -> contentIntent ?: sbn?.notification?.contentIntent
             is IslandEvent.Call -> sbn.notification?.contentIntent
             is IslandEvent.Notification -> sbn.notification?.contentIntent
             is IslandEvent.AudioRecording -> contentIntent

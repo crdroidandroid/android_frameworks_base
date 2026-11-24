@@ -163,15 +163,19 @@ constructor(
         val sportsGroup = combine(
             smartspace.sportsEvents,
             notification.sportsEvents,
-        ) { qlSports, notifSports ->
+        ) { ssSports, notifSports ->
             if (!isTypeEnabled("sports")) emptyList()
-            else qlSports + notifSports.filter { ns ->
-                qlSports.none { qs ->
-                    qs.team1Name.equals(ns.team1Name, ignoreCase = true) &&
-                        qs.team2Name.equals(ns.team2Name, ignoreCase = true)
+            else ssSports + notifSports.filter { ns ->
+                ssSports.none { ss ->
+                    ss.team1Name.equals(ns.team1Name, ignoreCase = true) &&
+                        ss.team2Name.equals(ns.team2Name, ignoreCase = true)
                 }
             }
         }
+        val nowPlayingSource = combine(
+            smartspace.nowPlayingEvent,
+            notification.nowPlayingEvent,
+        ) { ambient, notif -> ambient ?: notif }
         val promotedGroup = combine(
             notification.promotedOngoingEvents,
             sportsGroup,
@@ -231,7 +235,7 @@ constructor(
                 lowGroupA,
                 appTracking.appSwitchEvent,
                 notification.audioRecordingEvent,
-                smartspace.nowPlayingEvent,
+                nowPlayingSource,
             ) { a, appSwitch, audioRec, nowPlaying ->
                 a + listOfNotNull(
                     appSwitch?.takeIf { isTypeEnabled("app_switch") },

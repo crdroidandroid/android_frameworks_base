@@ -17,24 +17,44 @@
 package com.android.systemui.axdynamicbar.data.source
 
 import android.app.PendingIntent
-import android.graphics.BitmapFactory
+import android.app.smartspace.SmartspaceAction
+import android.app.smartspace.SmartspaceConfig
+import android.app.smartspace.SmartspaceManager
+import android.app.smartspace.SmartspaceSession
+import android.app.smartspace.SmartspaceTarget
+import android.app.smartspace.uitemplatedata.HeadToHeadTemplateData
+import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import android.util.LruCache
-import com.android.axion.quicklook.SportsData
+import android.graphics.drawable.Icon
+import android.os.Bundle
+import android.util.Log
 import com.android.systemui.axdynamicbar.model.IslandEvent
 import com.android.systemui.dagger.SysUISingleton
-import com.android.systemui.quicklook.QuickLookClient
+import com.android.systemui.dagger.qualifiers.Application
+import com.android.systemui.dagger.qualifiers.Background
+import com.android.systemui.settings.UserTracker
+import com.google.android.systemui.keyguard.domain.interactor.AmbientIndicationInteractor
+import com.google.android.systemui.keyguard.shared.AmbientIndicationMusic
+import java.util.concurrent.Executor
 import javax.inject.Inject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 @SysUISingleton
 class SmartspaceIslandManager
 @Inject
 constructor(
-    private val quickLookClient: QuickLookClient,
+    @Application private val context: Context,
+    @Application private val applicationScope: CoroutineScope,
+    @Background private val bgExecutor: Executor,
+    private val userTracker: UserTracker,
+    private val ambientIndicationInteractor: AmbientIndicationInteractor,
 ) {
     private val _sportsEvents = MutableStateFlow<List<IslandEvent.Sports>>(emptyList())
     val sportsEvents: StateFlow<List<IslandEvent.Sports>> = _sportsEvents.asStateFlow()
@@ -42,159 +62,388 @@ constructor(
     private val _nowPlayingEvent = MutableStateFlow<IslandEvent.NowPlaying?>(null)
     val nowPlayingEvent: StateFlow<IslandEvent.NowPlaying?> = _nowPlayingEvent.asStateFlow()
 
+    private val lock = Any()
     @Volatile private var listening = false
 
+    private var nowPlayingJob: Job? = null
+    private var lastNowPlayingTitle: String? = null
+    private var dismissedNowPlayingTitle: String? = null
+
+    private var session: SmartspaceSession? = null
     private var allSports: List<IslandEvent.Sports> = emptyList()
     private val dismissedSportsKeys = mutableSetOf<String>()
 
-    private val iconCache = LruCache<String, Drawable>(24)
+    private val sessionListener =
+        SmartspaceSession.OnTargetsAvailableListener { targets -> onTargetsAvailable(targets) }
 
-    private var lastNowPlayingText: String? = null
-    private var dismissedNowPlayingText: String? = null
-
-    private val callback = object : QuickLookClient.Callback {
-        override fun onSportsUpdate(sports: List<SportsData>) {
-            if (!listening) return
-            val seen = HashMap<String, Int>()
-            allSports = sports.map { data ->
-                val base = "ql_sports_${data.league}|${data.team1Name}|${data.team2Name}"
-                val count = seen.merge(base, 1) { a, b -> a + b } ?: 1
-                val key = if (count == 1) base else "$base#$count"
-                val status = parseGameStatus(data.status, data.statusDetail)
-                IslandEvent.Sports(
-                    team1Name = data.team1Name,
-                    team2Name = data.team2Name,
-                    score1 = data.score1,
-                    score2 = data.score2,
-                    team1Icon = bytesToDrawable(data.team1IconBytes),
-                    team2Icon = bytesToDrawable(data.team2IconBytes),
-                    status = status,
-                    statusDetail = data.statusDetail,
-                    league = data.league,
-                    key = key,
-                )
+    private val userCallback =
+        object : UserTracker.Callback {
+            override fun onUserChanged(newUser: Int, userContext: Context) {
+                synchronized(lock) {
+                    if (!listening) return
+                    closeSession()
+                    allSports = emptyList()
+                    dismissedSportsKeys.clear()
+                    publishSports()
+                    openSession()
+                }
             }
-            val liveKeys = allSports.mapTo(HashSet()) { it.key }
-            dismissedSportsKeys.retainAll(liveKeys)
-            publishSports()
         }
-
-        override fun onNowPlayingUpdate(text: String, tapAction: PendingIntent?) {
-            if (!listening) return
-            if (text.isBlank()) {
-                lastNowPlayingText = null
-                dismissedNowPlayingText = null
-                _nowPlayingEvent.value = null
-                return
-            }
-            lastNowPlayingText = text
-            if (text == dismissedNowPlayingText) {
-                _nowPlayingEvent.value = null
-                return
-            }
-            dismissedNowPlayingText = null
-            val byMatch = NOW_PLAYING_BY_PATTERN.find(text)
-            val dashParts = if (byMatch == null) text.split(" - ", " – ", limit = 2) else null
-            val songTitle: String
-            val artist: String
-            when {
-                byMatch != null -> {
-                    songTitle = byMatch.groupValues[1].trim()
-                    artist = byMatch.groupValues[2].trim()
-                }
-                dashParts != null && dashParts.size == 2 -> {
-                    songTitle = dashParts[0].trim()
-                    artist = dashParts[1].trim()
-                }
-                else -> {
-                    songTitle = text
-                    artist = ""
-                }
-            }
-            _nowPlayingEvent.value = IslandEvent.NowPlaying(
-                songTitle = songTitle,
-                artist = artist,
-                key = "ql_now_playing",
-            )
-        }
-    }
 
     fun startListening() {
-        if (listening) return
-        listening = true
-        quickLookClient.addCallback(callback)
+        synchronized(lock) {
+            if (listening) return
+            listening = true
+            openSession()
+        }
+        userTracker.addCallback(userCallback, bgExecutor)
+        nowPlayingJob =
+            applicationScope.launch {
+                ambientIndicationInteractor.ambientMusicState.collect { onAmbientMusic(it) }
+            }
     }
 
     fun stopListening() {
-        if (!listening) return
-        listening = false
-        quickLookClient.removeCallback(callback)
-        allSports = emptyList()
-        dismissedSportsKeys.clear()
-        lastNowPlayingText = null
-        dismissedNowPlayingText = null
-        _sportsEvents.value = emptyList()
-        _nowPlayingEvent.value = null
-        iconCache.evictAll()
+        synchronized(lock) {
+            if (!listening) return
+            listening = false
+            closeSession()
+            allSports = emptyList()
+            dismissedSportsKeys.clear()
+            lastNowPlayingTitle = null
+            dismissedNowPlayingTitle = null
+            _sportsEvents.value = emptyList()
+            _nowPlayingEvent.value = null
+        }
+        userTracker.removeCallback(userCallback)
+        nowPlayingJob?.cancel()
+        nowPlayingJob = null
     }
 
     fun clearSportsEvent(key: String, team1: String? = null, team2: String? = null) {
-        allSports
-            .filter { it.key == key || it.isSameGame(team1, team2) }
-            .forEach { dismissedSportsKeys.add(it.key) }
-        dismissedSportsKeys.add(key)
-        publishSports()
+        synchronized(lock) {
+            allSports
+                .filter { it.key == key || it.isSameGame(team1, team2) }
+                .forEach { dismissedSportsKeys.add(it.key) }
+            dismissedSportsKeys.add(key)
+            publishSports()
+        }
     }
 
+    /** Hides the current song until a different one is recognized. */
     fun dismissNowPlaying() {
-        dismissedNowPlayingText = lastNowPlayingText
-        _nowPlayingEvent.value = null
+        synchronized(lock) {
+            dismissedNowPlayingTitle = lastNowPlayingTitle
+            _nowPlayingEvent.value = null
+        }
     }
 
+    private fun onAmbientMusic(music: AmbientIndicationMusic?) {
+        synchronized(lock) {
+            if (!listening) return
+            val event = music?.let { toNowPlaying(it) }
+            if (event == null) {
+                lastNowPlayingTitle = null
+                dismissedNowPlayingTitle = null
+                _nowPlayingEvent.value = null
+                return
+            }
+            val title = event.songTitle
+            lastNowPlayingTitle = title
+            if (title == dismissedNowPlayingTitle) {
+                _nowPlayingEvent.value = null
+                return
+            }
+            dismissedNowPlayingTitle = null
+            _nowPlayingEvent.value = event
+        }
+    }
+
+    private fun toNowPlaying(music: AmbientIndicationMusic): IslandEvent.NowPlaying? {
+        val extended = music.extendedIndication
+        if (extended?.isSongSearching == true) return null
+        val songTitle = extended?.songTitle?.toString()?.trim().orEmpty()
+        val artistName = extended?.artistName?.toString()?.trim().orEmpty()
+        val text = music.text?.toString()?.trim().orEmpty()
+
+        val (title, artist) =
+            when {
+                songTitle.isNotEmpty() -> songTitle to artistName
+                text.isNotEmpty() -> splitSongText(text)
+                else -> return null
+            }
+        return IslandEvent.NowPlaying(
+            songTitle = title,
+            artist = artist,
+            key = NOW_PLAYING_KEY,
+            contentIntent = music.openIntent,
+        )
+    }
+
+    private fun splitSongText(text: String): Pair<String, String> {
+        NOW_PLAYING_BY_PATTERN.find(text)?.let {
+            return it.groupValues[1].trim() to it.groupValues[2].trim()
+        }
+        val dashParts = text.split(" - ", " – ", limit = 2)
+        if (dashParts.size == 2) return dashParts[0].trim() to dashParts[1].trim()
+        return text to ""
+    }
+
+    // endregion
+
+    // region Sports (Google Smartspace)
+
+    /** Must be called with [lock] held. */
+    private fun openSession() {
+        if (session != null) return
+        val manager =
+            userTracker.userContext.getSystemService(SmartspaceManager::class.java) ?: run {
+                Log.w(TAG, "SmartspaceManager not available")
+                return
+            }
+        try {
+            val config =
+                SmartspaceConfig.Builder(userTracker.userContext, UI_SURFACE)
+                    .setSmartspaceTargetCount(TARGET_COUNT)
+                    .build()
+            session =
+                manager.createSmartspaceSession(config).also {
+                    it.addOnTargetsAvailableListener(bgExecutor, sessionListener)
+                    it.requestSmartspaceUpdate()
+                }
+        } catch (e: Exception) {
+            Log.w(TAG, "Failed to create Smartspace session", e)
+            session = null
+        }
+    }
+
+    /** Must be called with [lock] held. */
+    private fun closeSession() {
+        val current = session ?: return
+        session = null
+        try {
+            current.removeOnTargetsAvailableListener(sessionListener)
+            current.close()
+        } catch (_: Exception) {}
+    }
+
+    private fun onTargetsAvailable(targets: List<SmartspaceTarget>) {
+        val converted =
+            targets.mapNotNull { target ->
+                try {
+                    convertSportsTarget(target)
+                } catch (e: Exception) {
+                    Log.w(TAG, "Failed to convert target ${target.smartspaceTargetId}", e)
+                    null
+                }
+            }
+        synchronized(lock) {
+            if (!listening) return
+            val seen = HashMap<String, Int>()
+            allSports =
+                converted.map { event ->
+                    val count = seen.merge(event.key, 1) { a, b -> a + b } ?: 1
+                    if (count == 1) event else event.copy(key = "${event.key}#$count")
+                }
+            dismissedSportsKeys.retainAll(allSports.mapTo(HashSet()) { it.key })
+            publishSports()
+        }
+    }
+
+    private fun convertSportsTarget(st: SmartspaceTarget): IslandEvent.Sports? {
+        val h2h =
+            try {
+                st.templateData as? HeadToHeadTemplateData
+            } catch (_: Exception) {
+                null
+            }
+        return when {
+            st.featureType == FEATURE_SPORTS -> convertScoreTarget(st)
+            h2h != null -> convertHeadToHeadTarget(st, h2h)
+            else -> null
+        }
+    }
+
+    private fun convertScoreTarget(st: SmartspaceTarget): IslandEvent.Sports? {
+        val header = st.headerAction
+        val base = st.baseAction
+        val headerExtras = safeExtras(header)
+        val baseExtras = safeExtras(base)
+
+        val statusDetail = headerExtras?.safeString("matchTimeSummary").orEmpty()
+        val score1 =
+            headerExtras?.safeString("firstCompetitorScore")
+                ?: baseExtras?.safeString("firstCompetitorScore")
+        val score2 =
+            headerExtras?.safeString("secondCompetitorScore")
+                ?: baseExtras?.safeString("secondCompetitorScore")
+
+        val title = header?.title?.toString() ?: base?.title?.toString()
+        if (title.isNullOrEmpty() && score1 == null) return null
+
+        val teams = title?.let { VS_PATTERN.find(it) }
+        return buildSports(
+            st = st,
+            team1 = teams?.groupValues?.get(1)?.trim().orEmpty(),
+            team2 = teams?.groupValues?.get(2)?.trim().orEmpty(),
+            score1 = score1.orEmpty(),
+            score2 = score2.orEmpty(),
+            team1Icon = headerExtras?.safeBitmap("firstCompetitorLogo")?.toDrawable(),
+            team2Icon = headerExtras?.safeBitmap("secondCompetitorLogo")?.toDrawable(),
+            statusDetail = statusDetail,
+        )
+    }
+
+    private fun convertHeadToHeadTarget(
+        st: SmartspaceTarget,
+        h2h: HeadToHeadTemplateData,
+    ): IslandEvent.Sports? {
+        val title = h2h.headToHeadTitle?.text?.toString() ?: st.headerAction?.title?.toString()
+        val team1Text = h2h.headToHeadFirstCompetitorText?.text?.toString().orEmpty()
+        val team2Text = h2h.headToHeadSecondCompetitorText?.text?.toString().orEmpty()
+        if (team1Text.isEmpty() && team2Text.isEmpty()) return null
+
+        val m1 = COMPETITOR_SCORE_PATTERN.find(team1Text)
+        val m2 = COMPETITOR_SCORE_PATTERN.find(team2Text)
+        val scored = m1 != null && m2 != null
+        return buildSports(
+            st = st,
+            team1 = if (scored) m1!!.groupValues[1].trim() else team1Text,
+            team2 = if (scored) m2!!.groupValues[1].trim() else team2Text,
+            score1 = if (scored) m1!!.groupValues[2] else "",
+            score2 = if (scored) m2!!.groupValues[2] else "",
+            team1Icon = h2h.headToHeadFirstCompetitorIcon?.icon?.toDrawable(),
+            team2Icon = h2h.headToHeadSecondCompetitorIcon?.icon?.toDrawable(),
+            statusDetail = title.orEmpty(),
+        )
+    }
+
+    private fun buildSports(
+        st: SmartspaceTarget,
+        team1: String,
+        team2: String,
+        score1: String,
+        score2: String,
+        team1Icon: Drawable?,
+        team2Icon: Drawable?,
+        statusDetail: String,
+    ) =
+        IslandEvent.Sports(
+            team1Name = team1,
+            team2Name = team2,
+            score1 = score1,
+            score2 = score2,
+            team1Icon = team1Icon,
+            team2Icon = team2Icon,
+            status = parseGameStatus(statusDetail),
+            statusDetail = statusDetail,
+            key = "ss_sports_${st.smartspaceTargetId}",
+            contentIntent = buildTapIntent(st),
+        )
+
+    private fun buildTapIntent(st: SmartspaceTarget): PendingIntent? {
+        val action =
+            listOfNotNull(st.baseAction, st.headerAction).firstOrNull {
+                it.pendingIntent != null || it.intent != null
+            } ?: return null
+        action.pendingIntent?.let { return it }
+        val intent = action.intent ?: return null
+        return PendingIntent.getActivityAsUser(
+            userTracker.userContext,
+            st.smartspaceTargetId.hashCode(),
+            intent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
+            null,
+            userTracker.userHandle,
+        )
+    }
+
+    /** Must be called with [lock] held. */
     private fun publishSports() {
         _sportsEvents.value = allSports.filterNot { it.key in dismissedSportsKeys }
     }
 
     private fun IslandEvent.Sports.isSameGame(team1: String?, team2: String?): Boolean =
-        team1 != null && team2 != null &&
+        team1 != null &&
+            team2 != null &&
             team1Name.equals(team1, ignoreCase = true) &&
             team2Name.equals(team2, ignoreCase = true)
 
-    private fun parseGameStatus(status: String, detail: String): IslandEvent.GameStatus {
-        val combined = "$status $detail".lowercase()
+    private fun parseGameStatus(detail: String): IslandEvent.GameStatus {
+        val text = detail.lowercase()
         return when {
-            combined.contains("final") -> IslandEvent.GameStatus.FINAL
-            combined.contains("half") -> IslandEvent.GameStatus.HALFTIME
-            combined.contains("live") || combined.contains("q") ||
-                combined.contains("inning") || combined.contains("set") ||
-                combined.contains("period") -> IslandEvent.GameStatus.LIVE
-            combined.contains("pre") || combined.contains("upcoming") ||
-                combined.contains("tip") || combined.contains("kick") -> IslandEvent.GameStatus.PRE_GAME
+            text.contains("final") -> IslandEvent.GameStatus.FINAL
+            text.contains("half") -> IslandEvent.GameStatus.HALFTIME
+            text.contains("live") ||
+                text.contains("q") ||
+                text.contains("inning") ||
+                text.contains("set") ||
+                text.contains("period") -> IslandEvent.GameStatus.LIVE
+            text.contains("pre") ||
+                text.contains("upcoming") ||
+                text.contains("tip") ||
+                text.contains("kick") -> IslandEvent.GameStatus.PRE_GAME
             else -> IslandEvent.GameStatus.LIVE
         }
     }
 
-    private fun bytesToDrawable(bytes: ByteArray?): Drawable? {
-        if (bytes == null || bytes.isEmpty()) return null
-        val key = "${bytes.size}:${bytes.contentHashCode()}"
-        iconCache.get(key)?.let { return it }
-        return try {
-            val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
-            BitmapFactory.decodeByteArray(bytes, 0, bytes.size, bounds)
-            var sample = 1
-            while (maxOf(bounds.outWidth, bounds.outHeight) / (sample * 2) >= MAX_ICON_PX) {
-                sample *= 2
-            }
-            val opts = BitmapFactory.Options().apply { inSampleSize = sample }
-            val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size, opts) ?: return null
-            BitmapDrawable(null, bitmap).also { iconCache.put(key, it) }
+    private fun safeExtras(action: SmartspaceAction?): Bundle? =
+        try {
+            action?.extras
         } catch (_: Exception) {
             null
         }
+
+    private fun Bundle.safeString(key: String): String? =
+        try {
+            getString(key)
+        } catch (_: Exception) {
+            null
+        }
+
+    private fun Bundle.safeBitmap(key: String): Bitmap? =
+        try {
+            getParcelable(key, Bitmap::class.java)
+        } catch (_: Exception) {
+            null
+        }
+
+    private fun Icon.toDrawable(): Drawable? =
+        try {
+            loadDrawable(userTracker.userContext)
+        } catch (e: Exception) {
+            Log.w(TAG, "Failed to load competitor icon", e)
+            null
+        }
+
+    private fun Bitmap.toDrawable(): Drawable {
+        val largest = maxOf(width, height)
+        val scaled =
+            if (largest > MAX_ICON_PX) {
+                val ratio = MAX_ICON_PX.toFloat() / largest
+                Bitmap.createScaledBitmap(
+                    this,
+                    (width * ratio).toInt().coerceAtLeast(1),
+                    (height * ratio).toInt().coerceAtLeast(1),
+                    true,
+                )
+            } else {
+                this
+            }
+        return BitmapDrawable(context.resources, scaled)
     }
 
+    // endregion
+
     private companion object {
+        const val TAG = "SmartspaceIslandManager"
+        const val NOW_PLAYING_KEY = "ambient_now_playing"
+        const val UI_SURFACE = "lockscreen"
+        const val TARGET_COUNT = 10
+        const val FEATURE_SPORTS = 9
         const val MAX_ICON_PX = 192
         val NOW_PLAYING_BY_PATTERN = Regex("""(.+?)\s+by\s+(.+)""", RegexOption.IGNORE_CASE)
+        val VS_PATTERN = Regex("""(.+?)\s+(?:vs\.?|v)\s+(.+)""", RegexOption.IGNORE_CASE)
+        val COMPETITOR_SCORE_PATTERN = Regex("""(\D*?)\s*(\d+)\s*$""")
     }
 }
