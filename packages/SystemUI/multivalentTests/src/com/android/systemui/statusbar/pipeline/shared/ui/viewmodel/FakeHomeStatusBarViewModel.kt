@@ -116,6 +116,9 @@ class FakeHomeStatusBarViewModel(
     override val isNotificationIconContainerVisible =
         MutableStateFlow(VisibilityModel(visibility = View.GONE, shouldAnimateChange = false))
 
+    override val isStatusBarLogoVisible =
+        MutableStateFlow(VisibilityModel(visibility = View.GONE, shouldAnimateChange = false))
+
     override val systemInfoCombinedVis =
         MutableStateFlow(
             SystemInfoCombinedVisibilityModel(

@@ -209,6 +209,7 @@ interface HomeStatusBarViewModel : Activatable {
     val shouldShowOperatorNameView: Flow<Boolean>
     val isClockVisible: Flow<VisibilityModel>
     val isNotificationIconContainerVisible: Flow<VisibilityModel>
+    val isStatusBarLogoVisible: Flow<VisibilityModel>
     val hideStartSideContentForHeadsUp: Flow<Boolean>
 
     /**
@@ -608,6 +609,19 @@ constructor(
                 columnPrefix = COL_PREFIX_NOTIF_CONTAINER,
                 initialValue = VisibilityModel(false.toVisibleOrInvisible(), false),
             )
+            .flowOn(bgDispatcher)
+
+    override val isStatusBarLogoVisible: Flow<VisibilityModel> =
+        combine(
+                statusBarVisibilityInteractor.shouldHomeStatusBarBeVisible,
+                homeStatusBarInteractor.visibilityViaDisableFlags,
+            ) { shouldStatusBarBeVisible, visibilityViaDisableFlags ->
+                val showLogo =
+                    shouldStatusBarBeVisible &&
+                        visibilityViaDisableFlags.areNotificationIconsAllowed
+                VisibilityModel(showLogo.toVisibleOrGone(), visibilityViaDisableFlags.animate)
+            }
+            .distinctUntilChanged()
             .flowOn(bgDispatcher)
 
     private val isSystemInfoVisible =

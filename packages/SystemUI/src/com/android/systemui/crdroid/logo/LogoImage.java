@@ -47,6 +47,8 @@ public abstract class LogoImage extends ImageView implements DarkReceiver {
     public int mLogoPosition;
     private int mLogoStyle;
     private int mTintColor = Color.WHITE;
+    // Whether the status bar (disable flags, keyguard, etc.) currently allows the logo.
+    private boolean mAllowedBySystem = true;
 
     private ContentObserver mSettingsObserver;
 
@@ -64,6 +66,14 @@ public abstract class LogoImage extends ImageView implements DarkReceiver {
     }
 
     protected abstract boolean isLogoVisible();
+
+    public boolean isLogoEnabled() {
+        return mShowLogo && isLogoVisible();
+    }
+
+    public void setAllowedBySystem(boolean allowed) {
+        mAllowedBySystem = allowed;
+    }
 
     @Override
     protected void onAttachedToWindow() {
@@ -109,7 +119,7 @@ public abstract class LogoImage extends ImageView implements DarkReceiver {
     @Override
     public void onDarkChanged(ArrayList<Rect> areas, float darkIntensity, int tint) {
         mTintColor = DarkIconDispatcher.getTint(areas, this, tint);
-        if (mShowLogo && isLogoVisible()) {
+        if (isLogoEnabled()) {
             updateLogo();
         }
     }
@@ -230,12 +240,17 @@ public abstract class LogoImage extends ImageView implements DarkReceiver {
                 Settings.System.STATUS_BAR_LOGO_POSITION, 0, UserHandle.USER_CURRENT);
         mLogoStyle = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.STATUS_BAR_LOGO_STYLE, 0, UserHandle.USER_CURRENT);
-        if (!mShowLogo || !isLogoVisible()) {
+        if (!isLogoEnabled()) {
+            animate().cancel();
             setImageDrawable(null);
             setVisibility(View.GONE);
             return;
         }
         updateLogo();
-        setVisibility(View.VISIBLE);
+        if (mAllowedBySystem) {
+            animate().cancel();
+            setAlpha(1f);
+            setVisibility(View.VISIBLE);
+        }
     }
 }
