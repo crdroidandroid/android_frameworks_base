@@ -14885,6 +14885,39 @@ public final class Settings {
         public static final String BATTERY_SAVER_DARK_THEME = "battery_saver_dark_theme";
 
         /**
+         * Whether the Dynamic Bar is enabled
+         * @hide
+         */
+        public static final String AX_DYNAMIC_BAR_ENABLED = "ax_dynamic_bar_enabled";
+
+        /**
+         * JSON array of Dynamic Bar event types that are disabled
+         * @hide
+         */
+        public static final String AX_DYNAMIC_BAR_EVENTS = "ax_dynamic_bar_events";
+
+        /**
+         * Whether the Dynamic Bar chip is shown on the lock screen
+         * @hide
+         */
+        public static final String AX_DYNAMIC_BAR_KEYGUARD_ENABLED =
+                "ax_dynamic_bar_keyguard_enabled";
+
+        /**
+         * Battery info mode of the Dynamic Bar chip on the lock screen
+         * @hide
+         */
+        public static final String AX_DYNAMIC_BAR_KEYGUARD_BATTERY_CHIP_MODE =
+                "ax_dynamic_bar_keyguard_battery_chip_mode";
+
+        /**
+         * Whether Dynamic Bar notifications are shown as a compact chip first
+         * @hide
+         */
+        public static final String AX_DYNAMIC_BAR_COMPACT_NOTIFICATIONS =
+                "ax_dynamic_bar_compact_notifications";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
