@@ -93,9 +93,10 @@ constructor(
     val isKeyguardEnabled: StateFlow<Boolean> = interactor.settings.isKeyguardEnabled
     val keyguardBatteryChipMode: StateFlow<Int> = interactor.settings.keyguardBatteryChipMode
     val chipMorphEnabled: StateFlow<Boolean> = interactor.settings.chipMorphEnabled
+    val hapticsEnabled: StateFlow<Boolean> = interactor.settings.hapticsEnabled
 
     fun performTapHaptic(view: View) {
-        if (interactor.settings.hapticsEnabled.value) {
+        if (hapticsEnabled.value) {
             view.performHapticFeedback(HapticFeedbackConstants.CONTEXT_CLICK)
         }
     }
