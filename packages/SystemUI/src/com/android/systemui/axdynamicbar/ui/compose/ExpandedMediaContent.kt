@@ -14,6 +14,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -250,7 +251,14 @@ private fun TransportButton(
     size: androidx.compose.ui.unit.Dp,
     onClick: () -> Unit,
 ) {
-    Surface(onClick = onClick, shape = CircleShape, color = bg, modifier = Modifier.size(size)) {
+    val interaction = remember { MutableInteractionSource() }
+    Surface(
+        onClick = onClick,
+        shape = CircleShape,
+        color = bg,
+        modifier = Modifier.pressScale(interaction).size(size),
+        interactionSource = interaction,
+    ) {
         Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
             Icon(icon, contentDescription, tint = tint, modifier = Modifier.size(ControlIconSize))
         }
@@ -549,11 +557,13 @@ internal fun RowScope.CompactMediaRow(
             )
     }
     Spacer(Modifier.width(SpaceMd))
+    val interaction = remember { MutableInteractionSource() }
     Surface(
         onClick = { interactor.togglePlayPause() },
         shape = CircleShape,
         color = accent.copy(alpha = AlphaAccent),
-        modifier = Modifier.size(36.dp),
+        modifier = Modifier.pressScale(interaction).size(36.dp),
+        interactionSource = interaction,
     ) {
         Box(contentAlignment = Alignment.Center) {
             Icon(

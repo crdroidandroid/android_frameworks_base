@@ -237,6 +237,21 @@ private fun ProgressRing(
     }
 }
 
+@Composable
+private fun MediaIconButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
+) {
+    val interaction = remember { MutableInteractionSource() }
+    IconButton(
+        onClick = onClick,
+        modifier = modifier.pressScale(interaction),
+        interactionSource = interaction,
+        content = content,
+    )
+}
+
 /**
  * The frosted keyguard panel. The blur backdrop is the surface (opaque [CardBg] where blur is
  * unavailable). The inert clickable is load-bearing: it consumes taps on the panel so the
@@ -441,13 +456,16 @@ private fun KeyguardMediaPanel(event: IslandEvent.Media, interactor: IslandActio
                                 overflow = TextOverflow.Ellipsis,
                             )
                         }
+                        val outputInteraction = remember { MutableInteractionSource() }
                         Surface(
                             onClick = {
                                 interactor.openMediaOutputSwitcher()
                                 interactor.collapseIsland()
                             },
+                            modifier = Modifier.pressScale(outputInteraction),
                             shape = ShapeChip,
                             color = colors.accent.copy(alpha = AlphaSubtle),
+                            interactionSource = outputInteraction,
                         ) {
                             Row(
                                 modifier = Modifier.padding(horizontal = SpaceLg, vertical = SpaceSm),
@@ -476,7 +494,7 @@ private fun KeyguardMediaPanel(event: IslandEvent.Media, interactor: IslandActio
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        IconButton(
+                        MediaIconButton(
                             onClick = {
                                 event.customActions.firstOrNull()?.let {
                                     interactor.sendCustomAction(it.action)
@@ -494,7 +512,7 @@ private fun KeyguardMediaPanel(event: IslandEvent.Media, interactor: IslandActio
 
                         Spacer(Modifier.width(SpaceSm))
 
-                        IconButton(
+                        MediaIconButton(
                             onClick = { interactor.skipPrev() },
                             modifier = Modifier.size(SizeButtonLg),
                         ) {
@@ -503,11 +521,13 @@ private fun KeyguardMediaPanel(event: IslandEvent.Media, interactor: IslandActio
 
                         Spacer(Modifier.width(SpaceSm))
 
+                        val playInteraction = remember { MutableInteractionSource() }
                         Surface(
                             onClick = { interactor.togglePlayPause() },
-                            modifier = Modifier.size(SizeButtonLg),
+                            modifier = Modifier.pressScale(playInteraction).size(SizeButtonLg),
                             shape = CircleShape,
                             color = colors.accent.copy(alpha = AlphaAccent),
+                            interactionSource = playInteraction,
                         ) {
                             Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
                                 AnimatedContent(
@@ -530,7 +550,7 @@ private fun KeyguardMediaPanel(event: IslandEvent.Media, interactor: IslandActio
 
                         Spacer(Modifier.width(SpaceSm))
 
-                        IconButton(
+                        MediaIconButton(
                             onClick = { interactor.skipNext() },
                             modifier = Modifier.size(SizeButtonLg),
                         ) {
@@ -539,7 +559,7 @@ private fun KeyguardMediaPanel(event: IslandEvent.Media, interactor: IslandActio
 
                         Spacer(Modifier.width(SpaceSm))
 
-                        IconButton(
+                        MediaIconButton(
                             onClick = {
                                 event.customActions.getOrNull(1)?.let {
                                     interactor.sendCustomAction(it.action)

@@ -12,6 +12,7 @@ import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -102,6 +103,7 @@ import com.android.systemui.axdynamicbar.shared.SpaceXs
 import com.android.systemui.axdynamicbar.shared.SpaceXxl
 import com.android.systemui.axdynamicbar.shared.SubtleGray
 import com.android.systemui.axdynamicbar.shared.onTint
+import com.android.systemui.axdynamicbar.shared.pressScale
 import com.android.systemui.axdynamicbar.shared.sendWithBal
 import com.android.systemui.axdynamicbar.shared.tint
 import com.android.systemui.axdynamicbar.shared.toneFor
@@ -658,11 +660,13 @@ private fun AlertActions(
                 },
             )
         }
+        val dismissInteraction = remember { MutableInteractionSource() }
         Surface(
             onClick = onDismiss,
             shape = CircleShape,
             color = accent.copy(alpha = AlphaIconBg),
-            modifier = Modifier.size(SizeActionHeight),
+            modifier = Modifier.pressScale(dismissInteraction).size(SizeActionHeight),
+            interactionSource = dismissInteraction,
         ) {
             Box(contentAlignment = Alignment.Center, modifier = Modifier.size(SizeActionHeight)) {
                 Icon(
@@ -685,7 +689,14 @@ private fun AlertActionPill(
     icon: ImageVector? = null,
     onClick: () -> Unit,
 ) {
-    Surface(onClick = onClick, shape = ShapeChip, color = backgroundColor, modifier = modifier) {
+    val interaction = remember { MutableInteractionSource() }
+    Surface(
+        onClick = onClick,
+        shape = ShapeChip,
+        color = backgroundColor,
+        modifier = modifier.pressScale(interaction),
+        interactionSource = interaction,
+    ) {
         Row(
             modifier = Modifier.height(SizeActionHeight).padding(horizontal = SpaceLg),
             verticalAlignment = Alignment.CenterVertically,
@@ -784,7 +795,14 @@ private fun ActionCircle(
     tint: Color,
     onClick: () -> Unit,
 ) {
-    Surface(onClick = onClick, shape = CircleShape, color = bg, modifier = Modifier.size(36.dp)) {
+    val interaction = remember { MutableInteractionSource() }
+    Surface(
+        onClick = onClick,
+        shape = CircleShape,
+        color = bg,
+        modifier = Modifier.pressScale(interaction).size(36.dp),
+        interactionSource = interaction,
+    ) {
         Box(contentAlignment = Alignment.Center, modifier = Modifier.size(36.dp)) {
             Icon(icon, null, tint = tint, modifier = Modifier.size(18.dp))
         }
@@ -798,11 +816,13 @@ private fun ExpandChip(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val interaction = remember { MutableInteractionSource() }
     Surface(
         onClick = onClick,
         shape = CircleShape,
         color = accent.copy(alpha = AlphaIconBg),
-        modifier = modifier.size(36.dp),
+        modifier = modifier.pressScale(interaction).size(36.dp),
+        interactionSource = interaction,
     ) {
         Box(contentAlignment = Alignment.Center, modifier = Modifier.size(36.dp)) {
             Icon(icon, contentDescription = null, tint = accent, modifier = Modifier.size(18.dp))
@@ -817,7 +837,14 @@ private fun DrawableActionCircle(
     tint: Color,
     onClick: () -> Unit,
 ) {
-    Surface(onClick = onClick, shape = CircleShape, color = bg, modifier = Modifier.size(36.dp)) {
+    val interaction = remember { MutableInteractionSource() }
+    Surface(
+        onClick = onClick,
+        shape = CircleShape,
+        color = bg,
+        modifier = Modifier.pressScale(interaction).size(36.dp),
+        interactionSource = interaction,
+    ) {
         Box(contentAlignment = Alignment.Center, modifier = Modifier.size(36.dp)) {
             Image(
                 bitmap = drawable.toScaledBitmap(18.dp),
@@ -894,6 +921,7 @@ private fun ReplyField(
             },
         )
         if (replyText.isNotEmpty()) {
+            val sendInteraction = remember { MutableInteractionSource() }
             Surface(
                 onClick = {
                     val intent = Intent().apply {
@@ -910,7 +938,8 @@ private fun ReplyField(
                 },
                 shape = CircleShape,
                 color = accent,
-                modifier = Modifier.size(32.dp).padding(SpaceXs),
+                modifier = Modifier.pressScale(sendInteraction).size(32.dp).padding(SpaceXs),
+                interactionSource = sendInteraction,
             ) {
                 Box(contentAlignment = Alignment.Center) {
                     Icon(Icons.AutoMirrored.Filled.Send, null, tint = IslandTone.ACCENT.onTint, modifier = Modifier.size(14.dp))
