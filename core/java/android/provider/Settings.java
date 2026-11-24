@@ -14924,6 +14924,12 @@ public final class Settings {
         public static final String AX_DYNAMIC_BAR_HAPTICS = "ax_dynamic_bar_haptics";
 
         /**
+         * Whether the Dynamic Bar chip morphs into its expanded panel
+         * @hide
+         */
+        public static final String AX_DYNAMIC_BAR_CHIP_MORPH = "ax_dynamic_bar_chip_morph";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
