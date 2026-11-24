@@ -117,7 +117,8 @@ fun AxDynamicBarChip(
 
     val isExpanded by viewModel.isExpanded.collectAsStateWithLifecycle()
     val morphEnabled by viewModel.chipMorphEnabled.collectAsStateWithLifecycle()
-    val morphScale = rememberChipMorphScale(morphEnabled && isExpanded && !ignoreKeyguard)
+    val hasAlert = state?.notificationAlert != null
+    val morphScale = rememberChipMorphScale(morphEnabled && (isExpanded || hasAlert) && !ignoreKeyguard)
     val morphAlpha by remember { derivedStateOf { pillMorphAlpha(morphScale.value) } }
 
     AnimatedVisibility(
