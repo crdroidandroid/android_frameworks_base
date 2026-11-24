@@ -50,6 +50,7 @@ import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.LocalViewConfiguration
 import androidx.compose.ui.res.dimensionResource
 import com.android.compose.animation.Expandable
@@ -109,6 +110,7 @@ fun AxDynamicBarChip(
     }
 
     val touchSlop = LocalViewConfiguration.current.touchSlop
+    val view = LocalView.current
     val expandableController = rememberExpandableController(color = Color.Transparent, shape = ChipShape)
     val expandableHolder = remember { arrayOfNulls<SystemUiExpandable>(1) }
     val currentState = rememberUpdatedState(state)
@@ -148,6 +150,7 @@ fun AxDynamicBarChip(
                                     else viewModel.cycleNext()
                                 } else if (currentState.value != null) {
                                     change.consume()
+                                    viewModel.performTapHaptic(view)
                                     if (viewModel.chipTapClosesPanel(down.uptimeMillis)) {
                                         viewModel.statusBarExpansion.collapse()
                                     } else {

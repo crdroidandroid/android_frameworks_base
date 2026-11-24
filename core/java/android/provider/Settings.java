@@ -14918,6 +14918,12 @@ public final class Settings {
                 "ax_dynamic_bar_compact_notifications";
 
         /**
+         * Whether tapping the Dynamic Bar chip performs haptic feedback
+         * @hide
+         */
+        public static final String AX_DYNAMIC_BAR_HAPTICS = "ax_dynamic_bar_haptics";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *

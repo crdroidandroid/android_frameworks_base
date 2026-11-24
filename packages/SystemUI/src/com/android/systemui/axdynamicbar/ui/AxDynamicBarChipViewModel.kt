@@ -1,5 +1,7 @@
 package com.android.systemui.axdynamicbar.ui
 
+import android.view.HapticFeedbackConstants
+import android.view.View
 import com.android.systemui.animation.Expandable
 import com.android.systemui.axdynamicbar.domain.AxDynamicBarInteractor
 import com.android.systemui.axdynamicbar.model.IslandEvent
@@ -89,6 +91,12 @@ constructor(
     val isEnabled: StateFlow<Boolean> = interactor.settings.isEnabled
     val isKeyguardEnabled: StateFlow<Boolean> = interactor.settings.isKeyguardEnabled
     val keyguardBatteryChipMode: StateFlow<Int> = interactor.settings.keyguardBatteryChipMode
+
+    fun performTapHaptic(view: View) {
+        if (interactor.settings.hapticsEnabled.value) {
+            view.performHapticFeedback(HapticFeedbackConstants.CONTEXT_CLICK)
+        }
+    }
 
     val keyguardBatteryInfo: StateFlow<KeyguardBatteryInfo> =
         combine(

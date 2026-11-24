@@ -52,6 +52,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layout
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.LocalViewConfiguration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -89,6 +90,7 @@ fun AxDynamicBarNowBar(
     viewModel: AxDynamicBarChipViewModel,
 ) {
     val touchSlop = LocalViewConfiguration.current.touchSlop
+    val view = LocalView.current
     val motionScheme = MaterialTheme.motionScheme
 
     AnimatedVisibility(
@@ -164,6 +166,7 @@ fun AxDynamicBarNowBar(
                                                 if (dx > 0f) viewModel.cyclePrev()
                                                 else viewModel.cycleNext()
                                             } else {
+                                                viewModel.performTapHaptic(view)
                                                 viewModel.statusBarExpansion.toggle()
                                             }
                                         }
