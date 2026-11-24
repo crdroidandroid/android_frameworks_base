@@ -117,6 +117,7 @@ internal fun KeyguardExpandedContent(
     interactor: IslandActions,
     onCollapse: () -> Unit,
     hapticsViewModelFactory: SliderHapticsViewModel.Factory,
+    panelModifier: Modifier = Modifier,
 ) {
     if (event is IslandEvent.KeyguardIndication ||
         event is IslandEvent.AppSwitch ||
@@ -181,12 +182,14 @@ internal fun KeyguardExpandedContent(
             .padding(top = topClearance),
         contentAlignment = Alignment.Center,
     ) {
-        when (event) {
-            is IslandEvent.Media -> KeyguardMediaPanel(event, interactor)
-            is IslandEvent.Timer -> KeyguardTimerPanel(event, interactor)
-            is IslandEvent.Stopwatch -> KeyguardStopwatchPanel(event, interactor)
-            is IslandEvent.AudioRecording -> KeyguardAudioRecordingPanel(event, interactor)
-            else -> KeyguardGenericPanel(event, interactor, hapticsViewModelFactory)
+        Box(modifier = panelModifier, contentAlignment = Alignment.Center) {
+            when (event) {
+                is IslandEvent.Media -> KeyguardMediaPanel(event, interactor)
+                is IslandEvent.Timer -> KeyguardTimerPanel(event, interactor)
+                is IslandEvent.Stopwatch -> KeyguardStopwatchPanel(event, interactor)
+                is IslandEvent.AudioRecording -> KeyguardAudioRecordingPanel(event, interactor)
+                else -> KeyguardGenericPanel(event, interactor, hapticsViewModelFactory)
+            }
         }
     }
 }

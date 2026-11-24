@@ -61,7 +61,12 @@ constructor(
     private var enforceAction: Runnable? = null
 
     override fun addViews(constraintLayout: ConstraintLayout) {
-        val composeView = AxComposeView(context).apply { id = chipViewId }
+        // The chip morph draws past the view, towards the collapsed chip below it.
+        val composeView = AxComposeView(context).apply {
+            id = chipViewId
+            clipChildren = false
+            clipToPadding = false
+        }
         constraintLayout.addView(composeView)
     }
 

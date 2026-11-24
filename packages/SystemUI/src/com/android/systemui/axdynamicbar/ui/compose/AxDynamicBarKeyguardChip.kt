@@ -10,6 +10,8 @@ import com.android.systemui.animation.Expandable as SystemUiExpandable
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterExitState
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
@@ -23,6 +25,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.snap
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.animation.fadeIn
@@ -64,6 +67,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -71,6 +75,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
@@ -79,6 +84,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.LocalViewConfiguration
@@ -159,55 +165,109 @@ fun AxDynamicBarKeyguardChip(
     val isKeyguardExpanded by viewModel.isKeyguardExpanded.collectAsStateWithLifecycle()
     val touchSlop = LocalViewConfiguration.current.touchSlop
     val batteryString by viewModel.batteryString.collectAsStateWithLifecycle()
+    val morphEnabled by viewModel.chipMorphEnabled.collectAsStateWithLifecycle()
+    val view = LocalView.current
 
     val motionScheme = MaterialTheme.motionScheme
     val expandableController = rememberExpandableController(color = Color.Transparent, shape = ChipShape)
 
     Box(modifier = modifier) {
 
-        val expandedVisibleState = remember { MutableTransitionState(false) }
-        expandedVisibleState.targetState = isKeyguardExpanded && state != null
-        LaunchedEffect(expandedVisibleState.isIdle, expandedVisibleState.currentState) {
-            if (expandedVisibleState.isIdle && !expandedVisibleState.currentState) {
-                viewModel.keyguardExpansion.notifyCollapseSettled()
+        val panelTarget = isKeyguardExpanded && state != null
+        // Chip bounds frozen at expand time; the view is relaid out while the panel is open.
+        var chipBounds by remember { mutableStateOf<Rect?>(null) }
+        var liveChipBounds by remember { mutableStateOf<Rect?>(null) }
+        // Keeps the chip back until the panel has shrunk into it.
+        var panelHold by remember { mutableStateOf(false) }
+        // Keeps the pill transition until the chip has settled back in.
+        var chipMorphHold by remember { mutableStateOf(false) }
+        LaunchedEffect(panelTarget, morphEnabled) {
+            if (panelTarget && morphEnabled) {
+                panelHold = true
+                chipMorphHold = true
             }
         }
-        val panelBlurAlpha by animateFloatAsState(
-            targetValue = if (expandedVisibleState.targetState) 1f else 0f,
-            animationSpec = motionScheme.fastEffectsSpec(),
-            label = "kg_panel_blur_alpha",
-        )
-        CompositionLocalProvider(LocalBlurAlpha provides panelBlurAlpha) {
-            AnimatedVisibility(
-                visibleState = expandedVisibleState,
-                enter = fadeIn(motionScheme.defaultEffectsSpec()),
-                exit = fadeOut(motionScheme.defaultEffectsSpec()),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.Center),
-            ) {
-                state?.let {
-                    KeyguardExpandedContent(
-                        event = it.event,
-                        allEvents = it.allEvents,
-                        interactor = viewModel.interactor,
-                        onCollapse = { viewModel.keyguardExpansion.collapse() },
-                        hapticsViewModelFactory = viewModel.interactor.sliderHapticsViewModelFactory,
-                    )
+        val morphDriven = morphEnabled && (panelTarget || chipMorphHold)
+
+        val expandedContent: @Composable (Modifier) -> Unit = { panelModifier ->
+            state?.let {
+                KeyguardExpandedContent(
+                    event = it.event,
+                    allEvents = it.allEvents,
+                    interactor = viewModel.interactor,
+                    onCollapse = { viewModel.keyguardExpansion.collapse() },
+                    hapticsViewModelFactory = viewModel.interactor.sliderHapticsViewModelFactory,
+                    panelModifier = panelModifier,
+                )
+            }
+        }
+
+        if (morphEnabled) {
+            ChipMorphContainer(
+                visible = panelTarget,
+                chipBounds = chipBounds,
+                onHidden = {
+                    panelHold = false
+                    viewModel.keyguardExpansion.notifyCollapseSettled()
+                },
+                content = expandedContent,
+            )
+        } else {
+            val expandedVisibleState = remember { MutableTransitionState(false) }
+            expandedVisibleState.targetState = panelTarget
+            LaunchedEffect(expandedVisibleState.isIdle, expandedVisibleState.currentState) {
+                if (expandedVisibleState.isIdle && !expandedVisibleState.currentState) {
+                    viewModel.keyguardExpansion.notifyCollapseSettled()
+                }
+            }
+            val panelBlurAlpha by animateFloatAsState(
+                targetValue = if (expandedVisibleState.targetState) 1f else 0f,
+                animationSpec = motionScheme.fastEffectsSpec(),
+                label = "kg_panel_blur_alpha",
+            )
+            CompositionLocalProvider(LocalBlurAlpha provides panelBlurAlpha) {
+                AnimatedVisibility(
+                    visibleState = expandedVisibleState,
+                    enter = fadeIn(motionScheme.defaultEffectsSpec()),
+                    exit = fadeOut(motionScheme.defaultEffectsSpec()),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.Center),
+                ) {
+                    expandedContent(Modifier)
                 }
             }
         }
 
+        val chipVisible = isOnKeyguard && isEnabled && isKeyguardEnabled && !isKeyguardExpanded &&
+            !(morphEnabled && panelHold)
+        val chipVisibleState = remember { MutableTransitionState(chipVisible) }
+        chipVisibleState.targetState = chipVisible
+        LaunchedEffect(chipVisibleState.isIdle, chipVisibleState.currentState, isOnKeyguard) {
+            if (!isOnKeyguard || (chipVisibleState.isIdle && chipVisibleState.currentState)) {
+                chipMorphHold = false
+            }
+        }
+
         AnimatedVisibility(
-            visible = isOnKeyguard && isEnabled && isKeyguardEnabled && !isKeyguardExpanded,
-            enter = fadeIn(tween(durationMillis = 200, delayMillis = 300)) +
-                scaleIn(
-                    initialScale = 0.9f,
-                    animationSpec = tween(durationMillis = 200, delayMillis = 300),
-                ),
-            exit = fadeOut(motionScheme.fastEffectsSpec()) + scaleOut(targetScale = 0.9f, animationSpec = motionScheme.fastSpatialSpec()),
+            visibleState = chipVisibleState,
+            enter = if (morphDriven) EnterTransition.None else
+                fadeIn(tween(durationMillis = 200, delayMillis = 300)) +
+                    scaleIn(
+                        initialScale = 0.9f,
+                        animationSpec = tween(durationMillis = 200, delayMillis = 300),
+                    ),
+            exit = if (morphDriven) ExitTransition.None else
+                fadeOut(motionScheme.fastEffectsSpec()) + scaleOut(targetScale = 0.9f, animationSpec = motionScheme.fastSpatialSpec()),
             modifier = Modifier
                 .align(Alignment.BottomCenter)
+                .onGloballyPositioned {
+                    if (it.size.width > 0 && it.size.height > 0) {
+                        val bounds = it.boundsOnScreen(view)
+                        liveChipBounds = bounds
+                        if (!isKeyguardExpanded) chipBounds = bounds
+                    }
+                }
                 .pointerInput(viewModel, state?.event?.id) {
                     awaitEachGesture {
                         val down = awaitFirstDown(pass = PointerEventPass.Initial)
@@ -244,87 +304,112 @@ fun AxDynamicBarKeyguardChip(
             // Captured before AnimatedContent shadows `transition`; mirrors the delayed enter above.
             val chipBlurAlpha by transition.animateFloat(
                 transitionSpec = {
-                    if (targetState == EnterExitState.Visible) {
-                        tween<Float>(durationMillis = 200, delayMillis = 300)
-                    } else {
-                        motionScheme.fastEffectsSpec<Float>()
+                    when {
+                        morphDriven -> snap<Float>()
+                        targetState == EnterExitState.Visible ->
+                            tween<Float>(durationMillis = 200, delayMillis = 300)
+                        else -> motionScheme.fastEffectsSpec<Float>()
                     }
                 },
                 label = "kg_chip_blur_visibility",
-            ) { if (it == EnterExitState.Visible) 1f else 0f }
+            ) { if (it == EnterExitState.Visible || morphDriven) 1f else 0f }
+            val morphScale by transition.animateFloat(
+                transitionSpec = {
+                    when {
+                        !morphDriven -> snap<Float>()
+                        targetState == EnterExitState.Visible -> IslandMorphMotion.PillRestore
+                        else -> IslandMorphMotion.PillShrink
+                    }
+                },
+                label = "kg_chip_morph",
+            ) { if (it == EnterExitState.Visible || !morphDriven) 1f else 0f }
+            val morphAlpha = pillMorphAlpha(morphScale)
 
-            val chipState = state
-            if (chipState != null) {
-                val displayEvent = chipState.notificationAlert ?: chipState.event
+            Box(
+                modifier = Modifier.graphicsLayer {
+                    scaleX = morphScale
+                    alpha = morphAlpha
+                    val frozen = chipBounds
+                    val live = liveChipBounds
+                    if (morphDriven && frozen != null && live != null) {
+                        translationX = frozen.left - live.left
+                        translationY = frozen.top - live.top
+                    }
+                },
+            ) {
+                val chipState = state
+                if (chipState != null) {
+                    val displayEvent = chipState.notificationAlert ?: chipState.event
 
-                AnimatedContent(
-                    targetState = displayEvent,
-                    transitionSpec = {
-                        (fadeIn(motionScheme.defaultEffectsSpec()) + scaleIn(
-                            initialScale = 0.95f,
-                            animationSpec = motionScheme.defaultSpatialSpec(),
-                        )) togetherWith (fadeOut(motionScheme.fastEffectsSpec()) + scaleOut(
-                            targetScale = 0.95f,
-                            animationSpec = motionScheme.fastSpatialSpec(),
-                        )) using SizeTransform(clip = false, sizeAnimationSpec = { _, _ -> motionScheme.defaultSpatialSpec() })
-                    },
-                    contentKey = { it::class.simpleName },
-                    label = "keyguard_chip_event",
-                ) { event ->
-                    val contentBlurAlpha by transition.animateFloat(
-                        transitionSpec = { motionScheme.fastEffectsSpec() },
-                        label = "kg_chip_blur_content",
-                    ) { if (it == EnterExitState.Visible) 1f else 0f }
-                    // The saturated tint, not the container: these chips sit on a neutral glass
-                    // surface, where the pale container role would barely show.
-                    val accent by animateColorAsState(
-                        accentColorFor(event),
-                        motionScheme.fastEffectsSpec(),
-                        label = "kg_accent",
-                    )
-                    val contentColor by animateColorAsState(
-                        OnCardText,
-                        motionScheme.fastEffectsSpec(),
-                        label = "kg_content",
-                    )
-                    val rawProgress = chipProgressFor(event)
-                    val progressTarget = rawProgress ?: 0f
-                    val progressAnim = remember { Animatable(progressTarget) }
-                    val progressSpec = motionScheme.defaultEffectsSpec<Float>()
-                    LaunchedEffect(progressTarget) {
-                        if (abs(progressTarget - progressAnim.value) > 0.05f) {
-                            progressAnim.animateTo(progressTarget, progressSpec)
-                        } else {
-                            progressAnim.snapTo(progressTarget)
+                    AnimatedContent(
+                        targetState = displayEvent,
+                        transitionSpec = {
+                            (fadeIn(motionScheme.defaultEffectsSpec()) + scaleIn(
+                                initialScale = 0.95f,
+                                animationSpec = motionScheme.defaultSpatialSpec(),
+                            )) togetherWith (fadeOut(motionScheme.fastEffectsSpec()) + scaleOut(
+                                targetScale = 0.95f,
+                                animationSpec = motionScheme.fastSpatialSpec(),
+                            )) using SizeTransform(clip = false, sizeAnimationSpec = { _, _ -> motionScheme.defaultSpatialSpec() })
+                        },
+                        contentKey = { it::class.simpleName },
+                        label = "keyguard_chip_event",
+                    ) { event ->
+                        val contentBlurAlpha by transition.animateFloat(
+                            transitionSpec = { motionScheme.fastEffectsSpec() },
+                            label = "kg_chip_blur_content",
+                        ) { if (it == EnterExitState.Visible) 1f else 0f }
+                        // The saturated tint, not the container: these chips sit on a neutral glass
+                        // surface, where the pale container role would barely show.
+                        val accent by animateColorAsState(
+                            accentColorFor(event),
+                            motionScheme.fastEffectsSpec(),
+                            label = "kg_accent",
+                        )
+                        val contentColor by animateColorAsState(
+                            OnCardText,
+                            motionScheme.fastEffectsSpec(),
+                            label = "kg_content",
+                        )
+                        val rawProgress = chipProgressFor(event)
+                        val progressTarget = rawProgress ?: 0f
+                        val progressAnim = remember { Animatable(progressTarget) }
+                        val progressSpec = motionScheme.defaultEffectsSpec<Float>()
+                        LaunchedEffect(progressTarget) {
+                            if (abs(progressTarget - progressAnim.value) > 0.05f) {
+                                progressAnim.animateTo(progressTarget, progressSpec)
+                            } else {
+                                progressAnim.snapTo(progressTarget)
+                            }
+                        }
+                        val progress = if (rawProgress != null) progressAnim.value else null
+
+                        Expandable(
+                            controller = expandableController,
+                            onClick = null,
+                            defaultMinSize = false,
+                        ) { expandable ->
+                            KeyguardChipBody(
+                                event = event,
+                                accent = accent,
+                                contentColor = contentColor,
+                                progress = progress,
+                                eventCount = chipState.eventCount,
+                                viewModel = viewModel,
+                                batteryString = batteryString,
+                                aospChipExpandable = expandable,
+                                blurAlpha = chipBlurAlpha * contentBlurAlpha * morphAlpha,
+                            )
                         }
                     }
-                    val progress = if (rawProgress != null) progressAnim.value else null
-
-                    Expandable(
-                        controller = expandableController,
-                        onClick = null,
-                        defaultMinSize = false,
-                    ) { expandable ->
-                        KeyguardChipBody(
-                            event = event,
-                            accent = accent,
-                            contentColor = contentColor,
-                            progress = progress,
-                            eventCount = chipState.eventCount,
-                            viewModel = viewModel,
-                            batteryString = batteryString,
-                            aospChipExpandable = expandable,
-                            blurAlpha = chipBlurAlpha * contentBlurAlpha,
-                        )
-                    }
+                } else {
+                    KeyguardBatteryChip(
+                        batteryInfo,
+                        keyguardBatteryChipMode,
+                        batteryString,
+                        blurAlpha = chipBlurAlpha * morphAlpha,
+                    )
                 }
-            } else {
-                KeyguardBatteryChip(
-                    batteryInfo,
-                    keyguardBatteryChipMode,
-                    batteryString,
-                    blurAlpha = chipBlurAlpha,
-                )
             }
         }
     }

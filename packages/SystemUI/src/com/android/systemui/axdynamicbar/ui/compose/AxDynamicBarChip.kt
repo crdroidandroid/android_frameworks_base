@@ -4,8 +4,6 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterExitState
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -30,7 +28,6 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -71,7 +68,8 @@ import com.android.systemui.axdynamicbar.shared.AlphaIconBg
 import com.android.systemui.axdynamicbar.shared.AlphaSecondary
 import com.android.systemui.axdynamicbar.shared.AlphaTertiary
 import com.android.systemui.axdynamicbar.shared.ChipHighlightWidth
-import com.android.systemui.axdynamicbar.shared.IslandMorphMotion
+import com.android.systemui.axdynamicbar.shared.pillMorphAlpha
+import com.android.systemui.axdynamicbar.shared.rememberChipMorphScale
 import com.android.systemui.axdynamicbar.shared.boundsOnScreen
 import com.android.systemui.axdynamicbar.shared.islandBlur
 import com.android.systemui.axdynamicbar.shared.PillPrimary
@@ -120,9 +118,7 @@ fun AxDynamicBarChip(
     val isExpanded by viewModel.isExpanded.collectAsStateWithLifecycle()
     val morphEnabled by viewModel.chipMorphEnabled.collectAsStateWithLifecycle()
     val morphScale = rememberChipMorphScale(morphEnabled && isExpanded && !ignoreKeyguard)
-    val morphAlpha by remember {
-        derivedStateOf { (morphScale.value / MORPH_FADE_SCALE).coerceIn(0f, 1f) }
-    }
+    val morphAlpha by remember { derivedStateOf { pillMorphAlpha(morphScale.value) } }
 
     AnimatedVisibility(
         visible = state != null && (ignoreKeyguard || !isOnKeyguard),
@@ -443,21 +439,6 @@ private fun StatusBarSportsTeamBadge(name: String, icon: Drawable?, contentColor
     }
 }
 
-
-private const val MORPH_FADE_SCALE = 0.7f
-
-@Composable
-private fun rememberChipMorphScale(hidden: Boolean): Animatable<Float, AnimationVector1D> {
-    val scale = remember { Animatable(1f, visibilityThreshold = 0.001f) }
-    LaunchedEffect(hidden) {
-        if (hidden) {
-            scale.animateTo(0f, IslandMorphMotion.PillShrink)
-        } else if (scale.value < 1f) {
-            scale.animateTo(1f, IslandMorphMotion.pillRestore(scale.value))
-        }
-    }
-    return scale
-}
 
 private fun chipDisplayKey(event: IslandEvent, isAlert: Boolean): String =
     if (isAlert) "alert:${event.id}" else event.id
