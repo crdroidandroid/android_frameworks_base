@@ -366,14 +366,15 @@ public class SliderPreference extends Preference {
         } else {
             mSlider.setStateDescription(null);
         }
+        final boolean hasRange = mMax > mMin;
         mSlider.setValueFrom(mMin);
-        mSlider.setValueTo(mMax);
-        mSlider.setValue(mSliderValue);
+        mSlider.setValueTo(hasRange ? mMax : mMin + 1);
+        mSlider.setValue(Math.max(mMin, Math.min(mMax, mSliderValue)));
         mSlider.clearOnSliderTouchListeners();
         mSlider.addOnSliderTouchListener(mTouchListener);
         mSlider.clearOnChangeListeners();
         mSlider.addOnChangeListener(mChangeListener);
-        mSlider.setEnabled(isEnabled());
+        mSlider.setEnabled(isEnabled() && hasRange);
         mSlider.setClickable(isSelectable());
 
         // Set up slider size
