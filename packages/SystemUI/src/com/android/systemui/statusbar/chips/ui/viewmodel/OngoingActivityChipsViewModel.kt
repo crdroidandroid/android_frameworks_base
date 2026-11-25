@@ -217,42 +217,36 @@ constructor(
         combine(
             incomingChipBundle.map { bundle -> rankChips(bundle) },
             displayStateInteractor.isWideScreen,
-        ) { rankedChips, isWideScreen ->
-            if (
-                !StatusBarHeadline.isEnabled &&
-                    !isWideScreen &&
-                    rankedChips.active.filter { !it.isHidden }.size >= 2
-            ) {
-                // If we have at least two showing chips and we don't have a ton of room
-                // (!isWideScreen), then we want to make both of them as small as possible
-                // so that we have the highest chance of showing both chips (as opposed to
-                // showing the first chip with a lot of text and completely hiding the other
-                // chips).
-                // With Headline, there's no need to squish chips.
-                val squishedActiveChips =
-                    rankedChips.active.map {
-                        if (!it.isHidden && it.shouldSquish()) {
-                            it.toIconOnly()
-                        } else {
-                            it
-                        }
-                    }
+        ) { rankedChips, isWideScreen -> rankedChips to isWideScreen }
 
-                MultipleOngoingActivityChipsModel(
-                    active = squishedActiveChips,
-                    overflow = rankedChips.overflow,
-                    inactive = rankedChips.inactive,
-                )
-            } else {
-                rankedChips
-            }
-        }
-
+    // Refined before squishing, so refiners see full chip content and only chips still shown
+    // in the status bar count towards squishing.
     val chips: StateFlow<MultipleOngoingActivityChipsModel> =
         unrefinedChips
-            .map { unrefinedChips ->
-                chipsRefiners.fold(unrefinedChips) { currentOutput, refiner ->
-                    refiner.transform(currentOutput)
+            .map { (rankedChips, isWideScreen) ->
+                val refinedChips =
+                    chipsRefiners.fold(rankedChips) { currentOutput, refiner ->
+                        refiner.transform(currentOutput)
+                    }
+                if (
+                    !StatusBarHeadline.isEnabled &&
+                        !isWideScreen &&
+                        refinedChips.active.filter { !it.isHidden }.size >= 2
+                ) {
+                    // If we have at least two showing chips and we don't have a ton of room
+                    // (!isWideScreen), then we want to make both of them as small as possible
+                    // so that we have the highest chance of showing both chips (as opposed to
+                    // showing the first chip with a lot of text and completely hiding the other
+                    // chips).
+                    // With Headline, there's no need to squish chips.
+                    refinedChips.copy(
+                        active =
+                            refinedChips.active.map {
+                                if (!it.isHidden && it.shouldSquish()) it.toIconOnly() else it
+                            }
+                    )
+                } else {
+                    refinedChips
                 }
             }
             .stateIn(scope, SharingStarted.Lazily, MultipleOngoingActivityChipsModel())
