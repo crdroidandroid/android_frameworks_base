@@ -71,7 +71,10 @@ import com.android.compose.theme.PlatformTheme
 import com.android.compose.theme.colorAttr
 import com.android.systemui.Flags
 import com.android.systemui.axdynamicbar.ui.AxDynamicBarChipViewModel
+import com.android.systemui.axdynamicbar.shared.ProvideIslandHaptics
 import com.android.systemui.axdynamicbar.ui.compose.AxDynamicBarChip
+import com.android.systemui.axdynamicbar.ui.compose.AxDynamicBarIslandHost
+import com.android.systemui.axdynamicbar.ui.compose.rememberIslandHole
 import com.android.systemui.clock.ClockModernization
 import com.android.systemui.clock.ui.composable.Clock
 import com.android.systemui.clock.ui.viewmodel.AmPmStyle
@@ -277,6 +280,7 @@ fun StatusBarRoot(
                     axDynamicBarChipViewModel = axDynamicBarChipViewModel,
                     context = context,
                 )
+                addDynamicBarIsland(phoneStatusBarView, axDynamicBarChipViewModel, context)
 
                 touchableExclusionRegionDisposableHandle =
                     HomeStatusBarTouchExclusionRegionBinder.bind(
@@ -394,6 +398,35 @@ fun StatusBarRoot(
             headlineComposer.Content(headlineViewModel, modifier = Modifier.align(Alignment.Center))
         }
     }
+}
+
+/** Adds the Dynamic Bar island drawn over a centred camera cutout. */
+private fun addDynamicBarIsland(
+    phoneStatusBarView: PhoneStatusBarView,
+    viewModel: AxDynamicBarChipViewModel,
+    context: Context,
+) {
+    val composeView =
+        ComposeView(context).apply {
+            layoutParams =
+                FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT,
+                    FrameLayout.LayoutParams.MATCH_PARENT,
+                )
+            clipChildren = false
+            clipToPadding = false
+            setContent {
+                val enabled by viewModel.isEnabled.collectAsState()
+                if (enabled) {
+                    PlatformTheme {
+                        ProvideIslandHaptics(viewModel.hapticsEnabled) {
+                            AxDynamicBarIslandHost(viewModel)
+                        }
+                    }
+                }
+            }
+        }
+    phoneStatusBarView.addView(composeView)
 }
 
 /** Adds the composable chips shown on the start side of the status bar. */
@@ -516,7 +549,7 @@ private fun addStartSideComposable(
                     }
 
                 val axEnabled by axDynamicBarChipViewModel.interactor.settings.isEnabled.collectAsState()
-                if (axEnabled) {
+                if (axEnabled && rememberIslandHole(axDynamicBarChipViewModel) == null) {
                     AxDynamicBarChip(
                         viewModel = axDynamicBarChipViewModel,
                         modifier = Modifier.widthIn(max = chipsMaxWidth),

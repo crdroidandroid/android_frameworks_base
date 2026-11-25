@@ -44,6 +44,7 @@ import androidx.compose.material.icons.filled.FlashlightOn
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.MicOff
+import androidx.compose.material.icons.filled.MusicNote
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
@@ -355,12 +356,16 @@ private fun MediaPillIcon(event: IslandEvent.Media, animated: Boolean = true) {
                 Modifier.size(16.dp).clip(CircleShape).background(toneFor(event).tint.copy(alpha = AlphaSubtle + 0.05f)),
             contentAlignment = Alignment.Center,
         ) {
-            WaveformAnimation(
-                toneFor(event).tint,
-                Modifier.size(10.dp),
-                isAnimating = animated && event.isPlaying,
-                barCount = 3,
-            )
+            if (animated) {
+                WaveformAnimation(
+                    toneFor(event).tint,
+                    Modifier.size(10.dp),
+                    isAnimating = event.isPlaying,
+                    barCount = 3,
+                )
+            } else {
+                Icon(Icons.Filled.MusicNote, null, tint = toneFor(event).tint, modifier = Modifier.size(10.dp))
+            }
         }
 }
 

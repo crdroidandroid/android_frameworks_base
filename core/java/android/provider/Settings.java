@@ -14930,6 +14930,12 @@ public final class Settings {
         public static final String AX_DYNAMIC_BAR_CHIP_MORPH = "ax_dynamic_bar_chip_morph";
 
         /**
+         * Whether the Dynamic Bar sits over a centred top camera cutout as an island
+         * @hide
+         */
+        public static final String AX_DYNAMIC_BAR_CENTER_ISLAND = "ax_dynamic_bar_center_island";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *

@@ -100,6 +100,7 @@ fun AxDynamicBarChip(
     viewModel: AxDynamicBarChipViewModel,
     modifier: Modifier = Modifier,
     ignoreKeyguard: Boolean = false,
+    island: android.graphics.Rect? = null,
 ) {
     val state by viewModel.chipState.collectAsStateWithLifecycle()
     val isOnKeyguard by viewModel.isOnKeyguard.collectAsStateWithLifecycle()
@@ -245,7 +246,17 @@ fun AxDynamicBarChip(
                         tier.chipCornerRadius, motionScheme.defaultSpatialSpec(), label = "chip_corner",
                     )
 
-                Box(
+                if (island != null) {
+                    IslandPill(
+                        event = event,
+                        isAlert = isAlert,
+                        hole = island,
+                        progress = progress,
+                        morphScale = { morphScale.value },
+                        morphAlpha = { morphAlpha },
+                        onPositioned = viewModel::updateChipBounds,
+                    )
+                } else Box(
                     modifier = Modifier.fillMaxHeight(),
                     contentAlignment = Alignment.Center,
                 ) {
