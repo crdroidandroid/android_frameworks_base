@@ -5,6 +5,7 @@
 
 package com.android.systemui.axdynamicbar.ui.compose
 
+import android.app.Notification
 import android.graphics.Rect
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.animateFloat
@@ -212,6 +213,8 @@ private fun IslandTrailing(event: IslandEvent, isAlert: Boolean, accent: Color) 
     Row(verticalAlignment = Alignment.CenterVertically) {
         val label = Modifier.weight(1f, fill = false)
         when {
+            isAlert && event is IslandEvent.Notification && event.isCallStyle() ->
+                IslandCallAlert(event, label)
             event is IslandEvent.Notification ->
                 IslandLabel(event.title?.takeIf { it.isNotBlank() } ?: event.appName, label)
             event is IslandEvent.Media ->
@@ -256,6 +259,30 @@ private fun IslandTrailing(event: IslandEvent, isAlert: Boolean, accent: Color) 
             else -> PillEventText(event, label, overrideColor = IslandContent)
         }
     }
+}
+
+private fun IslandEvent.Notification.isCallStyle(): Boolean {
+    val extras = sbn.notification?.extras ?: return false
+    return extras.containsKey(Notification.EXTRA_ANSWER_INTENT) ||
+        extras.containsKey(Notification.EXTRA_DECLINE_INTENT) ||
+        extras.containsKey(Notification.EXTRA_HANG_UP_INTENT)
+}
+
+@Composable
+private fun IslandCallAlert(event: IslandEvent.Notification, modifier: Modifier) {
+    val extras = event.sbn.notification?.extras
+    val incoming =
+        extras?.getInt(Notification.EXTRA_CALL_TYPE) == Notification.CallStyle.CALL_TYPE_INCOMING ||
+            extras?.containsKey(Notification.EXTRA_HANG_UP_INTENT) == false
+    if (incoming) {
+        RingingCallIcon()
+        return
+    }
+    val start = event.sbn.notification?.`when`?.takeIf { it > 0L } ?: event.sbn.postTime
+    val call = remember(event.sbn.key, start) {
+        IslandEvent.Call(sbn = event.sbn, callType = CALL_ACTIVE, callStartTimeMs = start)
+    }
+    PillEventText(call, modifier, overrideColor = IslandContent)
 }
 
 @Composable

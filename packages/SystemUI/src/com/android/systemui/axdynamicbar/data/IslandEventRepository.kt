@@ -265,7 +265,14 @@ constructor(
                     it is IslandEvent.PromotedOngoing &&
                         (it.sbn.key in aosp.notificationKeys || it.sbn.isMediaNotification())
                 }
-            high + transientFiltered + promotedFiltered + indication + aosp.events
+            val callKeys = high.mapNotNullTo(HashSet()) { (it as? IslandEvent.Call)?.sbn?.key }
+            val aospFiltered =
+                if (callKeys.isEmpty()) {
+                    aosp.events
+                } else {
+                    aosp.events.filterNot { it.active.notificationKey in callKeys }
+                }
+            high + transientFiltered + promotedFiltered + indication + aospFiltered
         }
 
         return allEvents.map { events ->
