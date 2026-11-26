@@ -23,12 +23,15 @@ import androidx.constraintlayout.widget.Barrier
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import com.android.systemui.clocks.ClockStyle
+import com.android.systemui.dagger.SysUISingleton
 import com.android.systemui.keyguard.shared.model.KeyguardSection
 import com.android.systemui.res.R
 import com.android.systemui.shared.R as sharedR
 import com.android.systemui.util.settings.SecureSettings
 import javax.inject.Inject
 
+// Blueprints preserve same-class sections, so both must share the view and enabled state.
+@SysUISingleton
 class KeyguardClockStyleSection
 @Inject
 constructor(
