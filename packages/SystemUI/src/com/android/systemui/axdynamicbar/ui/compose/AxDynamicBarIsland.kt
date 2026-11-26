@@ -13,6 +13,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.keyframes
 import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -26,6 +27,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Bolt
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Layers
 import androidx.compose.material.icons.filled.Lock
@@ -43,9 +45,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.Layout
@@ -77,6 +81,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import com.android.systemui.res.R
 import kotlin.math.PI
 import kotlin.math.sin
+import kotlinx.coroutines.launch
 
 private val IslandMinHeight = 30.dp
 private val IslandMaxHeight = 40.dp
@@ -93,6 +98,7 @@ private const val AOSP_CALL_PREFIX = "callChip-"
 private const val AOSP_SCREEN_RECORD_KEY = "ScreenRecord"
 private val IslandRinging = Color(0xFF34C759)
 private val IslandCountdown = Color(0xFFFFC107)
+private val IslandCharging = Color(0xFFFFD60A)
 private val IslandRecording = Color(0xFFFF5252)
 
 // The camera hole the bar sits over, or null when it stays a regular status bar chip.
@@ -204,7 +210,36 @@ private fun IslandLeading(event: IslandEvent, isAlert: Boolean, accent: Color) {
                     Text(event.score1, style = PillPrimary, color = IslandContent, maxLines = 1)
                 }
             }
+        event is IslandEvent.Charging ->
+            IslandBatteryIcon(
+                level = event.level,
+                fill = if (event.isPowerSave) IslandCountdown else IslandRinging,
+            )
         else -> PillEventIcon(event, tint = accent, animated = false)
+    }
+}
+
+// A thick landscape battery: a filled body over a faint track, with the terminal on the right.
+@Composable
+private fun IslandBatteryIcon(level: Int, fill: Color) {
+    val fraction = level.coerceIn(0, 100) / 100f
+    Canvas(Modifier.size(width = 24.dp, height = 13.dp)) {
+        val nubWidth = size.width * 0.08f
+        val gap = size.width * 0.04f
+        val bodyWidth = size.width - nubWidth - gap
+        val radius = CornerRadius(size.height * 0.32f)
+        val track = IslandContent.copy(alpha = 0.3f)
+        drawRoundRect(track, size = Size(bodyWidth, size.height), cornerRadius = radius)
+        clipRect(right = bodyWidth * fraction) {
+            drawRoundRect(fill, size = Size(bodyWidth, size.height), cornerRadius = radius)
+        }
+        val nubHeight = size.height * 0.42f
+        drawRoundRect(
+            if (fraction >= 1f) fill else track,
+            topLeft = Offset(bodyWidth + gap, (size.height - nubHeight) / 2f),
+            size = Size(nubWidth, nubHeight),
+            cornerRadius = CornerRadius(nubWidth / 2f),
+        )
     }
 }
 
@@ -255,6 +290,11 @@ private fun IslandTrailing(event: IslandEvent, isAlert: Boolean, accent: Color) 
                 IslandLabel(stringResource(R.string.ax_dynamic_bar_copied), label)
             event is IslandEvent.Vpn -> Unit
             event is IslandEvent.BiometricUnlock -> UnlockingIcon()
+            event is IslandEvent.Charging -> {
+                ChargingBoltIcon()
+                Spacer(Modifier.width(SpaceXxs))
+                IslandLabel("${event.level}%", label)
+            }
             event is IslandEvent.Alarm && event.label.isNotEmpty() -> IslandLabel(event.label, label)
             else -> PillEventText(event, label, overrideColor = IslandContent)
         }
@@ -335,6 +375,40 @@ private fun UnlockingIcon() {
             },
         )
     }
+}
+
+// Strikes in with a bounce and a short flicker, then holds.
+@Composable
+private fun ChargingBoltIcon() {
+    val strike = remember { Animatable(0f) }
+    val flicker = remember { Animatable(0f) }
+    LaunchedEffect(Unit) {
+        launch { strike.animateTo(1f, tween(420, delayMillis = 150)) }
+        flicker.animateTo(
+            1f,
+            keyframes {
+                durationMillis = 570
+                0f at 150
+                1f at 270
+                0.35f at 340
+                1f at 410
+                0.6f at 470
+                1f at 570
+            },
+        )
+    }
+    Icon(
+        Icons.Filled.Bolt,
+        null,
+        tint = IslandCharging,
+        modifier = Modifier.size(16.dp).graphicsLayer {
+            val p = strike.value
+            val scale = 0.6f + 0.4f * p + 0.2f * sin(p * PI.toFloat())
+            scaleX = scale
+            scaleY = scale
+            alpha = flicker.value
+        },
+    )
 }
 
 @Composable
