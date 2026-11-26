@@ -16,6 +16,7 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -87,7 +88,7 @@ private val IslandMinHeight = 30.dp
 private val IslandMaxHeight = 40.dp
 private val IslandLensPadding = 10.dp
 private val IslandMinGap = 34.dp
-private val IslandSideMaxWidth = 76.dp
+private val IslandSideMaxWidth = 60.dp
 private val IslandSidePadding = 8.dp
 private val IslandSpacing = 6.dp
 private val IslandIconSize = 18.dp
@@ -418,8 +419,8 @@ private fun IslandLabel(text: String, modifier: Modifier) {
         style = PillPrimary,
         color = IslandContent,
         maxLines = 1,
-        overflow = TextOverflow.Ellipsis,
-        modifier = modifier,
+        overflow = TextOverflow.Clip,
+        modifier = modifier.basicMarquee(iterations = 1),
     )
 }
 
