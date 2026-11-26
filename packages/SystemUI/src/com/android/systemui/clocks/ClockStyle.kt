@@ -71,7 +71,7 @@ class ClockStyle @JvmOverloads constructor(
     private var currentShiftX = 0
     private var currentShiftY = 0
 
-    private var pendingLayoutListener: View.OnLayoutChangeListener? = null
+    private var clockLayoutListener: View.OnLayoutChangeListener? = null
 
     // Dynamic clock size: the whole frame is scaled up while the large clock is requested, so it
     // never fights the user size scale or the AOD animation applied to the clock view itself.
@@ -192,7 +192,7 @@ class ClockStyle @JvmOverloads constructor(
         handler.removeCallbacks(aodTickRunnable)
         currentClockView?.animate()?.cancel()
         clockFrame?.animate()?.cancel()
-        removePendingLayoutListener()
+        removeClockLayoutListener()
         runCatching { context.unregisterReceiver(screenReceiver) }
         callbacksRegistered = false
     }
@@ -330,7 +330,7 @@ class ClockStyle @JvmOverloads constructor(
     }
 
     private fun updateClockView() {
-        removePendingLayoutListener()
+        removeClockLayoutListener()
         currentClockView?.let { (it.parent as? ViewGroup)?.removeView(it) }
         currentClockView = null
         textClocks.clear()
@@ -583,7 +583,7 @@ class ClockStyle @JvmOverloads constructor(
         if (currentClockView == null) return
         applyClockAlpha()
         applyClockColors()
-        applyClockScaleAfterLayout(currentClockView!!)
+        observeClockLayout(currentClockView!!)
     }
 
     private fun applyClockAlpha() {
@@ -650,36 +650,38 @@ class ClockStyle @JvmOverloads constructor(
         val scale = getScaleFactor()
         view.scaleX = scale
         view.scaleY = scale
-        view.pivotX = view.width / 2f
-        view.pivotY = 0f
+        updateClockPivot(view)
         disableClippingOnParents(view)
         // What fits on screen at the large size depends on the scale above
         applySizeScale(animate = false)
     }
 
-    private fun applyClockScaleAfterLayout(view: View) {
-        if (view.width > 0) {
-            applyClockScale()
-            return
-        }
-        removePendingLayoutListener()
+    private fun updateClockPivot(view: View) {
+        if (view.width <= 0) return
+        view.pivotX = view.width / 2f
+        view.pivotY = 0f
+    }
+
+    private fun observeClockLayout(view: View) {
+        removeClockLayoutListener()
         val listener = object : View.OnLayoutChangeListener {
             override fun onLayoutChange(
                 v: View, l: Int, t: Int, r: Int, b: Int,
                 ol: Int, ot: Int, oR: Int, ob: Int,
             ) {
-                v.removeOnLayoutChangeListener(this)
-                if (pendingLayoutListener === this) pendingLayoutListener = null
-                applyClockScale()
+                // Blueprint changes can produce zero or temporary widths. Keep the
+                // pivot centered as constraints settle, without resetting AOD animations.
+                if (v === currentClockView) updateClockPivot(v)
             }
         }
-        pendingLayoutListener = listener
+        clockLayoutListener = listener
         view.addOnLayoutChangeListener(listener)
+        applyClockScale()
     }
 
-    private fun removePendingLayoutListener() {
-        pendingLayoutListener?.let { currentClockView?.removeOnLayoutChangeListener(it) }
-        pendingLayoutListener = null
+    private fun removeClockLayoutListener() {
+        clockLayoutListener?.let { currentClockView?.removeOnLayoutChangeListener(it) }
+        clockLayoutListener = null
     }
 
     private fun disableClippingOnParents(view: View) {

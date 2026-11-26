@@ -24,6 +24,7 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.android.systemui.clocks.ClockStyle
+import com.android.systemui.dagger.SysUISingleton
 import com.android.systemui.keyguard.domain.interactor.KeyguardClockInteractor
 import com.android.systemui.keyguard.shared.model.ClockSize
 import com.android.systemui.keyguard.shared.model.KeyguardSection
@@ -35,6 +36,7 @@ import com.android.systemui.shared.R as sharedR
 import javax.inject.Inject
 import kotlinx.coroutines.DisposableHandle
 
+@SysUISingleton
 class KeyguardClockStyleSection
 @Inject
 constructor(
