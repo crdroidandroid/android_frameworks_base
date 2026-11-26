@@ -944,9 +944,15 @@ constructor(
             }
 
         val allActions = sbn.notification?.actions ?: emptyArray()
+        val byIntent = allActions.associateBy { actionIntentString(it) }
+        fun find(names: Set<String>) = names.firstNotNullOfOrNull { byIntent[it] }
+        val speaker = callToggle(find(DIALER_SPEAKER_OFF), find(DIALER_SPEAKER_ON))
+        val mute = callToggle(find(DIALER_UNMUTE), find(DIALER_MUTE))
+        val toggleActions = DIALER_TOGGLES.mapNotNullTo(HashSet()) { byIntent[it] }
         val actions =
             allActions
                 .filter { a -> a.remoteInputs.isNullOrEmpty() && a.actionIntent != null }
+                .filter { a -> a !in toggleActions }
                 .take(3)
                 .mapNotNull { a ->
                     a.title?.let { IslandEvent.NotificationAction(label = it, action = a) }
@@ -976,6 +982,8 @@ constructor(
                 callType = callType,
                 callStartTimeMs = callStart,
                 actions = actions,
+                speaker = speaker,
+                mute = mute,
             )
 
         _callEvents.update { list -> listOf(event) + list.filter { it.sbn.key != sbn.key } }
@@ -995,6 +1003,16 @@ constructor(
             }
         iconResNameCache.put(key, name ?: "")
         return name
+    }
+
+    // The dialer offers the action that leaves the current state, so turnOff means it is on.
+    private fun callToggle(
+        turnOff: Notification.Action?,
+        turnOn: Notification.Action?,
+    ): IslandEvent.CallToggle? {
+        turnOff?.actionIntent?.let { return IslandEvent.CallToggle(on = true, intent = it) }
+        turnOn?.actionIntent?.let { return IslandEvent.CallToggle(on = false, intent = it) }
+        return null
     }
 
     private fun actionIntentString(action: Notification.Action): String? {
@@ -1315,3 +1333,14 @@ constructor(
 }
 
 private fun Bundle.getText(key: String): String? = getCharSequence(key)?.toString()
+
+// AOSP InCallUI and Google Dialer.
+private const val INCALLUI = "com.android.incallui."
+private const val GOOGLE_DIALER = "com.android.dialer.incall.statusbarnotification.buttonintent"
+private val DIALER_SPEAKER_ON =
+    setOf("${INCALLUI}ACTION_TURN_ON_SPEAKER", "${GOOGLE_DIALER}SPEAKER_ON")
+private val DIALER_SPEAKER_OFF =
+    setOf("${INCALLUI}ACTION_TURN_OFF_SPEAKER", "${GOOGLE_DIALER}SPEAKER_OFF")
+private val DIALER_MUTE = setOf("${INCALLUI}ACTION_MUTE", "${GOOGLE_DIALER}MUTE")
+private val DIALER_UNMUTE = setOf("${INCALLUI}ACTION_UNMUTE", "${GOOGLE_DIALER}UNMUTE")
+private val DIALER_TOGGLES = DIALER_SPEAKER_ON + DIALER_SPEAKER_OFF + DIALER_MUTE + DIALER_UNMUTE

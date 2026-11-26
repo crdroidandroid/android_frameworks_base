@@ -317,9 +317,14 @@ sealed class IslandEvent(open val priority: Int, val id: String) : Comparable<Is
         val callType: String = "Phone:incoming",
         val callStartTimeMs: Long = System.currentTimeMillis(),
         val actions: List<NotificationAction> = emptyList(),
+        val speaker: CallToggle? = null,
+        val mute: CallToggle? = null,
     ) : IslandEvent(priority = 100, id = "call_${sbn.key}") {
         override fun withoutDrawables() = copy(appIcon = null, callerPhoto = null)
     }
+
+    // A dialer switch offered on the call notification; on is the state it is in now.
+    data class CallToggle(val on: Boolean, val intent: PendingIntent)
 
     data class Notification(
         val sbn: StatusBarNotification,
