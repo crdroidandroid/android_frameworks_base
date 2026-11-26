@@ -190,6 +190,11 @@ public final class PlayIntegritySpoofService {
     private volatile boolean mSpoofPhotos = false;
     private volatile boolean mDebug = false;
 
+    /** Build fields that have a *_FOR_ATTESTATION twin read by KeyMint attestation. */
+    private static final String[] ATTESTATION_ID_KEYS = {
+        "MANUFACTURER", "BRAND", "DEVICE", "PRODUCT", "MODEL"
+    };
+
     private final Map<String, String> mBuildFields = new ConcurrentHashMap<>();
     private final Map<String, String> mSystemProps = new ConcurrentHashMap<>();
 
@@ -291,6 +296,13 @@ public final class PlayIntegritySpoofService {
 
             mBuildFields.put("DEVICE_INITIAL_SDK_INT",
                     resolveDeviceInitialSdk(mBuildFields.get("DEVICE"), mDeviceInitialSdkInt));
+
+            for (String key : ATTESTATION_ID_KEYS) {
+                String value = mBuildFields.get(key);
+                if (value != null && !value.isEmpty()) {
+                    mBuildFields.put(key + "_FOR_ATTESTATION", value);
+                }
+            }
 
             if (mBuildFields.isEmpty() && mSystemProps.isEmpty()) {
                 mConfigLoaded = false;
@@ -583,6 +595,12 @@ public final class PlayIntegritySpoofService {
         putPropIfPresent(props, "ro.product.name", mBuildFields.get("PRODUCT"));
         putPropIfPresent(props, "ro.product.brand", mBuildFields.get("BRAND"));
         putPropIfPresent(props, "ro.product.model", mBuildFields.get("MODEL"));
+        putPropIfPresent(props, "ro.product.manufacturer", mBuildFields.get("MANUFACTURER"));
+        putPropIfPresent(props, "ro.product.vendor.manufacturer", mBuildFields.get("MANUFACTURER"));
+        putPropIfPresent(props, "ro.product.vendor.brand", mBuildFields.get("BRAND"));
+        putPropIfPresent(props, "ro.product.vendor.device", mBuildFields.get("DEVICE"));
+        putPropIfPresent(props, "ro.product.vendor.name", mBuildFields.get("PRODUCT"));
+        putPropIfPresent(props, "ro.product.vendor.model", mBuildFields.get("MODEL"));
         String securityPatch = mBuildFields.get("SECURITY_PATCH");
         if (securityPatch != null) {
             putPropIfPresent(props, "ro.build.version.security_patch", securityPatch);
