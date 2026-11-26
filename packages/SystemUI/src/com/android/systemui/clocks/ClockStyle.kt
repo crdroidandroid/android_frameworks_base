@@ -671,7 +671,11 @@ class ClockStyle @JvmOverloads constructor(
             ) {
                 // Blueprint changes can produce zero or temporary widths. Keep the
                 // pivot centered as constraints settle, without resetting AOD animations.
-                if (v === currentClockView) updateClockPivot(v)
+                if (v !== currentClockView) return
+                updateClockPivot(v)
+                if (r - l > 0 && (r - l != oR - ol || b - t != ob - ot)) {
+                    post { applySizeScale(animate = false) }
+                }
             }
         }
         clockLayoutListener = listener
