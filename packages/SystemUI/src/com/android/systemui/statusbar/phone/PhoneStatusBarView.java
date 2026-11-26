@@ -91,6 +91,8 @@ public class PhoneStatusBarView extends FrameLayout implements Callbacks {
     private StatusBarLongPressGestureDetector mStatusBarLongPressGestureDetector;
     private final Region mTouchableRegion = Region.obtain();
 
+    private int mIslandWidth = 0;
+
     private int mStatusBarPaddingStart = 0;
     private int mStatusBarPaddingTop = 0;
     private int mStatusBarPaddingEnd = 0;
@@ -481,6 +483,18 @@ public class PhoneStatusBarView extends FrameLayout implements Callbacks {
         bounds.right = bounds.right - mCutoutSideNudge;
         lp.width = bounds.width();
         lp.height = bounds.height();
+        if (mIslandWidth > 0) {
+            int gap = Math.round(8 * getResources().getDisplayMetrics().density);
+            lp.width = Math.max(lp.width, mIslandWidth + gap);
+        }
+    }
+
+    /** Keeps the side icons clear of the Dynamic Bar island while it is showing. */
+    public void setIslandWidth(int width) {
+        if (mIslandWidth == width) return;
+        mIslandWidth = width;
+        updateCutoutLocation();
+        if (mCutoutSpace != null) mCutoutSpace.requestLayout();
     }
 
     private void updateSafeInsets() {

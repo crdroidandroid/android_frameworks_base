@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -247,6 +248,8 @@ fun AxDynamicBarChip(
                     )
 
                 if (island != null) {
+                    val widthKey = remember { Any() }
+                    DisposableEffect(widthKey) { onDispose { viewModel.clearIslandWidth(widthKey) } }
                     IslandPill(
                         event = event,
                         isAlert = isAlert,
@@ -255,6 +258,7 @@ fun AxDynamicBarChip(
                         morphScale = { morphScale.value },
                         morphAlpha = { morphAlpha },
                         onPositioned = viewModel::updateChipBounds,
+                        onWidth = { viewModel.reportIslandWidth(widthKey, it) },
                     )
                 } else Box(
                     modifier = Modifier.fillMaxHeight(),

@@ -418,6 +418,11 @@ private fun addDynamicBarIsland(
             setContent {
                 val enabled by viewModel.isEnabled.collectAsState()
                 if (enabled) {
+                    val islandWidth by viewModel.islandReservedWidthPx.collectAsState()
+                    DisposableEffect(islandWidth) {
+                        phoneStatusBarView.setIslandWidth(islandWidth)
+                        onDispose { phoneStatusBarView.setIslandWidth(0) }
+                    }
                     PlatformTheme {
                         ProvideIslandHaptics(viewModel.hapticsEnabled) {
                             AxDynamicBarIslandHost(viewModel)

@@ -57,6 +57,7 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.onPlaced
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.Constraints
@@ -139,6 +140,7 @@ internal fun IslandPill(
     morphScale: () -> Float,
     morphAlpha: () -> Float,
     onPositioned: (androidx.compose.ui.geometry.Rect) -> Unit,
+    onWidth: (Int) -> Unit,
 ) {
     val view = LocalView.current
     val density = LocalDensity.current
@@ -151,6 +153,7 @@ internal fun IslandPill(
         gap = gap.coerceAtLeast(IslandMinGap),
         modifier = Modifier
             .onGloballyPositioned { onPositioned(it.boundsOnScreen(view)) }
+            .onSizeChanged { onWidth(it.width) }
             .graphicsLayer {
                 scaleX = morphScale()
                 alpha = morphAlpha()

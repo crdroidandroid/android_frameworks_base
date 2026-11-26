@@ -187,6 +187,20 @@ constructor(
         if (bounds.width > 0f && bounds.height > 0f) _chipBoundsOnScreen.value = bounds
     }
 
+    private val islandWidths = mutableMapOf<Any, Int>()
+    private val _islandWidthPx = MutableStateFlow(0)
+    val islandReservedWidthPx: StateFlow<Int> = _islandWidthPx.asStateFlow()
+
+    fun reportIslandWidth(key: Any, px: Int) {
+        islandWidths[key] = px
+        _islandWidthPx.value = islandWidths.values.max()
+    }
+
+    fun clearIslandWidth(key: Any) {
+        islandWidths.remove(key)
+        _islandWidthPx.value = islandWidths.values.maxOrNull() ?: 0
+    }
+
     val isExpanded: StateFlow<Boolean> = statusBarExpansion.isExpanded
 
     val isKeyguardExpanded: StateFlow<Boolean> = keyguardExpansion.isExpanded
