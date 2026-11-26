@@ -24,7 +24,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -65,7 +65,9 @@ fun ExpandedIslandContent(
     expandedFilter: String? = null,
     pinnedEventId: String? = null,
     hapticsViewModelFactory: SliderHapticsViewModel.Factory,
+    isVisible: Boolean = true,
 ) {
+    val reveal = rememberCardStackReveal(isVisible)
     if (events.isEmpty()) return
 
     val filteredEvents =
@@ -126,78 +128,81 @@ fun ExpandedIslandContent(
             PaddingValues(start = SpaceLg, end = SpaceLg, top = SpaceXxs, bottom = EXPANDED_BOTTOM_PAD),
     ) {
         if (isNotificationFilter && notifGroups.isNotEmpty()) {
-            notifGroups.forEach { group ->
+            notifGroups.forEachIndexed { index, group ->
                 if (group.size == 1) {
                     val event = group.first()
                     item(key = event.id) {
-                        MagneticSwipeToDismiss(
-                            onDismiss = { interactor.dismissEvent(event) },
-                            modifier = Modifier.animateItem(),
-                        ) {
-                            PrimaryCard { NotificationExpanded(event, interactor) }
+                        StackedCard(reveal, index, Modifier.animateItem()) {
+                            MagneticSwipeToDismiss(onDismiss = { interactor.dismissEvent(event) }) {
+                                PrimaryCard { NotificationExpanded(event, interactor) }
+                            }
                         }
                     }
                 } else {
                     val pkg = group.first().sbn.packageName
                     val isExpanded = expandedGroups[pkg] == true
                     item(key = "group_$pkg") {
-                        MagneticSwipeToDismiss(
-                            onDismiss = { group.forEach { interactor.dismissEvent(it) } },
-                            modifier = Modifier.animateItem(),
-                        ) {
-                            PrimaryCard {
-                                NotificationGroupCard(
-                                    notifications = group,
-                                    isExpanded = isExpanded,
-                                    onToggleExpand = { expandedGroups[pkg] = !isExpanded },
-                                    interactor = interactor,
-                                )
+                        StackedCard(reveal, index, Modifier.animateItem()) {
+                            MagneticSwipeToDismiss(
+                                onDismiss = { group.forEach { interactor.dismissEvent(it) } },
+                            ) {
+                                PrimaryCard {
+                                    NotificationGroupCard(
+                                        notifications = group,
+                                        isExpanded = isExpanded,
+                                        onToggleExpand = { expandedGroups[pkg] = !isExpanded },
+                                        interactor = interactor,
+                                    )
+                                }
                             }
                         }
                     }
                 }
             }
         } else {
-            items(filteredEvents, key = { it.id }) { event ->
-                MagneticSwipeToDismiss(
-                    onDismiss = { interactor.dismissEvent(event) },
-                    modifier = Modifier.animateItem(),
-                ) {
-                    if (event is IslandEvent.Media) {
-                        MediaCard(event, interactor)
-                    } else {
-                        val context = LocalContext.current
-                        val tapModifier =
-                            if (event.contentIntent != null) {
-                                Modifier.clickable {
-                                    if (event.contentIntent.trySendWithBal(context)) {
-                                        interactor.collapseIsland()
+            itemsIndexed(filteredEvents, key = { _, it -> it.id }) { index, event ->
+                StackedCard(reveal, index, Modifier.animateItem()) {
+                    MagneticSwipeToDismiss(onDismiss = { interactor.dismissEvent(event) }) {
+                        if (event is IslandEvent.Media) {
+                            MediaCard(event, interactor)
+                        } else {
+                            val context = LocalContext.current
+                            val tapModifier =
+                                if (event.contentIntent != null) {
+                                    Modifier.clickable {
+                                        if (event.contentIntent.trySendWithBal(context)) {
+                                            interactor.collapseIsland()
+                                        }
                                     }
+                                } else {
+                                    Modifier
                                 }
-                            } else {
-                                Modifier
-                            }
-                        PrimaryCard(modifier = tapModifier) {
-                            // Hoisted: the specs are read inside the non-composable transitionSpec.
-                            val motionScheme = MaterialTheme.motionScheme
-                            AnimatedContent(
-                                targetState = event,
-                                transitionSpec = {
-                                    ((fadeIn(motionScheme.defaultEffectsSpec()) +
-                                        scaleIn(
-                                            initialScale = 0.95f,
-                                            animationSpec = motionScheme.defaultSpatialSpec(),
-                                        )) togetherWith
-                                        (fadeOut(motionScheme.fastEffectsSpec()) +
-                                            scaleOut(
-                                                targetScale = 0.95f,
-                                                animationSpec = motionScheme.fastSpatialSpec(),
-                                            ))).using(sizeTransform = null)
-                                },
-                                contentKey = { it::class.simpleName + it.id },
-                                label = "expanded_card",
-                            ) { animatedEvent ->
-                                ExpandedEventContent(animatedEvent, interactor, hapticsViewModelFactory)
+                            PrimaryCard(modifier = tapModifier) {
+                                // Hoisted: the specs are read inside the non-composable transitionSpec.
+                                val motionScheme = MaterialTheme.motionScheme
+                                AnimatedContent(
+                                    targetState = event,
+                                    transitionSpec = {
+                                        ((fadeIn(motionScheme.defaultEffectsSpec()) +
+                                            scaleIn(
+                                                initialScale = 0.95f,
+                                                animationSpec = motionScheme.defaultSpatialSpec(),
+                                            )) togetherWith
+                                            (fadeOut(motionScheme.fastEffectsSpec()) +
+                                                scaleOut(
+                                                    targetScale = 0.95f,
+                                                    animationSpec = motionScheme.fastSpatialSpec(),
+                                                ))).using(sizeTransform = null)
+                                    },
+                                    contentKey = { it::class.simpleName + it.id },
+                                    label = "expanded_card",
+                                ) { animatedEvent ->
+                                    ExpandedEventContent(
+                                        animatedEvent,
+                                        interactor,
+                                        hapticsViewModelFactory,
+                                    )
+                                }
                             }
                         }
                     }

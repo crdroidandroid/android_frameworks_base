@@ -486,6 +486,7 @@ private fun OverlayContent(viewModel: AxDynamicBarChipViewModel, statusBarHeight
                         onCollapse = { viewModel.statusBarExpansion.collapse() },
                         pinnedEventId = state.event.id,
                         hapticsViewModelFactory = viewModel.interactor.sliderHapticsViewModelFactory,
+                        isVisible = isExpanded,
                     )
                 }
             }
