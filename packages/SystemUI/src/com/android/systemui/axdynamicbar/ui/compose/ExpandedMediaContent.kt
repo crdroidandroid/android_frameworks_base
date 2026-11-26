@@ -4,10 +4,6 @@ import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
 import android.util.TypedValue
 import android.widget.SeekBar
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -83,7 +79,6 @@ private val SeekBarHeight = 24.dp
 internal fun MediaCard(event: IslandEvent.Media, interactor: IslandActions) {
     val colors = rememberMediaColors(event)
     val accent = colors.accent
-    val motionScheme = MaterialTheme.motionScheme
 
     Box(
         modifier = Modifier
@@ -112,14 +107,9 @@ internal fun MediaCard(event: IslandEvent.Media, interactor: IslandActions) {
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(SpaceLg),
                 ) {
-                    AnimatedContent(
-                        targetState = event.albumArt,
-                        transitionSpec = {
-                            fadeIn(motionScheme.defaultEffectsSpec()) togetherWith
-                                fadeOut(motionScheme.fastEffectsSpec())
-                        },
-                        contentKey = { it?.hashCode() ?: 0 },
-                        label = "media_card_art",
+                    MediaArtFlip(
+                        track = event.track to event.packageName,
+                        artwork = event.albumArt,
                     ) { art ->
                         if (art != null) {
                             Image(

@@ -322,15 +322,9 @@ private fun KeyguardMediaPanel(event: IslandEvent.Media, interactor: IslandActio
                     .fillMaxWidth(),
                 contentAlignment = Alignment.Center,
             ) {
-                AnimatedContent(
-                    targetState = event.albumArt,
-                    transitionSpec = {
-                        fadeIn(motionScheme.defaultEffectsSpec()) togetherWith
-                            fadeOut(motionScheme.fastEffectsSpec()) using
-                            SizeTransform(clip = false)
-                    },
-                    contentKey = { it?.hashCode() ?: 0 },
-                    label = "kg_media_album_art",
+                MediaArtFlip(
+                    track = event.track to event.packageName,
+                    artwork = event.albumArt,
                 ) { art ->
                     // aspectRatio alone: full width when there is room, otherwise bounded by the
                     // height the column can spare — always square, never cropped by the panel.
