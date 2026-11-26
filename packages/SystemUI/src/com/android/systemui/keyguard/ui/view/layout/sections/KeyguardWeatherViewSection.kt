@@ -25,6 +25,7 @@ import androidx.constraintlayout.widget.Barrier
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import com.android.systemui.customization.clocks.R as clocksR
+import com.android.systemui.dagger.SysUISingleton
 import com.android.systemui.keyguard.shared.model.KeyguardSection
 import com.android.systemui.keyguard.ui.viewmodel.KeyguardSmartspaceViewModel
 import com.android.systemui.res.R
@@ -34,6 +35,7 @@ import javax.inject.Inject
 
 import com.android.systemui.weather.WeatherInfoView
 
+@SysUISingleton
 class KeyguardWeatherViewSection
 @Inject
 constructor(
