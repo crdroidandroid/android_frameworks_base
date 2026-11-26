@@ -21,7 +21,9 @@ import android.graphics.Matrix
 import android.graphics.Path
 import android.graphics.drawable.Animatable
 import android.graphics.drawable.AnimatedVectorDrawable
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.VectorDrawable
 import android.text.TextUtils
 import android.util.PathParser
 import androidx.annotation.VisibleForTesting
@@ -443,7 +445,19 @@ fun SmallTileContent(
             contentScale = ContentScale.Crop,
         )
     } else {
-        Icon(icon = icon, tint = animatedColor, modifier = iconModifier)
+        // painterResource only supports vector and bitmap drawables
+        val safeIcon =
+            if (
+                icon is Icon.Resource &&
+                    loadedDrawable != null &&
+                    loadedDrawable !is VectorDrawable &&
+                    loadedDrawable !is BitmapDrawable
+            ) {
+                Icon.Loaded(loadedDrawable, icon.contentDescription, icon.resId)
+            } else {
+                icon
+            }
+        Icon(icon = safeIcon, tint = animatedColor, modifier = iconModifier)
     }
 }
 
