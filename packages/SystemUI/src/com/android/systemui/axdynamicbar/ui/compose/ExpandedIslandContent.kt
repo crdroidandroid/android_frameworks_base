@@ -94,12 +94,16 @@ fun ExpandedIslandContent(
             }
         }
 
-    val notifIds = remember(filteredEvents) {
-        filteredEvents.filterIsInstance<IslandEvent.Notification>().map { it.id }.distinct()
+    // Open cards do not time out while they are being read.
+    val heldIds = remember(filteredEvents) {
+        filteredEvents
+            .filter { it is IslandEvent.Notification || it is IslandEvent.Charging }
+            .map { it.id }
+            .distinct()
     }
-    DisposableEffect(interactor, notifIds) {
-        notifIds.forEach(interactor::onNotificationInteraction)
-        onDispose { notifIds.forEach(interactor::onNotificationInteractionEnd) }
+    DisposableEffect(interactor, heldIds) {
+        heldIds.forEach(interactor::onNotificationInteraction)
+        onDispose { heldIds.forEach(interactor::onNotificationInteractionEnd) }
     }
 
     val shouldCollapse = filteredEvents.isEmpty()

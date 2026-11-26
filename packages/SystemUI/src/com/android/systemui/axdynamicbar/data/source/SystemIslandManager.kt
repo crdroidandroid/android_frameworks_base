@@ -12,6 +12,7 @@ import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.media.AudioManager
 import android.net.Uri
+import android.os.BatteryManager
 import android.os.CancellationSignal
 import android.os.Handler
 import android.os.PersistableBundle
@@ -32,20 +33,29 @@ import com.android.systemui.statusbar.pipeline.battery.domain.interactor.Battery
 import com.android.systemui.statusbar.policy.BatteryController
 import java.io.File
 import java.io.IOException
+import kotlin.math.abs
 import java.util.concurrent.atomic.AtomicLong
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.isActive
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
@@ -65,6 +75,7 @@ constructor(
 ) {
     companion object {
         private const val TAG = "SystemIslandManager"
+        private const val CHARGER_POLL_MS = 1000L
         private const val MAX_CLIPBOARD_HISTORY = 10
         private const val PREFS_NAME = "ax_dynamic_bar_prefs"
         private const val KEY_CLIPBOARD_STASH = "clipboard_stash"
@@ -124,6 +135,13 @@ constructor(
     @Volatile var chargingDismissed = false
     private var lastRingerMode = -1
     private var batteryJob: Job? = null
+    private var readingsJob: Job? = null
+    private val currentDivider: Float by lazy {
+        context.resources
+            .getInteger(R.integer.config_currentInfoDivider)
+            .coerceAtLeast(1)
+            .toFloat()
+    }
 
     private var listening = false
     @Volatile private var lastClipboardToken: String? = null
@@ -630,18 +648,20 @@ constructor(
                             _chargingEvent.value = event
                             onChargingStarted?.invoke(event)
                         } else if (snap.isCharging && wasChargingBefore && !chargingDismissed) {
-                            _chargingEvent.value =
-                                _chargingEvent.value?.copy(
-                                    level = snap.level ?: _chargingEvent.value?.level ?: 0,
+                            _chargingEvent.update { event ->
+                                event?.copy(
+                                    level = snap.level ?: event.level,
                                     isPowerSave = snap.isPowerSave,
                                     timeRemaining = snap.timeEst,
                                 )
+                            }
                         } else if (!snap.isCharging && wasChargingBefore) {
                             chargingDismissed = false
                             _chargingEvent.value = null
                         }
                     }
             }
+        startChargerReadings()
     }
 
     fun stopCharging() {
@@ -649,7 +669,61 @@ constructor(
         chargingListening = false
         batteryJob?.cancel()
         batteryJob = null
+        readingsJob?.cancel()
+        readingsJob = null
         _chargingEvent.value = null
+    }
+
+    // Listens to the charger only while the charging event is up.
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private fun startChargerReadings() {
+        readingsJob?.cancel()
+        readingsJob =
+            applicationScope.launch(backgroundDispatcher) {
+                _chargingEvent
+                    .map { it != null }
+                    .distinctUntilChanged()
+                    .flatMapLatest { shown -> if (shown) chargerReadings() else emptyFlow() }
+                    .collect { readings ->
+                        _chargingEvent.update { it?.copy(readings = readings) }
+                    }
+            }
+    }
+
+    // Live values, polled while the event is up; the battery broadcast only fires on change.
+    private fun chargerReadings(): Flow<IslandEvent.ChargerReadings> =
+        flow {
+                val batteryManager = context.getSystemService(BatteryManager::class.java)
+                val filter = IntentFilter(Intent.ACTION_BATTERY_CHANGED)
+                while (true) {
+                    emit(readChargerNow(batteryManager, context.registerReceiver(null, filter)))
+                    delay(CHARGER_POLL_MS)
+                }
+            }
+            .distinctUntilChanged()
+
+    private fun readChargerNow(
+        batteryManager: BatteryManager?,
+        battery: Intent?,
+    ): IslandEvent.ChargerReadings {
+        val raw =
+            batteryManager?.getIntProperty(BatteryManager.BATTERY_PROPERTY_CURRENT_NOW)
+                ?.takeIf { it != Int.MIN_VALUE && it != 0 }
+                ?.let { abs(it).toFloat() }
+        // Same scaling as the keyguard charging info: micro-amps unless a device overlay says not.
+        val currentMa = raw?.let { it / currentDivider }
+        val voltageV =
+            battery?.getIntExtra(BatteryManager.EXTRA_VOLTAGE, -1)
+                ?.takeIf { it > 0 }
+                ?.let { if (it > 100_000) it / 1_000_000f else it / 1000f }
+        val tenthsC = battery?.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, Int.MIN_VALUE)
+        return IslandEvent.ChargerReadings(
+            currentMa = currentMa,
+            powerW =
+                if (currentMa != null && voltageV != null) currentMa / 1000f * voltageV else null,
+            voltageV = voltageV,
+            temperatureC = tenthsC?.takeIf { it > 0 }?.let { it / 10f },
+        )
     }
 
     fun startRinger() {

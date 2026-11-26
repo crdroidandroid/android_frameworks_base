@@ -124,9 +124,18 @@ sealed class IslandEvent(open val priority: Int, val id: String) : Comparable<Is
         val isCharging: Boolean = true,
         val isPowerSave: Boolean = false,
         val timeRemaining: String? = null,
+        val readings: ChargerReadings? = null,
     ) : IslandEvent(priority = 50, id = "charging") {
         override val behavior = EventBehavior(autoDismissMs = 3000L)
     }
+
+    // What the charger reports; null where it reports nothing.
+    data class ChargerReadings(
+        val currentMa: Float? = null,
+        val powerW: Float? = null,
+        val voltageV: Float? = null,
+        val temperatureC: Float? = null,
+    )
 
     data class RingerMode(val mode: Int, val label: String) :
         IslandEvent(priority = 40, id = "ringer_mode") {

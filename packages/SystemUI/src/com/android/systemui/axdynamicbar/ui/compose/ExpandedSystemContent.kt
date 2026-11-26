@@ -44,6 +44,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.selected
@@ -64,6 +65,7 @@ private fun batteryLevelColor(level: Int): Color =
 @Composable
 internal fun ChargingExpanded(event: IslandEvent.Charging) {
     val tint = IslandTone.POSITIVE.tint
+    val stats = event.readings?.let { chargerStats(it) }.orEmpty()
     ExpandedCardLayout(
         accentColor = tint,
         icon = {
@@ -96,7 +98,72 @@ internal fun ChargingExpanded(event: IslandEvent.Charging) {
                 }
             }
         },
+        actions =
+            if (stats.isEmpty()) null
+            else {
+                {
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(top = SpaceSm),
+                        horizontalArrangement = Arrangement.spacedBy(SpaceSm),
+                    ) {
+                        stats.forEach { (label, value) ->
+                            ChargerStat(label, value, tint, Modifier.weight(1f))
+                        }
+                    }
+                }
+            },
     )
+}
+
+@Composable
+private fun chargerStats(readings: IslandEvent.ChargerReadings): List<Pair<String, String>> {
+    val locale = LocalConfiguration.current.locales[0]
+    fun one(value: Float) = String.format(locale, "%.1f", value)
+    return listOfNotNull(
+        readings.currentMa?.let {
+            stringResource(R.string.ax_dynamic_bar_charger_current) to
+                if (it >= 1000f) "${String.format(locale, "%.2f", it / 1000f)} A"
+                else "${String.format(locale, "%.0f", it)} mA"
+        },
+        readings.powerW?.let {
+            stringResource(R.string.ax_dynamic_bar_charger_power) to "${one(it)} W"
+        },
+        readings.voltageV?.let {
+            stringResource(R.string.ax_dynamic_bar_charger_voltage) to
+                "${String.format(locale, "%.2f", it)} V"
+        },
+        readings.temperatureC?.let {
+            stringResource(R.string.ax_dynamic_bar_charger_temperature) to "${one(it)} \u00B0C"
+        },
+    )
+}
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+private fun ChargerStat(label: String, value: String, tint: Color, modifier: Modifier) {
+    Column(
+        modifier =
+            modifier
+                .clip(ShapeCompact)
+                .background(tint.copy(alpha = AlphaIconBg))
+                .padding(horizontal = SpaceSm, vertical = SpaceMd),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(SpaceXxs),
+    ) {
+        Text(
+            value,
+            color = OnCardText,
+            style = MaterialTheme.typography.labelLargeEmphasized,
+            maxLines = 1,
+        )
+        Text(
+            label,
+            color = SubtleGray,
+            style = MaterialTheme.typography.labelSmall,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+    }
 }
 
 @Composable

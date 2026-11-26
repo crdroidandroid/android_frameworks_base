@@ -95,6 +95,10 @@
     <string name="ax_dynamic_bar_hotspot_devices"><xliff:g id="count" example="3">%d</xliff:g> devices</string>
     <string name="ax_dynamic_bar_wireless_charging">Wireless Charging</string>
     <string name="ax_dynamic_bar_until_full">until full</string>
+    <string name="ax_dynamic_bar_charger_current">Current</string>
+    <string name="ax_dynamic_bar_charger_power">Power</string>
+    <string name="ax_dynamic_bar_charger_voltage">Voltage</string>
+    <string name="ax_dynamic_bar_charger_temperature">Temp</string>
     <string name="ax_dynamic_bar_battery_saver">Battery Saver</string>
     <string name="ax_dynamic_bar_call">Call</string>
     <string name="ax_dynamic_bar_incoming_call">Incoming Call</string>
