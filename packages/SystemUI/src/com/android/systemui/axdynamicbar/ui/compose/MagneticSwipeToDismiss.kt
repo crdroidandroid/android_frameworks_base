@@ -93,7 +93,6 @@ internal fun MagneticSwipeToDismiss(
                         alpha = contentAlpha
                         scaleX = 1f - progress * 0.04f
                         scaleY = 1f - progress * 0.04f
-                        rotationZ = (offsetX / detachPx).coerceIn(-1f, 1f) * 2f
                     }
                     .pointerInput(allowUpDismiss) {
                         val touchSlop = viewConfig.touchSlop
