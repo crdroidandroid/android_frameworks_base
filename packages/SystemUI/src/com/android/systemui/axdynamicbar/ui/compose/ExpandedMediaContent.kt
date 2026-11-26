@@ -107,10 +107,7 @@ internal fun MediaCard(event: IslandEvent.Media, interactor: IslandActions) {
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(SpaceLg),
                 ) {
-                    MediaArtFlip(
-                        track = event.track to event.packageName,
-                        artwork = event.albumArt,
-                    ) { art ->
+                    MediaArtFlip(artwork = event.albumArt) { art ->
                         if (art != null) {
                             Image(
                                 bitmap = art.toSquareScaledBitmap(AlbumArtSize),
