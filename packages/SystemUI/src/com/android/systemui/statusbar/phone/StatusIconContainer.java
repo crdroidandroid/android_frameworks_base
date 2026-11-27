@@ -34,7 +34,6 @@ import android.view.View;
 
 import com.android.keyguard.AlphaOptimizedLinearLayout;
 import com.android.systemui.res.R;
-import com.android.systemui.statusbar.NetworkTraffic;
 import com.android.systemui.statusbar.StatusIconDisplayable;
 import com.android.systemui.statusbar.notification.stack.AnimationFilter;
 import com.android.systemui.statusbar.notification.stack.AnimationProperties;
@@ -76,7 +75,6 @@ public class StatusIconContainer extends AlphaOptimizedLinearLayout {
     private ArrayList<StatusIconState> mLayoutStates = new ArrayList<>();
     // So we can count and measure properly
     private ArrayList<View> mMeasureViews = new ArrayList<>();
-    private boolean mOutOfRoom;
     // Any ignored icon will never be added as a child
     private Set<String> mIgnoredSlots = new HashSet<>();
 
@@ -215,7 +213,6 @@ public class StatusIconContainer extends AlphaOptimizedLinearLayout {
     }
 
     private int getMeasuredWidth(int widthMode, int specWidth, int totalWidth) {
-        mOutOfRoom = widthMode != MeasureSpec.UNSPECIFIED && totalWidth > specWidth;
         if (widthMode == MeasureSpec.EXACTLY) {
             if (!mNeedsUnderflow && totalWidth > specWidth) {
                 mNeedsUnderflow = true;
@@ -335,10 +332,8 @@ public class StatusIconContainer extends AlphaOptimizedLinearLayout {
             StatusIconDisplayable iconView = (StatusIconDisplayable) child;
             StatusIconState childState = getViewStateFromChild(child);
 
-            // Traffic is the first to give way when the status icons run out of room.
             if (!iconView.isIconVisible() || iconView.isIconBlocked()
-                    || mIgnoredSlots.contains(iconView.getSlot())
-                    || (mOutOfRoom && child instanceof NetworkTraffic)) {
+                    || mIgnoredSlots.contains(iconView.getSlot())) {
                 childState.visibleState = STATE_HIDDEN;
                 if (DEBUG) Log.d(TAG, "skipping child (" + iconView.getSlot() + ") not visible");
                 continue;
