@@ -34,6 +34,7 @@ import android.view.View;
 
 import com.android.keyguard.AlphaOptimizedLinearLayout;
 import com.android.systemui.res.R;
+import com.android.systemui.statusbar.NetworkTraffic;
 import com.android.systemui.statusbar.StatusIconDisplayable;
 import com.android.systemui.statusbar.notification.stack.AnimationFilter;
 import com.android.systemui.statusbar.notification.stack.AnimationProperties;
@@ -317,7 +318,24 @@ public class StatusIconContainer extends AlphaOptimizedLinearLayout {
      * position, and then deciding if it should be shown as an icon, a dot, or hidden.
      */
     private void calculateIconTranslations() {
+        // Traffic gives way first: drop it and lay out again if anything overflowed.
+        if (layoutIconStates(false)) {
+            layoutIconStates(true);
+        }
+
+        // Stole this from NotificationIconContainer. Not optimal but keeps the layout logic clean
+        if (isLayoutRtl()) {
+            for (int i = 0; i < getChildCount(); i++) {
+                View child = getChildAt(i);
+                StatusIconState state = getViewStateFromChild(child);
+                state.setXTranslation(getWidth() - state.getXTranslation() - child.getWidth());
+            }
+        }
+    }
+
+    private boolean layoutIconStates(boolean dropTraffic) {
         mLayoutStates.clear();
+        boolean hasTraffic = false;
         float width = getWidth();
         float translationX = width - getPaddingEnd();
         float contentStart = getPaddingStart();
@@ -333,7 +351,8 @@ public class StatusIconContainer extends AlphaOptimizedLinearLayout {
             StatusIconState childState = getViewStateFromChild(child);
 
             if (!iconView.isIconVisible() || iconView.isIconBlocked()
-                    || mIgnoredSlots.contains(iconView.getSlot())) {
+                    || mIgnoredSlots.contains(iconView.getSlot())
+                    || (dropTraffic && child instanceof NetworkTraffic)) {
                 childState.visibleState = STATE_HIDDEN;
                 if (DEBUG) Log.d(TAG, "skipping child (" + iconView.getSlot() + ") not visible");
                 continue;
@@ -345,6 +364,7 @@ public class StatusIconContainer extends AlphaOptimizedLinearLayout {
             childState.visibleState = STATE_ICON;
             childState.setXTranslation(translationX);
             mLayoutStates.add(0, childState);
+            hasTraffic |= child instanceof NetworkTraffic;
 
             // Shift translationX over by mIconSpacing for the next view.
             translationX -= mIconSpacing;
@@ -390,15 +410,7 @@ public class StatusIconContainer extends AlphaOptimizedLinearLayout {
                 }
             }
         }
-
-        // Stole this from NotificationIconContainer. Not optimal but keeps the layout logic clean
-        if (isLayoutRtl()) {
-            for (int i = 0; i < childCount; i++) {
-                View child = getChildAt(i);
-                StatusIconState state = getViewStateFromChild(child);
-                state.setXTranslation(width - state.getXTranslation() - child.getWidth());
-            }
-        }
+        return hasTraffic && firstUnderflowIndex != -1;
     }
 
     private void applyIconStates() {
@@ -491,10 +503,15 @@ public class StatusIconContainer extends AlphaOptimizedLinearLayout {
             }
 
             icon.setVisibleState(visibleState, animateVisibility);
+            // Traffic hides through its own view visibility, which the base state would undo.
+            int ownVisibility = view.getVisibility();
             if (animationProperties != null && !qsExpansionTransitioning) {
                 animateTo(view, animationProperties);
             } else {
                 super.applyToView(view);
+            }
+            if (view instanceof NetworkTraffic && view.getVisibility() != ownVisibility) {
+                view.setVisibility(ownVisibility);
             }
 
             qsExpansionTransitioning = false;
