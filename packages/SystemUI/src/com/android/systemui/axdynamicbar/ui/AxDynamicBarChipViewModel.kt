@@ -163,9 +163,16 @@ constructor(
 
     val isOnKeyguard: StateFlow<Boolean> = interactor.isOnKeyguard
 
+    private val _islandActive = MutableStateFlow(false)
+
+    fun setIslandActive(active: Boolean) {
+        _islandActive.value = active
+    }
+
+    // Only the start side chip competes with the notification icons; the island makes room instead.
     val isShowingOnStatusBar: Flow<Boolean> =
-        combine(isEnabled, chipState, isOnKeyguard) { enabled, state, onKeyguard ->
-                enabled && state != null && !onKeyguard
+        combine(isEnabled, chipState, isOnKeyguard, _islandActive) { enabled, state, onKeyguard, island ->
+                enabled && state != null && !onKeyguard && !island
             }
             .distinctUntilChanged()
 

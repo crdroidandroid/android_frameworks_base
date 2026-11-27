@@ -37,6 +37,7 @@ import androidx.compose.material.icons.filled.MusicNote
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -114,7 +115,13 @@ internal fun rememberIslandHole(viewModel: AxDynamicBarChipViewModel): Rect? {
 // Fills the status bar and centres the island on the camera hole; empty space passes touches on.
 @Composable
 fun AxDynamicBarIslandHost(viewModel: AxDynamicBarChipViewModel) {
-    val hole = rememberIslandHole(viewModel) ?: return
+    val hole = rememberIslandHole(viewModel)
+    val active = hole != null
+    DisposableEffect(active) {
+        viewModel.setIslandActive(active)
+        onDispose { viewModel.setIslandActive(false) }
+    }
+    if (hole == null) return
     var natural by remember { mutableStateOf<androidx.compose.ui.geometry.Rect?>(null) }
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         AxDynamicBarChip(
