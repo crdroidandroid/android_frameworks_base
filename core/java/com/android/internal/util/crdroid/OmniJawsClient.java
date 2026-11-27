@@ -75,6 +75,8 @@ public class OmniJawsClient {
     private static final String COL_FORECAST_CONDITION_CODE = "forecast_condition_code";
     private static final String COL_TIME_STAMP = "time_stamp";
     private static final String COL_FORECAST_DATE = "forecast_date";
+    private static final String COL_FORECAST_PRECIP_PROBABILITY = "forecast_precip_probability";
+    private static final String COL_FORECAST_PRECIP_AMOUNT = "forecast_precip_amount";
     private static final String COL_PIN_WHEEL = "pin_wheel";
     private static final String COL_FEELS_LIKE = "feels_like";
     private static final String COL_PRESSURE = "pressure";
@@ -101,6 +103,8 @@ public class OmniJawsClient {
     private static final String COL_HOURLY_TIMESTAMP = "hourly_timestamp";
     private static final String COL_HOURLY_HUMIDITY = "hourly_humidity";
     private static final String COL_HOURLY_WIND_SPEED = "hourly_wind_speed";
+    private static final String COL_HOURLY_PRECIP_PROBABILITY = "hourly_precip_probability";
+    private static final String COL_HOURLY_PRECIP_AMOUNT = "hourly_precip_amount";
 
     public static final String[] WEATHER_PROJECTION = {
             COL_CITY, COL_WIND_SPEED, COL_WIND_DIRECTION, COL_CONDITION_CODE, COL_TEMPERATURE,
@@ -108,7 +112,7 @@ public class OmniJawsClient {
             COL_FORECAST_CONDITION_CODE, COL_TIME_STAMP, COL_FORECAST_DATE, COL_PIN_WHEEL,
             COL_FEELS_LIKE, COL_PRESSURE, COL_UVI, COL_VISIBILITY, COL_DEW_POINT,
             COL_SUNRISE, COL_SUNSET, COL_CITY_ID, COL_AQI, COL_AQI_SCALE,
-            COL_PM25, COL_PM10
+            COL_PM25, COL_PM10, COL_FORECAST_PRECIP_PROBABILITY, COL_FORECAST_PRECIP_AMOUNT
     };
 
     public static final String[] SETTINGS_PROJECTION = {
@@ -117,7 +121,8 @@ public class OmniJawsClient {
 
     public static final String[] HOURLY_PROJECTION = {
             COL_HOURLY_TEMPERATURE, COL_HOURLY_CONDITION_CODE, COL_HOURLY_CONDITION,
-            COL_HOURLY_TIMESTAMP, COL_HOURLY_HUMIDITY, COL_HOURLY_WIND_SPEED
+            COL_HOURLY_TIMESTAMP, COL_HOURLY_HUMIDITY, COL_HOURLY_WIND_SPEED,
+            COL_HOURLY_PRECIP_PROBABILITY, COL_HOURLY_PRECIP_AMOUNT
     };
 
     public static final String AQI_SCALE_US = "us";
@@ -209,6 +214,7 @@ public class OmniJawsClient {
                 info = new WeatherInfo();
                 info.tempUnits = getTemperatureUnit();
                 info.windUnits = getWindUnit();
+                info.precipUnits = getPrecipUnit();
                 List<DayForecast> forecasts = new ArrayList<>();
 
                 final int colCity = weatherCursor.getColumnIndex(COL_CITY);
@@ -239,6 +245,10 @@ public class OmniJawsClient {
                 final int colForecastConditionCode =
                         weatherCursor.getColumnIndex(COL_FORECAST_CONDITION_CODE);
                 final int colForecastDate = weatherCursor.getColumnIndex(COL_FORECAST_DATE);
+                final int colForecastPrecipProbability =
+                        weatherCursor.getColumnIndex(COL_FORECAST_PRECIP_PROBABILITY);
+                final int colForecastPrecipAmount =
+                        weatherCursor.getColumnIndex(COL_FORECAST_PRECIP_AMOUNT);
 
                 for (int i = 0; i < weatherCursor.getCount(); i++) {
                     weatherCursor.moveToPosition(i);
@@ -273,6 +283,8 @@ public class OmniJawsClient {
                         day.condition = getString(weatherCursor, colForecastCondition);
                         day.conditionCode = getInt(weatherCursor, colForecastConditionCode, -1);
                         day.date = getString(weatherCursor, colForecastDate);
+                        day.precipProbability = getFloat(weatherCursor, colForecastPrecipProbability);
+                        day.precipAmount = getFloat(weatherCursor, colForecastPrecipAmount);
                         forecasts.add(day);
                     }
                 }
@@ -292,6 +304,7 @@ public class OmniJawsClient {
                 if (info != null) {
                     info.tempUnits = getTemperatureUnit();
                     info.windUnits = getWindUnit();
+                    info.precipUnits = getPrecipUnit();
                     info.provider = getString(settingsCursor,
                             settingsCursor.getColumnIndex(COL_PROVIDER));
                     info.iconPack = getString(settingsCursor,
@@ -312,6 +325,9 @@ public class OmniJawsClient {
                     final int colTimestamp = hourlyCursor.getColumnIndex(COL_HOURLY_TIMESTAMP);
                     final int colHumidity = hourlyCursor.getColumnIndex(COL_HOURLY_HUMIDITY);
                     final int colWindSpeed = hourlyCursor.getColumnIndex(COL_HOURLY_WIND_SPEED);
+                    final int colPrecipProbability =
+                            hourlyCursor.getColumnIndex(COL_HOURLY_PRECIP_PROBABILITY);
+                    final int colPrecipAmount = hourlyCursor.getColumnIndex(COL_HOURLY_PRECIP_AMOUNT);
 
                     if (colTemp == -1 || colCode == -1 || colCondition == -1
                             || colTimestamp == -1 || colHumidity == -1 || colWindSpeed == -1) {
@@ -326,6 +342,8 @@ public class OmniJawsClient {
                             h.timestamp = hourlyCursor.getLong(colTimestamp);
                             h.humidity = hourlyCursor.getFloat(colHumidity);
                             h.windSpeed = hourlyCursor.getFloat(colWindSpeed);
+                            h.precipProbability = getFloat(hourlyCursor, colPrecipProbability);
+                            h.precipAmount = getFloat(hourlyCursor, colPrecipAmount);
                             hourly.add(h);
                         }
                         info.hourlyForecasts = hourly;
@@ -530,6 +548,10 @@ public class OmniJawsClient {
         return mMetric ? "km/h" : "mph";
     }
 
+    private String getPrecipUnit() {
+        return mMetric ? "mm" : "in";
+    }
+
     public Drawable getWeatherConditionImage(Context context, int conditionCode) {
         if (mRes == null) {
             loadDefaultIconsPackage(context);
@@ -593,6 +615,7 @@ public class OmniJawsClient {
         public List<DayForecast> forecasts;
         public String tempUnits;
         public String windUnits;
+        public String precipUnits;
         public String provider;
         public String pinWheel;
         public String iconPack;
@@ -632,6 +655,10 @@ public class OmniJawsClient {
         public int conditionCode;
         public String condition;
         public String date;
+        /** Chance of precipitation 0-100, NaN when unknown. */
+        public float precipProbability = Float.NaN;
+        /** Precipitation in mm (inches when imperial), NaN when unknown. */
+        public float precipAmount = Float.NaN;
 
         @Override
         public String toString() {
@@ -646,6 +673,8 @@ public class OmniJawsClient {
         public long timestamp;
         public float humidity;
         public float windSpeed;
+        public float precipProbability = Float.NaN;
+        public float precipAmount = Float.NaN;
 
         @Override
         public String toString() {
