@@ -63,6 +63,7 @@ import com.android.systemui.Dependency;
 import com.android.systemui.rotation.RotationPolicyWrapper;
 
 import java.util.Objects;
+import java.util.function.BiPredicate;
 import java.util.function.BooleanSupplier;
 
 public class PhoneStatusBarView extends FrameLayout implements Callbacks {
@@ -92,6 +93,8 @@ public class PhoneStatusBarView extends FrameLayout implements Callbacks {
     private final Region mTouchableRegion = Region.obtain();
 
     private int mIslandWidth = 0;
+    private BiPredicate<Float, Float> mIslandHitTest;
+    private float mIslandDownY = Float.NaN;
 
     private int mStatusBarPaddingStart = 0;
     private int mStatusBarPaddingTop = 0;
@@ -385,6 +388,15 @@ public class PhoneStatusBarView extends FrameLayout implements Callbacks {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
+        // Upward drags that start on the island belong to it, not the shade.
+        if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
+            mIslandDownY = mIslandHitTest != null
+                    && mIslandHitTest.test(event.getRawX(), event.getRawY())
+                    ? event.getY() : Float.NaN;
+        } else if (event.getActionMasked() == MotionEvent.ACTION_MOVE
+                && event.getY() < mIslandDownY) {
+            return false;
+        }
         return mTouchEventHandler != null
                 ? mTouchEventHandler.onInterceptTouchEvent(event)
                 : super.onInterceptTouchEvent(event);
@@ -495,6 +507,10 @@ public class PhoneStatusBarView extends FrameLayout implements Callbacks {
         mIslandWidth = width;
         updateCutoutLocation();
         if (mCutoutSpace != null) mCutoutSpace.requestLayout();
+    }
+
+    public void setIslandHitTest(BiPredicate<Float, Float> hitTest) {
+        mIslandHitTest = hitTest;
     }
 
     private void updateSafeInsets() {

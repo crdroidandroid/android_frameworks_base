@@ -114,6 +114,8 @@ fun AxDynamicBarChip(
     val expandableController = rememberExpandableController(color = Color.Transparent, shape = ChipShape)
     val expandableHolder = remember { arrayOfNulls<SystemUiExpandable>(1) }
     val currentState = rememberUpdatedState(state)
+    val minimized by viewModel.isIslandMinimized.collectAsStateWithLifecycle()
+    val currentMinimized = rememberUpdatedState(minimized)
 
     val motionScheme = MaterialTheme.motionScheme
 
@@ -128,12 +130,13 @@ fun AxDynamicBarChip(
         enter = fadeIn(motionScheme.defaultEffectsSpec()) + scaleIn(initialScale = 0.8f, animationSpec = motionScheme.defaultSpatialSpec()),
         exit = fadeOut(motionScheme.fastEffectsSpec()) + scaleOut(targetScale = 0.8f, animationSpec = motionScheme.fastSpatialSpec()),
         modifier = modifier
-            .pointerInput(viewModel, state?.event?.id, isOnKeyguard, ignoreKeyguard) {
+            .pointerInput(viewModel, state?.event?.id, isOnKeyguard, ignoreKeyguard, island) {
                 awaitEachGesture {
                     val down = awaitFirstDown(pass = PointerEventPass.Initial)
                     val pointerId = down.id
                     val start = down.position
                     var dragging = false
+                    var swipeUp = false
                     var direction = 0
                     var totalDx = 0f
                     var canceled = false
@@ -149,11 +152,22 @@ fun AxDynamicBarChip(
                                 awaitPointerEvent(PointerEventPass.Final)
                                     .changes.firstOrNull { it.id == pointerId }?.isConsumed == true
                             } else change.isConsumed
-                            if (!canceled && !releaseConsumed && (dragging || direction == 0)) {
+                            if (swipeUp) {
+                                change.consume()
+                                if (viewModel.isExpanded.value) {
+                                    viewModel.statusBarExpansion.collapse()
+                                } else if (viewModel.minimizeIsland()) {
+                                    viewModel.performTapHaptic(view)
+                                }
+                            } else if (!canceled && !releaseConsumed && (dragging || direction == 0)) {
                                 if (dragging) {
                                     change.consume()
                                     if (totalDx > 0f) viewModel.cyclePrev()
                                     else viewModel.cycleNext()
+                                } else if (currentState.value != null && currentMinimized.value) {
+                                    change.consume()
+                                    viewModel.performTapHaptic(view)
+                                    viewModel.restoreIsland()
                                 } else if (currentState.value != null) {
                                     change.consume()
                                     viewModel.performTapHaptic(view)
@@ -178,9 +192,15 @@ fun AxDynamicBarChip(
                         if (change.isConsumed && !dragging) { canceled = true; break }
                         if (direction == 0 && (abs(dx) > touchSlop || abs(dy) > touchSlop)) {
                             direction = if (abs(dx) > abs(dy)) 1 else 2
-                            if (direction == 2) break // Let the notification shade handle a vertical swipe.
-                            dragging = true
+                            if (direction == 2) {
+                                // Up tucks the island into the camera; down belongs to the shade.
+                                if (island == null || dy > 0f || currentMinimized.value) break
+                                swipeUp = true
+                            } else {
+                                dragging = true
+                            }
                         }
+                        if (swipeUp) change.consume()
                         if (dragging) {
                             totalDx = dx
                             change.consume()
@@ -250,16 +270,35 @@ fun AxDynamicBarChip(
                 if (island != null) {
                     val widthKey = remember { Any() }
                     DisposableEffect(widthKey) { onDispose { viewModel.clearIslandWidth(widthKey) } }
-                    IslandPill(
-                        event = event,
-                        isAlert = isAlert,
-                        hole = island,
-                        progress = progress,
-                        morphScale = { morphScale.value },
-                        morphAlpha = { morphAlpha },
-                        onPositioned = viewModel::updateChipBounds,
-                        onWidth = { viewModel.reportIslandWidth(widthKey, it) },
-                    )
+                    AnimatedContent(
+                        targetState = minimized,
+                        transitionSpec = {
+                            (fadeIn(motionScheme.defaultEffectsSpec()) +
+                                scaleIn(initialScale = 0.4f, animationSpec = motionScheme.defaultSpatialSpec())) togetherWith
+                                (fadeOut(motionScheme.fastEffectsSpec()) +
+                                    scaleOut(targetScale = 0.4f, animationSpec = motionScheme.fastSpatialSpec()))
+                        },
+                        contentAlignment = Alignment.Center,
+                        label = "island_minimize",
+                    ) { tucked ->
+                        if (tucked) {
+                            IslandCurves(
+                                hole = island,
+                                onWidth = { viewModel.reportIslandWidth(widthKey, it) },
+                            )
+                        } else {
+                            IslandPill(
+                                event = event,
+                                isAlert = isAlert,
+                                hole = island,
+                                progress = progress,
+                                morphScale = { morphScale.value },
+                                morphAlpha = { morphAlpha },
+                                onPositioned = viewModel::updateChipBounds,
+                                onWidth = { viewModel.reportIslandWidth(widthKey, it) },
+                            )
+                        }
+                    }
                 } else Box(
                     modifier = Modifier.fillMaxHeight(),
                     contentAlignment = Alignment.Center,

@@ -51,6 +51,8 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
@@ -95,6 +97,9 @@ private val IslandSidePadding = 8.dp
 private val IslandSpacing = 6.dp
 private val IslandIconSize = 18.dp
 private val IslandShape = RoundedCornerShape(percent = 50)
+private val IslandCurveInset = 4.dp
+private val IslandCurveStroke = 2.dp
+private val IslandCurveTouch = 48.dp
 private val IslandContent = Color.White
 private const val CALL_ACTIVE = "Phone:active"
 private const val AOSP_CALL_PREFIX = "callChip-"
@@ -183,6 +188,29 @@ internal fun IslandPill(
         leading = { IslandLeading(event, isAlert, accent) },
         trailing = { IslandTrailing(event, isAlert, accent) },
     )
+}
+
+// Minimized island: two thin arcs hugging the camera.
+@Composable
+internal fun IslandCurves(hole: Rect, onWidth: (Int) -> Unit) {
+    val density = LocalDensity.current
+    val holeW = with(density) { hole.width().toDp() }
+    val holeH = with(density) { hole.height().toDp() }
+    Canvas(
+        Modifier
+            .onSizeChanged { onWidth(it.width) }
+            .size(
+                width = (holeW + IslandCurveInset * 2).coerceAtLeast(IslandCurveTouch),
+                height = (holeH + IslandCurveInset * 2).coerceAtLeast(IslandMinHeight),
+            )
+    ) {
+        val inset = IslandCurveInset.toPx()
+        val arcSize = Size(hole.width() + inset * 2, hole.height() + inset * 2)
+        val topLeft = Offset((size.width - arcSize.width) / 2f, (size.height - arcSize.height) / 2f)
+        val stroke = Stroke(width = IslandCurveStroke.toPx(), cap = StrokeCap.Round)
+        drawArc(Color.Black, 145f, 70f, false, topLeft, arcSize, style = stroke)
+        drawArc(Color.Black, -35f, 70f, false, topLeft, arcSize, style = stroke)
+    }
 }
 
 @Composable

@@ -2,6 +2,7 @@ package com.android.systemui.axdynamicbar.ui
 
 import android.view.HapticFeedbackConstants
 import android.view.View
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import com.android.systemui.animation.Expandable
 import com.android.systemui.axdynamicbar.domain.AxDynamicBarInteractor
@@ -210,6 +211,50 @@ constructor(
     fun clearIslandWidth(key: Any) {
         islandWidths.remove(key)
         _islandWidthPx.value = islandWidths.values.maxOrNull() ?: 0
+    }
+
+    // Island tucked into the camera for the event it was minimized on; anything new shows again.
+    private val minimizedEventId = MutableStateFlow<String?>(null)
+
+    val isIslandMinimized: StateFlow<Boolean> =
+        combine(chipState, minimizedEventId) { state, id ->
+                id != null && state != null && state.notificationAlert == null &&
+                    state.event.id == id && canMinimize(state.event)
+            }
+            .distinctUntilChanged()
+            .stateIn(applicationScope, SharingStarted.Lazily, false)
+
+    init {
+        applicationScope.launch {
+            chipState.collect { state ->
+                val id = minimizedEventId.value ?: return@collect
+                if (state == null || (state.notificationAlert == null && state.event.id != id)) {
+                    minimizedEventId.value = null
+                }
+            }
+        }
+    }
+
+    fun minimizeIsland(): Boolean {
+        val state = chipState.value ?: return false
+        if (state.notificationAlert != null || !canMinimize(state.event)) return false
+        minimizedEventId.value = state.event.id
+        return true
+    }
+
+    fun isIslandSwipeTarget(x: Float, y: Float): Boolean {
+        if (!_islandActive.value || chipState.value == null || isIslandMinimized.value) return false
+        return chipBoundsOnScreen.value?.contains(Offset(x, y)) == true
+    }
+
+    fun restoreIsland() {
+        minimizedEventId.value = null
+    }
+
+    private fun canMinimize(event: IslandEvent): Boolean = when (event) {
+        is IslandEvent.Call -> event.callType != "Phone:incoming"
+        is IslandEvent.Alarm -> !event.isRinging
+        else -> true
     }
 
     val isExpanded: StateFlow<Boolean> = statusBarExpansion.isExpanded

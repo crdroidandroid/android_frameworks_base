@@ -423,6 +423,10 @@ private fun addDynamicBarIsland(
                         phoneStatusBarView.setIslandWidth(islandWidth)
                         onDispose { phoneStatusBarView.setIslandWidth(0) }
                     }
+                    DisposableEffect(Unit) {
+                        phoneStatusBarView.setIslandHitTest(viewModel::isIslandSwipeTarget)
+                        onDispose { phoneStatusBarView.setIslandHitTest(null) }
+                    }
                     PlatformTheme {
                         ProvideIslandHaptics(viewModel.hapticsEnabled) {
                             AxDynamicBarIslandHost(viewModel)
