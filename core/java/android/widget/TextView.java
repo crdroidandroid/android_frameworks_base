@@ -4509,6 +4509,7 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
             attributes.mFontFamily = null;
             mFontFamily = null;
         }
+        mLastResolvedSystemFont = Typeface.getFontName();
         setTypefaceFromAttrs(attributes.mFontTypeface, attributes.mFontFamily,
                 attributes.mTypefaceIndex, attributes.mTextStyle, attributes.mFontWeight);
 
@@ -4685,7 +4686,11 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
 
         if (!TextUtils.equals(mLastResolvedSystemFont, Typeface.getFontName())) {
             if (mFontFamily != null) {
-                setTypeface(Typeface.getOverrideTypeface(mFontFamily));
+                final Typeface normal = Typeface.create(mFontFamily, Typeface.NORMAL);
+                final Typeface current = mOriginalTypeface;
+                setTypeface(current != null
+                        ? Typeface.create(normal, current.getWeight(), current.isItalic())
+                        : normal);
             }
             mLastResolvedSystemFont = Typeface.getFontName();
         }
