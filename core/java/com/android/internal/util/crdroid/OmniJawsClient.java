@@ -59,6 +59,8 @@ public class OmniJawsClient {
     public static final int EXTRA_ERROR_NETWORK = 0;
     public static final int EXTRA_ERROR_LOCATION = 1;
     public static final int EXTRA_ERROR_DISABLED = 2;
+    public static final int EXTRA_ERROR_API_KEY = 3;
+    public static final int EXTRA_ERROR_RATE_LIMIT = 4;
 
     private static final String COL_CITY = "city";
     private static final String COL_WIND_SPEED = "wind_speed";
