@@ -83,8 +83,7 @@ import com.android.systemui.axdynamicbar.model.IslandEvent
 import com.android.systemui.axdynamicbar.shared.AlphaGlass
 import com.android.systemui.axdynamicbar.shared.AlphaIconBg
 import com.android.systemui.axdynamicbar.shared.AlphaSubtle
-import com.android.systemui.axdynamicbar.shared.islandBlur
-import com.android.systemui.axdynamicbar.shared.CardBg
+import com.android.systemui.axdynamicbar.shared.islandCard
 import com.android.systemui.axdynamicbar.shared.DarkCard
 import com.android.systemui.axdynamicbar.shared.IslandTone
 import com.android.systemui.axdynamicbar.shared.OnCardText
@@ -253,7 +252,7 @@ fun NotificationAlertCard(
                 }
                 .clip(ShapeCard)
                 // Frosted surface; falls back to the opaque card colour where blur is unavailable.
-                .islandBlur(RadiusCard, CardBg),
+                .islandCard(RadiusCard),
         ) {
           Box {
             SceneTransitionLayout(state = stlState) {

@@ -1,5 +1,6 @@
 package com.android.systemui.keyguard.ui.view.layout.sections
 
+import com.android.systemui.axdynamicbar.shared.ProvideIslandCardStyle
 import android.content.Context
 import android.transition.TransitionManager
 import android.view.View
@@ -90,8 +91,10 @@ constructor(
 
         composeView.setContent {
             PlatformTheme {
-                ProvideIslandHaptics(viewModel.hapticsEnabled) {
-                    AxDynamicBarKeyguardChip(viewModel = viewModel)
+                ProvideIslandCardStyle(viewModel.cardStyle, viewModel.shadeColorStyle) {
+                    ProvideIslandHaptics(viewModel.hapticsEnabled) {
+                        AxDynamicBarKeyguardChip(viewModel = viewModel)
+                    }
                 }
             }
         }

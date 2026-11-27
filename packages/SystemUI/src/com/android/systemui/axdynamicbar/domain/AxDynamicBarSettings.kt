@@ -30,6 +30,8 @@ class AxDynamicBarSettings @Inject constructor(
         const val KEY_HAPTICS = Settings.Secure.AX_DYNAMIC_BAR_HAPTICS
         const val KEY_CHIP_MORPH = Settings.Secure.AX_DYNAMIC_BAR_CHIP_MORPH
         const val KEY_CENTER_ISLAND = Settings.Secure.AX_DYNAMIC_BAR_CENTER_ISLAND
+        const val KEY_CARD_STYLE = Settings.Secure.AX_DYNAMIC_BAR_CARD_STYLE
+        const val KEY_SHADE_COLOR_STYLE = Settings.Secure.SHADE_COLOR_STYLE
     }
 
     private val _isEnabled = MutableStateFlow(false)
@@ -52,6 +54,12 @@ class AxDynamicBarSettings @Inject constructor(
 
     private val _centerIsland = MutableStateFlow(false)
     val centerIsland: StateFlow<Boolean> = _centerIsland.asStateFlow()
+
+    private val _cardStyle = MutableStateFlow(0)
+    val cardStyle: StateFlow<Int> = _cardStyle.asStateFlow()
+
+    private val _shadeColorStyle = MutableStateFlow(0)
+    val shadeColorStyle: StateFlow<Int> = _shadeColorStyle.asStateFlow()
 
     private val _disabledEventTypes = MutableStateFlow<Set<String>>(emptySet())
     val disabledEventTypes: StateFlow<Set<String>> = _disabledEventTypes.asStateFlow()
@@ -121,6 +129,18 @@ class AxDynamicBarSettings @Inject constructor(
             settingsObserver,
             UserHandle.USER_ALL,
         )
+        secureSettings.registerContentObserverForUserSync(
+            KEY_CARD_STYLE,
+            false,
+            settingsObserver,
+            UserHandle.USER_ALL,
+        )
+        secureSettings.registerContentObserverForUserSync(
+            KEY_SHADE_COLOR_STYLE,
+            false,
+            settingsObserver,
+            UserHandle.USER_ALL,
+        )
     }
 
     fun destroy() {
@@ -144,6 +164,10 @@ class AxDynamicBarSettings @Inject constructor(
             secureSettings.getIntForUser(KEY_CHIP_MORPH, 1, UserHandle.USER_CURRENT) == 1
         _centerIsland.value =
             secureSettings.getIntForUser(KEY_CENTER_ISLAND, 0, UserHandle.USER_CURRENT) == 1
+        _cardStyle.value =
+            secureSettings.getIntForUser(KEY_CARD_STYLE, 0, UserHandle.USER_CURRENT)
+        _shadeColorStyle.value =
+            secureSettings.getIntForUser(KEY_SHADE_COLOR_STYLE, 0, UserHandle.USER_CURRENT)
 
         val json = secureSettings.getStringForUser(KEY_EVENTS, UserHandle.USER_CURRENT) ?: ""
         _disabledEventTypes.value =

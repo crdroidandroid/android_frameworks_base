@@ -191,14 +191,16 @@ fun AxDynamicBarKeyguardChip(
 
         val expandedContent: @Composable (Modifier) -> Unit = { panelModifier ->
             state?.let {
-                KeyguardExpandedContent(
-                    event = it.event,
-                    allEvents = it.allEvents,
-                    interactor = viewModel.interactor,
-                    onCollapse = { viewModel.keyguardExpansion.collapse() },
-                    hapticsViewModelFactory = viewModel.interactor.sliderHapticsViewModelFactory,
-                    panelModifier = panelModifier,
-                )
+                IslandCardTheme {
+                    KeyguardExpandedContent(
+                        event = it.event,
+                        allEvents = it.allEvents,
+                        interactor = viewModel.interactor,
+                        onCollapse = { viewModel.keyguardExpansion.collapse() },
+                        hapticsViewModelFactory = viewModel.interactor.sliderHapticsViewModelFactory,
+                        panelModifier = panelModifier,
+                    )
+                }
             }
         }
 

@@ -2,6 +2,8 @@
 
 package com.android.systemui.axdynamicbar.ui
 
+import com.android.systemui.axdynamicbar.shared.ProvideIslandCardStyle
+import com.android.systemui.axdynamicbar.shared.IslandCardTheme
 import android.content.Context
 import android.graphics.PixelFormat
 import android.view.Gravity
@@ -199,8 +201,12 @@ constructor(
         val view = ComposeView(context).apply {
             setContent {
                 PlatformTheme {
-                    ProvideIslandHaptics(viewModel.hapticsEnabled) {
-                        OverlayContent(viewModel, statusBarTop, hasCutout)
+                    ProvideIslandCardStyle(viewModel.cardStyle, viewModel.shadeColorStyle) {
+                        IslandCardTheme {
+                            ProvideIslandHaptics(viewModel.hapticsEnabled) {
+                                OverlayContent(viewModel, statusBarTop, hasCutout)
+                            }
+                        }
                     }
                 }
             }

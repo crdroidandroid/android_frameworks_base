@@ -458,7 +458,7 @@ internal fun PrimaryCard(modifier: Modifier = Modifier, content: @Composable () 
         modifier =
             Modifier.fillMaxWidth()
                 .clip(ShapeCard)
-                .islandBlur(RadiusCard, CardBg)
+                .islandCard(RadiusCard)
                 .then(modifier)
     ) {
         Box(modifier = Modifier.padding(SpaceXxl)) { content() }
