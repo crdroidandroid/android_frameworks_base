@@ -100,6 +100,20 @@ constructor(
         private const val TAG = "AxDynamicBarInteractor"
         private const val NOTIF_ALERT_DURATION_MS = 4500L
 
+        // The app an event speaks for; it steps aside while that app is on screen.
+        private fun IslandEvent.ownerPackage(): String? = when (this) {
+            is IslandEvent.Media -> packageName.ifEmpty { null }
+            is IslandEvent.Notification -> sbn.packageName
+            is IslandEvent.Call -> sbn.packageName
+            is IslandEvent.PromotedOngoing -> sbn.packageName
+            is IslandEvent.Sports -> sbn?.packageName ?: contentIntent?.creatorPackage
+            is IslandEvent.Timer -> contentIntent?.creatorPackage
+            is IslandEvent.Stopwatch -> contentIntent?.creatorPackage
+            is IslandEvent.Alarm -> contentIntent?.creatorPackage
+            is IslandEvent.AudioRecording -> contentIntent?.creatorPackage
+            else -> null
+        }
+
         private fun IslandEvent.Notification.isActiveCall(): Boolean {
             val extras = sbn.notification?.extras ?: return false
             return extras.containsKey(Notification.EXTRA_ANSWER_INTENT) ||
@@ -253,8 +267,12 @@ constructor(
                 repository.events,
                 settings.disabledEventTypes,
                 _isOnKeyguard,
-            ) { raw, _, kg ->
-                raw.filter { settings.isEventEnabled(it) } to kg
+                repository.foregroundApp.packages,
+            ) { raw, _, kg, foreground ->
+                raw.filter {
+                    settings.isEventEnabled(it) &&
+                        (kg || foreground.isEmpty() || it.ownerPackage() !in foreground)
+                } to kg
             }.collect { (rawEvents, onKeyguard) ->
                 if (!settings.isEnabled.value) return@collect
                 dismissedEventIds.removeAll { id -> rawEvents.none { it.id == id } }

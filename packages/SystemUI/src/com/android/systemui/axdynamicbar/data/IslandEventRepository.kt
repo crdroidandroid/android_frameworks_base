@@ -7,6 +7,7 @@ import com.android.systemui.axdynamicbar.data.source.AospChipIslandManager
 import com.android.systemui.axdynamicbar.data.source.AppTrackingIslandManager
 import com.android.systemui.axdynamicbar.data.source.BiometricIslandManager
 import com.android.systemui.axdynamicbar.data.source.ConnectivityIslandManager
+import com.android.systemui.axdynamicbar.data.source.ForegroundAppTracker
 import com.android.systemui.axdynamicbar.data.source.MediaIslandManager
 import com.android.systemui.axdynamicbar.data.source.NotificationIslandManager
 import com.android.systemui.axdynamicbar.data.source.SmartspaceIslandManager
@@ -40,6 +41,7 @@ constructor(
     val biometric: BiometricIslandManager,
     val smartspace: SmartspaceIslandManager,
     val aospChip: AospChipIslandManager,
+    val foregroundApp: ForegroundAppTracker,
     private val settings: AxDynamicBarSettings,
     @Application private val applicationScope: CoroutineScope,
 ) {
@@ -102,6 +104,7 @@ constructor(
         if (isTypeEnabled("ringer")) system.startRinger()
         if (isTypeEnabled("clipboard")) system.startClipboard()
         notification.startListening()
+        foregroundApp.startListening()
         if (isTypeEnabled("app_switch")) appTracking.startListening()
         if (isTypeEnabled("torch")) torch.startListening()
         if (isTypeEnabled("biometric_unlock")) biometric.startListening()
@@ -118,6 +121,7 @@ constructor(
         notification.stopListening()
         torch.stopListening()
         appTracking.stopListening()
+        foregroundApp.stopListening()
         biometric.stopListening()
         smartspace.stopListening()
     }
