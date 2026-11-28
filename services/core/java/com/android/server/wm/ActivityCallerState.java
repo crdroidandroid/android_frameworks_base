@@ -188,13 +188,19 @@ final class ActivityCallerState {
 
         // EXTRA_STREAM
         if (intent.hasExtra(Intent.EXTRA_STREAM)) {
-            final ArrayList<Uri> streams = tryToUnparcelArrayListExtraStreamsUri(intent);
-            if (streams == null) {
-                addUriIfContentUri(tryToUnparcelExtraStreamUri(intent), uris);
-            } else {
+            // Probe the expected type first to avoid Bundle cast warnings.
+            final boolean multiple = Intent.ACTION_SEND_MULTIPLE.equals(intent.getAction());
+            final Uri stream = multiple ? null : tryToUnparcelExtraStreamUri(intent);
+            final ArrayList<Uri> streams = stream != null ? null
+                    : tryToUnparcelArrayListExtraStreamsUri(intent);
+            if (stream != null) {
+                addUriIfContentUri(stream, uris);
+            } else if (streams != null) {
                 for (int i = streams.size() - 1; i >= 0; i--) {
                     addUriIfContentUri(streams.get(i), uris);
                 }
+            } else if (multiple) {
+                addUriIfContentUri(tryToUnparcelExtraStreamUri(intent), uris);
             }
         }
 
