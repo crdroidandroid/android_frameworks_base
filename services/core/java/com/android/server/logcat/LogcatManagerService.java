@@ -435,7 +435,7 @@ public final class LogcatManagerService extends SystemService {
             return;
         }
 
-        if (client.mPackageName.equals("org.omnirom.logcat")) {
+        if (client.mPackageName.equals("com.crdroid.logcat")) {
             onAccessApprovedForClient(client);
             return;
         }
