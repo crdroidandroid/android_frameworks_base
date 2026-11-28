@@ -372,11 +372,16 @@ public class NotificationBackgroundView extends View implements Dumpable,
         if (!lockscreenBlurForNotifications()) {
             return;
         }
-        Assert.isMainThread();
-
         if (mBlurBackgroundEnabled == enabled) {
             return;
         }
+        if (!isAttachedToWindow()) {
+            // May be called from async inflation; drawable is handled in onAttachedToWindow.
+            mBlurBackgroundEnabled = enabled;
+            return;
+        }
+        Assert.isMainThread();
+
         mBlurBackgroundEnabled = enabled;
         if (enabled) {
             if (isAttachedToWindow()) {
