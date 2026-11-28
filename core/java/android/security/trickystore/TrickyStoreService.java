@@ -720,7 +720,9 @@ public class TrickyStoreService {
         } catch (Exception e) {
             // A failed probe is not proof of a damaged TEE. Unsupported attestation
             // or unavailable provisioning may produce the same failure.
-            Log.w(TAG, "Attested key generation probe unavailable", e);
+            Throwable cause = e;
+            while (cause.getCause() != null) cause = cause.getCause();
+            Log.w(TAG, "Hardware attestation unavailable, falling back to keybox: " + cause);
             return true;
         } finally {
             if (ks != null) {
