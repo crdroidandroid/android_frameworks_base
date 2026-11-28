@@ -47,6 +47,7 @@ import android.hardware.fingerprint.IFingerprintServiceReceiver;
 import android.hardware.fingerprint.IUdfpsOverlayController;
 import android.os.Binder;
 import android.os.Build;
+import android.os.DeadObjectException;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.RemoteException;
@@ -137,6 +138,7 @@ public class FingerprintProvider implements IBinder.DeathRecipient, ServiceProvi
     @Nullable private String mHalInstanceNameCurrent;
 
     private boolean mCleanup;
+    private boolean mIgnoreDisplayTouchesUnsupported;
 
     private final class BiometricTaskStackListener extends TaskStackListener {
         @Override
@@ -812,11 +814,22 @@ public class FingerprintProvider implements IBinder.DeathRecipient, ServiceProvi
     @Override
     public void setIgnoreDisplayTouches(long requestId, int sensorId, boolean ignoreTouches) {
         mHandler.post(() -> {
+            if (mIgnoreDisplayTouchesUnsupported) {
+                return;
+            }
             try {
                 mFingerprintSensors.get(
                         sensorId).getLazySession().get().getSession().setIgnoreDisplayTouches(
                         ignoreTouches);
                 Slog.d(getTag(), "setIgnoreDisplayTouches set to " + ignoreTouches);
+            } catch (RemoteException e) {
+                if (e instanceof DeadObjectException) {
+                    Slog.w(getTag(), "setIgnore failed", e);
+                    return;
+                }
+                mIgnoreDisplayTouchesUnsupported = true;
+                Slog.w(getTag(), "setIgnoreDisplayTouches unsupported by HAL: "
+                        + e.getMessage());
             } catch (Exception e) {
                 Slog.w(getTag(), "setIgnore failed", e);
             }
