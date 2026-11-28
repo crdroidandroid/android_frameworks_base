@@ -818,6 +818,23 @@ public class UriGrantsManagerService extends IUriGrantsManager.Stub implements
             Intent intent, int contentUserHint, int mode, int callingUid,
             @RequiredContentUriPermission Integer requireContentUriPermissionFromCaller,
             Integer requestHashCode) {
+        // Probe the expected type first to avoid Bundle cast warnings.
+        final boolean multiple = Intent.ACTION_SEND_MULTIPLE.equals(intent.getAction());
+        if (!multiple && enforceOnExtraStreamUriUnlocked(intent, contentUserHint, mode,
+                callingUid, requireContentUriPermissionFromCaller, requestHashCode)) {
+            return;
+        }
+        if (!enforceOnExtraStreamUrisUnlocked(intent, contentUserHint, mode, callingUid,
+                requireContentUriPermissionFromCaller, requestHashCode) && multiple) {
+            enforceOnExtraStreamUriUnlocked(intent, contentUserHint, mode, callingUid,
+                    requireContentUriPermissionFromCaller, requestHashCode);
+        }
+    }
+
+    private boolean enforceOnExtraStreamUriUnlocked(Intent intent, int contentUserHint,
+            int mode, int callingUid,
+            @RequiredContentUriPermission Integer requireContentUriPermissionFromCaller,
+            Integer requestHashCode) {
         try {
             final Uri uri = intent.getParcelableExtra(Intent.EXTRA_STREAM, Uri.class);
             if (uri != null) {
@@ -825,12 +842,19 @@ public class UriGrantsManagerService extends IUriGrantsManager.Stub implements
                 enforceRequireContentUriPermissionFromCallerUnlocked(
                         requireContentUriPermissionFromCaller, grantUri, callingUid,
                         requestHashCode);
+                return true;
             }
         } catch (BadParcelableException e) {
             Slog.w(TAG, "Failed to unparcel an URI in EXTRA_STREAM, skipping"
                     + " requireContentUriPermissionFromCaller: " + e);
         }
+        return false;
+    }
 
+    private boolean enforceOnExtraStreamUrisUnlocked(Intent intent, int contentUserHint,
+            int mode, int callingUid,
+            @RequiredContentUriPermission Integer requireContentUriPermissionFromCaller,
+            Integer requestHashCode) {
         try {
             final ArrayList<Uri> uris = intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM,
                     Uri.class);
@@ -841,11 +865,13 @@ public class UriGrantsManagerService extends IUriGrantsManager.Stub implements
                             requireContentUriPermissionFromCaller, grantUri, callingUid,
                             requestHashCode);
                 }
+                return true;
             }
         } catch (BadParcelableException e) {
             Slog.w(TAG, "Failed to unparcel an ArrayList of URIs in EXTRA_STREAM, skipping"
                     + " requireContentUriPermissionFromCaller: " + e);
         }
+        return false;
     }
 
     private void notifyActivityLaunchRequestCompletedUnlocked(Integer requestHashCode,
