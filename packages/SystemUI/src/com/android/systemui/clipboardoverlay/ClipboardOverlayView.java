@@ -27,6 +27,7 @@ import android.animation.ObjectAnimator;
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.annotation.Nullable;
+import android.app.ActivityOptions;
 import android.app.PendingIntent;
 import android.app.RemoteAction;
 import android.content.Context;
@@ -514,7 +515,10 @@ public class ClipboardOverlayView extends DraggableConstraintLayout {
                     @Override
                     public Unit invoke() {
                         try {
-                            action.getActionIntent().send();
+                            action.getActionIntent().send(ActivityOptions.makeBasic()
+                                    .setPendingIntentBackgroundActivityStartMode(
+                                            ActivityOptions.MODE_BACKGROUND_ACTIVITY_START_ALLOWED)
+                                    .toBundle());
                             onFinish.run();
                         } catch (PendingIntent.CanceledException e) {
                             Log.e(TAG, "Failed to send intent");
