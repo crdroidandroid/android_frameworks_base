@@ -4596,6 +4596,15 @@ class StorageManagerService extends IStorageManager.Stub
                 return StorageManager.MOUNT_MODE_EXTERNAL_NONE;
             }
 
+            // Processes may be started before servicesReady().
+            if (mIPackageManager == null) {
+                mPmInternal = LocalServices.getService(PackageManagerInternal.class);
+                mIPackageManager = IPackageManager.Stub.asInterface(
+                        ServiceManager.getService("package"));
+                mIAppOpsService = IAppOpsService.Stub.asInterface(
+                        ServiceManager.getService(Context.APP_OPS_SERVICE));
+            }
+
             final String[] packagesForUid = mIPackageManager.getPackagesForUid(uid);
             if (ArrayUtils.isEmpty(packagesForUid)) {
                 // It's possible the package got uninstalled already, so just ignore.
