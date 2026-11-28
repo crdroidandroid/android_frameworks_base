@@ -93,6 +93,7 @@ import com.android.systemui.log.table.Diffable
 import com.android.systemui.log.table.TableLogBuffer
 import com.android.systemui.log.table.TableRowLogger
 import com.android.systemui.log.table.logDiffsForTable
+import com.android.systemui.axdynamicbar.domain.AxDynamicBarSettings
 import com.android.systemui.media.controls.domain.pipeline.MediaDataManager
 import com.android.systemui.media.controls.shared.model.MediaData
 import com.android.systemui.notifications.ui.NotificationPlaceholderStateStorage
@@ -223,6 +224,7 @@ constructor(
     unfoldTransitionInteractor: UnfoldTransitionInteractor,
     val activeNotificationsInteractor: ActiveNotificationsInteractor,
     private val mediaDataManager: MediaDataManager,
+    private val dynamicBarSettings: AxDynamicBarSettings,
     notificationPlaceholderStateStorage: NotificationPlaceholderStateStorage,
     @NotificationAlphaTableLog private val alphaTableLogger: TableLogBuffer,
     windowRootViewBlurInteractor: WindowRootViewBlurInteractor,
@@ -1028,6 +1030,9 @@ constructor(
 
                 awaitClose { mediaDataManager.removeListener(listener) }
             }
+                .combine(dynamicBarSettings.coversKeyguardMedia) { media, covered ->
+                    media && !covered
+                }
         }
 
     private val availableHeight: Flow<Float> =

@@ -12,7 +12,10 @@ import com.android.systemui.util.settings.SecureSettings
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import org.json.JSONArray
 
 @SysUISingleton
@@ -63,6 +66,16 @@ class AxDynamicBarSettings @Inject constructor(
 
     private val _disabledEventTypes = MutableStateFlow<Set<String>>(emptySet())
     val disabledEventTypes: StateFlow<Set<String>> = _disabledEventTypes.asStateFlow()
+
+    /** Whether the lock screen chip shows media, making the lock screen player redundant. */
+    val coversKeyguardMedia: Flow<Boolean> =
+        combine(_isEnabled, _isKeyguardEnabled, _disabledEventTypes) { on, kg, disabled ->
+                on && kg && "media" !in disabled
+            }
+            .distinctUntilChanged()
+
+    fun isKeyguardMediaCovered(): Boolean =
+        _isEnabled.value && _isKeyguardEnabled.value && "media" !in _disabledEventTypes.value
 
     init {
         refresh()

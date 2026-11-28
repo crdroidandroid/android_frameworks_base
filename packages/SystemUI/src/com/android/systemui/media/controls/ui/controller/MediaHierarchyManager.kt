@@ -53,6 +53,7 @@ import com.android.systemui.media.dream.MediaDreamComplication
 import com.android.systemui.media.remedia.shared.flag.MediaControlsInComposeFlag
 import com.android.systemui.plugins.statusbar.StatusBarStateController
 import com.android.systemui.res.R
+import com.android.systemui.axdynamicbar.domain.AxDynamicBarSettings
 import com.android.systemui.scene.shared.flag.SceneContainerFlag
 import com.android.systemui.shade.ShadeDisplayAware
 import com.android.systemui.shade.domain.interactor.ShadeInteractor
@@ -128,6 +129,7 @@ constructor(
     private val shadeModeInteractor: ShadeModeInteractor,
     private val logger: MediaViewLogger,
     private val dumpManager: DumpManager,
+    private val dynamicBarSettings: AxDynamicBarSettings,
 ) : Dumpable {
 
     /** Track the media player setting status on lock screen. */
@@ -1301,7 +1303,7 @@ constructor(
                 // Communal does not have its own StatusBarState so it should always have higher
                 // priority for the UMO over the lockscreen.
                 isCommunalShowing -> LOCATION_COMMUNAL_HUB
-                onLockscreen && allowMediaPlayerOnLockScreen -> LOCATION_LOCKSCREEN
+                onLockscreen && allowMediaOnLockscreen() -> LOCATION_LOCKSCREEN
                 else -> LOCATION_QQS
             }
         // When we're on lock screen and the player is not active, we should keep it in QS.
@@ -1399,8 +1401,11 @@ constructor(
     }
 
     private fun isLockScreenVisibleToUser(): Boolean {
-        return isOnLockscreen && allowMediaPlayerOnLockScreen
+        return isOnLockscreen && allowMediaOnLockscreen()
     }
+
+    private fun allowMediaOnLockscreen(): Boolean =
+        allowMediaPlayerOnLockScreen && !dynamicBarSettings.isKeyguardMediaCovered()
 
     private fun isHomeScreenShadeVisibleToUser(): Boolean {
         return !statusBarStateController.isDozing &&

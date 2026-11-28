@@ -22,6 +22,7 @@ import android.view.View.GONE
 import androidx.annotation.VisibleForTesting
 import com.android.systemui.dagger.SysUISingleton
 import com.android.systemui.dagger.qualifiers.Application
+import com.android.systemui.axdynamicbar.domain.AxDynamicBarSettings
 import com.android.systemui.media.controls.domain.pipeline.MediaDataManager
 import com.android.systemui.res.R
 import com.android.systemui.scene.shared.flag.SceneContainerFlag
@@ -62,6 +63,7 @@ constructor(
     private val statusBarStateController: SysuiStatusBarStateController,
     private val lockscreenShadeTransitionController: LockscreenShadeTransitionController,
     private val mediaDataManager: MediaDataManager,
+    private val dynamicBarSettings: AxDynamicBarSettings,
     @ShadeDisplayAware private val resources: Resources,
     private val splitShadeStateController: SplitShadeStateController,
     private val shadeModeInteractor: ShadeModeInteractor,
@@ -205,7 +207,8 @@ constructor(
         val stackHeightSequence = computeHeightPerNotificationLimit(stack, shelfHeight)
 
         // TODO: Avoid making this split shade assumption by simply checking the stack for media
-        val isMediaShowing = mediaDataManager.hasActiveMedia()
+        val isMediaShowing =
+            mediaDataManager.hasActiveMedia() && !dynamicBarSettings.isKeyguardMediaCovered()
         val isSplitShade =
             if (SceneContainerFlag.isEnabled) shadeModeInteractor.isSplitShade
             else splitShadeStateController.shouldUseSplitNotificationShade(resources)

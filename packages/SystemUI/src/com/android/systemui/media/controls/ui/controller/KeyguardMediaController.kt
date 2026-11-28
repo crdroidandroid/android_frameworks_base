@@ -57,6 +57,7 @@ import com.android.systemui.media.remedia.ui.viewmodel.MediaViewModel
 import com.android.systemui.plugins.statusbar.StatusBarStateController
 import com.android.systemui.res.R
 import com.android.systemui.scene.shared.flag.SceneContainerFlag
+import com.android.systemui.axdynamicbar.domain.AxDynamicBarSettings
 import com.android.systemui.shade.ShadeDisplayAware
 import com.android.systemui.statusbar.StatusBarState
 import com.android.systemui.statusbar.SysuiStatusBarStateController
@@ -107,6 +108,7 @@ constructor(
     private val mediaCarouselInteractor: MediaCarouselInteractor,
     private val falsingSystem: MediaFalsingSystem,
     private val secureSettings: SecureSettings,
+    private val dynamicBarSettings: AxDynamicBarSettings,
 ) : Dumpable {
     private var lastUsedStatusBarState = -1
 
@@ -155,14 +157,20 @@ constructor(
             // Let's now initialize this view, which also creates the host view for us.
             mediaHost.init(MediaHierarchyManager.LOCATION_LOCKSCREEN)
             listenForLockscreenSettingChanges(applicationScope)
+            applicationScope.launch {
+                dynamicBarSettings.coversKeyguardMedia.collect {
+                    refreshMediaPosition(reason = "DynamicBar media chip changed")
+                }
+            }
         } else {
             applicationScope.launch {
                 combine(
                         mediaCarouselInteractor.allowMediaOnLockscreen,
                         mediaCarouselInteractor.hasActiveMedia,
                         mediaCarouselInteractor.isOnLockscreen,
-                    ) { allowMediaOnLockscreen, activeMedia, isOnLockscreen ->
-                        if (allowMediaOnLockscreen && isOnLockscreen) {
+                        dynamicBarSettings.coversKeyguardMedia,
+                    ) { allowMediaOnLockscreen, activeMedia, isOnLockscreen, coveredByChip ->
+                        if (allowMediaOnLockscreen && isOnLockscreen && !coveredByChip) {
                             activeMedia
                         } else {
                             false
@@ -374,7 +382,8 @@ constructor(
             if (MediaControlsInComposeFlag.isEnabled) {
                 isMediaVisibleOnLockscreen
             } else {
-                mediaHost.visible && allowMediaPlayerOnLockScreen
+                mediaHost.visible && allowMediaPlayerOnLockScreen &&
+                    !dynamicBarSettings.isKeyguardMediaCovered()
             }
         val isBypassNotEnabled = !bypassController.bypassEnabled
         val useSplitShade = useSplitShade
