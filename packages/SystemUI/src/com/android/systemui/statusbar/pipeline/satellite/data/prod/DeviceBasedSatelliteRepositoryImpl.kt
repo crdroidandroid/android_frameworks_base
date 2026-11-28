@@ -501,11 +501,11 @@ constructor(
                     }
 
                     override fun onError(error: SatelliteManager.SatelliteException) {
-                        logBuffer.e(
-                            "Exception when checking for satellite support. " +
-                                "Assuming it is not supported for this device.",
-                            error,
-                        )
+                        // Expected on devices without satellite support; skip the stack trace.
+                        logBuffer.i({ int1 = error.errorCode }) {
+                            "Satellite support check failed (result=$int1). " +
+                                "Assuming it is not supported for this device."
+                        }
 
                         // Assume that an error means it's not supported
                         continuation.resume(NotSupported)
