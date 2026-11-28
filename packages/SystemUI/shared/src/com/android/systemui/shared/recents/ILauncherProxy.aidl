@@ -24,7 +24,7 @@ import android.view.MotionEvent;
 import android.app.contextualsearch.ContextualSearchConfig;
 import com.android.systemui.shared.recents.ISystemUiProxy;
 
-// Next ID: 41
+// Next ID: 42
 oneway interface ILauncherProxy {
 
     void onActiveNavBarRegionChanges(in Region activeRegion) = 11;
@@ -171,4 +171,11 @@ oneway interface ILauncherProxy {
      * Sent when contextual search has been invoked with the given entrypoint and config.
      */
     void invokeContextualSearch(int entryPoint, in ContextualSearchConfig config) = 40;
+
+    /**
+     * Sent when the Dynamic Bar has events waiting for the given apps to close. Closing one of
+     * them to home may shrink its window into {@code bounds} (screen coordinates, in
+     * {@code rotation}). Empty packages or null bounds clear the target.
+     */
+    void onIslandTargetChanged(in String[] packages, in Rect bounds, int rotation) = 41;
 }

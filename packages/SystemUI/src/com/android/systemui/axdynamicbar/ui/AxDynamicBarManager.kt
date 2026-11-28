@@ -10,11 +10,13 @@ class AxDynamicBarManager
 constructor(
     private val viewModel: AxDynamicBarChipViewModel,
     private val expandedPanel: AxDynamicBarExpandedPanel,
+    private val morphTargetPublisher: IslandMorphTargetPublisher,
 ) : CoreStartable {
 
     override fun start() {
         viewModel.interactor.init()
         expandedPanel.init()
+        morphTargetPublisher.start()
     }
 }
 

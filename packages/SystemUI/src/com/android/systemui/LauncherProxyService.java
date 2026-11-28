@@ -202,6 +202,9 @@ public class LauncherProxyService implements CallbackController<LauncherProxyLis
     private final ShadeModeInteractor mShadeModeInteractor;
 
     private ILauncherProxy mLauncherProxy;
+    private String[] mIslandPackages = new String[0];
+    private Rect mIslandBounds;
+    private int mIslandRotation;
     private int mConnectionBackoffAttempts;
     private boolean mBound;
     private boolean mIsEnabled;
@@ -656,6 +659,7 @@ public class LauncherProxyService implements CallbackController<LauncherProxyLis
                 Log.e(TAG_OPS, "Failed to call onInitialize()", e);
             }
             dispatchNavButtonBounds();
+            dispatchIslandTarget();
 
             // Force-update the systemui state flags
             updateSystemUiStateFlags();
@@ -1001,6 +1005,23 @@ public class LauncherProxyService implements CallbackController<LauncherProxyLis
             } catch (RemoteException e) {
                 Log.e(TAG_OPS, "Failed to call onActiveNavBarRegionChanges()", e);
             }
+        }
+    }
+
+    /** Tells launcher where apps with pending Dynamic Bar events should close into. */
+    public void onIslandTargetChanged(String[] packages, Rect bounds, int rotation) {
+        mIslandPackages = packages;
+        mIslandBounds = bounds;
+        mIslandRotation = rotation;
+        dispatchIslandTarget();
+    }
+
+    private void dispatchIslandTarget() {
+        if (mLauncherProxy == null) return;
+        try {
+            mLauncherProxy.onIslandTargetChanged(mIslandPackages, mIslandBounds, mIslandRotation);
+        } catch (RemoteException e) {
+            Log.e(TAG_OPS, "Failed to call onIslandTargetChanged()", e);
         }
     }
 

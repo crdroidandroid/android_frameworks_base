@@ -199,6 +199,27 @@ constructor(
         if (bounds.width > 0f && bounds.height > 0f) _chipBoundsOnScreen.value = bounds
     }
 
+    private val islandEstimate = MutableStateFlow<android.graphics.Rect?>(null)
+
+    fun setIslandMorphEstimate(rect: android.graphics.Rect?) {
+        islandEstimate.value = rect
+    }
+
+    // Where a closing app should land: the chip as last laid out, or the island's usual spot.
+    val morphTarget: Flow<android.graphics.Rect?> =
+        combine(chipBoundsOnScreen, islandEstimate, _islandActive) { chip, estimate, island ->
+                val chipRect = chip?.let {
+                    android.graphics.Rect(
+                        it.left.toInt(), it.top.toInt(), it.right.toInt(), it.bottom.toInt())
+                }
+                if (island && estimate != null) {
+                    chipRect?.takeIf {
+                        abs(it.exactCenterX() - estimate.exactCenterX()) < 2f
+                    } ?: estimate
+                } else chipRect
+            }
+            .distinctUntilChanged()
+
     private val islandWidths = mutableMapOf<Any, Int>()
     private val _islandWidthPx = MutableStateFlow(0)
     val islandReservedWidthPx: StateFlow<Int> = _islandWidthPx.asStateFlow()

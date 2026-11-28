@@ -97,6 +97,7 @@ private val IslandSidePadding = 8.dp
 private val IslandSpacing = 6.dp
 private val IslandIconSize = 18.dp
 private val IslandShape = RoundedCornerShape(percent = 50)
+private val IslandEstimateSide = 30.dp
 private val IslandCurveInset = 4.dp
 private val IslandCurveStroke = 2.dp
 private val IslandCurveTouch = 48.dp
@@ -127,6 +128,11 @@ fun AxDynamicBarIslandHost(viewModel: AxDynamicBarChipViewModel) {
         onDispose { viewModel.setIslandActive(false) }
     }
     if (hole == null) return
+    val density = LocalDensity.current
+    DisposableEffect(hole, density) {
+        viewModel.setIslandMorphEstimate(islandEstimate(hole, density))
+        onDispose { viewModel.setIslandMorphEstimate(null) }
+    }
     var natural by remember { mutableStateOf<androidx.compose.ui.geometry.Rect?>(null) }
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         AxDynamicBarChip(
@@ -142,6 +148,18 @@ fun AxDynamicBarIslandHost(viewModel: AxDynamicBarChipViewModel) {
         )
     }
 }
+
+// A typical island around the hole, for when no pill has been laid out yet.
+private fun islandEstimate(hole: Rect, density: androidx.compose.ui.unit.Density): Rect =
+    with(density) {
+        val height = (hole.height().toDp() + 8.dp).coerceIn(IslandMinHeight, IslandMaxHeight)
+            .roundToPx()
+        val gap = (hole.width().toDp() + IslandLensPadding * 2).coerceAtLeast(IslandMinGap)
+        val width = (gap + IslandEstimateSide * 2).roundToPx()
+        val left = hole.centerX() - width / 2
+        val top = (hole.centerY() - height / 2).coerceAtLeast(0)
+        Rect(left, top, left + width, top + height)
+    }
 
 @Composable
 internal fun IslandPill(

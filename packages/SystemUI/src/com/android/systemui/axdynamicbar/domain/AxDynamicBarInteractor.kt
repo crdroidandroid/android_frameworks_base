@@ -64,6 +64,10 @@ constructor(
 
     private val dismissedEventIds: MutableSet<String> = ConcurrentHashMap.newKeySet()
 
+    private val _eventOwnerPackages = MutableStateFlow<Set<String>>(emptySet())
+    /** Apps owning a live event, which close into the island rather than their icon. */
+    val eventOwnerPackages: StateFlow<Set<String>> = _eventOwnerPackages.asStateFlow()
+
     override var onFocusableRequested: ((Boolean) -> Unit)? = null
 
     var onCollapseRequested: (() -> Unit)? = null
@@ -269,10 +273,13 @@ constructor(
                 _isOnKeyguard,
                 repository.foregroundApp.packages,
             ) { raw, _, kg, foreground ->
-                raw.filter {
-                    settings.isEventEnabled(it) &&
-                        (kg || foreground.isEmpty() || it.ownerPackage() !in foreground)
-                } to kg
+                val enabled = raw.filter { settings.isEventEnabled(it) }
+                _eventOwnerPackages.value =
+                    if (kg) emptySet()
+                    else enabled.mapNotNullTo(HashSet()) { e ->
+                        e.ownerPackage()?.takeIf { e.id !in dismissedEventIds }
+                    }
+                enabled.filter { it.ownerPackage()?.let { p -> p in foreground && !kg } != true } to kg
             }.collect { (rawEvents, onKeyguard) ->
                 if (!settings.isEnabled.value) return@collect
                 dismissedEventIds.removeAll { id -> rawEvents.none { it.id == id } }
