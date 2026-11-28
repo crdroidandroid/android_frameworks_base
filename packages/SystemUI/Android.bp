@@ -486,6 +486,7 @@ android_library {
     }),
     defaults: ["SystemUI-srcs-defaults"],
     static_libs: [
+        "OmniJawsClient",
         "//frameworks/libs/systemui:compilelib",
         "com.android.systemui.bundle.phone_api",
         "SystemUI-res",

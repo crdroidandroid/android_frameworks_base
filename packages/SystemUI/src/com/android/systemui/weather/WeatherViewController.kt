@@ -17,7 +17,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 
-import com.android.internal.util.crdroid.OmniJawsClient
+import org.omnirom.omnijaws.client.OmniJawsClient
 
 import com.android.systemui.res.R
 
@@ -146,7 +146,7 @@ class WeatherViewController(
 
     private fun buildWeatherText(info: OmniJawsClient.WeatherInfo): String {
         val settings = weatherSettingsFlow.value
-        val conditionText = getConditionText(info.condition.lowercase())
+        val conditionText = getConditionText(info.condition.orEmpty().lowercase())
 
         val locationText = if (settings.showWeatherLocation) " • ${info.city}" else ""
         val conditionDisplay = if (settings.showWeatherText) " • $conditionText" else ""
